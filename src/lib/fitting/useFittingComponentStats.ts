@@ -1,72 +1,25 @@
-import { useEffect, useState } from "react";
-import { getFittingComponent, type FittingComponentDetail } from "./fittingApi";
+import { useEffect, useMemo, useState } from "react";
+import type { ComponentCardIndexRecord } from "../componentCardIndex";
+import type { FittingComponentDetail } from "./fittingApi";
+import { ensureFittingBuildContext } from "./fittingApi";
+import { getFittingBuildContext } from "./fittingBuildContext";
+import {
+  cacheFpsComponentFromCard,
+  getCachedFpsComponentFromCard,
+  getFittingComponentCacheEntry,
+  isAbortError,
+  isNotFoundError,
+  loadVehicleFittingComponent,
+} from "./fittingComponentStore";
 
-const resolvedCache = new Map<string, FittingComponentDetail>();
-const inflightCache = new Map<string, Promise<FittingComponentDetail>>();
+export {
+  cacheFpsComponentFromCard,
+  getCachedFittingComponent,
+  getCachedFpsComponentFromCard,
+  prefetchFittingComponents,
+} from "./fittingComponentStore";
 
-function cacheKey(entityClass: string): string {
-  return entityClass.trim().toLowerCase();
-}
-
-export function isAbortError(error: unknown): boolean {
-  if (error instanceof DOMException && error.name === "AbortError") return true;
-  if (error instanceof Error && error.name === "AbortError") return true;
-  if (error instanceof Error && /NS_BINDING_ABORTED|aborted/i.test(error.message)) return true;
-  return false;
-}
-
-function isNotFoundError(error: unknown): boolean {
-  return error instanceof Error && error.message.includes("404");
-}
-
-function readResolvedCache(entityClass: string): FittingComponentDetail | null {
-  return resolvedCache.get(cacheKey(entityClass)) ?? null;
-}
-
-function loadFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
-  const key = cacheKey(entityClass);
-  const cached = resolvedCache.get(key);
-  if (cached) return Promise.resolve(cached);
-
-  const inflight = inflightCache.get(key);
-  if (inflight) return inflight;
-
-  const promise = getFittingComponent(entityClass, undefined, () => readResolvedCache(entityClass))
-    .then((detail) => {
-      resolvedCache.set(key, detail);
-      inflightCache.delete(key);
-      return detail;
-    })
-    .catch((error) => {
-      inflightCache.delete(key);
-      const resolved = resolvedCache.get(key);
-      if (resolved) return resolved;
-      throw error;
-    });
-
-  inflightCache.set(key, promise);
-  return promise;
-}
-
-export function prefetchFittingComponents(entityClasses: readonly string[]): void {
-  for (const entityClass of entityClasses) {
-    const normalized = entityClass.trim();
-    if (!normalized) continue;
-    const key = cacheKey(normalized);
-    if (resolvedCache.has(key) || inflightCache.has(key)) continue;
-    loadFittingComponent(normalized).catch((error) => {
-      if (isAbortError(error)) return;
-    });
-  }
-}
-
-export function getCachedFittingComponent(
-  entityClass: string | null | undefined,
-): FittingComponentDetail | null {
-  const normalized = entityClass?.trim();
-  if (!normalized) return null;
-  return resolvedCache.get(cacheKey(normalized)) ?? null;
-}
+export { isAbortError } from "./fittingComponentStore";
 
 export type FittingComponentStatsState = {
   detail: FittingComponentDetail | null;
@@ -77,86 +30,143 @@ export type FittingComponentStatsState = {
 
 export function useFittingComponentStats(entityClass: string | null | undefined): FittingComponentStatsState {
   const normalizedEntityClass = entityClass?.trim() ?? "";
-  const [detail, setDetail] = useState<FittingComponentDetail | null>(() => {
-    if (!normalizedEntityClass) return null;
-    return resolvedCache.get(cacheKey(normalizedEntityClass)) ?? null;
-  });
+  const { channel, buildId } = getFittingBuildContext();
+
   const [loading, setLoading] = useState(() => {
     if (!normalizedEntityClass) return false;
-    return !resolvedCache.has(cacheKey(normalizedEntityClass));
+    if (!buildId) return true;
+    const entry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
+    return !entry;
   });
   const [error, setError] = useState<string | null>(null);
-  const [missing, setMissing] = useState(false);
+  const [, setBuildEpoch] = useState(0);
 
   useEffect(() => {
     if (!normalizedEntityClass) {
       queueMicrotask(() => {
-        setDetail(null);
         setLoading(false);
         setError(null);
-        setMissing(false);
       });
       return;
     }
 
     let cancelled = false;
-    const key = cacheKey(normalizedEntityClass);
 
-    const applyCached = (cached: FittingComponentDetail) => {
-      setDetail(cached);
-      setLoading(false);
-      setError(null);
-      setMissing(false);
-    };
-
-    const cached = resolvedCache.get(key);
-    if (cached) {
-      queueMicrotask(() => {
-        if (cancelled) return;
-        applyCached(cached);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    queueMicrotask(() => {
-      if (cancelled) return;
+    const run = async () => {
       setLoading(true);
       setError(null);
-      setMissing(false);
-      setDetail(null);
-    });
 
-    loadFittingComponent(normalizedEntityClass)
-      .then((result) => {
+      try {
+        await ensureFittingBuildContext();
+      } catch (bootstrapError) {
+        if (cancelled || isAbortError(bootstrapError)) return;
+        setError(
+          bootstrapError instanceof Error
+            ? bootstrapError.message
+            : "Fitting build context unavailable",
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (cancelled) return;
+      setBuildEpoch((value) => value + 1);
+
+      const cachedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
+      if (cachedEntry) {
+        setLoading(false);
+        setError(null);
+        return;
+      }
+
+      try {
+        await loadVehicleFittingComponent(normalizedEntityClass);
         if (cancelled) return;
-        applyCached(result);
-      })
-      .catch((fetchError: unknown) => {
+        setLoading(false);
+        setError(null);
+      } catch (fetchError: unknown) {
         if (cancelled || isAbortError(fetchError)) return;
 
-        const resolved = resolvedCache.get(key);
-        if (resolved) {
-          applyCached(resolved);
+        const resolvedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
+        if (resolvedEntry || isNotFoundError(fetchError)) {
+          setLoading(false);
+          setError(null);
           return;
         }
 
-        if (isNotFoundError(fetchError)) {
-          setMissing(true);
-          setDetail(null);
-          setError(null);
-        } else {
-          setError(fetchError instanceof Error ? fetchError.message : "Fitting stats unavailable");
-          setDetail(null);
-        }
+        setError(fetchError instanceof Error ? fetchError.message : "Fitting stats unavailable");
         setLoading(false);
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [normalizedEntityClass, channel, buildId]);
+
+  const cacheEntry = normalizedEntityClass
+    ? getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail")
+    : null;
+  if (cacheEntry?.status === "resolved") {
+    return { detail: cacheEntry.detail, loading: false, error: null, missing: false };
+  }
+  if (cacheEntry?.status === "missing") {
+    return { detail: null, loading: false, error: null, missing: true };
+  }
+
+  // Unsettled identities must not leak a prior identity's detail into stats regions.
+  // While buildId is unresolved, keep the fitting-dependent region in loading only.
+  return {
+    detail: null,
+    loading: Boolean(normalizedEntityClass) && (loading || !error),
+    error,
+    missing: false,
+  };
+}
+
+export function useFpsFittingComponentFromCard(
+  card: ComponentCardIndexRecord | null | undefined,
+  cardLoading = false,
+): FittingComponentStatsState {
+  const identity = card?.entityClass?.trim() ?? "";
+  const { channel, buildId } = getFittingBuildContext();
+  const [buildReady, setBuildReady] = useState(() => Boolean(buildId));
+
+  useEffect(() => {
+    if (buildId) {
+      queueMicrotask(() => setBuildReady(true));
+      return;
+    }
+
+    let cancelled = false;
+    setBuildReady(false);
+    void ensureFittingBuildContext()
+      .then(() => {
+        if (!cancelled) setBuildReady(true);
+      })
+      .catch(() => {
+        if (!cancelled) setBuildReady(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [normalizedEntityClass]);
+  }, [channel, buildId]);
 
-  return { detail, loading, error, missing };
+  const detail = useMemo(() => {
+    if (!card || !identity || !buildReady || !getFittingBuildContext().buildId) return null;
+    return cacheFpsComponentFromCard(identity, card) ?? getCachedFpsComponentFromCard(identity);
+  }, [card, identity, channel, buildId, buildReady]);
+
+  const waitingOnBuild = Boolean(card) && Boolean(identity) && !buildReady;
+  const missing = !cardLoading && !waitingOnBuild && Boolean(card) && !detail;
+
+  return {
+    detail,
+    loading: cardLoading || waitingOnBuild,
+    error: null,
+    missing,
+  };
 }

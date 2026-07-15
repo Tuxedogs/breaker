@@ -1,6 +1,18 @@
 import { apiUrl } from "../apiUrl";
+import {
+  appendFittingBuildQuery,
+  captureFittingApiMeta,
+  getFittingBuildContext,
+  getFittingBuildId,
+  getFittingChannel,
+  setFittingChannel,
+  type FittingBuildContext,
+  type FittingChannel,
+} from "./fittingBuildContext";
 
 export type FittingConfidence = "high" | "medium" | "low";
+export type { FittingBuildContext, FittingChannel };
+export { getFittingBuildContext, getFittingBuildId, getFittingChannel, setFittingChannel };
 
 export type FittingApiMeta = {
   apiVersion: "1";
@@ -10,15 +22,77 @@ export type FittingApiMeta = {
   generatedAt: string;
 };
 
+export type ResolvedFittingBuildContext = {
+  channel: FittingChannel;
+  buildId: string;
+};
+
 type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
 
-const FITTING_CHANNEL_QUERY = "channel=LIVE";
+type FittingBuildContextBootstrapper = () => Promise<void>;
+
+let ensureFittingBuildContextInflight: Promise<ResolvedFittingBuildContext> | null = null;
+let fittingBuildContextBootstrapper: FittingBuildContextBootstrapper | null = null;
 
 function withFittingBuild(path: string): string {
-  const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}${FITTING_CHANNEL_QUERY}`;
+  return appendFittingBuildQuery(path);
+}
+
+function captureResponseMeta(payload: unknown): void {
+  if (!payload || typeof payload !== "object") return;
+  const meta = (payload as { meta?: FittingApiMeta }).meta;
+  if (!meta?.buildId) return;
+  captureFittingApiMeta(meta);
+}
+
+/**
+ * Resolves channel + buildId before any patch-static component-detail GET.
+ * Bootstrap may use channel-only `/meta`; component-detail never starts until buildId is known.
+ */
+export async function ensureFittingBuildContext(
+  signal?: AbortSignal,
+): Promise<ResolvedFittingBuildContext> {
+  const current = getFittingBuildContext();
+  if (current.buildId) {
+    return { channel: current.channel, buildId: current.buildId };
+  }
+
+  if (!ensureFittingBuildContextInflight) {
+    ensureFittingBuildContextInflight = (async () => {
+      if (fittingBuildContextBootstrapper) {
+        await fittingBuildContextBootstrapper();
+      } else {
+        await readResponse<DetailResponse<unknown>>(
+          withFittingBuild("/api/v1/fitting/meta"),
+          signal,
+        );
+      }
+
+      const resolved = getFittingBuildContext();
+      if (!resolved.buildId) {
+        throw new Error("Fitting buildId unresolved after meta bootstrap");
+      }
+      return { channel: resolved.channel, buildId: resolved.buildId };
+    })().finally(() => {
+      ensureFittingBuildContextInflight = null;
+    });
+  }
+
+  return ensureFittingBuildContextInflight;
+}
+
+export function setFittingBuildContextBootstrapperForTests(
+  bootstrapper: FittingBuildContextBootstrapper | null,
+): void {
+  fittingBuildContextBootstrapper = bootstrapper;
+  ensureFittingBuildContextInflight = null;
+}
+
+export function resetFittingBuildContextBootstrapForTests(): void {
+  fittingBuildContextBootstrapper = null;
+  ensureFittingBuildContextInflight = null;
 }
 
 type DamageType = "physical" | "energy" | "distortion" | "thermal" | "biochemical" | "stun";
@@ -227,7 +301,9 @@ async function writeJson<T>(path: string, payload: unknown, signal?: AbortSignal
     const problem = await response.json().catch(() => null) as { detail?: string } | null;
     throw new Error(problem?.detail ?? `Fitting API request failed: ${response.status}`);
   }
-  return response.json() as Promise<T>;
+  const responseBody = await response.json() as T;
+  captureResponseMeta(responseBody);
+  return responseBody;
 }
 
 export async function validateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingValidationResult> {
@@ -268,7 +344,9 @@ async function readResponse<T>(
     throw new Error("Fitting API returned an empty response body");
   }
 
-  return JSON.parse(raw) as T;
+  const payload = JSON.parse(raw) as T;
+  captureResponseMeta(payload);
+  return payload;
 }
 
 async function readAllPages<T>(path: string, signal?: AbortSignal): Promise<T[]> {
@@ -465,12 +543,13 @@ export async function getFittingComponent(
     ? (): DetailResponse<FittingComponentDetail> | null => {
       const detail = resolveDetailCached();
       if (!detail) return null;
+      const { channel, buildId } = getFittingBuildContext();
       return {
         meta: {
           apiVersion: "1",
           artifactSchemaVersion: 0,
-          channel: "LIVE",
-          buildId: "",
+          channel,
+          buildId: buildId ?? "",
           generatedAt: "",
         },
         data: detail,

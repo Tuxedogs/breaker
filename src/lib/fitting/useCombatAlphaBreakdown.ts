@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { getFittingComponent } from "./fittingApi";
+import { useMemo } from "react";
+import type { FittingComponentStats } from "./fittingApi";
 import {
   aggregateDamageAlpha,
   buildOffensiveGroups,
@@ -26,55 +26,24 @@ function sumAlphas(values: Array<number | null | undefined>): number | null {
   return nums.reduce((sum, value) => sum + value, 0);
 }
 
-export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlphaBreakdown {
-  const [statsByComponentId, setStatsByComponentId] = useState<Record<string, Record<string, number | null>>>({});
-  const [loading, setLoading] = useState(false);
-
-  const weaponRows = useMemo(() => {
+export function useCombatAlphaBreakdown(
+  portRows: PortBreakdownRow[],
+  statsByComponentId: Record<string, FittingComponentStats>,
+  detailsLoading = false,
+): CombatAlphaBreakdown {
+  const weaponComponentIds = useMemo(() => {
     const groups = buildOffensiveGroups(portRows);
-    return groups
-      .filter((group) => gunGroupKeys.has(group.key) || group.key === "missiles" || group.key === "torpedoes")
-      .flatMap((group) => group.rows)
-      .filter((row) => row.equippedComponentKey);
+    return [...new Set(
+      groups
+        .filter((group) => gunGroupKeys.has(group.key) || group.key === "missiles" || group.key === "torpedoes")
+        .flatMap((group) => group.rows)
+        .map((row) => row.equippedComponentKey)
+        .filter(Boolean),
+    )] as string[];
   }, [portRows]);
 
-  const componentIds = useMemo(
-    () => [...new Set(weaponRows.map((row) => row.equippedComponentKey!))],
-    [weaponRows],
-  );
-
-  useEffect(() => {
-    if (componentIds.length === 0) {
-      queueMicrotask(() => {
-        setStatsByComponentId({});
-        setLoading(false);
-      });
-      return;
-    }
-
-    const controller = new AbortController();
-    queueMicrotask(() => setLoading(true));
-
-    void (async () => {
-      const next: Record<string, Record<string, number | null>> = {};
-      for (const componentId of componentIds) {
-        try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
-          next[componentId] = detail.stats;
-        } catch {
-          if (controller.signal.aborted) return;
-          next[componentId] = {};
-        }
-      }
-      if (!controller.signal.aborted) {
-        setStatsByComponentId(next);
-        setLoading(false);
-      }
-    })();
-
-    return () => controller.abort();
-  }, [componentIds]);
+  const weaponStatsReady = weaponComponentIds.length === 0
+    || weaponComponentIds.every((id) => id in statsByComponentId);
 
   return useMemo(() => {
     const groups = buildOffensiveGroups(portRows);
@@ -109,7 +78,7 @@ export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlp
       missileAlpha: alphaForGroup("missiles"),
       torpedoAlpha: alphaForGroup("torpedoes"),
       byDamageType,
-      loading,
+      loading: detailsLoading || !weaponStatsReady,
     };
-  }, [loading, portRows, statsByComponentId]);
+  }, [detailsLoading, portRows, statsByComponentId, weaponStatsReady]);
 }

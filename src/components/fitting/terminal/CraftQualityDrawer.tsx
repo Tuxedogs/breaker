@@ -12,7 +12,8 @@ import {
   deriveFinalProductQuality,
 } from "../../industry/crafting/utils/recipeQuality";
 import type { ComponentRecipe } from "../../industry/crafting/utils/craftingTypes";
-import { getFittingComponent, type FittingComponentDetail } from "../../../lib/fitting/fittingApi";
+import type { FittingComponentDetail } from "../../../lib/fitting/fittingApi";
+import { loadVehicleFittingComponent } from "../../../lib/fitting/fittingComponentStore";
 import { getCraftingItemByBlueprintGuid } from "../../../lib/craftingData";
 import { getMaterialQualityQuantizationFromApi } from "../../../lib/craftingReferenceApi";
 import type { CraftQualityOverride } from "../../../lib/fitting/fittingTerminalTypes";
@@ -71,20 +72,20 @@ export default function CraftQualityDrawer({
   useEffect(() => {
     if (!portRow.equippedComponentKey) return;
     const componentId = portRow.equippedComponentKey;
-    const controller = new AbortController();
+    let cancelled = false;
     queueMicrotask(() => {
-      if (controller.signal.aborted) return;
+      if (cancelled) return;
       setLoading(true);
       setUnavailable(null);
     });
 
     Promise.all([
       getCraftingItemByBlueprintGuid(componentId),
-      getFittingComponent(componentId, controller.signal),
+      loadVehicleFittingComponent(componentId),
       getMaterialQualityQuantizationFromApi(),
     ])
       .then(([craftRecipe, componentDetail, quantizationRaw]) => {
-        if (controller.signal.aborted) return;
+        if (cancelled) return;
         if (!craftRecipe) {
           setUnavailable("Requires recipe data");
           setRecipe(null);
@@ -107,13 +108,13 @@ export default function CraftQualityDrawer({
         setMaterialQualities(qualities);
       })
       .catch(() => {
-        if (!controller.signal.aborted) setUnavailable("Requires recipe data");
+        if (!cancelled) setUnavailable("Requires recipe data");
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!cancelled) setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [portRow.equippedComponentKey, existingOverride]);
 
   useEffect(() => {

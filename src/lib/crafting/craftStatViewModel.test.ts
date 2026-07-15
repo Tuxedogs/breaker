@@ -245,6 +245,16 @@ test("buildCraftStatViewModel groups FPS armor resistance as a matrix", () => {
   assert.ok(model.groups.some((group) => group.kind === "matrix"));
 });
 
+test("buildCraftStatViewModel prefers loading over stale detail", () => {
+  const model = buildCraftStatViewModel({
+    detail: shieldDetail(),
+    loading: true,
+  });
+  assert.equal(model.status, "loading");
+  assert.equal(model.comparisonGroups.length, 0);
+  assert.equal(model.overviewGroups.length, 0);
+});
+
 test("listAmbiguousBenefitDirectionProperties reports unknown GPP directions", () => {
   const recipe: ComponentRecipe = {
     ...shieldRecipe(),
