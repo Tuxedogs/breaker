@@ -1,12 +1,12 @@
 @import "../../styles/scintel-filter-shell.css";
 
 .mb-page {
-  --mb-panel: #04131d;
-  --mb-panel-2: #051a28;
-  --mb-panel-3: #03121c;
-  --mb-row-hover: #081e2c;
-  --mb-border: rgba(65, 132, 160, 0.14);
-  --mb-border-strong: rgba(77, 184, 168, 0.2);
+  --mb-panel: var(--ops-surface-primary);
+  --mb-panel-2: var(--ops-surface-row);
+  --mb-panel-3: var(--ops-canvas);
+  --mb-row-hover: var(--ops-surface-hover);
+  --mb-border: var(--ops-border-soft);
+  --mb-border-strong: var(--ops-border-default);
   --mb-text: #edf7ff;
   --mb-muted: #a9bad0;
   --mb-subtle: #7a8fa3;
@@ -21,7 +21,7 @@
   min-height: 0;
   height: 100%;
   padding: clamp(0.65rem, 1.2vw, 1rem) clamp(0.65rem, 1.2vw, 0.85rem) clamp(0.85rem, 1.2vw, 1.1rem);
-  background: var(--mb-panel-3);
+  background: var(--ops-canvas);
   color: var(--mb-text);
   font-family: var(--font-primary, Rajdhani, sans-serif);
   overflow: hidden;
@@ -62,6 +62,12 @@
   width: 100%;
 }
 
+.mb-page .mb-browser-search:focus-within {
+  border-color: rgba(125, 211, 252, 0.46);
+  background: #0d1823;
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.06), inset 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
 .mb-filter-row {
   flex-wrap: wrap;
   gap: 6px;
@@ -99,9 +105,9 @@
 
 .mb-filter-row select:focus {
   outline: 0;
-  border-color: rgba(255, 153, 0, 0.52);
-  box-shadow: 0 0 0 1px rgba(255, 153, 0, 0.08);
-  color: rgba(255, 210, 80, 0.97);
+  border-color: rgba(125, 211, 252, 0.62);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.1);
+  color: #dff6ff;
 }
 
 .mb-filter-meta {
@@ -334,9 +340,9 @@
 }
 
 .mb-browse-group {
-  border: 1px solid var(--mb-border);
-  border-radius: 6px;
-  background: rgba(4, 19, 29, 0.62);
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
   padding: 10px;
 }
 
@@ -536,9 +542,11 @@
   width: 100%;
   min-height: 0;
   padding: 0;
-  border: 1px solid var(--mb-border);
-  border-radius: 10px;
-  background: var(--mb-panel-2);
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background:
+    linear-gradient(180deg, rgba(15, 22, 34, 0.68), rgba(13, 21, 30, 0) 94px),
+    var(--ops-surface-row);
   color: var(--mb-text);
   cursor: pointer;
   text-align: left;
@@ -578,8 +586,16 @@
 
 .mb-family-row:hover,
 .mb-family-block.is-selected > .mb-family-row {
-  border-color: rgba(77, 184, 168, 0.2);
-  background: var(--mb-row-hover);
+  border-color: rgba(125, 211, 252, 0.38);
+  background:
+    linear-gradient(180deg, rgba(18, 30, 44, 0.82), rgba(17, 28, 39, 0) 94px),
+    var(--ops-surface-hover);
+}
+
+.mb-page .mb-view-selector .craft-frl-chip--active {
+  border-color: rgba(125, 211, 252, 0.48);
+  background: rgba(14, 116, 144, 0.14);
+  color: #9ce5ff;
 }
 
 .mission-group-card__rail,
@@ -1072,13 +1088,13 @@
 }
 
 .mission-concept-dossier {
-  --panel-bg: var(--ui-panel-bg, #04131d);
-  --panel-bg-deep: var(--ui-panel-bg-deep, #03121c);
-  --panel-row-bg: var(--ui-panel-row, #051a28);
-  --panel-row-hover: var(--ui-panel-row-hover, #081e2c);
-  --panel-border: var(--ui-panel-border, rgba(65, 132, 160, 0.16));
-  --panel-border-soft: var(--ui-panel-border-soft, rgba(65, 132, 160, 0.14));
-  --accent-cyan: var(--ui-accent-cyan, #4db8b0);
+  --panel-bg: var(--ops-surface-primary);
+  --panel-bg-deep: var(--ops-surface-deep);
+  --panel-row-bg: var(--ops-surface-row);
+  --panel-row-hover: var(--ops-surface-hover);
+  --panel-border: var(--ops-border-default);
+  --panel-border-soft: var(--ops-border-soft);
+  --accent-cyan: #7dd3fc;
   --accent-blue: #4da3ff;
   --accent-purple: #b85cf6;
   --warning: #ffb84d;
@@ -1099,6 +1115,13 @@
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
   padding: 0;
   overflow: hidden;
+}
+
+.mission-dossier-modal-shell .mission-concept-dossier {
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
 }
 
 .mission-dossier-header {
@@ -1363,7 +1386,7 @@
 }
 
 .mission-dossier-tabs button:hover {
-  border-color: color-mix(in srgb, var(--accent-purple) 50%, var(--panel-border-soft));
+  border-color: rgba(125, 211, 252, 0.42);
   color: var(--text-primary);
 }
 
@@ -1374,10 +1397,10 @@
 
 .mission-dossier-tabs button.is-active,
 .mission-dossier-chips button.is-active {
-  border-color: var(--accent-purple);
-  background: rgba(184, 92, 246, 0.16);
+  border-color: rgba(125, 211, 252, 0.52);
+  background: rgba(14, 116, 144, 0.14);
   color: var(--text-primary);
-  box-shadow: inset 0 -2px 0 rgba(184, 92, 246, 0.68);
+  box-shadow: inset 0 -2px 0 rgba(125, 211, 252, 0.68);
 }
 
 .mission-dossier-panel {
@@ -1398,7 +1421,7 @@
 .mission-dossier-card {
   min-width: 0;
   border: 1px solid var(--panel-border-soft);
-  border-radius: 10px;
+  border-radius: var(--ops-radius-nested);
   background: var(--panel-row-bg);
   display: grid;
   align-content: start;
