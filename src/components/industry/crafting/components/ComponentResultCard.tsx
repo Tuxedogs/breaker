@@ -158,7 +158,7 @@ export default function ComponentResultCard({
   const location = useLocation();
 
   return (
-    <article className={`component-result-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
+    <article className={`component-result-card ops-primary-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
       <Link
         className="component-result-card__hit"
         to={{

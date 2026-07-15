@@ -4253,6 +4253,8 @@
 }
 
 .component-result-card__hit {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: var(--cd-row-gap, 8px);
   height: 100%;
@@ -5654,12 +5656,12 @@
    ========================================================================== */
 
 :where(.craft-page, .craft-planner-shell).component-results-browser {
-  --panel-bg: #0a1119;
-  --panel-bg-deep: #070d14;
-  --panel-row-bg: #0d151e;
-  --panel-row-hover: #111c27;
-  --panel-border: rgba(115, 143, 171, 0.2);
-  --panel-border-soft: rgba(115, 143, 171, 0.14);
+  --panel-bg: var(--ops-surface-primary);
+  --panel-bg-deep: var(--ops-surface-deep);
+  --panel-row-bg: var(--ops-surface-row);
+  --panel-row-hover: var(--ops-surface-hover);
+  --panel-border: var(--ops-border-default);
+  --panel-border-soft: var(--ops-border-soft);
   --accent-cyan: #7dd3fc;
   --accent-blue: #38bdf8;
   --text-primary: #e7edff;
@@ -5796,7 +5798,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
-.component-result-card:hover {
+.component-result-card:hover,
+.component-result-card.ops-primary-card:hover {
   border-color: rgba(125, 211, 252, 0.38);
   background: #0e1823;
   box-shadow:
@@ -5815,7 +5818,7 @@
 }
 
 .component-card-metric {
-  border-bottom-color: rgba(115, 143, 171, 0.11);
+  border-bottom-color: rgba(115, 143, 171, 0.14);
 }
 
 .component-card-metric strong {
@@ -5856,6 +5859,12 @@
   border-color: rgba(115, 143, 171, 0.22);
   background: #0e1720;
   color: #aeb9c8;
+}
+
+.component-results-browser .component-card-craft-modifier {
+  border-color: rgba(139, 163, 188, 0.22);
+  background: rgba(13, 21, 30, 0.88);
+  color: #aebed2;
 }
 
 .component-card-material {

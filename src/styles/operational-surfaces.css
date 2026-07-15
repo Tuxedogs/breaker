@@ -1,0 +1,110 @@
+/*
+ * Opt-in operational card perimeter derived from Next Fabrication Run.
+ * Appearance only: layout, spacing, typography, overflow, and interaction
+ * remain owned by each page.
+ */
+
+.dash-next-run.ops-primary-card,
+.dash-card.ops-primary-card,
+.component-result-card.ops-primary-card,
+.bq-page .bq-queue-col.ops-primary-card,
+.bq-page .bq-center-shell.ops-primary-card,
+.bq-page .bq-summary-col.ops-primary-card {
+  position: relative;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.dash-next-run.ops-primary-card::after,
+.dash-card.ops-primary-card::after,
+.component-result-card.ops-primary-card::after,
+.bq-page .bq-queue-col.ops-primary-card::after,
+.bq-page .bq-center-shell.ops-primary-card::after,
+.bq-page .bq-summary-col.ops-primary-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(
+    var(--ops-highlight-max, 420px),
+    var(--ops-highlight-span, 42%),
+    calc(100% - 16px)
+  );
+  height: 1px;
+  pointer-events: none;
+  z-index: 2;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, var(--ops-highlight-color), transparent);
+  box-shadow: var(--ops-highlight-glow);
+}
+
+.component-result-card.ops-primary-card {
+  --ops-highlight-max: 320px;
+  --ops-highlight-span: 72%;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 22, 34, 0.88) 0,
+      rgba(15, 22, 34, 0.56) 76px,
+      rgba(10, 17, 25, 0) 132px
+    ),
+    var(--ops-surface-primary);
+  border-color: rgba(125, 154, 184, 0.26);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.dash-card.ops-primary-card {
+  --ops-highlight-max: 320px;
+  --ops-highlight-span: 64%;
+}
+
+.dash-card.ops-primary-card > .dash-card-header,
+.bq-page .bq-queue-col.ops-primary-card > .bq-queue-col-head,
+.bq-page .bq-summary-col.ops-primary-card > .bq-summary-head {
+  border-bottom-color: rgba(115, 143, 171, 0.18);
+  background: var(--ops-header-band);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.bq-page .bq-center-shell.ops-primary-card .bq-item-sidebar {
+  border-bottom-color: var(--ops-border-default);
+  background: linear-gradient(180deg, rgba(15, 22, 34, 0.82), rgba(10, 17, 25, 0.96));
+}
+
+.bq-page .bq-center-shell.ops-primary-card {
+  --ops-highlight-max: 560px;
+  --ops-highlight-span: 34%;
+}
+
+.bq-page .bq-center-shell.ops-primary-card .bq-stats-overview-group {
+  border: 0;
+  border-left: 1px solid var(--ops-border-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-center-shell.ops-primary-card .bq-stats-overview-group:first-child {
+  border-left: 0;
+}
+
+.bq-page .bq-center-shell.ops-primary-card .bq-component-statistics {
+  border-color: var(--ops-border-soft);
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (min-width: 2200px) {
+  .bq-page .bq-center-shell.ops-primary-card {
+    --ops-highlight-max: 680px;
+  }
+}
+
+.bq-page .bq-summary-col--collapsed.ops-primary-card {
+  --ops-highlight-max: 32px;
+  --ops-highlight-span: 100%;
+}

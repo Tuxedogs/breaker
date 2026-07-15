@@ -7,10 +7,10 @@
 /* ── Page shell ───────────────────────────────── */
 
 .dash-page {
-  --dash-primary-card-surface: #0a1119;
+  --dash-primary-card-surface: var(--ops-surface-primary);
   --dash-secondary-card-surface: #0d151e;
-  --dash-primary-card-border: rgba(115, 143, 171, 0.2);
-  --dash-primary-card-shadow: 0 10px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  --dash-primary-card-border: var(--ops-border-default);
+  --dash-primary-card-shadow: var(--ops-shadow-primary);
   display: flex;
   height: 100vh;
   overflow: hidden;
@@ -1178,10 +1178,10 @@
 }
 
 .dash-stat-card {
-  background: var(--dash-secondary-card-surface);
-  border: 1px solid rgba(115, 143, 171, 0.16);
+  background: var(--ops-surface-row);
+  border: 1px solid var(--ops-border-soft);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.025);
-  border-radius: 6px;
+  border-radius: var(--ops-radius-primary);
   padding: 0.9rem 1rem;
   display: flex;
   align-items: flex-start;
@@ -2235,12 +2235,22 @@
   flex-shrink: 0;
 }
 
+.dash-card.ops-primary-card > .dash-card-header {
+  background: var(--ops-header-band);
+}
+
 .dash-card-title {
   font-family: var(--font-primary);
   font-size: 0.64rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(187, 204, 229, 0.84);
+}
+
+.dash-card.ops-primary-card .dash-card-title {
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  color: rgba(232, 239, 255, 0.94);
 }
 
 .dash-card-meta {
@@ -2275,6 +2285,10 @@
   align-items: center;
 }
 
+.dash-card.ops-primary-card > .dash-card-footer {
+  background: rgba(12, 20, 31, 0.42);
+}
+
 .dash-card-footer-link {
   font-family: var(--font-primary);
   font-size: 0.76rem;
@@ -2288,6 +2302,14 @@
 }
 
 .dash-card-footer-link:hover { color: #ff9d00; }
+
+.dash-card.ops-primary-card .dash-card-footer-link {
+  color: rgba(125, 211, 252, 0.82);
+}
+
+.dash-card.ops-primary-card .dash-card-footer-link:hover {
+  color: rgba(165, 231, 255, 0.98);
+}
 
 .dash-card-footer-arrow {
   width: 12px;

@@ -4694,23 +4694,23 @@
   --bq-text: #e7edff;
   --bq-sub: #b9c9dd;
   --bq-dim: #8fa1b6;
-  --bq-edge: rgba(115, 143, 171, 0.2);
-  --bq-edge-soft: rgba(115, 143, 171, 0.14);
+  --bq-edge: var(--ops-border-default);
+  --bq-edge-soft: var(--ops-border-soft);
   --bq-cyan: #7dd3fc;
   --bq-green: #4ade80;
   --bq-amber: #fbbf24;
   --bq-red: #fb7185;
-  --bq-panel: #0a1119;
-  --mb-bg-gutter: #050b11;
-  --mb-bg-card: #0a1119;
-  --mb-bg-row: #0d151e;
-  --alloc-panel-bg: #0a1119;
-  --alloc-panel-bg-deep: #080f17;
-  --alloc-row-bg: #0d151e;
-  --alloc-row-hover: #111c27;
-  --alloc-drawer-bg: #080f17;
-  --alloc-border: rgba(115, 143, 171, 0.2);
-  --alloc-border-soft: rgba(115, 143, 171, 0.14);
+  --bq-panel: var(--ops-surface-primary);
+  --mb-bg-gutter: var(--ops-canvas);
+  --mb-bg-card: var(--ops-surface-primary);
+  --mb-bg-row: var(--ops-surface-row);
+  --alloc-panel-bg: var(--ops-surface-primary);
+  --alloc-panel-bg-deep: var(--ops-surface-deep);
+  --alloc-row-bg: var(--ops-surface-row);
+  --alloc-row-hover: var(--ops-surface-hover);
+  --alloc-drawer-bg: var(--ops-surface-deep);
+  --alloc-border: var(--ops-border-default);
+  --alloc-border-soft: var(--ops-border-soft);
   --alloc-cyan: #7dd3fc;
   --alloc-blue: #60a5fa;
   --alloc-danger: #fb7185;
@@ -4718,12 +4718,12 @@
   --alloc-text-primary: #e7edff;
   --alloc-text-secondary: #b9c9dd;
   --alloc-text-muted: #8fa1b6;
-  --panel-bg: #0a1119;
-  --panel-bg-deep: #080f17;
-  --panel-row-bg: #0d151e;
-  --panel-row-hover: #111c27;
-  --panel-border: rgba(115, 143, 171, 0.2);
-  --panel-border-soft: rgba(115, 143, 171, 0.14);
+  --panel-bg: var(--ops-surface-primary);
+  --panel-bg-deep: var(--ops-surface-deep);
+  --panel-row-bg: var(--ops-surface-row);
+  --panel-row-hover: var(--ops-surface-hover);
+  --panel-border: var(--ops-border-default);
+  --panel-border-soft: var(--ops-border-soft);
   --accent-cyan: #7dd3fc;
   --accent-blue: #60a5fa;
   --danger: #fb7185;
@@ -4732,7 +4732,7 @@
   --text-primary: #e7edff;
   --text-secondary: #b9c9dd;
   --text-muted: #8fa1b6;
-  background: #050b11;
+  background: var(--ops-canvas);
 }
 
 .bq-queue-col,
@@ -4788,7 +4788,7 @@
 
 .bq-craft-card.is-selected,
 .bq-craft-card.is-selected.allocation-owner-highlight {
-  border-color: rgba(125, 211, 252, 0.72);
+  border-color: rgba(125, 211, 252, 0.38);
   background: #11202c;
   box-shadow:
     inset 3px 0 0 #7dd3fc,

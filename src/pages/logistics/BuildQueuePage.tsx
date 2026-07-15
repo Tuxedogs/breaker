@@ -257,7 +257,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
       ) : null}
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
-        <aside className="bq-queue-col" aria-label="Build queue list">
+        <aside className="bq-queue-col ops-primary-card" aria-label="Build queue list">
           <header className="bq-queue-col-head">
             <span className="bq-queue-col-title">
               Build Queue <em>{activeRows.length}/{MAX_QUEUE_SLOTS}</em>
@@ -369,7 +369,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
 
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
-            <div className="bq-center-shell">
+            <div className="bq-center-shell ops-primary-card">
             <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}

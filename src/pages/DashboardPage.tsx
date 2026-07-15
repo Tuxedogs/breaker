@@ -808,7 +808,7 @@ export default function DashboardPage() {
         </section>
 
         <div className="dash-cards-row">
-          <article className="dash-card" aria-label="Inventory overview">
+          <article className="dash-card ops-primary-card" aria-label="Inventory overview">
             <div className="dash-card-header"><span className="dash-card-title">Inventory Overview</span></div>
             <div className="dash-card-body dash-inventory-body">
               {topQualityMaterials.length > 0 ? (
@@ -856,7 +856,7 @@ export default function DashboardPage() {
             </div>
           </article>
 
-          <article className="dash-card" aria-label="Auto reserve readiness">
+          <article className="dash-card ops-primary-card" aria-label="Auto reserve readiness">
             <div className="dash-card-header"><span className="dash-card-title">Auto Reserve</span></div>
             <div className="dash-card-body dash-reserve-body">
               <div className="dash-reserve-metrics">
@@ -898,7 +898,7 @@ export default function DashboardPage() {
             </div>
           </article>
 
-          <article className="dash-card" aria-label="Material shortages">
+          <article className="dash-card ops-primary-card" aria-label="Material shortages">
             <div className="dash-card-header"><span className="dash-card-title">Material Shortages</span></div>
             <div className="dash-card-body">
               <table className="dash-shortages-table">
@@ -932,7 +932,7 @@ export default function DashboardPage() {
             </div>
           </article>
 
-          <article className="dash-card" aria-label="Build queue">
+          <article className="dash-card ops-primary-card" aria-label="Build queue">
             <div className="dash-card-header">
               <span className="dash-card-title">Build Queue</span>
               <div className="dash-card-meta">
@@ -986,7 +986,7 @@ export default function DashboardPage() {
         />
         {ENABLE_FITTING_UI && <FittingLaunchPanel />}
 
-        <div className="dash-card dash-card--rail">
+        <div className="dash-card dash-card--rail ops-primary-card">
           <div className="dash-card-header"><span className="dash-card-title">Primary Locations</span></div>
           <div className="dash-card-body dash-card-body--compact">
             <ul className="dash-locations-list" role="list">
@@ -1002,7 +1002,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dash-card dash-card--rail">
+        <div className="dash-card dash-card--rail ops-primary-card">
           <div className="dash-card-header"><span className="dash-card-title">Mining Recommendations</span></div>
           <div className="dash-card-body dash-card-body--compact">
             <ul className="dash-mining-list" role="list">
@@ -1062,7 +1062,7 @@ function NextFabricationRunModule({
   onSelectRun: (queueItemId: string) => void;
 }) {
   return (
-    <article className="dash-next-run" aria-labelledby="dash-next-run-title" data-fixture={run?.fixtureOnly ? "development" : undefined}>
+    <article className="dash-next-run ops-primary-card" aria-labelledby="dash-next-run-title" data-fixture={run?.fixtureOnly ? "development" : undefined}>
       <header className="dash-next-run-header">
         <div>
           <span className="dash-next-run-kicker">Operations handoff</span>
@@ -1225,7 +1225,7 @@ function QuickInventoryPanel({
   topMaterialName: string | null;
 }) {
   return (
-    <div className="dash-card dash-card--rail">
+    <div className="dash-card dash-card--rail ops-primary-card">
       <div className="dash-card-header"><span className="dash-card-title">Quick Inventory</span></div>
       <div className="dash-card-body dash-card-body--compact">
         <div className="dash-qinv-stats">
