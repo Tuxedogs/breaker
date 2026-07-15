@@ -5787,42 +5787,162 @@
 }
 
 .component-results-grid {
-  gap: var(--cd-grid-gap);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 0.85vw, 16px);
 }
 
 .component-result-card {
+  min-height: clamp(306px, 23vw, 344px);
+  border-radius: var(--ops-radius-primary, 7px);
   border-color: rgba(115, 143, 171, 0.18);
-  background: #0a1119;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(34, 211, 238, 0.045), transparent 34%),
+    radial-gradient(circle at 82% 0%, rgba(139, 92, 246, 0.035), transparent 38%),
+    linear-gradient(145deg, rgba(15, 25, 37, 0.98), rgba(8, 15, 23, 0.99));
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
+.component-result-card--weapon {
+  min-height: clamp(306px, 23vw, 344px);
+}
+
 .component-result-card:hover,
 .component-result-card.ops-primary-card:hover {
   border-color: rgba(125, 211, 252, 0.38);
-  background: #0e1823;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(34, 211, 238, 0.075), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(139, 92, 246, 0.055), transparent 40%),
+    linear-gradient(145deg, rgba(18, 31, 45, 0.99), rgba(10, 18, 27, 0.99));
   box-shadow:
     0 12px 26px rgba(0, 0, 0, 0.32),
-    inset 3px 0 0 rgba(56, 189, 248, 0.56);
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 0 0 1px rgba(56, 189, 248, 0.04);
+}
+
+.component-result-card__hit {
+  align-content: start;
+  grid-template-rows: auto auto auto auto minmax(0, auto) auto;
+  gap: clamp(9px, 0.55vw, 12px);
+  padding: clamp(14px, 0.85vw, 18px);
+}
+
+.component-result-card__identity {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.component-result-card__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.component-result-card__kind,
+.component-result-card__category {
+  color: #8fa1b6;
+  font-size: clamp(0.68rem, 0.62rem + 0.12vw, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.component-result-card__kind {
+  color: #7dd3fc;
+}
+
+.component-result-card__category {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.component-result-card__category::before {
+  content: "/";
+  margin-right: 8px;
+  color: rgba(139, 92, 246, 0.66);
+}
+
+.component-result-card__product {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.82fr) minmax(190px, 1.18fr);
+  gap: clamp(14px, 0.9vw, 20px);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.component-result-card__image-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: clamp(116px, 7.6vw, 148px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 62%, rgba(56, 189, 248, 0.09), transparent 56%),
+    linear-gradient(135deg, rgba(21, 35, 49, 0.46), rgba(8, 14, 22, 0.06));
+  clip-path: polygon(0 0, 92% 0, 100% 18%, 100% 100%, 8% 100%, 0 82%);
+}
+
+.component-result-card__image-stage::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% 8px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.32), transparent);
+}
+
+.component-result-card__cat-icon {
+  width: min(94%, 220px);
+  height: clamp(96px, 6.8vw, 132px);
+  object-fit: contain;
+  opacity: 0.96;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.44));
+}
+
+.component-result-card__image-stage .component-result-card__id {
+  color: #71849a;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
 }
 
 .component-result-card__title {
   color: #e7edff;
+  font-size: clamp(1.2rem, 1.05rem + 0.34vw, 1.55rem);
   line-height: 1.18;
 }
 
-.component-result-card__subline,
 .component-card-metric span {
   color: #8fa1b6;
 }
 
+.component-card-metrics--core {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: stretch;
+  gap: 0;
+  min-width: 0;
+}
+
 .component-card-metric {
+  align-content: center;
+  gap: 4px;
+  min-height: 0;
+  padding: 7px 2px;
   border-bottom-color: rgba(115, 143, 171, 0.14);
+}
+
+.component-card-metrics--core .component-card-metric:last-child {
+  border-bottom-color: transparent;
 }
 
 .component-card-metric strong {
   color: #dfe9f7;
+  font-size: clamp(0.98rem, 0.9rem + 0.16vw, 1.12rem);
 }
 
 .component-result-card--weapon .component-card-metric--primary span {
@@ -5832,6 +5952,38 @@
 .component-result-card--weapon .component-card-metric--primary strong {
   color: #f2f6fc;
   font-weight: 900;
+}
+
+.component-card-secondary-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  min-width: 0;
+  padding: 7px 0;
+  border-top: 1px solid rgba(115, 143, 171, 0.1);
+  border-bottom: 1px solid rgba(115, 143, 171, 0.1);
+}
+
+.component-card-secondary-metrics > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+}
+
+.component-card-secondary-metrics small {
+  color: #71849a;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.component-card-secondary-metrics strong {
+  color: #aebed2;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
 .component-result-card--weapon .component-card-modifiers .component-card-badge {
@@ -5868,14 +6020,23 @@
 }
 
 .component-card-material {
-  border-color: rgba(115, 143, 171, 0.16);
-  background: #070d14;
-  color: #b9c9dd;
-  font-size: var(--cd-font-sm);
+  min-height: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8fa1b6;
+  font-size: 0.74rem;
+  font-weight: 700;
 }
 
 .component-card-material span {
-  color: #7dd3fc;
+  color: #8ecfe7;
+  font-weight: 800;
+}
+
+.component-card-materials {
+  gap: 5px 14px;
+  opacity: 0.84;
 }
 
 .component-card-action {
@@ -5906,6 +6067,58 @@
 .component-results-browser :is(a, button, input, select, [tabindex]):focus-visible {
   outline: 2px solid rgba(125, 211, 252, 0.92);
   outline-offset: 2px;
+}
+
+@media (min-width: 2200px) and (min-height: 1200px) {
+  .component-results-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .component-result-card,
+  .component-result-card--weapon {
+    min-height: 374px;
+  }
+
+  .component-result-card__hit {
+    gap: 13px;
+    padding: 18px;
+  }
+
+  .component-result-card__title {
+    font-size: 1.62rem;
+  }
+
+  .component-result-card__product {
+    grid-template-columns: minmax(210px, 0.88fr) minmax(240px, 1.12fr);
+    gap: 22px;
+  }
+
+  .component-result-card__image-stage {
+    min-height: 164px;
+  }
+
+  .component-result-card__cat-icon {
+    width: min(94%, 260px);
+    height: 152px;
+  }
+
+  .component-card-metric span {
+    font-size: 0.74rem;
+  }
+
+  .component-card-metric strong {
+    font-size: 1.18rem;
+  }
+
+  .component-card-secondary-metrics small {
+    font-size: 0.7rem;
+  }
+
+  .component-card-secondary-metrics strong,
+  .component-card-material {
+    font-size: 0.84rem;
+  }
 }
 
 /* Crafting Detail surface hierarchy */

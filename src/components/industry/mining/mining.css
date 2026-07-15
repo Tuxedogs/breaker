@@ -3626,7 +3626,6 @@
 }
 
 .mine-page--v2 .mining-left-rail-filters {
-  margin: 0 14px 6px;
   overflow: hidden;
   flex: 0 0 auto;
 }
@@ -3636,12 +3635,6 @@
   justify-content: flex-end;
   padding: 0;
   flex: 0 0 auto;
-}
-
-.mine-page--v2 .mining-filter-drawer {
-  padding: 8px 12px 10px;
-  background: rgba(3, 18, 28, 0.72);
-  border-top: 0;
 }
 
 .mine-page--v2 .mining-filter-chip-block {
@@ -3732,7 +3725,6 @@
 .mine-page--v2 .mining-filter-chips--wrap {
   display: flex;
   flex-wrap: wrap;
-  max-height: 172px;
   overflow: auto;
   padding-right: 2px;
   scrollbar-width: thin;
@@ -4318,14 +4310,14 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24), inset 0 1px rgba(255, 255, 255, 0.025);
 }
 
-.mine-page--v2 .mining-filter-drawer {
-  background: var(--panel-bg-deep);
-}
-
 .mine-page--v2 .mining-filter-chip {
   border-color: var(--panel-border-soft);
   background: var(--panel-row-bg);
   color: rgba(205, 217, 235, 0.76);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .mine-page--v2 .mining-filter-chip:hover:not(.is-active):not(.is-disabled):not(:disabled) {
