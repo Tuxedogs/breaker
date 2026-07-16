@@ -9,13 +9,13 @@
     "gradeRaw": "2",
     "grade": "B",
     "gradeSource": "AttachDef.Grade",
-    "class": "industrial",
+    "class": "civilian",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "8af71a8a-7da0-4e31-afc7-648fc916e387",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+    "manufacturerGuid": "967cd454-20d9-4cb8-8465-990ff1a1f769",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
     "baseStats": {
       "mass": 20,
-      "health": 273,
+      "health": 210,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -60,7 +60,7 @@
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 810,
+        "nominalSignature": 720,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -68,48 +68,48 @@
         "decayRate": 0.15
       },
       "distortion": {
-        "maximum": 1600,
-        "decayRate": 172.5,
-        "decayDelay": 1.15,
+        "maximum": 2000,
+        "decayRate": 150,
+        "decayDelay": 1.35,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s00_vogel.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "0db54db1-d325-48b1-94e3-e110f1fd724a",
     "blueprintName": "BP_CRAFT_RADR_WLOP_S00_Vogel",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/radar/bp_craft_radr_wlop_s00_vogel.xml",
-    "entityClass": "ad6617d1-ccbf-45e4-9ac3-8bd0bc6b8ff5",
+    "entityClass": "5b19ed1b-c24b-45ef-975a-70630519ea22",
     "craftTimeSeconds": 390,
     "materials": [
       {
@@ -129,7 +129,7 @@
         "slot": "TRANSMITTER",
         "costType": "resource",
         "materialKey": "quartz",
-        "materialName": "Quartz",
+        "materialName": "quartz",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",

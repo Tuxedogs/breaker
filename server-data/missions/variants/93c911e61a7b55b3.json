@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
   "variant": {
     "variantKey": "9f87be01-d306-4663-9c63-b6f669783b48",
@@ -128,12 +128,6 @@
         "label": "Stanton Star",
         "confidence": "resolved",
         "rawType": "ContractPrerequisite_Location"
-      },
-      {
-        "type": "locality",
-        "label": "Stanton",
-        "confidence": "resolved",
-        "rawType": "ContractPrerequisite_Locality"
       }
     ],
     "pickupLocation": {
@@ -532,10 +526,37 @@
         },
         {
           "role": "locality pool",
-          "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
-          "resolvedName": "Stanton",
+          "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "resolvedName": "Stanton 2",
           "type": "MissionLocality",
-          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "resolvedName": "Stanton 3",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "resolvedName": "Stanton 4",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
           "consideredPickup": true,
           "reason": "Contract prerequisite gates mission availability."
         },
@@ -647,13 +668,6 @@
           "type": "StarMapObject",
           "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
           "system": "Stanton"
-        },
-        {
-          "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
-          "displayName": "Stanton",
-          "type": "MissionLocality",
-          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
-          "system": "Stanton"
         }
       ],
       "grouping": {
@@ -665,11 +679,10 @@
           "Stanton 3",
           "Stanton 4",
           "Stanton 1",
-          "Stanton Star",
-          "Stanton"
+          "Stanton Star"
         ],
         "displayLabel": "Stanton",
-        "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +3",
+        "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +2",
         "confidence": "exact"
       }
     },
@@ -678,7 +691,7 @@
         "status": "exact",
         "displayName": "Stanton Star",
         "displayLabel": "Stanton",
-        "detailDisplay": "Stanton 2, Stanton 3, Stanton 4 +3",
+        "detailDisplay": "Stanton 2, Stanton 3, Stanton 4 +2",
         "systems": [
           "Stanton"
         ],
@@ -727,13 +740,6 @@
             "type": "StarMapObject",
             "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
             "system": "Stanton"
-          },
-          {
-            "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
-            "displayName": "Stanton",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
-            "system": "Stanton"
           }
         ],
         "grouping": {
@@ -745,11 +751,10 @@
             "Stanton 3",
             "Stanton 4",
             "Stanton 1",
-            "Stanton Star",
-            "Stanton"
+            "Stanton Star"
           ],
           "displayLabel": "Stanton",
-          "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +3",
+          "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +2",
           "confidence": "exact"
         }
       },
@@ -1163,8 +1168,35 @@
         "role": "pickup",
         "rawType": "ContractPrerequisite_Locality",
         "attr": "localityAvailable",
-        "guidOrToken": "a335e8b0-e551-4126-a213-5634d7d23511",
-        "resolvedName": "Stanton",
+        "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
         "system": "Stanton",
         "confidence": "resolved"
       },
@@ -1253,8 +1285,7 @@
       "Stanton 3",
       "Stanton 4",
       "Stanton 1",
-      "Stanton Star",
-      "Stanton"
+      "Stanton Star"
     ],
     "unresolvedLocationTokens": [],
     "destinationTokens": [],
@@ -1395,7 +1426,7 @@
     ],
     "flags": [],
     "releaseFlags": [
-      "Release flag not set"
+      "Not for release"
     ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "lawful",

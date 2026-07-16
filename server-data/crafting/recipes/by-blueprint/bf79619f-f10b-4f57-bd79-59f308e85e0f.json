@@ -5,17 +5,17 @@
     "displayName": "Endurance",
     "nameSource": "localization_item_name",
     "componentType": "powerplant",
-    "size": "0",
+    "size": "1",
     "gradeRaw": "2",
     "grade": "B",
     "gradeSource": "AttachDef.Grade",
     "class": "industrial",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
     "manufacturerGuid": "d7cc897f-b760-4a73-93c0-27e23c52db0a",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
     "baseStats": {
-      "mass": 93,
-      "health": 98,
+      "mass": 280,
+      "health": 270,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,11 +56,11 @@
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 21.6,
+        "timeToRepair": 37.8,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 5450,
+        "nominalSignature": 7430,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -68,48 +68,48 @@
         "decayRate": 0.15
       },
       "distortion": {
-        "maximum": 2600,
-        "decayRate": 173.3333,
+        "maximum": 4050,
+        "decayRate": 270,
         "decayDelay": 1.5,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s01_endurance_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "bf79619f-f10b-4f57-bd79-59f308e85e0f",
     "blueprintName": "BP_CRAFT_POWR_JUST_S01_Endurance_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/powerplant/bp_craft_powr_just_s01_endurance_scitem.xml",
-    "entityClass": "ad59f651-83d0-42f3-839a-8f055243ba6b",
+    "entityClass": "49d355d9-b5a5-454a-a6e8-dedb4bdffa02",
     "craftTimeSeconds": 810,
     "materials": [
       {
@@ -129,7 +129,7 @@
         "slot": "VOLTAGE REGULATOR",
         "costType": "resource",
         "materialKey": "laranite",
-        "materialName": "Laranite",
+        "materialName": "laranite",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",
@@ -142,7 +142,7 @@
         "slot": "STATOR CORES",
         "costType": "resource",
         "materialKey": "taranite",
-        "materialName": "Taranite",
+        "materialName": "taranite",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",

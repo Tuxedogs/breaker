@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
   "variant": {
     "variantKey": "40c66c12-9f62-4fdd-a2fc-afff1ca9e406",
@@ -49,6 +49,7 @@
     "displayName": "URGENT REFUEL REQUEST:",
     "titleSource": "token_template_cleaned",
     "titleConfidence": "medium",
+    "briefing": "Hey, you!\n\nI've got a beacon at [Location]. They say their tanks are running dry and they could use [FuelType]. If you're interested, I get the feeling they'll be really pleased to see you.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nThey're stuck out in an area with a bad reputation, though things have been a bit more quiet recently. Still worth staying alert I'd say, just in case there's still trouble lurking out there. \n\nEither way, the sooner everyone's able to get flying again - and that includes you - the better.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
     "rawName": "@UWC_Refueling_moderate_title_001",
     "internalName": "Refueling_Stanton_Moderate",
     "missionType": "CareerContract",
@@ -696,15 +697,19 @@
         "unresolved": false
       },
       "objective": {
-        "status": "unknown",
-        "displayName": "Unknown objective location",
-        "displayLabel": "Unknown objective location",
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
         "systems": [],
-        "confidence": "low",
-        "sourceRefs": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
         "unresolvedRefs": [],
-        "sourceTextTokens": [],
-        "unresolved": false
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
       }
     },
     "locationRefs": [
@@ -1148,6 +1153,13 @@
         "resolvedName": "Stanton 1",
         "system": "Stanton",
         "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
       }
     ],
     "locations": [

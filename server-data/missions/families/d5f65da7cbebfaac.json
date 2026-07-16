@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "family": {
     "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
-    "displayName": "URGENT FLEET REFUEL",
+    "displayName": "URGENT CONVOY REFUEL",
     "titleSource": "shared_variant_localized",
     "titleConfidence": "medium",
     "rawName": "Refueling_Pyro",
@@ -175,42 +175,37 @@
       "Region C",
       "Region D",
       "Region A",
-      "Stanton 2",
-      "Stanton 3",
-      "Stanton 4",
-      "Neutral / 0 rep to Elite Contractor / 95,250 rep"
+      "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "Contractor / 2,200 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Pyro, Stanton",
+    "pickupSummary": "Pickup: Pyro",
     "pickupStatuses": [
-      "generated_from_pool"
+      "system_scope"
     ],
     "pickupUnresolvedCount": 0,
     "locationRoles": {
       "pickup": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "displayLabel": "Pyro, Stanton",
-        "detailDisplay": "Pyro, Stanton",
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro",
         "systems": [
-          "Pyro",
-          "Stanton"
+          "Pyro"
         ],
         "primarySystem": "Pyro",
-        "confidence": "medium",
-        "sourceRole": "locality_pool",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
         "sourceRefs": [
           "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
           "67cc750e-3e5f-47b2-9dd0-66662142c82f",
           "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
-          "9d323b1b-5805-4ddd-8641-563246d55279",
-          "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+          "9d323b1b-5805-4ddd-8641-563246d55279"
         ],
         "unresolvedRefs": [],
         "unresolvedLocationTokens": [],
-        "generatedFromPool": true,
-        "systemScope": false,
+        "generatedFromPool": false,
+        "systemScope": true,
         "rawLocalities": [
           {
             "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
@@ -239,46 +234,21 @@
             "type": "MissionLocality",
             "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
             "system": "Pyro"
-          },
-          {
-            "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "displayName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "system": "Stanton"
-          },
-          {
-            "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "displayName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "system": "Stanton"
-          },
-          {
-            "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "displayName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "system": "Stanton"
           }
         ],
         "grouping": {
           "systems": [
-            "Pyro",
-            "Stanton"
+            "Pyro"
           ],
           "localityNames": [
+            "Region A",
             "Region B",
             "Region C",
-            "Region D",
-            "Region A",
-            "Stanton 2",
-            "Stanton 3",
-            "Stanton 4"
+            "Region D"
           ],
-          "displayLabel": "Pyro, Stanton",
-          "detailLabel": "Pyro, Stanton",
-          "confidence": "generated_from_pool"
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro",
+          "confidence": "system_scope"
         }
       },
       "destination": {
@@ -346,33 +316,6 @@
         "confidence": "resolved"
       },
       {
-        "role": "pickup",
-        "rawType": "ContractPrerequisite_Locality",
-        "attr": "localityAvailable",
-        "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-        "resolvedName": "Stanton 2",
-        "system": "Stanton",
-        "confidence": "resolved"
-      },
-      {
-        "role": "pickup",
-        "rawType": "ContractPrerequisite_Locality",
-        "attr": "localityAvailable",
-        "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-        "resolvedName": "Stanton 3",
-        "system": "Stanton",
-        "confidence": "resolved"
-      },
-      {
-        "role": "pickup",
-        "rawType": "ContractPrerequisite_Locality",
-        "attr": "localityAvailable",
-        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-        "resolvedName": "Stanton 4",
-        "system": "Stanton",
-        "confidence": "resolved"
-      },
-      {
         "role": "objective",
         "rawType": "mission_text_token",
         "attr": "sourceTextToken",
@@ -387,10 +330,7 @@
       "Region B",
       "Region C",
       "Region D",
-      "Region A",
-      "Stanton 2",
-      "Stanton 3",
-      "Stanton 4"
+      "Region A"
     ],
     "unresolvedLocationTokens": [],
     "destinationTokens": [],
@@ -410,7 +350,7 @@
       "b95ac811-ec6b-4027-9294-3e1f8d9107f5",
       "16cb5fd9-18c9-4ff7-a4b1-e4433c13e7ad"
     ],
-    "searchText": "urgent fleet refuel critical refuel request: refueling_pyro_hard united wayfarers club careercontract standing refuel pickup: pyro, stanton refuel request: urgent refuel request: 5a3fb744-787c-460c-aecb-3ae0422d744d 4b0ba86c-4796-4d32-8bab-7e39d0dd83cd 9bbba062-857d-4d81-bc71-773eb8d2db41 0d66c038-2136-4c36-8e77-e449eba8e493 321e27a8-40ea-4b30-8811-153833aead14 b95ac811-ec6b-4027-9294-3e1f8d9107f5 16cb5fd9-18c9-4ff7-a4b1-e4433c13e7ad blueprint: fuel nozzle: nozzle fast, nozzle secure, nozzle very fast, nozzle very secure +4 standing +200 credits formula unresolved standing +150 standing +50"
+    "searchText": "urgent convoy refuel critical refuel request: refueling_pyro_hard united wayfarers club careercontract standing refuel pickup: pyro hi,\n\nanother day another beacon. there's a [ship] looking to be topped up with [fueltype] at [location].  the client vessel will pay you at the rate of [refuelrequest], and as a united wayfarers club contractor, you will also qualify for the uwc service fee listed above upon completion.\n\ni can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. we've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nif you decide to take the job, do me a favor and keep everything peeled. if you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nmaybe i'm being paranoid, but that doesn't mean they're not out to get you, as momma deloit used to say. \n\nactually she never said that - but i'm pretty sure she would if she did this for a living.\n\njust do the job and get home safe, okay?\n\ndina deloit\ndispatch hub\nunited wayfarers club\n\"we’ve got your back\" refuel request: urgent refuel request: 5a3fb744-787c-460c-aecb-3ae0422d744d 4b0ba86c-4796-4d32-8bab-7e39d0dd83cd 9bbba062-857d-4d81-bc71-773eb8d2db41 0d66c038-2136-4c36-8e77-e449eba8e493 321e27a8-40ea-4b30-8811-153833aead14 b95ac811-ec6b-4027-9294-3e1f8d9107f5 16cb5fd9-18c9-4ff7-a4b1-e4433c13e7ad blueprint: fuel nozzle: nozzle fast, nozzle secure, nozzle very fast, nozzle very secure +4 standing +200 credits formula unresolved standing +150 standing +50"
   },
   "groupSummary": {
     "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
@@ -564,19 +504,16 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Pyro, Stanton",
+    "pickupSummary": "Pickup: Pyro",
     "pickupStatuses": [
-      "generated_from_pool"
+      "system_scope"
     ],
     "pickupUnresolvedCount": 0,
     "locations": [
       "Region B",
       "Region C",
       "Region D",
-      "Region A",
-      "Stanton 2",
-      "Stanton 3",
-      "Stanton 4"
+      "Region A"
     ],
     "unresolvedLocationTokens": []
   },
@@ -674,9 +611,9 @@
       "displayName": "CRITICAL REFUEL REQUEST:",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -689,9 +626,9 @@
       "displayName": "REFUEL REQUEST:",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -704,9 +641,9 @@
       "displayName": "REFUEL REQUEST:",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -716,12 +653,12 @@
     },
     {
       "variantKey": "0d66c038-2136-4c36-8e77-e449eba8e493",
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -731,12 +668,12 @@
     },
     {
       "variantKey": "321e27a8-40ea-4b30-8811-153833aead14",
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -746,12 +683,12 @@
     },
     {
       "variantKey": "b95ac811-ec6b-4027-9294-3e1f8d9107f5",
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
@@ -764,9 +701,9 @@
       "displayName": "URGENT REFUEL REQUEST:",
       "missionType": "CareerContract",
       "pickupLocation": {
-        "status": "generated_from_pool",
-        "displayName": "Region B, Region C, Region D +4",
-        "confidence": "medium"
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",

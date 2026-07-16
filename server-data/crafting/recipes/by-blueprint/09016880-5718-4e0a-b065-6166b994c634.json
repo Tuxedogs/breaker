@@ -5,17 +5,17 @@
     "displayName": "HeatSink",
     "nameSource": "localization_item_name",
     "componentType": "cooler",
-    "size": "0",
-    "gradeRaw": "2",
-    "grade": "B",
+    "size": "2",
+    "gradeRaw": "3",
+    "grade": "C",
     "gradeSource": "AttachDef.Grade",
-    "class": "civilian",
+    "class": "stealth",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "6cf93625-789a-4e8f-a857-325d64a58c93",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+    "manufacturerGuid": "a2a97679-2a6e-4e89-80d8-439c88a01427",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
     "baseStats": {
-      "mass": 43,
-      "health": 53,
+      "mass": 230,
+      "health": 300,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,72 +56,72 @@
       },
       "resources": {
         "consumption": {
-          "Power": 1
+          "Power": 2
         },
         "generation": {
-          "Coolant": 16
+          "Coolant": 32
         }
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 17.7,
+        "timeToRepair": 53.6,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 375,
+        "nominalSignature": 500,
         "decayRate": 0.15
       },
       "irSignature": {
-        "nominalSignature": 2500,
+        "nominalSignature": 3330,
         "decayRate": 0.5
       },
       "distortion": {
-        "maximum": 1400,
-        "decayRate": 93.33334,
-        "decayDelay": 1.5,
+        "maximum": 2500,
+        "decayRate": 166.6667,
+        "decayDelay": 3,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "resources": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "ItemResourceComponentParams"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_heatsink_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "09016880-5718-4e0a-b065-6166b994c634",
     "blueprintName": "BP_CRAFT_COOL_TYDT_S02_HeatSink_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/cooler/bp_craft_cool_tydt_s02_heatsink_scitem.xml",
-    "entityClass": "7db13b34-c8b1-4e1a-9aba-3dcd7087e995",
+    "entityClass": "4df4557d-6c24-421a-9db6-36d731dcffe4",
     "craftTimeSeconds": 690,
     "materials": [
       {

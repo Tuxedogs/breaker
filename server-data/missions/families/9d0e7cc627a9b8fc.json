@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "family": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateBoss_Career",
     "displayName": "Vaughn CareerContract",
@@ -13,15 +13,15 @@
     "faction": "Vaughn",
     "missionType": "CareerContract",
     "reputationScope": {
-      "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-      "displayName": "Assassination",
-      "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
       "factionDisplayName": "Vaughn",
-      "trackType": "Assassination",
+      "trackType": "Standing",
       "confidence": "resolved",
       "sourceRefs": [
-        "9beab676-a7d2-43ab-af3b-d9ff731be175"
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
       ]
     },
     "missionArchetype": "Mercenary",
@@ -34,12 +34,10 @@
     ],
     "rewardSummary": [
       "Blueprint: Vaughn Generator Eliminate Boss: Pulverizer LMG, Tripledown Pistol, Citadel Arms Base, Citadel Legs Base +7",
-      "Assassination +8,000",
-      "Assassination -4,000",
+      "Standing +300",
       "Credits formula unresolved",
       "Blueprint: RDC Boss: R97 Shotgun, R97 \"Scorched\" Shotgun, Monde Arms Daimyo, Monde Core Daimyo +7",
-      "Assassination +4,000",
-      "Assassination -2,000"
+      "Standing +250"
     ],
     "blueprintRewards": [
       "Vaughn Generator Eliminate Boss: Pulverizer LMG, Tripledown Pistol, Citadel Arms Base, Citadel Legs Base +7",
@@ -240,62 +238,34 @@
       }
     ],
     "reputationRewards": [
-      "Assassination +8,000",
-      "Assassination -4,000",
-      "Assassination +4,000",
-      "Assassination -2,000"
+      "Standing +300",
+      "Standing +250"
     ],
     "rewardedReputationPaths": [
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 8000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 300,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "65e015b0-afb2-4316-9eb5-9b0652f221cd"
         ]
       },
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -4000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 250,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "7115b8ce-9897-40b2-9f63-df3d6e262801"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 4000,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "0896e681-c035-425b-b689-779790b9371d"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -2000,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "b55dfc36-301a-412a-8e82-d43e469bdb43"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7b82e00e-07eb-4b56-990c-b23399673504"
         ]
       }
     ],
@@ -308,10 +278,10 @@
       "ContractResult_CalculatedReward:formula"
     ],
     "prerequisiteRequirements": [
-      "Elite Assassin / 56,000 rep to Master Assassin / 112,000 rep",
+      "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
       "Procedural location placeholder",
       "Nyx",
-      "High Value Assassin / 24,000 rep to Master Assassin / 112,000 rep"
+      "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep"
     ],
     "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
@@ -446,21 +416,21 @@
       "dd077557-c0e7-4c50-b81b-155775fca22c",
       "49e03834-2e9c-bebb-87cd-3840679d4a96"
     ],
-    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminateboss_eliminatecompetionworkers vaughn careercontract assassination mercenary pickup: nyx i am not sure if you’re acquainted with [location], but [targetname] is the one who calls the shots there. i need them eliminated.\n\nthat is easier said then done, i'm afraid. they are notoriously reluctant to see to matters personally, preferring their underlings to handle the dirty work. that said, eliminate enough of the underlings and they will have no choice but to deal with you themselves.\n\nearnestly,\nvaughn end of a salamander they will be missed 46590930-4039-d4e2-5f80-8059137a3bb8 dd077557-c0e7-4c50-b81b-155775fca22c 49e03834-2e9c-bebb-87cd-3840679d4a96 blueprint: vaughn generator eliminate boss: pulverizer lmg, tripledown pistol, citadel arms base, citadel legs base +7 assassination +8,000 assassination -4,000 credits formula unresolved blueprint: rdc boss: r97 shotgun, r97 \"scorched\" shotgun, monde arms daimyo, monde core daimyo +7 assassination +4,000 assassination -2,000"
+    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminateboss_eliminatecompetionworkers vaughn careercontract standing mercenary pickup: nyx i am not sure if you’re acquainted with [location], but [targetname] is the one who calls the shots there. i need them eliminated.\n\nthat is easier said then done, i'm afraid. they are notoriously reluctant to see to matters personally, preferring their underlings to handle the dirty work. that said, eliminate enough of the underlings and they will have no choice but to deal with you themselves.\n\nearnestly,\nvaughn end of a salamander they will be missed 46590930-4039-d4e2-5f80-8059137a3bb8 dd077557-c0e7-4c50-b81b-155775fca22c 49e03834-2e9c-bebb-87cd-3840679d4a96 blueprint: vaughn generator eliminate boss: pulverizer lmg, tripledown pistol, citadel arms base, citadel legs base +7 standing +300 credits formula unresolved blueprint: rdc boss: r97 shotgun, r97 \"scorched\" shotgun, monde arms daimyo, monde core daimyo +7 standing +250"
   },
   "groupSummary": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateBoss_Career",
     "provider": "Vaughn",
     "reputationScope": {
-      "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-      "displayName": "Assassination",
-      "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
       "factionDisplayName": "Vaughn",
-      "trackType": "Assassination",
+      "trackType": "Standing",
       "confidence": "resolved",
       "sourceRefs": [
-        "9beab676-a7d2-43ab-af3b-d9ff731be175"
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
       ]
     },
     "missionArchetype": "Mercenary",
@@ -469,12 +439,10 @@
   "rewardSummary": {
     "rewardSummary": [
       "Blueprint: Vaughn Generator Eliminate Boss: Pulverizer LMG, Tripledown Pistol, Citadel Arms Base, Citadel Legs Base +7",
-      "Assassination +8,000",
-      "Assassination -4,000",
+      "Standing +300",
       "Credits formula unresolved",
       "Blueprint: RDC Boss: R97 Shotgun, R97 \"Scorched\" Shotgun, Monde Arms Daimyo, Monde Core Daimyo +7",
-      "Assassination +4,000",
-      "Assassination -2,000"
+      "Standing +250"
     ],
     "blueprintRewards": [
       "Vaughn Generator Eliminate Boss: Pulverizer LMG, Tripledown Pistol, Citadel Arms Base, Citadel Legs Base +7",
@@ -675,62 +643,34 @@
       }
     ],
     "reputationRewards": [
-      "Assassination +8,000",
-      "Assassination -4,000",
-      "Assassination +4,000",
-      "Assassination -2,000"
+      "Standing +300",
+      "Standing +250"
     ],
     "rewardedReputationPaths": [
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 8000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 300,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "65e015b0-afb2-4316-9eb5-9b0652f221cd"
         ]
       },
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -4000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 250,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "7115b8ce-9897-40b2-9f63-df3d6e262801"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 4000,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "0896e681-c035-425b-b689-779790b9371d"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -2000,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "b55dfc36-301a-412a-8e82-d43e469bdb43"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7b82e00e-07eb-4b56-990c-b23399673504"
         ]
       }
     ],
@@ -962,7 +902,7 @@
         "displayName": "Nyx",
         "confidence": "medium"
       },
-      "standingRequirement": "Elite Assassin / 56,000 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
@@ -977,7 +917,7 @@
         "displayName": "Nyx",
         "confidence": "medium"
       },
-      "standingRequirement": "High Value Assassin / 24,000 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
@@ -992,7 +932,7 @@
         "displayName": "Nyx",
         "confidence": "medium"
       },
-      "standingRequirement": "High Value Assassin / 24,000 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,

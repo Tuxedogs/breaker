@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Nyx",
   "variant": {
     "variantKey": "1080d9fc-d511-4bda-a567-161797dac491",
@@ -49,6 +49,7 @@
     "displayName": "CRITICAL REFUEL REQUEST:",
     "titleSource": "token_template_cleaned",
     "titleConfidence": "medium",
+    "briefing": "Hi,\n\nAnother day another beacon. There's a [Ship] looking to be topped up with [FuelType] at [Location].  The client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nI can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. We've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nIf you decide to take the job, do me a favor and keep everything peeled. If you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nMaybe I'm being paranoid, but that doesn't mean they're not out to get you, as Momma Deloit used to say. \n\nActually she never said that - but I'm pretty sure she would if she did this for a living.\n\nJust do the job and get home safe, okay?\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
     "rawName": "@UWC_Refueling_high_title_001",
     "internalName": "Refueling_Nyx_Hard",
     "missionType": "CareerContract",
@@ -264,15 +265,19 @@
         "unresolved": false
       },
       "objective": {
-        "status": "unknown",
-        "displayName": "Unknown objective location",
-        "displayLabel": "Unknown objective location",
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
         "systems": [],
-        "confidence": "low",
-        "sourceRefs": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
         "unresolvedRefs": [],
-        "sourceTextTokens": [],
-        "unresolved": false
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
       }
     },
     "locationRefs": [
@@ -356,6 +361,13 @@
         "resolvedName": "Nyx",
         "system": "Nyx",
         "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
       }
     ],
     "locations": [

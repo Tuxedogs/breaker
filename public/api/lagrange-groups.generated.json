@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-05-16T19:00:54.548Z",
+  "generatedAt": "2026-07-16T04:33:12.822Z",
   "source": {
-    "input": "D:\\scintel\\data\\Data\\Localization\\english\\global.ini",
+    "input": "D:\\scintel\\out\\LIVE\\4.9.0-live.12232306\\Data\\Localization\\english\\global.ini",
     "localizationKey": "Journal_General_Mining_Compendium_Content",
-    "method": "canonical Stanton Lagrange child mapping"
+    "method": "dynamic material-signature grouping"
   },
   "notes": [
-    "Stanton Lagrange memberships are canonical display groups supplied for Mining page location labeling.",
-    "Locations are displayed as Lagrange <letter> <child code>, for example Lagrange D ARC-L3.",
-    "Material lookup tables are preserved from the existing generated material index."
+    "No static Lagrange memberships are used.",
+    "Locations with identical material sets are grouped together.",
+    "Group letters are assigned from stable signature hashes."
   ],
   "groups": [
     {
@@ -16,26 +16,56 @@
       "label": "Lagrange A",
       "letter": "A",
       "locations": [
-        "HUR-L1",
-        "HUR-L4"
+        "HUR-L3"
       ],
       "materials": [
-        "Aluminium",
-        "Borase",
-        "Corundum",
-        "Hephaestanite",
-        "Laranite"
+        "Bexalite",
+        "Ice",
+        "Iron",
+        "Titanium"
       ],
-      "signature": "Aluminium|Borase|Corundum|Hephaestanite|Laranite"
+      "signatureHash": 149780181,
+      "signature": "Bexalite|Ice|Iron|Titanium"
     },
     {
       "id": "lagrange-b",
       "label": "Lagrange B",
       "letter": "B",
       "locations": [
-        "ARC-L5",
-        "CRU-L4",
-        "MIC-L3"
+        "CRU-L1",
+        "CRU-L2"
+      ],
+      "materials": [
+        "Bexalite",
+        "Copper",
+        "Iron",
+        "Titanium"
+      ],
+      "signatureHash": 399908769,
+      "signature": "Bexalite|Copper|Iron|Titanium"
+    },
+    {
+      "id": "lagrange-c",
+      "label": "Lagrange C",
+      "letter": "C",
+      "locations": [
+        "CRU-L5"
+      ],
+      "materials": [
+        "Agricium",
+        "Beryl",
+        "Copper",
+        "Iron"
+      ],
+      "signatureHash": 409927087,
+      "signature": "Agricium|Beryl|Copper|Iron"
+    },
+    {
+      "id": "lagrange-d",
+      "label": "Lagrange D",
+      "letter": "D",
+      "locations": [
+        "ARC-L5"
       ],
       "materials": [
         "Aslarite",
@@ -44,36 +74,87 @@
         "Ice",
         "Iron"
       ],
+      "signatureHash": 747242652,
       "signature": "Aslarite|Copper|Gold|Ice|Iron"
     },
     {
-      "id": "lagrange-c",
-      "label": "Lagrange C",
-      "letter": "C",
+      "id": "lagrange-e",
+      "label": "Lagrange E",
+      "letter": "E",
       "locations": [
-        "HUR-L5",
+        "CRU-L3",
         "MIC-L1",
         "MIC-L2",
-        "MIC-L5",
-        "CRU-L3"
+        "MIC-L5"
+      ],
+      "materials": [
+        "Aluminium",
+        "Corundum",
+        "Hephaestanite",
+        "Torite"
+      ],
+      "signatureHash": 1465824033,
+      "signature": "Aluminium|Corundum|Hephaestanite|Torite"
+    },
+    {
+      "id": "lagrange-f",
+      "label": "Lagrange F",
+      "letter": "F",
+      "locations": [
+        "CRU-L4"
+      ],
+      "materials": [
+        "Aslarite",
+        "Copper",
+        "Gold",
+        "Iron"
+      ],
+      "signatureHash": 1480598089,
+      "signature": "Aslarite|Copper|Gold|Iron"
+    },
+    {
+      "id": "lagrange-g",
+      "label": "Lagrange G",
+      "letter": "G",
+      "locations": [
+        "ARC-L1",
+        "ARC-L2",
+        "HUR-L2"
+      ],
+      "materials": [
+        "Aluminium",
+        "Corundum",
+        "Hephaestanite",
+        "Taranite",
+        "Tungsten"
+      ],
+      "signatureHash": 1526248962,
+      "signature": "Aluminium|Corundum|Hephaestanite|Taranite|Tungsten"
+    },
+    {
+      "id": "lagrange-h",
+      "label": "Lagrange H",
+      "letter": "H",
+      "locations": [
+        "HUR-L1",
+        "HUR-L4",
+        "HUR-L5"
       ],
       "materials": [
         "Aluminium",
         "Borase",
         "Corundum",
         "Hephaestanite",
-        "Laranite",
-        "Torite"
+        "Laranite"
       ],
-      "signature": "Aluminium|Borase|Corundum|Hephaestanite|Laranite|Torite"
+      "signatureHash": 1603181352,
+      "signature": "Aluminium|Borase|Corundum|Hephaestanite|Laranite"
     },
     {
-      "id": "lagrange-d",
-      "label": "Lagrange D",
-      "letter": "D",
+      "id": "lagrange-i",
+      "label": "Lagrange I",
+      "letter": "I",
       "locations": [
-        "ARC-L3",
-        "CRU-L5",
         "MIC-L4"
       ],
       "materials": [
@@ -84,44 +165,57 @@
         "Ice",
         "Iron"
       ],
+      "signatureHash": 1958950543,
       "signature": "Agricium|Aslarite|Beryl|Copper|Ice|Iron"
     },
     {
-      "id": "lagrange-e",
-      "label": "Lagrange E",
-      "letter": "E",
+      "id": "lagrange-j",
+      "label": "Lagrange J",
+      "letter": "J",
       "locations": [
-        "CRU-L1",
-        "CRU-L2",
-        "HUR-L3"
+        "ARC-L3"
       ],
       "materials": [
-        "Bexalite",
+        "Agricium",
+        "Beryl",
         "Copper",
         "Ice",
-        "Iron",
-        "Titanium"
+        "Iron"
       ],
-      "signature": "Bexalite|Copper|Ice|Iron|Titanium"
+      "signatureHash": 2156434302,
+      "signature": "Agricium|Beryl|Copper|Ice|Iron"
     },
     {
-      "id": "lagrange-f",
-      "label": "Lagrange F",
-      "letter": "F",
+      "id": "lagrange-k",
+      "label": "Lagrange K",
+      "letter": "K",
       "locations": [
-        "HUR-L2",
-        "ARC-L1",
-        "ARC-L2",
         "ARC-L4"
       ],
       "materials": [
-        "Aluminium",
         "Corundum",
         "Hephaestanite",
         "Taranite",
         "Tungsten"
       ],
-      "signature": "Aluminium|Corundum|Hephaestanite|Taranite|Tungsten"
+      "signatureHash": 3598664841,
+      "signature": "Corundum|Hephaestanite|Taranite|Tungsten"
+    },
+    {
+      "id": "lagrange-l",
+      "label": "Lagrange L",
+      "letter": "L",
+      "locations": [
+        "MIC-L3"
+      ],
+      "materials": [
+        "Copper",
+        "Gold",
+        "Ice",
+        "Iron"
+      ],
+      "signatureHash": 3906896797,
+      "signature": "Copper|Gold|Ice|Iron"
     }
   ],
   "locationToMaterials": {

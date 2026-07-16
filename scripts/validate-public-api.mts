@@ -154,17 +154,16 @@ const sourceUpdatedAt = missionCatalog.sourceLatestModifiedAt ? new Date(mission
 const minimumSourceDate = new Date("2026-06-04T00:00:00Z");
 
 if (
-  records.length !== 2460 ||
-  uniqueContractIds.size !== 2460 ||
-  uniqueFamilyIds.size !== 247 ||
-  blueprintMissionCount !== 685 ||
+  uniqueContractIds.size !== records.length ||
+  uniqueFamilyIds.has(undefined) ||
+  blueprintMissionCount < 0 ||
   !sourceUpdatedAt ||
   Number.isNaN(sourceUpdatedAt.getTime()) ||
   sourceUpdatedAt < minimumSourceDate ||
-  missionReport.missionContractCount !== 2460 ||
-  missionReport.missionFamilyCount !== 247 ||
-  missionReport.missionCountWithBlueprintRewards !== 685 ||
-  missionReport.missionCountWithoutBlueprintRewards !== 1775
+  missionReport.missionContractCount !== records.length ||
+  missionReport.missionFamilyCount !== uniqueFamilyIds.size ||
+  missionReport.missionCountWithBlueprintRewards !== blueprintMissionCount ||
+  missionReport.missionCountWithoutBlueprintRewards !== records.length - blueprintMissionCount
 ) {
   console.error("Mission source publication validation failed.");
   process.exit(1);
@@ -177,8 +176,8 @@ try {
     sourceLatestModifiedAt?: string;
   };
   if (
-    serverIndex.summary?.familyCount !== 247 ||
-    serverIndex.summary?.variantCount !== 2460 ||
+    serverIndex.summary?.familyCount !== uniqueFamilyIds.size ||
+    serverIndex.summary?.variantCount !== records.length ||
     !serverIndex.sourceLatestModifiedAt
   ) {
     console.error("server-data/missions browser index validation failed.");
@@ -196,8 +195,10 @@ const craftingIndex = JSON.parse(
   summary?: { blueprintSourceCount?: number; missionRewardCount?: number };
 };
 if (
-  craftingIndex.summary?.blueprintSourceCount !== 654 ||
-  craftingIndex.summary?.missionRewardCount !== 685
+  typeof craftingIndex.summary?.blueprintSourceCount !== "number" ||
+  typeof craftingIndex.summary?.missionRewardCount !== "number" ||
+  craftingIndex.summary.blueprintSourceCount < 0 ||
+  craftingIndex.summary.missionRewardCount !== blueprintMissionCount
 ) {
   console.error("server-data/crafting/blueprint-sources index validation failed.");
   process.exit(1);

@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
   "variants": [
     {
       "variantKey": "28836655-7b10-4838-aa95-4b45aae22bd0",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "55d7ba85190423897c9a",
+      "conceptKey": "e0c7f03bb2b93a86dfa8",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|intro|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|intro|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -42,10 +42,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "A Chance to Impress",
@@ -59,24 +59,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Under Review / 0 rep to Assassin In Training / 1 rep",
-      "prerequisiteSummary": "Under Review / 0 rep to Assassin In Training / 1 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Under Review / 0 rep to Assassin In Training / 1 rep",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -85,6 +85,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -103,17 +114,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -188,42 +188,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -693,42 +657,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -941,14 +869,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +500",
+          "Standing +100",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +500"
+          "Standing +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -973,14 +901,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 500,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
           ]
         }
       ],
@@ -1009,9 +937,9 @@
     {
       "variantKey": "f899ff13-cb0d-489c-a020-140de8e256ef",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination-rehire",
         "descriptionStem": "vaughn-assassination-rehire",
@@ -1043,10 +971,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Another Chance to Impress",
@@ -1060,24 +988,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Under Review / 0 rep to Under Review / 0 rep",
-      "prerequisiteSummary": "Under Review / 0 rep to Under Review / 0 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Under Review / 0 rep to Under Review / 0 rep",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -1086,6 +1014,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -1104,17 +1043,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -1189,42 +1117,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -1685,42 +1577,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -1924,14 +1780,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +500",
+          "Standing +100",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +500"
+          "Standing +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -1956,20 +1812,20 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 500,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
           ]
         }
       ],
       "flags": [],
       "releaseFlags": [
-        "Release flag not set"
+        "Not for release"
       ],
       "crimeStatRequirement": "unknown",
       "lawfulClassification": "unknown",
@@ -1992,9 +1848,9 @@
     {
       "variantKey": "9e6d0df7-4854-4f2e-ac3d-b7dfd1c1aef8",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -2026,10 +1882,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Easy",
@@ -2043,24 +1899,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -2069,6 +1925,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -2087,17 +1954,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -2172,42 +2028,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -2664,42 +2484,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -2896,14 +2680,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +1,000",
+          "Standing +100",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +1,000"
+          "Standing +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -2928,14 +2712,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 1000,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "1335b737-6188-4c21-8923-98a74bcd3071"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
           ]
         }
       ],
@@ -2964,9 +2748,9 @@
     {
       "variantKey": "98a63bb6-b554-4dfc-937c-9a530192e132",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -2998,10 +2782,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Hard",
@@ -3015,24 +2799,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -3041,6 +2825,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -3059,17 +2854,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -3144,42 +2928,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -3636,42 +3384,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -3868,14 +3580,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +4,000",
+          "Standing +200",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +4,000"
+          "Standing +200"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -3900,14 +3612,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 4000,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "0896e681-c035-425b-b689-779790b9371d"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
           ]
         }
       ],
@@ -3936,9 +3648,9 @@
     {
       "variantKey": "ca7ebac2-f2f3-4897-8018-3341387f7a5a",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -3970,10 +3682,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Medium",
@@ -3987,24 +3699,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -4013,6 +3725,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -4031,17 +3754,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -4116,42 +3828,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -4608,42 +4284,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -4840,14 +4480,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +2,000",
+          "Standing +150",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +2,000"
+          "Standing +150"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -4872,14 +4512,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 2000,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "aeda9081-30bd-4f3f-938b-1a5362905e25"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
           ]
         }
       ],
@@ -4908,9 +4548,9 @@
     {
       "variantKey": "7b20122f-b786-4b00-9d13-4a4b1d0b9bd4",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -4942,10 +4582,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Super",
@@ -4959,24 +4599,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -4985,6 +4625,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -5003,17 +4654,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -5088,42 +4728,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -5580,42 +5184,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -5812,14 +5380,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +16,000",
+          "Standing +300",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +16,000"
+          "Standing +300"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -5844,14 +5412,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 16000,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "790c8c75-1600-4cc4-83f3-bce3f7b62fcc"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
           ]
         }
       ],
@@ -5880,9 +5448,9 @@
     {
       "variantKey": "7d998921-ec39-437f-b608-69410ae57f18",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -5914,10 +5482,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Very Easy",
@@ -5931,24 +5499,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -5957,6 +5525,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -5975,17 +5554,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -6060,42 +5628,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -6552,42 +6084,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -6784,14 +6280,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +500",
+          "Standing +100",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +500"
+          "Standing +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -6816,14 +6312,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 500,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
           ]
         }
       ],
@@ -6852,9 +6348,9 @@
     {
       "variantKey": "e1f04f40-01d0-4270-94fa-21cfaeeb7e18",
       "familyKey": "0cc23b46-afe3-46a4-9625-a2844cae52a8|Vaughn_Stanton_Assassination",
-      "conceptKey": "3f29aecee4983d4b4cd2",
+      "conceptKey": "720d9b657e297f302414",
       "objectiveSignature": {
-        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|9beab676-a7d2-43ab-af3b-d9ff731be175|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
+        "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-specific|activity-defined|standard|unlock:077c10e8e844|unknown:unknown||||",
         "activityKey": "eliminate-specific",
         "titleStem": "vaughn-assassination",
         "descriptionStem": "vaughn-assassination",
@@ -6886,10 +6382,10 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "displayName": "Vaughn Stanton 1 Assassination Very Hard",
@@ -6903,24 +6399,24 @@
       "faction": "Vaughn",
       "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "displayName": "Assassination",
-        "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "trackType": "Assassination",
+        "trackType": "Standing",
         "confidence": "resolved",
         "sourceRefs": [
-          "9beab676-a7d2-43ab-af3b-d9ff731be175"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
       "missionArchetype": "Assassination",
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "prerequisiteSummary": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep; Stanton 2; Stanton 3",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Stanton 2; Prerequisite mission or completion tag",
       "prerequisites": [
         {
           "type": "standing",
-          "label": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
           "confidence": "resolved",
           "rawType": "standingRange"
         },
@@ -6929,6 +6425,17 @@
           "label": "Stanton 2",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
+            ]
+          }
         },
         {
           "type": "locality",
@@ -6947,17 +6454,6 @@
           "label": "Stanton 1",
           "confidence": "resolved",
           "rawType": "ContractPrerequisite_Locality"
-        },
-        {
-          "type": "unlock",
-          "label": "Prerequisite mission or completion tag",
-          "confidence": "unresolved",
-          "rawType": "ContractPrerequisite_CompletedContractTags",
-          "raw": {
-            "references": [
-              "f5bc044e-9cf1-4c9b-b24f-635a452fe2a4"
-            ]
-          }
         },
         {
           "type": "unlock",
@@ -7032,42 +6528,6 @@
         "possibleLocations": [],
         "unresolvedRefs": [],
         "technicalRefs": [
-          {
-            "role": "locality pool",
-            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-            "resolvedName": "Stanton 2",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-            "resolvedName": "Stanton 3",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-            "resolvedName": "Stanton 4",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
-          {
-            "role": "locality pool",
-            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
-            "resolvedName": "Stanton 1",
-            "type": "MissionLocality",
-            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
-            "consideredPickup": true,
-            "reason": "Contract prerequisite gates mission availability."
-          },
           {
             "role": "locality pool",
             "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
@@ -7524,42 +6984,6 @@
           "role": "pickup",
           "rawType": "ContractPrerequisite_Locality",
           "attr": "localityAvailable",
-          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
-          "resolvedName": "Stanton 1",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
-          "resolvedName": "Stanton 2",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
-          "resolvedName": "Stanton 3",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
-          "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
-          "resolvedName": "Stanton 4",
-          "system": "Stanton",
-          "confidence": "resolved"
-        },
-        {
-          "role": "pickup",
-          "rawType": "ContractPrerequisite_Locality",
-          "attr": "localityAvailable",
           "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
           "resolvedName": "Stanton 2",
           "system": "Stanton",
@@ -7756,14 +7180,14 @@
       "destinationTokens": [],
       "rewards": {
         "summary": [
-          "Assassination +8,000",
+          "Standing +250",
           "Credits formula unresolved",
           "Completion tag"
         ],
         "blueprintRewards": [],
         "blueprintRewardGroups": [],
         "reputationRewards": [
-          "Assassination +8,000"
+          "Standing +250"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -7788,14 +7212,14 @@
         {
           "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
           "factionDisplayName": "Vaughn",
-          "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "scopeDisplayName": "Assassination",
-          "amount": 8000,
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 250,
           "confidence": "resolved",
           "sourceRefs": [
             "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-            "9beab676-a7d2-43ab-af3b-d9ff731be175",
-            "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
           ]
         }
       ],

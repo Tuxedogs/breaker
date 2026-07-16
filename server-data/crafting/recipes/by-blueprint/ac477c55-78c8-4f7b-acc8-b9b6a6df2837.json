@@ -5,17 +5,17 @@
     "displayName": "Capstan",
     "nameSource": "blueprintGuid",
     "componentType": "radar",
-    "size": "0",
-    "gradeRaw": "2",
-    "grade": "B",
+    "size": "1",
+    "gradeRaw": "3",
+    "grade": "C",
     "gradeSource": "AttachDef.Grade",
-    "class": "industrial",
+    "class": "civilian",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "8af71a8a-7da0-4e31-afc7-648fc916e387",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+    "manufacturerGuid": "967cd454-20d9-4cb8-8465-990ff1a1f769",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
     "baseStats": {
-      "mass": 20,
-      "health": 273,
+      "mass": 110,
+      "health": 500,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,11 +56,11 @@
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 21.9,
+        "timeToRepair": 38.3,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 810,
+        "nominalSignature": 1600,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -68,48 +68,48 @@
         "decayRate": 0.15
       },
       "distortion": {
-        "maximum": 1600,
-        "decayRate": 172.5,
-        "decayDelay": 1.15,
+        "maximum": 3000,
+        "decayRate": 220,
+        "decayDelay": 1.5,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s00_broadspecgo.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_wlop_s01_capstan.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "ac477c55-78c8-4f7b-acc8-b9b6a6df2837",
     "blueprintName": "BP_CRAFT_RADR_WLOP_S01_Capstan",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/radar/bp_craft_radr_wlop_s01_capstan.xml",
-    "entityClass": "ad6617d1-ccbf-45e4-9ac3-8bd0bc6b8ff5",
+    "entityClass": "22121214-6333-4edd-826a-0d06c15b5636",
     "craftTimeSeconds": 480,
     "materials": [
       {
@@ -129,7 +129,7 @@
         "slot": "TRANSMITTER",
         "costType": "resource",
         "materialKey": "quartz",
-        "materialName": "Quartz",
+        "materialName": "quartz",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",

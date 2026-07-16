@@ -5,17 +5,17 @@
     "displayName": "Ice Box",
     "nameSource": "blueprintGuid",
     "componentType": "cooler",
-    "size": "0",
+    "size": "2",
     "gradeRaw": "2",
     "grade": "B",
     "gradeSource": "AttachDef.Grade",
-    "class": "civilian",
+    "class": "stealth",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "6cf93625-789a-4e8f-a857-325d64a58c93",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+    "manufacturerGuid": "a2a97679-2a6e-4e89-80d8-439c88a01427",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
     "baseStats": {
-      "mass": 43,
-      "health": 53,
+      "mass": 230,
+      "health": 340,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,72 +56,72 @@
       },
       "resources": {
         "consumption": {
-          "Power": 1
+          "Power": 2
         },
         "generation": {
-          "Coolant": 16
+          "Coolant": 32
         }
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 17.7,
+        "timeToRepair": 48.7,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 375,
+        "nominalSignature": 500,
         "decayRate": 0.15
       },
       "irSignature": {
-        "nominalSignature": 2500,
+        "nominalSignature": 3330,
         "decayRate": 0.5
       },
       "distortion": {
-        "maximum": 1400,
-        "decayRate": 93.33334,
-        "decayDelay": 1.5,
+        "maximum": 2900,
+        "decayRate": 193.3333,
+        "decayDelay": 3,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "resources": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "ItemResourceComponentParams"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_jspn_s00_cryostarsl_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_tydt_s02_icebox_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "caaf41d5-d10c-49d7-bfad-fd5b3aa839c8",
     "blueprintName": "BP_CRAFT_COOL_TYDT_S02_IceBox_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/cooler/bp_craft_cool_tydt_s02_icebox_scitem.xml",
-    "entityClass": "7db13b34-c8b1-4e1a-9aba-3dcd7087e995",
+    "entityClass": "e6ad7280-57d0-4222-942e-6c2a23e78bf6",
     "craftTimeSeconds": 720,
     "materials": [
       {

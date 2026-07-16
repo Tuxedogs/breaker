@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
   "variants": [
     {
-      "variantKey": "68ba28ac-70b1-4f91-b994-7c7209f39e3f",
+      "variantKey": "ffb4a5bd-6e38-47b9-b221-e841c944536d",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -26,29 +26,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "medium",
       "tierLabel": "Medium Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Orange Lvl. Contract: Defend",
       "titleSource": "token_template_cleaned",
@@ -56,28 +54,33 @@
       "briefing": "I'm hoping that you'll be able to provide protection services at [Location]. One of our high priority clients is having some real trouble with a band of outlaws targeting their [Objects]. Need to be able to keep the assets as safe and intact as possible. Client’s expecting the service they pay for, so don’t mess this up or we might lose a loyal customer.\n\nFor now, we’re still a little in the dark when it comes to these outlaws, but if you manage to nail this to the Foxwell standards, we’re offering  [ScripAmount] MG Scrip to the main contractor. \n\nGood luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_M_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_Medium",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -433,7 +436,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 150,
@@ -450,38 +453,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "68ba28ac-70b1-4f91-b994-7c7209f39e3f",
+        "contractId": "ffb4a5bd-6e38-47b9-b221-e841c944536d",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_M_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_M_Desc_001"
       }
     },
     {
-      "variantKey": "67fa8115-4040-4788-882c-7236bb5dd7b7",
+      "variantKey": "253ed55b-be9b-40cf-8e57-d5105ec5cab4",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -489,29 +492,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "hard",
       "tierLabel": "High Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Orange Lvl. Contract: Protect",
       "titleSource": "token_template_cleaned",
@@ -519,28 +520,33 @@
       "briefing": "One of our high priority clients is under attack from a criminal gang targeting their [Objects] in [Location]. The client’s assets are valuable, so we need to keep those safe at all costs, but I won’t kid – it’ll be a challenge and a half with these thugs determined to do some real damage. \n\nIf it were me, I wouldn’t hesitate to bring backup to deal with them. They’re no joke, so we’re offering a well-earned [ScripAmount] MG Scrip to the main contractor who deals with these guys successfully. \n\nBest of luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_H_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_Hard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -896,7 +902,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 200,
@@ -913,38 +919,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "67fa8115-4040-4788-882c-7236bb5dd7b7",
+        "contractId": "253ed55b-be9b-40cf-8e57-d5105ec5cab4",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_H_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_H_Desc_001"
       }
     },
     {
-      "variantKey": "54900978-db60-46a2-9ce1-adc76758a0f4",
+      "variantKey": "d5c94f7b-0a69-4a65-9d5b-855620ba8829",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -952,29 +958,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "veryhard",
       "tierLabel": "Very High Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Red Lvl. Contract: Defend",
       "titleSource": "token_template_cleaned",
@@ -982,28 +986,33 @@
       "briefing": "Urgent ship support needed at [Location]. A known destructive criminal organization has been testing the waters with one of our clients’ property for months, and has now raised hell by targeting the client’s [Objects]. These assets are highly valuable, so need to keep those safe at all costs – though we know it’ll be no easy feat.\n\nI cannot stress enough how dangerous these guys are, so I wouldn’t hesitate to bring backup to deal with them. If you and the assets make it out intact, we’re offering a well-earned [ScripAmount] MG Scrip  to the main contractor. \n\nBest of luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_VH_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_VeryHard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -1359,7 +1368,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 250,
@@ -1376,38 +1385,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "54900978-db60-46a2-9ce1-adc76758a0f4",
+        "contractId": "d5c94f7b-0a69-4a65-9d5b-855620ba8829",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_VH_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_VH_Desc_001"
       }
     },
     {
-      "variantKey": "7557caf0-7285-4bbf-bdc1-4e452d31ecd9",
+      "variantKey": "62e63ca3-1f93-4810-8d86-b6377228190d",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -1415,29 +1424,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "super",
       "tierLabel": "Extreme Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Red Lvl. Contract: Protect",
       "titleSource": "token_template_cleaned",
@@ -1445,28 +1452,33 @@
       "briefing": "An emergency contract just came through about a gang of violent thugs wreaking havoc on one of our VIP clients’ infrastructures. If available, we need you to rush to [Location] and defend the client’s extremely valuable [Objects] at all costs. \n\nFoxwell is extremely aware of this group, so believe me when I say these pilots are not to be taken lightly. I strongly recommend that you arrange a  highly competent backup force to fly with you to the site.\n\nIf you manage to survive the encounter with the client’s property intact, we’re adding  [ScripAmount] MG Scrip any main contractor brave enough to take this job on. \n\nStay safe, and good luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_S_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_Super",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -1822,7 +1834,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 300,
@@ -1839,38 +1851,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "7557caf0-7285-4bbf-bdc1-4e452d31ecd9",
+        "contractId": "62e63ca3-1f93-4810-8d86-b6377228190d",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_S_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_S_Desc_001"
       }
     },
     {
-      "variantKey": "100c7734-7ea5-44ad-8613-47c8735b246f",
+      "variantKey": "ab9bc47d-57f5-4ae8-ad61-c78ade917627",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -1878,29 +1890,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "veryeasy",
       "tierLabel": "Very Low Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_VeryEasy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Yellow Lvl. Contract: Defend",
       "titleSource": "token_template_cleaned",
@@ -1908,28 +1918,33 @@
       "briefing": "Calling all pilots – one of our clients is looking for some protection for their [Objects], based in [Location]. From what we’ve gathered, the attackers are a group of wannabe outlaw pests who probably haven’t realized the value of the assets they’re trying to destroy, just wreaking havoc for the sake of it. Still, the client’s property is important, so should be kept as intact as possible.\n\nIf you take care of them to the Foxwell standards, we’re offering [ScripAmount] MG Scrip to the main contractor. \n\nGood luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_VE_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_VeryEasy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_VeryEasy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -2285,7 +2300,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -2302,38 +2317,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "100c7734-7ea5-44ad-8613-47c8735b246f",
+        "contractId": "ab9bc47d-57f5-4ae8-ad61-c78ade917627",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_VE_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_VE_Desc_001"
       }
     },
     {
-      "variantKey": "eda57006-6a8f-44d8-9689-c938fffc26fa",
+      "variantKey": "32e98d19-2172-4734-8fef-834af5a97141",
       "familyKey": "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-      "conceptKey": "b8c0e08dbca1a7f11c90",
+      "conceptKey": "6550b8f66b2f73fde387",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location",
         "titleStem": "foxwell-defend-destructible-entites",
         "descriptionStem": "foxwell-defend-destructible-entites",
         "handlerStem": "foxwell-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location",
@@ -2341,29 +2356,27 @@
           "title:foxwell-defend-destructible-entites",
           "description:foxwell-defend-destructible-entites",
           "handler:foxwell-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "easy",
       "tierLabel": "Low Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "CrimeStat limited",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Yellow Lvl. Contract: Protect",
       "titleSource": "token_template_cleaned",
@@ -2371,28 +2384,33 @@
       "briefing": "Any willing pilots in the area? Need some protection around [Location] for a client. A band of outlaws has been targeting their [Objects], and if nothing's done about it they'll do some real damage. Need someone to protect the client’s property as much as possible and deal with the thugs.\n\nFrom the intel we’ve managed to gather, these thugs are small-time but can cause some pain if you’re not careful. So, if you manage to nail this to the Foxwell standards, we’re offering [ScripAmount] MG Scrip to the main contractor. \n\nGood luck,\n\nKevin Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
       "rawName": "@Foxwell_DefendDestructibleEntites_E_Title_001",
       "internalName": "Foxwell_DefendDestructibleEntities_Nyx_Easy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "25a09f68-e95f-4712-978c-168e9337a746|Foxwell_DefendDestructibleEntities_Nyx",
-          "Foxwell_DefendDestructibleEntities_Nyx_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Nyx",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -2748,7 +2766,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -2765,19 +2783,19 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "eda57006-6a8f-44d8-9689-c938fffc26fa",
+        "contractId": "32e98d19-2172-4734-8fef-834af5a97141",
         "generatorGuid": "25a09f68-e95f-4712-978c-168e9337a746",
         "generatorName": "ContractGenerator.FoxwellEnforcement_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendDestructibleEntites_E_Title_001",
         "descriptionRaw": "@Foxwell_DefendDestructibleEntites_E_Desc_001"
       }

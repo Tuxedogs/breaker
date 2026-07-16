@@ -6,16 +6,16 @@
     "nameSource": "localization_item_name",
     "componentType": "quantumdrive",
     "size": "1",
-    "gradeRaw": "2",
-    "grade": "B",
+    "gradeRaw": "3",
+    "grade": "C",
     "gradeSource": "AttachDef.Grade",
-    "class": "competition",
+    "class": "military",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "cfc0122d-5275-415a-a656-3dcb3346feb5",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+    "manufacturerGuid": "0f9ffe57-8542-4d83-a246-72568a5f2f91",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
     "baseStats": {
-      "mass": 140,
-      "health": 120,
+      "mass": 150,
+      "health": 240,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,11 +56,11 @@
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 29.1,
+        "timeToRepair": 48,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 21600,
+        "nominalSignature": 18800,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -68,48 +68,48 @@
         "decayRate": 0.15
       },
       "distortion": {
-        "maximum": 1800,
-        "decayRate": 120,
+        "maximum": 3600,
+        "decayRate": 240,
         "decayDelay": 1.5,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "0ebb9a7a-cc06-4f34-913c-3be7e4237374",
     "blueprintName": "BP_CRAFT_QDRV_WETK_S01_Beacon_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/quantumdrive/size1/bp_craft_qdrv_wetk_s01_beacon_scitem.xml",
-    "entityClass": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
+    "entityClass": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
     "craftTimeSeconds": 840,
     "materials": [
       {
@@ -142,7 +142,7 @@
         "slot": "CONTAINMENT MATRIX",
         "costType": "resource",
         "materialKey": "beryl",
-        "materialName": "Beryl",
+        "materialName": "beryl",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",

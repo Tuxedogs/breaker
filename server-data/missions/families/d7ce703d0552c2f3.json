@@ -1,29 +1,31 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "family": {
     "familyKey": "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Pyro",
-    "displayName": "Head Hunters Escort Ships Pyro",
-    "titleSource": "internal_fallback",
+    "displayName": "Headhunters CareerContract",
+    "titleSource": "provider_archetype_fallback",
     "titleConfidence": "low",
     "rawName": "HeadHunters_EscortShips_Pyro",
     "internalName": "HeadHunters_EscortShips_Pyro_VeryEasy",
-    "provider": "Unknown provider",
-    "faction": "Unknown faction",
-    "missionType": "Contract",
+    "provider": "Headhunters",
+    "faction": "Headhunters",
+    "missionType": "CareerContract",
     "reputationScope": {
-      "scopeKey": "unknown-faction:unknown-scope",
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
       "displayName": "Ship Combat",
-      "factionKey": "unknown-faction",
-      "factionDisplayName": "Unknown faction",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
       "trackType": "Ship Combat",
-      "confidence": "unresolved",
+      "confidence": "partial",
       "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Pyro",
         "HeadHunters_EscortShips_Pyro_VeryEasy"
       ],
-      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
     },
     "missionArchetype": "Defend Ship",
     "variantCount": 6,
@@ -53,7 +55,7 @@
     "rewardedReputationPaths": [
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 500,
@@ -66,7 +68,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 2000,
@@ -79,7 +81,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 1000,
@@ -92,7 +94,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 16000,
@@ -105,7 +107,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 8000,
@@ -127,6 +129,7 @@
     ],
     "reputationRequirement": "Headhunters: Applicant Rank VI",
     "prerequisiteRequirements": [
+      "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
       "Procedural location placeholder",
       "Region B",
       "Headhunters: Applicant Rank VI",
@@ -135,8 +138,7 @@
       "Region A",
       "Prerequisite mission or completion tag",
       "Headhunters: Rank I Rank VI",
-      "Headhunters: Rank II Rank VI",
-      "Headhunters: Rank III Rank VI"
+      "Headhunters: Rank II Rank VI"
     ],
     "pickupSummary": "Pickup: Pyro, Stanton",
     "pickupStatuses": [
@@ -377,30 +379,32 @@
       "ContractResult_CalculatedReward:formula"
     ],
     "variantKeys": [
-      "1438c6b2-aec4-4b36-9d37-10eaf9d6c699",
-      "4e98a2ec-6367-4932-927f-e73b78c8207f",
-      "e8b4cf77-8606-4264-ada6-9cc3a6913a89",
-      "8cc441d4-6d6b-4972-a437-47d427eabdf6",
-      "717189bc-7bfd-436b-9f3e-6a59b786d58c",
-      "f974664d-4b13-4eca-bd8c-5b5e02356e30"
+      "bcf3840e-9b2b-4477-9993-fbb8ed5b7a92",
+      "7d05343c-d629-439b-befb-de86cf38715b",
+      "5aefc427-5c02-4940-a2f0-c93dab00383b",
+      "63c181b7-462b-45bf-8ca6-0a6eadf0bc25",
+      "2d54b476-7ed3-462a-b046-8ee4cf0b8249",
+      "0952be21-c29f-4e37-bcd8-6132d2f77646"
     ],
-    "searchText": "head hunters escort ships pyro eliminate annoyance headhunters_escortships_pyro_veryeasy unknown provider contract ship combat defend ship pickup: pyro, stanton headhunters flying in and out of [defendlocationwrapperlocation] are being harassed by some aggressive upstarts. need them dealt with before they become a real pain in the ass.   \n\nget there and i’ll update you on what these pests are doing so you can hunt ‘em down. \n\nclear ‘em all out i’ll throw [scripamount] council scrip to whoever accepted this gig as a bonus.\n\n- stows help headhunters at protect our site restore order at secure our airspace stop attack at 1438c6b2-aec4-4b36-9d37-10eaf9d6c699 4e98a2ec-6367-4932-927f-e73b78c8207f e8b4cf77-8606-4264-ada6-9cc3a6913a89 8cc441d4-6d6b-4972-a437-47d427eabdf6 717189bc-7bfd-436b-9f3e-6a59b786d58c f974664d-4b13-4eca-bd8c-5b5e02356e30 ship combat head hunters +500 credits formula unresolved item reward: council scrip completion tag ship combat head hunters +2,000 ship combat head hunters +1,000 ship combat head hunters +16,000 ship combat head hunters +8,000"
+    "searchText": "headhunters careercontract eliminate annoyance headhunters_escortships_pyro_veryeasy headhunters careercontract ship combat defend ship pickup: pyro, stanton headhunters flying in and out of [defendlocationwrapperlocation] are being harassed by some aggressive upstarts. need them dealt with before they become a real pain in the ass.   \n\nget there and i’ll update you on what these pests are doing so you can hunt ‘em down. \n\nclear ‘em all out i’ll throw [scripamount] council scrip to whoever accepted this gig as a bonus.\n\n- stows help headhunters at protect our site restore order at secure our airspace stop attack at bcf3840e-9b2b-4477-9993-fbb8ed5b7a92 7d05343c-d629-439b-befb-de86cf38715b 5aefc427-5c02-4940-a2f0-c93dab00383b 63c181b7-462b-45bf-8ca6-0a6eadf0bc25 2d54b476-7ed3-462a-b046-8ee4cf0b8249 0952be21-c29f-4e37-bcd8-6132d2f77646 ship combat head hunters +500 credits formula unresolved item reward: council scrip completion tag ship combat head hunters +2,000 ship combat head hunters +1,000 ship combat head hunters +16,000 ship combat head hunters +8,000"
   },
   "groupSummary": {
     "familyKey": "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Pyro",
-    "provider": "Unknown provider",
+    "provider": "Headhunters",
     "reputationScope": {
-      "scopeKey": "unknown-faction:unknown-scope",
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
       "displayName": "Ship Combat",
-      "factionKey": "unknown-faction",
-      "factionDisplayName": "Unknown faction",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
       "trackType": "Ship Combat",
-      "confidence": "unresolved",
+      "confidence": "partial",
       "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Pyro",
         "HeadHunters_EscortShips_Pyro_VeryEasy"
       ],
-      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
     },
     "missionArchetype": "Defend Ship",
     "variantCount": 6
@@ -428,7 +432,7 @@
     "rewardedReputationPaths": [
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 500,
@@ -441,7 +445,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 2000,
@@ -454,7 +458,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 1000,
@@ -467,7 +471,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 16000,
@@ -480,7 +484,7 @@
       },
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-        "factionDisplayName": "Unknown faction",
+        "factionDisplayName": "Headhunters",
         "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
         "scopeDisplayName": "Ship Combat Head Hunters",
         "amount": 8000,
@@ -514,99 +518,99 @@
     "blueprintRewardGroups": []
   },
   "variantKeys": [
-    "1438c6b2-aec4-4b36-9d37-10eaf9d6c699",
-    "4e98a2ec-6367-4932-927f-e73b78c8207f",
-    "e8b4cf77-8606-4264-ada6-9cc3a6913a89",
-    "8cc441d4-6d6b-4972-a437-47d427eabdf6",
-    "717189bc-7bfd-436b-9f3e-6a59b786d58c",
-    "f974664d-4b13-4eca-bd8c-5b5e02356e30"
+    "bcf3840e-9b2b-4477-9993-fbb8ed5b7a92",
+    "7d05343c-d629-439b-befb-de86cf38715b",
+    "5aefc427-5c02-4940-a2f0-c93dab00383b",
+    "63c181b7-462b-45bf-8ca6-0a6eadf0bc25",
+    "2d54b476-7ed3-462a-b046-8ee4cf0b8249",
+    "0952be21-c29f-4e37-bcd8-6132d2f77646"
   ],
   "variantSummaries": [
     {
-      "variantKey": "1438c6b2-aec4-4b36-9d37-10eaf9d6c699",
+      "variantKey": "bcf3840e-9b2b-4477-9993-fbb8ed5b7a92",
       "displayName": "Eliminate Annoyance",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
       "hasUnresolvedRewards": true
     },
     {
-      "variantKey": "4e98a2ec-6367-4932-927f-e73b78c8207f",
+      "variantKey": "7d05343c-d629-439b-befb-de86cf38715b",
       "displayName": "Help Headhunters at",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
       "hasUnresolvedRewards": true
     },
     {
-      "variantKey": "e8b4cf77-8606-4264-ada6-9cc3a6913a89",
+      "variantKey": "5aefc427-5c02-4940-a2f0-c93dab00383b",
       "displayName": "Protect Our Site",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
       "hasUnresolvedRewards": true
     },
     {
-      "variantKey": "8cc441d4-6d6b-4972-a437-47d427eabdf6",
+      "variantKey": "63c181b7-462b-45bf-8ca6-0a6eadf0bc25",
       "displayName": "Restore Order at",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
       "hasUnresolvedRewards": true
     },
     {
-      "variantKey": "717189bc-7bfd-436b-9f3e-6a59b786d58c",
+      "variantKey": "2d54b476-7ed3-462a-b046-8ee4cf0b8249",
       "displayName": "Secure Our Airspace",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
       "hasUnresolvedRewards": true
     },
     {
-      "variantKey": "f974664d-4b13-4eca-bd8c-5b5e02356e30",
+      "variantKey": "0952be21-c29f-4e37-bcd8-6132d2f77646",
       "displayName": "Stop Attack at",
-      "missionType": "Contract",
+      "missionType": "CareerContract",
       "pickupLocation": {
         "status": "generated_from_pool",
         "displayName": "Region B, Region C, Region D +2",
         "confidence": "medium"
       },
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,

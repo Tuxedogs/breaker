@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
   "variants": [
     {
-      "variantKey": "aeb8462c-ac70-4861-8f23-e60c99c1c02c",
+      "variantKey": "f4054178-9d89-4963-a801-387a902d5dc7",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -26,11 +26,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "easy",
@@ -41,41 +41,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Easy",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_E_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Easy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -1082,7 +1085,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -1099,38 +1102,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "aeb8462c-ac70-4861-8f23-e60c99c1c02c",
+        "contractId": "f4054178-9d89-4963-a801-387a902d5dc7",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_E_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_E_Desc"
       }
     },
     {
-      "variantKey": "22a5240e-d007-40b7-a2e3-027065c19537",
+      "variantKey": "8436bbb2-8057-4220-b75d-65cb9639389f",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -1138,11 +1141,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "hard",
@@ -1153,41 +1156,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Hard",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_H_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Hard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -2252,7 +2258,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 200,
@@ -2269,38 +2275,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "22a5240e-d007-40b7-a2e3-027065c19537",
+        "contractId": "8436bbb2-8057-4220-b75d-65cb9639389f",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_H_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_H_Desc"
       }
     },
     {
-      "variantKey": "b1b9630e-06d9-4760-a2be-1899fdb97fb7",
+      "variantKey": "9731c308-24e7-4f31-abe0-10f2078483ab",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -2308,11 +2314,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "medium",
@@ -2323,41 +2329,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Medium",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_M_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Medium",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -3364,7 +3373,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 150,
@@ -3381,38 +3390,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "b1b9630e-06d9-4760-a2be-1899fdb97fb7",
+        "contractId": "9731c308-24e7-4f31-abe0-10f2078483ab",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_M_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_M_Desc"
       }
     },
     {
-      "variantKey": "a5de5995-825a-408b-bedb-3e386192c8b1",
+      "variantKey": "ece88c3a-492e-478e-b7f2-fa3c80d8b643",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -3420,11 +3429,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "super",
@@ -3435,41 +3444,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Super",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_S_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Super",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -4534,7 +4546,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 300,
@@ -4551,38 +4563,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "a5de5995-825a-408b-bedb-3e386192c8b1",
+        "contractId": "ece88c3a-492e-478e-b7f2-fa3c80d8b643",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_S_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_S_Desc"
       }
     },
     {
-      "variantKey": "f3293ec9-3120-413c-81dc-6edebb49593c",
+      "variantKey": "af3d21d8-c6a3-46c6-9f1b-fc1ceb5472c4",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -4590,11 +4602,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "veryeasy",
@@ -4605,41 +4617,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_From"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Very Easy From",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_VE_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_From",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_From"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -5646,7 +5661,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -5663,38 +5678,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "f3293ec9-3120-413c-81dc-6edebb49593c",
+        "contractId": "af3d21d8-c6a3-46c6-9f1b-fc1ceb5472c4",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_VE_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VE_Desc"
       }
     },
     {
-      "variantKey": "1909b168-0abc-4ebc-99cc-f489a53078e2",
+      "variantKey": "359ac395-ea43-4849-9efa-45c704b8fd1a",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -5702,11 +5717,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "veryeasy",
@@ -5717,41 +5732,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_To"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Very Easy To",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_VE_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_To",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_To"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -6758,38 +6776,38 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "1909b168-0abc-4ebc-99cc-f489a53078e2",
+        "contractId": "359ac395-ea43-4849-9efa-45c704b8fd1a",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_VE_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VE_Desc"
       }
     },
     {
-      "variantKey": "3bff1eba-cb09-412c-a755-42292b3e0679",
+      "variantKey": "d838d03b-8b38-48c6-956e-2017daae0aca",
       "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-      "conceptKey": "8d5f0db81e76af352e76",
+      "conceptKey": "70c7c4bef3688e7ef882",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|unknown:bounded||||",
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "foxwell-defend-entites-and-escort",
         "descriptionStem": "foxwell-defend-entites-and-escort",
         "handlerStem": "foxwell-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "unlock:3d81bc60eb17",
-        "legalState": "unknown:bounded",
+        "legalState": "lawful:bounded",
         "confidence": "strong",
         "evidence": [
           "activity:defend-location+escort-ship",
@@ -6797,11 +6815,11 @@
           "title:foxwell-defend-entites-and-escort",
           "description:foxwell-defend-entites-and-escort",
           "handler:foxwell-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:unlock:3d81bc60eb17",
-          "legal:unknown:bounded"
+          "legal:lawful:bounded"
         ]
       },
       "tierKey": "veryhard",
@@ -6812,41 +6830,44 @@
         "CrimeStat limited"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Foxwell Defend Entities And Escort Pyro Very Hard",
       "titleSource": "internal_fallback",
       "titleConfidence": "low",
       "rawName": "@Foxwell_DefendEntitesAndEscort_VH_Title",
       "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryHard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
-        "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
         "sourceRefs": [
-          "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
-          "Foxwell_DefendEntitiesAndEscort_Pyro_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
-      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Region B",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "crimeStat",
           "label": "CrimeStat limited to 2 or below",
@@ -7911,7 +7932,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Foxwell Enforcement",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 250,
@@ -7928,19 +7949,19 @@
         "Release flag not set"
       ],
       "crimeStatRequirement": "bounded",
-      "lawfulClassification": "unknown",
-      "lawfulConfidence": "unknown",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
       "confidence": {
         "hasUnresolvedLocation": false,
         "hasUnresolvedRewards": true,
         "hasUnresolvedPrerequisites": true
       },
       "technical": {
-        "contractId": "3bff1eba-cb09-412c-a755-42292b3e0679",
+        "contractId": "d838d03b-8b38-48c6-956e-2017daae0aca",
         "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
         "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Foxwell_DefendEntitesAndEscort_VH_Title",
         "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VH_Desc"
       }

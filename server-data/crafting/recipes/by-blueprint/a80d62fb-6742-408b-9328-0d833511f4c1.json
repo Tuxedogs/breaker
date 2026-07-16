@@ -11,10 +11,10 @@
     "gradeSource": "AttachDef.Grade",
     "class": "civilian",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "65a5d887-3b21-4046-a718-6912c0c7c3be",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+    "manufacturerGuid": "f91beb30-915c-42f6-9b1f-f5bd74633fd6",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
     "baseStats": {
-      "mass": 1300,
+      "mass": 950,
       "health": 1300,
       "damageResistances": {
         "physical": {
@@ -59,16 +59,16 @@
           "Power": 4
         },
         "generation": {
-          "Shield": 20000
+          "Shield": 14400
         }
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 89.1,
+        "timeToRepair": 111,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 1800,
+        "nominalSignature": 1500,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -84,44 +84,44 @@
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "resources": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "ItemResourceComponentParams"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_behr_s03_6ca_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_seco_s03_armor_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "a80d62fb-6742-408b-9328-0d833511f4c1",
     "blueprintName": "BP_CRAFT_SHLD_SECO_S03_ARMOR_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/shield/bp_craft_shld_seco_s03_armor_scitem.xml",
-    "entityClass": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
+    "entityClass": "324e5ee4-12b4-4f41-bccc-b3b001398a74",
     "craftTimeSeconds": 810,
     "materials": [
       {
@@ -141,7 +141,7 @@
         "slot": "FIELD ARRAY",
         "costType": "resource",
         "materialKey": "laranite",
-        "materialName": "Laranite",
+        "materialName": "laranite",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",
@@ -154,7 +154,7 @@
         "slot": "FREQUENCY CONTROLLER",
         "costType": "item",
         "materialKey": "glacosite",
-        "materialName": "Glacosite",
+        "materialName": "glacosite",
         "materialForm": "gem",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingItemEntityGuid",

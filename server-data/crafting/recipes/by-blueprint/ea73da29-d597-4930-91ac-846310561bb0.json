@@ -5,17 +5,17 @@
     "displayName": "White Rose",
     "nameSource": "blueprintGuid",
     "componentType": "powerplant",
-    "size": "0",
-    "gradeRaw": "2",
-    "grade": "B",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
     "gradeSource": "AttachDef.Grade",
-    "class": "industrial",
+    "class": "civilian",
     "classSource": "AttachDef.Localization.Description->global.ini:Class",
-    "manufacturerGuid": "d7cc897f-b760-4a73-93c0-27e23c52db0a",
-    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+    "manufacturerGuid": "40c59850-8fb5-4a0e-ab61-7fd3871a632a",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
     "baseStats": {
-      "mass": 93,
-      "health": 98,
+      "mass": 150,
+      "health": 220,
       "damageResistances": {
         "physical": {
           "ignoreMeleeDamage": 1,
@@ -56,11 +56,11 @@
       },
       "selfRepair": {
         "maxRepairCount": 1,
-        "timeToRepair": 21.6,
+        "timeToRepair": 34.7,
         "healthRatio": 0.2
       },
       "emSignature": {
-        "nominalSignature": 5450,
+        "nominalSignature": 6190,
         "decayRate": 0.15
       },
       "irSignature": {
@@ -68,48 +68,48 @@
         "decayRate": 0.15
       },
       "distortion": {
-        "maximum": 2600,
-        "decayRate": 173.3333,
+        "maximum": 3350,
+        "decayRate": 223.3333,
         "decayDelay": 1.5,
         "warningRatio": 0.75
       }
     },
     "statSources": {
       "mass": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "SEntityRigidPhysicsControllerParams",
         "attribute": "Mass"
       },
       "health": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "SHealthComponentParams",
         "attribute": "Health"
       },
       "damageResistances": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "SHealthComponentParams/DamageResistances"
       },
       "selfRepair": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "ItemResourceComponentParams/selfRepair"
       },
       "emSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "EMSignature"
       },
       "irSignature": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "IRSignature"
       },
       "distortion": {
-        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_just_s00_defiant_scitem.xml",
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_sasu_s01_whiterose_scitem.xml",
         "node": "SDistortionParams"
       }
     },
     "blueprintGuid": "ea73da29-d597-4930-91ac-846310561bb0",
     "blueprintName": "BP_CRAFT_POWR_SASU_S01_WhiteRose_SCItem",
     "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/powerplant/bp_craft_powr_sasu_s01_whiterose_scitem.xml",
-    "entityClass": "ad59f651-83d0-42f3-839a-8f055243ba6b",
+    "entityClass": "a5518651-cd87-490d-98ee-dccba428fdca",
     "craftTimeSeconds": 780,
     "materials": [
       {
@@ -129,7 +129,7 @@
         "slot": "VOLTAGE REGULATOR",
         "costType": "resource",
         "materialKey": "laranite",
-        "materialName": "Laranite",
+        "materialName": "laranite",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",
@@ -142,7 +142,7 @@
         "slot": "STATOR CORES",
         "costType": "resource",
         "materialKey": "bexalite",
-        "materialName": "Bexalite",
+        "materialName": "bexalite",
         "materialForm": "refined",
         "materialNameSource": "material_identity_index",
         "guidRole": "craftingResourceGuid",

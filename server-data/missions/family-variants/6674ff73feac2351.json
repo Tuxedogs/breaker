@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Nyx",
   "variants": [
     {
@@ -50,6 +50,7 @@
       "displayName": "CRITICAL REFUEL REQUEST:",
       "titleSource": "token_template_cleaned",
       "titleConfidence": "medium",
+      "briefing": "Hi,\n\nAnother day another beacon. There's a [Ship] looking to be topped up with [FuelType] at [Location].  The client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nI can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. We've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nIf you decide to take the job, do me a favor and keep everything peeled. If you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nMaybe I'm being paranoid, but that doesn't mean they're not out to get you, as Momma Deloit used to say. \n\nActually she never said that - but I'm pretty sure she would if she did this for a living.\n\nJust do the job and get home safe, okay?\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
       "rawName": "@UWC_Refueling_high_title_001",
       "internalName": "Refueling_Nyx_Hard",
       "missionType": "CareerContract",
@@ -265,15 +266,19 @@
           "unresolved": false
         },
         "objective": {
-          "status": "unknown",
-          "displayName": "Unknown objective location",
-          "displayLabel": "Unknown objective location",
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
           "systems": [],
-          "confidence": "low",
-          "sourceRefs": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
           "unresolvedRefs": [],
-          "sourceTextTokens": [],
-          "unresolved": false
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
         }
       },
       "locationRefs": [
@@ -357,6 +362,13 @@
           "resolvedName": "Nyx",
           "system": "Nyx",
           "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
         }
       ],
       "locations": [
@@ -552,7 +564,7 @@
       "displayName": "REFUEL REQUEST:",
       "titleSource": "token_template_cleaned",
       "titleConfidence": "medium",
-      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is running on empty, so make sure your fuel pods are topped off.\n\nThe client vessel will pay you at the rate of [FuelRate] aUEC per SCU of Hydrogen and  [QTFuelRate] aUEC per SCU of Quantum , and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
       "rawName": "@UWC_Refueling_easy_title_001",
       "internalName": "Refueling_Decoy_Nyx",
       "missionType": "CareerContract",
@@ -1066,7 +1078,7 @@
       "displayName": "REFUEL REQUEST:",
       "titleSource": "token_template_cleaned",
       "titleConfidence": "medium",
-      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is running on empty, so make sure your fuel pods are topped off.\n\nThe client vessel will pay you at the rate of [FuelRate] aUEC per SCU of Hydrogen and  [QTFuelRate] aUEC per SCU of Quantum , and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
       "rawName": "@UWC_Refueling_easy_title_001",
       "internalName": "Refueling_Nyx_Easy",
       "missionType": "CareerContract",
@@ -1577,7 +1589,7 @@
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "titleSource": "localized_clean",
       "titleConfidence": "high",
       "rawName": "@UWC_Refueling_multiple_med_title_001",
@@ -2094,7 +2106,7 @@
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "titleSource": "localized_clean",
       "titleConfidence": "high",
       "rawName": "@UWC_Refueling_multiple_med_title_001",
@@ -2596,7 +2608,7 @@
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
         ]
       },
-      "displayName": "URGENT FLEET REFUEL",
+      "displayName": "URGENT CONVOY REFUEL",
       "titleSource": "localized_clean",
       "titleConfidence": "high",
       "rawName": "@UWC_Refueling_multiple_med_title_001",
@@ -3116,6 +3128,7 @@
       "displayName": "URGENT REFUEL REQUEST:",
       "titleSource": "token_template_cleaned",
       "titleConfidence": "medium",
+      "briefing": "Hey, you!\n\nI've got a beacon at [Location]. They say their tanks are running dry and they could use [FuelType]. If you're interested, I get the feeling they'll be really pleased to see you.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nThey're stuck out in an area with a bad reputation, though things have been a bit more quiet recently. Still worth staying alert I'd say, just in case there's still trouble lurking out there. \n\nEither way, the sooner everyone's able to get flying again - and that includes you - the better.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
       "rawName": "@UWC_Refueling_moderate_title_001",
       "internalName": "Refueling_Nyx_Moderate",
       "missionType": "CareerContract",
@@ -3331,15 +3344,19 @@
           "unresolved": false
         },
         "objective": {
-          "status": "unknown",
-          "displayName": "Unknown objective location",
-          "displayLabel": "Unknown objective location",
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
           "systems": [],
-          "confidence": "low",
-          "sourceRefs": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
           "unresolvedRefs": [],
-          "sourceTextTokens": [],
-          "unresolved": false
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
         }
       },
       "locationRefs": [
@@ -3423,6 +3440,13 @@
           "resolvedName": "Nyx",
           "system": "Nyx",
           "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
         }
       ],
       "locations": [

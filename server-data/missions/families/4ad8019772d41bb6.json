@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "family": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateSpecific_Stanton_Career",
     "displayName": "Vaughn CareerContract",
@@ -13,15 +13,15 @@
     "faction": "Vaughn",
     "missionType": "CareerContract",
     "reputationScope": {
-      "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-      "displayName": "Assassination",
-      "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
       "factionDisplayName": "Vaughn",
-      "trackType": "Assassination",
+      "trackType": "Standing",
       "confidence": "resolved",
       "sourceRefs": [
-        "9beab676-a7d2-43ab-af3b-d9ff731be175"
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
       ]
     },
     "missionArchetype": "Mercenary",
@@ -33,11 +33,8 @@
     ],
     "rewardSummary": [
       "Blueprint: Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8",
-      "Assassination +1,000",
-      "Assassination -500",
-      "Credits formula unresolved",
-      "Assassination +500",
-      "Assassination -250"
+      "Standing +100",
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [
       "Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8"
@@ -149,62 +146,20 @@
       }
     ],
     "reputationRewards": [
-      "Assassination +1,000",
-      "Assassination -500",
-      "Assassination +500",
-      "Assassination -250"
+      "Standing +100"
     ],
     "rewardedReputationPaths": [
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 1000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "1335b737-6188-4c21-8923-98a74bcd3071"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -500,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "4ad8855c-862d-4681-bebb-99ac160cb7b0"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 500,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "36d5786c-5258-48ca-a3b8-fefb5838e143"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -250,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "0c926b08-6567-490c-964e-a5413e757dc2"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
         ]
       }
     ],
@@ -217,9 +172,9 @@
       "ContractResult_CalculatedReward:formula"
     ],
     "prerequisiteRequirements": [
-      "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
+      "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "Procedural location placeholder",
-      "Assassin In Training / 1 rep to Master Assassin / 112,000 rep"
+      "Neutral / 0 rep to Elite Contractor / 95,250 rep"
     ],
     "pickupSummary": "Pickup: unresolved for 3 variants",
     "pickupStatuses": [
@@ -334,21 +289,21 @@
       "f0274151-6591-4bab-b6db-bd01536f9f28",
       "494d970a-a73e-af8d-155e-ab608cf65e92"
     ],
-    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminatespecific_eliminatecompetionworkers vaughn careercontract assassination mercenary pickup: unresolved for 3 variants they say there is no honor among thieves. today, it seems, you're targeting one of your own. \n\nplease head to [location] and kill [targetname]. what you do with the others there is entirely up to you.\n\nearnestly,\nvaughn pyro contract they will be missed 41d02f67-3abc-4a67-86bc-7037c2c4b2bd f0274151-6591-4bab-b6db-bd01536f9f28 494d970a-a73e-af8d-155e-ab608cf65e92 blueprint: vaughn generator eliminate specific: killshot rifle, deadrig shotgun, overlord arms supernova, overlord core supernova +8 assassination +1,000 assassination -500 credits formula unresolved assassination +500 assassination -250"
+    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminatespecific_eliminatecompetionworkers vaughn careercontract standing mercenary pickup: unresolved for 3 variants they say there is no honor among thieves. today, it seems, you're targeting one of your own. \n\nplease head to [location] and kill [targetname]. what you do with the others there is entirely up to you.\n\nearnestly,\nvaughn pyro contract they will be missed 41d02f67-3abc-4a67-86bc-7037c2c4b2bd f0274151-6591-4bab-b6db-bd01536f9f28 494d970a-a73e-af8d-155e-ab608cf65e92 blueprint: vaughn generator eliminate specific: killshot rifle, deadrig shotgun, overlord arms supernova, overlord core supernova +8 standing +100 credits formula unresolved"
   },
   "groupSummary": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateSpecific_Stanton_Career",
     "provider": "Vaughn",
     "reputationScope": {
-      "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-      "displayName": "Assassination",
-      "rawName": "SReputationScopeParams.ReputationScope_Assassination",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
       "factionDisplayName": "Vaughn",
-      "trackType": "Assassination",
+      "trackType": "Standing",
       "confidence": "resolved",
       "sourceRefs": [
-        "9beab676-a7d2-43ab-af3b-d9ff731be175"
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
       ]
     },
     "missionArchetype": "Mercenary",
@@ -357,11 +312,8 @@
   "rewardSummary": {
     "rewardSummary": [
       "Blueprint: Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8",
-      "Assassination +1,000",
-      "Assassination -500",
-      "Credits formula unresolved",
-      "Assassination +500",
-      "Assassination -250"
+      "Standing +100",
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [
       "Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8"
@@ -473,62 +425,20 @@
       }
     ],
     "reputationRewards": [
-      "Assassination +1,000",
-      "Assassination -500",
-      "Assassination +500",
-      "Assassination -250"
+      "Standing +100"
     ],
     "rewardedReputationPaths": [
       {
         "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
         "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 1000,
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
         "confidence": "resolved",
         "sourceRefs": [
           "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "1335b737-6188-4c21-8923-98a74bcd3071"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -500,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "4ad8855c-862d-4681-bebb-99ac160cb7b0"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": 500,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "36d5786c-5258-48ca-a3b8-fefb5838e143"
-        ]
-      },
-      {
-        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-        "factionDisplayName": "Vaughn",
-        "scopeKey": "9beab676-a7d2-43ab-af3b-d9ff731be175",
-        "scopeDisplayName": "Assassination",
-        "amount": -250,
-        "confidence": "resolved",
-        "sourceRefs": [
-          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
-          "9beab676-a7d2-43ab-af3b-d9ff731be175",
-          "0c926b08-6567-490c-964e-a5413e757dc2"
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
         ]
       }
     ],
@@ -669,7 +579,7 @@
         "displayName": "Unknown",
         "confidence": "low"
       },
-      "standingRequirement": "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
@@ -684,7 +594,7 @@
         "displayName": "Unknown",
         "confidence": "low"
       },
-      "standingRequirement": "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
@@ -699,7 +609,7 @@
         "displayName": "Unknown",
         "confidence": "low"
       },
-      "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
       "creditStatus": "formula_unresolved",
       "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,

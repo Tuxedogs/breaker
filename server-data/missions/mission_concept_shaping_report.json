@@ -1,40 +1,40 @@
 {
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "stage": "Stage 1.2 meaningful offer-title boundary tuning",
   "gatePassed": true,
   "stage2Recommendation": "hold_for_concept-granularity_review",
   "totals": {
     "oldStage1GlobalConceptCount": 755,
-    "factionsProcessed": 27,
-    "reputationScopesProcessed": 39,
-    "oldGlobalFamilyCardCount": 247,
-    "newGlobalConceptCardCount": 518,
-    "conceptsWithOneFamily": 479,
-    "conceptsWithMultipleFamilies": 39,
-    "familiesSplitIntoMultipleConcepts": 87,
-    "variantsAssignedExactlyOnce": 2460,
+    "factionsProcessed": 28,
+    "reputationScopesProcessed": 38,
+    "oldGlobalFamilyCardCount": 259,
+    "newGlobalConceptCardCount": 533,
+    "conceptsWithOneFamily": 490,
+    "conceptsWithMultipleFamilies": 43,
+    "familiesSplitIntoMultipleConcepts": 91,
+    "variantsAssignedExactlyOnce": 2501,
     "unassignedVariants": 0,
     "multiplyAssignedVariants": 0,
     "groupingConfidence": {
-      "strong": 298,
+      "strong": 284,
       "partial": 14,
-      "unresolved": 206
+      "unresolved": 235
     },
     "mixedRewardConcepts": 50,
     "mixedRewardShelfViolations": 0,
     "conceptsCrossingOwningScopes": 0,
     "multiFamilyNonStrongConcepts": 0,
     "headhuntersOldStage1ConceptCount": 141,
-    "headhuntersTunedConceptCount": 45
+    "headhuntersTunedConceptCount": 48
   },
   "slicedApi": {
     "browserIndexVariantBodies": 0,
-    "browserIndexSerializedBytes": 3994793,
-    "conceptFamilyVariantReferenceCount": 594,
-    "familyVariantRouteReferences": 247,
-    "familyDetailRouteReferences": 247,
-    "exactVariantRouteReferences": 2460,
+    "browserIndexSerializedBytes": 4161047,
+    "conceptFamilyVariantReferenceCount": 618,
+    "familyVariantRouteReferences": 259,
+    "familyDetailRouteReferences": 259,
+    "exactVariantRouteReferences": 2501,
     "familyRoutesPreserved": true,
     "exactVariantRoutesPreserved": true
   },
@@ -48,9 +48,20 @@
   "validationExamples": [
     {
       "factionName": "Headhunters",
-      "oldFamilyCardCount": 23,
-      "newConceptCardCount": 45,
+      "oldFamilyCardCount": 32,
+      "newConceptCardCount": 48,
       "collapsed": [
+        {
+          "conceptKey": "90cf652017d4193d29b8",
+          "displayName": "Backup Needed Now",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "4a18ad5d-7727-4aec-a876-7084460c41ed|HeadHunters_DefendShip_Nyx",
+            "4a18ad5d-7727-4aec-a876-7084460c41ed|HeadHunters_DefendShip_Stanton"
+          ],
+          "variantCount": 12,
+          "confidence": "strong"
+        },
         {
           "conceptKey": "53d174fed535c0a8c4bc",
           "displayName": "Deep space hit",
@@ -64,6 +75,29 @@
           "confidence": "strong"
         },
         {
+          "conceptKey": "037a939b41a21c4a920e",
+          "displayName": "Defend From Mercs",
+          "owningScope": "Standing",
+          "familyKeys": [
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Pyro",
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Stanton"
+          ],
+          "variantCount": 18,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "4f7879c8aff53265ddde",
+          "displayName": "Eliminate Annoyance",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Pyro",
+            "f65a4fc0-4e32-4f82-a496-a3a318416266|HeadHunters_EscortShips_Stanton"
+          ],
+          "variantCount": 12,
+          "confidence": "strong"
+        },
+        {
           "conceptKey": "523caaf6448d5c03f3fd",
           "displayName": "Finish the job",
           "owningScope": "Hauling",
@@ -73,17 +107,6 @@
             "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton"
           ],
           "variantCount": 18,
-          "confidence": "strong"
-        },
-        {
-          "conceptKey": "b515b67bc27778eb23f8",
-          "displayName": "Hit on XenoThreat command",
-          "owningScope": "Ship Combat",
-          "familyKeys": [
-            "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
-            "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll_Nyx"
-          ],
-          "variantCount": 36,
           "confidence": "strong"
         }
       ],
@@ -525,8 +548,8 @@
     }
   ],
   "reviewFlags": [
-    "Conservative objective splitting increases candidate cards from 247 families to 518 concepts; review readability before Stage 2.",
-    "220 partial or unresolved concepts remain intentionally unmerged."
+    "Conservative objective splitting increases candidate cards from 259 families to 533 concepts; review readability before Stage 2.",
+    "249 partial or unresolved concepts remain intentionally unmerged."
   ],
   "notes": [
     "Concept grouping is global and contains no faction-specific grouping rules.",

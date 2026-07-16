@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
   "variants": [
     {
-      "variantKey": "9cee381f-5638-48df-bffd-0be4600fa531",
+      "variantKey": "99eef676-42d3-4bd5-b910-28d5b1f11dcf",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -26,8 +26,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -37,17 +37,15 @@
       "tierLabel": "Very High Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Defend From Mercs",
       "titleSource": "token_template_cleaned",
@@ -55,28 +53,33 @@
       "briefing": "A band of hired guns has been sent to mess with our interests over at [Location]. Seems someone has been tipped off that if the [Objects] there are destroyed that it will severely interrupt Headhunter operations in the area. That's a problem I want you to fix.\n\nNot gonna lie, theses mercs are no joke. It'd be foolish to go it alone. That’s why you’ll need to be fully supplied and find some trustworthy friends to fly at your wing.\n\nThis op needs to go off without a hitch, so I’m offering the main contractor [ScripAmount] Council Scrip for a job well done. \n\nStows out.",
       "rawName": "@Headhunters_DefendDestructibleEntites_VH_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_VeryHard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_VeryHard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -453,7 +456,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 250,
@@ -478,27 +481,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "9cee381f-5638-48df-bffd-0be4600fa531",
+        "contractId": "99eef676-42d3-4bd5-b910-28d5b1f11dcf",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_VH_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_VH_Desc_001"
       }
     },
     {
-      "variantKey": "993af7d7-48b6-4312-92ff-d813d4eb3cb5",
+      "variantKey": "dd543713-310d-44e9-83ce-5a77ed209abe",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -509,8 +512,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -520,17 +523,15 @@
       "tierLabel": "Extreme Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Guard At All Costs",
       "titleSource": "token_template_cleaned",
@@ -538,28 +539,33 @@
       "briefing": "Our partners at [Location] need help. A rival outlaw crew are swarming the area and attacking the [Objects] there. That’d be bad enough as is, but this site is absolutely critical to our future plans in the area and its damn important that it remains in working order.\n\nWith the scale of this attack and the skill of these pilots, there's no doubt that some reliable backup would serve you well. Gather your crew, fly out to the site, and stop these bootlicks before they can do any lasting damage. \n\nTo prove just how serious we are about getting this done right, the main contractor will earn [ScripAmount] Council Scrip for making sure absolutely nothing goes wrong.\n\n- Stow",
       "rawName": "@Headhunters_DefendDestructibleEntites_S_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_Super",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Super"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -936,7 +942,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 300,
@@ -961,27 +967,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "993af7d7-48b6-4312-92ff-d813d4eb3cb5",
+        "contractId": "dd543713-310d-44e9-83ce-5a77ed209abe",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_S_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_S_Desc_001"
       }
     },
     {
-      "variantKey": "c0c71b98-64c3-4564-b74c-f1d97a3579fa",
+      "variantKey": "78c14822-ea17-41c9-af27-4e2072675948",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -992,8 +998,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -1003,17 +1009,15 @@
       "tierLabel": "Very Low Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_VeryEasy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Keep Safe From Upstarts",
       "titleSource": "token_template_cleaned",
@@ -1021,28 +1025,33 @@
       "briefing": "You don't need all the details, but Headhunters have an interest in what happens over at [Location] and I just got word they're being harassed by some aggressive upstarts. \n\nThe dumb sods are trying to cripple the place by taking out their [Objects]. I'm not having it.   \n\nGet there and provide some protection before everything gets destroyed. These chumps are lightweights so shouldn't be too much of a problem for you to handle. \n\nClear ‘em all out I’ll throw [ScripAmount] Council Scrip to whoever accepted this gig as a bonus.\n\n- Stows",
       "rawName": "@Headhunters_DefendDestructibleEntites_VE_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_VeryEasy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_VeryEasy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -1419,7 +1428,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -1444,27 +1453,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "c0c71b98-64c3-4564-b74c-f1d97a3579fa",
+        "contractId": "78c14822-ea17-41c9-af27-4e2072675948",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_VE_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_VE_Desc_001"
       }
     },
     {
-      "variantKey": "d9b69130-1021-4d00-9178-ab800bcb3027",
+      "variantKey": "f89b7163-52b6-4b8b-a941-6c62a8d571ba",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -1475,8 +1484,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -1486,17 +1495,15 @@
       "tierLabel": "Low Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Protect From Luggers",
       "titleSource": "token_template_cleaned",
@@ -1504,28 +1511,33 @@
       "briefing": "Some morons with some seriously inflated notion of their place in 'verse made the damn foolish choice of attacking the [Objects] at [Location]. We've got some things in play over there so we can’t let ‘em get away with it.\n\nIf you're interesting in helpin' out, get there and deal with these luggers before they can do too much damage. Don't figure you'll break too much of a sweat dealin' with them.\n\nAlso, I’ll sweeten the pot by giving the main contractor [ScripAmount] Council Scrip just to show my appreciation. \n\nStows out.",
       "rawName": "@Headhunters_DefendDestructibleEntites_E_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_Easy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Easy"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -1902,7 +1914,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 100,
@@ -1927,27 +1939,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "d9b69130-1021-4d00-9178-ab800bcb3027",
+        "contractId": "f89b7163-52b6-4b8b-a941-6c62a8d571ba",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_E_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_E_Desc_001"
       }
     },
     {
-      "variantKey": "eb41f9dc-fa18-4d75-8fe4-66d5acd27910",
+      "variantKey": "f03e9edd-f363-4b31-89d3-9747a6591314",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -1958,8 +1970,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -1969,17 +1981,15 @@
       "tierLabel": "Medium Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Secure From Rivals",
       "titleSource": "token_template_cleaned",
@@ -1987,28 +1997,33 @@
       "briefing": "Our friends at [Location] have been compromised. A new gang in the area  are threatening them by targeting their [Objects].  \n\nIf those get destroyed its going to be seriously bad for business, so I want you over there pronto on protection duty.  \n \nIf you need any extra motivation, I’m adding [ScripAmount] Council Scrip for the main contractor.\n\n- Stows",
       "rawName": "@Headhunters_DefendDestructibleEntites_M_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_Medium",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Medium"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -2385,7 +2400,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 150,
@@ -2410,27 +2425,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "eb41f9dc-fa18-4d75-8fe4-66d5acd27910",
+        "contractId": "f03e9edd-f363-4b31-89d3-9747a6591314",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_M_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_M_Desc_001"
       }
     },
     {
-      "variantKey": "b5e32df0-1928-42da-896c-737f08b86f9c",
+      "variantKey": "b3956ae1-de0c-4c09-8364-0b7389836e2a",
       "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-      "conceptKey": "24f3019d3ea797ccbfbe",
+      "conceptKey": "037a939b41a21c4a920e",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location",
         "titleStem": "headhunters-defend-destructible-entites",
         "descriptionStem": "headhunters-defend-destructible-entites",
         "handlerStem": "head-hunters-defend-destructible-entities",
-        "archetype": "Contract",
-        "contractType": "Contract",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -2441,8 +2456,8 @@
           "title:headhunters-defend-destructible-entites",
           "description:headhunters-defend-destructible-entites",
           "handler:head-hunters-defend-destructible-entities",
-          "contract:contract",
-          "archetype:contract",
+          "contract:careercontract",
+          "archetype:careercontract",
           "intro:standard",
           "chain:open",
           "legal:unknown:unknown"
@@ -2452,17 +2467,15 @@
       "tierLabel": "High Risk",
       "isIntro": false,
       "specificityBadges": [
-        "Contract",
+        "CareerContract",
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
       "displayName": "Stop Gang From Destroying",
       "titleSource": "token_template_cleaned",
@@ -2470,28 +2483,33 @@
       "briefing": "Got word from some allies of ours over at [Location] that they're coming under attack. A gang we've had run-ins with before are trying to take them over by first destroying their [Objects].\n\nThis crew are mungers through and through, but they mean business and can handle themselves in a fight. It will take a bit of doing to make sure they don't blow up everything. You might even think about bringing some help along.\n\nHandle this right and I’ll give the main contractor [ScripAmount] Council Scrip.\n\n- Stows",
       "rawName": "@Headhunters_DefendDestructibleEntites_H_Title_001",
       "internalName": "HeadHunters_DefendDestructibleEntities_Nyx_Hard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
         "displayName": "Standing",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Standing",
-        "confidence": "unresolved",
+        "confidence": "resolved",
         "sourceRefs": [
-          "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
-          "HeadHunters_DefendDestructibleEntities_Nyx_Hard"
-        ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
       },
-      "missionArchetype": "Contract",
-      "standingRequirement": "No extracted standing requirement",
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Procedural location placeholder; Nyx; Headhunters: Applicant Rank VI",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Procedural location placeholder; Nyx",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "location",
           "label": "Procedural location placeholder",
@@ -2868,7 +2886,7 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
+          "factionDisplayName": "Headhunters",
           "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "scopeDisplayName": "Standing",
           "amount": 200,
@@ -2893,11 +2911,11 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "b5e32df0-1928-42da-896c-737f08b86f9c",
+        "contractId": "b3956ae1-de0c-4c09-8364-0b7389836e2a",
         "generatorGuid": "cfd97e03-0be4-4e76-8488-67bf3b71f442",
         "generatorName": "ContractGenerator.HeadHunters_DefendDestructibleEntities",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defenddestructibleentities.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@Headhunters_DefendDestructibleEntites_H_Title_001",
         "descriptionRaw": "@Headhunters_DefendDestructibleEntites_H_Desc_001"
       }

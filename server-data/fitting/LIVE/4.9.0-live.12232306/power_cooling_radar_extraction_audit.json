@@ -1,0 +1,535 @@
+{
+  "buildId": "4.9.0-live.12232306",
+  "calculationCounts": {
+    "commonMissingFields": {
+      "missing_cooling_fields": {
+        "coolantUsage": 1988,
+        "coolingDraw": 1988,
+        "coolingRequired": 1988
+      },
+      "missing_performance_fields": {
+        "boostSpeedForward": 12,
+        "maxSpeed": 12,
+        "pitchRate": 12,
+        "rollRate": 12,
+        "scmSpeed": 12,
+        "yawRate": 12
+      },
+      "missing_power_fields": {
+        "minimumPowerRequired": 76,
+        "powerDraw": 76,
+        "powerInputMinimum": 76,
+        "powerUsage": 76
+      },
+      "missing_quantum_fields": {
+        "fuelRate": 303
+      },
+      "missing_radar_fields": {
+        "detectionRange": 342,
+        "scanRate": 342
+      },
+      "missing_weapon_fields": {
+        "alphaDamageTotal": 5
+      }
+    },
+    "shipsWithCoolingCalculations": 336,
+    "shipsWithPowerCalculations": 336,
+    "shipsWithRadarCalculations": 333,
+    "unresolvedRefsSummary": {
+      "byKind": {
+        "calculation_missing_default": 322,
+        "calculation_performance_flight_controller_record_unresolved": 9,
+        "calculation_performance_flight_controller_ref_missing": 3,
+        "missing_cooling_fields": 1988,
+        "missing_performance_fields": 12,
+        "missing_power_fields": 76,
+        "missing_quantum_fields": 303,
+        "missing_radar_fields": 342,
+        "missing_weapon_fields": 5
+      },
+      "total": 3060
+    }
+  },
+  "channel": "LIVE",
+  "confidence": "medium",
+  "externalSourceUse": {
+    "communityData": false,
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "findings": {
+    "cooling": {
+      "candidateCounts": {
+        "coolantProvider": 81,
+        "coolingCapacity": 0,
+        "powerConsumption": 81,
+        "powerRanges": 243,
+        "resourceInput": 81,
+        "thermalEqualization": 81
+      },
+      "coverage": {
+        "coolingCapacity": {
+          "coveragePct": 0.0,
+          "missing": 81,
+          "present": 0
+        },
+        "coolingGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        },
+        "coolingGenerationRate": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        },
+        "powerUsage": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        },
+        "thermalEqualizationRate": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        }
+      },
+      "examples": [
+        {
+          "componentKey": "1f5be5de_b5ea_42c7_879f_289c4bf64f19",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "COOL_AEGS_S04_Javelin_SCItem",
+          "provenance": {
+            "coolingGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Coolant",
+              "sourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion/generation/resourceAmountPerSecond/SStandardResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "standardResourceUnits",
+              "unitNode": "SStandardResourceUnit",
+              "unitUnknown": true
+            },
+            "thermalEqualizationRateProvenance": {
+              "attribute": "coolingEqualizationRate",
+              "confidence": "low",
+              "sourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/coolingEqualizationParams/CoolingEqualizationRateAtTemperatureDifference",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/cooler/cool_aegs_s04_javelin_scitem.xml",
+          "values": {
+            "coolingGenerated": 74,
+            "coolingGenerationRate": 74,
+            "powerUsage": 6,
+            "thermalEqualizationRate": 3.75
+          }
+        },
+        {
+          "componentKey": "a2472bfc_17ff_461d_8d99_ec68da5d04b1",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "COOL_RSI_S04_Bengal_SCItem",
+          "provenance": {
+            "coolingGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Coolant",
+              "sourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion/generation/resourceAmountPerSecond/SStandardResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "standardResourceUnits",
+              "unitNode": "SStandardResourceUnit",
+              "unitUnknown": true
+            },
+            "thermalEqualizationRateProvenance": {
+              "attribute": "coolingEqualizationRate",
+              "confidence": "low",
+              "sourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/coolingEqualizationParams/CoolingEqualizationRateAtTemperatureDifference",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/cooler/cool_rsi_s04_bengal_scitem.xml",
+          "values": {
+            "coolingGenerated": 72,
+            "coolingGenerationRate": 72,
+            "powerUsage": 6,
+            "thermalEqualizationRate": 3.75
+          }
+        },
+        {
+          "componentKey": "209c4920_36d6_4e32_8cea_8865083d8906",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "COOL_S01_Template",
+          "provenance": {
+            "coolingGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Coolant",
+              "sourcePath": "COOL_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion/generation/resourceAmountPerSecond/SStandardResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "standardResourceUnits",
+              "unitNode": "SStandardResourceUnit",
+              "unitUnknown": true
+            },
+            "thermalEqualizationRateProvenance": {
+              "attribute": "coolingEqualizationRate",
+              "confidence": "low",
+              "sourcePath": "COOL_S01_Template/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/coolingEqualizationParams/CoolingEqualizationRateAtTemperatureDifference",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/cooler/cool_s01_template.xml",
+          "values": {
+            "coolingGenerated": 27,
+            "coolingGenerationRate": 27,
+            "powerUsage": 0,
+            "thermalEqualizationRate": 3.75
+          }
+        }
+      ],
+      "sourceEvidence": "Coolers expose ItemResourceDeltaConversion with consumption[@resource='Power'] and generation[@resource='Coolant']/resourceAmountPerSecond/SStandardResourceUnit@standardResourceUnits."
+    },
+    "demand": {
+      "coverage": {
+        "coolantUsage": {
+          "coveragePct": 35.18,
+          "missing": 527,
+          "present": 286
+        },
+        "coolingDraw": {
+          "coveragePct": 35.18,
+          "missing": 527,
+          "present": 286
+        },
+        "coolingRequired": {
+          "coveragePct": 35.18,
+          "missing": 527,
+          "present": 286
+        },
+        "powerDraw": {
+          "coveragePct": 60.02,
+          "missing": 325,
+          "present": 488
+        },
+        "powerUsage": {
+          "coveragePct": 60.02,
+          "missing": 325,
+          "present": 488
+        }
+      },
+      "sourceEvidence": "Modeled components expose demand through resource-network consumption deltas. Weapons are extracted through their custom weapon registry; ship components use the generic component registry."
+    },
+    "power": {
+      "candidateCounts": {
+        "coolantConsumption": 83,
+        "heatGeneration": 83,
+        "powerCapacity": 0,
+        "powerProvider": 83
+      },
+      "coverage": {
+        "coolantUsage": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "heatGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "powerCapacity": {
+          "coveragePct": 0.0,
+          "missing": 83,
+          "present": 0
+        },
+        "powerGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "powerGenerationRate": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "powerOutput": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        }
+      },
+      "examples": [
+        {
+          "componentKey": "f330457d_df9b_4421_a522_45b407a735a7",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "POWR_PyroOutpost",
+          "provenance": {
+            "heatGeneratedProvenance": {
+              "attribute": "baselineTemperatureChange",
+              "confidence": "low",
+              "sourcePath": "POWR_PyroOutpost/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/itemResourceParams/stateHeatGenerationValues/EntityTemperatureResourceHeatGeneration",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            },
+            "powerGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Power",
+              "sourcePath": "POWR_PyroOutpost/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaGeneration/generation/resourceAmountPerSecond/SPowerSegmentResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "units",
+              "unitNode": "SPowerSegmentResourceUnit",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/powerplant/powr_pyrooutpost.xml",
+          "values": {
+            "coolantUsage": 0,
+            "heatGenerated": 0.72,
+            "powerGenerated": 10000,
+            "powerGenerationRate": 10000,
+            "powerOutput": 10000
+          }
+        },
+        {
+          "componentKey": "d74b7048_85f2_4e21_ac6f_6dbd0d817a00",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "POWR_S01_Template",
+          "provenance": {
+            "heatGeneratedProvenance": {
+              "attribute": "baselineTemperatureChange",
+              "confidence": "low",
+              "sourcePath": "POWR_S01_Template/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/itemResourceParams/stateHeatGenerationValues/EntityTemperatureResourceHeatGeneration",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            },
+            "powerGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Power",
+              "sourcePath": "POWR_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaGeneration/generation/resourceAmountPerSecond/SPowerSegmentResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "units",
+              "unitNode": "SPowerSegmentResourceUnit",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/powerplant/powr_s01_template.xml",
+          "values": {
+            "coolantUsage": 0,
+            "heatGenerated": 0.72,
+            "powerGenerated": 15,
+            "powerGenerationRate": 15,
+            "powerOutput": 15
+          }
+        },
+        {
+          "componentKey": "a32c1b11_1911_48da_90af_3717c18d74c7",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "POWR_S02_Template",
+          "provenance": {
+            "heatGeneratedProvenance": {
+              "attribute": "baselineTemperatureChange",
+              "confidence": "low",
+              "sourcePath": "POWR_S02_Template/Components/SEntityPhysicsControllerParams/PhysType/SEntityRigidPhysicsControllerParams/temperature/itemResourceParams/stateHeatGenerationValues/EntityTemperatureResourceHeatGeneration",
+              "unitConfidence": "low",
+              "unitUnknown": true
+            },
+            "powerGeneratedProvenance": {
+              "confidence": "high",
+              "direction": "generation",
+              "resource": "Power",
+              "sourcePath": "POWR_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaGeneration/generation/resourceAmountPerSecond/SPowerSegmentResourceUnit",
+              "unitConfidence": "high",
+              "unitField": "units",
+              "unitNode": "SPowerSegmentResourceUnit",
+              "unitUnknown": true
+            }
+          },
+          "sourceFile": "entities/scitem/ships/powerplant/powr_s02_template.xml",
+          "values": {
+            "coolantUsage": 0,
+            "heatGenerated": 0.72,
+            "powerGenerated": 19,
+            "powerGenerationRate": 19,
+            "powerOutput": 19
+          }
+        }
+      ],
+      "sourceEvidence": "Power plants expose ItemResourceDeltaGeneration/generation[@resource='Power']/resourceAmountPerSecond/SPowerSegmentResourceUnit@units."
+    },
+    "radar": {
+      "aimAssistInterpretation": "Observed gameplay context only: distanceMinAssignment is firing-solution distance at minimum radar power and distanceMaxAssignment is firing-solution distance at maximum radar power. The scaling formula is unknown and not modeled.",
+      "candidateCounts": {
+        "aimAssistRange": 152,
+        "coolantConsumption": 67,
+        "powerConsumption": 67,
+        "powerRanges": 201,
+        "resourceInput": 67,
+        "scanCooldown": 76,
+        "signatureSensitivity": 608
+      },
+      "coverage": {
+        "aimAssistMaxAssignmentDistance": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "aimAssistMinAssignmentDistance": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "coolantUsage": {
+          "coveragePct": 88.16,
+          "missing": 9,
+          "present": 67
+        },
+        "detectionRange": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "powerUsage": {
+          "coveragePct": 88.16,
+          "missing": 9,
+          "present": 67
+        },
+        "scanCooldownTime": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "scanRange": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "scanRate": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "signatureSensitivity": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        }
+      },
+      "examples": [
+        {
+          "componentKey": "c818ab50_4350_42dc_b285_388adec321ec",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "RADR_AntiPersonnel_Turret",
+          "provenance": {
+            "scanCooldownTimeProvenance": {
+              "attribute": "cooldownTime",
+              "confidence": "medium",
+              "sourcePath": "RADR_AntiPersonnel_Turret/Components/SCItemRadarComponentParams/pingProperties",
+              "unitConfidence": "medium",
+              "unitUnknown": true
+            },
+            "signatureSensitivityProvenance": {
+              "aggregation": "max",
+              "confidence": "medium",
+              "sourcePath": "Components/SCItemRadarComponentParams/signatureDetection/SCItemRadarSignatureDetection@sensitivity",
+              "unitConfidence": "medium",
+              "unitUnknown": false
+            }
+          },
+          "sourceFile": "entities/scitem/ships/radar/radr_antipersonnel_turret.xml",
+          "values": {
+            "aimAssistMaxAssignmentDistance": 632.5,
+            "aimAssistMinAssignmentDistance": 630,
+            "coolantUsage": 0,
+            "powerUsage": 3,
+            "scanCooldownTime": 0,
+            "signatureSensitivity": 1
+          }
+        },
+        {
+          "componentKey": "1c7cba80_f570_4b4b_ba6d_35a2a121c78c",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "RADR_S00_Fake",
+          "provenance": {
+            "scanCooldownTimeProvenance": {
+              "attribute": "cooldownTime",
+              "confidence": "medium",
+              "sourcePath": "RADR_S00_Fake/Components/SCItemRadarComponentParams/pingProperties",
+              "unitConfidence": "medium",
+              "unitUnknown": true
+            },
+            "signatureSensitivityProvenance": {
+              "aggregation": "max",
+              "confidence": "medium",
+              "sourcePath": "Components/SCItemRadarComponentParams/signatureDetection/SCItemRadarSignatureDetection@sensitivity",
+              "unitConfidence": "medium",
+              "unitUnknown": false
+            }
+          },
+          "sourceFile": "entities/scitem/ships/radar/radr_s00_fake.xml",
+          "values": {
+            "aimAssistMaxAssignmentDistance": 632.5,
+            "aimAssistMinAssignmentDistance": 630,
+            "coolantUsage": null,
+            "powerUsage": null,
+            "scanCooldownTime": 2.5,
+            "signatureSensitivity": 1
+          }
+        },
+        {
+          "componentKey": "7c939489_2a58_4c37_a6b1_26c3eca8e80f",
+          "displayName": "<= PLACEHOLDER =>",
+          "name": "RADR_S01_Template",
+          "provenance": {
+            "scanCooldownTimeProvenance": {
+              "attribute": "cooldownTime",
+              "confidence": "medium",
+              "sourcePath": "RADR_S01_Template/Components/SCItemRadarComponentParams/pingProperties",
+              "unitConfidence": "medium",
+              "unitUnknown": true
+            },
+            "signatureSensitivityProvenance": {
+              "aggregation": "max",
+              "confidence": "medium",
+              "sourcePath": "Components/SCItemRadarComponentParams/signatureDetection/SCItemRadarSignatureDetection@sensitivity",
+              "unitConfidence": "medium",
+              "unitUnknown": false
+            }
+          },
+          "sourceFile": "entities/scitem/ships/radar/radr_s01_template.xml",
+          "values": {
+            "aimAssistMaxAssignmentDistance": 977.5,
+            "aimAssistMinAssignmentDistance": 910,
+            "coolantUsage": 0,
+            "powerUsage": 6,
+            "scanCooldownTime": 2.5,
+            "signatureSensitivity": 1
+          }
+        }
+      ],
+      "signatureSensitivityAggregation": "max over SCItemRadarSignatureDetection@sensitivity candidates; raw candidates are preserved on each radar record.",
+      "sourceEvidence": "Radars expose SCItemRadarComponentParams/signatureDetection/SCItemRadarSignatureDetection@sensitivity, pingProperties@cooldownTime, and aimAssist distance assignment fields; aimAssist distances are extracted separately and not promoted to detection or scan range."
+    }
+  },
+  "foundryNativePercent": 100,
+  "generatedAt": "2026-07-16T04:22:25Z",
+  "generator": "scripts/fitting/build_fitting_registries.py",
+  "generatorModule": "scripts/fitting/reports/power_cooling_radar_extraction_audit.py",
+  "knownLimitations": [
+    "Power/cooling units are native Foundry resource units; exact gameplay units remain unitUnknown.",
+    "Power capacity and cooling capacity were not found as distinct reliable fields in the audited component records.",
+    "Radar aim-assist distances are extracted as firing-solution assignment fields; they are not treated as detection range or scan range.",
+    "Radar ping cooldown is not treated as scan rate without stronger source semantics."
+  ],
+  "schemaVersion": 1,
+  "sourceClassification": "derived from another new semantic registry",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.9.0-live.12232306\\foundry\\records"
+}

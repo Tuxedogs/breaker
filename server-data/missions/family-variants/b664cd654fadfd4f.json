@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-02T07:42:39.629Z",
-  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "generatedAt": "2026-07-16T09:17:05.374Z",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:10.234294+00:00",
   "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
   "variants": [
     {
-      "variantKey": "44f3deee-d85d-4b80-a715-755fe2cf022a",
+      "variantKey": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -26,7 +26,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -41,13 +41,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Defend From Mercs",
       "titleSource": "token_template_cleaned",
@@ -55,28 +56,36 @@
       "briefing": "So, I thought we had done a good job of keeping things on the quiet side, but looks like the fact [Location] has Headhunters ties has gotten out. Now there are some heavy operators causing major problems there, targeting the [Objects] and generally causing me a massive headache.\n\nWith the amount of firepower these interlopers are packing, you're gonna need to bring along a crew of your own to pull this off. Especially since I need you to be protecting any friendly ships that need help.\n\nThis op needs to go off without a hitch, so I’m offering the main contractor [ScripAmount] Council Scrip for a job well done. \n\nStows out.",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_VH_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -394,7 +403,7 @@
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
           "Blueprint: Nyx Headhunters Hard: Tarantula GT-870 Mark 1 Cannon, Tarantula GT-870 Mark 2 Cannon, Tarantula GT-870 Mark 3 Cannon, YellowJacket GT-210 Gatling +3",
-          "Standing +250",
+          "Ship Combat +250",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -614,7 +623,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +250"
+          "Ship Combat +250"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -652,16 +661,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 250,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "7b82e00e-07eb-4b56-990c-b23399673504"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -677,27 +687,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "44f3deee-d85d-4b80-a715-755fe2cf022a",
+        "contractId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_VH_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_VH_Desc"
       }
     },
     {
-      "variantKey": "a43e965f-7feb-4380-b74e-00d88a726b17",
+      "variantKey": "d687fa20-4647-4816-b5a5-b3329aceaa67",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -708,7 +718,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -723,13 +733,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Super"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Guard From Rivals",
       "titleSource": "token_template_cleaned",
@@ -737,28 +748,36 @@
       "briefing": "The maintenance and reliable function of [Location] is pretty darn important to the Headhunters, but this rival crew seems determined knock it out of contention. They're on site now, targeting [Objects] there. \n\nProtecting the site, and any friendly ships, in the area is important enough that I want you to bring some reliable backup along when you go and terminate these nullbrains. \n\nTo prove just how serious we are about getting this done right, the main contractor will earn [ScripAmount] Council Scrip for making sure absolutely nothing goes wrong.\n\n- Stow",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_S_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_Super",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Super"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -1076,7 +1095,7 @@
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
           "Blueprint: Nyx Headhunters Hard: Tarantula GT-870 Mark 1 Cannon, Tarantula GT-870 Mark 2 Cannon, Tarantula GT-870 Mark 3 Cannon, YellowJacket GT-210 Gatling +3",
-          "Standing +300",
+          "Ship Combat +300",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -1296,7 +1315,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +300"
+          "Ship Combat +300"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -1334,16 +1353,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 300,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "65e015b0-afb2-4316-9eb5-9b0652f221cd"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -1359,27 +1379,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "a43e965f-7feb-4380-b74e-00d88a726b17",
+        "contractId": "d687fa20-4647-4816-b5a5-b3329aceaa67",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_S_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_S_Desc"
       }
     },
     {
-      "variantKey": "254df4aa-c281-4712-bd0d-ce2aeb3e7775",
+      "variantKey": "2163d4e3-3fa4-4593-b936-0b860cf18706",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -1390,7 +1410,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -1405,13 +1425,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_To"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Keep Safe",
       "titleSource": "token_template_cleaned",
@@ -1419,28 +1440,36 @@
       "briefing": "I won't bore you with the nitty gritty, but trust me when I say that [Location] is important to the Headhunters. So imagine how pissed I am to learn that they're being harassed by some aggressive upstarts who are hellbent on taking out their [Objects]. It won't stand.   \n\nGet there and provide some protection before everything gets destroyed, including any friendly ships in the area. Nullbrains like these hopefully won't pose too much of a challenge to a rising star like yourself.\n\nClear ‘em all out I’ll throw [ScripAmount] Council Scrip to whoever accepted this gig.\n\n- Stows",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_VE_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_To",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_To"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -1757,7 +1786,7 @@
       "rewards": {
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
-          "Standing +100",
+          "Ship Combat +100",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -1912,7 +1941,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +100"
+          "Ship Combat +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -1950,16 +1979,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 100,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -1975,27 +2005,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "254df4aa-c281-4712-bd0d-ce2aeb3e7775",
+        "contractId": "2163d4e3-3fa4-4593-b936-0b860cf18706",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_VE_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_VE_Desc"
       }
     },
     {
-      "variantKey": "80c3155a-f57c-4d22-8bad-de66ce2b0a60",
+      "variantKey": "72fac260-b856-4d48-82f8-5f7c536049cb",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -2006,7 +2036,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -2021,13 +2051,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_From"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Keep Safe",
       "titleSource": "token_template_cleaned",
@@ -2035,28 +2066,36 @@
       "briefing": "I won't bore you with the nitty gritty, but trust me when I say that [Location] is important to the Headhunters. So imagine how pissed I am to learn that they're being harassed by some aggressive upstarts who are hellbent on taking out their [Objects]. It won't stand.   \n\nGet there and provide some protection before everything gets destroyed, including any friendly ships in the area. Nullbrains like these hopefully won't pose too much of a challenge to a rising star like yourself.\n\nClear ‘em all out I’ll throw [ScripAmount] Council Scrip to whoever accepted this gig.\n\n- Stows",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_VE_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_From",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryEasy_From"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -2373,7 +2412,7 @@
       "rewards": {
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
-          "Standing +100",
+          "Ship Combat +100",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -2528,7 +2567,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +100"
+          "Ship Combat +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -2566,16 +2605,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 100,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -2591,27 +2631,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "80c3155a-f57c-4d22-8bad-de66ce2b0a60",
+        "contractId": "72fac260-b856-4d48-82f8-5f7c536049cb",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_VE_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_VE_Desc"
       }
     },
     {
-      "variantKey": "de72f185-824b-4c66-84b9-b5731e168a53",
+      "variantKey": "6e2c4232-79a6-4738-8568-014f0c45bfce",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -2622,7 +2662,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -2637,13 +2677,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Easy"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Provide Protection at",
       "titleSource": "token_template_cleaned",
@@ -2651,28 +2692,36 @@
       "briefing": "I was having a shite day, and it just got worse. Our interests over at [Location] comm'd to let me know that their  [Objects] are under attack by these no-name hoods looking to stake a claim.\n\nYou're gonna go there for me and protect the place, including any friendly ships unfortunate enough to be caught in the crossfire. Don't think putting these wannabees in their place will be too tricky for someone like you. \n\nAlso, I’ll sweeten the pot by giving the main contractor [ScripAmount] Council Scrip just to show my appreciation. \n\nStows out.",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_E_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_Easy",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Easy"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -2989,7 +3038,7 @@
       "rewards": {
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
-          "Standing +100",
+          "Ship Combat +100",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -3144,7 +3193,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +100"
+          "Ship Combat +100"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -3182,16 +3231,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 100,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -3207,27 +3257,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "de72f185-824b-4c66-84b9-b5731e168a53",
+        "contractId": "6e2c4232-79a6-4738-8568-014f0c45bfce",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_E_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_E_Desc"
       }
     },
     {
-      "variantKey": "affa71b7-2192-4ef6-b16a-b1b19b4f4a69",
+      "variantKey": "d2f45155-d6ee-4f2a-9eb6-b69f08c6c154",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -3238,7 +3288,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -3253,13 +3303,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Medium"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Secure from Upstarts",
       "titleSource": "token_template_cleaned",
@@ -3267,28 +3318,36 @@
       "briefing": "A new gang who is proving to be a real pain in the ass for the Headhunters just upped the stakes by attacking the [Objects] at [Location]. Never a good thing since we got interest in the welfare of the folks there, but doubly so because if they do too much damage it might royally screw an upcoming operation.\n\nHead over there as soon as you're able and stop the attack before they can do any lasting damage. And if any friendly ships need a hand, I want you to look out for them too. Don't expect this gang to be pushovers but you should still be able to deal with them if you keep your head on.\n \nIf you need any extra motivation, I’m adding [ScripAmount] Council Scrip for the main contractor.\n\n- Stows",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_M_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_Medium",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Medium"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -3605,7 +3664,7 @@
       "rewards": {
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
-          "Standing +150",
+          "Ship Combat +150",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -3760,7 +3819,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +150"
+          "Ship Combat +150"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -3798,16 +3857,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 150,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "7f8f04c4-92bd-48a0-8017-b922c2404849"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -3823,27 +3883,27 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "affa71b7-2192-4ef6-b16a-b1b19b4f4a69",
+        "contractId": "d2f45155-d6ee-4f2a-9eb6-b69f08c6c154",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_M_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_M_Desc"
       }
     },
     {
-      "variantKey": "4683f665-83d3-4d4a-a26b-5e66a7e0658a",
+      "variantKey": "3fcc6cb4-7831-4f8f-896a-fd099aa75906",
       "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
-      "conceptKey": "28a658ba7aa2b1aff789",
+      "conceptKey": "51ddeff01e48d7f23f2f",
       "objectiveSignature": {
-        "key": "unknown-faction|unknown-faction:unknown-scope|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
         "activityKey": "defend-location+escort-ship",
         "titleStem": "head-hunters-defend-entites-and-escort",
         "descriptionStem": "head-hunters-defend-entites-and-escort",
         "handlerStem": "head-hunters-defend-entities-and-escort",
         "archetype": "Defend Ship",
-        "contractType": "Contract",
+        "contractType": "CareerContract",
         "introState": "standard",
         "chainState": "open",
         "legalState": "unknown:unknown",
@@ -3854,7 +3914,7 @@
           "title:head-hunters-defend-entites-and-escort",
           "description:head-hunters-defend-entites-and-escort",
           "handler:head-hunters-defend-entities-and-escort",
-          "contract:contract",
+          "contract:careercontract",
           "archetype:defend-ship",
           "intro:standard",
           "chain:open",
@@ -3869,13 +3929,14 @@
         "Generated pickup pool"
       ],
       "owningScopeProvenance": {
-        "scopeKey": "unknown-faction:unknown-scope",
-        "confidence": "unresolved",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Hard"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "displayName": "Stop Rival Attack at",
       "titleSource": "token_template_cleaned",
@@ -3883,28 +3944,36 @@
       "briefing": "There's this small gang that continues to be a thorn in our side, and the bastards have just ambushed some friends over at [Location]. Seems like they're doing their best to destroy the [Objects] there.\n\nI need you and whatever crew you can muster on site stopping these mungers from blowing everything up and protecting any friendly ships that need a hand.\n\nHandle this right and I’ll give the main contractor  [ScripAmount] Council Scrip.\n\n- Stows",
       "rawName": "@HeadHunters_DefendEntitesAndEscort_H_Title",
       "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_Hard",
-      "missionType": "Contract",
-      "provider": "Unknown provider",
-      "faction": "Unknown faction",
-      "contractType": "Contract",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
       "reputationScope": {
-        "scopeKey": "unknown-faction:unknown-scope",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
         "displayName": "Ship Combat",
-        "factionKey": "unknown-faction",
-        "factionDisplayName": "Unknown faction",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
         "trackType": "Ship Combat",
-        "confidence": "unresolved",
+        "confidence": "partial",
         "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
           "HeadHunters_DefendEntitiesAndEscort_Nyx_Hard"
         ],
-        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
       },
       "missionArchetype": "Defend Ship",
-      "standingRequirement": "No extracted standing requirement",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "reputationRequirement": "Headhunters: Applicant Rank VI",
-      "prerequisiteSummary": "Nyx; Headhunters: Applicant Rank VI; Headhunters: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Nyx; Headhunters: Applicant Rank VI",
       "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
         {
           "type": "locality",
           "label": "Nyx",
@@ -4222,7 +4291,7 @@
         "summary": [
           "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter Star SL, Kelvid, Cryo-Star +13",
           "Blueprint: Nyx Headhunters Hard: Tarantula GT-870 Mark 1 Cannon, Tarantula GT-870 Mark 2 Cannon, Tarantula GT-870 Mark 3 Cannon, YellowJacket GT-210 Gatling +3",
-          "Standing +200",
+          "Ship Combat +200",
           "Credits formula unresolved",
           "Item reward: Council Scrip",
           "Completion tag"
@@ -4442,7 +4511,7 @@
           }
         ],
         "reputationRewards": [
-          "Standing +200"
+          "Ship Combat +200"
         ],
         "credits": "Credits formula unresolved",
         "creditStatus": "formula_unresolved",
@@ -4480,16 +4549,17 @@
       "rewardedReputationPaths": [
         {
           "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-          "factionDisplayName": "Unknown faction",
-          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-          "scopeDisplayName": "Standing",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
           "amount": 200,
-          "confidence": "resolved",
+          "confidence": "partial",
           "sourceRefs": [
             "09efeef4-c646-408d-a979-3ae56a3b1beb",
             "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
             "51e63405-693e-4cdd-a140-9dd34de582ff"
-          ]
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
         }
       ],
       "flags": [],
@@ -4505,11 +4575,11 @@
         "hasUnresolvedPrerequisites": false
       },
       "technical": {
-        "contractId": "4683f665-83d3-4d4a-a26b-5e66a7e0658a",
+        "contractId": "3fcc6cb4-7831-4f8f-896a-fd099aa75906",
         "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
         "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
         "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
-        "handlerType": "ContractGeneratorHandler_List",
+        "handlerType": "ContractGeneratorHandler_Career",
         "titleRaw": "@HeadHunters_DefendEntitesAndEscort_H_Title",
         "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_H_Desc"
       }
