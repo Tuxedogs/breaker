@@ -75,20 +75,15 @@ export default function ComponentResultCard({
   const {
     detail: vehicleFittingDetail,
     loading: fittingStatsLoading,
-    missing: fittingStatsMissing,
-    error: fittingStatsError,
   } = useFittingComponentStats(isFpsItem ? null : entityClass);
 
   const {
     detail: fpsFittingDetail,
     loading: fpsFittingLoading,
-    missing: fpsFittingMissing,
   } = useFpsFittingComponentFromCard(isFpsItem ? record : null);
 
   const fittingDetail = isFpsItem ? fpsFittingDetail : vehicleFittingDetail;
   const fittingLoading = isFpsItem ? fpsFittingLoading : fittingStatsLoading;
-  const fittingMissing = isFpsItem ? fpsFittingMissing : fittingStatsMissing;
-  const fittingError = isFpsItem ? null : fittingStatsError;
 
   const resolvedDisplayName = useMemo(
     () => resolveCraftingDisplayName({
@@ -135,14 +130,21 @@ export default function ComponentResultCard({
     });
 
   const meta = Array.isArray(schema.meta) ? schema.meta : [];
+  const catalogStats = [
+    ...(Array.isArray(schema.familyStats) ? schema.familyStats : []),
+    ...(Array.isArray(schema.genericStats) ? schema.genericStats : []),
+  ];
   const modifierLabels = Array.isArray(schema.modifierLabels) ? schema.modifierLabels : [];
   const classificationBadges = weaponPresentation?.badges ?? [];
 
-  const visibleStats = useMemo(() => {
+  const fittingStats = useMemo(() => {
     if (isFpsItem || !fittingDetail) return [];
     return buildBrowseStatPreviewFromFitting(fittingDetail);
   }, [isFpsItem, fittingDetail]);
 
+  const visibleStats = [...catalogStats, ...fittingStats].filter((metric, index, metrics) => (
+    metrics.findIndex((candidate) => candidate.label === metric.label) === index
+  ));
   const coreMetrics = (visibleStats.length > 0 ? visibleStats : meta).slice(0, 3);
   const coreMetricKeys = new Set(coreMetrics.map((metric) => `${metric.label}:${metric.value}`));
   const secondaryMetrics = [
@@ -156,24 +158,14 @@ export default function ComponentResultCard({
 
   const showStatUnavailable = useMemo(() => {
     if (!record || fittingLoading) return false;
-    if (isFpsItem) return true;
-    if (!entityClass || fittingMissing || fittingError) return true;
-    if (fittingDetail && visibleStats.length === 0) return true;
-    return false;
+    return visibleStats.length === 0;
   }, [
     record,
     fittingLoading,
-    isFpsItem,
-    entityClass,
-    fittingMissing,
-    fittingError,
-    fittingDetail,
     visibleStats.length,
   ]);
 
-  const statUnavailableMessage = isFpsItem
-    ? "Fitting stats unsupported"
-    : "Fitting stats unavailable";
+  const statUnavailableMessage = "Base stats unavailable";
 
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
   const isShipWeapon = record?.type === "weaponGun" || recipe?.component_type === "weaponGun";
