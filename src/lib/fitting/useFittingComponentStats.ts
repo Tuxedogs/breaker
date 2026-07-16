@@ -141,7 +141,9 @@ export function useFpsFittingComponentFromCard(
     }
 
     let cancelled = false;
-    setBuildReady(false);
+    queueMicrotask(() => {
+      if (!cancelled) setBuildReady(false);
+    });
     void ensureFittingBuildContext()
       .then(() => {
         if (!cancelled) setBuildReady(true);
@@ -156,7 +158,9 @@ export function useFpsFittingComponentFromCard(
   }, [channel, buildId]);
 
   const detail = useMemo(() => {
-    if (!card || !identity || !buildReady || !getFittingBuildContext().buildId) return null;
+    const currentContext = getFittingBuildContext();
+    const contextIsCurrent = currentContext.channel === channel && currentContext.buildId === buildId;
+    if (!card || !identity || !buildReady || !buildId || !contextIsCurrent) return null;
     return cacheFpsComponentFromCard(identity, card) ?? getCachedFpsComponentFromCard(identity);
   }, [card, identity, channel, buildId, buildReady]);
 
