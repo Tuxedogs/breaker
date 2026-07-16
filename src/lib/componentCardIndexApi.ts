@@ -1,6 +1,7 @@
 import { apiUrl } from "@/lib/apiUrl";
 import { parseJsonResponse } from "@/lib/safeJson";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { validateComponentCatalogGeneration } from "@/lib/componentCatalogGeneration";
 import {
   clearComponentCardIndexMonolithCache,
   getComponentCardIndexFromMonolith,
@@ -58,6 +59,12 @@ export async function getComponentCardIndexFromApi(): Promise<ComponentCardIndex
       if (!facets || records.length === 0) {
         throw new Error("Component card API payload is invalid");
       }
+
+      validateComponentCatalogGeneration(
+        index.sourceGeneratedAt ?? index.generatedAt,
+        facetsPayload,
+        browsePayload,
+      );
 
       if (
         typeof index.shapedRecordCount === "number"

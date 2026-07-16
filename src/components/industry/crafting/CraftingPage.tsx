@@ -104,6 +104,7 @@ export default function CraftingModule() {
     const resolveMaterial = createMaterialResolver(materialTemplates);
 
     const inputs = (recipe.materials ?? []).flatMap((mat, rowIndex) => {
+      if (mat.input_kind === "part") return [];
       const resolved = resolveMaterial({
         materialGuid: mat.cost_id,
         costId: mat.cost_id,

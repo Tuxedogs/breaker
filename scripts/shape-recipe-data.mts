@@ -2,6 +2,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getCraftingRecipesRoot } from "../server/config/craftingRecipesRoot.ts";
+import {
+  classifyRecipeInput,
+  getRecipeInputDisplayName,
+} from "../src/lib/crafting/recipeInputClassification.ts";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -28,6 +32,29 @@ function recordGuid(record: JsonRecord, kind: "vehicle" | "fps"): string | null 
   return normalizeGuid(record.blueprintGuid);
 }
 
+function shapeRecipeInput(value: unknown): unknown {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return value;
+
+  const input = value as JsonRecord;
+  const inputKind = classifyRecipeInput(input);
+  const displayName = getRecipeInputDisplayName(input);
+
+  return {
+    ...input,
+    inputKind,
+    ...(inputKind === "part" && displayName ? { materialName: displayName } : {}),
+  };
+}
+
+function shapeRecipeRecord(record: JsonRecord): JsonRecord {
+  const shaped = { ...record };
+  for (const key of ["materials", "materialRequirements"]) {
+    const inputs = shaped[key];
+    if (Array.isArray(inputs)) shaped[key] = inputs.map(shapeRecipeInput);
+  }
+  return shaped;
+}
+
 async function readJsonArray(filePath: string): Promise<JsonRecord[]> {
   const raw = await readFile(filePath, "utf8");
   const parsed = JSON.parse(raw) as unknown;
@@ -52,7 +79,8 @@ async function main() {
 
   async function shapeRecords(records: JsonRecord[], kind: "vehicle" | "fps") {
     for (const record of records) {
-      const guid = recordGuid(record, kind);
+      const shapedRecord = shapeRecipeRecord(record);
+      const guid = recordGuid(shapedRecord, kind);
       if (!guid) {
         missingIdCount += 1;
         continue;
@@ -65,7 +93,7 @@ async function main() {
       recordFiles[guid] = relativePath;
       await writeFile(
         path.join(outputRoot, relativePath),
-        `${JSON.stringify({ schemaVersion: 1, kind, record }, null, 2)}\n`,
+        `${JSON.stringify({ schemaVersion: 1, kind, record: shapedRecord }, null, 2)}\n`,
         "utf8",
       );
     }
@@ -74,14 +102,17 @@ async function main() {
   await shapeRecords(vehicleRecords, "vehicle");
   await shapeRecords(fpsRecords, "fps");
 
+  const shapedVehicleRecords = vehicleRecords.map(shapeRecipeRecord);
+  const shapedFpsRecords = fpsRecords.map(shapeRecipeRecord);
+
   await writeFile(
     path.join(catalogRoot, "vehicle.json"),
-    `${JSON.stringify(vehicleRecords, null, 2)}\n`,
+    `${JSON.stringify(shapedVehicleRecords, null, 2)}\n`,
     "utf8",
   );
   await writeFile(
     path.join(catalogRoot, "fps.json"),
-    `${JSON.stringify(fpsRecords, null, 2)}\n`,
+    `${JSON.stringify(shapedFpsRecords, null, 2)}\n`,
     "utf8",
   );
 

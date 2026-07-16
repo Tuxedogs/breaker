@@ -32,11 +32,7 @@ export const FIXTURE_ITEM_IDS = {
   fpsArmor: "bq-fixture-fps-armor",
 } as const;
 
-const fixtureExtraMaterials: MaterialTemplate[] = [
-  { id: "insulativelinermaterial", name: "Insulative Liner Material", materialType: "refined" },
-];
-
-const fixtureMaterials = [...materialTemplates, ...fixtureExtraMaterials];
+const fixtureMaterials = [...materialTemplates];
 const materialById = new Map(fixtureMaterials.map((material) => [material.id, material]));
 
 function materialTypeFor(materialId: string): MaterialTemplate["materialType"] {
@@ -120,7 +116,6 @@ const inventoryEntries: InventoryEntry[] = [
   entry("bq-fix-inv-taranite", "taranite", 1, 820, rarityCatalog.epic, "FPS-01"),
   entry("bq-fix-inv-hephaestanite", "hephaestanite", 1, 760, rarityCatalog.uncommon, "FPS-02"),
   entry("bq-fix-inv-hadanite", "hadanite", 4, 880, rarityCatalog.epic, "FPS-03"),
-  entry("bq-fix-inv-liner", "insulativelinermaterial", 1, 740, rarityCatalog.rare, "ARM-01"),
 ];
 
 const recipes: RecipeTemplate[] = [
@@ -151,7 +146,6 @@ const fpsWeaponRequirements = [
 
 const fpsArmorRequirements = [
   requirement("bq-fix-fps-armor:carapace", "ouratite", 0.06, "scu", 780),
-  requirement("bq-fix-fps-armor:liner", "insulativelinermaterial", 0.02, "scu", 740),
 ];
 
 const recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]> = {
@@ -243,7 +237,6 @@ const buildQueue: BuildQueueItem[] = [
     materialRequirements: fpsArmorRequirements,
     reservedAllocations: [
       allocation("bq-fix-alloc-fps-arm-carapace", "ouratite", "bq-fix-inv-ouratite", 0.06, "bq-fix-fps-armor:carapace", 780, rarityCatalog.uncommon),
-      allocation("bq-fix-alloc-fps-arm-liner", "insulativelinermaterial", "bq-fix-inv-liner", 0.02, "bq-fix-fps-armor:liner", 740, rarityCatalog.rare),
     ],
   },
 ];

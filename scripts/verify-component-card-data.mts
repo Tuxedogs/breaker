@@ -3,9 +3,11 @@ import path from "node:path";
 
 import { getComponentCardsRoot } from "../server/config/componentCardsRoot.ts";
 import { handleComponentCardsRoute } from "../server/routes/componentCards.routes.ts";
+import { isNonInventoryRecipePart } from "../src/lib/crafting/recipeInputClassification.ts";
 
 type ComponentCardsIndex = {
   shapedRecordCount?: number;
+  supplementalRecordCount?: number;
   duplicateIdCount?: number;
   missingIdCount?: number;
   recordFiles?: Record<string, string>;
@@ -22,7 +24,10 @@ type BrowsePayload = {
 };
 
 type MaterialIdentityIndex = {
-  materials?: Array<{ materialKey?: string; sources?: unknown[] }>;
+  materials?: Array<{
+    materialKey?: string;
+    aliases?: Record<string, unknown>;
+  }>;
 };
 
 type SourceIndex = {
@@ -37,6 +42,22 @@ type SourceIndex = {
   }>;
 };
 
+type CurrentRecipe = {
+  blueprintGuid?: string;
+  materials?: Array<{
+    materialName?: string | null;
+    costId?: string | null;
+    materialId?: string | null;
+    materialKey?: string | null;
+  }>;
+  materialRequirements?: Array<{
+    materialName?: string | null;
+    costId?: string | null;
+    materialId?: string | null;
+    materialKey?: string | null;
+  }>;
+};
+
 const root = getComponentCardsRoot();
 const index = JSON.parse(await readFile(path.join(root, "index.json"), "utf8")) as ComponentCardsIndex;
 const browse = JSON.parse(await readFile(path.join(root, "browse.json"), "utf8")) as BrowsePayload;
@@ -44,6 +65,12 @@ const facets = JSON.parse(await readFile(path.join(root, "facets.json"), "utf8")
 const sourceIndex = JSON.parse(
   await readFile(path.resolve("public", "api", "crafting", "component_card_index.json"), "utf8"),
 ) as SourceIndex;
+const vehicleRecipes = JSON.parse(
+  await readFile(path.resolve("public", "api", "crafting", "blueprints.json"), "utf8"),
+) as CurrentRecipe[];
+const fpsRecipes = JSON.parse(
+  await readFile(path.resolve("public", "api", "crafting", "fps", "fps_blueprints.json"), "utf8"),
+) as CurrentRecipe[];
 const materialIdentity = JSON.parse(
   await readFile(path.resolve("public", "api", "crafting", "material_identity_index.json"), "utf8"),
 ) as MaterialIdentityIndex;
@@ -51,9 +78,26 @@ const materialIdentity = JSON.parse(
 const shapedCount = index.shapedRecordCount ?? 0;
 const recordFiles = index.recordFiles ?? {};
 const browseRecords = browse.records ?? [];
+const currentRecipeIds = new Set(
+  [...vehicleRecipes, ...fpsRecipes]
+    .map((recipe) => recipe.blueprintGuid?.trim().toLowerCase())
+    .filter((id): id is string => Boolean(id)),
+);
+const upstreamIds = new Set(
+  (sourceIndex.records ?? [])
+    .map((record) => record.id?.trim().toLowerCase())
+    .filter((id): id is string => Boolean(id)),
+);
+const expectedCatalogIds = new Set([...upstreamIds, ...currentRecipeIds]);
+const expectedSupplementalCount = [...currentRecipeIds].filter((id) => !upstreamIds.has(id)).length;
 
-if (shapedCount !== 1553) {
-  throw new Error(`Expected 1553 shaped records, found ${shapedCount}.`);
+if (shapedCount !== expectedCatalogIds.size) {
+  throw new Error(`Expected ${expectedCatalogIds.size} shaped records, found ${shapedCount}.`);
+}
+if ((index.supplementalRecordCount ?? 0) !== expectedSupplementalCount) {
+  throw new Error(
+    `Expected ${expectedSupplementalCount} supplemental current recipes, found ${index.supplementalRecordCount ?? 0}.`,
+  );
 }
 if ((index.duplicateIdCount ?? 0) !== 0) {
   throw new Error(`Expected 0 duplicate ids, found ${index.duplicateIdCount}.`);
@@ -85,34 +129,37 @@ if (browseEntityClassCount < vehicleRecordCount) {
   throw new Error(`Expected at least ${vehicleRecordCount} browse records with entityClass, found ${browseEntityClassCount}.`);
 }
 
-function hasFilterableMaterialSource(sources: unknown): boolean {
-  if (!Array.isArray(sources)) return false;
-  return sources.some((source) => {
-    const text = typeof source === "string" ? source.toLowerCase().replace(/\\/g, "/") : "";
-    return text.includes("/crafting/qualityquantization/")
-      || text.includes("/harvestable/")
-      || text.includes("/entities/scitem/carryables/")
-      || text.includes("/contracts/contracttemplates/");
-  });
-}
-
 const filterableMaterialKeys = new Set(
   (materialIdentity.materials ?? [])
-    .filter((material) => material.materialKey && hasFilterableMaterialSource(material.sources))
+    .filter((material) => {
+      if (!material.materialKey) return false;
+      const aliasIds = material.aliases && typeof material.aliases === "object"
+        ? Object.values(material.aliases).flatMap((value) => Array.isArray(value) ? value : [])
+        : [];
+      return !isNonInventoryRecipePart({ materialKey: material.materialKey }) && !aliasIds.some((id) => isNonInventoryRecipePart({
+        costId: id,
+        materialKey: material.materialKey,
+      }));
+    })
     .map((material) => material.materialKey as string),
 );
 
 const facetPayload = facets.facets as { materials?: Array<{ value?: string; label?: string }> };
 const materialFacets = Array.isArray(facetPayload.materials) ? facetPayload.materials : [];
 const sourceRecords = Array.isArray(sourceIndex.records) ? sourceIndex.records : [];
+const currentRecipeRecords = [...vehicleRecipes, ...fpsRecipes].map((recipe) => ({
+  id: recipe.blueprintGuid,
+  materials: recipe.materialRequirements ?? recipe.materials ?? [],
+}));
+const ingredientRecords = [...sourceRecords, ...currentRecipeRecords];
 const allRecipeMaterials = new Map<string, { label: string; materialKey: string | null }>();
 const excludedNonMaterialInputs = new Map<string, { label: string; materialKey: string | null }>();
 const unresolvedIngredientClassifications = new Map<string, { label: string; materialKey: string | null }>();
 let linerRequirementCount = 0;
 
-for (const record of sourceRecords) {
+for (const record of ingredientRecords) {
   for (const material of record.materials ?? []) {
-    const label = material.name?.trim() ?? "";
+    const label = ("name" in material ? material.name : material.materialName)?.trim() ?? "";
     const value = material.costId ?? material.materialId ?? label;
     if (!label || !value) continue;
     const materialKey = material.materialKey?.trim() || null;
@@ -171,6 +218,13 @@ for (const record of browseRecords) {
   }
 }
 
+const missingCurrentRecipeIds = currentRecipeRecords
+  .map((recipe) => recipe.id?.trim().toLowerCase())
+  .filter((id): id is string => Boolean(id) && !browseIds.has(id));
+if (missingCurrentRecipeIds.length > 0) {
+  throw new Error(`Current recipes missing component cards: ${missingCurrentRecipeIds.join(", ")}`);
+}
+
 const sampleId = browseRecords[0]?.id?.trim().toLowerCase();
 if (!sampleId) {
   throw new Error("Unable to pick a sample browse record.");
@@ -183,11 +237,11 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
       const result = await handleComponentCardsRoute("GET", "/api/crafting/component-cards/index");
       if (!result || result.status !== 200) throw new Error(`Unexpected status: ${result?.status ?? "null"}`);
       const body = result.body as { shapedRecordCount?: number; recordIds?: string[] };
-      if (body.shapedRecordCount !== 1553) {
-        throw new Error(`Expected shapedRecordCount 1553, found ${body.shapedRecordCount ?? 0}.`);
+      if (body.shapedRecordCount !== shapedCount) {
+        throw new Error(`Expected shapedRecordCount ${shapedCount}, found ${body.shapedRecordCount ?? 0}.`);
       }
-      if (!Array.isArray(body.recordIds) || body.recordIds.length !== 1553) {
-        throw new Error(`Expected 1553 recordIds, found ${body.recordIds?.length ?? 0}.`);
+      if (!Array.isArray(body.recordIds) || body.recordIds.length !== shapedCount) {
+        throw new Error(`Expected ${shapedCount} recordIds, found ${body.recordIds?.length ?? 0}.`);
       }
     },
   },
@@ -208,8 +262,8 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
       const result = await handleComponentCardsRoute("GET", "/api/crafting/component-cards/browse");
       if (!result || result.status !== 200) throw new Error(`Unexpected status: ${result?.status ?? "null"}`);
       const body = result.body as { records?: unknown[] };
-      if (!Array.isArray(body.records) || body.records.length !== 1553) {
-        throw new Error(`Expected 1553 browse records, found ${body.records?.length ?? 0}.`);
+      if (!Array.isArray(body.records) || body.records.length !== shapedCount) {
+        throw new Error(`Expected ${shapedCount} browse records, found ${body.records?.length ?? 0}.`);
       }
       for (const [index, record] of body.records.entries()) {
         const card = record && typeof record === "object" ? (record as { card?: { modifierLabels?: unknown } }).card : null;

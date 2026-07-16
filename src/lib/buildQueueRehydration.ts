@@ -38,6 +38,7 @@ function buildRecipeInputs(recipeId: string, recipe: ComponentRecipe, materials:
   const resolveMaterial = createMaterialResolver(materials);
 
   return (recipe.materials ?? []).flatMap((mat, rowIndex) => {
+    if (mat.input_kind === "part") return [];
     const resolved = resolveMaterial({
       materialGuid: mat.cost_id,
       costId: mat.cost_id,
