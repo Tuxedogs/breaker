@@ -12,9 +12,10 @@ import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
-import type { BuildQueueItem, RecipeTemplate } from "../../types/logistics";
+import type { BuildQueueItem, RecipeTemplate, ReservedMaterialAllocation } from "../../types/logistics";
 import { getCraftingItems } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
+import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
@@ -71,6 +72,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
   const [typeLabelByBlueprintId, setTypeLabelByBlueprintId] = useState<Record<string, string>>({});
+  const [fixtureBuildQueue, setFixtureBuildQueue] = useState<BuildQueueItem[]>(() => fixture?.buildQueue ?? []);
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
@@ -95,38 +97,47 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const storeAddInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
 
   const inventoryEntries = fixture?.inventoryEntries ?? storeInventoryEntries;
-  const buildQueue = fixture?.buildQueue ?? storeBuildQueue;
+  const buildQueue = fixture ? fixtureBuildQueue : storeBuildQueue;
   const locations = fixture?.locations ?? storeLocations;
   const materials = fixture?.materials ?? storeMaterials;
   const recipes = fixture?.recipes ?? storeRecipes;
   const recipeInputsByRecipeId = fixture?.recipeInputsByRecipeId ?? storeRecipeInputsByRecipeId;
 
   const updateBuildQueueItemQuantity = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string, _quantity: number) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeUpdateBuildQueueItemQuantity;
   const updateBuildQueueItemAllowLowerQuality = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string, _allowLowerQuality: boolean) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeUpdateBuildQueueItemAllowLowerQuality;
   const updateBuildQueueMaterialRequirement = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((id: string, requirementId: string, input: RecipeInputTemplate) => {
+        setFixtureBuildQueue((current) => current.map((item) => {
+          if (item.id !== id) return item;
+          const materialRequirements = (item.materialRequirements ?? fixture?.recipeInputsByRecipeId[item.recipeId] ?? [])
+            .map((requirement) => requirement.requirementId === requirementId
+              ? { ...requirement, ...input, requirementId: requirement.requirementId, materialId: requirement.materialId, quantity: requirement.quantity }
+              : requirement);
+          return { ...item, materialRequirements };
+        }));
+      })
     : storeUpdateBuildQueueMaterialRequirement;
   const updateBuildQueueItemStatus = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string, _status: NonNullable<BuildQueueItem["status"]>) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeUpdateBuildQueueItemStatus;
   const removeBuildQueueItem = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeRemoveBuildQueueItem;
   const toggleBuildQueueAllocation = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string, _allocation: ReservedMaterialAllocation) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeToggleBuildQueueAllocation;
   const updateBuildQueueAllocationQuantity = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string, _allocationId: string, _quantity: number) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeUpdateBuildQueueAllocationQuantity;
   const clearStaleBuildQueueItemAllocations = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_id: string) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeClearStaleBuildQueueItemAllocations;
   const addInventoryEntries = isFixture
-    ? (() => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    ? ((_entries: Parameters<typeof storeAddInventoryEntries>[0]) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
     : storeAddInventoryEntries;
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
@@ -161,16 +172,22 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     return () => { cancelled = true; };
   }, [buildQueue]);
 
-  const activeRows = sortQueueItems(buildQueue.filter((item) => item.status !== "complete")).map((item) => ({ item }));
-  const completedRows = sortQueueItems(buildQueue.filter((item) => item.status === "complete")).map((item) => ({ item }));
+  const activeRows = useMemo(
+    () => sortQueueItems(buildQueue.filter((item) => item.status !== "complete")).map((item) => ({ item })),
+    [buildQueue],
+  );
+  const completedRows = useMemo(
+    () => sortQueueItems(buildQueue.filter((item) => item.status === "complete")).map((item) => ({ item })),
+    [buildQueue],
+  );
   const visibleRows = queueTab === "active" ? activeRows : completedRows;
-  const resolvedSelectedItemId = (() => {
+  const resolvedSelectedItemId = useMemo(() => {
     if (visibleRows.length === 0) return null;
     if (selectedItemId && visibleRows.some((row) => row.item.id === selectedItemId)) {
       return selectedItemId;
     }
     return visibleRows[0]?.item.id ?? null;
-  })();
+  }, [visibleRows, selectedItemId]);
 
   const selectedRow = visibleRows.find((row) => row.item.id === resolvedSelectedItemId) ?? null;
 

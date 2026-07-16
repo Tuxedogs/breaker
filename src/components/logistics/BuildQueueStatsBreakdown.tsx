@@ -14,6 +14,7 @@ import {
   hasMaterialAllocations,
 } from "@/lib/logistics/buildQueueCraftStats";
 import {
+  BuildQueueCraftIdentityPanel,
   BuildQueueCraftOverviewPanel,
   BuildQueueCraftStatisticsPanel,
 } from "./BuildQueueCraftStatsPanel";
@@ -185,6 +186,11 @@ function useBuildQueueStatsContext(): CraftStatViewModel {
 export function BuildQueueCraftOverview() {
   const model = useBuildQueueStatsContext();
   return <BuildQueueCraftOverviewPanel model={model} />;
+}
+
+export function BuildQueueCraftIdentity() {
+  const model = useBuildQueueStatsContext();
+  return <BuildQueueCraftIdentityPanel model={model} />;
 }
 
 export function BuildQueueCraftStatistics() {

@@ -5,9 +5,11 @@ import {
   componentCardIndexResponse,
   componentCardMonolithResponse,
   componentCards,
+  blueprintSourceMissions,
   fittingDetails,
   fittingMeta,
   fpsRecipeCatalog,
+  materialIdentityIndex,
   materialQualityQuantization,
   recipeShards,
   vehicleRecipeCatalog,
@@ -21,6 +23,12 @@ export const handlers = [
   http.get("*/api/crafting/recipes/catalog/vehicle", () => HttpResponse.json(vehicleRecipeCatalog)),
   http.get("*/api/crafting/recipes/catalog/fps", () => HttpResponse.json(fpsRecipeCatalog)),
   http.get("*/api/crafting/reference/material-quality-quantization", () => HttpResponse.json(materialQualityQuantization)),
+  http.get("*/api/crafting/reference/material-identity", () => HttpResponse.json(materialIdentityIndex)),
+  http.get("*/api/crafting/material_identity_index.json", () => HttpResponse.json(materialIdentityIndex)),
+  http.get("*/api/crafting/blueprint-sources", ({ request }) => {
+    const blueprintGuid = new URL(request.url).searchParams.get("blueprintGuid")?.trim().toLowerCase() ?? "";
+    return HttpResponse.json({ blueprintGuid, missions: blueprintSourceMissions.get(blueprintGuid) ?? [] });
+  }),
   http.get("*/api/v1/fitting/meta", () => HttpResponse.json({ meta: fittingMeta, data: {} })),
   http.get("*/api/crafting/component-cards/:id", ({ params }) => {
     const record = componentCards.get(String(params.id).toLowerCase());

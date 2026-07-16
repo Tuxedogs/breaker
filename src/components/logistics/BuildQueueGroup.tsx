@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
@@ -40,20 +41,97 @@ import {
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { apiUrl } from '../../lib/apiUrl';
+import { loadBlueprintSourceMissions } from '../../lib/craftingBlueprintSourcesApi';
 import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
-import { BuildQueueCraftOverview, BuildQueueCraftStatistics, BuildQueueStatsProvider } from './BuildQueueStatsBreakdown';
+import { BuildQueueCraftIdentity, BuildQueueCraftStatistics, BuildQueueStatsProvider } from './BuildQueueStatsBreakdown';
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 type BuildQueueActiveDrawer = {
-  type: 'quality' | 'reserve';
+  type: 'reserve';
   requirementKey: string;
 };
+
+type BlueprintMissionLink = {
+  href: string;
+  id: string;
+  label: string;
+};
+
+function readMissionString(record: Record<string, unknown>, ...keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === 'string' && value.trim()) return value.trim();
+  }
+  return undefined;
+}
+
+function normalizeBlueprintMissionLink(value: unknown): BlueprintMissionLink | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const mission = value as Record<string, unknown>;
+  const conceptKey = readMissionString(mission, 'conceptKey');
+  const missionId = readMissionString(mission, 'missionId', 'contractId');
+  const label = readMissionString(mission, 'contractTitle', 'title', 'contractDebugName', 'debugName');
+  const routeKey = conceptKey ?? missionId;
+  if (!routeKey || !label) return null;
+  const params = new URLSearchParams(conceptKey ? { concept: conceptKey } : { search: routeKey });
+  return {
+    href: `/industry/missions?${params.toString()}`,
+    id: `${conceptKey ? 'concept' : 'mission'}:${routeKey}`,
+    label: label.replace(/~mission\(([^)]+)\)/g, '$1'),
+  };
+}
+
+function BlueprintSourceDisplay({ blueprintId, fallbackLabel }: { blueprintId?: string; fallbackLabel: string }) {
+  const [missionLinks, setMissionLinks] = useState<BlueprintMissionLink[] | null>(null);
+
+  useEffect(() => {
+    const normalizedBlueprintId = blueprintId?.trim();
+    if (!normalizedBlueprintId) {
+      queueMicrotask(() => setMissionLinks([]));
+      return;
+    }
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) setMissionLinks(null);
+    });
+    loadBlueprintSourceMissions(normalizedBlueprintId)
+      .then((missions) => {
+        if (cancelled) return;
+        const links = missions
+          .map(normalizeBlueprintMissionLink)
+          .filter((link): link is BlueprintMissionLink => Boolean(link))
+          .filter((link, index, all) => all.findIndex((candidate) => candidate.href === link.href) === index);
+        setMissionLinks(links);
+      })
+      .catch(() => {
+        if (!cancelled) setMissionLinks([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [blueprintId]);
+
+  if (!missionLinks?.length) {
+    return <span className="bq-item-blueprint" title={fallbackLabel}>{fallbackLabel}</span>;
+  }
+
+  return (
+    <span className="bq-item-blueprint-links" title={missionLinks.map((mission) => mission.label).join(', ')}>
+      {missionLinks.map((mission, index) => (
+        <span key={mission.id}>
+          {index > 0 ? ', ' : null}
+          <Link className="bq-item-blueprint-link" to={mission.href}>{mission.label}</Link>
+        </span>
+      ))}
+    </span>
+  );
+}
 
 function isDrawerToggleExcluded(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && Boolean(target.closest('button,input,select,textarea,[data-bq-row-control="true"]'));
@@ -513,17 +591,6 @@ function isPartialLotAllocation(reservedQuantity: number, lotQuantity: number): 
   return reservedQuantity > SCU_QUANTITY_EPSILON && lotQuantity - reservedQuantity > SCU_QUANTITY_EPSILON;
 }
 
-function parseTargetQualityDraft(value: string): number | null {
-  const trimmed = value.trim();
-  if (!/^\d+$/.test(trimmed)) return null;
-  const parsed = Number(trimmed);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function normalizeTargetQualityDraft(value: string): string {
-  return value.replace(/\D/g, '');
-}
-
 function buildSolverCandidateLots(
   stacks: InventoryStack[],
   buildQueue: BuildQueueItem[],
@@ -723,15 +790,6 @@ function QualityAllocationChips({
         );
       })}
     </div>
-  );
-}
-
-function EditIcon() {
-  return (
-    <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z" />
-      <path d="m13.5 6.5 3 3" />
-    </svg>
   );
 }
 
@@ -1006,145 +1064,43 @@ interface Props {
 function TargetQualityEditor({
   label,
   tone,
-  isOpen,
-  inline,
-  draftQuality,
-  recipeTargetQuality,
-  onOpen,
-  onDraftQualityChange,
-  onApply,
-  onCancel,
+  materialName,
+  value,
+  onChange,
+  onCommit,
 }: {
   label: string;
   tone: string;
-  isOpen: boolean;
-  inline?: boolean;
-  draftQuality: string;
-  recipeTargetQuality: number;
-  onOpen: () => void;
-  onDraftQualityChange: (value: string) => void;
-  onApply: () => void;
-  onCancel: () => void;
+  materialName: string;
+  value: number;
+  onChange: (value: number) => void;
+  onCommit: (value: number) => void;
 }) {
-  const rootRef = useRef<HTMLSpanElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const canApply = parseTargetQualityDraft(draftQuality) !== null;
-
-  useEffect(() => {
-    if (inline) {
-      if (!isOpen) return;
-      const frame = window.requestAnimationFrame(() => {
-        inputRef.current?.focus({ preventScroll: true });
-      });
-      return () => window.cancelAnimationFrame(frame);
-    }
-    if (inline) return;
-    if (!isOpen) return;
-    const frame = window.requestAnimationFrame(() => {
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [inline, isOpen]);
-
-  useEffect(() => {
-    if (inline) return;
-    if (!isOpen) return;
-    const onPointerDown = (event: PointerEvent) => {
-      if (rootRef.current?.contains(event.target as Node)) return;
-      onCancel();
-    };
-    document.addEventListener('pointerdown', onPointerDown);
-    return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [inline, isOpen, onCancel]);
-
-  const setPreset = (value: number) => onDraftQualityChange(String(clampTargetQuality(value)));
-  const commitInline = () => {
-    if (canApply) onApply();
-    else onCancel();
-  };
+  const normalizedValue = clampTargetQuality(value);
 
   return (
-    <span className={`bq-target-editor${inline ? ' bq-target-editor--inline' : ''}`} ref={rootRef} data-bq-row-control="true">
-      {inline && isOpen ? (
+    <span className="bq-target-editor bq-target-editor--slider" data-bq-row-control="true">
+      <span className={`bq-target-quality bq-target-quality--${tone}`} aria-hidden="true">
+        <span>{label}</span>
+      </span>
+      <span className="bq-target-slider-shell">
         <input
-          ref={inputRef}
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          className={`bq-target-inline-input bq-target-inline-input--${tone}`}
-          value={draftQuality}
-          aria-label="Exact target quality"
+          type="range"
+          min="1"
+          max="1000"
+          step="1"
+          className="bq-target-quality-slider"
+          value={normalizedValue}
+          aria-label={`Target quality for ${materialName}`}
+          aria-valuetext={`Target ${normalizedValue}`}
           data-bq-row-control="true"
-          onChange={(event) => onDraftQualityChange(normalizeTargetQualityDraft(event.target.value))}
-          onBlur={commitInline}
+          onChange={(event) => onChange(clampTargetQuality(Number(event.target.value)))}
+          onBlur={(event) => onCommit(clampTargetQuality(Number(event.currentTarget.value)))}
           onClick={(event) => event.stopPropagation()}
           onPointerDown={(event) => event.stopPropagation()}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              commitInline();
-            } else if (event.key === 'Escape') {
-              event.preventDefault();
-              onCancel();
-            }
-          }}
         />
-      ) : (
-        <button
-          type="button"
-          className={`bq-target-quality bq-target-quality--${tone}${isOpen ? ' is-active' : ''}`}
-          aria-label="Edit target quality"
-          aria-expanded={isOpen}
-          onClick={(event) => {
-            event.stopPropagation();
-            onOpen();
-          }}
-        >
-          <span>{label}</span>
-          <EditIcon />
-        </button>
-      )}
-      {!inline && isOpen ? (
-        <div
-          className="bq-target-popover"
-          role="dialog"
-          aria-label="Target Quality"
-          onClick={(event) => event.stopPropagation()}
-          onKeyDown={(event) => {
-            if (event.key === 'Escape') {
-              event.preventDefault();
-              onCancel();
-            }
-          }}
-        >
-          <h4>Target Quality</h4>
-          <input
-            ref={inputRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={draftQuality}
-            aria-label="Exact target quality"
-            onChange={(event) => onDraftQualityChange(normalizeTargetQualityDraft(event.target.value))}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && canApply) {
-                event.preventDefault();
-                onApply();
-              }
-            }}
-          />
-          <div className="bq-target-presets" aria-label="Target quality presets">
-            <button type="button" onClick={() => setPreset(800)}>800+</button>
-            <button type="button" onClick={() => setPreset(900)}>900+</button>
-            <button type="button" onClick={() => setPreset(recipeTargetQuality)}>Recipe</button>
-          </div>
-          <div className="bq-target-popover-actions">
-            <button type="button" className="bq-btn" onClick={onCancel}>Cancel</button>
-            <button type="button" className="bq-btn bq-btn--confirm" disabled={!canApply} onClick={onApply}>Apply</button>
-          </div>
-        </div>
-      ) : null}
+        <output>{normalizedValue}</output>
+      </span>
     </span>
   );
 }
@@ -1161,7 +1117,6 @@ export default function BuildQueueGroup({
 }: Props) {
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [quickAddTarget, setQuickAddTarget] = useState<InventoryQuickAddTarget | null>(null);
-  const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [pendingReassignment, setPendingReassignment] = useState<PendingReassignment | null>(null);
   const [pendingCraftSolverPlan, setPendingCraftSolverPlan] = useState<{
     itemId: string;
@@ -1180,19 +1135,6 @@ export default function BuildQueueGroup({
   useEffect(() => () => {
     onAllocationOwnerHighlightChange?.(null);
   }, [onAllocationOwnerHighlightChange]);
-
-  function openQualityEditor(itemId: string, editorKey: string, selectedQuality: number | undefined) {
-    const alreadyOpen =
-      activeDrawersByItem[itemId]?.type === 'quality' &&
-      activeDrawersByItem[itemId]?.requirementKey === editorKey;
-    setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: alreadyOpen ? undefined : { type: 'quality', requirementKey: editorKey } }));
-    setQualityDrafts((prev) => {
-      const next = { ...prev };
-      delete next[editorKey];
-      if (!alreadyOpen) next[editorKey] = String(clampTargetQuality(selectedQuality ?? 500));
-      return next;
-    });
-  }
 
   function toggleReserveDrawer(itemId: string, requirementKey: string, isOpen: boolean) {
     setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: isOpen ? undefined : { type: 'reserve', requirementKey } }));
@@ -1234,32 +1176,14 @@ export default function BuildQueueGroup({
     setAllocationOwnerHighlight(null);
   }
 
-  function cancelQualityEditor(itemId: string, editorKey: string) {
-    if (
-      activeDrawersByItem[itemId]?.type === 'quality' &&
-      activeDrawersByItem[itemId]?.requirementKey === editorKey
-    ) {
-      setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: undefined }));
-    }
-    setQualityDrafts((prev) => {
-      const next = { ...prev };
-      delete next[editorKey];
-      return next;
-    });
-  }
-
-  function applyQualityEditor(
+  function updateTargetQuality(
     item: BuildQueueItem,
     input: RecipeInputTemplate,
     requirementId: string,
-    editorKey: string,
     qualityBands: QualityBand[],
-    ownAllocations: ReservedMaterialAllocation[],
-    effectiveReservedQuality: number | undefined,
+    value: number,
   ) {
-    const parsed = parseTargetQualityDraft(qualityDrafts[editorKey] ?? '');
-    if (parsed === null) return;
-    const draftQuality = clampTargetQuality(parsed);
+    const draftQuality = clampTargetQuality(value);
     const bandIndex = findNearestBandForQuality(qualityBands, draftQuality);
     const draftModifier = getModifiersAtQuality(input.qualityModifiers ?? [], draftQuality)[0];
     onMaterialRequirementChange(item.id, requirementId, {
@@ -1271,10 +1195,18 @@ export default function BuildQueueGroup({
       modifierType: draftModifier?.modifierMode ?? input.modifierType,
       modifierValue: draftModifier?.value ?? input.modifierValue,
     });
+  }
+
+  function commitTargetQuality(
+    item: BuildQueueItem,
+    value: number,
+    ownAllocations: ReservedMaterialAllocation[],
+    effectiveReservedQuality: number | undefined,
+  ) {
+    const draftQuality = clampTargetQuality(value);
     if (Number.isFinite(effectiveReservedQuality) && draftQuality > Number(effectiveReservedQuality)) {
       ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
     }
-    cancelQualityEditor(item.id, editorKey);
   }
 
   return (
@@ -1581,6 +1513,8 @@ export default function BuildQueueGroup({
                   <h2 className="bq-item-name">{itemName}</h2>
                 </div>
 
+                <BuildQueueCraftIdentity />
+
                 <div className="bq-item-badges" aria-label="Craft status">
                   {headerBadges.map((badge) => (
                     <span key={badge.key} className={`bq-badge ${badge.className}`}>
@@ -1591,9 +1525,7 @@ export default function BuildQueueGroup({
 
                 <div className="bq-item-mission">
                   <span className="bq-item-mission-label">Blueprint Source</span>
-                  <span className="bq-item-blueprint" title={blueprintLabel}>
-                    {blueprintLabel}
-                  </span>
+                  <BlueprintSourceDisplay blueprintId={item.blueprint_id} fallbackLabel={blueprintLabel} />
                 </div>
 
                 <div className="bq-item-footer">
@@ -1617,10 +1549,6 @@ export default function BuildQueueGroup({
                   <span className="bq-qty-val">{item.quantity}x</span>
                   <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} disabled={isCompletedCraft} aria-label="Increase quantity">+</button>
                 </div>
-              </div>
-
-              <div className="bq-item-stats">
-                <BuildQueueCraftOverview />
               </div>
 
               <div className="bq-item-visual" aria-hidden="true">
@@ -1667,7 +1595,6 @@ export default function BuildQueueGroup({
                 <div className="bq-mat-head" aria-hidden="true">
                   <span>Material</span>
                   <span>Total Need</span>
-                  <span>Allocated</span>
                   <span>Target</span>
                   <span>Avg Quality</span>
                   <span>Shortfall / Excess</span>
@@ -1681,15 +1608,9 @@ export default function BuildQueueGroup({
                   const reserveExpanded =
                     activeDrawer?.type === 'reserve' &&
                     activeDrawer.requirementKey === group.groupKey;
-                  const qualityExpanded =
-                    activeDrawer?.type === 'quality' &&
-                    activeDrawer.requirementKey === group.groupKey;
                   const qualityRequirement = group.requirements[0];
                   const targetEditorQuality = clampTargetQuality(group.targetQuality ?? group.selectedQuality ?? 500);
                   const targetEditorBands = qualityRequirement.qualityBands ?? FALLBACK_QUALITY_BANDS;
-                  const qualityDraft = qualityExpanded
-                    ? (qualityDrafts[group.groupKey] ?? String(clampTargetQuality(targetEditorQuality)))
-                    : String(clampTargetQuality(targetEditorQuality));
                   const balanceAmount = group.allocatedTotal - group.requiredTotal;
                   const balanceTone = balanceAmount < 0 ? 'short' : balanceAmount > 0 ? 'excess' : 'met';
                   const balanceLabel = formatQuantity(Math.abs(balanceAmount), group.material);
@@ -1719,7 +1640,6 @@ export default function BuildQueueGroup({
                       className={[
                         'bq-mat-group',
                         group.needTotal > 0 ? 'bq-mat-group--missing' : '',
-                        qualityExpanded ? 'bq-mat-group--target-open' : '',
                         isMobileTouchLayout ? 'bq-mat-group--mobile-card' : '',
                       ].filter(Boolean).join(' ')}
                     >
@@ -1769,28 +1689,26 @@ export default function BuildQueueGroup({
                         </div>
                         <div className="bq-mat-card-metrics">
                           <span><em>Need</em>{formatQuantity(group.requiredTotal, group.material)}</span>
-                          <span className={`bq-qty-cell--allocated ${materialTypeClass(group.material)}`}><em>Allocated</em>{formatQuantity(group.allocatedTotal, group.material)}</span>
                           <span className="bq-target-quality-cell">
                             <em>Target</em>
                             <TargetQualityEditor
                               label={targetQualityLabel}
                               tone={targetQualityTone}
-                              isOpen={qualityExpanded}
-                              inline={isMobileTouchLayout}
-                              draftQuality={qualityDraft}
-                              recipeTargetQuality={group.recipeTargetQuality}
-                              onOpen={() => openQualityEditor(item.id, group.groupKey, targetEditorQuality)}
-                              onDraftQualityChange={(value) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: value }))}
-                              onApply={() => applyQualityEditor(
+                              materialName={group.displayName}
+                              value={targetEditorQuality}
+                              onChange={(value) => updateTargetQuality(
                                 item,
                                 qualityRequirement.input,
                                 qualityRequirement.requirementId,
-                                group.groupKey,
                                 targetEditorBands,
+                                value,
+                              )}
+                              onCommit={(value) => commitTargetQuality(
+                                item,
+                                value,
                                 qualityRequirement.ownAllocations,
                                 qualityRequirement.effectiveReservedQuality,
                               )}
-                              onCancel={() => cancelQualityEditor(item.id, group.groupKey)}
                             />
                           </span>
                           <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
@@ -1841,26 +1759,24 @@ export default function BuildQueueGroup({
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.requiredTotal, group.material)}</span>
-                        <span className={`bq-qty-cell bq-qty-cell--allocated ${materialTypeClass(group.material)}`}>{formatQuantity(group.allocatedTotal, group.material)}</span>
                         <TargetQualityEditor
                           label={targetQualityLabel}
                           tone={targetQualityTone}
-                          isOpen={qualityExpanded}
-                          inline={isMobileTouchLayout}
-                          draftQuality={qualityDraft}
-                          recipeTargetQuality={group.recipeTargetQuality}
-                          onOpen={() => openQualityEditor(item.id, group.groupKey, targetEditorQuality)}
-                          onDraftQualityChange={(value) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: value }))}
-                          onApply={() => applyQualityEditor(
+                          materialName={group.displayName}
+                          value={targetEditorQuality}
+                          onChange={(value) => updateTargetQuality(
                             item,
                             qualityRequirement.input,
                             qualityRequirement.requirementId,
-                            group.groupKey,
                             targetEditorBands,
+                            value,
+                          )}
+                          onCommit={(value) => commitTargetQuality(
+                            item,
+                            value,
                             qualityRequirement.ownAllocations,
                             qualityRequirement.effectiveReservedQuality,
                           )}
-                          onCancel={() => cancelQualityEditor(item.id, group.groupKey)}
                         />
                         <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
                           <span><i aria-hidden="true" />{averageQualityLabel}</span>

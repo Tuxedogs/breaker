@@ -55,11 +55,11 @@ async function selectFixtureItem(page: Page, itemId: string, itemName: string) {
   await expect(listCard).toBeVisible();
   await listCard.click();
   await expect(page.locator(".bq-item-name")).toHaveText(itemName);
-  await expect(page.locator(".bq-item-stats .bq-stats-overview")).toBeVisible();
+  await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
 }
 
 test.describe("Build Queue stats fixture", () => {
-  test("renders overview header + component statistics card for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
+  test("renders identity-only headers + consolidated component statistics for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
     const failures = installFailureGuards(page);
     const externalApiRequests: string[] = [];
     page.on("request", (request) => {
@@ -82,20 +82,101 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(".bq-craft-card")).toHaveCount(4);
       await expect(page.locator(".bq-center-col")).toBeVisible();
 
+      if (viewport.name === "1920x1080") {
+        const missionLink = page.locator(".bq-item-blueprint-link").first();
+        await expect(missionLink).toHaveText("Xenothreat 2 85 01");
+        await expect(missionLink).toHaveAttribute("href", "/industry/missions?concept=xenothreat-2-85-01");
+
+        await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+        await expect(page.locator(".bq-item-header .bq-stat-compare-row")).toHaveCount(0);
+        await expect(page.locator(".bq-item-identity .bq-stats-meta--header")).toBeVisible();
+        await expect(page.locator(".bq-component-statistics .bq-stat-compare-group")).toHaveCount(4);
+        await expect(page.locator(".bq-component-statistics .bq-stat-compact-row").first()).toBeVisible();
+        await expect(page.locator(".bq-component-statistics")).not.toContainText("Not modified");
+
+        const alignment = await page.locator(".bq-stat-compare-row").first().evaluate((row) => {
+          const slots = Array.from(row.querySelectorAll(".bq-stat-compare-slot"));
+          return slots.map((slot) => {
+            const rect = slot.getBoundingClientRect();
+            return { width: rect.width, top: rect.top };
+          });
+        });
+        expect(alignment).toHaveLength(3);
+        expect(Math.max(...alignment.map((slot) => slot.width)) - Math.min(...alignment.map((slot) => slot.width))).toBeLessThan(1);
+        expect(Math.max(...alignment.map((slot) => slot.top)) - Math.min(...alignment.map((slot) => slot.top))).toBeLessThan(1);
+
+        const slider = page.getByRole("slider", { name: "Target quality for Stileron" }).first();
+        const targetValues = page.locator(".bq-component-statistics .bq-stat-compare-target");
+        const before = await targetValues.allTextContents();
+        const previousQuality = Number(await slider.inputValue());
+        const nextQuality = Math.max(1, previousQuality - 75);
+        await slider.evaluate((element, value) => {
+          const input = element as HTMLInputElement;
+          const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+          setValue?.call(input, String(value));
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        }, nextQuality);
+        await expect(slider).toHaveValue(String(nextQuality));
+        await expect.poll(async () => (await targetValues.allTextContents()).join("|")).not.toBe(before.join("|"));
+
+        await slider.evaluate((element, value) => {
+          const input = element as HTMLInputElement;
+          const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+          setValue?.call(input, String(value));
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        }, previousQuality);
+        await expect(slider).toHaveValue(String(previousQuality));
+        await expect.poll(async () => (await targetValues.allTextContents()).join("|")).toBe(before.join("|"));
+
+        await expect(page.locator(".bq-mat-head")).not.toContainText("Allocated");
+      }
+
       for (const item of fixtureItems) {
         await selectFixtureItem(page, item.id, item.name);
         await expect(page.locator(".bq-materials-section")).toBeVisible();
         await expect(page.locator(".bq-mat-table")).toBeVisible();
 
         if (item.expectGroupedStats) {
-          await expect(page.locator('.bq-item-stats [data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
-          await expect(page.locator(".bq-item-stats .bq-stats-meta")).toBeVisible();
-          await expect(page.locator(".bq-item-stats .bq-stats-overview-group").first()).toBeVisible();
-          await expect(page.locator(".bq-item-stats .bq-stat-compare")).toHaveCount(0);
+          await expect(page.locator(".bq-item-stats")).toHaveCount(0);
+          await expect(page.locator(".bq-item-identity .bq-stats-meta")).toBeVisible();
           await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+          await expect(page.locator(".bq-component-statistics .bq-stat-compare-group").first()).toBeVisible();
           await expect(page.locator(".bq-component-statistics .bq-stat-compare").first()).toBeVisible();
         } else {
-          await expect(page.locator(".bq-item-stats .bq-stats-overview")).toBeVisible();
+          await expect(page.locator(".bq-component-statistics")).toBeVisible();
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.ad5b) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Physical Damage",
+            "Fire Rate",
+            "Ammo Capacity",
+            "Projectile Speed",
+            "Projectile Range / Max Travel",
+            "Heat Per Shot",
+            "Power",
+            "Mass",
+          ]));
+          const modifiedLabels = await page.locator(".bq-component-statistics .bq-stat-compare-row .bq-stat-compare-label").allTextContents();
+          expect(modifiedLabels).toEqual(["Alpha Damage", "Health"]);
+          const compactText = (await page.locator(".bq-stat-compact-list").allTextContents()).join("|");
+          expect(compactText).not.toContain("0%");
+
+          const allocationColors = await page.evaluate(() => {
+            const allocationValue = document.querySelector(".bq-stat-compare-allocation .bq-stat-compare-value");
+            const qualityValue = document.querySelector(".bq-quality-chip strong");
+            const targetValue = document.querySelector(".bq-stat-compare-target .bq-stat-compare-value");
+            return {
+              allocation: allocationValue ? getComputedStyle(allocationValue).color : "",
+              quality: qualityValue ? getComputedStyle(qualityValue).color : "",
+              target: targetValue ? getComputedStyle(targetValue).color : "",
+            };
+          });
+          expect(allocationColors.allocation).toBe(allocationColors.quality);
+          expect(allocationColors.allocation).not.toBe(allocationColors.target);
         }
 
         await page.screenshot({
@@ -103,6 +184,11 @@ test.describe("Build Queue stats fixture", () => {
           fullPage: true,
         });
       }
+
+      const horizontalOverflow = await page.evaluate(() => (
+        Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth
+      ));
+      expect(horizontalOverflow).toBeLessThanOrEqual(1);
     }
 
     expect(failures).toEqual([]);

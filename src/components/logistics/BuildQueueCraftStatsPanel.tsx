@@ -4,18 +4,62 @@ import type {
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
 
-function ComparisonDelta({
-  column,
-}: {
-  column: CraftStatComparisonColumnView;
-}) {
-  if (column.state !== "ready") return null;
+type ConsolidatedStat =
+  | { kind: "comparison"; row: CraftStatComparisonRowView }
+  | { kind: "static"; label: string; value: string };
 
-  const delta = column.percentDelta ?? column.absoluteDelta;
-  if (!delta) {
-    return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
+
+function normalizeStatKey(value: string): string {
+  const normalized = value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return normalized === "componenthp" ? "health" : normalized;
+}
+
+function normalizeGroupKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGroup[] {
+  const comparisonByGroup = new Map(
+    model.comparisonGroups.map((group) => [normalizeGroupKey(group.title), group] as const),
+  );
+  const usedComparisonGroups = new Set<string>();
+  const groups: ConsolidatedStatGroup[] = [];
+
+  for (const overviewGroup of model.overviewGroups) {
+    const groupKey = normalizeGroupKey(overviewGroup.title);
+    const comparisonGroup = comparisonByGroup.get(groupKey);
+    const comparisonKeys = new Set(
+      comparisonGroup?.rows.map((row) => normalizeStatKey(row.label)) ?? [],
+    );
+    const stats: ConsolidatedStat[] = overviewGroup.stats
+      .filter((stat) => !comparisonKeys.has(normalizeStatKey(stat.label)))
+      .map((stat) => ({ kind: "static", label: stat.label, value: stat.value }));
+
+    if (comparisonGroup) {
+      usedComparisonGroups.add(groupKey);
+      stats.push(...comparisonGroup.rows.map((row) => ({ kind: "comparison" as const, row })));
+    }
+
+    if (stats.length > 0) groups.push({ title: overviewGroup.title, stats });
   }
 
+  for (const comparisonGroup of model.comparisonGroups) {
+    const groupKey = normalizeGroupKey(comparisonGroup.title);
+    if (usedComparisonGroups.has(groupKey)) continue;
+    groups.push({
+      title: comparisonGroup.title,
+      stats: comparisonGroup.rows.map((row) => ({ kind: "comparison", row })),
+    });
+  }
+
+  return groups;
+}
+
+function ComparisonDelta({ column }: { column: CraftStatComparisonColumnView }) {
+  if (column.state !== "ready") return null;
+  const delta = column.percentDelta ?? column.absoluteDelta;
+  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
   return (
     <span className={`bq-stat-compare-delta ${column.impactClass ?? "bq-stat-compare-delta--neutral"}`}>
       {delta}
@@ -23,11 +67,25 @@ function ComparisonDelta({
   );
 }
 
-function ComparisonColumn({
-  column,
-}: {
-  column: CraftStatComparisonColumnView;
-}) {
+function hasNonZeroDelta(value: string | undefined): boolean {
+  if (!value) return false;
+  const parsed = Number.parseFloat(value.replace(/[^0-9+.-]/g, ""));
+  return Number.isFinite(parsed) && Math.abs(parsed) > 0.0001;
+}
+
+function columnDiffersFromBase(column: CraftStatComparisonColumnView, baseValue: string): boolean {
+  if (column.state !== "ready") return false;
+  return hasNonZeroDelta(column.percentDelta)
+    || hasNonZeroDelta(column.absoluteDelta)
+    || (column.percentDelta === undefined && column.absoluteDelta === undefined && column.value !== baseValue);
+}
+
+function comparisonIsModified(row: CraftStatComparisonRowView): boolean {
+  return columnDiffersFromBase(row.target, row.baseValue)
+    || columnDiffersFromBase(row.allocation, row.baseValue);
+}
+
+function ComparisonColumn({ column }: { column: CraftStatComparisonColumnView }) {
   if (column.state !== "ready") {
     return (
       <span className="bq-stat-compare-empty" data-bq-stat-state={column.state}>
@@ -35,7 +93,6 @@ function ComparisonColumn({
       </span>
     );
   }
-
   return (
     <span className="bq-stat-compare-cell">
       <strong className="bq-stat-compare-value">{column.value}</strong>
@@ -46,49 +103,79 @@ function ComparisonColumn({
 
 function DirectionIndicator({ direction }: { direction: CraftStatComparisonRowView["benefitDirection"] }) {
   if (direction === "higher-is-better") {
-    return <span className="bq-stat-direction bq-stat-direction--higher">↑ higher is better</span>;
+    return <span className="bq-stat-direction bq-stat-direction--higher">Higher is better</span>;
   }
   if (direction === "lower-is-better") {
-    return <span className="bq-stat-direction bq-stat-direction--lower">↓ lower is better</span>;
+    return <span className="bq-stat-direction bq-stat-direction--lower">Lower is better</span>;
   }
-  return <span className="bq-stat-direction bq-stat-direction--neutral">— neutral</span>;
+  return <span className="bq-stat-direction bq-stat-direction--neutral">Neutral</span>;
 }
 
-function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
-  if (rows.length === 0) return null;
+function ComparisonStat({ row }: { row: CraftStatComparisonRowView }) {
+  return (
+    <article className="bq-stat-compare-row" data-bq-benefit-direction={row.benefitDirection} aria-label={`${row.label} comparison`}>
+      <div className="bq-stat-compare-heading">
+        <strong className="bq-stat-compare-label">{row.label}</strong>
+        {row.unit !== "-" ? <span className="bq-stat-compare-unit">{row.unit}</span> : null}
+      </div>
+      <div className="bq-stat-compare-values">
+        <span className="bq-stat-compare-slot bq-stat-compare-base">
+          <span className="bq-stat-compare-slot-label">Base</span>
+          <strong>{row.baseValue}</strong>
+        </span>
+        <span className="bq-stat-compare-slot bq-stat-compare-target">
+          <span className="bq-stat-compare-slot-label">Target</span>
+          <span className="bq-stat-compare-slot-content"><ComparisonColumn column={row.target} /></span>
+        </span>
+        <span className="bq-stat-compare-slot bq-stat-compare-allocation">
+          <span className="bq-stat-compare-slot-label">Allocation</span>
+          <span className="bq-stat-compare-slot-content"><ComparisonColumn column={row.allocation} /></span>
+        </span>
+      </div>
+      <div className="bq-stat-compare-direction"><DirectionIndicator direction={row.benefitDirection} /></div>
+    </article>
+  );
+}
+
+function CompactStat({ label, value, unit }: { label: string; value: string; unit?: string }) {
+  return (
+    <div className="bq-stat-compact-row" role="listitem" aria-label={`${label}: ${value}${unit && unit !== "-" ? ` ${unit}` : ""}`}>
+      <span className="bq-stat-compact-label">{label}</span>
+      <strong className="bq-stat-compact-value">{value}</strong>
+      {unit && unit !== "-" ? <span className="bq-stat-compact-unit">{unit}</span> : null}
+    </div>
+  );
+}
+
+function ConsolidatedGroup({ group }: { group: ConsolidatedStatGroup }) {
+  const unchangedStats = group.stats.filter((stat) => (
+    stat.kind === "static" || !comparisonIsModified(stat.row)
+  ));
+  const modifiedStats = group.stats.filter((stat): stat is Extract<ConsolidatedStat, { kind: "comparison" }> => (
+    stat.kind === "comparison" && comparisonIsModified(stat.row)
+  ));
 
   return (
-    <div className="bq-stat-compare" role="table" aria-label="Base target allocation comparison">
-      <div className="bq-stat-compare-head" role="row">
-        <span role="columnheader">Stat</span>
-        <span role="columnheader">Unit</span>
-        <span role="columnheader">Base</span>
-        <span role="columnheader">Target</span>
-        <span role="columnheader">Allocation</span>
-        <span role="columnheader">Direction</span>
+    <section
+      className={`bq-stat-compare-group${modifiedStats.length === 0 ? " bq-stat-compare-group--unchanged-only" : ""}`}
+      aria-label={group.title}
+    >
+      <h4 className="bq-stat-compare-group-title">{group.title}</h4>
+      <div className="bq-stat-group-layout">
+        {unchangedStats.length > 0 ? (
+          <div className="bq-stat-compact-list" role="list" aria-label={`${group.title} unchanged statistics`}>
+            {unchangedStats.map((stat) => stat.kind === "comparison"
+              ? <CompactStat key={stat.row.statId} label={stat.row.label} value={stat.row.baseValue} unit={stat.row.unit} />
+              : <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />)}
+          </div>
+        ) : null}
+        {modifiedStats.length > 0 ? (
+          <div className="bq-stat-compare bq-stat-modified-list" role="list" aria-label={`${group.title} modified statistics`}>
+            {modifiedStats.map((stat) => <ComparisonStat key={stat.row.statId} row={stat.row} />)}
+          </div>
+        ) : null}
       </div>
-      {rows.map((row) => (
-        <div
-          key={row.statId}
-          className="bq-stat-compare-row"
-          role="row"
-          data-bq-benefit-direction={row.benefitDirection}
-        >
-          <span className="bq-stat-compare-label" role="rowheader">{row.label}</span>
-          <span className="bq-stat-compare-unit" role="cell">{row.unit}</span>
-          <strong className="bq-stat-compare-base" role="cell">{row.baseValue}</strong>
-          <span className="bq-stat-compare-target" role="cell">
-            <ComparisonColumn column={row.target} />
-          </span>
-          <span className="bq-stat-compare-allocation" role="cell">
-            <ComparisonColumn column={row.allocation} />
-          </span>
-          <span className="bq-stat-compare-direction" role="cell">
-            <DirectionIndicator direction={row.benefitDirection} />
-          </span>
-        </div>
-      ))}
-    </div>
+    </section>
   );
 }
 
@@ -104,96 +191,44 @@ function StatsLegend() {
 
 export function BuildQueueCraftOverviewPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
-    return (
-      <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="loading">
-        <p className="bq-stats-breakdown-empty">Loading stats...</p>
-      </div>
-    );
+    return <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading stats...</p></div>;
   }
-
   if (model.status !== "ready") {
-    return (
-      <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="unavailable">
-        <p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Stats unavailable"}</p>
-      </div>
-    );
+    return <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Stats unavailable"}</p></div>;
   }
+  return <div className="bq-stats-overview" data-bq-stats-status="ready" data-bq-stats-category={model.category}><BuildQueueCraftIdentityPanel model={model} /></div>;
+}
 
+export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewModel }) {
+  if (model.status !== "ready" || model.identity.length === 0) return null;
   return (
-    <div
-      className="bq-stats-overview"
-      data-bq-stats-status="ready"
-      data-bq-stats-category={model.category}
-      aria-label="Component stock overview"
-    >
-      {model.identity.length > 0 ? (
-        <div className="bq-stats-meta" aria-label="Component identity">
-          {model.identity.map((badge) => (
-            <span key={`${badge.label}:${badge.value}`} className="bq-stats-meta-badge">
-              <span>{badge.label}</span>
-              <strong>{badge.value}</strong>
-            </span>
-          ))}
-        </div>
-      ) : null}
-      {model.overviewGroups.length > 0 ? (
-        <div className="bq-stats-overview-groups">
-          {model.overviewGroups.map((group) => (
-            <section key={group.title} className="bq-stats-overview-group" aria-label={group.title}>
-              <div className="bq-stats-overview-group-title">{group.title}</div>
-              <div className="bq-stats-overview-grid">
-                {group.stats.map((stat) => (
-                  <div key={`${group.title}:${stat.label}`} className="bq-stats-overview-stat">
-                    <span className="bq-stats-overview-stat-label">{stat.label}</span>
-                    <strong className="bq-stats-overview-stat-value">{stat.value}</strong>
-                  </div>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      ) : (
-        <p className="bq-stats-breakdown-empty">No stock stats available</p>
-      )}
+    <div className="bq-stats-meta bq-stats-meta--header" aria-label="Component identity">
+      {model.identity.map((badge) => (
+        <span key={`${badge.label}:${badge.value}`} className="bq-stats-meta-badge">
+          <span>{badge.label}</span><strong>{badge.value}</strong>
+        </span>
+      ))}
     </div>
   );
 }
 
 export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
-    return (
-      <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading">
-        <p className="bq-stats-breakdown-empty">Loading component statistics...</p>
-      </section>
-    );
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
+  }
+  if (model.status !== "ready" || (model.comparisonGroups.length === 0 && model.overviewGroups.length === 0)) {
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
   }
 
-  if (model.status !== "ready" || model.comparisonGroups.length === 0) {
-    return (
-      <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable">
-        <p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p>
-      </section>
-    );
-  }
-
+  const consolidatedGroups = buildConsolidatedGroups(model);
   return (
-    <section
-      className="bq-component-statistics"
-      data-bq-stats-status="ready"
-      data-bq-stats-category={model.category}
-      aria-label="Component statistics"
-    >
+    <section className="bq-component-statistics" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
         <StatsLegend />
       </header>
       <div className="bq-component-statistics-body">
-        {model.comparisonGroups.map((group) => (
-          <div key={group.title} className="bq-stat-compare-group">
-            <div className="bq-stat-compare-group-title">{group.title}</div>
-            <ComparisonTable rows={group.rows} />
-          </div>
-        ))}
+        {consolidatedGroups.map((group) => <ConsolidatedGroup key={group.title} group={group} />)}
       </div>
     </section>
   );
@@ -201,10 +236,5 @@ export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatView
 
 /** @deprecated Use BuildQueueCraftOverviewPanel or BuildQueueCraftStatisticsPanel */
 export default function BuildQueueCraftStatsPanel({ model }: { model: CraftStatViewModel }) {
-  return (
-    <>
-      <BuildQueueCraftOverviewPanel model={model} />
-      <BuildQueueCraftStatisticsPanel model={model} />
-    </>
-  );
+  return <><BuildQueueCraftOverviewPanel model={model} /><BuildQueueCraftStatisticsPanel model={model} /></>;
 }

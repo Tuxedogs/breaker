@@ -7,6 +7,7 @@ import ad5bRecipe from "../../../../server-data/crafting/recipes/by-blueprint/ba
 import fpsWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/bd636d35-43fd-4782-a223-40ce0a727f39.json";
 import fpsArmorRecipe from "../../../../server-data/crafting/recipes/by-blueprint/005d95db-96ca-45b7-9647-7e7537b8fac8.json";
 import materialQualityQuantization from "../../../../server-data/crafting/reference/material-quality-quantization.json";
+import materialIdentityIndex from "../../../../server-data/crafting/reference/material-identity-index.json";
 import componentCardFacetsSource from "../../../../server-data/crafting/component-cards/facets.json";
 
 export const fixtureMetadata = {
@@ -15,6 +16,14 @@ export const fixtureMetadata = {
   fixtureDate: "2026-07-12",
   sourceEndpoints: ["/api/crafting/component-cards/:id", "/api/crafting/recipes/:id", "/api/v1/fitting/components/:entityClass"],
 };
+
+export const blueprintSourceMissions = new Map<string, unknown[]>([
+  ["db3f4c97-8d40-4b36-b397-452dea1594fc", [{
+    conceptKey: "xenothreat-2-85-01",
+    contractId: "f7e79f35-9b92-4b44-8f76-4fc9154f16cd",
+    contractTitle: "Xenothreat 2 85 01",
+  }]],
+]);
 
 export const componentCards = new Map([fr66Card, ad5bCard, fpsWeaponCard, fpsArmorCard].map((record) => [record.id, record]));
 export const componentCardRecords = [fr66Card, ad5bCard, fpsWeaponCard, fpsArmorCard];
@@ -65,7 +74,7 @@ export const recipeShards = new Map<string, unknown>([
 ]);
 export const vehicleRecipeCatalog = [fr66Recipe.record, ad5bRecipe.record];
 export const fpsRecipeCatalog = [fpsWeaponRecipe.record, fpsArmorRecipe.record];
-export { materialQualityQuantization };
+export { materialIdentityIndex, materialQualityQuantization };
 
 export const fittingMeta = { apiVersion: "1", artifactSchemaVersion: 1, channel: "LIVE", buildId: fixtureMetadata.buildId, generatedAt: "2026-07-12T00:00:00.000Z" } as const;
 
