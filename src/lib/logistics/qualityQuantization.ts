@@ -8,9 +8,9 @@ export type QualityBand = {
 
 export type QualityQuantizationRecord = {
   guid: string;
-  recordName: string;
-  recordType: string;
-  path: string;
+  recordName?: string | null;
+  recordType?: string | null;
+  path?: string | null;
   bands: QualityBand[];
 };
 
@@ -42,7 +42,8 @@ export function getQualityBandsForMaterial(materialName: string): QualityBand[] 
   const normalized = normalizeMaterialName(materialName);
 
   const record = records.find((entry) => {
-    const recordMaterial = entry.recordName.replace(/^Quantization_/i, "");
+    const recordMaterial = entry.recordName?.replace(/^Quantization_/i, "");
+    if (!recordMaterial) return false;
     return normalizeMaterialName(recordMaterial) === normalized;
   });
 
