@@ -6,6 +6,7 @@ import {
   componentCardMonolithResponse,
   componentCards,
   fittingDetails,
+  fittingMeta,
   fpsRecipeCatalog,
   materialQualityQuantization,
   recipeShards,
@@ -20,6 +21,7 @@ export const handlers = [
   http.get("*/api/crafting/recipes/catalog/vehicle", () => HttpResponse.json(vehicleRecipeCatalog)),
   http.get("*/api/crafting/recipes/catalog/fps", () => HttpResponse.json(fpsRecipeCatalog)),
   http.get("*/api/crafting/reference/material-quality-quantization", () => HttpResponse.json(materialQualityQuantization)),
+  http.get("*/api/v1/fitting/meta", () => HttpResponse.json({ meta: fittingMeta, data: {} })),
   http.get("*/api/crafting/component-cards/:id", ({ params }) => {
     const record = componentCards.get(String(params.id).toLowerCase());
     return record ? HttpResponse.json(record) : HttpResponse.json({ error: "Unknown fixture component card" }, { status: 404 });
