@@ -29,7 +29,7 @@ export default function QueueLedger({
 
   if (collapsed) {
     return (
-      <aside className="bq-summary-col bq-summary-col--collapsed" aria-label="Queue summary">
+      <aside className="bq-summary-col bq-summary-col--collapsed ops-primary-card" aria-label="Queue summary">
         <button
           type="button"
           className="bq-summary-reopen"
@@ -45,7 +45,7 @@ export default function QueueLedger({
   }
 
   return (
-    <aside className="bq-summary-col" aria-label="Queue summary">
+    <aside className="bq-summary-col ops-primary-card" aria-label="Queue summary">
       <header className="bq-summary-head">
         <h2>Queue Summary</h2>
         <button type="button" className="bq-summary-collapse" onClick={onToggleCollapse} aria-label="Collapse queue summary">

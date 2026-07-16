@@ -4,9 +4,7 @@ const fixturePath = "/logistics/build-queue/__fixture/stats";
 const port = 5175;
 const baseURL = `http://127.0.0.1:${port}`;
 
-const localApiCommand = process.platform === "win32"
-  ? `cmd /c "set SCINTEL_LOCAL_API=1&& vite --host 127.0.0.1 --port ${port}"`
-  : `SCINTEL_LOCAL_API=1 vite --host 127.0.0.1 --port ${port}`;
+const fixtureCommand = `vite --mode fixtures --host 127.0.0.1 --port ${port}`;
 
 export default defineConfig({
   testDir: "./tests/ui",
@@ -23,7 +21,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   webServer: {
-    command: localApiCommand,
+    command: fixtureCommand,
     url: `${baseURL}${fixturePath}`,
     reuseExistingServer: false,
     timeout: 180_000,

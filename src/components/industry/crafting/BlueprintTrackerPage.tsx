@@ -1688,7 +1688,7 @@ export default function BlueprintTrackerPage() {
           <div className="is-category"><i><BlueprintFallbackIcon category="armorSet" /></i><span>Categories</span><strong>{new Set(trackedItems.map((item) => item.category)).size}</strong></div>
         </section>
 
-        <div className="bp-controls bt-tracker-controls">
+        <div className="bp-controls bt-tracker-controls ops-primary-card">
           <input className="bp-search" type="search" value={bpSearchQuery} placeholder={trackerTab === "browse" ? "Search blueprint catalog..." : "Search tracked blueprints..."} onChange={(event) => setBpSearchQuery(event.target.value)} />
           <div className="bp-chips" role="tablist" aria-label="Blueprint categories">
             {[{ key: "all" as const, label: "All" }, ...CATEGORY_ORDER.map((key) => ({ key, label: CATEGORY_LABEL[key] }))].map((chip) => (
@@ -1718,7 +1718,7 @@ export default function BlueprintTrackerPage() {
                       <span className="bt-tracked-category"><span>Category</span><strong>{CATEGORY_LABEL[item.category]}</strong></span>
                       <span className="bt-tracked-progress"><span>Progress</span><strong>{item.collectedCount} / {item.totalCount}</strong><i><b style={{ width: `${progress}%` }} /></i></span>
                       <span className="bt-tracked-source"><span>Sources</span><strong>{item.sourceCount || "Unknown"}</strong><small>{item.bestSource}</small></span>
-                      <span className={`bt-tracked-status is-${complete ? "complete" : partial ? "partial" : "tracking"}`}>{complete ? "Complete" : partial ? "Partial" : tracked ? "Tracking" : "Not tracked"}</span>
+                      <span className={`bt-tracked-status is-${complete ? "complete" : partial ? "partial" : tracked ? "tracking" : "inactive"}`}>{complete ? "Complete" : partial ? "Partial" : tracked ? "Tracking" : "Not tracked"}</span>
                     </button>
                     <div className="bt-tracked-actions"><button className="bt-action" type="button" onClick={item.open}>View Details</button>{tracked && <button className="bt-action bt-action--positive" type="button" onClick={() => setBlueprintsCompleted(item.memberIds, !complete)}>{complete ? "Reopen" : "Mark Complete"}</button>}<button className={`bt-action${tracked ? " bt-action--danger" : " bt-action--primary"}`} type="button" onClick={() => void setRecipesTracked(item.memberIds, !tracked)}>{tracked ? "Untrack" : "Track Blueprint"}</button></div>
                   </article>
@@ -1727,7 +1727,7 @@ export default function BlueprintTrackerPage() {
             </main>
 
             {selectedTrackerItem && (
-              <aside className="bt-tracker-detail">
+              <aside className="bt-tracker-detail ops-primary-card">
                 <header className="bt-tracker-detail-head"><div><span>{CATEGORY_LABEL[selectedTrackerItem.category]}</span><h2>{selectedTrackerItem.name}</h2><p>{selectedTrackerItem.typeLabel}</p></div><div className="bt-tracker-detail-head-actions"><button className={`bt-action${isItemTracked(selectedTrackerItem) ? " bt-action--danger" : " bt-action--primary"}`} type="button" onClick={() => void setRecipesTracked(selectedTrackerItem.memberIds, !isItemTracked(selectedTrackerItem))}>{isItemTracked(selectedTrackerItem) ? "Untrack" : "Track Blueprint"}</button>{isItemTracked(selectedTrackerItem) && <button className="bt-action bt-action--positive" type="button" onClick={() => setBlueprintsCompleted(selectedTrackerItem.memberIds, !isItemComplete(selectedTrackerItem))}>{isItemComplete(selectedTrackerItem) ? "Reopen" : "Mark Complete"}</button>}<button className="bt-detail-close-action" type="button" onClick={() => { setSelectedRewardId(null); setSelectedArmorSetKey(null); setSelectedFpsWeaponKey(null); }} aria-label="Close details">x</button></div></header>
                 <section className="bt-detail-summary-strip"><div><span>Progress</span><strong>{selectedTrackerItem.collectedCount} / {selectedTrackerItem.totalCount}</strong></div><div><span>Sources</span><strong>{selectedTrackerItem.sourceCount}</strong></div><div><span>Status</span><strong>{isItemComplete(selectedTrackerItem) ? "Complete" : isItemTracked(selectedTrackerItem) ? "Tracking" : "Not tracked"}</strong></div></section>
                 {selectedArmorSetKey && (() => {

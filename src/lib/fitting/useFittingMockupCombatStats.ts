@@ -46,9 +46,6 @@ function dpsForRows(
 }
 
 export function useFittingMockupCombatStats(portRows: PortBreakdownRow[]): MockupCombatStats {
-  const loadoutSignature = portRows
-    .map((row) => `${row.portId}:${row.equippedComponentKey ?? ""}`)
-    .join("\0");
   const componentIds = useMemo(() => {
     const groups = buildOffensiveGroups(portRows);
     return [...new Set(
@@ -63,7 +60,7 @@ export function useFittingMockupCombatStats(portRows: PortBreakdownRow[]): Mocku
         .map((row) => row.equippedComponentKey)
         .filter(Boolean),
     )] as string[];
-  }, [loadoutSignature, portRows]);
+  }, [portRows]);
 
   const { statsById, loading } = useEquippedComponentDetails(componentIds);
 

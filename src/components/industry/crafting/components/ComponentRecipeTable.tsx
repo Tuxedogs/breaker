@@ -54,15 +54,11 @@ import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityC
 import { resolveCraftingCardTitle } from "@/lib/crafting/resolveCraftingDisplayName";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
-  buildFittingIdentityMetricRows,
   buildItemSummaryDetailStatRows,
-  buildSecondaryStatsFromFitting,
   isFittingWeaponPerformanceType,
 } from "@/lib/fitting/fittingStatProjection";
 import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import {
-  buildComponentCardSchema,
-  buildComponentCardSchemaFromIndex,
   formatCraftTime,
   type ComponentCardMetric,
 } from "../utils/componentCardSchema";
@@ -79,7 +75,6 @@ import {
   formatModifierDifference,
   formatModifierStatName,
   getCraftingModifierBaseValue,
-  normalizeDetailStatLabel,
   type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
 import {
@@ -1548,14 +1543,16 @@ function getIndexStatsObject(record: ComponentCardIndexRecord | undefined, key: 
 }
 
 function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
+  const displayLabel = stat.label === "Projectile Range / Max Travel" ? "Range" : stat.label;
+
   return (
     <span className="craft-detail-stat-row craft-stat-row stat-row">
-      <span className="craft-stat-label">{stat.label}</span>
+      <span className="craft-stat-label">{displayLabel}</span>
       <strong className="craft-stat-value">
         <span className={`craft-detail-stat-value ${stat.valueImpactClass ?? ""}`}>{stat.value}</span>
         {stat.modifier && (
           <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
-            ({stat.modifier.value})
+            {stat.modifier.value}
           </span>
         )}
       </strong>
@@ -1577,35 +1574,49 @@ function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
     );
   }
 
+  const displaySections = groups.reduce<Array<{ key: string; title: string; stats: DetailStatRow[] }>>(
+    (sections, group) => {
+      const groupStats = group.kind === "nested"
+        ? group.subclusters.flatMap((subcluster) => subcluster.stats)
+        : group.kind === "flat"
+          ? group.stats
+          : [];
+
+      if (group.title === "Thermal / Power" || group.title === "Signature / Detection") {
+        const systemsSection = sections.find((section) => section.key === "systems");
+        if (systemsSection) {
+          systemsSection.stats.push(...groupStats);
+        } else {
+          sections.push({ key: "systems", title: "Systems", stats: [...groupStats] });
+        }
+        return sections;
+      }
+
+      const title = group.title === "Ballistics / Damage"
+        ? "Damage"
+        : group.title === "Durability / Physical"
+          ? "Durability"
+          : group.title;
+      sections.push({ key: group.title, title, stats: groupStats });
+      return sections;
+    },
+    [],
+  ).filter((section) => section.stats.length > 0);
+
   return (
     <div className="weapon-performance-groups">
-      {groups.map((group) => (
+      {displaySections.map((section) => (
         <section
-          key={group.title}
-          className={`stat-group${group.kind === "nested" ? " stat-group--nested" : ""}`}
-          aria-label={group.title}
+          key={section.key}
+          className="stat-group"
+          aria-label={section.title}
         >
-          <div className="stat-group-title">{group.title}</div>
-          {group.kind === "nested" ? (
-            <div className="stat-group-body">
-              {group.subclusters.map((subcluster) => (
-                <div key={subcluster.title} className="stat-subcluster">
-                  <div className="stat-subcluster-title">{subcluster.title}</div>
-                  <div className="stat-group-grid">
-                    {subcluster.stats.map((stat) => (
-                      <DetailStatRowItem key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : group.kind === "flat" ? (
-            <div className="stat-group-grid">
-              {group.stats.map((stat) => (
-                <DetailStatRowItem key={`${group.title}:${stat.label}`} stat={stat} />
-              ))}
-            </div>
-          ) : null}
+          <div className="stat-group-title">{section.title}</div>
+          <div className="stat-group-grid">
+            {section.stats.map((stat) => (
+              <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
+            ))}
+          </div>
         </section>
       ))}
     </div>
@@ -2064,29 +2075,10 @@ function ItemSummaryPanel({
   totalModifiers: TotalModifierRow[];
   p6lrReference?: P6LRReference;
 }) {
-  const schema = componentCardRecord
-    ? buildComponentCardSchemaFromIndex(componentCardRecord, { preserveDisplayName: true })
-    : buildComponentCardSchema(recipe);
-  const identityRows: ComponentCardMetric[] = componentCardRecord
-    ? [
-        { label: "Type", value: componentCardRecord.typeLabel },
-        { label: "Category", value: componentCardRecord.category },
-        { label: "Family", value: componentCardRecord.family ?? "" },
-        { label: "Variant", value: componentCardRecord.variantName ?? "" },
-        { label: "Craft Time", value: formatCraftTime(componentCardRecord.craftTimeSeconds) },
-      ].filter((row) => Boolean(row.value))
-    : [];
   const baseStatRows = fittingDetail ? buildItemSummaryDetailStatRows(fittingDetail) : [];
   const displayStatRows = buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
-  const fittingIdentityRows = fittingDetail ? buildFittingIdentityMetricRows(fittingDetail) : [];
-  const secondaryStats = fittingDetail ? buildSecondaryStatsFromFitting(fittingDetail) : [];
-  const detailMetaRows = [...identityRows, ...fittingIdentityRows, ...secondaryStats].filter(
-    (row, index, rows) =>
-      rows.findIndex((candidate) => normalizeDetailStatLabel(candidate.label) === normalizeDetailStatLabel(row.label)) === index,
-  );
-  const statsSectionLabel = fittingDetail && isFittingWeaponPerformanceType(fittingDetail)
-    ? "Weapon Performance"
-    : `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? schema.typeLabel} Stats`;
+  const usesGroupedWeaponStats = Boolean(fittingDetail && isFittingWeaponPerformanceType(fittingDetail));
+  const statsSectionLabel = `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? recipe.component_type} Stats`;
   const graphData =
     buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
     buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
@@ -2096,13 +2088,12 @@ function ItemSummaryPanel({
 
   return (
     <section className="craft-detail-summary-section" aria-label="Selected item summary">
-      <div className="craft-summary-section-label">Item Summary</div>
       <div className="craft-detail-summary-content">
 
         {displayStatRows.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
-            <div className="craft-summary-section-label">{statsSectionLabel}</div>
-            {fittingDetail && isFittingWeaponPerformanceType(fittingDetail) ? (
+            {!usesGroupedWeaponStats && <div className="craft-summary-section-label">{statsSectionLabel}</div>}
+            {usesGroupedWeaponStats ? (
               <WeaponPerformanceStatGroups stats={displayStatRows} />
             ) : (
               <div className="craft-detail-stat-list craft-stat-grid">
@@ -2122,21 +2113,7 @@ function ItemSummaryPanel({
           </p>
         )}
 
-        {graphData ? (
-          <DetailGraphPanel data={graphData} />
-        ) : detailMetaRows.length > 0 && (
-        <div className="craft-summary-section craft-detail-secondary-panel">
-          <div className="craft-summary-section-label">Details</div>
-          <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-            {detailMetaRows.map((stat) => (
-              <span key={`${stat.label}:${stat.value}`}>
-                <span>{stat.label}</span>
-                <strong>{stat.value}</strong>
-              </span>
-            ))}
-          </div>
-          </div>
-        )}
+        {graphData && <DetailGraphPanel data={graphData} />}
       </div>
     </section>
   );
@@ -2154,6 +2131,11 @@ function MissionSourcePanel({
   onToggleMissionBookmark: (missionId: string) => void;
 }) {
   const missionEntries = useMissionRewardEntries(recipe, rewardPools);
+  const [expandedSourceRecipeId, setExpandedSourceRecipeId] = useState<string | null>(null);
+  const showAllSources = expandedSourceRecipeId === recipe.blueprint_id;
+  const visibleMissionEntries = showAllSources ? missionEntries : missionEntries.slice(0, 3);
+  const hasAdditionalSources = missionEntries.length > 3;
+
   const hasSourceValue = (value: unknown) => Boolean(value) && !/^unknown|n\/a$/i.test(String(value));
   const blueprintRows: ComponentCardMetric[] = [
     { label: "Blueprint ID", value: recipe.blueprint_id },
@@ -2179,12 +2161,12 @@ function MissionSourcePanel({
             </div>
           ) : (
             <div className="craft-mission-source-list">
-              {missionEntries.map((entry) => {
+              {visibleMissionEntries.map((entry, entryIndex) => {
                 const bookmarked = isMissionBookmarked(entry.id);
                 const chance = formatMissionChance(entry.chance);
 
                 return (
-                  <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
+                  <div key={`${entry.id}:${entryIndex}`} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
                     <button
                       type="button"
                       className={`craft-mission-bookmark-btn${bookmarked ? " is-active" : ""}`}
@@ -2222,6 +2204,18 @@ function MissionSourcePanel({
               })}
             </div>
           )}
+          {hasAdditionalSources && (
+            <button
+              type="button"
+              className="craft-detail-source-toggle"
+              aria-expanded={showAllSources}
+              onClick={() => setExpandedSourceRecipeId((current) =>
+                current === recipe.blueprint_id ? null : recipe.blueprint_id
+              )}
+            >
+              {showAllSources ? "Show fewer sources" : "See all sources"}
+            </button>
+          )}
       </div>
       {hasAdvancedSourceData && (
         <details className="craft-detail-source-advanced">
@@ -2257,40 +2251,6 @@ function MissionSourcePanel({
         </details>
       )}
     </section>
-  );
-}
-
-function CraftingOverviewPanel({
-  recipe,
-  finalProductQuality,
-}: {
-  recipe: ComponentRecipe;
-  finalProductQuality: FinalProductQuality;
-}) {
-  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
-  const displayFinalProductQuality =
-    finalProductQuality.averageBand ?? finalProductQuality.band;
-
-  return (
-    <div className="craft-detail-overview-cards">
-      {formatCraftTime(recipe.craft_time_seconds) && (
-        <article className="craft-detail-overview-card">
-          <span className="craft-detail-overview-card-label">Craft Time</span>
-          <strong className="craft-detail-overview-card-value">{formatCraftTime(recipe.craft_time_seconds)}</strong>
-        </article>
-      )}
-      <article className="craft-detail-overview-card">
-        <span className="craft-detail-overview-card-label">Resulting Quality</span>
-        <strong className={`craft-detail-overview-card-value craft-detail-band-pill ${componentRarityClass}`}>
-          {formatCompactNumber(displayFinalProductQuality)}
-        </strong>
-      </article>
-      <article className="craft-detail-overview-card">
-        <span className="craft-detail-overview-card-label">Materials Required</span>
-        <strong className="craft-detail-overview-card-value">{recipe.materials.length}</strong>
-        <span className="craft-detail-overview-card-sub">ingredients</span>
-      </article>
-    </div>
   );
 }
 
@@ -2409,7 +2369,6 @@ function EstimatedEffectsPanel({
 }
 
 function RightCraftingPanel({
-  recipe,
   fittingDetail,
   totalModifiers,
   overallModifiers,
@@ -2417,7 +2376,6 @@ function RightCraftingPanel({
   finalProductQuality,
   children,
 }: {
-  recipe: ComponentRecipe;
   fittingDetail?: FittingComponentDetail | null;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
@@ -2427,12 +2385,6 @@ function RightCraftingPanel({
 }) {
   return (
     <section className="craft-detail-crafting-section" aria-label="Crafting and materials">
-      <div className="craft-detail-panel-head">
-        <div>
-          <div className="craft-summary-section-label">Crafting Overview</div>
-        </div>
-      </div>
-      <CraftingOverviewPanel recipe={recipe} finalProductQuality={finalProductQuality} />
       <section className="craft-detail-material-section">
         <div className="craft-summary-section-label">Material Requirements</div>
         <MaterialRequirementsTable>{children}</MaterialRequirementsTable>
@@ -2500,6 +2452,8 @@ function RecipeDrawer({
     : recipe.blueprint_id;
   const [selectedRecipeId, setSelectedRecipeId] = useState(initialSelectedRecipeId);
   const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
+  const [expandedDescriptionRecipeId, setExpandedDescriptionRecipeId] = useState<string | null>(null);
+  const descriptionExpanded = expandedDescriptionRecipeId === selectedRecipe.blueprint_id;
 
   useEffect(() => {
     setSelectedRecipeId(initialSelectedRecipeId);
@@ -2658,11 +2612,12 @@ function RecipeDrawer({
   const heroCraftTime = formatCraftTime(
     selectedComponentCard?.craftTimeSeconds ?? selectedRecipe.craft_time_seconds ?? 0,
   );
-  const heroTypeLabel =
-    selectedComponentCard?.typeLabel ??
-    buildComponentCardSchema(selectedRecipe).typeLabel;
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
   const heroIconUrl = selectedComponentCard ? getComponentCategoryIconUrl(selectedComponentCard) : null;
+  const itemDescription = selectedComponentCard?.description
+    ? trimItemDescription(selectedComponentCard.description)
+    : "";
+  const descriptionCanExpand = itemDescription.length > 150 || itemDescription.split("\n").length > 2;
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
@@ -2682,63 +2637,83 @@ function RecipeDrawer({
           ) : (
             <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
           )}
-          <div className="craft-detail-hero-card-copy">
-            <span className="craft-detail-visual-kind">{heroTypeLabel}</span>
-            <strong>{displayName}</strong>
-            <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-              {formatCompactNumber(finalProductQuality.averageBand)}
-            </span>
-          </div>
         </div>
         <div className="craft-detail-title-block">
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
           <h1 className="craft-detail-title">{displayName}</h1>
           <div className="craft-summary-chips craft-detail-hero-chips">
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-              {formatCompactNumber(finalProductQuality.averageBand)} Quality
+              Quality {formatCompactNumber(finalProductQuality.averageBand)}
             </span>
             {heroMeta.map((value) => (
               <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
             ))}
-            {heroCraftTime && (
-              <span className="craft-badge craft-badge--neutral craft-badge--craft-time">
-                Craft {heroCraftTime}
-              </span>
-            )}
           </div>
-          {selectedComponentCard?.description && (
-            <p className="craft-item-description">
-              {trimItemDescription(selectedComponentCard.description)}
-            </p>
+          {itemDescription && (
+            <div className="craft-detail-description">
+              <p
+                id="craft-detail-description"
+                className={`craft-item-description${descriptionCanExpand && !descriptionExpanded ? " is-clamped" : ""}`}
+              >
+                {itemDescription}
+              </p>
+              {descriptionCanExpand && (
+                <button
+                  type="button"
+                  className="craft-detail-description-toggle"
+                  aria-controls="craft-detail-description"
+                  aria-expanded={descriptionExpanded}
+                  onClick={() => setExpandedDescriptionRecipeId((current) =>
+                    current === selectedRecipe.blueprint_id ? null : selectedRecipe.blueprint_id
+                  )}
+                >
+                  {descriptionExpanded ? "Show less" : "See more…"}
+                </button>
+              )}
+            </div>
           )}
         </div>
-        <div className="craft-summary-action-row craft-detail-actions">
-          <button
-            type="button"
-            className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
-            aria-pressed={selectedIsBookmarked}
-            aria-label={selectedIsBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
-            onClick={() => onToggleBookmark(selectedRecipe)}
-          >
-            {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
-          </button>
-          <button
-            type="button"
-            className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
-            aria-pressed={selectedIsQueued}
-            aria-label={selectedIsQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
-            onClick={() => onAddToQueue(
-              selectedRecipe,
-              buildSelectedQualitySnapshot(
-                selectedRecipe,
-                materialQualities,
-                getBandsForMaterial,
-              ),
-              finalProductQuality,
+        <div className="craft-detail-hero-right">
+          <div className="craft-detail-header-facts" aria-label="Crafting summary">
+            {heroCraftTime && (
+              <span>
+                <span>Craft Time</span>
+                <strong>{heroCraftTime}</strong>
+              </span>
             )}
-          >
-            {selectedIsQueued ? "Queued" : "Add to Queue"}
-          </button>
+            <span>
+              <span>Materials Required</span>
+              <strong>{selectedRecipe.materials.length} <small>ingredients</small></strong>
+            </span>
+          </div>
+          <div className="craft-summary-action-row craft-detail-actions">
+            <button
+              type="button"
+              className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
+              aria-pressed={selectedIsBookmarked}
+              aria-label={selectedIsBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
+              onClick={() => onToggleBookmark(selectedRecipe)}
+            >
+              {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
+            </button>
+            <button
+              type="button"
+              className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+              aria-pressed={selectedIsQueued}
+              aria-label={selectedIsQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
+              onClick={() => onAddToQueue(
+                selectedRecipe,
+                buildSelectedQualitySnapshot(
+                  selectedRecipe,
+                  materialQualities,
+                  getBandsForMaterial,
+                ),
+                finalProductQuality,
+              )}
+            >
+              {selectedIsQueued ? "Queued" : "Add to Queue"}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -2786,7 +2761,6 @@ function RecipeDrawer({
         )}
 
         <RightCraftingPanel
-          recipe={selectedRecipe}
           fittingDetail={fittingDetail}
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}

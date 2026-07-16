@@ -3,9 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import MaterialIcon from "../components/logistics/MaterialIcon";
 import { useLogisticsStore } from "../stores/logisticsStore";
 import { deriveUserDashStats } from "../lib/dashboardStats";
-import type { LogisticsMaterialTemplate } from "../data/logistics/seed";
-import { buildRecommendationRequest, getMiningRecommendations } from "../features/mining/recommenderAdapter";
-import type { PublicLocationEntry, RequiredMaterial } from "../features/mining/types";
+import type { LogisticsMaterialTemplate, RecipeInputTemplate } from "../data/logistics/seed";
 import {
   formatInventoryQuantity,
   getActiveInventoryEntries,
@@ -15,7 +13,22 @@ import {
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
 import { getQueueLedgerModel, type QueueLedgerLine } from "../lib/logistics/queueLedger";
-import { isDisplayableFittingShip, listFittingShips, type FittingShipSummary as ApiFittingShipSummary } from "../lib/fitting/fittingApi";
+import {
+  allocationMatchesRequirement,
+  getAvailableQuantityForInventoryEntry,
+  getMaterialReservationCoverage,
+  validateReservedAllocations,
+} from "../lib/logistics/selectors";
+import {
+  getAllocationTotal,
+  getQualityProjectionStatus,
+  getRequirementLineKey,
+  getWeightedEffectiveQuality,
+} from "../lib/logistics/buildQueueReservations";
+import {
+  getQualityBandsForMaterial,
+  loadQualityQuantizationRecords,
+} from "../lib/logistics/qualityQuantization";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from "../types/logistics";
 
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -48,32 +61,6 @@ function StatIcon({ type }: { type: StatIconType }) {
     </div>
   );
 }
-
-type FittingShipSummary = {
-  shipKey: string;
-  name: string;
-  manufacturer: string | null;
-  role: string | null;
-  career: string | null;
-  movementClass: string | null;
-  crewSize: number | null;
-  isGroundVehicle: boolean | null;
-};
-
-function adaptFittingShip(ship: ApiFittingShipSummary): FittingShipSummary {
-  return {
-    shipKey: ship.id,
-    name: ship.displayName || ship.name,
-    manufacturer: ship.manufacturer,
-    role: ship.role,
-    career: ship.career,
-    movementClass: ship.vehicleType,
-    crewSize: ship.crew.max ?? ship.crew.min,
-    isGroundVehicle: ship.isGroundVehicle,
-  };
-}
-
-const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
 
 function StatTooltip({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -109,30 +96,6 @@ function BqThumb({ color }: { color: string }) {
   );
 }
 
-function LocationIcon({ type }: { type: string }) {
-  const d = type === "station"
-    ? "M12 2L2 7v10l10 5 10-5V7L12 2z"
-    : "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z";
-  return (
-    <div className="dash-location-icon">
-      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-        <path d={d} />
-      </svg>
-    </div>
-  );
-}
-
-function getMiningRecReason(rec: PublicLocationEntry): string {
-  if (rec.requiredMaterials && rec.requiredMaterials.length > 0) return "Needed for active build";
-  return "Shortage material";
-}
-
-function getMiningRecQuality(rec: PublicLocationEntry): string | null {
-  const quality = rec.requiredMaterials?.[0]?.selectedQuality ?? rec.routeScores?.[0]?.selectedQuality;
-  if (quality == null || !Number.isFinite(quality)) return null;
-  return `Q${formatDashNumber(quality)}`;
-}
-
 function formatDashNumber(value: number): string {
   if (!Number.isFinite(value)) return "0";
   const rounded = Math.round(value * 100) / 100;
@@ -141,6 +104,126 @@ function formatDashNumber(value: number): string {
 
 function getQueueItemName(item: BuildQueueItem, recipesById: Map<string, { name: string }>) {
   return item.itemName ?? recipesById.get(item.recipeId)?.name ?? item.recipeId;
+}
+type DashboardOverviewTab = "mining" | "inventory";
+
+type QueueRequirementRef = {
+  item: BuildQueueItem;
+  itemName: string;
+  input: RecipeInputTemplate;
+  inputIndex: number;
+  materialKey: string;
+  requirementId: string;
+  requiredQuantity: number;
+};
+
+type MiningOverviewRow = {
+  materialKey: string;
+  material: MaterialTemplate & Partial<LogisticsMaterialTemplate>;
+  displayName: string;
+  target: number | null;
+  bandBelow: number | null;
+  bandAbove: number | null;
+  requiredQuantity: number;
+  ledgerLine: QueueLedgerLine | null;
+  unitType: RecipeInputTemplate["unitType"];
+  requiredBy: QueueRequirementRef[];
+  isRefinable: boolean;
+};
+
+type InventoryReservationTone = "unreserved" | "partial" | "fulfilled";
+
+function isMineableMaterial(material: MaterialTemplate | undefined): material is MaterialTemplate & Partial<LogisticsMaterialTemplate> {
+  const sourceGroups = (material as Partial<LogisticsMaterialTemplate> | undefined)?.sourceGroups ?? [];
+  return sourceGroups.some((group) => group === "ores" || group === "vehicleMining" || group === "fpsMining");
+}
+function isRefinableMineable(material: MaterialTemplate & Partial<LogisticsMaterialTemplate>): boolean {
+  return material.isRefinable === true || material.canComeFromRefinery === true || material.sourceGroups?.includes("ores") === true;
+}
+function getAdjacentBandValues(
+  bands: Array<{ mappedValue: string | number }> | null | undefined,
+  target: number | null,
+): { below: number | null; above: number | null } {
+  if (target == null || !bands?.length) return { below: null, above: null };
+  const mappedValues = [...new Set(
+    bands
+      .map((band) => Number(band.mappedValue))
+      .filter((value) => Number.isFinite(value)),
+  )].sort((left, right) => left - right);
+  return {
+    below: mappedValues.filter((value) => value < target).at(-1) ?? null,
+    above: mappedValues.find((value) => value > target) ?? null,
+  };
+}
+
+function getUniqueRequiredBy(requirements: QueueRequirementRef[]): QueueRequirementRef[] {
+  const seen = new Set<string>();
+  return requirements.filter((requirement) => {
+    if (seen.has(requirement.item.id)) return false;
+    seen.add(requirement.item.id);
+    return true;
+  });
+}
+
+function getQueueItemIdentifier(requirement: QueueRequirementRef): string {
+  const fromName = requirement.itemName.trim().split(/\s+/)[0]?.replace(/[^a-z0-9-]/gi, "") ?? "";
+  const fromItemId = requirement.item.itemId?.replace(/[^a-z0-9-]/gi, "") ?? "";
+  return (fromName || fromItemId || "Item").slice(0, 5);
+}
+
+function OverviewTooltip({
+  content,
+  ariaLabel,
+  children,
+}: {
+  content: string;
+  ariaLabel: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <span className="dash-overview-tooltip" tabIndex={0} aria-label={ariaLabel}>
+      {children}
+      <span className="dash-overview-tooltip-content" role="tooltip">{content}</span>
+    </span>
+  );
+}
+function RequiredByValue({ requirements }: { requirements: QueueRequirementRef[] }) {
+  const requiredBy = getUniqueRequiredBy(requirements);
+  if (requiredBy.length === 0) return <span className="dash-overview-muted">—</span>;
+  const itemNames = requiredBy.map((requirement) => requirement.itemName);
+  const visibleLabel = requiredBy.length === 1
+    ? getQueueItemIdentifier(requiredBy[0])
+    : `${requiredBy.length} items`;
+  return (
+    <OverviewTooltip
+      content={itemNames.join(" · ")}
+      ariaLabel={`Required by ${itemNames.join(", ")}`}
+    >
+      <span className="dash-required-by-value">{visibleLabel}</span>
+    </OverviewTooltip>
+  );
+}
+
+function MiningAmount({ row }: { row: MiningOverviewRow }) {
+  if (row.isRefinable) {
+    const oreRequired = row.ledgerLine?.rawOreNeeded ?? 0;
+    return (
+      <span className="dash-mining-amount dash-tabnum">
+        <span className="dash-material-state-badge dash-material-state-badge--ore">{formatDashNumber(oreRequired)}</span>
+        <span className="dash-material-state-badge dash-material-state-badge--refined">{formatDashNumber(row.requiredQuantity)}</span>
+        <span className="dash-mining-amount-unit">SCU</span>
+      </span>
+    );
+  }
+  const unitType = row.unitType === "SCU" || row.unitType === "scu" || row.unitType === "cscu" ? "scu" : "unit";
+  return (
+    <span className="dash-mining-amount dash-tabnum">
+      <span className="dash-material-state-badge dash-material-state-badge--raw">
+        {unitType === "unit" ? `x ${formatDashNumber(row.requiredQuantity)}` : formatDashNumber(row.requiredQuantity)}
+      </span>
+      {unitType === "scu" && <span className="dash-mining-amount-unit">SCU</span>}
+    </span>
+  );
 }
 
 function getOwnedQuantityForRequirement(materialId: string, inventoryEntries: InventoryEntry[]) {
@@ -166,66 +249,326 @@ function getQueueItemProgress(
   return Math.max(0, Math.min(100, Math.round((covered / required) * 100)));
 }
 
-function buildInventoryLocationSummaries(
+type NextRunBoxState = "available" | "selected" | "reserved" | "unavailable";
+type NextRunMovementState = "warehouse" | "pull" | "pending";
+
+type NextRunBox = {
+  id: string;
+  label: string;
+  quality?: number;
+  quantity: string;
+  reservedQuantity?: string;
+  availability: NextRunBoxState;
+  reservationLabel: string;
+  owner?: string;
+  movement: NextRunMovementState;
+  pullOrder?: number;
+  remainder?: string;
+};
+
+type NextRunMaterial = {
+  id: string;
+  name: string;
+  requirement: string;
+  state: "covered" | "partial" | "missing";
+  boxes: NextRunBox[];
+};
+
+type NextRunLocation = {
+  id: string;
+  name: string;
+  visitOrder?: number;
+  materials: NextRunMaterial[];
+};
+
+type NextFabricationRun = {
+  queueItemId: string;
+  itemName: string;
+  quantity: number;
+  target?: string;
+  projected?: string;
+  readiness: string;
+  coverage: string;
+  targetState: "met" | "unavailable" | "pending";
+  minimumQuality?: string;
+  minimumQuantity?: string;
+  bestAchievable?: string;
+  locations: NextRunLocation[];
+  locationsToVisit: string;
+  boxesToRetrieve: string;
+  missingMaterials: string;
+  expectedExcess?: string;
+  actionLabel: string;
+  actionNote: string;
+  fixtureOnly?: boolean;
+};
+
+const DEV_NEXT_FABRICATION_RUNS: NextFabricationRun[] = import.meta.env.DEV ? [
+{
+  queueItemId: "fixture-allocated",
+  itemName: "Avalanche Cooler",
+  quantity: 4,
+  target: "900",
+  projected: "918",
+  readiness: "Ready to retrieve",
+  coverage: "2 of 2 requirements covered",
+  targetState: "met",
+  locationsToVisit: "1 location",
+  boxesToRetrieve: "3 boxes",
+  missingMaterials: "None identified",
+  expectedExcess: "0.06 SCU expected remainder",
+  actionLabel: "Review Pull Plan",
+  actionNote: "All reserved boxes are ready for warehouse retrieval.",
+  fixtureOnly: true,
+  locations: [
+    {
+      id: "fixture-allocated-everus",
+      name: "Everus Harbor · Manufacturing Storage",
+      visitOrder: 1,
+      materials: [
+        {
+          id: "fixture-allocated-copper",
+          name: "Copper",
+          requirement: "0.18 SCU required · Target 900",
+          state: "covered",
+          boxes: [
+            { id: "fixture-allocated-copper-01", label: "Box CPR-118", quality: 936, quantity: "0.14 SCU", reservedQuantity: "0.14 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 1, remainder: "Consumed" },
+            { id: "fixture-allocated-copper-02", label: "Box CPR-204", quality: 902, quantity: "0.10 SCU", reservedQuantity: "0.04 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 2, remainder: "0.06 SCU remains" },
+          ],
+        },
+        {
+          id: "fixture-allocated-quartz",
+          name: "Quartz",
+          requirement: "0.08 SCU required · Target 860",
+          state: "covered",
+          boxes: [
+            { id: "fixture-allocated-quartz-01", label: "Box QTZ-044", quality: 884, quantity: "0.08 SCU", reservedQuantity: "0.08 SCU reserved", availability: "reserved", reservationLabel: "Reserved", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 3, remainder: "Consumed" },
+          ],
+        },
+      ],
+    },
+  ],
+},
+{
+  queueItemId: "fixture-partial",
+  itemName: "P6-LR \"Archangel\" Sniper Rifle",
+  quantity: 2,
+  target: "924",
+  projected: "911",
+  readiness: "Review required",
+  coverage: "92% material coverage",
+  targetState: "unavailable",
+  minimumQuality: "965",
+  minimumQuantity: "0.08 SCU",
+  bestAchievable: "911",
+  locationsToVisit: "3 locations",
+  boxesToRetrieve: "6 boxes",
+  missingMaterials: "0.08 SCU Tungsten",
+  expectedExcess: "0.14 SCU expected refund",
+  actionLabel: "Review Pull Plan",
+  actionNote: "Review source allocations and the unresolved Tungsten shortfall.",
+  fixtureOnly: true,
+  locations: [
+    {
+      id: "fixture-orbituary",
+      name: "Everus Harbor · Cargo Center A",
+      visitOrder: 1,
+      materials: [
+        {
+          id: "fixture-taranite",
+          name: "Taranite",
+          requirement: "0.12 SCU required · Target 924",
+          state: "covered",
+          boxes: [
+            { id: "fixture-tar-01", label: "Box TAR-184", quality: 978, quantity: "0.10 SCU", reservedQuantity: "0.10 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 1, remainder: "No remainder" },
+            { id: "fixture-tar-02", label: "Box TAR-203", quality: 941, quantity: "0.16 SCU", reservedQuantity: "0.02 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 2, remainder: "0.14 SCU remains" },
+          ],
+        },
+        {
+          id: "fixture-hephaestanite",
+          name: "Hephaestanite",
+          requirement: "0.04 SCU required · Target 900",
+          state: "covered",
+          boxes: [
+            { id: "fixture-hep-01", label: "Box HEP-044", quality: 936, quantity: "0.04 SCU", reservedQuantity: "0.04 SCU reserved", availability: "reserved", reservationLabel: "Reserved", owner: "P6-LR ×2", movement: "pull", pullOrder: 3, remainder: "Consumed" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "fixture-seraphim",
+      name: "Seraphim Station · Industrial Storage Annex 04",
+      visitOrder: 2,
+      materials: [
+        {
+          id: "fixture-iron",
+          name: "Iron",
+          requirement: "0.06 SCU required · Target 640",
+          state: "covered",
+          boxes: [
+            { id: "fixture-iron-01", label: "Box IRN-771", quality: 681, quantity: "0.18 SCU", reservedQuantity: "0.06 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 4, remainder: "0.12 SCU remains" },
+            { id: "fixture-iron-02", label: "Box IRN-640", quality: 640, quantity: "0.24 SCU", availability: "reserved", reservationLabel: "Reserved", owner: "AD5B Ballistic Gatling", movement: "warehouse", remainder: "0.24 SCU remains" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "fixture-magnus",
+      name: "Magnus Gateway · Warehouse Row 12",
+      visitOrder: 3,
+      materials: [
+        {
+          id: "fixture-tungsten",
+          name: "Tungsten",
+          requirement: "0.20 SCU required · 0.08 SCU short",
+          state: "partial",
+          boxes: [
+            { id: "fixture-tung-01", label: "Box TNG-508", quality: 966, quantity: "0.12 SCU", reservedQuantity: "0.12 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 5, remainder: "Consumed" },
+            { id: "fixture-tung-02", label: "Required box unavailable", quality: 965, quantity: "0.08 SCU needed", availability: "unavailable", reservationLabel: "Missing", movement: "pending" },
+          ],
+        },
+      ],
+    },
+  ],
+},
+{
+  queueItemId: "fixture-unreserved",
+  itemName: "Long-Range Industrial Power Coupling Assembly",
+  quantity: 1,
+  target: "875",
+  projected: "Not available",
+  readiness: "Reservations required",
+  coverage: "0 of 2 requirements covered",
+  targetState: "pending",
+  locationsToVisit: "Not planned",
+  boxesToRetrieve: "No boxes selected",
+  missingMaterials: "0.24 SCU Copper · 0.10 SCU Quartz",
+  actionLabel: "Reserve Materials",
+  actionNote: "Select eligible boxes in the Build Queue before planning retrieval.",
+  fixtureOnly: true,
+  locations: [],
+},
+] : [];
+
+function formatRunQuantity(quantity: number, unitType: string | undefined) {
+  return formatInventoryQuantity(quantity, unitType === "unit" ? "unit" : "scu");
+}
+
+function buildProductionNextFabricationRun(
+  item: BuildQueueItem | undefined,
   inventoryEntries: InventoryEntry[],
+  materialTemplates: MaterialTemplate[],
   locations: InventoryLocation[],
-  materials: MaterialTemplate[],
-) {
+  recipesById: Map<string, { name: string }>,
+  recipeInputTemplates: Parameters<typeof getBuildQueueItemInputs>[1],
+): NextFabricationRun | null {
+  if (!item) return null;
+
+  const inputs = getBuildQueueItemInputs(item, recipeInputTemplates);
+  const allocations = item.reservedAllocations ?? [];
+  const validations = validateReservedAllocations(allocations, inventoryEntries);
+  const validationByAllocationId = new Map(validations.map((validation) => [validation.allocation.id, validation]));
+  const inventoryById = new Map(inventoryEntries.map((entry) => [entry.id, entry]));
+  const materialById = new Map(materialTemplates.map((material) => [material.id, material]));
   const locationById = new Map(locations.map((location) => [location.id, location]));
-  const groups = new Map<string, { id: string; name: string; type: string; scu: number; units: number; entries: number }>();
-  for (const entry of inventoryEntries) {
-    const id = entry.locationId ?? "unassigned";
-    const location = locationById.get(id);
-    const material = entry.materialId ? materials.find((candidate) => candidate.id === entry.materialId) : undefined;
-    const current = groups.get(id) ?? {
-      id,
-      name: location?.name ?? "Unassigned",
-      type: location?.type ?? "station",
-      scu: 0,
-      units: 0,
-      entries: 0,
-    };
-    if (resolveInventoryUnitType(entry, material) === "scu") current.scu += entry.quantity;
-    else current.units += entry.quantity;
-    current.entries += 1;
-    groups.set(id, current);
+  const itemName = getQueueItemName(item, recipesById);
+
+  const inputStates = inputs.map((input, index) => {
+    const materialId = input.materialId ?? input.materialKey ?? `requirement-${index}`;
+    const requirementId = input.requirementId ?? `${item.id}:${materialId}:${index}`;
+    const requiredQuantity = input.quantity * item.quantity;
+    const coverage = getMaterialReservationCoverage(
+      item,
+      materialId,
+      requiredQuantity,
+      inventoryEntries,
+      { requirementId, selectedQuality: input.selectedQuality, unitType: input.unitType },
+    );
+    return { input, materialId, requirementId, requiredQuantity, coverage };
+  });
+
+  const coveredCount = inputStates.filter(({ coverage }) => coverage.coverageState === "covered" || coverage.coverageState === "overReserved").length;
+  const missingStates = inputStates.filter(({ coverage }) => coverage.coverageState !== "covered" && coverage.coverageState !== "overReserved");
+  const grouped = new Map<string, NextRunLocation>();
+
+  for (const allocation of allocations) {
+    const inventoryEntry = inventoryById.get(allocation.inventoryEntryId);
+    const validation = validationByAllocationId.get(allocation.id);
+    const locationId = inventoryEntry?.locationId ?? allocation.locationId ?? "unassigned";
+    const location = locationId === "unassigned" ? undefined : locationById.get(locationId);
+    const locationName = locationId === "unassigned"
+      ? "Unassigned Stock"
+      : location?.name ?? "Unknown Location";
+    const materialId = allocation.materialId;
+    const inputState = inputStates.find(({ requirementId, materialId: inputMaterialId }) =>
+      (allocation.requirementId ? requirementId === allocation.requirementId : inputMaterialId === materialId));
+    const materialName = allocation.materialName ?? materialById.get(materialId)?.name ?? inputState?.input.displayName ?? inputState?.input.materialName ?? materialId;
+    const locationGroup = grouped.get(locationId) ?? { id: locationId, name: locationName, materials: [] };
+    let materialGroup = locationGroup.materials.find((material) => material.id === materialId);
+    if (!materialGroup) {
+      materialGroup = {
+        id: materialId,
+        name: materialName,
+        requirement: inputState
+          ? `${formatRunQuantity(inputState.requiredQuantity, inputState.input.unitType)} required${inputState.input.selectedQuality != null ? ` · Target ${formatDashNumber(inputState.input.selectedQuality)}` : ""}`
+          : "Reserved material",
+        state: inputState?.coverage.coverageState === "covered" || inputState?.coverage.coverageState === "overReserved"
+          ? "covered"
+          : inputState?.coverage.coverageState === "missing" ? "missing" : "partial",
+        boxes: [],
+      };
+      locationGroup.materials.push(materialGroup);
+    }
+    const unitType = allocation.unitType ?? inventoryEntry?.unitType;
+    const isStale = validation?.isStale ?? !inventoryEntry;
+    materialGroup.boxes.push({
+      id: allocation.id,
+      label: inventoryEntry?.container ? `Box ${inventoryEntry.container}` : `Box ${materialGroup.boxes.length + 1}`,
+      quality: allocation.quality ?? inventoryEntry?.quality,
+      quantity: inventoryEntry ? formatRunQuantity(inventoryEntry.quantity, unitType) : "Box unavailable",
+      reservedQuantity: `${formatRunQuantity(allocation.quantityReserved, unitType)} reserved`,
+      availability: isStale ? "unavailable" : "reserved",
+      reservationLabel: isStale ? "Needs review" : "Reserved",
+      owner: itemName,
+      movement: "pending",
+    });
+    grouped.set(locationId, locationGroup);
   }
-  return [...groups.values()]
-    .sort((a, b) => b.scu - a.scu || b.units - a.units || b.entries - a.entries || a.name.localeCompare(b.name));
-}
 
-function formatLocationQuantity(location: ReturnType<typeof buildInventoryLocationSummaries>[number]) {
-  const parts: string[] = [];
-  if (location.scu > 0) parts.push(`${formatDashNumber(location.scu)} SCU`);
-  if (location.units > 0) parts.push(`x${formatDashNumber(location.units)}`);
-  return parts.join(" / ") || "0";
-}
+  const missingLabels = missingStates.map(({ input, requiredQuantity, coverage }) => {
+    const remaining = Math.max(0, requiredQuantity - coverage.reservedQuantity);
+    const materialName = input.displayName ?? input.materialName ?? materialById.get(input.materialId)?.name ?? input.materialId;
+    return `${formatRunQuantity(remaining, input.unitType)} ${materialName}`;
+  });
 
-function getTopRecordedInventoryLocation(locations: ReturnType<typeof buildInventoryLocationSummaries>) {
-  return [...locations].sort((a, b) => b.entries - a.entries || b.scu - a.scu || b.units - a.units || a.name.localeCompare(b.name))[0] ?? null;
-}
-
-function toRequiredMaterials(lines: QueueLedgerLine[]): RequiredMaterial[] {
-  return lines.map((line) => ({
-    materialId: line.materialId,
-    materialKey: line.materialKey,
-    materialName: line.displayName,
-    displayName: line.displayName,
-    requiredQuantity: line.rawOreNeeded > 0 ? line.rawOreNeeded : line.netMissingRefined,
-    unitType: line.rawOreNeeded > 0 ? "SCU" : line.unitType,
-    usedBy: [],
-    slots: [],
-  }));
+  return {
+    queueItemId: item.id,
+    itemName,
+    quantity: item.quantity,
+    projected: item.finalProductQualityAverage != null ? `Band ${formatDashNumber(item.finalProductQualityAverage)}` : undefined,
+    readiness: missingStates.length === 0 ? "Allocated" : "Needs allocation",
+    coverage: inputs.length > 0 ? `${coveredCount} of ${inputs.length} requirements covered` : "No material requirements",
+    targetState: "pending",
+    locations: [...grouped.values()],
+    locationsToVisit: grouped.size > 0 ? `${grouped.size} location${grouped.size === 1 ? "" : "s"}` : "Not planned",
+    boxesToRetrieve: allocations.length > 0 ? `${allocations.length} reserved box${allocations.length === 1 ? "" : "es"}` : "Not planned",
+    missingMaterials: missingLabels.length > 0 ? missingLabels.join(" · ") : "None identified",
+    actionLabel: allocations.length > 0 ? "Review Pull Plan" : "Reserve Materials",
+    actionNote: allocations.length > 0
+      ? "Review source allocations before warehouse retrieval."
+      : "Select eligible boxes in the Build Queue before planning retrieval.",
+  };
 }
 
 export default function DashboardPage() {
   const { inventoryEntries: allInventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
   const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const userStats = deriveUserDashStats(inventoryEntries, materialTemplates as LogisticsMaterialTemplate[]);
-  const [miningState, setMiningState] = useState<{ status: "idle" | "loading" | "loaded" | "error"; data: PublicLocationEntry[] }>({
-    status: "idle",
-    data: [],
-  });
+  const [selectedNextRunId, setSelectedNextRunId] = useState<string | null>(null);
+  const [overviewTab, setOverviewTab] = useState<DashboardOverviewTab>("mining");
+  const [openReservationEntryId, setOpenReservationEntryId] = useState<string | null>(null);
+  const [highlightedQueueItemId, setHighlightedQueueItemId] = useState<string | null>(null);
+  const [qualityBandsReady, setQualityBandsReady] = useState(false);
 
   const queueLedger = useMemo(
     () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials: materialTemplates, recipeInputsByRecipeId: recipeInputTemplates }),
@@ -235,73 +578,191 @@ export default function DashboardPage() {
   const completedQueueItems = useMemo(() => buildQueue.filter((item) => item.status === "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
   const locationNamesById = useMemo(() => new Map(locations.map((location) => [location.id, location.name])), [locations]);
+  const queueRequirementsByMaterial = useMemo(() => {
+    const grouped = new Map<string, QueueRequirementRef[]>();
+    for (const item of activeQueueItems) {
+      const itemName = getQueueItemName(item, recipesById);
+      getBuildQueueItemInputs(item, recipeInputTemplates).forEach((input, inputIndex) => {
+        const materialKey = input.materialKey ?? input.materialId;
+        const requirement: QueueRequirementRef = {
+          item,
+          itemName,
+          input,
+          inputIndex,
+          materialKey,
+          requirementId: getRequirementLineKey(item, input, inputIndex),
+          requiredQuantity: input.quantity * item.quantity,
+        };
+        grouped.set(materialKey, [...(grouped.get(materialKey) ?? []), requirement]);
+      });
+    }
+    return grouped;
+  }, [activeQueueItems, recipeInputTemplates, recipesById]);
   const topQualityMaterials = useMemo(
     () => getGlobalTopQualityMaterials(inventoryEntries, materialTemplates)
       .filter(({ entry }) => entry.quality != null && Number.isFinite(entry.quality))
       .slice(0, 6),
     [inventoryEntries, materialTemplates]
   );
-  const inventoryLocationSummaries = useMemo(
-    () => buildInventoryLocationSummaries(inventoryEntries, locations, materialTemplates),
-    [inventoryEntries, locations, materialTemplates]
-  );
-  const primaryLocations = useMemo(() => inventoryLocationSummaries.slice(0, 5), [inventoryLocationSummaries]);
-  const topRecordedInventoryLocation = useMemo(
-    () => getTopRecordedInventoryLocation(inventoryLocationSummaries),
-    [inventoryLocationSummaries]
-  );
-  const inventoryOverviewTarget = topRecordedInventoryLocation
-    ? `/logistics/inventory?location=${encodeURIComponent(topRecordedInventoryLocation.id)}`
-    : "/logistics/inventory";
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
   const reserveSummary = queueLedger.summary;
   const qualityTargetCount = useMemo(
     () => activeQueueItems.filter((item) => item.finalProductQualityBand != null && item.allowLowerQuality !== true).length,
     [activeQueueItems],
   );
-  const avgQueueProgress = useMemo(() => {
-    const progresses = activeQueueItems
-      .map((item) => getQueueItemProgress(item, inventoryEntries, recipeInputTemplates))
-      .filter((progress): progress is number => progress !== null);
-    if (progresses.length === 0) return null;
-    return Math.round(progresses.reduce((sum, value) => sum + value, 0) / progresses.length);
-  }, [activeQueueItems, inventoryEntries, recipeInputTemplates]);
-  const topVolumeMaterial = userStats.top3Volume[0];
-  const miningRequiredMaterials = useMemo(
-    () => toRequiredMaterials(
-      queueLedger.rawOreRequirementLines.length > 0 ? queueLedger.rawOreRequirementLines : queueLedger.refinedShortfallLines
-    ),
-    [queueLedger.rawOreRequirementLines, queueLedger.refinedShortfallLines]
-  );
-  const displayedMiningState = miningRequiredMaterials.length === 0
-    ? { status: "idle" as const, data: [] as PublicLocationEntry[] }
-    : miningState;
-  const topMiningRec = displayedMiningState.data[0];
+  const miningOverviewRows = useMemo<MiningOverviewRow[]>(() => {
+    const ledgerByMaterial = new Map(queueLedger.lines.map((line) => [line.materialKey, line]));
+    return [...queueRequirementsByMaterial.entries()]
+      .map(([materialKey, requirements]) => {
+        const material = materialTemplates.find((candidate) => candidate.id === materialKey);
+        if (!isMineableMaterial(material)) return null;
+        const targetRequirement = requirements
+          .filter((requirement) => requirement.input.selectedQuality != null && Number.isFinite(requirement.input.selectedQuality))
+          .sort((left, right) => (right.input.selectedQuality ?? 0) - (left.input.selectedQuality ?? 0))[0];
+        const target = targetRequirement?.input.selectedQuality ?? null;
+        const bands = targetRequirement?.input.qualityBands?.length
+          ? targetRequirement.input.qualityBands
+          : qualityBandsReady
+            ? getQualityBandsForMaterial(material.name)
+            : null;
+        const adjacentBands = getAdjacentBandValues(bands, target);
+        const ledgerLine = ledgerByMaterial.get(materialKey) ?? ledgerByMaterial.get(material.id) ?? null;
+        return {
+          materialKey,
+          material,
+          displayName: material.name,
+          target,
+          bandBelow: adjacentBands.below,
+          bandAbove: adjacentBands.above,
+          requiredQuantity: requirements.reduce((sum, requirement) => sum + requirement.requiredQuantity, 0),
+          ledgerLine,
+          unitType: requirements[0]?.input.unitType,
+          requiredBy: requirements,
+          isRefinable: isRefinableMineable(material),
+        };
+      })
+      .filter((row): row is MiningOverviewRow => row !== null)
+      .sort((left, right) => right.requiredQuantity - left.requiredQuantity || left.displayName.localeCompare(right.displayName));
+  }, [materialTemplates, qualityBandsReady, queueLedger.lines, queueRequirementsByMaterial]);
+  const inventoryOverviewRows = useMemo(() => topQualityMaterials.map(({ entry, material }) => {
+    const materialKey = entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id;
+    const requirements = queueRequirementsByMaterial.get(materialKey) ?? [];
+    const assignedItems = activeQueueItems.filter((item) =>
+      (item.reservedAllocations ?? []).some((allocation) => allocation.inventoryEntryId === entry.id),
+    );
+    const assignedRequirements = requirements.filter((requirement) =>
+      assignedItems.some((item) => item.id === requirement.item.id) &&
+      (requirement.item.reservedAllocations ?? []).some((allocation) =>
+        allocation.inventoryEntryId === entry.id &&
+        allocationMatchesRequirement(allocation, materialKey, {
+          requirementId: requirement.requirementId,
+          selectedQuality: requirement.input.selectedQuality,
+          unitType: requirement.input.unitType,
+          allowLowerQuality: Boolean(requirement.item.allowLowerQuality),
+        }),
+      ),
+    );
+    const fulfilled = assignedRequirements.length > 0 && assignedRequirements.every((requirement) => {
+      const identity = {
+        requirementId: requirement.requirementId,
+        selectedQuality: requirement.input.selectedQuality,
+        unitType: requirement.input.unitType,
+        allowLowerQuality: Boolean(requirement.item.allowLowerQuality),
+      };
+      const coverage = getMaterialReservationCoverage(
+        requirement.item,
+        materialKey,
+        requirement.requiredQuantity,
+        inventoryEntries,
+        identity,
+      );
+      const allocations = (requirement.item.reservedAllocations ?? []).filter((allocation) =>
+        allocationMatchesRequirement(allocation, materialKey, identity),
+      );
+      const allocatedAmount = getAllocationTotal(allocations);
+      const qualityStatus = getQualityProjectionStatus(
+        allocatedAmount,
+        requirement.requiredQuantity,
+        getWeightedEffectiveQuality(allocations),
+        requirement.input.selectedQuality,
+      );
+      const quantityMet = coverage.coverageState === "covered" || coverage.coverageState === "overReserved";
+      const qualityMet = requirement.item.allowLowerQuality === true || requirement.input.selectedQuality == null || qualityStatus === "meets" || qualityStatus === "above";
+      return quantityMet && qualityMet;
+    });
+    const reservationTone: InventoryReservationTone = assignedItems.length === 0
+      ? "unreserved"
+      : fulfilled
+        ? "fulfilled"
+        : "partial";
+    const eligibleRequirements = requirements.filter((requirement) => {
+      if (getAvailableQuantityForInventoryEntry(entry, buildQueue, requirement.item.id) <= 0) return false;
+      const target = requirement.input.selectedQuality;
+      return target == null || requirement.item.allowLowerQuality === true || (entry.quality != null && entry.quality >= target);
+    });
+    const locationName = entry.locationId
+      ? locationNamesById.get(entry.locationId) ?? "Unknown Location"
+      : "Unassigned Stock";
+    return {
+      entry,
+      material,
+      materialKey,
+      itemName: resolveInventoryItemName(entry, material),
+      locationName,
+      requirements,
+      assignedItems,
+      eligibleRequirements: getUniqueRequiredBy(eligibleRequirements),
+      reservationTone,
+    };
+  }), [activeQueueItems, buildQueue, inventoryEntries, locationNamesById, queueRequirementsByMaterial, topQualityMaterials]);
+  const displayedBuildQueueItems = useMemo(() => {
+    const visible = buildQueue.slice(0, 5);
+    if (!highlightedQueueItemId || visible.some((item) => item.id === highlightedQueueItemId)) return visible;
+    const highlighted = buildQueue.find((item) => item.id === highlightedQueueItemId);
+    if (!highlighted) return visible;
+    return visible.length < 5 ? [...visible, highlighted] : [...visible.slice(0, 4), highlighted];
+  }, [buildQueue, highlightedQueueItemId]);
+  const nextRunFixtureMode = import.meta.env.DEV
+    ? new URLSearchParams(window.location.search).get("fixture")
+    : null;
+  const nextFabricationRuns = useMemo(() => {
+    if (nextRunFixtureMode === "next-fabrication-empty") return [];
+    if (nextRunFixtureMode === "next-fabrication") return DEV_NEXT_FABRICATION_RUNS;
+    return activeQueueItems
+      .map((item) => buildProductionNextFabricationRun(
+        item,
+        inventoryEntries,
+        materialTemplates,
+        locations,
+        recipesById,
+        recipeInputTemplates,
+      ))
+      .filter((run): run is NextFabricationRun => run !== null);
+  }, [activeQueueItems, inventoryEntries, locations, materialTemplates, nextRunFixtureMode, recipeInputTemplates, recipesById]);
+  const nextFabricationRun = nextFabricationRuns.find((run) => run.queueItemId === selectedNextRunId)
+    ?? nextFabricationRuns[0]
+    ?? null;
 
   useEffect(() => {
-    if (miningRequiredMaterials.length === 0) return;
-
-    const controller = new AbortController();
-    queueMicrotask(() => {
-      if (!controller.signal.aborted) setMiningState((current) => ({ status: "loading", data: current.data }));
-    });
-    getMiningRecommendations(
-      buildRecommendationRequest({
-        priorityStack: [],
-        manualDemand: [],
-        favoriteLocationIds: [],
-        filters: { showOnlyStarred: false },
-      }, null, miningRequiredMaterials, "quality"),
-      controller.signal
-    )
-      .then((response) => {
-        if (!controller.signal.aborted) setMiningState({ status: "loaded", data: response.recommendations.slice(0, 3) });
+    let cancelled = false;
+    loadQualityQuantizationRecords()
+      .then(() => {
+        if (!cancelled) setQualityBandsReady(true);
       })
-      .catch(() => {
-        if (!controller.signal.aborted) setMiningState((current) => ({ status: "error", data: current.data }));
-      });
-    return () => controller.abort();
-  }, [miningRequiredMaterials]);
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (!openReservationEntryId) return;
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest(".dash-reservation-control")) return;
+      setOpenReservationEntryId(null);
+    };
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
+  }, [openReservationEntryId]);
 
   return (
     <div className="dash-content-grid">
@@ -325,63 +786,25 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="dash-hero-workflow" aria-label="Operations snapshot">
-              <Link to="/logistics/inventory" className="dash-hero-mini dash-hero-mini--inventory">
-                <span className="dash-hero-mini-label">Inventory</span>
-                <span className="dash-hero-mini-value dash-tabnum">
-                  {userStats.totalVolume > 0
-                    ? (userStats.totalVolumeUnit === "x"
-                      ? `x${userStats.totalVolume}`
-                      : `${userStats.totalVolume} SCU`)
-                    : "—"}
-                </span>
-                <span className="dash-hero-mini-meta">
-                  {topVolumeMaterial ? `Top: ${topVolumeMaterial.name}` : `${inventoryEntries.length} records`}
-                </span>
+            <div className="dash-hero-sequence" aria-label="Current production sequence">
+              <Link to="/logistics/inventory" className="dash-hero-sequence-step">
+                <span>01 / Inventory</span>
+                <strong className="dash-tabnum">{inventoryEntries.length} records positioned</strong>
               </Link>
-
-              <Link to="/logistics/build-queue" className="dash-hero-mini dash-hero-mini--reserve">
-                <span className="dash-hero-mini-label">Auto Reserve</span>
-                <span className="dash-hero-mini-value dash-tabnum">
-                  {reserveSummary.reservableLines > 0 ? reserveSummary.reservableLines : "—"}
-                  <small> ready</small>
-                </span>
-                <span className="dash-hero-mini-meta">
-                  {queueLedger.refinedShortfallLines.length > 0
-                    ? `${queueLedger.refinedShortfallLines.length} shortfall${queueLedger.refinedShortfallLines.length === 1 ? "" : "s"}`
-                    : qualityTargetCount > 0
-                      ? `${qualityTargetCount} quality target${qualityTargetCount === 1 ? "" : "s"}`
-                      : "No shortages"}
-                </span>
+              <ArrowRight size={14} />
+              <Link to="/logistics/build-queue" className="dash-hero-sequence-step">
+                <span>02 / Reserve</span>
+                <strong className="dash-tabnum">
+                  {reserveSummary.reservableLines} ready · {queueLedger.refinedShortfallLines.length} short
+                </strong>
               </Link>
-
-              <Link to="/logistics/build-queue" className="dash-hero-mini dash-hero-mini--queue">
-                <span className="dash-hero-mini-label">Build Queue</span>
-                <span className="dash-hero-mini-value dash-tabnum">
-                  {activeQueueItems.length}
-                  <small> active</small>
-                </span>
-                <span className="dash-hero-mini-meta">
-                  {avgQueueProgress != null ? `${avgQueueProgress}% materials covered` : `${buildQueue.length} queued`}
-                </span>
-              </Link>
-
-              <Link to="/industry/mining" className="dash-hero-mini dash-hero-mini--mining">
-                <span className="dash-hero-mini-label">Mining</span>
-                <span className="dash-hero-mini-value dash-hero-mini-value--truncate">
-                  {topMiningRec
-                    ? (topMiningRec.requiredMaterials?.[0]?.displayName ?? topMiningRec.materials[0] ?? "Route ready")
-                    : (displayedMiningState.status === "loading" ? "Loading…" : "—")}
-                </span>
-                <span className="dash-hero-mini-meta dash-hero-mini-meta--truncate">
-                  {topMiningRec
-                    ? [
-                        `${topMiningRec.systemName} / ${topMiningRec.locationName}`,
-                        getMiningRecQuality(topMiningRec),
-                      ].filter(Boolean).join(" · ")
-                    : "No shortage routes"}
-                </span>
-              </Link>
+              <ArrowRight size={14} />
+              <div className="dash-hero-sequence-step dash-hero-sequence-step--current">
+                <span>03 / Fabricate next</span>
+                <strong title={nextFabricationRun?.itemName}>
+                  {nextFabricationRun?.itemName ?? "No active fabrication run"}
+                </strong>
+              </div>
             </div>
           </div>
         </section>
@@ -475,55 +898,210 @@ export default function DashboardPage() {
         </section>
 
         <div className="dash-cards-row">
-          <article className="dash-card" aria-label="Inventory overview">
-            <div className="dash-card-header"><span className="dash-card-title">Inventory Overview</span></div>
-            <div className="dash-card-body dash-inventory-body">
-              {topQualityMaterials.length > 0 ? (
-                <div className="dash-inventory-quality-list">
-                  <div className="dash-inventory-quality-head" aria-hidden>
-                    <span>Material</span>
-                    <span>Location</span>
-                    <span>Amount</span>
-                    <span>Quality</span>
-                  </div>
-                  {topQualityMaterials.map(({ entry, material }) => {
-                    const itemName = resolveInventoryItemName(entry, material);
-                    const locationId = entry.locationId ?? "__unassigned__";
-                    const locationName = entry.locationId ? locationNamesById.get(entry.locationId) ?? "Unknown Location" : "Unassigned Stock";
-                    return (
-                      <Link
-                        key={entry.id}
-                        to={`/logistics/inventory?location=${encodeURIComponent(locationId)}`}
-                        className="dash-inventory-quality-row"
-                      >
-                        <MaterialIcon
-                          materialName={itemName}
-                          materialState={material?.materialType === "refined" ? "refined" : "raw"}
-                          size={18}
-                        />
-                        <span className="dash-inventory-quality-name">{itemName}</span>
-                        <span className="dash-inventory-quality-loc">{locationName}</span>
-                        <span className="dash-inventory-quality-qty dash-tabnum">
-                          {formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material))}
-                        </span>
-                        <span className="dash-inventory-quality-value dash-tabnum" style={{ color: entry.rarity.colorHex }}>
-                          Q{entry.quality}
-                        </span>
-                        <ArrowRight />
-                      </Link>
-                    );
-                  })}
+          <article className="dash-card dash-card--inventory-primary ops-primary-card" aria-label="Mining and inventory overview">
+            <div className="dash-card-header dash-overview-header">
+              <div className="dash-overview-tabs" role="tablist" aria-label="Overview type">
+                <button
+                  id="dash-mining-overview-tab"
+                  type="button"
+                  role="tab"
+                  aria-selected={overviewTab === "mining"}
+                  aria-controls="dash-mining-overview-panel"
+                  className={overviewTab === "mining" ? "is-active" : ""}
+                  onClick={() => {
+                    setOverviewTab("mining");
+                    setOpenReservationEntryId(null);
+                  }}
+                >
+                  Mining Overview
+                </button>
+                <button
+                  id="dash-inventory-overview-tab"
+                  type="button"
+                  role="tab"
+                  aria-selected={overviewTab === "inventory"}
+                  aria-controls="dash-inventory-overview-panel"
+                  className={overviewTab === "inventory" ? "is-active" : ""}
+                  onClick={() => {
+                    setOverviewTab("inventory");
+                    setOpenReservationEntryId(null);
+                  }}
+                >
+                  Inventory Overview
+                </button>
+              </div>
+            </div>
+            <div className="dash-card-body dash-inventory-body dash-overview-body">
+              {overviewTab === "mining" ? (
+                <div
+                  id="dash-mining-overview-panel"
+                  role="tabpanel"
+                  aria-labelledby="dash-mining-overview-tab"
+                  className="dash-overview-panel"
+                >
+                  {miningOverviewRows.length > 0 ? (
+                    <table className="dash-overview-table dash-overview-table--mining">
+                      <thead>
+                        <tr>
+                          <th>Material</th>
+                          <th>Target</th>
+                          <th>
+                            <OverviewTooltip
+                              content="The first value is the mapped quality band immediately below the target; the second is immediately above it."
+                              ariaLabel="Band. Shows the mapped quality immediately below and above the target."
+                            >
+                              <span className="dash-overview-header-tooltip">Band</span>
+                            </OverviewTooltip>
+                          </th>
+                          <th>
+                            <span className="dash-overview-amount-heading" aria-label="Amount state badges">
+                              <span className="dash-material-state-badge dash-material-state-badge--ore">ore</span>
+                              <span className="dash-material-state-badge dash-material-state-badge--refined">Refined</span>
+                              <span className="dash-material-state-badge dash-material-state-badge--raw">raw</span>
+                            </span>
+                          </th>
+                          <th>Required By</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {miningOverviewRows.map((row) => {
+                          const bandLabel = row.bandBelow != null && row.bandAbove != null
+                            ? `${formatDashNumber(row.bandBelow)} / ${formatDashNumber(row.bandAbove)}`
+                            : "—";
+                          return (
+                            <tr key={row.materialKey}>
+                              <td>
+                                <span className="dash-overview-material">
+                                  <MaterialIcon materialName={row.displayName} materialState="raw" size={18} />
+                                  <span>{row.displayName}</span>
+                                </span>
+                              </td>
+                              <td className="dash-tabnum">{row.target != null ? formatDashNumber(row.target) : "—"}</td>
+                              <td>
+                                <OverviewTooltip
+                                  content="Lower / upper mapped quality surrounding this target."
+                                  ariaLabel={`${bandLabel}. Lower and upper mapped quality surrounding the target.`}
+                                >
+                                  <span className="dash-overview-band-value dash-tabnum">{bandLabel}</span>
+                                </OverviewTooltip>
+                              </td>
+                              <td><MiningAmount row={row} /></td>
+                              <td><RequiredByValue requirements={row.requiredBy} /></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="dash-empty-state">No mineable materials are required by the active Build Queue</div>
+                  )}
                 </div>
               ) : (
-                <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No material quality recorded" : "No inventory recorded"}</div>
+                <div
+                  id="dash-inventory-overview-panel"
+                  role="tabpanel"
+                  aria-labelledby="dash-inventory-overview-tab"
+                  className="dash-overview-panel"
+                >
+                  {inventoryOverviewRows.length > 0 ? (
+                    <table className="dash-overview-table dash-overview-table--inventory">
+                      <thead>
+                        <tr>
+                          <th>Material</th>
+                          <th>Location</th>
+                          <th>Reserved</th>
+                          <th>Amount</th>
+                          <th>Quality</th>
+                          <th>Required By</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {inventoryOverviewRows.map((row) => {
+                          const assignedRequirement = row.requirements.find((requirement) =>
+                            row.assignedItems.some((item) => item.id === requirement.item.id),
+                          );
+                          const reservationLabel = row.reservationTone === "unreserved"
+                            ? `Not reserved by the Build Queue. Show eligible builds for ${row.itemName}.`
+                            : row.reservationTone === "partial"
+                              ? `Reserved for ${assignedRequirement?.itemName ?? "a Build Queue item"}, but quantity or quality requirements are not fulfilled.`
+                              : `Reserved for ${assignedRequirement?.itemName ?? "a Build Queue item"}; quantity and quality requirements are fulfilled.`;
+                          const popoverOpen = row.reservationTone === "unreserved" && openReservationEntryId === row.entry.id;
+                          return (
+                            <tr key={row.entry.id}>
+                              <td>
+                                <Link
+                                  to={`/logistics/inventory?location=${encodeURIComponent(row.entry.locationId ?? "__unassigned__")}`}
+                                  className="dash-overview-material dash-overview-material--link"
+                                >
+                                  <MaterialIcon
+                                    materialName={row.itemName}
+                                    materialState={row.material?.materialType === "refined" ? "refined" : "raw"}
+                                    size={18}
+                                  />
+                                  <span>{row.itemName}</span>
+                                </Link>
+                              </td>
+                              <td className="dash-overview-location" title={row.locationName}>{row.locationName}</td>
+                              <td>
+                                <div className="dash-reservation-control">
+                                  <button
+                                    type="button"
+                                    className={`dash-reservation-indicator dash-reservation-indicator--${row.reservationTone}`}
+                                    aria-label={reservationLabel}
+                                    aria-expanded={row.reservationTone === "unreserved" ? popoverOpen : undefined}
+                                    onClick={() => {
+                                      if (row.reservationTone === "unreserved") {
+                                        setOpenReservationEntryId((current) => current === row.entry.id ? null : row.entry.id);
+                                        return;
+                                      }
+                                      setOpenReservationEntryId(null);
+                                      setHighlightedQueueItemId(row.assignedItems[0]?.id ?? null);
+                                    }}
+                                  >
+                                    <span aria-hidden />
+                                  </button>
+                                  {popoverOpen && (
+                                    <div className="dash-reservation-popover" role="dialog" aria-label={`Eligible builds for ${row.itemName}`}>
+                                      <strong>Eligible builds</strong>
+                                      {row.eligibleRequirements.length > 0 ? (
+                                        <ul role="list">
+                                          {row.eligibleRequirements.map((requirement) => (
+                                            <li key={requirement.item.id}>{requirement.itemName}</li>
+                                          ))}
+                                        </ul>
+                                      ) : (
+                                        <span>No valid queue items</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="dash-tabnum">{formatInventoryQuantity(row.entry.quantity, resolveInventoryUnitType(row.entry, row.material))}</td>
+                              <td className="dash-overview-quality dash-tabnum" style={{ color: row.entry.rarity.colorHex }}>{row.entry.quality}</td>
+                              <td><RequiredByValue requirements={row.requirements} /></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No material quality recorded" : "No inventory recorded"}</div>
+                  )}
+                </div>
               )}
             </div>
             <div className="dash-card-footer">
-              <Link to={inventoryOverviewTarget} className="dash-card-footer-link">Go to Inventory <ArrowRight /></Link>
+              <Link
+                to={overviewTab === "mining" ? "/industry/mining" : "/logistics/inventory"}
+                className="dash-card-footer-link"
+              >
+                {overviewTab === "mining" ? "Open Mining" : "Go to Inventory"} <ArrowRight />
+              </Link>
             </div>
           </article>
 
-          <article className="dash-card" aria-label="Auto reserve readiness">
+          <div className="dash-status-deck" aria-label="Operational status">
+          <article className="dash-card dash-card--reserve-status ops-primary-card" aria-label="Auto reserve readiness">
             <div className="dash-card-header"><span className="dash-card-title">Auto Reserve</span></div>
             <div className="dash-card-body dash-reserve-body">
               <div className="dash-reserve-metrics">
@@ -565,7 +1143,7 @@ export default function DashboardPage() {
             </div>
           </article>
 
-          <article className="dash-card" aria-label="Material shortages">
+          <article className="dash-card dash-card--shortage-status ops-primary-card" aria-label="Material shortages">
             <div className="dash-card-header"><span className="dash-card-title">Material Shortages</span></div>
             <div className="dash-card-body">
               <table className="dash-shortages-table">
@@ -598,8 +1176,9 @@ export default function DashboardPage() {
               <Link to="/logistics/build-queue" className="dash-card-footer-link">View All Shortages <ArrowRight /></Link>
             </div>
           </article>
+          </div>
 
-          <article className="dash-card" aria-label="Build queue">
+          <article className="dash-card dash-card--queue-secondary ops-primary-card" aria-label="Build queue">
             <div className="dash-card-header">
               <span className="dash-card-title">Build Queue</span>
               <div className="dash-card-meta">
@@ -610,11 +1189,16 @@ export default function DashboardPage() {
             </div>
             <div className="dash-card-body">
               <ul className="dash-bq-list" role="list">
-                {buildQueue.slice(0, 5).map((item) => {
+                {displayedBuildQueueItems.map((item) => {
                   const progress = getQueueItemProgress(item, inventoryEntries, recipeInputTemplates);
                   const queued = progress === null;
+                  const highlighted = item.id === highlightedQueueItemId;
                   return (
-                    <li key={item.id} className="dash-bq-item">
+                    <li
+                      key={item.id}
+                      className={`dash-bq-item${highlighted ? " dash-bq-item--highlighted" : ""}`}
+                      aria-label={highlighted ? `${getQueueItemName(item, recipesById)}, highlighted from Inventory Overview` : undefined}
+                    >
                       <BqThumb color={item.status === "complete" ? "#4ade80" : "#ff9d00"} />
                       <div className="dash-bq-info">
                         <div className="dash-bq-name">{getQueueItemName(item, recipesById)}</div>
@@ -635,224 +1219,188 @@ export default function DashboardPage() {
             </div>
           </article>
         </div>
-      </div>
 
-      <aside className="dash-right-col" aria-label="System panels">
-        <QuickInventoryPanel
-          entryCount={inventoryEntries.length}
-          uniqueItems={new Set(inventoryEntries.map((entry) => entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id)).size}
-          totalVolume={userStats.totalVolume}
-          totalVolumeUnit={userStats.totalVolumeUnit}
-          topMaterialName={topVolumeMaterial?.name ?? null}
+        <NextFabricationRunModule
+          run={nextFabricationRun}
+          runs={nextFabricationRuns}
+          onSelectRun={setSelectedNextRunId}
         />
-        {ENABLE_FITTING_UI && <FittingLaunchPanel />}
-
-        <div className="dash-card dash-card--rail">
-          <div className="dash-card-header"><span className="dash-card-title">Primary Locations</span></div>
-          <div className="dash-card-body dash-card-body--compact">
-            <ul className="dash-locations-list" role="list">
-              {primaryLocations.map((loc) => (
-                <li key={loc.id} className="dash-location-row">
-                  <LocationIcon type={loc.type} />
-                  <span className="dash-location-name">{loc.name}</span>
-                  <span className="dash-location-scu dash-tabnum">{formatLocationQuantity(loc)}</span>
-                </li>
-              ))}
-              {primaryLocations.length === 0 && <li className="dash-empty-state">No records yet</li>}
-            </ul>
-          </div>
-        </div>
-
-        <div className="dash-card dash-card--rail">
-          <div className="dash-card-header"><span className="dash-card-title">Mining Recommendations</span></div>
-          <div className="dash-card-body dash-card-body--compact">
-            <ul className="dash-mining-list" role="list">
-              {displayedMiningState.data.map((rec) => {
-                const materialName = rec.requiredMaterials?.[0]?.displayName ?? rec.materials[0] ?? "Mining route";
-                const qualityLabel = getMiningRecQuality(rec);
-                return (
-                  <li key={rec.locationKey} className="dash-mining-item">
-                    <div className="dash-mining-item-head">
-                      <MaterialIcon materialName={materialName} size={16} />
-                      <span className="dash-mining-material">{materialName}</span>
-                      {qualityLabel && <span className="dash-mining-quality dash-tabnum">{qualityLabel}</span>}
-                    </div>
-                    <div className="dash-mining-location">{rec.systemName} / {rec.locationName}</div>
-                    <div className="dash-mining-reason">{getMiningRecReason(rec)}</div>
-                  </li>
-                );
-              })}
-              {displayedMiningState.data.length === 0 && (
-                <li className="dash-empty-state">{displayedMiningState.status === "loading" ? "Loading recommendations" : "No queue shortages to route"}</li>
-              )}
-            </ul>
-          </div>
-          <div className="dash-card-footer">
-            <Link to="/industry/mining" className="dash-card-footer-link">View Mining <ArrowRight /></Link>
-          </div>
-        </div>
-      </aside>
+      </div>
     </div>
   );
 }
+function RunStateIcon({ state }: { state: NextRunBoxState | NextRunMovementState | NextFabricationRun["targetState"] }) {
+  const path = state === "unavailable"
+    ? "M12 2L2 20h20L12 2zm0 6v5m0 3.5v.5"
+    : state === "pull"
+      ? "M5 19h14M12 5v10m0 0l-4-4m4 4l4-4"
+      : state === "warehouse"
+        ? "M3 9l9-6 9 6v11H3V9zm4 3h10m-10 4h10"
+        : state === "pending"
+          ? "M12 3a9 9 0 109 9m-9-5v5l3 2"
+          : "M20 6L9 17l-5-5";
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d={path} />
+    </svg>
+  );
+}
 
-function QuickInventoryPanel({
-  entryCount,
-  uniqueItems,
-  totalVolume,
-  totalVolumeUnit,
-  topMaterialName,
+function NextFabricationRunModule({
+  run,
+  runs,
+  onSelectRun,
 }: {
-  entryCount: number;
-  uniqueItems: number;
-  totalVolume: number;
-  totalVolumeUnit: "SCU" | "x";
-  topMaterialName: string | null;
+  run: NextFabricationRun | null;
+  runs: NextFabricationRun[];
+  onSelectRun: (queueItemId: string) => void;
 }) {
   return (
-    <div className="dash-card dash-card--rail">
-      <div className="dash-card-header"><span className="dash-card-title">Quick Inventory</span></div>
-      <div className="dash-card-body dash-card-body--compact">
-        <div className="dash-qinv-stats">
-          <div className="dash-qinv-stat">
-            <span className="dash-qinv-stat-label">Records</span>
-            <span className="dash-qinv-stat-value dash-tabnum">{entryCount > 0 ? entryCount : "—"}</span>
-          </div>
-          <div className="dash-qinv-stat">
-            <span className="dash-qinv-stat-label">Items</span>
-            <span className="dash-qinv-stat-value dash-tabnum">{uniqueItems > 0 ? uniqueItems : "—"}</span>
-          </div>
-          <div className="dash-qinv-stat dash-qinv-stat--wide">
-            <span className="dash-qinv-stat-label">Total volume</span>
-            <span className="dash-qinv-stat-value dash-tabnum">
-              {totalVolume > 0
-                ? (totalVolumeUnit === "x" ? `x${totalVolume}` : `${totalVolume} SCU`)
-                : "—"}
-            </span>
-          </div>
+    <article className="dash-next-run ops-primary-card" aria-labelledby="dash-next-run-title" data-fixture={run?.fixtureOnly ? "development" : undefined}>
+      <header className="dash-next-run-header">
+        <div>
+          <span className="dash-next-run-kicker">Operations handoff</span>
+          <h2 id="dash-next-run-title">Next Fabrication Run</h2>
         </div>
-        {topMaterialName && (
-          <p className="dash-qinv-lead">Led by <strong>{topMaterialName}</strong></p>
+        {run && (
+          <span className={`dash-next-run-status dash-next-run-status--${run.targetState}`}>
+            <RunStateIcon state={run.targetState} />
+            {run.targetState === "met" ? "Target Met" : run.targetState === "unavailable" ? "Target Unavailable With Current Inventory" : "Target pending"}
+          </span>
         )}
-      </div>
-      <div className="dash-card-footer">
-        <Link to="/logistics/inventory" className="dash-card-footer-link">View Inventory <ArrowRight /></Link>
-      </div>
-    </div>
-  );
-}
+      </header>
 
-function FittingLaunchPanel() {
-  const [ships, setShips] = useState<FittingShipSummary[]>([]);
-  const [status, setStatus] = useState<"idle" | "loading" | "loaded" | "error">("idle");
-  const [query, setQuery] = useState("");
-  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    queueMicrotask(() => {
-      if (!controller.signal.aborted) setStatus("loading");
-    });
-    listFittingShips(controller.signal)
-      .then((payload) => {
-        if (controller.signal.aborted) return;
-        const records = payload.filter(isDisplayableFittingShip).map(adaptFittingShip);
-        setShips(records);
-        setSelectedShipKey((current) => current ?? records[0]?.shipKey ?? null);
-        setStatus("loaded");
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) setStatus("error");
-      });
-    return () => controller.abort();
-  }, []);
-
-  const filteredShips = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    const matches = needle
-      ? ships.filter((ship) => [
-        ship.name,
-        ship.manufacturer,
-        ship.role,
-        ship.career,
-      ].filter(Boolean).join(" ").toLowerCase().includes(needle))
-      : ships;
-    return matches.slice(0, 8);
-  }, [query, ships]);
-
-  const selectedShip = useMemo(
-    () => ships.find((ship) => ship.shipKey === selectedShipKey) ?? filteredShips[0] ?? null,
-    [filteredShips, selectedShipKey, ships],
-  );
-
-  return (
-    <div className="dash-panel dash-fitting-panel">
-      <div className="dash-panel-header">
-        <span className="dash-panel-title">Fitting</span>
-        <span className="dash-fitting-count">{status === "loaded" ? `${ships.length} ships` : "Internal"}</span>
-      </div>
-      <div className="dash-panel-body dash-fitting-body">
-        <label className="dash-fitting-search">
-          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search ships..."
-            aria-label="Search fitting ships"
-          />
-        </label>
-
-        <div className="dash-fitting-selector" role="listbox" aria-label="Fitting ship selector">
-          {filteredShips.map((ship) => {
-            const selected = ship.shipKey === selectedShip?.shipKey;
-            return (
-              <button
-                key={ship.shipKey}
-                type="button"
-                className={["dash-fitting-option", selected ? "dash-fitting-option--active" : ""].filter(Boolean).join(" ")}
-                onClick={() => setSelectedShipKey(ship.shipKey)}
-                role="option"
-                aria-selected={selected}
-              >
-                <span className="dash-fitting-option-main">
-                  <span className="dash-fitting-option-name">{ship.name}</span>
-                  <span className="dash-fitting-option-meta">{ship.manufacturer ?? "Unknown"} / {ship.role ?? ship.career ?? "Unclassified"}</span>
-                </span>
-                <span className="dash-fitting-proto dash-fitting-proto--ready">Ready</span>
-              </button>
-            );
-          })}
-          {status === "loading" && <div className="dash-empty-state">Loading fitting ships</div>}
-          {status === "error" && <div className="dash-empty-state">Fitting ships unavailable</div>}
-          {status === "loaded" && filteredShips.length === 0 && <div className="dash-empty-state">No matching ships</div>}
+      {!run ? (
+        <div className="dash-next-run-empty">
+          <div className="dash-next-run-empty-icon" aria-hidden>◇</div>
+          <div>
+            <strong>No fabrication run is queued</strong>
+            <span>Add a craft to the Build Queue to review its material pull plan here.</span>
+          </div>
+          <Link to="/logistics/build-queue" className="dash-next-run-action dash-next-run-action--secondary">
+            Open Build Queue <ArrowRight size={14} />
+          </Link>
         </div>
+      ) : (
+        <div className="dash-next-run-layout">
+          <section className="dash-next-run-summary" aria-label="Craft summary">
+            <div className="dash-next-run-item">
+              <div className="dash-next-run-item-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round">
+                  <path d="M12 2l9 5-9 5-9-5 9-5zm-9 5v10l9 5 9-5V7M12 12v10" />
+                </svg>
+              </div>
+              <div>
+                <span>Craft ×{run.quantity}</span>
+                <label className="dash-next-run-selector">
+                  <span className="dash-sr-only">Queued craft</span>
+                  <select
+                    aria-label="Select queued craft"
+                    value={run.queueItemId}
+                    onChange={(event) => onSelectRun(event.target.value)}
+                  >
+                    {runs.map((candidate) => (
+                      <option key={candidate.queueItemId} value={candidate.queueItemId}>
+                        {candidate.itemName}
+                      </option>
+                    ))}
+                  </select>
+                  <svg aria-hidden viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" /></svg>
+                </label>
+              </div>
+            </div>
 
-        {selectedShip && (
-          <div className="dash-fitting-summary" aria-label="Selected fitting ship">
-            <div className="dash-fitting-summary-head">
-              <span>{selectedShip.manufacturer ?? "Unknown"}</span>
-              <strong>{selectedShip.name}</strong>
+            <dl className="dash-next-run-metrics">
+              <div><dt>Target</dt><dd className="dash-tabnum">{run.target ?? "Not provided"}</dd></div>
+              <div><dt>Projected</dt><dd className="dash-tabnum">{run.projected ?? "Not provided"}</dd></div>
+              <div><dt>Readiness</dt><dd>{run.readiness}</dd></div>
+              <div><dt>Coverage</dt><dd>{run.coverage}</dd></div>
+            </dl>
+
+            <div className="dash-next-run-boundary" aria-label="Minimum to target status">
+              <span className="dash-next-run-boundary-label">Min to Target</span>
+              {run.minimumQuality && run.minimumQuantity ? (
+                <>
+                  <strong>Minimum Quality {run.minimumQuality}</strong>
+                  <span>{run.minimumQuantity} still required</span>
+                  {run.bestAchievable && <span>Best achievable: Projected {run.bestAchievable}</span>}
+                </>
+              ) : (
+                <span>Production inputs not available</span>
+              )}
             </div>
-            <div className="dash-fitting-metrics">
-              <span><b>Role</b>{selectedShip.role ?? selectedShip.career ?? "Unknown"}</span>
-              <span><b>Crew</b>{selectedShip.crewSize ?? "-"}</span>
-              <span><b>Dataset</b>Stock loadout</span>
+          </section>
+
+          <section className="dash-next-run-pull" aria-label="Locations, materials, and boxes">
+            <div className="dash-next-run-pull-head">
+              <span>Locations → Materials → Individual Boxes</span>
             </div>
-            <Link to={`/fitting/${selectedShip.shipKey}`} className="dash-fitting-open">
-              Open Fitting
-              <ArrowRight size={10} />
+            <div className="dash-next-run-scroll">
+              {run.locations.length > 0 ? run.locations.map((location, locationIndex) => (
+                <details key={location.id} className="dash-next-run-location" open={locationIndex < 2}>
+                  <summary>
+                    <span className="dash-next-run-location-order">{location.visitOrder ?? locationIndex + 1}</span>
+                    <span className="dash-next-run-location-name" title={location.name}>{location.name}</span>
+                    <span>{location.materials.length} material{location.materials.length === 1 ? "" : "s"}</span>
+                    <svg aria-hidden viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" /></svg>
+                  </summary>
+                  <div className="dash-next-run-location-body">
+                    {location.materials.map((material) => (
+                      <div key={material.id} className={`dash-next-run-material dash-next-run-material--${material.state}`}>
+                        <div className="dash-next-run-material-head">
+                          <span className="dash-next-run-material-name">
+                            <MaterialIcon materialName={material.name} size={16} />
+                            <strong>{material.name}</strong>
+                          </span>
+                          <span>{material.requirement}</span>
+                        </div>
+                        <div className="dash-next-run-box-head" aria-hidden>
+                          <span>Box</span><span>Quality</span><span>Quantity</span><span>Reservation</span><span>State</span><span>Expected</span>
+                        </div>
+                        {material.boxes.map((box) => (
+                          <div key={box.id} className={`dash-next-run-box dash-next-run-box--${box.availability}`}>
+                            <span className="dash-next-run-box-name" title={box.label}>{box.label}</span>
+                            <span className="dash-next-run-box-quality dash-tabnum">{box.quality != null ? `Quality ${formatDashNumber(box.quality)}` : "Not recorded"}</span>
+                            <span className="dash-next-run-box-quantity dash-tabnum">
+                              <strong>{box.quantity}</strong>
+                              {box.reservedQuantity && <small>{box.reservedQuantity}</small>}
+                            </span>
+                            <span className="dash-next-run-box-reservation">
+                              <span className={`dash-next-run-chip dash-next-run-chip--${box.availability}`}>
+                                <RunStateIcon state={box.availability} /> {box.reservationLabel}
+                              </span>
+                              {box.owner && <small title={box.owner}>{box.owner}</small>}
+                            </span>
+                            <span className={`dash-next-run-chip dash-next-run-chip--${box.movement}`}>
+                              <RunStateIcon state={box.movement} /> {box.movement === "pull" ? `${box.pullOrder ? `${box.pullOrder}. ` : ""}Pull` : box.movement === "warehouse" ? "Warehouse" : "Plan pending"}
+                            </span>
+                            <span className="dash-next-run-box-remainder">{box.remainder ?? box.owner ?? "Not provided"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )) : (
+                <div className="dash-next-run-inline-empty">No reserved boxes are attached to this craft yet.</div>
+              )}
+            </div>
+          </section>
+
+          <aside className="dash-next-run-actions" aria-label="Action summary">
+            <div className="dash-next-run-action-list">
+              <div><span>Locations to visit</span><strong>{run.locationsToVisit}</strong></div>
+              <div><span>Boxes to retrieve</span><strong>{run.boxesToRetrieve}</strong></div>
+              <div className={run.missingMaterials === "None identified" ? "is-ok" : "is-warning"}><span>Missing materials</span><strong>{run.missingMaterials}</strong></div>
+              <div><span>Expected excess / refund</span><strong>{run.expectedExcess ?? "Not provided"}</strong></div>
+            </div>
+            <Link to="/logistics/build-queue" className="dash-next-run-action">
+              {run.actionLabel} <ArrowRight size={14} />
             </Link>
-          </div>
-        )}
-
-        <p className="dash-fitting-note">
-          Read-only LIVE fitting data. Dashboard preview only.
-        </p>
-      </div>
-    </div>
+            <span className="dash-next-run-action-note">{run.actionNote}</span>
+          </aside>
+        </div>
+      )}
+    </article>
   );
 }

@@ -61,6 +61,13 @@ async function selectFixtureItem(page: Page, itemId: string, itemName: string) {
 test.describe("Build Queue stats fixture", () => {
   test("renders overview header + component statistics card for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
     const failures = installFailureGuards(page);
+    const externalApiRequests: string[] = [];
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname.startsWith("/api/") && url.origin !== "http://127.0.0.1:5175") {
+        externalApiRequests.push(request.url());
+      }
+    });
     await mkdir(screenshotDir, { recursive: true });
 
     for (const viewport of [
@@ -71,6 +78,7 @@ test.describe("Build Queue stats fixture", () => {
       await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
 
       await expect(page.locator('[data-bq-fixture="stats"]')).toBeVisible();
+      await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
       await expect(page.locator(".bq-craft-card")).toHaveCount(4);
       await expect(page.locator(".bq-center-col")).toBeVisible();
 
@@ -98,5 +106,6 @@ test.describe("Build Queue stats fixture", () => {
     }
 
     expect(failures).toEqual([]);
+    expect(externalApiRequests).toEqual([]);
   });
 });

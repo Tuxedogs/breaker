@@ -118,7 +118,7 @@ export function useEquippedComponentDetails(componentIds: readonly string[]): Eq
     })();
 
     return () => { cancelled = true; };
-  }, [idsKey]);
+  }, [idsKey, sortedIds]);
 
   return useMemo(() => {
     const statsById: Record<string, FittingComponentStats> = {};
@@ -147,13 +147,7 @@ export function useEquippedComponentDetails(componentIds: readonly string[]): Eq
 export function useEquippedComponentDetailsForPortRows(
   portRows: readonly PortBreakdownRow[],
 ): EquippedComponentDetailsState {
-  const loadoutSignature = portRows
-    .map((row) => `${row.portId}:${row.equippedComponentKey ?? ""}`)
-    .join(IDS_KEY_SEPARATOR);
-  const idsKey = useMemo(
-    () => buildComponentIdsKey(collectEquippedComponentIds(portRows)),
-    [loadoutSignature],
-  );
+  const idsKey = equippedComponentIdsKey(portRows);
   const componentIds = useMemo(() => splitComponentIdsKey(idsKey), [idsKey]);
   return useEquippedComponentDetails(componentIds);
 }

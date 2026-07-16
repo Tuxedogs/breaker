@@ -4253,6 +4253,8 @@
 }
 
 .component-result-card__hit {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: var(--cd-row-gap, 8px);
   height: 100%;
@@ -5646,6 +5648,1066 @@
     --cd-stat-val:  1.08rem;
     --cd-mat-name:  1.4rem;
   }
+}
+
+/* ==========================================================================
+   Approved Dashboard graphite rollout — Recipe Browser + Crafting Detail
+   Page-local only: surfaces, typography, density, and interaction states.
+   ========================================================================== */
+
+:where(.craft-page, .craft-planner-shell).component-results-browser {
+  --panel-bg: var(--ops-surface-primary);
+  --panel-bg-deep: var(--ops-surface-deep);
+  --panel-row-bg: var(--ops-surface-row);
+  --panel-row-hover: var(--ops-surface-hover);
+  --panel-border: var(--ops-border-default);
+  --panel-border-soft: var(--ops-border-soft);
+  --accent-cyan: #7dd3fc;
+  --accent-blue: #38bdf8;
+  --text-primary: #e7edff;
+  --text-secondary: #b9c9dd;
+  --text-muted: #8fa1b6;
+
+  --cd-font-xs: 0.72rem;
+  --cd-font-sm: 0.82rem;
+  --cd-font-md: 0.92rem;
+  --cd-font-lg: 1.04rem;
+  --cd-font-xl: 1.18rem;
+  --cd-font-title: 1.32rem;
+  --cd-chip-h: 32px;
+  --cd-control-h: 38px;
+  --cd-row-gap: 7px;
+  --cd-card-pad: 12px;
+  --cd-grid-gap: 12px;
+  --cd-icon-sm: 56px;
+  --cd-stat-val: 0.98rem;
+
+  max-width: 2240px;
+  border-color: rgba(115, 143, 171, 0.16);
+  background: #050b11;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.craft-page.component-results-browser {
+  background: var(--bg-app);
+}
+
+.component-browser-toolbar {
+  box-shadow: none;
+}
+
+@media (min-width: 761px) {
+  .component-browser-toolbar .scintel-filter-header.crb-row--search,
+  .component-browser-toolbar .scintel-filter-body {
+    border-color: rgba(115, 143, 171, 0.2);
+    background: #0a1119;
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .component-browser-toolbar .recipe-browser-filterDrawer {
+    box-shadow:
+      0 16px 34px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .component-browser-toolbar .component-browser-search,
+  .component-browser-toolbar .scintel-filter-toggle,
+  .component-browser-toolbar .crb-bookmarks-btn,
+  .component-browser-toolbar .scintel-filter-clear,
+  .component-browser-toolbar .component-browser-count,
+  .component-browser-toolbar .crb-material-trigger,
+  .component-browser-toolbar .crb-material-trigger--toolbar {
+    border-color: rgba(115, 143, 171, 0.18);
+    background: #070d14;
+    color: #b9c9dd;
+  }
+
+  .component-browser-toolbar .component-browser-search:focus-within,
+  .component-browser-toolbar .scintel-filter-toggle:hover,
+  .component-browser-toolbar .crb-bookmarks-btn:hover,
+  .component-browser-toolbar .crb-material-trigger:hover,
+  .component-browser-toolbar .crb-material-trigger--open {
+    border-color: rgba(125, 211, 252, 0.46);
+    background: #0d1823;
+    color: #d9f3ff;
+    box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.05);
+  }
+
+  .component-browser-toolbar .scintel-filter-toggle[aria-expanded="true"],
+  .component-browser-toolbar .crb-filters-btn--active,
+  .component-browser-toolbar .crb-bookmarks-btn--active,
+  .component-browser-toolbar .crb-material-trigger--active {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(14, 116, 144, 0.14);
+    color: #9ce5ff;
+    box-shadow: inset 3px 0 0 rgba(56, 189, 248, 0.72);
+  }
+
+  .component-browser-toolbar .craft-frl-chip {
+    border-color: rgba(115, 143, 171, 0.16);
+    background: #070d14;
+    color: #aebed2;
+  }
+
+  .component-browser-toolbar .craft-frl-chip:hover {
+    border-color: rgba(125, 211, 252, 0.36);
+    background: #0d1823;
+    color: #e7edff;
+  }
+
+  .component-browser-toolbar .craft-frl-chip--active {
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(14, 116, 144, 0.14);
+    color: #9ce5ff;
+    box-shadow: inset 0 -2px 0 rgba(56, 189, 248, 0.72);
+  }
+
+  .component-browser-toolbar .crb-material-dropdown {
+    border-color: rgba(115, 143, 171, 0.22);
+    background: #070d14;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.48);
+  }
+
+  .component-browser-toolbar .crb-material-option {
+    border-color: rgba(115, 143, 171, 0.14);
+    background: #0a1119;
+    color: #b9c9dd;
+  }
+
+  .component-browser-toolbar .crb-material-option:hover,
+  .component-browser-toolbar .crb-material-option--active {
+    border-color: rgba(56, 189, 248, 0.42);
+    background: rgba(14, 116, 144, 0.14);
+    color: #9ce5ff;
+  }
+}
+
+.component-results-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 0.85vw, 16px);
+}
+
+.component-result-card {
+  min-height: clamp(306px, 23vw, 344px);
+  border-radius: var(--ops-radius-primary, 7px);
+  border-color: rgba(115, 143, 171, 0.18);
+  background:
+    radial-gradient(circle at 18% 24%, rgba(34, 211, 238, 0.045), transparent 34%),
+    radial-gradient(circle at 82% 0%, rgba(139, 92, 246, 0.035), transparent 38%),
+    linear-gradient(145deg, rgba(15, 25, 37, 0.98), rgba(8, 15, 23, 0.99));
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.component-result-card--weapon {
+  min-height: clamp(306px, 23vw, 344px);
+}
+
+.component-result-card:hover,
+.component-result-card.ops-primary-card:hover {
+  border-color: rgba(125, 211, 252, 0.38);
+  background:
+    radial-gradient(circle at 18% 24%, rgba(34, 211, 238, 0.075), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(139, 92, 246, 0.055), transparent 40%),
+    linear-gradient(145deg, rgba(18, 31, 45, 0.99), rgba(10, 18, 27, 0.99));
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 0 0 1px rgba(56, 189, 248, 0.04);
+}
+
+.component-result-card__hit {
+  align-content: start;
+  grid-template-rows: auto auto auto auto minmax(0, auto) auto;
+  gap: clamp(9px, 0.55vw, 12px);
+  padding: clamp(14px, 0.85vw, 18px);
+}
+
+.component-result-card__identity {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.component-result-card__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.component-result-card__kind,
+.component-result-card__category {
+  color: #8fa1b6;
+  font-size: clamp(0.68rem, 0.62rem + 0.12vw, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.component-result-card__kind {
+  color: #7dd3fc;
+}
+
+.component-result-card__category {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.component-result-card__category::before {
+  content: "/";
+  margin-right: 8px;
+  color: rgba(139, 92, 246, 0.66);
+}
+
+.component-result-card__product {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.82fr) minmax(190px, 1.18fr);
+  gap: clamp(14px, 0.9vw, 20px);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.component-result-card__image-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: clamp(116px, 7.6vw, 148px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 62%, rgba(56, 189, 248, 0.09), transparent 56%),
+    linear-gradient(135deg, rgba(21, 35, 49, 0.46), rgba(8, 14, 22, 0.06));
+  clip-path: polygon(0 0, 92% 0, 100% 18%, 100% 100%, 8% 100%, 0 82%);
+}
+
+.component-result-card__image-stage::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% 8px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.32), transparent);
+}
+
+.component-result-card__cat-icon {
+  width: min(94%, 220px);
+  height: clamp(96px, 6.8vw, 132px);
+  object-fit: contain;
+  opacity: 0.96;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.44));
+}
+
+.component-result-card__image-stage .component-result-card__id {
+  color: #71849a;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+}
+
+.component-result-card__title {
+  color: #e7edff;
+  font-size: clamp(1.2rem, 1.05rem + 0.34vw, 1.55rem);
+  line-height: 1.18;
+}
+
+.component-card-metric span {
+  color: #8fa1b6;
+}
+
+.component-card-metrics--core {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: stretch;
+  gap: 0;
+  min-width: 0;
+}
+
+.component-card-metric {
+  align-content: center;
+  gap: 4px;
+  min-height: 0;
+  padding: 7px 2px;
+  border-bottom-color: rgba(115, 143, 171, 0.14);
+}
+
+.component-card-metrics--core .component-card-metric:last-child {
+  border-bottom-color: transparent;
+}
+
+.component-card-metric strong {
+  color: #dfe9f7;
+  font-size: clamp(0.98rem, 0.9rem + 0.16vw, 1.12rem);
+}
+
+.component-result-card--weapon .component-card-metric--primary span {
+  color: #aebed2;
+}
+
+.component-result-card--weapon .component-card-metric--primary strong {
+  color: #f2f6fc;
+  font-weight: 900;
+}
+
+.component-card-secondary-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  min-width: 0;
+  padding: 7px 0;
+  border-top: 1px solid rgba(115, 143, 171, 0.1);
+  border-bottom: 1px solid rgba(115, 143, 171, 0.1);
+}
+
+.component-card-secondary-metrics > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+}
+
+.component-card-secondary-metrics small {
+  color: #71849a;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.component-card-secondary-metrics strong {
+  color: #aebed2;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.component-result-card--weapon .component-card-modifiers .component-card-badge {
+  border-color: rgba(132, 154, 178, 0.24);
+  background: #101923;
+  color: #aebed2;
+  font-weight: 750;
+  letter-spacing: 0.025em;
+}
+
+.component-result-card--weapon .component-card-modifiers :is(
+  .component-card-badge--damage-physical,
+  .component-card-badge--damage-energy,
+  .component-card-badge--damage-distortion,
+  .component-card-badge--damage-thermal,
+  .component-card-badge--damage-biochemical,
+  .component-card-badge--damage-stun
+) {
+  border-color: rgba(139, 163, 188, 0.28);
+  background: #111c26;
+  color: #c0cddd;
+}
+
+.component-result-card--weapon .component-card-modifiers .component-card-badge--weapon-type {
+  border-color: rgba(115, 143, 171, 0.22);
+  background: #0e1720;
+  color: #aeb9c8;
+}
+
+.component-results-browser .component-card-craft-modifier {
+  border-color: rgba(139, 163, 188, 0.22);
+  background: rgba(13, 21, 30, 0.88);
+  color: #aebed2;
+}
+
+.component-card-material {
+  min-height: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8fa1b6;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.component-card-material span {
+  color: #8ecfe7;
+  font-weight: 800;
+}
+
+.component-card-materials {
+  gap: 5px 14px;
+  opacity: 0.84;
+}
+
+.component-card-action {
+  border-color: rgba(245, 158, 11, 0.34);
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+}
+
+.component-browser-pager,
+.component-browser-state {
+  border-color: rgba(115, 143, 171, 0.18);
+  background: #0a1119;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.component-browser-pager .craft-frl-clear {
+  border-color: rgba(115, 143, 171, 0.18);
+  background: #070d14;
+  color: #b9c9dd;
+}
+
+.component-browser-pager .craft-frl-clear:hover:not(:disabled) {
+  border-color: rgba(125, 211, 252, 0.38);
+  background: #0d1823;
+  color: #d9f3ff;
+}
+
+.component-results-browser :is(a, button, input, select, [tabindex]):focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.92);
+  outline-offset: 2px;
+}
+
+@media (min-width: 2200px) and (min-height: 1200px) {
+  .component-results-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .component-result-card,
+  .component-result-card--weapon {
+    min-height: 374px;
+  }
+
+  .component-result-card__hit {
+    gap: 13px;
+    padding: 18px;
+  }
+
+  .component-result-card__title {
+    font-size: 1.62rem;
+  }
+
+  .component-result-card__product {
+    grid-template-columns: minmax(210px, 0.88fr) minmax(240px, 1.12fr);
+    gap: 22px;
+  }
+
+  .component-result-card__image-stage {
+    min-height: 164px;
+  }
+
+  .component-result-card__cat-icon {
+    width: min(94%, 260px);
+    height: 152px;
+  }
+
+  .component-card-metric span {
+    font-size: 0.74rem;
+  }
+
+  .component-card-metric strong {
+    font-size: 1.18rem;
+  }
+
+  .component-card-secondary-metrics small {
+    font-size: 0.7rem;
+  }
+
+  .component-card-secondary-metrics strong,
+  .component-card-material {
+    font-size: 0.84rem;
+  }
+}
+
+/* Crafting Detail surface hierarchy */
+.craft-detail-stage.craft-detail-shell {
+  --panel-bg: #0a1119;
+  --panel-bg-deep: #070d14;
+  --panel-row-bg: #0d151e;
+  --panel-row-hover: #111c27;
+  --panel-border: rgba(115, 143, 171, 0.2);
+  --panel-border-soft: rgba(115, 143, 171, 0.14);
+  --accent-cyan: #7dd3fc;
+  --accent-blue: #38bdf8;
+  --text-primary: #e7edff;
+  --text-secondary: #b9c9dd;
+  --text-muted: #8fa1b6;
+
+  max-width: 2240px;
+  border-color: rgba(115, 143, 171, 0.16);
+  background: #050b11;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.craft-detail-hero,
+.craft-detail-crafting,
+.craft-detail-summary-section,
+.craft-detail-sources-section {
+  border-color: rgba(115, 143, 171, 0.2);
+  background: #0a1119;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.craft-detail-hero-card,
+.craft-detail-overview-card,
+.craft-detail-overview-strip > span,
+.craft-detail-material-row,
+.craft-detail-effect-row,
+.craft-detail-sources-section .craft-mission-source,
+.stat-group {
+  border-color: rgba(115, 143, 171, 0.14);
+  background: #0d151e;
+}
+
+.craft-detail-hero-card,
+.craft-detail-overview-card,
+.craft-detail-overview-strip > span,
+.craft-detail-sources-section .craft-mission-source,
+.stat-group {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.craft-detail-visual-panel {
+  border-color: rgba(115, 143, 171, 0.16);
+  background: #070d14;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.craft-detail-visual-panel::after {
+  background: linear-gradient(90deg, transparent, rgba(115, 143, 171, 0.24), transparent);
+}
+
+.craft-detail-back-link,
+.craft-detail-hero .craft-summary-bookmark-btn {
+  border-color: rgba(115, 143, 171, 0.18);
+  background: #070d14;
+  color: #b9c9dd;
+}
+
+.craft-detail-back-link:hover,
+.craft-detail-hero .craft-summary-bookmark-btn:hover {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: #0d1823;
+  color: #e7edff;
+}
+
+.craft-detail-stage .craft-detail-title {
+  color: #e7edff;
+  font-size: clamp(1.55rem, 1.3rem + 0.45vw, 1.95rem);
+  line-height: 1.08;
+}
+
+.craft-detail-title-block .craft-item-description {
+  color: #b9c9dd;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.craft-detail-meta {
+  color: #8fa1b6;
+  font-size: 0.78rem;
+}
+
+.craft-detail-stat-panel .craft-summary-section-label,
+.craft-detail-sources-section .craft-summary-section-label,
+.craft-detail-crafting-section .craft-summary-section-label,
+.craft-detail-summary-section > .craft-summary-section-label,
+.stat-group-title {
+  color: #b9c9dd;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+}
+
+.craft-detail-overview-card-label,
+.craft-detail-overview-strip span span,
+.craft-detail-material-table-head,
+.craft-detail-material-slot,
+.craft-detail-meta-list span span {
+  color: #8fa1b6;
+  font-size: 0.68rem;
+}
+
+.craft-detail-overview-card-value,
+.craft-detail-overview-strip strong {
+  font-size: 1.06rem;
+}
+
+.craft-detail-overview-card-sub,
+.craft-detail-meta-list strong {
+  font-size: 0.76rem;
+}
+
+.craft-detail-material-table,
+.craft-detail-effects-list {
+  border-color: rgba(115, 143, 171, 0.16);
+  background: #070d14;
+}
+
+.craft-detail-material-table-head {
+  border-bottom-color: rgba(115, 143, 171, 0.14);
+  background: #070d14;
+}
+
+.craft-detail-material-row,
+.craft-detail-effect-row {
+  border-bottom-color: rgba(115, 143, 171, 0.11);
+}
+
+.craft-detail-material-row:nth-child(even),
+.craft-detail-effect-row:nth-child(even) {
+  background: #0b131c;
+}
+
+.craft-detail-material-row:hover,
+.craft-detail-material-row:nth-child(even):hover,
+.craft-detail-sources-section .craft-mission-source:hover {
+  border-color: rgba(125, 211, 252, 0.28);
+  background: #111c27;
+}
+
+.craft-detail-material-id strong,
+.craft-detail-material-required,
+.craft-detail-quality-value,
+.craft-detail-effect-stat {
+  font-size: 0.88rem;
+}
+
+.craft-detail-effect-chip {
+  border-color: rgba(115, 143, 171, 0.16);
+  background: #070d14;
+}
+
+/* Flatten repeated stat rows and contain unusually long server-provided values. */
+.craft-stat-grid,
+.craft-detail-stat-list {
+  gap: 0 10px;
+}
+
+.craft-stat-row,
+.craft-detail-stat-row {
+  grid-template-columns: minmax(88px, 0.78fr) minmax(0, 1.22fr);
+  align-items: start;
+  min-height: 34px;
+  padding: 7px 2px;
+  border: 0;
+  border-bottom: 1px solid rgba(115, 143, 171, 0.11);
+  border-radius: 0;
+  background: transparent;
+}
+
+.craft-stat-label,
+.craft-detail-stat-row > span:first-child {
+  color: #8fa1b6;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.craft-stat-value,
+.craft-detail-stat-row strong {
+  width: 100%;
+  overflow: hidden;
+  color: #e7edff;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.craft-detail-stat-row .craft-detail-stat-value,
+.craft-detail-stat-modifier {
+  white-space: normal;
+}
+
+.stat-subcluster {
+  border-top-color: rgba(115, 143, 171, 0.12);
+}
+
+@media (min-width: 2200px) and (min-height: 1200px) {
+  :where(.craft-page, .craft-planner-shell).component-results-browser {
+    --cd-font-xs: 0.78rem;
+    --cd-font-sm: 0.9rem;
+    --cd-font-md: 1rem;
+    --cd-font-lg: 1.14rem;
+    --cd-font-xl: 1.28rem;
+    --cd-font-title: 1.48rem;
+    --cd-chip-h: 36px;
+    --cd-control-h: 42px;
+    --cd-row-gap: 8px;
+    --cd-card-pad: 14px;
+    --cd-grid-gap: 14px;
+    --cd-icon-sm: 60px;
+    --cd-stat-val: 1.06rem;
+
+    padding: 20px;
+  }
+
+  .component-browser-toolbar .component-browser-search input {
+    font-size: 1rem;
+  }
+
+  .component-browser-toolbar .scintel-filter-toggle,
+  .component-browser-toolbar .crb-bookmarks-btn,
+  .component-browser-toolbar .component-browser-count,
+  .component-browser-toolbar .crb-material-trigger--toolbar {
+    min-height: 42px;
+    font-size: 0.8rem;
+  }
+
+  .component-browser-toolbar .craft-frl-chip {
+    min-height: 34px;
+    font-size: 0.84rem;
+  }
+
+  .component-browser-page-readout,
+  .component-browser-page-count {
+    font-size: 0.88rem !important;
+  }
+
+  .craft-detail-stage.craft-detail-shell {
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .craft-detail-hero,
+  .craft-detail-crafting-section,
+  .craft-detail-summary-section,
+  .craft-detail-sources-section {
+    padding: 16px 18px;
+  }
+
+  .craft-detail-stage .craft-detail-title { font-size: 2rem; }
+  .craft-detail-title-block .craft-item-description { font-size: 0.96rem; }
+  .craft-detail-meta { font-size: 0.84rem; }
+  .craft-detail-stat-panel .craft-summary-section-label,
+  .craft-detail-sources-section .craft-summary-section-label,
+  .craft-detail-crafting-section .craft-summary-section-label,
+  .craft-detail-summary-section > .craft-summary-section-label,
+  .stat-group-title { font-size: 0.8rem; }
+  .craft-detail-overview-card-label,
+  .craft-detail-overview-strip span span,
+  .craft-detail-material-table-head,
+  .craft-detail-material-slot,
+  .craft-detail-meta-list span span { font-size: 0.74rem !important; }
+  .craft-detail-overview-card-value,
+  .craft-detail-overview-strip strong { font-size: 1.16rem; }
+  .craft-detail-material-row { min-height: 52px; }
+  .craft-detail-material-id strong,
+  .craft-detail-material-required,
+  .craft-detail-quality-value,
+  .craft-detail-effect-stat { font-size: 0.96rem; }
+  .craft-stat-label,
+  .craft-detail-stat-row > span:first-child { font-size: 0.84rem; }
+  .craft-stat-value,
+  .craft-detail-stat-row strong { font-size: 0.98rem; }
+}
+
+/* Crafting Detail header and disclosure refinement. */
+.craft-detail-stage.craft-detail-shell {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.craft-detail-back-link,
+.craft-detail-back-link:hover {
+  min-height: 26px;
+  padding: 3px 6px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.craft-detail-back-link {
+  gap: 6px;
+  color: #8fa1b6;
+  letter-spacing: 0.11em;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.035), 0 -1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.craft-detail-back-link::before {
+  content: "‹";
+  color: rgba(125, 211, 252, 0.72);
+  font-size: 1rem;
+  line-height: 0;
+}
+
+.craft-detail-back-link:hover {
+  color: #cfefff;
+}
+
+.craft-detail-hero {
+  grid-template-columns: 68px minmax(0, 1fr) minmax(330px, auto);
+  align-items: center;
+  gap: 16px;
+}
+
+.craft-detail-hero-card {
+  display: block;
+  width: 68px;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.craft-detail-hero-icon {
+  width: 68px;
+  height: 68px;
+  border: 0;
+  background: transparent;
+}
+
+.craft-detail-description {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  max-width: 68ch;
+}
+
+.craft-detail-title-block .craft-item-description {
+  max-width: 68ch;
+  margin: 2px 0 0;
+  white-space: pre-line;
+}
+
+.craft-detail-title-block .craft-item-description.is-clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
+.craft-detail-description-toggle,
+.craft-detail-source-toggle {
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent-cyan);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  cursor: pointer;
+}
+
+.craft-detail-description-toggle:hover,
+.craft-detail-source-toggle:hover {
+  color: #cfefff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.craft-detail-description-toggle:focus-visible,
+.craft-detail-source-toggle:focus-visible,
+.craft-detail-back-link:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.88);
+  outline-offset: 2px;
+}
+
+.craft-detail-hero-right {
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+  min-width: 0;
+}
+
+.craft-detail-header-facts {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  justify-content: end;
+  gap: 22px;
+}
+
+.craft-detail-header-facts > span {
+  display: grid;
+  gap: 3px;
+  min-width: 112px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(115, 143, 171, 0.18);
+}
+
+.craft-detail-header-facts > span > span {
+  color: #8fa1b6;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.craft-detail-header-facts strong {
+  color: #e7edff;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.craft-detail-header-facts small {
+  color: #8fa1b6;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.craft-detail-actions {
+  min-width: 0;
+}
+
+.craft-detail-summary-section {
+  padding-top: 12px;
+}
+
+.craft-detail-source-toggle {
+  margin-top: 8px;
+}
+
+.craft-detail-stage .craft-detail-effect-chip--performance {
+  border-color: rgba(125, 211, 252, 0.22);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.craft-detail-stage .craft-detail-effect-chip--performance strong.craft-ok,
+.craft-detail-stage .craft-detail-stat-modifier.craft-ok,
+.craft-detail-stage .craft-detail-stat-value.craft-ok,
+.craft-detail-stage .craft-stat-modifier:not(.craft-shortage),
+.craft-detail-stage .stat-modifier:not(.craft-shortage) {
+  color: var(--accent-cyan);
+  text-shadow: none;
+}
+
+.craft-detail-stage .craft-detail-quality-fill {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 7px rgba(125, 211, 252, 0.28);
+}
+
+.craft-detail-stage .craft-detail-band-marker.is-before-active .craft-detail-band-dot {
+  background: rgba(125, 211, 252, 0.5);
+}
+
+.craft-detail-stage .craft-detail-band-marker.is-active .craft-detail-band-dot,
+.craft-detail-stage .craft-detail-band-marker.is-active .craft-quality-marker-line {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 9px rgba(125, 211, 252, 0.36);
+}
+
+.craft-detail-stage .craft-detail-band-marker.is-active .craft-quality-marker-value {
+  color: var(--accent-cyan);
+}
+
+.craft-detail-stage .craft-detail-quality-input:focus-visible + .craft-detail-quality-rail {
+  box-shadow:
+    0 0 0 2px rgba(125, 211, 252, 0.42),
+    inset 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 1180px) {
+  .craft-detail-hero {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .craft-detail-hero-card,
+  .craft-detail-hero-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .craft-detail-hero-right {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    justify-items: stretch;
+  }
+
+  .craft-detail-header-facts {
+    justify-content: start;
+  }
+}
+
+/* Component Statistics: flat hierarchy within the parent card. */
+.craft-detail-stat-panel .weapon-performance-groups {
+  gap: 0;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group {
+  gap: 8px;
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid rgba(115, 143, 171, 0.14);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group:last-child {
+  padding-bottom: 0;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group-title {
+  color: #dfe9f7;
+  font-size: clamp(0.82rem, 0.77rem + 0.12vw, 0.94rem);
+  font-weight: 760;
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group-grid {
+  column-gap: 18px;
+  row-gap: 0;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-row {
+  min-height: 36px;
+  padding: 7px 2px;
+  border: 0;
+  border-bottom: 1px solid rgba(115, 143, 171, 0.1);
+  border-radius: 0;
+  background: transparent;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .stat-group-grid > .stat-row:nth-last-child(-n + 2) {
+  border-bottom-color: transparent;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .craft-stat-label {
+  color: #9cacc0;
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .craft-stat-value {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  line-height: 1.12;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-value {
+  color: #e7edff;
+}
+
+.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-modifier,
+.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-modifier.craft-ok {
+  display: block;
+  color: var(--accent-cyan);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: none;
 }
 
 

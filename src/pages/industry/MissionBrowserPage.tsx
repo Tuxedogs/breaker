@@ -2019,7 +2019,7 @@ export default function MissionBrowserPage() {
 
 
         <div className="mb-filter-toolbar">
-          <div className="mb-filter-shell scintel-filter-shell">
+          <div className="mb-filter-shell scintel-filter-shell ops-primary-card">
             <div className="scintel-filter-header crb-row--search mb-filter-header">
               <div className="scintel-filter-search">
                 <label className="component-browser-search mb-browser-search">
@@ -2086,7 +2086,7 @@ export default function MissionBrowserPage() {
             {activeView === "full" && pagedFullCategories.map((category) => {
               const categoryConcepts = category.conceptKeys.map((conceptKey) => conceptsByKey.get(conceptKey)).filter((concept): concept is MissionConceptView => Boolean(concept));
               return (
-                <section className="mb-browse-group mission-category-block" key={category.categoryKey}>
+                <section className="mb-browse-group mission-category-block ops-primary-card" key={category.categoryKey}>
                   <header className="mb-group-header mission-category-block__header">
                     <div>
                       <span>Category</span>
@@ -2107,7 +2107,7 @@ export default function MissionBrowserPage() {
             {activeView === "faction" && pagedFactionViews.map((faction) => {
               const factionConceptKeys = new Set(faction.categories.flatMap((category) => category.conceptKeys));
               return (
-                <section className="mb-browse-group mission-faction-block" key={faction.factionKey}>
+                <section className="mb-browse-group mission-faction-block ops-primary-card" key={faction.factionKey}>
                   <header className="mb-group-header mission-faction-block__header">
                     <div>
                       <span>Faction</span>
@@ -2140,7 +2140,7 @@ export default function MissionBrowserPage() {
               const variantCount = group.reputationScopes.reduce((sum, scope) => sum + (scope.conceptKeys ?? []).reduce((scopeSum, conceptKey) => scopeSum + (conceptsByKey.get(conceptKey)?.variantCount ?? 0), 0), 0);
               const pathNames = group.reputationScopes.map((scope) => shortRepScope(scope.displayName));
               return (
-              <section className="mb-browse-group mission-faction-block" key={group.factionKey}>
+              <section className="mb-browse-group mission-faction-block ops-primary-card" key={group.factionKey}>
                 <header className="mb-group-header mission-faction-block__header">
                   <div>
                     <span>Faction</span>
@@ -2209,7 +2209,7 @@ export default function MissionBrowserPage() {
         >
           <div
             ref={modalShellRef}
-            className="mission-dossier-modal-shell"
+            className="mission-dossier-modal-shell ops-primary-card"
             role="dialog"
             aria-modal="true"
             aria-label={`${selectedConcept.displayName} mission dossier`}

@@ -20,9 +20,9 @@ import {
   getShipWeaponBadgeClassName,
 } from "../utils/shipWeaponCardDisplay";
 
-function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
+function MetricRow({ metric, primary = false }: { metric: ComponentCardSchema["meta"][number]; primary?: boolean }) {
   return (
-    <span className="component-card-metric">
+    <span className={`component-card-metric${primary ? " component-card-metric--primary" : ""}`}>
       <span>{metric.label}</span>
       <strong>{metric.value}</strong>
     </span>
@@ -143,6 +143,17 @@ export default function ComponentResultCard({
     return buildBrowseStatPreviewFromFitting(fittingDetail);
   }, [isFpsItem, fittingDetail]);
 
+  const coreMetrics = (visibleStats.length > 0 ? visibleStats : meta).slice(0, 3);
+  const coreMetricKeys = new Set(coreMetrics.map((metric) => `${metric.label}:${metric.value}`));
+  const secondaryMetrics = [
+    ...(visibleStats.length > 0 ? visibleStats.slice(3) : meta.slice(3)),
+    ...(visibleStats.length > 0 ? meta : []),
+  ].filter((metric, index, metrics) => {
+    const key = `${metric.label}:${metric.value}`;
+    return !coreMetricKeys.has(key)
+      && metrics.findIndex((candidate) => `${candidate.label}:${candidate.value}` === key) === index;
+  }).slice(0, 5);
+
   const showStatUnavailable = useMemo(() => {
     if (!record || fittingLoading) return false;
     if (isFpsItem) return true;
@@ -169,7 +180,7 @@ export default function ComponentResultCard({
   const location = useLocation();
 
   return (
-    <article className={`component-result-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
+    <article className={`component-result-card ops-primary-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
       <Link
         className="component-result-card__hit"
         to={{
@@ -178,9 +189,16 @@ export default function ComponentResultCard({
         }}
         state={{ from: location.pathname + location.search }}
       >
-        {isShipWeapon ? (
-          <div className="component-result-card__title-row">
-            <h3 className="component-result-card__title">{weaponPresentation?.displayName ?? resolvedCardTitle}</h3>
+        <header className="component-result-card__identity">
+          <span className="component-result-card__eyebrow">
+            <span className="component-result-card__kind">{schema.kindLabel}</span>
+            <span className="component-result-card__category">{schema.categoryLabel ?? schema.typeLabel}</span>
+          </span>
+          <h3 className="component-result-card__title">{weaponPresentation?.displayName ?? resolvedCardTitle}</h3>
+        </header>
+
+        <div className="component-result-card__product">
+          <div className="component-result-card__image-stage">
             {iconUrl ? (
               <img
                 src={iconUrl}
@@ -192,50 +210,30 @@ export default function ComponentResultCard({
               <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
             )}
           </div>
-        ) : (
-          <>
-            <span className="component-result-card__topline">
-              <span className="component-result-card__kind">{schema.typeLabel}</span>
-              {iconUrl ? (
-                <img
-                  src={iconUrl}
-                  alt=""
-                  aria-hidden="true"
-                  className="component-result-card__cat-icon"
+
+          {coreMetrics.length > 0 ? (
+            <div className="component-card-metrics component-card-metrics--core">
+              {coreMetrics.map((metric) => (
+                <MetricRow
+                  key={`${metric.label}:${metric.value}`}
+                  metric={metric}
+                  primary={isShipWeapon && metric.label === "Alpha Damage"}
                 />
-              ) : (
-                <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
-              )}
-            </span>
+              ))}
+            </div>
+          ) : null}
+        </div>
 
-            <h3 className="component-result-card__title">{resolvedCardTitle}</h3>
-          </>
-        )}
-
-        {record?.type !== "weaponGun" && (
-          <div className="component-result-card__subline">
-            <span>{schema.kindLabel}</span>
-            {record?.type && <span>{record.type}</span>}
-            {recipe?.component_type && <span>{recipe.component_type}</span>}
-            {schema.categoryLabel && schema.categoryLabel !== (record?.type ?? recipe?.component_type) && <span>{schema.categoryLabel}</span>}
-          </div>
-        )}
-
-        {meta.length > 0 && (
-          <div className="component-card-metrics component-card-metrics--meta">
-            {meta.slice(0, 5).map((metric) => (
-              <MetricRow key={`${metric.label}:${metric.value}`} metric={metric} />
+        {secondaryMetrics.length > 0 ? (
+          <div className="component-card-secondary-metrics" aria-label="Additional component information">
+            {secondaryMetrics.map((metric) => (
+              <span key={`${metric.label}:${metric.value}`}>
+                <small>{metric.label}</small>
+                <strong>{metric.value}</strong>
+              </span>
             ))}
           </div>
-        )}
-
-        {visibleStats.length > 0 && (
-          <div className="component-card-metrics">
-            {visibleStats.map((metric) => (
-              <MetricRow key={`${metric.label}:${metric.value}`} metric={metric} />
-            ))}
-          </div>
-        )}
+        ) : null}
 
         {showStatUnavailable && (
           <p className="component-card-stat-unavailable craft-muted" aria-label="Stat preview unavailable">

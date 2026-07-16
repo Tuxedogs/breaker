@@ -114,7 +114,7 @@ export default function FittingPage() {
     return () => controller.abort();
   }, [selectedShipKey]);
 
-  const baseRows = basePortRows.data ?? [];
+  const baseRows = useMemo(() => basePortRows.data ?? [], [basePortRows.data]);
   const { lookup: componentLookup } = useEquippedComponentLookup(baseRows);
 
   const enrichedPortRows = useMemo(() => {
