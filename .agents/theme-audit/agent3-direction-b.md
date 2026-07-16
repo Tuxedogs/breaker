@@ -70,7 +70,7 @@ Mining bridges the first and second dialects but also exposes the inconsistency 
 
 **Canvas and surfaces.** Carrier uses the shared `.logi-page` canvas (`background: var(--bg-app)`) and header, then a compact grid of `.clog-panel` charcoal gradients (`#181d21 → #101417`) with `rgba(255,255,255,.07)` borders and 6px radius. Nested room/capability/summary cards use translucent white fills around `.025–.03` and borders `.06–.08`. The silhouette, restrained radius, and warm panel gradient are premium and practical. Surface nesting is conceptually clear, but the luminance difference between panel and nested cards is slight enough that the faint borders carry too much load.
 
-**What should be preserved.** 
+**What should be preserved.**
 
 - The top-row carrier-controls + expanding cargo-rooms composition and bottom-row loadout + capability composition (`.clog-top-row`, `.clog-bottom-row`). It maps operational priority cleanly.
 - The amber identity used for panel titles, capacity, active toggles, focus, and decisive quick actions. It feels like a ship terminal and is more restrained than broad cyan/purple glow.

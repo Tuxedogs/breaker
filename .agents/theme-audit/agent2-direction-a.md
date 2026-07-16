@@ -126,4 +126,3 @@ Direction A can scale across tables, queues, mission cards, inventories and logi
 - No matched 1920×1080 and 2560×1440 screenshots were captured in this pass; exact line wrapping, scroll pressure and computed alpha compositing require visual/computed-style verification by the evidence/accessibility agents.
 - Fitting category-color semantics were inferred from selector names; the code does not establish a global legend, so those mappings should not be promoted without product confirmation.
 - Contrast judgments here flag risk from declared values; they are not substitutes for composited WCAG measurements.
-

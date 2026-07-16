@@ -1,6 +1,6 @@
 # Moonbreaker Theme Audit
 
-Investigation date: 2026-07-12  
+Investigation date: 2026-07-12
 Scope: Dashboard, Fitting Mockup, Mission Browser, Blueprint Tracker, Mining, Build Queue, and Carrier Logistics. This is a recommendation report only; no application code, behavior, data, routing, or responsive logic was changed.
 
 ## 1. Executive verdict
