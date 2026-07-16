@@ -5,6 +5,7 @@ const BUILD_QUEUE_URL = "/api/user/build-queue";
 
 export type UserBuildQueueItem = {
   id: string;
+  queueId?: string;
   recipeId: string;
   variantId: string | null;
   quantity: number;
@@ -14,6 +15,7 @@ export type UserBuildQueueItem = {
 
 export type BuildQueueItemRequest = {
   id?: string;
+  queueId?: string;
   recipeId: string;
   variantId?: string | null;
   quantity?: number;
@@ -103,7 +105,7 @@ export async function deleteUserBuildQueueItem(
   await parseUserJsonResponse<{ ok: true }>(response, { label: "delete build queue item", url });
 }
 
-export async function clearUserBuildQueue(accessToken: string): Promise<void> {
+export async function clearUserBuildQueue(accessToken: string, queueId?: string): Promise<void> {
   const url = apiUrl(BUILD_QUEUE_URL);
   const response = await fetch(url, {
     method: "DELETE",
@@ -111,7 +113,7 @@ export async function clearUserBuildQueue(accessToken: string): Promise<void> {
       ...authHeaders(accessToken),
       "content-type": "application/json",
     },
-    body: JSON.stringify({ clearAll: true }),
+    body: JSON.stringify({ clearAll: true, queueId }),
   });
   await parseUserJsonResponse<{ ok: true }>(response, { label: "clear build queue", url });
 }

@@ -164,8 +164,20 @@ export interface BuildQueueFinalProductQualitySnapshot {
   band?: number;
 }
 
+export type BuildQueueSourceType = "custom" | "fitting";
+
+export interface BuildQueue {
+  id: string;
+  name: string;
+  sourceType: BuildQueueSourceType;
+  sourceReference?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface BuildQueueItem {
   id: string;
+  queueId?: string;
   recipeId: string;
   blueprint_id?: string;
   itemId?: string;

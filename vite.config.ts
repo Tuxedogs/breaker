@@ -77,7 +77,8 @@ function isDynamicApiPath(pathname: string) {
     || pathname.startsWith("/api/missions/variant/")
     || pathname.startsWith("/api/missions/variants/")
     || pathname.startsWith("/api/user/inventory/stacks/")
-    || pathname.startsWith("/api/user/inventory/locations/");
+    || pathname.startsWith("/api/user/inventory/locations/")
+    || pathname.startsWith("/api/user/inventory/build-queues/");
 }
 
 const contentTypes: Record<string, string> = {

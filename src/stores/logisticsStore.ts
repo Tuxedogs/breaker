@@ -18,6 +18,9 @@ import {
   persistBuildQueueItem,
 } from "../lib/userBuildQueuePersistence";
 import {
+  persistOnlineActiveBuildQueue,
+  persistOnlineBuildQueue,
+  persistOnlineBuildQueueDelete,
   persistOnlineInventoryLocation,
   persistOnlineInventoryLocationDelete,
   persistOnlineInventoryStack,
@@ -34,6 +37,12 @@ import {
   remapInventoryEntryLocationIds,
 } from "../lib/logistics/inventoryLocationOptions";
 import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
+import {
+  createDefaultBuildQueue,
+  createLocalBuildQueueId,
+  normalizeBuildQueueName,
+  normalizeBuildQueueState,
+} from "../lib/logistics/buildQueues";
 import { getInventoryMutationBlockReason } from "../lib/logistics/inventoryFreshness";
 import {
   hasInventoryImportSyncPayload,
@@ -54,7 +63,9 @@ import {
   syncOnlinePersistenceState,
 } from "../lib/userOnlinePersistence";
 import type {
+  BuildQueue,
   BuildQueueItem,
+  BuildQueueSourceType,
   InventoryEntry,
   InventoryLocation,
   ItemTemplate,
@@ -142,6 +153,8 @@ interface LogisticsStoreState {
   inventoryUi: InventoryUiState;
   inventorySync: InventorySyncState;
   buildQueue: BuildQueueItem[];
+  buildQueues: BuildQueue[];
+  activeBuildQueueId: string;
   setInventoryUi: (patch: Partial<InventoryUiState>) => void;
   setInventorySync: (patch: Partial<InventorySyncState>) => void;
   addLocation: (location: InventoryLocation) => void;
@@ -177,7 +190,9 @@ interface LogisticsStoreState {
     state: {
       locations: InventoryLocation[];
       inventoryEntries: InventoryEntry[];
+      buildQueues: BuildQueue[];
       buildQueue: BuildQueueItem[];
+      activeBuildQueueId?: string | null;
     },
     options?: {
       userId?: string;
@@ -189,6 +204,10 @@ interface LogisticsStoreState {
     userId: string | null,
     error: unknown,
   ) => void;
+  createBuildQueue: (name: string, options?: { sourceType?: BuildQueueSourceType; sourceReference?: string }) => string;
+  setActiveBuildQueue: (id: string) => void;
+  renameBuildQueue: (id: string, name: string) => void;
+  deleteBuildQueue: (id: string) => void;
   addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
@@ -219,12 +238,15 @@ const LOGISTICS_STORAGE_KEY = "sc_logistics_state_v1";
 const LEGACY_LOGISTICS_STORAGE_KEY = "moonbreaker-logistics-v1";
 
 function buildAuthenticatedLogisticsClearUpdate(
-  state: Pick<LogisticsStoreState, "inventoryUi" | "buildQueue">,
-): Pick<LogisticsStoreState, "inventoryEntries" | "locations" | "buildQueue" | "inventoryUi"> {
+  state: Pick<LogisticsStoreState, "inventoryUi"> & Partial<Pick<LogisticsStoreState, "buildQueue">>,
+): Pick<LogisticsStoreState, "inventoryEntries" | "locations" | "buildQueue" | "buildQueues" | "activeBuildQueueId" | "inventoryUi"> {
+  const defaultQueue = createDefaultBuildQueue();
   return {
     inventoryEntries: [],
     locations: mergeCanonicalInventoryLocations(undefined).locations,
-    buildQueue: initialBuildQueue.map((item) => ({ ...item, reservedAllocations: [] })),
+    buildQueue: initialBuildQueue.map((item) => ({ ...item, queueId: defaultQueue.id, reservedAllocations: [] })),
+    buildQueues: [defaultQueue],
+    activeBuildQueueId: defaultQueue.id,
     inventoryUi: {
       ...state.inventoryUi,
       selectedLocationId: null,
@@ -675,6 +697,8 @@ function fireAndForgetInventoryMutation(
 
 migrateLegacyLogisticsStorage();
 
+const initialQueueState = normalizeBuildQueueState({ items: initialBuildQueue });
+
 export const useLogisticsStore = create<LogisticsStoreState>()(
   persist(
     (set, get) => ({
@@ -686,7 +710,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       inventoryEntries: [],
       inventoryUi: defaultInventoryUi,
       inventorySync: defaultInventorySync,
-      buildQueue: initialBuildQueue,
+      buildQueue: initialQueueState.items,
+      buildQueues: initialQueueState.queues,
+      activeBuildQueueId: initialQueueState.activeQueueId,
       setInventoryUi: (patch) => {
         set((state) => ({ inventoryUi: { ...state.inventoryUi, ...patch } }));
       },
@@ -973,10 +999,17 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       replaceBuildQueueFromRemote: (items, registrations) => {
         set((state) => {
+          const normalizedQueueState = normalizeBuildQueueState({
+            queues: state.buildQueues,
+            items,
+            activeQueueId: state.activeBuildQueueId,
+          });
           const seedRecipeIds = new Set(state.recipeTemplates.map((recipe) => recipe.id));
           const extraRecipes = registrations.recipeTemplates.filter((recipe) => !seedRecipeIds.has(recipe.id));
           return {
-            buildQueue: items,
+            buildQueue: normalizedQueueState.items,
+            buildQueues: normalizedQueueState.queues,
+            activeBuildQueueId: normalizedQueueState.activeQueueId,
             recipeTemplates: [...state.recipeTemplates, ...extraRecipes],
             recipeInputTemplates: {
               ...state.recipeInputTemplates,
@@ -1008,6 +1041,16 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             userId,
             nowMs,
           );
+          const normalizedQueueState = normalizeBuildQueueState({
+            queues: onlineState.buildQueues,
+            items: onlineState.buildQueue.map((item) => ({
+              ...item,
+              quantity: Math.max(1, Math.trunc(item.quantity)),
+              allowLowerQuality: item.allowLowerQuality === true,
+              status: item.status ?? "queued",
+            })),
+            activeQueueId: onlineState.activeBuildQueueId,
+          });
           return {
             locations: mergedLocations.locations,
             inventoryEntries: repairInventoryEntryIds(
@@ -1016,12 +1059,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                 mergedLocations.locationIdRemap,
               ),
             ),
-            buildQueue: onlineState.buildQueue.map((item) => ({
-              ...item,
-              quantity: Math.max(1, Math.trunc(item.quantity)),
-              allowLowerQuality: item.allowLowerQuality === true,
-              status: item.status ?? "queued",
-            })),
+            buildQueue: normalizedQueueState.items,
+            buildQueues: normalizedQueueState.queues,
+            activeBuildQueueId: normalizedQueueState.activeQueueId,
             inventorySync: {
               ...state.inventorySync,
               ...successPatch,
@@ -1043,9 +1083,77 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           };
         });
       },
+      createBuildQueue: (name, options) => {
+        const normalizedName = normalizeBuildQueueName(name);
+        if (!normalizedName) return "";
+        const id = createLocalBuildQueueId();
+        const queue: BuildQueue = {
+          id,
+          name: normalizedName,
+          sourceType: options?.sourceType ?? "custom",
+          sourceReference: options?.sourceReference?.trim() || undefined,
+        };
+        set((state) => ({
+          buildQueues: [...state.buildQueues, queue],
+          activeBuildQueueId: id,
+        }));
+        persistOnlineBuildQueue(queue, id)?.catch((error: unknown) => logBuildQueuePersistenceFailure("create queue", error));
+        return id;
+      },
+      setActiveBuildQueue: (id) => {
+        set((state) => state.buildQueues.some((queue) => queue.id === id)
+          ? { activeBuildQueueId: id }
+          : {});
+        persistOnlineActiveBuildQueue(id)?.catch((error: unknown) => logBuildQueuePersistenceFailure("select queue", error));
+      },
+      renameBuildQueue: (id, name) => {
+        const normalizedName = normalizeBuildQueueName(name);
+        if (!normalizedName) return;
+        let changed: BuildQueue | undefined;
+        set((state) => {
+          const buildQueues = state.buildQueues.map((queue) => queue.id === id
+            ? { ...queue, name: normalizedName }
+            : queue);
+          changed = buildQueues.find((queue) => queue.id === id);
+          return changed ? { buildQueues } : {};
+        });
+        if (changed) persistOnlineBuildQueue(changed)?.catch((error: unknown) => logBuildQueuePersistenceFailure("rename queue", error));
+      },
+      deleteBuildQueue: (id) => {
+        let previousState: Pick<LogisticsStoreState, "buildQueues" | "buildQueue" | "activeBuildQueueId"> | null = null;
+        set((state) => {
+          if (state.buildQueues.length <= 1) return {};
+          const queueIndex = state.buildQueues.findIndex((queue) => queue.id === id);
+          if (queueIndex < 0) return {};
+          const buildQueues = state.buildQueues.filter((queue) => queue.id !== id);
+          const fallback = buildQueues[Math.max(0, queueIndex - 1)] ?? buildQueues[0];
+          const activeBuildQueueId = state.activeBuildQueueId === id ? fallback.id : state.activeBuildQueueId;
+          previousState = {
+            buildQueues: state.buildQueues,
+            buildQueue: state.buildQueue,
+            activeBuildQueueId: state.activeBuildQueueId,
+          };
+          return {
+            buildQueues,
+            buildQueue: state.buildQueue.filter((item) => item.queueId !== id),
+            activeBuildQueueId,
+          };
+        });
+        if (!previousState) return;
+        persistOnlineBuildQueueDelete(id)?.then(() => {
+          const fallbackId = get().activeBuildQueueId;
+          if (fallbackId !== previousState?.activeBuildQueueId) {
+            persistOnlineActiveBuildQueue(fallbackId)?.catch((error: unknown) => logBuildQueuePersistenceFailure("select fallback queue", error));
+          }
+        }).catch((error: unknown) => {
+          logBuildQueuePersistenceFailure("delete queue", error);
+          const snapshot = previousState;
+          if (snapshot) set(snapshot);
+        });
+      },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {
-          const existing = state.buildQueue.find((item) => item.recipeId === recipeId);
+          const existing = state.buildQueue.find((item) => item.queueId === state.activeBuildQueueId && item.recipeId === recipeId);
           if (existing) {
             const nextBuildQueue = state.buildQueue.map((item) =>
               item.id === existing.id
@@ -1060,9 +1168,12 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             if (changedItem) persistQueueSnapshot("add item", changedItem);
             return { buildQueue: nextBuildQueue };
           }
-          const nextPriority = state.buildQueue.reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
+          const nextPriority = state.buildQueue
+            .filter((item) => item.queueId === state.activeBuildQueueId)
+            .reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
           const newItem: BuildQueueItem = {
             id: `bq-craft-${recipeId}-${Date.now()}`,
+            queueId: state.activeBuildQueueId,
             recipeId,
             blueprint_id: snapshot?.blueprint_id,
             itemId: snapshot?.itemId,
@@ -1188,8 +1299,8 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       clearBuildQueue: () => {
         set((state) => {
-          const nextBuildQueue: BuildQueueItem[] = [];
-          const request = persistBuildQueueClear();
+          const nextBuildQueue = state.buildQueue.filter((item) => item.queueId !== state.activeBuildQueueId);
+          const request = persistBuildQueueClear(state.activeBuildQueueId);
           request?.catch((error: unknown) => {
             logBuildQueuePersistenceFailure("clear queue", error);
             set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
@@ -1302,7 +1413,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             ...defaultInventorySync,
             hasHydratedPersist: state.inventorySync.hasHydratedPersist,
           },
-          buildQueue: initialBuildQueue,
+          buildQueue: initialQueueState.items,
+          buildQueues: initialQueueState.queues,
+          activeBuildQueueId: initialQueueState.activeQueueId,
         }));
       },
     }),

@@ -110,11 +110,30 @@ export const inventoryImportRows = pgTable(
   }),
 );
 
+export const buildQueues = pgTable(
+  "build_queues",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull(),
+    name: text("name").notNull(),
+    sourceType: text("source_type").notNull().default("custom"),
+    sourceReference: text("source_reference"),
+    metadata: jsonb("metadata").notNull().default({}),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index("build_queues_user_id_idx").on(table.userId),
+    sourceReferenceIdx: index("build_queues_source_reference_idx").on(table.userId, table.sourceType, table.sourceReference),
+  }),
+);
+
 export const buildQueueItems = pgTable(
   "build_queue_items",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull(),
+    queueId: uuid("queue_id").notNull().references(() => buildQueues.id, { onDelete: "cascade" }),
     recipeId: text("recipe_id").notNull(),
     blueprintId: text("blueprint_id"),
     itemId: text("item_id"),
@@ -136,6 +155,7 @@ export const buildQueueItems = pgTable(
   },
   (table) => ({
     userIdIdx: index("build_queue_items_user_id_idx").on(table.userId),
+    queueIdIdx: index("build_queue_items_queue_id_idx").on(table.queueId),
     recipeIdIdx: index("build_queue_items_recipe_id_idx").on(table.recipeId),
   }),
 );

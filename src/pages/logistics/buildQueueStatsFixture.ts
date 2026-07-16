@@ -5,6 +5,7 @@ import {
   type RecipeInputTemplate,
 } from "../../data/logistics/seed";
 import type {
+  BuildQueue,
   BuildQueueItem,
   InventoryEntry,
   InventoryLocation,
@@ -164,6 +165,7 @@ const recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]> = {
 const buildQueue: BuildQueueItem[] = [
   {
     id: FIXTURE_ITEM_IDS.fr66,
+    queueId: "bq-fixture-queue-defense",
     recipeId: "recipe-fixture-fr66",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fr66,
     itemId: "fr66",
@@ -188,6 +190,7 @@ const buildQueue: BuildQueueItem[] = [
   },
   {
     id: FIXTURE_ITEM_IDS.ad5b,
+    queueId: "bq-fixture-queue-defense",
     recipeId: "recipe-fixture-ad5b",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.ad5b,
     itemId: "ad5b",
@@ -208,6 +211,7 @@ const buildQueue: BuildQueueItem[] = [
   },
   {
     id: FIXTURE_ITEM_IDS.fpsWeapon,
+    queueId: "bq-fixture-queue-ground",
     recipeId: "recipe-fixture-fps-weapon",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fpsWeapon,
     itemId: "p6-lr",
@@ -229,6 +233,7 @@ const buildQueue: BuildQueueItem[] = [
   },
   {
     id: FIXTURE_ITEM_IDS.fpsArmor,
+    queueId: "bq-fixture-queue-expedition",
     recipeId: "recipe-fixture-fps-armor",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fpsArmor,
     itemId: "adp-mk4-arms",
@@ -249,7 +254,9 @@ const buildQueue: BuildQueueItem[] = [
 ];
 
 export type BuildQueuePageFixture = {
+  buildQueues: BuildQueue[];
   buildQueue: BuildQueueItem[];
+  activeBuildQueueId: string;
   inventoryEntries: InventoryEntry[];
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
@@ -259,7 +266,13 @@ export type BuildQueuePageFixture = {
 };
 
 export const buildQueueStatsFixture: BuildQueuePageFixture = {
+  buildQueues: [
+    { id: "bq-fixture-queue-defense", name: "Pyro Defense Refit", sourceType: "custom" },
+    { id: "bq-fixture-queue-ground", name: "Ground Team Loadout", sourceType: "custom" },
+    { id: "bq-fixture-queue-expedition", name: "Expedition Spares", sourceType: "fitting", sourceReference: "fixture-fit-600i-expedition" },
+  ],
   buildQueue,
+  activeBuildQueueId: "bq-fixture-queue-defense",
   inventoryEntries,
   materials: fixtureMaterials,
   locations: inventoryLocations.filter((location) => location.id === fixtureLocationId),

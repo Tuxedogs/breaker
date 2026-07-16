@@ -58,7 +58,9 @@ function getUserPlanningPayload() {
   return {
     locations: state.locations.filter((location) => !isSeedLocation(location) || referencedLocationIds.has(location.id)),
     inventoryEntries,
+    buildQueues: state.buildQueues,
     buildQueue,
+    activeBuildQueueId: state.activeBuildQueueId,
   };
 }
 
@@ -67,6 +69,7 @@ function hasRemotePlanningState(remote: OnlinePersistenceState | null) {
     remote && (
       remote.locations.length > 0
       || remote.inventoryEntries.length > 0
+      || remote.buildQueues.length > 0
       || remote.buildQueue.length > 0
       || remote.sync?.migratedAt
     )
@@ -142,7 +145,9 @@ export default function OnlinePersistenceCoordinator() {
       remoteState: {
         locations: InventoryLocation[];
         inventoryEntries: InventoryEntry[];
+        buildQueues: OnlinePersistenceState["buildQueues"];
         buildQueue: BuildQueueItem[];
+        activeBuildQueueId?: string | null;
       },
       requestId: number,
     ) {
@@ -193,7 +198,9 @@ export default function OnlinePersistenceCoordinator() {
         applyHydratedState({
           locations: remote.locations,
           inventoryEntries: remote.inventoryEntries,
+          buildQueues: remote.buildQueues,
           buildQueue: remote.buildQueue,
+          activeBuildQueueId: remote.activeBuildQueueId,
         }, requestId);
         markSynced(remote.sync?.migratedAt);
         logInventorySyncDev("coordinator refresh success", {
@@ -278,7 +285,9 @@ export default function OnlinePersistenceCoordinator() {
         const remotePayload = {
           locations: remote.locations,
           inventoryEntries: remote.inventoryEntries,
+          buildQueues: remote.buildQueues,
           buildQueue: remote.buildQueue,
+          activeBuildQueueId: remote.activeBuildQueueId,
         };
         const shouldUploadLocal = !window.localStorage.getItem(userMigratedAtKey)
           && shouldAllowLocalToServerMigrationUpload(remotePayload, localPayload);
@@ -294,7 +303,9 @@ export default function OnlinePersistenceCoordinator() {
           applyHydratedState({
             locations: synced.locations,
             inventoryEntries: synced.inventoryEntries,
+            buildQueues: synced.buildQueues,
             buildQueue: synced.buildQueue,
+            activeBuildQueueId: synced.activeBuildQueueId,
           }, requestId);
           window.localStorage.setItem(userMigratedAtKey, synced.sync?.migratedAt ?? new Date().toISOString());
           markSynced(synced.sync?.migratedAt, synced.sync?.lastSyncedAt);

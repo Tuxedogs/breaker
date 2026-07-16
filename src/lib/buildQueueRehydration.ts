@@ -94,6 +94,7 @@ export function rehydrateBuildQueueItems(
 
     return [{
       id: `db-${row.id}`,
+      queueId: row.queueId,
       recipeId: row.recipeId,
       blueprint_id: recipe.blueprint_id,
       itemId: getRecipeItemId(recipe),
