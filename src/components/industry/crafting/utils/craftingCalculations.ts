@@ -19,6 +19,7 @@ export function aggregateMaterials(
     const materials = recipe?.materials ?? item.materials ?? [];
     if (materials.length === 0) continue;
     for (const mat of materials) {
+      if (mat.input_kind === "part") continue;
       const key = mat.cost_id || mat.material_name;
       const existing = totals.get(key);
       const add = mat.quantity * item.quantity;
@@ -51,6 +52,7 @@ export function computeMaterialDemand(recipes: ComponentRecipe[]): MaterialDeman
 
   for (const recipe of recipes) {
     for (const mat of recipe.materials) {
+      if (mat.input_kind === "part") continue;
       const key = mat.cost_id || mat.material_name;
       const entry = map.get(key);
       if (entry) {

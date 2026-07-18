@@ -2,18 +2,24 @@ import fr66Card from "../../../../server-data/crafting/component-cards/by-id/db3
 import ad5bCard from "../../../../server-data/crafting/component-cards/by-id/ba842720-ad32-4d53-8f56-992bacb1fc45.json";
 import fpsWeaponCard from "../../../../server-data/crafting/component-cards/by-id/bd636d35-43fd-4782-a223-40ce0a727f39.json";
 import fpsArmorCard from "../../../../server-data/crafting/component-cards/by-id/005d95db-96ca-45b7-9647-7e7537b8fac8.json";
+import hazardZoneWeaponCard from "../../../../server-data/crafting/component-cards/by-id/ad3568b3-9a28-441e-b8cd-af572cd52e3f.json";
+import secondWindArmorCard from "../../../../server-data/crafting/component-cards/by-id/5fa322e9-ddb3-4696-94fb-45725aca6aef.json";
+import secondWindWeaponCard from "../../../../server-data/crafting/component-cards/by-id/b488199e-f0fc-4e8b-89bd-d3a435d6dce1.json";
 import fr66Recipe from "../../../../server-data/crafting/recipes/by-blueprint/db3f4c97-8d40-4b36-b397-452dea1594fc.json";
 import ad5bRecipe from "../../../../server-data/crafting/recipes/by-blueprint/ba842720-ad32-4d53-8f56-992bacb1fc45.json";
 import fpsWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/bd636d35-43fd-4782-a223-40ce0a727f39.json";
 import fpsArmorRecipe from "../../../../server-data/crafting/recipes/by-blueprint/005d95db-96ca-45b7-9647-7e7537b8fac8.json";
+import hazardZoneWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/ad3568b3-9a28-441e-b8cd-af572cd52e3f.json";
+import secondWindArmorRecipe from "../../../../server-data/crafting/recipes/by-blueprint/5fa322e9-ddb3-4696-94fb-45725aca6aef.json";
+import secondWindWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/b488199e-f0fc-4e8b-89bd-d3a435d6dce1.json";
 import materialQualityQuantization from "../../../../server-data/crafting/reference/material-quality-quantization.json";
 import materialIdentityIndex from "../../../../server-data/crafting/reference/material-identity-index.json";
 import componentCardFacetsSource from "../../../../server-data/crafting/component-cards/facets.json";
 
 export const fixtureMetadata = {
   channel: "LIVE",
-  buildId: "4.8.184.64329-12122953",
-  fixtureDate: "2026-07-12",
+  buildId: "4.9.0-live.12232306",
+  fixtureDate: "2026-07-16",
   sourceEndpoints: ["/api/crafting/component-cards/:id", "/api/crafting/recipes/:id", "/api/v1/fitting/components/:entityClass"],
 };
 
@@ -25,21 +31,37 @@ export const blueprintSourceMissions = new Map<string, unknown[]>([
   }]],
 ]);
 
-export const componentCards = new Map([fr66Card, ad5bCard, fpsWeaponCard, fpsArmorCard].map((record) => [record.id, record]));
-export const componentCardRecords = [fr66Card, ad5bCard, fpsWeaponCard, fpsArmorCard];
+export const componentCards = new Map([
+  fr66Card,
+  ad5bCard,
+  fpsWeaponCard,
+  fpsArmorCard,
+  hazardZoneWeaponCard,
+  secondWindArmorCard,
+  secondWindWeaponCard,
+].map((record) => [record.id, record]));
+export const componentCardRecords = [
+  fr66Card,
+  ad5bCard,
+  fpsWeaponCard,
+  fpsArmorCard,
+  hazardZoneWeaponCard,
+  secondWindArmorCard,
+  secondWindWeaponCard,
+];
 export const componentCardRecordFiles = Object.fromEntries(
   componentCardRecords.map((record) => [record.id, `by-id/${record.id}.json`]),
 );
 
-const componentCardGeneratedAt = "2026-07-12T00:00:00.000Z";
-const componentCardSourceGeneratedAt = "2026-06-23T06:01:05.031Z";
+const componentCardGeneratedAt = "2026-07-16T00:00:00.000Z";
+const componentCardSourceGeneratedAt = componentCardGeneratedAt;
 
 export const componentCardIndexResponse = {
   schemaVersion: 1,
   generatedAt: componentCardGeneratedAt,
   sourceGeneratedAt: componentCardSourceGeneratedAt,
-  sourceRecordCount: { vehicle: 2, fps: 2, total: 4 },
-  shapedRecordCount: 4,
+  sourceRecordCount: { vehicle: 3, fps: 4, total: 7 },
+  shapedRecordCount: 7,
   missingIdCount: 0,
   duplicateIdCount: 0,
   skippedCount: 0,
@@ -49,12 +71,12 @@ export const componentCardIndexResponse = {
 
 export const componentCardFacetsResponse = {
   ...componentCardFacetsSource,
-  generatedAt: componentCardGeneratedAt,
+  generatedAt: componentCardSourceGeneratedAt,
 };
 
 export const componentCardBrowseResponse = {
   schemaVersion: 1,
-  generatedAt: componentCardGeneratedAt,
+  generatedAt: componentCardSourceGeneratedAt,
   recordCount: componentCardRecords.length,
   records: componentCardRecords,
 };
@@ -71,9 +93,17 @@ export const recipeShards = new Map<string, unknown>([
   ["ba842720-ad32-4d53-8f56-992bacb1fc45", ad5bRecipe],
   ["bd636d35-43fd-4782-a223-40ce0a727f39", fpsWeaponRecipe],
   ["005d95db-96ca-45b7-9647-7e7537b8fac8", fpsArmorRecipe],
+  ["ad3568b3-9a28-441e-b8cd-af572cd52e3f", hazardZoneWeaponRecipe],
+  ["5fa322e9-ddb3-4696-94fb-45725aca6aef", secondWindArmorRecipe],
+  ["b488199e-f0fc-4e8b-89bd-d3a435d6dce1", secondWindWeaponRecipe],
 ]);
-export const vehicleRecipeCatalog = [fr66Recipe.record, ad5bRecipe.record];
-export const fpsRecipeCatalog = [fpsWeaponRecipe.record, fpsArmorRecipe.record];
+export const vehicleRecipeCatalog = [fr66Recipe.record, ad5bRecipe.record, hazardZoneWeaponRecipe.record];
+export const fpsRecipeCatalog = [
+  fpsWeaponRecipe.record,
+  fpsArmorRecipe.record,
+  secondWindArmorRecipe.record,
+  secondWindWeaponRecipe.record,
+];
 export { materialIdentityIndex, materialQualityQuantization };
 
 export const fittingMeta = { apiVersion: "1", artifactSchemaVersion: 1, channel: "LIVE", buildId: fixtureMetadata.buildId, generatedAt: "2026-07-12T00:00:00.000Z" } as const;

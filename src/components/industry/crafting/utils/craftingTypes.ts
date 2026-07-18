@@ -3,6 +3,7 @@
 export interface ComponentMaterial {
   slot: string;
   cost_type: string;
+  input_kind?: "material" | "part";
   material_name: string;
   cost_id: string;
   quantity: number;

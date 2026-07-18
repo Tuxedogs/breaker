@@ -264,7 +264,7 @@ function readBrowseCardMetadata(record: ComponentCardIndexRecord): {
   };
 }
 
-/** Browse metadata only — no component-card stat payload. Stats come from fitting API. */
+/** Shared component-catalog projection used by the recipe browser. */
 export function buildComponentCardBrowseMetadataFromIndex(
   record: ComponentCardIndexRecord,
   options?: { displayName?: string; variantLabel?: string | null },
@@ -279,8 +279,8 @@ export function buildComponentCardBrowseMetadataFromIndex(
     kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: record.category === record.kind ? undefined : record.category,
     meta: getIndexMeta(record),
-    genericStats: [],
-    familyStats: [],
+    genericStats: getIndexGenericStats(record),
+    familyStats: getIndexFamilyStats(record),
     modifierLabels,
     materialsPreview,
   };
@@ -328,17 +328,6 @@ function getIndexMeta(record: ComponentCardIndexRecord): ComponentCardMetric[] {
   if (craftTime) meta.push({ label: "Craft", value: craftTime });
 
   return meta;
-}
-
-function getFallbackIndexStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
-  const stats: ComponentCardMetric[] = [];
-  pushMetric(stats, "Type", record.typeLabel);
-  if (record.size !== null) pushMetric(stats, "Size", `S${record.size}`);
-  pushMetric(stats, "Grade", record.grade);
-  pushMetric(stats, "Class", record.class ? titleCase(record.class) : null);
-  pushMetric(stats, "Craft", formatCraftTime(record.craftTimeSeconds));
-  if ((record.materials?.length ?? 0) > 0) pushMetric(stats, "Materials", String(record.materials?.length));
-  return stats;
 }
 
 function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
@@ -479,7 +468,17 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     return stats;
   }
 
-  return getFallbackIndexStats(record);
+  return stats;
+}
+
+export function buildComponentCatalogStatMetrics(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const seen = new Set<string>();
+  return [...getIndexFamilyStats(record), ...getIndexGenericStats(record)].filter((metric) => {
+    const key = `${metric.label}:${metric.value}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export function buildComponentCardSchema(

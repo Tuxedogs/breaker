@@ -13,13 +13,21 @@ import {
   getCraftedPropertiesFromApi,
   getQualityQuantizationFromApi,
 } from "./craftingReferenceApi";
+import {
+  classifyRecipeInput,
+  getRecipeInputDisplayName,
+} from "./crafting/recipeInputClassification";
 
 const BLUEPRINTS_URL = "/api/crafting/blueprints.json";
 const FPS_BLUEPRINTS_URL = "/api/crafting/fps/fps_blueprints.json";
 
 interface ApiMaterialRecord {
   slot?: string | null;
+  slotDisplayName?: string | null;
   costType?: string | null;
+  inputKind?: string | null;
+  materialId?: string | null;
+  materialKey?: string | null;
   materialName?: string | null;
   costId?: string | null;
   quantity?: string | number | null;
@@ -87,6 +95,9 @@ export interface FpsBlueprintMaterialRecord {
   slot?: string | null;
   slotDisplayName?: string | null;
   costType?: string | null;
+  inputKind?: string | null;
+  materialId?: string | null;
+  materialKey?: string | null;
   materialName?: string | null;
   costId?: string | null;
   quantity?: string | number | null;
@@ -278,11 +289,13 @@ function normalizeMaterial(
   item: BlueprintRecord
 ): ComponentMaterial {
   const slot = toStringOrFallback(material.slot, "");
+  const inputKind = classifyRecipeInput(material);
 
   return {
     slot,
     cost_type: toStringOrFallback(material.costType, "resource"),
-    material_name: toStringOrFallback(material.materialName),
+    input_kind: inputKind,
+    material_name: getRecipeInputDisplayName(material) || toStringOrFallback(material.materialName),
     cost_id: toStringOrFallback(material.costId, ""),
     quantity: toNumber(material.quantity),
     qualityModifiers: (item.qualityModifiers ?? []).filter((modifier) => {
@@ -367,6 +380,7 @@ function normalizeFpsMaterial(
   recipeModifiers: ApiQualityModifierRecord[]
 ): ComponentMaterial {
   const slot = toStringOrFallback(material.slot ?? material.slotDisplayName, "");
+  const inputKind = classifyRecipeInput(material);
   const materialModifiers = fpsMaterialModifiersToQualityModifiers(material);
   const modifiers = materialModifiers.length > 0
     ? materialModifiers
@@ -375,7 +389,8 @@ function normalizeFpsMaterial(
   return {
     slot,
     cost_type: toStringOrFallback(material.costType, "resource"),
-    material_name: toStringOrFallback(material.materialName),
+    input_kind: inputKind,
+    material_name: getRecipeInputDisplayName(material) || toStringOrFallback(material.materialName),
     cost_id: toStringOrFallback(material.costId, ""),
     quantity: toNumber(material.quantity),
     qualityModifiers: modifiers.map((modifier) => normalizeQualityModifier(modifier, item)),

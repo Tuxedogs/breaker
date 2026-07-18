@@ -30,6 +30,8 @@ export type ComponentCardIndexShieldStats = {
   coolantUsageMax: number | null;
 };
 
+export type ComponentCardIndexFamilyStats = Record<string, unknown>;
+
 export type ComponentCardIndexMaterial = {
   slot: string | null;
   name: string;
@@ -106,16 +108,18 @@ export type ComponentCardIndexRecord = {
       irSignature: number | null;
       distortionMaximum: number | null;
     };
-    cooler: { coolantGeneration: number | null; powerDraw: number | null } | null;
-    powerPlant: null;
-    quantumDrive: null;
+    cooler: ComponentCardIndexFamilyStats | null;
+    powerPlant: ComponentCardIndexFamilyStats | null;
+    quantumDrive: ComponentCardIndexFamilyStats | null;
     shield: ComponentCardIndexShieldStats | null;
-    shipWeapon: null;
-    radar: null;
-    tractorBeam: null;
-    fpsWeapon: { weaponClass: string | null; family: string | null; variantName: string | null; variantCount: number } | null;
-    fpsArmor: { armorSlot: string | null; armorWeight: string | null; family: string | null; variantName: string | null; variantCount: number } | null;
-    fpsAmmo: { ammoClass: string | null; family: string | null; variantName: string | null; variantCount: number } | null;
+    shipWeapon: ComponentCardIndexFamilyStats | null;
+    radar: ComponentCardIndexFamilyStats | null;
+    tractorBeam: ComponentCardIndexFamilyStats | null;
+    miningLaser?: ComponentCardIndexFamilyStats | null;
+    weaponMining?: ComponentCardIndexFamilyStats | null;
+    fpsWeapon: ComponentCardIndexFamilyStats | null;
+    fpsArmor: ComponentCardIndexFamilyStats | null;
+    fpsAmmo: ComponentCardIndexFamilyStats | null;
   };
   source: {
     files: string[];
