@@ -1,4 +1,5 @@
 import type { ComponentCardIndexRecord } from "./componentCardIndex";
+import { resolveComponentImageUrl } from "./componentImageResolver";
 import { resolveFittingComponentIcon } from "./fitting/resolveFittingComponentIcon";
 
 const VEHICLE_TYPE_TO_COMPONENT_TYPE: Record<string, string> = {
@@ -108,6 +109,12 @@ export function getComponentCategoryIcon(record: ComponentCardIndexRecord): stri
 }
 
 export function getComponentCategoryIconUrl(record: ComponentCardIndexRecord): string | null {
+  const componentImageUrl = resolveComponentImageUrl({
+    entityClass: record.entityClass,
+    componentId: record.id,
+  });
+  if (componentImageUrl) return componentImageUrl;
+
   if (record.kind === "vehicle") {
     const componentType = VEHICLE_TYPE_TO_COMPONENT_TYPE[record.type];
     if (componentType) {

@@ -1,4 +1,5 @@
 import type { BlueprintSourceSnapshot, BuildQueueItem, RecipeTemplate } from "../../types/logistics";
+import { resolveComponentImageUrl } from "../componentImageResolver";
 import { type FittingIconMode } from "./fittingIconMode";
 import { normalizeComponentSize } from "./fittingIconIdentity";
 import {
@@ -7,13 +8,14 @@ import {
   type FittingIconResolvedMode,
 } from "./resolveFittingComponentIcon";
 
-export type CraftedItemIconType = "manifest" | "category" | "fps_weapon" | "none";
+export type CraftedItemIconType = "component_image" | "manifest" | "category" | "fps_weapon" | "none";
 
 export type ResolveCraftedItemIconInput = {
   itemName?: string | null;
   recipeName?: string | null;
   category?: string | null;
   itemId?: string | null;
+  blueprintId?: string | null;
   blueprintSources?: BlueprintSourceSnapshot[];
   size?: unknown;
   preferredMode?: FittingIconMode;
@@ -87,6 +89,19 @@ export function inferCraftedItemComponentType(
 }
 
 export function resolveCraftedItemIcon(input: ResolveCraftedItemIconInput): ResolveCraftedItemIconResult {
+  const componentImageUrl = resolveComponentImageUrl({
+    blueprintId: input.blueprintId,
+    canonicalKey: input.itemId,
+  });
+  if (componentImageUrl) {
+    return {
+      src: componentImageUrl,
+      resolvedMode: "accent",
+      iconType: "component_image",
+      confidence: "exact",
+    };
+  }
+
   const componentName = (input.itemName ?? input.recipeName ?? "").trim();
   if (!componentName) {
     return {
@@ -166,6 +181,7 @@ export function resolveCraftedItemIconFromQueueItem(
     recipeName: recipe?.name,
     category: recipe?.category,
     itemId: item.itemId,
+    blueprintId: item.blueprint_id,
     blueprintSources: item.blueprintSources,
     preferredMode,
   });
