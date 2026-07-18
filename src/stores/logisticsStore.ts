@@ -11,6 +11,12 @@ import {
   type RecipeInputTemplate,
 } from "../data/logistics/seed";
 import { normalizeRecipeInputTemplate } from "../lib/logistics/materialResolver";
+import {
+  createBuildQueueCompletionSnapshot,
+  createBuildQueueEntryId,
+  moveActiveQueueEntry,
+  reorderActiveQueueEntries,
+} from "../lib/logistics/buildQueueEntries";
 import { rarityFromBandIndex } from "../components/industry/crafting/utils/qualityBands";
 import {
   persistBuildQueueClear,
@@ -36,7 +42,7 @@ import {
   mergeCanonicalInventoryLocations,
   remapInventoryEntryLocationIds,
 } from "../lib/logistics/inventoryLocationOptions";
-import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
+import { getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
 import {
   createDefaultBuildQueue,
   createLocalBuildQueueId,
@@ -211,6 +217,8 @@ interface LogisticsStoreState {
   addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
+  reorderBuildQueueItems: (queueId: string, orderedEntryIds: string[]) => void;
+  moveBuildQueueItem: (id: string, destinationQueueId: string, destinationIndex?: number) => void;
   toggleBuildQueueItemPriority: (id: string) => void;
   updateBuildQueueItemQuantity: (id: string, quantity: number) => void;
   updateBuildQueueItemAllowLowerQuality: (id: string, allowLowerQuality: boolean) => void;
@@ -357,6 +365,10 @@ function getInventoryLotKey(entry: InventoryEntry): string {
   ].join("|");
 }
 
+function isDiscreteInventoryBox(entry: InventoryEntry): boolean {
+  return entry.recordKind === "box";
+}
+
 export function getRarityForBand(qualityBand?: number): RarityInfo {
   return rarityCatalog[rarityFromBandIndex(qualityBand)];
 }
@@ -365,13 +377,20 @@ function normalizeRarity(rarity: RarityInfo | undefined, fallback: RarityInfo): 
   return isRarityTier(rarity?.tier) ? rarityCatalog[rarity.tier] : fallback;
 }
 
+function normalizeInventoryQuality(value: unknown): number | undefined {
+  if (value === "" || value === null || value === undefined) return undefined;
+  const parsed = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(parsed)) return undefined;
+  return Math.max(0, Math.min(1000, Math.trunc(parsed)));
+}
+
 function normalizeInventoryEntry(
   entry: InventoryEntry,
   materials: MaterialTemplate[],
   fallbackCreatedAt?: string,
 ): InventoryEntry {
   const material = getMaterialTemplate(entry.materialId, materials);
-  const quality = isNumber(entry.quality) ? clampMaterialQuality(entry.quality) : undefined;
+  const quality = isNumber(entry.quality) ? normalizeInventoryQuality(entry.quality) : undefined;
   const qualityBand = isNumber(entry.qualityBand) ? Math.trunc(entry.qualityBand) : undefined;
   const rarity = quality !== undefined
     ? getRarityForBand(qualityBand)
@@ -416,6 +435,7 @@ function getInventoryMergeKey(entry: InventoryEntry): string {
 
 function getInventoryStackKey(entry: InventoryEntry): string {
   return [
+    isDiscreteInventoryBox(entry) ? `box:${entry.id}` : "aggregate",
     getInventoryMergeKey(entry),
     entry.locationId ?? "",
     entry.container ?? "",
@@ -443,6 +463,10 @@ export function repairInventoryEntryIds(entries: InventoryEntry[]): InventoryEnt
     const stackKey = getInventoryStackKey(entry);
     const identicalIndex = indexByStackKey.get(stackKey);
     if (identicalIndex !== undefined) {
+      if (isDiscreteInventoryBox(entry)) {
+        repaired[identicalIndex] = entry;
+        continue;
+      }
       const existing = repaired[identicalIndex];
       const sourceHistory = Array.from(new Set([
         ...(existing.sourceHistory ?? (existing.source ? [existing.source] : [])),
@@ -481,6 +505,59 @@ export function repairInventoryEntryIds(entries: InventoryEntry[]): InventoryEnt
   }
 
   return repaired;
+}
+
+export function mergeInventoryEntries(
+  existingEntries: InventoryEntry[],
+  incomingEntries: InventoryEntry[],
+  materials: MaterialTemplate[],
+): InventoryEntry[] {
+  const normalizedIncoming = incomingEntries.map((entry) => normalizeInventoryEntry(entry, materials));
+  return repairInventoryEntryIds(normalizedIncoming.reduce((inventory, normalized) => {
+    const incomingWorkOrderIds = normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : []);
+    if (
+      incomingWorkOrderIds.length > 0 &&
+      inventory.some((current) => {
+        const currentWorkOrderIds = current.workOrderIds ?? (current.workOrderId ? [current.workOrderId] : []);
+        return current.materialId !== undefined &&
+          current.materialId === normalized.materialId &&
+          currentWorkOrderIds.some((id) => incomingWorkOrderIds.includes(id));
+      })
+    ) {
+      return inventory;
+    }
+    const existingIdx = inventory.findIndex((current) =>
+      !isDiscreteInventoryBox(current) &&
+      !isDiscreteInventoryBox(normalized) &&
+      getInventoryMergeKey(current) === getInventoryMergeKey(normalized) &&
+      (current.locationId ?? "") === (normalized.locationId ?? "") &&
+      (current.container ?? "") === (normalized.container ?? "") &&
+      (current.quality ?? "__none") === (normalized.quality ?? "__none") &&
+      getInventoryLotKey(current) === getInventoryLotKey(normalized)
+    );
+    if (existingIdx === -1) return [...inventory, normalized];
+
+    const existing = inventory[existingIdx];
+    const sourceHistory = Array.from(new Set([
+      ...(existing.sourceHistory ?? (existing.source ? [existing.source] : [])),
+      ...(normalized.sourceHistory ?? (normalized.source ? [normalized.source] : [])),
+    ]));
+    const workOrderIds = Array.from(new Set([
+      ...(existing.workOrderIds ?? (existing.workOrderId ? [existing.workOrderId] : [])),
+      ...(normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : [])),
+    ]));
+    const merged = normalizeInventoryEntry({
+      ...existing,
+      quantity: existing.quantity + normalized.quantity,
+      source: normalized.source ?? existing.source,
+      sourceHistory: sourceHistory.length ? sourceHistory : undefined,
+      workOrderId: normalized.workOrderId ?? existing.workOrderId,
+      workOrderIds: workOrderIds.length ? workOrderIds : undefined,
+      updatedAt: new Date().toISOString(),
+    }, materials, existing.createdAt);
+
+    return inventory.map((current, idx) => idx === existingIdx ? merged : current);
+  }, existingEntries));
 }
 
 function getReservedQuantityForStack(
@@ -734,49 +811,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       addInventoryEntries: (entries) => {
         set((state) => {
           const normalizedIncoming = entries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates));
-          const inventoryEntries = repairInventoryEntryIds(normalizedIncoming.reduce((inventory, normalized) => {
-            const incomingWorkOrderIds = normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : []);
-            if (
-              incomingWorkOrderIds.length > 0 &&
-              inventory.some((current) => {
-                const currentWorkOrderIds = current.workOrderIds ?? (current.workOrderId ? [current.workOrderId] : []);
-                return current.materialId !== undefined &&
-                  current.materialId === normalized.materialId &&
-                  currentWorkOrderIds.some((id) => incomingWorkOrderIds.includes(id));
-              })
-            ) {
-              return inventory;
-            }
-            const existingIdx = inventory.findIndex((current) =>
-              getInventoryMergeKey(current) === getInventoryMergeKey(normalized) &&
-              (current.locationId ?? "") === (normalized.locationId ?? "") &&
-              (current.container ?? "") === (normalized.container ?? "") &&
-              (current.quality ?? "__none") === (normalized.quality ?? "__none") &&
-              getInventoryLotKey(current) === getInventoryLotKey(normalized)
-            );
-            if (existingIdx === -1) return [...inventory, normalized];
-
-            const existing = inventory[existingIdx];
-            const sourceHistory = Array.from(new Set([
-              ...(existing.sourceHistory ?? (existing.source ? [existing.source] : [])),
-              ...(normalized.sourceHistory ?? (normalized.source ? [normalized.source] : [])),
-            ]));
-            const workOrderIds = Array.from(new Set([
-              ...(existing.workOrderIds ?? (existing.workOrderId ? [existing.workOrderId] : [])),
-              ...(normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : [])),
-            ]));
-            const merged = normalizeInventoryEntry({
-              ...existing,
-              quantity: existing.quantity + normalized.quantity,
-              source: normalized.source ?? existing.source,
-              sourceHistory: sourceHistory.length ? sourceHistory : undefined,
-              workOrderId: normalized.workOrderId ?? existing.workOrderId,
-              workOrderIds: workOrderIds.length ? workOrderIds : undefined,
-              updatedAt: new Date().toISOString(),
-            }, state.materialTemplates, existing.createdAt);
-
-            return inventory.map((current, idx) => idx === existingIdx ? merged : current);
-          }, state.inventoryEntries));
+          const inventoryEntries = mergeInventoryEntries(state.inventoryEntries, entries, state.materialTemplates);
           for (const incoming of normalizedIncoming) {
             const saved = inventoryEntries.find((entry) => getInventoryStackKey(entry) === getInventoryStackKey(incoming));
             if (saved) {
@@ -1153,26 +1188,12 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {
-          const existing = state.buildQueue.find((item) => item.queueId === state.activeBuildQueueId && item.recipeId === recipeId);
-          if (existing) {
-            const nextBuildQueue = state.buildQueue.map((item) =>
-              item.id === existing.id
-                ? {
-                    ...item,
-                    quantity: item.quantity + quantity,
-                    blueprintSources: item.blueprintSources?.length ? item.blueprintSources : snapshot?.blueprintSources,
-                  }
-                : item,
-            );
-            const changedItem = nextBuildQueue.find((item) => item.id === existing.id);
-            if (changedItem) persistQueueSnapshot("add item", changedItem);
-            return { buildQueue: nextBuildQueue };
-          }
           const nextPriority = state.buildQueue
             .filter((item) => item.queueId === state.activeBuildQueueId)
             .reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
           const newItem: BuildQueueItem = {
-            id: `bq-craft-${recipeId}-${Date.now()}`,
+            id: createBuildQueueEntryId(),
+            entryKind: "instance",
             queueId: state.activeBuildQueueId,
             recipeId,
             blueprint_id: snapshot?.blueprint_id,
@@ -1199,7 +1220,17 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       updateBuildQueueItemStatus: (id, status) => {
         set((state) => {
-          const buildQueue = state.buildQueue.map((item) => (item.id === id ? { ...item, status } : item));
+          const buildQueue = state.buildQueue.map((item) => {
+            if (item.id !== id) return item;
+            if (status === "complete") {
+              return {
+                ...item,
+                status,
+                completionSnapshot: item.completionSnapshot ?? createBuildQueueCompletionSnapshot(item),
+              };
+            }
+            return { ...item, status, completionSnapshot: undefined };
+          });
           const changed = buildQueue.find((item) => item.id === id);
           if (changed) persistQueueSnapshot("update status", changed);
           return { buildQueue };
@@ -1212,6 +1243,35 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           );
           const changed = buildQueue.find((item) => item.id === id);
           if (changed) persistQueueSnapshot("update priority", changed);
+          return { buildQueue };
+        });
+      },
+      reorderBuildQueueItems: (queueId, orderedEntryIds) => {
+        set((state) => {
+          const buildQueue = reorderActiveQueueEntries(state.buildQueue, queueId, orderedEntryIds);
+          buildQueue.forEach((item, index) => {
+            const previous = state.buildQueue[index];
+            if (previous && (previous.priority !== item.priority || previous.priorityActive !== item.priorityActive)) {
+              persistQueueSnapshot("reorder items", item);
+            }
+          });
+          return { buildQueue };
+        });
+      },
+      moveBuildQueueItem: (id, destinationQueueId, destinationIndex) => {
+        set((state) => {
+          const buildQueue = moveActiveQueueEntry(state.buildQueue, id, destinationQueueId, destinationIndex);
+          buildQueue.forEach((item, index) => {
+            const previous = state.buildQueue[index];
+            if (previous && (
+              previous.queueId !== item.queueId ||
+              previous.status !== item.status ||
+              previous.priority !== item.priority ||
+              previous.priorityActive !== item.priorityActive
+            )) {
+              persistQueueSnapshot("move item", item);
+            }
+          });
           return { buildQueue };
         });
       },
@@ -1474,14 +1534,15 @@ export function createInventoryEntryDraft(
 ): InventoryEntry {
   const material = getMaterialTemplate(input.materialId, get().materialTemplates);
   const timestamp = new Date().toISOString();
-  const quality = clampMaterialQuality(input.quality);
+  const quality = normalizeInventoryQuality(input.quality);
   const qualityBand = input.qualityBand === undefined ? undefined : Math.trunc(input.qualityBand);
   const rarity = quality !== undefined ? getRarityForBand(qualityBand) : rarityCatalog.common;
   return normalizeInventoryEntry({
     id: input.id,
+    recordKind: input.recordKind,
     materialId: input.materialId,
     materialName: material?.name ?? input.materialName,
-    materialType: material?.materialType ?? input.materialType,
+    materialType: input.materialType ?? material?.materialType,
     catalogItemId: input.catalogItemId ?? input.materialId,
     catalogSource: input.catalogSource,
     itemName: input.itemName,

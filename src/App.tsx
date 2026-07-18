@@ -20,6 +20,7 @@ const InventoryFixturePage = lazy(() => import("./pages/logistics/InventoryFixtu
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 const BuildQueueFixturePage = lazy(() => import("./pages/logistics/BuildQueueFixturePage"));
+const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/InventoryAddModalFixturePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
 const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
@@ -170,10 +171,16 @@ export default function App() {
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />
         {import.meta.env.DEV ? (
-          <Route
-            path="logistics/build-queue/__fixture/stats"
-            element={<Suspense fallback={<RouteFallback />}><BuildQueueFixturePage /></Suspense>}
-          />
+          <>
+            <Route
+              path="logistics/build-queue/__fixture/stats"
+              element={<Suspense fallback={<RouteFallback />}><BuildQueueFixturePage /></Suspense>}
+            />
+            <Route
+              path="logistics/build-queue/__fixture/add-inventory"
+              element={<Suspense fallback={<RouteFallback />}><InventoryAddModalFixturePage /></Suspense>}
+            />
+          </>
         ) : null}
 
         {/* Combat tools */}

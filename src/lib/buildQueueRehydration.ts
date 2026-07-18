@@ -93,7 +93,8 @@ export function rehydrateBuildQueueItems(
     recipeInputTemplates[row.recipeId] = inputs;
 
     return [{
-      id: `db-${row.id}`,
+      id: row.id,
+      entryKind: "instance",
       queueId: row.queueId,
       recipeId: row.recipeId,
       blueprint_id: recipe.blueprint_id,

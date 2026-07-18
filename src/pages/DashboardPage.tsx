@@ -29,6 +29,7 @@ import {
   getQualityBandsForMaterial,
   loadQualityQuantizationRecords,
 } from "../lib/logistics/qualityQuantization";
+import { getActiveBuildQueueEntries } from "../lib/logistics/buildQueueEntries";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from "../types/logistics";
 
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -574,7 +575,7 @@ export default function DashboardPage() {
     () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials: materialTemplates, recipeInputsByRecipeId: recipeInputTemplates }),
     [buildQueue, inventoryEntries, materialTemplates, recipeInputTemplates]
   );
-  const activeQueueItems = useMemo(() => buildQueue.filter((item) => item.status !== "complete"), [buildQueue]);
+  const activeQueueItems = useMemo(() => getActiveBuildQueueEntries(buildQueue), [buildQueue]);
   const completedQueueItems = useMemo(() => buildQueue.filter((item) => item.status === "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
   const locationNamesById = useMemo(() => new Map(locations.map((location) => [location.id, location.name])), [locations]);
@@ -716,12 +717,12 @@ export default function DashboardPage() {
     };
   }), [activeQueueItems, buildQueue, inventoryEntries, locationNamesById, queueRequirementsByMaterial, topQualityMaterials]);
   const displayedBuildQueueItems = useMemo(() => {
-    const visible = buildQueue.slice(0, 5);
+    const visible = activeQueueItems.slice(0, 5);
     if (!highlightedQueueItemId || visible.some((item) => item.id === highlightedQueueItemId)) return visible;
-    const highlighted = buildQueue.find((item) => item.id === highlightedQueueItemId);
+    const highlighted = activeQueueItems.find((item) => item.id === highlightedQueueItemId);
     if (!highlighted) return visible;
     return visible.length < 5 ? [...visible, highlighted] : [...visible.slice(0, 4), highlighted];
-  }, [buildQueue, highlightedQueueItemId]);
+  }, [activeQueueItems, highlightedQueueItemId]);
   const nextRunFixtureMode = import.meta.env.DEV
     ? new URLSearchParams(window.location.search).get("fixture")
     : null;
@@ -890,7 +891,7 @@ export default function DashboardPage() {
           <div className="dash-stat-card">
             <div className="dash-stat-main">
               <div className="dash-stat-label">Build Queue</div>
-              <div className="dash-stat-value">{buildQueue.length}</div>
+              <div className="dash-stat-value">{activeQueueItems.length}</div>
               <div className="dash-stat-sublabel">{activeQueueItems.length} active builds</div>
             </div>
             <StatIcon type="queue" />
@@ -1182,7 +1183,7 @@ export default function DashboardPage() {
             <div className="dash-card-header">
               <span className="dash-card-title">Build Queue</span>
               <div className="dash-card-meta">
-                <span>{buildQueue.length} Items Queued</span>
+                <span>{activeQueueItems.length} Items Queued</span>
                 <span className="dash-card-meta-sep">/</span>
                 <span>{activeQueueItems.length} Active</span>
               </div>
@@ -1199,7 +1200,7 @@ export default function DashboardPage() {
                       className={`dash-bq-item${highlighted ? " dash-bq-item--highlighted" : ""}`}
                       aria-label={highlighted ? `${getQueueItemName(item, recipesById)}, highlighted from Inventory Overview` : undefined}
                     >
-                      <BqThumb color={item.status === "complete" ? "#4ade80" : "#ff9d00"} />
+                      <BqThumb color="#ff9d00" />
                       <div className="dash-bq-info">
                         <div className="dash-bq-name">{getQueueItemName(item, recipesById)}</div>
                         <div className="dash-bq-bar-wrap" aria-hidden><div className="dash-bq-bar-fill" style={{ width: queued ? "0%" : `${progress}%` }} /></div>
@@ -1211,7 +1212,7 @@ export default function DashboardPage() {
                     </li>
                   );
                 })}
-                {buildQueue.length === 0 && <li className="dash-empty-state">No builds queued yet</li>}
+                {activeQueueItems.length === 0 && <li className="dash-empty-state">No builds queued yet</li>}
               </ul>
             </div>
             <div className="dash-card-footer">

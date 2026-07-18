@@ -71,7 +71,7 @@ export async function addUserBuildQueueItem(
 
 export async function updateUserBuildQueueItem(
   accessToken: string,
-  payload: Required<Pick<BuildQueueItemRequest, "recipeId" | "quantity">> & Pick<BuildQueueItemRequest, "variantId">,
+  payload: Required<Pick<BuildQueueItemRequest, "recipeId" | "quantity">> & Pick<BuildQueueItemRequest, "id" | "queueId" | "variantId">,
 ): Promise<UserBuildQueueItem | null> {
   const url = apiUrl(BUILD_QUEUE_URL);
   const response = await fetch(url, {

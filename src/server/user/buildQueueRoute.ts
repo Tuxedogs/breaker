@@ -5,6 +5,7 @@ import {
   deleteBuildQueueItem,
   listBuildQueueItems,
   normalizeQuantity,
+  normalizeQueueEntryId,
   normalizeRecipeId,
   normalizeVariantId,
   updateBuildQueueItem,
@@ -48,6 +49,7 @@ export async function handleUserBuildQueueRoute(
       if (!recipeId) return safeError(400, "recipeId is required.");
 
       const item = await addBuildQueueItem(userId, {
+        id: normalizeQueueEntryId(body.id),
         queueId: normalizeRecipeId(body.queueId),
         recipeId,
         variantId: normalizeVariantId(body.variantId),
@@ -62,6 +64,7 @@ export async function handleUserBuildQueueRoute(
       if (!recipeId) return safeError(400, "recipeId is required.");
 
       const item = await updateBuildQueueItem(userId, {
+        id: normalizeQueueEntryId(body.id),
         recipeId,
         queueId: normalizeRecipeId(body.queueId),
         variantId: normalizeVariantId(body.variantId),

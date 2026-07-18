@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
@@ -15,6 +15,11 @@ import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
 import type { BuildQueue, BuildQueueItem, RecipeTemplate } from "../../types/logistics";
 import { createLocalBuildQueueId, normalizeBuildQueueState } from "../../lib/logistics/buildQueues";
+import {
+  createBuildQueueCompletionSnapshot,
+  moveActiveQueueEntry,
+  reorderActiveQueueEntries,
+} from "../../lib/logistics/buildQueueEntries";
 import { getCraftingItems } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
@@ -73,15 +78,36 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [addCraftOpen, setAddCraftOpen] = useState(false);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
+  const [draggingEntryId, setDraggingEntryId] = useState<string | null>(null);
+  const [queueDropIndex, setQueueDropIndex] = useState<number | null>(null);
+  const [dragDestinationId, setDragDestinationId] = useState<string | "completed" | null>(null);
   const [typeLabelByBlueprintId, setTypeLabelByBlueprintId] = useState<Record<string, string>>({});
+  const fixturePersistenceKey = useMemo(() => {
+    if (!isFixture || typeof window === "undefined") return null;
+    const key = new URLSearchParams(window.location.search).get("persist");
+    return key ? `bq-fixture:${key}` : null;
+  }, [isFixture]);
   const initialFixtureQueues = useMemo(() => normalizeBuildQueueState({
     queues: fixture?.buildQueues,
     items: fixture?.buildQueue,
     activeQueueId: fixture?.activeBuildQueueId,
   }), [fixture]);
-  const [fixtureBuildQueue, setFixtureBuildQueue] = useState<BuildQueueItem[]>(() => initialFixtureQueues.items);
-  const [fixtureQueues, setFixtureQueues] = useState<BuildQueue[]>(() => initialFixtureQueues.queues);
-  const [fixtureActiveQueueId, setFixtureActiveQueueId] = useState(() => initialFixtureQueues.activeQueueId);
+  const initialFixtureState = useMemo(() => {
+    if (!fixturePersistenceKey) return initialFixtureQueues;
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(fixturePersistenceKey) ?? "null") as {
+        queues?: BuildQueue[];
+        items?: BuildQueueItem[];
+        activeQueueId?: string;
+      } | null;
+      return saved ? normalizeBuildQueueState(saved) : initialFixtureQueues;
+    } catch {
+      return initialFixtureQueues;
+    }
+  }, [fixturePersistenceKey, initialFixtureQueues]);
+  const [fixtureBuildQueue, setFixtureBuildQueue] = useState<BuildQueueItem[]>(() => initialFixtureState.items);
+  const [fixtureQueues, setFixtureQueues] = useState<BuildQueue[]>(() => initialFixtureState.queues);
+  const [fixtureActiveQueueId, setFixtureActiveQueueId] = useState(() => initialFixtureState.activeQueueId);
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
@@ -105,6 +131,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const storeUpdateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const storeUpdateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
   const storeUpdateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
+  const storeReorderBuildQueueItems = useLogisticsStore((s) => s.reorderBuildQueueItems);
+  const storeMoveBuildQueueItem = useLogisticsStore((s) => s.moveBuildQueueItem);
   const storeRemoveBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
   const storeToggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const storeUpdateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
@@ -123,6 +151,15 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const materials = fixture?.materials ?? storeMaterials;
   const recipes = fixture?.recipes ?? storeRecipes;
   const recipeInputsByRecipeId = fixture?.recipeInputsByRecipeId ?? storeRecipeInputsByRecipeId;
+
+  useEffect(() => {
+    if (!fixturePersistenceKey) return;
+    window.localStorage.setItem(fixturePersistenceKey, JSON.stringify({
+      queues: fixtureQueues,
+      items: fixtureBuildQueue,
+      activeQueueId: fixtureActiveQueueId,
+    }));
+  }, [fixtureActiveQueueId, fixtureBuildQueue, fixturePersistenceKey, fixtureQueues]);
 
   function flagFixtureReadOnly(...args: unknown[]) {
     void args;
@@ -148,7 +185,14 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       })
     : storeUpdateBuildQueueMaterialRequirement;
   const updateBuildQueueItemStatus = isFixture
-    ? flagFixtureReadOnly
+    ? ((id: string, status: NonNullable<BuildQueueItem["status"]>) => {
+        setFixtureBuildQueue((current) => current.map((item) => {
+          if (item.id !== id) return item;
+          return status === "complete"
+            ? { ...item, status, completionSnapshot: item.completionSnapshot ?? createBuildQueueCompletionSnapshot(item, "2026-07-17T12:00:00.000Z") }
+            : { ...item, status, completionSnapshot: undefined };
+        }));
+      })
     : storeUpdateBuildQueueItemStatus;
   const removeBuildQueueItem = isFixture
     ? flagFixtureReadOnly
@@ -168,6 +212,14 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
       })
     : storeAddInventoryEntries;
+  const reorderBuildQueueItems = isFixture
+    ? ((queueId: string, orderedIds: string[]) => setFixtureBuildQueue((current) => reorderActiveQueueEntries(current, queueId, orderedIds)))
+    : storeReorderBuildQueueItems;
+  const moveBuildQueueItem = isFixture
+    ? ((id: string, destinationQueueId: string, destinationIndex?: number) => (
+        setFixtureBuildQueue((current) => moveActiveQueueEntry(current, id, destinationQueueId, destinationIndex))
+      ))
+    : storeMoveBuildQueueItem;
 
   const queueLedger = getQueueLedgerModel({ buildQueue: activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId });
   const freshnessBlockReason = isFixture
@@ -266,11 +318,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   }
 
   function handleStatusChange(id: string, status: NonNullable<BuildQueueItem["status"]>) {
-    if (isFixture) {
-      setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
-      return;
-    }
-    if (status === "complete" && freshnessBlockReason) {
+    if (!isFixture && status === "complete" && freshnessBlockReason) {
       setInventoryGuardMessage(freshnessBlockReason);
       return;
     }
@@ -280,6 +328,71 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       setQueueTab("completed");
       setSelectedItemId(id);
     }
+  }
+
+  function clearDragState() {
+    setDraggingEntryId(null);
+    setQueueDropIndex(null);
+    setDragDestinationId(null);
+  }
+
+  function handleCraftDragStart(event: ReactDragEvent<HTMLButtonElement>, id: string) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/build-queue-entry", id);
+    setDraggingEntryId(id);
+    setQueueDropIndex(activeRows.findIndex((row) => row.item.id === id));
+  }
+
+  function handleQueueCardDragOver(event: ReactDragEvent<HTMLDivElement>, index: number) {
+    if (!draggingEntryId) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    const bounds = event.currentTarget.getBoundingClientRect();
+    setQueueDropIndex(index + (event.clientY >= bounds.top + bounds.height / 2 ? 1 : 0));
+    setDragDestinationId(activeBuildQueueId);
+  }
+
+  function dropIntoQueue(destinationQueueId: string, destinationIndex?: number) {
+    if (!draggingEntryId) return;
+    const moving = buildQueue.find((item) => item.id === draggingEntryId);
+    if (!moving) return clearDragState();
+    if (moving.queueId === destinationQueueId) {
+      const orderedIds = activeRows.map((row) => row.item.id).filter((id) => id !== draggingEntryId);
+      orderedIds.splice(Math.max(0, Math.min(destinationIndex ?? orderedIds.length, orderedIds.length)), 0, draggingEntryId);
+      reorderBuildQueueItems(destinationQueueId, orderedIds);
+    } else {
+      moveBuildQueueItem(draggingEntryId, destinationQueueId, destinationIndex);
+    }
+    setSelectedItemId(draggingEntryId);
+    clearDragState();
+  }
+
+  function handleQueueListDrop(event: ReactDragEvent<HTMLDivElement>) {
+    if (!draggingEntryId) return;
+    event.preventDefault();
+    event.stopPropagation();
+    dropIntoQueue(activeBuildQueueId, queueDropIndex ?? activeRows.length);
+  }
+
+  function handleDestinationDrop(event: ReactDragEvent<HTMLButtonElement>, destinationId: string | "completed") {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!draggingEntryId) return;
+    if (destinationId === "completed") {
+      handleStatusChange(draggingEntryId, "complete");
+      clearDragState();
+      return;
+    }
+    dropIntoQueue(destinationId);
+  }
+
+  function handleKeyboardReorder(id: string, direction: -1 | 1) {
+    const orderedIds = activeRows.map((row) => row.item.id);
+    const currentIndex = orderedIds.indexOf(id);
+    const destinationIndex = currentIndex + direction;
+    if (currentIndex < 0 || destinationIndex < 0 || destinationIndex >= orderedIds.length) return;
+    [orderedIds[currentIndex], orderedIds[destinationIndex]] = [orderedIds[destinationIndex], orderedIds[currentIndex]];
+    reorderBuildQueueItems(activeBuildQueueId, orderedIds);
   }
 
   function handleQuickAddInventory(entries: Parameters<typeof addInventoryEntries>[0]) {
@@ -405,6 +518,12 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               onPointerMove={handleMobileSelectorPointerMove}
               onPointerUp={handleMobileSelectorPointerEnd}
               onPointerCancel={handleMobileSelectorPointerEnd}
+              onDragOver={(event) => {
+                if (!draggingEntryId) return;
+                event.preventDefault();
+                if (event.target === event.currentTarget) setQueueDropIndex(activeRows.length);
+              }}
+              onDrop={handleQueueListDrop}
             >
             {visibleRows.length === 0 ? (
               <div className="bq-empty-state">
@@ -435,8 +554,13 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
                 );
               })
             ) : visibleRows.map((row, index) => (
+              <div
+                key={row.item.id}
+                className={`bq-craft-card-drop-slot${queueDropIndex === index && draggingEntryId !== row.item.id ? " is-drop-before" : ""}${queueDropIndex === index + 1 && draggingEntryId !== row.item.id ? " is-drop-after" : ""}`}
+                onDragOver={(event) => handleQueueCardDragOver(event, index)}
+                onDrop={handleQueueListDrop}
+              >
                 <BuildQueueCraftCard
-                  key={row.item.id}
                   index={index + 1}
                   item={row.item}
                   itemTypeLabel={getItemTypeLabel(row.item)}
@@ -446,7 +570,12 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
                   selected={row.item.id === resolvedSelectedItemId}
                   highlighted={row.item.id === allocationOwnerHighlightId}
                   onSelect={setSelectedItemId}
+                  dragging={draggingEntryId === row.item.id}
+                  onDragStart={handleCraftDragStart}
+                  onDragEnd={clearDragState}
+                  onKeyboardReorder={handleKeyboardReorder}
                 />
+              </div>
               ))}
             </div>
           </div>
@@ -456,6 +585,36 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               + Add Another Craft
             </Link>
           </footer>
+          {draggingEntryId ? (
+            <div className="bq-drag-destinations" aria-label="Move craft destinations">
+              <span className="bq-drag-destinations-title">Move craft to</span>
+              {buildQueues.filter((queue) => queue.sourceType === "custom").map((queue) => (
+                <button
+                  key={queue.id}
+                  type="button"
+                  className={`bq-drag-destination${dragDestinationId === queue.id ? " is-over" : ""}`}
+                  onDragEnter={() => setDragDestinationId(queue.id)}
+                  onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }}
+                  onDragLeave={() => setDragDestinationId((current) => current === queue.id ? null : current)}
+                  onDrop={(event) => handleDestinationDrop(event, queue.id)}
+                >
+                  <span>{queue.name}</span>
+                  {queue.id === activeBuildQueueId ? <small>Current queue</small> : <small>Move here</small>}
+                </button>
+              ))}
+              <button
+                type="button"
+                className={`bq-drag-destination bq-drag-destination--completed${dragDestinationId === "completed" ? " is-over" : ""}`}
+                onDragEnter={() => setDragDestinationId("completed")}
+                onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }}
+                onDragLeave={() => setDragDestinationId((current) => current === "completed" ? null : current)}
+                onDrop={(event) => handleDestinationDrop(event, "completed")}
+              >
+                <span>Completed</span>
+                <small>Archive craft</small>
+              </button>
+            </div>
+          ) : null}
         </aside>
 
         <section className="bq-center-col" aria-label="Selected craft workspace">

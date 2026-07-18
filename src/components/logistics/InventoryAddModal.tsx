@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createInventoryEntryDraft, useLogisticsStore } from '../../stores/logisticsStore';
 import { getInventoryUnitLabel, resolveInventoryUnitType } from '../../lib/logistics/inventory';
 import {
@@ -29,7 +29,28 @@ type Props = {
   locations: InventoryLocation[];
   onSave: (entries: InventoryEntry[]) => void;
   onCancel: () => void;
+  fixture?: {
+    locationId: string;
+    qualityGroups: Array<{ quality: string; quantities: string[] }>;
+    createEntryId: () => string;
+    timestamp: string;
+    bypassFreshnessGuard?: boolean;
+    syncWarning?: string;
+  };
 };
+
+type BoxQuantityDraft = {
+  id: string;
+  value: string;
+};
+
+type QualityGroupDraft = {
+  id: string;
+  quality: string;
+  boxes: BoxQuantityDraft[];
+};
+
+const MAX_QUALITY_GROUPS = 5;
 
 function normalizeItemLookup(value: string): string {
   return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -39,12 +60,12 @@ function createNewInventoryId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function parseOptionalQuality(value: string): number | undefined {
+function parseQuality(value: string): number | undefined {
   const trimmed = value.trim();
   if (!trimmed) return undefined;
-  const parsed = parseInt(trimmed, 10);
-  if (!Number.isFinite(parsed)) return undefined;
-  return Math.max(0, Math.min(1000, parsed));
+  const parsed = Number(trimmed);
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 1000) return undefined;
+  return parsed;
 }
 
 function deriveKindFromMaterial(mat: MaterialTemplate | undefined): InventoryItemKind {
@@ -85,15 +106,6 @@ function isRefinableScuMineable(material: MaterialTemplate | undefined, identity
     material.materialType === 'ore' ||
     material.materialType === 'refined';
   return hasRefinerySource && usesScu;
-}
-
-function resizeBoxQuantities(current: string[], nextCount: number): string[] {
-  const count = Math.max(1, Math.min(24, Math.trunc(nextCount) || 1));
-  if (current.length === count) return current;
-  if (current.length < count) {
-    return [...current, ...Array.from({ length: count - current.length }, () => '')];
-  }
-  return current.slice(0, count);
 }
 
 function LocationField({
@@ -176,6 +188,7 @@ export default function InventoryAddModal({
   locations,
   onSave,
   onCancel,
+  fixture,
 }: Props) {
   const materialIdentities = useMaterialIdentityIndex();
   const inventorySync = useLogisticsStore((state) => state.inventorySync);
@@ -187,14 +200,26 @@ export default function InventoryAddModal({
     : 'scu';
   const unitLabel = material ? getInventoryUnitLabel(material) : (unitType === 'scu' ? 'SCU' : 'unit');
 
-  const [locationId, setLocationId] = useState('');
-  const [locationSearch, setLocationSearch] = useState('');
-  const [boxCount, setBoxCount] = useState('1');
-  const [boxQuantities, setBoxQuantities] = useState<string[]>(['']);
-  const [quality, setQuality] = useState('');
+  const nextDraftId = useRef(1);
+  const createDraftId = (kind: 'quality' | 'box') => `${kind}-${nextDraftId.current++}`;
+  const [locationId, setLocationId] = useState(fixture?.locationId ?? '');
+  const [locationSearch, setLocationSearch] = useState(
+    () => locations.find((entry) => entry.id === fixture?.locationId)?.name ?? '',
+  );
+  const [qualityGroups, setQualityGroups] = useState<QualityGroupDraft[]>(() => {
+    const initial = fixture?.qualityGroups ?? [{ quality: '', quantities: [''] }];
+    return initial.map((group, groupIndex) => ({
+      id: `quality-initial-${groupIndex + 1}`,
+      quality: group.quality,
+      boxes: group.quantities.map((value, boxIndex) => ({
+        id: `box-initial-${groupIndex + 1}-${boxIndex + 1}`,
+        value,
+      })),
+    }));
+  });
   const [unrefined, setUnrefined] = useState(false);
   const [hasTriedSave, setHasTriedSave] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(fixture?.syncWarning ?? '');
 
   const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
 
@@ -216,54 +241,108 @@ export default function InventoryAddModal({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onCancel]);
 
-  function handleBoxCountChange(nextValue: string) {
-    setBoxCount(nextValue);
-    const parsedCount = Math.max(1, Math.min(24, parseInt(nextValue, 10) || 1));
-    setBoxQuantities((current) => resizeBoxQuantities(current, parsedCount));
+  function addQualityGroup() {
+    setQualityGroups((current) => current.length >= MAX_QUALITY_GROUPS
+      ? current
+      : [...current, {
+          id: createDraftId('quality'),
+          quality: '',
+          boxes: [{ id: createDraftId('box'), value: '' }],
+        }]);
+  }
+
+  function removeQualityGroup(groupId: string) {
+    setQualityGroups((current) => current.filter((group) => group.id !== groupId));
+  }
+
+  function updateQuality(groupId: string, value: string) {
+    setQualityGroups((current) => current.map((group) => (
+      group.id === groupId ? { ...group, quality: value } : group
+    )));
+  }
+
+  function addBox(groupId: string) {
+    setQualityGroups((current) => current.map((group) => (
+      group.id === groupId
+        ? { ...group, boxes: [...group.boxes, { id: createDraftId('box'), value: '' }] }
+        : group
+    )));
+  }
+
+  function removeBox(groupId: string, boxId: string) {
+    setQualityGroups((current) => current.map((group) => (
+      group.id === groupId
+        ? { ...group, boxes: group.boxes.filter((box) => box.id !== boxId) }
+        : group
+    )));
+  }
+
+  function updateBox(groupId: string, boxId: string, value: string) {
+    setQualityGroups((current) => current.map((group) => (
+      group.id === groupId
+        ? {
+            ...group,
+            boxes: group.boxes.map((box) => box.id === boxId ? { ...box, value } : box),
+          }
+        : group
+    )));
   }
 
   function buildEntries(): InventoryEntry[] | null {
     if (!material || !resolvedLocationId) return null;
 
-    const parsedQuality = parseOptionalQuality(quality);
     const entries: InventoryEntry[] = [];
 
-    for (const quantityValue of boxQuantities) {
-      const quantity = parseFloat(quantityValue);
-      if (!Number.isFinite(quantity) || quantity <= 0) return null;
+    if (qualityGroups.length === 0) return null;
+    for (const group of qualityGroups) {
+      const parsedQuality = parseQuality(group.quality);
+      if (parsedQuality === undefined || group.boxes.length === 0) return null;
 
-      if (showUnrefined) {
-        const itemKind: InventoryItemKind = unrefined ? 'ore' : 'refined';
+      for (const box of group.boxes) {
+        const quantity = Number(box.value);
+        if (!Number.isFinite(quantity) || quantity <= 0) return null;
+        const timestamp = fixture?.timestamp ?? new Date().toISOString();
+        const id = fixture?.createEntryId() ?? createNewInventoryId();
+
+        if (showUnrefined) {
+          const itemKind: InventoryItemKind = unrefined ? 'ore' : 'refined';
+          entries.push(createInventoryEntryDraft({
+            id,
+            recordKind: 'box',
+            materialId: material.id,
+            materialType: unrefined ? 'ore' : 'refined',
+            itemName: target.displayName,
+            itemKind,
+            unitType: 'scu',
+            catalogSource: 'api' as InventoryCatalogSource,
+            quality: parsedQuality,
+            quantity,
+            boxSize: quantity,
+            locationId: resolvedLocationId,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          }));
+          continue;
+        }
+
+        const itemKind = deriveKindFromMaterial(material);
         entries.push(createInventoryEntryDraft({
-          id: createNewInventoryId(),
+          id,
+          recordKind: 'box',
           materialId: material.id,
-          materialType: unrefined ? 'ore' : 'refined',
+          materialType: material.materialType,
           itemName: target.displayName,
           itemKind,
-          unitType: 'scu',
+          unitType: unitType,
           catalogSource: 'api' as InventoryCatalogSource,
           quality: parsedQuality,
           quantity,
+          boxSize: quantity,
           locationId: resolvedLocationId,
-          updatedAt: new Date().toISOString(),
+          createdAt: timestamp,
+          updatedAt: timestamp,
         }));
-        continue;
       }
-
-      const itemKind = deriveKindFromMaterial(material);
-      entries.push(createInventoryEntryDraft({
-        id: createNewInventoryId(),
-        materialId: material.id,
-        materialType: material.materialType,
-        itemName: target.displayName,
-        itemKind,
-        unitType: unitType,
-        catalogSource: 'api' as InventoryCatalogSource,
-        quality: parsedQuality,
-        quantity,
-        locationId: resolvedLocationId,
-        updatedAt: new Date().toISOString(),
-      }));
     }
 
     return entries.length > 0 ? entries : null;
@@ -273,18 +352,20 @@ export default function InventoryAddModal({
     setHasTriedSave(true);
     setErrorMessage('');
 
-    const auth = getOnlinePersistenceAuth();
-    const blockReason = getInventoryMutationBlockReason(
-      inventorySync,
-      auth.userId,
-      {
-        hasAccessToken: Boolean(auth.accessToken),
-        hasHydratedPersist: inventorySync.hasHydratedPersist,
-      },
-    );
-    if (blockReason) {
-      setErrorMessage(blockReason);
-      return;
+    if (!fixture?.bypassFreshnessGuard) {
+      const auth = getOnlinePersistenceAuth();
+      const blockReason = getInventoryMutationBlockReason(
+        inventorySync,
+        auth.userId,
+        {
+          hasAccessToken: Boolean(auth.accessToken),
+          hasHydratedPersist: inventorySync.hasHydratedPersist,
+        },
+      );
+      if (blockReason) {
+        setErrorMessage(blockReason);
+        return;
+      }
     }
 
     const entries = buildEntries();
@@ -293,17 +374,18 @@ export default function InventoryAddModal({
         setErrorMessage('Choose a known inventory location.');
         return;
       }
-      setErrorMessage('Enter a quantity greater than zero for each box.');
+      setErrorMessage('Enter a valid quality and a quantity greater than zero for every box.');
       return;
     }
 
     onSave(entries);
   }
 
-  const quantityError = boxQuantities.some((value) => {
-    const parsed = parseFloat(value);
+  const qualityError = qualityGroups.some((group) => parseQuality(group.quality) === undefined);
+  const quantityError = qualityGroups.some((group) => group.boxes.length === 0 || group.boxes.some((box) => {
+    const parsed = Number(box.value);
     return !Number.isFinite(parsed) || parsed <= 0;
-  });
+  }));
 
   return (
     <div className="bq-inv-quick-backdrop" role="presentation" onMouseDown={onCancel}>
@@ -319,21 +401,9 @@ export default function InventoryAddModal({
             <h3 id="bq-inv-quick-title">Add Inventory</h3>
             <p className="bq-inv-quick-subtitle">Quick add for build queue material</p>
           </div>
-          <button type="button" className="bq-btn bq-btn--compact" onClick={onCancel}>Cancel</button>
         </div>
 
         <div className="bq-inv-quick-body">
-          <div className="logi-form-field">
-            <span className="logi-form-label">Material</span>
-            <input
-              type="text"
-              className="logi-form-input logi-form-input--selected"
-              value={target.displayName}
-              readOnly
-              aria-readonly="true"
-            />
-          </div>
-
           <LocationField
             locations={locations}
             locationId={locationId}
@@ -346,36 +416,98 @@ export default function InventoryAddModal({
             <span className="logi-form-error">Choose a known inventory location.</span>
           ) : null}
 
-          <div className="logi-form-row-pair">
-            <div className="logi-form-field">
-              <label htmlFor="bq-inv-quick-box-count" className="logi-form-label">Number of boxes</label>
-              <input
-                id="bq-inv-quick-box-count"
-                type="number"
-                className="logi-form-input"
-                min={1}
-                max={24}
-                step={1}
-                value={boxCount}
-                onChange={(event) => handleBoxCountChange(event.target.value)}
-              />
+          <div className="logi-form-field">
+            <span className="logi-form-label">Material</span>
+            <div className="bq-inv-quick-material-value" aria-label={`Material ${target.displayName}`}>
+              <span>{target.displayName}</span>
+              <span className="bq-inv-quick-material-lock" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
+                  <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                </svg>
+                Locked
+              </span>
             </div>
-            <div className="logi-form-field">
-              <label htmlFor="bq-inv-quick-quality" className="logi-form-label">
-                Quality <span className="logi-form-label-sub">(0-1000)</span>
-              </label>
-              <input
-                id="bq-inv-quick-quality"
-                type="number"
-                className="logi-form-input"
-                value={quality}
-                onChange={(event) => setQuality(event.target.value)}
-                placeholder="Optional"
-                min={0}
-                max={1000}
-                step={1}
-              />
+            <span className="bq-inv-quick-material-helper">Add other materials from the Inventory page.</span>
+          </div>
+
+          <div className="bq-inv-quick-quality-groups">
+            <div className="bq-inv-quick-quality-title-row">
+              <strong>Box Qualities (0-1000)</strong>
+              <span>Add up to 5 different quality levels.</span>
             </div>
+            {qualityGroups.map((group, groupIndex) => {
+              const groupQualityError = hasTriedSave && parseQuality(group.quality) === undefined;
+              return (
+                <section key={group.id} className="bq-inv-quick-quality-group" aria-label={`Quality group ${groupIndex + 1}`}>
+                  <div className="bq-inv-quick-quality-head">
+                    <label htmlFor={`bq-inv-quick-quality-${group.id}`} className="bq-inv-quick-quality-value">
+                      <input
+                        id={`bq-inv-quick-quality-${group.id}`}
+                        type="number"
+                        className={`logi-form-input${groupQualityError ? ' logi-form-input--error' : ''}`}
+                        value={group.quality}
+                        onChange={(event) => updateQuality(group.id, event.target.value)}
+                        placeholder="500"
+                        aria-label={`Quality group ${groupIndex + 1} value`}
+                        min={0}
+                        max={1000}
+                        step={1}
+                      />
+                      <span>Quality</span>
+                    </label>
+                    <button
+                      type="button"
+                      className="bq-inv-quick-remove"
+                      onClick={() => removeQualityGroup(group.id)}
+                      aria-label={`Remove quality group ${groupIndex + 1}`}
+                    >X</button>
+                  </div>
+
+                  <div className="bq-inv-quick-boxes">
+                    <div className="bq-inv-quick-box-head" aria-hidden="true">
+                      <span>Boxes at this quality</span>
+                      <span>Amount ({unitLabel})</span>
+                    </div>
+                    {group.boxes.map((box, boxIndex) => {
+                      const parsedQuantity = Number(box.value);
+                      const boxError = hasTriedSave && (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0);
+                      return (
+                        <div key={box.id} className="bq-inv-quick-box-row">
+                          <span className="bq-inv-quick-box-marker" aria-hidden="true">-</span>
+                          <label htmlFor={`bq-inv-quick-qty-${box.id}`} className="bq-inv-quick-box-input">
+                          <input
+                            id={`bq-inv-quick-qty-${box.id}`}
+                            type="number"
+                            className={`logi-form-input${boxError ? ' logi-form-input--error' : ''}`}
+                            value={box.value}
+                            onChange={(event) => updateBox(group.id, box.id, event.target.value)}
+                            placeholder={`Quantity (${unitLabel})`}
+                            aria-label={`Box ${boxIndex + 1} amount at Quality ${group.quality || 'unset'}`}
+                            min={0}
+                            step={unitType === 'scu' ? 0.01 : 1}
+                          />
+                          </label>
+                          <button
+                            type="button"
+                            className="bq-inv-quick-remove"
+                            onClick={() => removeBox(group.id, box.id)}
+                            aria-label={`Remove box ${boxIndex + 1} from quality group ${groupIndex + 1}`}
+                          >X</button>
+                        </div>
+                      );
+                    })}
+                    <button type="button" className="bq-inv-quick-add-box" onClick={() => addBox(group.id)}>+ Add Box</button>
+                  </div>
+                </section>
+              );
+            })}
+            <button
+              type="button"
+              className="bq-inv-quick-add-quality"
+              onClick={addQualityGroup}
+              disabled={qualityGroups.length >= MAX_QUALITY_GROUPS}
+            >+ Add Quality (up to 5)</button>
           </div>
 
           {showUnrefined ? (
@@ -389,32 +521,8 @@ export default function InventoryAddModal({
             </label>
           ) : null}
 
-          <div className="bq-inv-quick-boxes">
-            <span className="logi-form-label">Quantity per box ({unitLabel})</span>
-            {boxQuantities.map((value, index) => (
-              <div key={`box-${index}`} className="bq-inv-quick-box-row">
-                <label htmlFor={`bq-inv-quick-qty-${index}`} className="bq-inv-quick-box-label">
-                  Box {index + 1}
-                </label>
-                <input
-                  id={`bq-inv-quick-qty-${index}`}
-                  type="number"
-                  className={`logi-form-input${hasTriedSave && quantityError ? ' logi-form-input--error' : ''}`}
-                  value={value}
-                  onChange={(event) => {
-                    const next = [...boxQuantities];
-                    next[index] = event.target.value;
-                    setBoxQuantities(next);
-                  }}
-                  placeholder="0.00"
-                  min={0}
-                  step={unitType === 'scu' ? 0.01 : 1}
-                />
-              </div>
-            ))}
-          </div>
-          {hasTriedSave && quantityError ? (
-            <span className="logi-form-error">Enter a quantity greater than zero for each box.</span>
+          {hasTriedSave && (qualityError || quantityError) ? (
+            <span className="logi-form-error">Enter a valid quality and a quantity greater than zero for every box.</span>
           ) : null}
           {errorMessage ? <span className="logi-form-error">{errorMessage}</span> : null}
         </div>

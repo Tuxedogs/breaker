@@ -166,6 +166,20 @@ function rowStackMergeKey(row: typeof inventoryStacks.$inferSelect) {
   ].join("|").toLowerCase();
 }
 
+function isDiscreteInventoryBox(input: UnknownRecord) {
+  return asString(input.recordKind) === "box";
+}
+
+export function shouldFallbackMergeInventoryRecord(input: unknown): boolean {
+  return !isRecord(input) || !isDiscreteInventoryBox(input);
+}
+
+export function getInventoryInsertId(input: unknown): string | undefined {
+  if (!isRecord(input) || !isDiscreteInventoryBox(input)) return undefined;
+  const id = asString(input.id);
+  return isUuid(id) ? id : undefined;
+}
+
 function buildQueueMergeKey(input: UnknownRecord, queueId: string) {
   return [
     queueId,
@@ -177,6 +191,20 @@ function buildQueueMergeKey(input: UnknownRecord, queueId: string) {
 
 function rowBuildQueueMergeKey(row: { queueId: string; recipeId: string; blueprintId: string | null; itemId: string | null }) {
   return [row.queueId, row.recipeId, row.blueprintId ?? "", row.itemId ?? ""].join("|").toLowerCase();
+}
+
+function isBuildQueueEntryInstance(input: UnknownRecord) {
+  return asString(input.entryKind) === "instance";
+}
+
+export function shouldFallbackMergeBuildQueueRecord(input: unknown): boolean {
+  return !isRecord(input) || !isBuildQueueEntryInstance(input);
+}
+
+export function getBuildQueueInsertId(input: unknown): string | undefined {
+  if (!isRecord(input) || !isBuildQueueEntryInstance(input)) return undefined;
+  const id = asString(input.id);
+  return isUuid(id) ? id : undefined;
 }
 
 function remapAllocationIds(allocations: unknown[], inventoryIdMap: Record<string, string>) {
@@ -449,14 +477,17 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
     const locationId = mappedLocationId && isUuid(mappedLocationId) && validLocationIds.has(mappedLocationId)
       ? mappedLocationId
       : null;
+    const isBox = isDiscreteInventoryBox(raw);
     const match = (isUuid(localId) ? stacksById.get(localId) : undefined)
       ?? (localId ? stacksByLocalId.get(localId) : undefined)
-      ?? stacksByMergeKey.get(stackMergeKey(raw, locationId));
+      ?? (shouldFallbackMergeInventoryRecord(raw) ? stacksByMergeKey.get(stackMergeKey(raw, locationId)) : undefined);
     const matchedStack = match;
     const addingToMatchedLocal = Boolean(matchedStack && localId && getSnapshotLocalId(matchedStack.snapshot) !== localId && !isUuid(localId));
     const nextQuantity = addingToMatchedLocal && matchedStack ? Number(matchedStack.quantity) + quantity : quantity;
+    const insertId = match ? undefined : getInventoryInsertId(raw);
 
     const values = {
+      ...(insertId ? { id: insertId } : {}),
       userId,
       locationId,
       materialId: asString(raw.materialId),
@@ -490,7 +521,14 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
       : await getDb().insert(inventoryStacks).values(values).returning();
 
     const saved = rows[0];
-    if (saved && localId) inventoryIdMap[localId] = saved.id;
+    if (saved) {
+      stacksById.set(saved.id, saved);
+      if (localId) {
+        inventoryIdMap[localId] = saved.id;
+        stacksByLocalId.set(localId, saved);
+      }
+      if (!isBox) stacksByMergeKey.set(rowStackMergeKey(saved), saved);
+    }
   }
 
   const existingQueue = await getDb()
@@ -518,9 +556,11 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
 
     const match = (isUuid(localId) ? queueById.get(localId) : undefined)
       ?? (localId ? queueByLocalId.get(localId) : undefined)
-      ?? queueByMergeKey.get(buildQueueMergeKey(raw, queueId));
+      ?? (shouldFallbackMergeBuildQueueRecord(raw) ? queueByMergeKey.get(buildQueueMergeKey(raw, queueId)) : undefined);
+    const insertId = match ? undefined : getBuildQueueInsertId(raw);
     const reservedAllocations = remapAllocationIds(asJsonArray(raw.reservedAllocations), inventoryIdMap);
     const values = {
+      ...(insertId ? { id: insertId } : {}),
       userId,
       queueId,
       recipeId,
@@ -551,7 +591,14 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
       : await getDb().insert(buildQueueItems).values(values).returning();
 
     const saved = rows[0];
-    if (saved && localId) buildQueueIdMap[localId] = saved.id;
+    if (saved) {
+      queueById.set(saved.id, saved);
+      if (localId) {
+        buildQueueIdMap[localId] = saved.id;
+        queueByLocalId.set(localId, saved);
+      }
+      if (!isBuildQueueEntryInstance(raw)) queueByMergeKey.set(rowBuildQueueMergeKey(saved), saved);
+    }
   }
 
   const settings = {
