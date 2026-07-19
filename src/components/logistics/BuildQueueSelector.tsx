@@ -11,6 +11,7 @@ export default function BuildQueueSelector({
   onCreate,
   onRename,
   onDelete,
+  renameRequestToken = 0,
 }: {
   queues: BuildQueue[];
   activeQueueId: string;
@@ -18,6 +19,7 @@ export default function BuildQueueSelector({
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
+  renameRequestToken?: number;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -36,6 +38,13 @@ export default function BuildQueueSelector({
     document.addEventListener("mousedown", handlePointerDown);
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [open]);
+
+  useEffect(() => {
+    if (!renameRequestToken) return;
+    setOpen(true);
+    setEditorMode("rename");
+    setName(activeQueue?.name ?? "");
+  }, [activeQueue?.id, activeQueue?.name, renameRequestToken]);
 
   function beginCreate() {
     setName("");

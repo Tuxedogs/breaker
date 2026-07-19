@@ -3,6 +3,7 @@ import type {
   CraftStatComparisonRowView,
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
+import BuildQueueFrame from "./BuildQueueFrame";
 
 type ConsolidatedStat =
   | { kind: "comparison"; row: CraftStatComparisonRowView }
@@ -63,10 +64,10 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
 function ComparisonDelta({ column }: { column: CraftStatComparisonColumnView }) {
   if (column.state !== "ready") return null;
   const delta = column.percentDelta ?? column.absoluteDelta;
-  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">(0%)</span>;
   return (
     <span className={`bq-stat-compare-delta ${column.impactClass ?? "bq-stat-compare-delta--neutral"}`}>
-      {delta}
+      ({delta})
     </span>
   );
 }
@@ -99,7 +100,9 @@ function ComparisonColumn({ column }: { column: CraftStatComparisonColumnView })
   }
   return (
     <span className="bq-stat-compare-cell">
-      <strong className="bq-stat-compare-value">{column.value}</strong>
+      <strong className={`bq-stat-compare-value ${column.impactClass ?? "bq-stat-compare-value--neutral"}`}>
+        {column.value}
+      </strong>
       <ComparisonDelta column={column} />
     </span>
   );
@@ -223,16 +226,17 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
 
 export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><BuildQueueFrame asset="stats-band-frame.svg" /><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
   }
   if (model.status !== "ready" || (model.comparisonGroups.length === 0 && model.overviewGroups.length === 0)) {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><BuildQueueFrame asset="stats-band-frame.svg" /><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
   }
 
   const consolidatedGroups = buildConsolidatedGroups(model);
   const hasModifiedStats = consolidatedGroups.some((group) => getModifiedStats(group).length > 0);
   return (
     <section className="bq-component-statistics" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
+      <BuildQueueFrame asset="stats-band-frame.svg" />
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
         <StatsLegend />

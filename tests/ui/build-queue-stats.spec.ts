@@ -9,7 +9,8 @@ import {
 } from "../../src/pages/logistics/buildQueueStatsFixture";
 
 const screenshotDir = path.resolve(process.cwd(), "artifacts/bq-craft-header/gate6");
-const orderingScreenshotDir = path.resolve(process.cwd(), "artifacts/build-queue-ordering");
+const craftingSliderScreenshotDir = path.resolve(process.cwd(), "artifacts/crafting-target-slider");
+const CRAFTING_TARGET_SLIDER_FIXTURE_PATH = "/industry/crafting/__fixture/target-slider";
 
 const fixtureItems = [
   { id: FIXTURE_ITEM_IDS.fr66, name: "FR-66", queue: "Pyro Defense Refit", expectGroupedStats: true },
@@ -69,6 +70,70 @@ async function selectQueue(page: Page, queueName: string) {
 }
 
 test.describe("Build Queue stats fixture", () => {
+  test("Crafting Detail uses the shared target slider and recalculates modifiers", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await mkdir(craftingSliderScreenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(CRAFTING_TARGET_SLIDER_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
+
+      await expect(page.locator('[data-crafting-target-slider-fixture="true"]')).toBeVisible();
+      const slider = page.getByRole("slider", { name: "Target quality for Stileron" });
+      const editor = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--slider')]");
+      const shell = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-slider-shell')]");
+      const badge = editor.locator(":scope > .bq-target-quality");
+      await expect(slider).toHaveValue("860");
+
+      const geometry = await editor.evaluate((element) => {
+        const badgeRect = element.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
+        const shellRect = element.querySelector(".bq-target-slider-shell")?.getBoundingClientRect();
+        return {
+          badgeWidth: badgeRect?.width ?? 0,
+          badgeCenter: badgeRect ? badgeRect.left + badgeRect.width / 2 : 0,
+          shellWidth: shellRect?.width ?? 0,
+          shellCenter: shellRect ? shellRect.left + shellRect.width / 2 : 0,
+        };
+      });
+      expect(geometry.badgeWidth).toBeLessThanOrEqual(80);
+      expect(geometry.shellWidth).toBeGreaterThan(geometry.badgeWidth);
+      expect(Math.abs(geometry.shellCenter - geometry.badgeCenter)).toBeLessThan(1);
+
+      await expect(shell).toHaveCSS("opacity", "0");
+      await editor.hover();
+      await expect(shell).toHaveCSS("opacity", "1");
+      await slider.focus();
+      await expect(badge).toHaveCSS("pointer-events", "none");
+      await expect(slider).toHaveCSS("pointer-events", "auto");
+
+      const modifier = page.locator(".craft-detail-effect-chip strong");
+      const beforeModifier = await modifier.textContent();
+      const sliderBox = await slider.boundingBox();
+      expect(sliderBox).not.toBeNull();
+      if (!sliderBox) throw new Error("Crafting Detail target slider has no pointer geometry.");
+
+      await page.mouse.click(sliderBox.x + sliderBox.width - 2, sliderBox.y + sliderBox.height / 2);
+      await expect(slider).toHaveValue("937");
+      await expect.poll(() => modifier.textContent()).not.toBe(beforeModifier);
+      const clickedModifier = await modifier.textContent();
+
+      await slider.focus();
+      await page.keyboard.press("Home");
+      await expect(slider).toHaveValue("500");
+      await expect.poll(() => modifier.textContent()).not.toBe(clickedModifier);
+
+      await page.screenshot({
+        path: path.join(craftingSliderScreenshotDir, `crafting-detail-target-slider-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
+
   test("nested Add Inventory keeps same-quality boxes discrete through emitted and reloaded records", async ({ page }) => {
     const failures = installFailureGuards(page);
     const modalScreenshotDir = path.resolve(process.cwd(), "artifacts/inventory-add-modal");
@@ -443,12 +508,9 @@ test.describe("Build Queue stats fixture", () => {
     expect(externalApiRequests).toEqual([]);
   });
 
-  test("reorders duplicate entries, moves between queues, and archives a completed snapshot", async ({ page }) => {
-    await mkdir(orderingScreenshotDir, { recursive: true });
-
+  test("projects stable drag destinations, moves queues, completes crafts, and creates a new queue", async ({ page }) => {
     for (const viewport of [
       { name: "1920x1080", width: 1920, height: 1080 },
-      { name: "2560x1440", width: 2560, height: 1440 },
     ]) {
       const persistenceKey = `ordering-${viewport.name}`;
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -472,16 +534,20 @@ test.describe("Build Queue stats fixture", () => {
       await page.mouse.down();
       await page.mouse.move(firstHandleBox.x + firstHandleBox.width / 2 + 14, firstHandleBox.y + firstHandleBox.height / 2 + 14, { steps: 4 });
       await expect(page.locator(".bq-drag-destinations")).toBeVisible();
-      await page.screenshot({ path: path.join(orderingScreenshotDir, `destinations-${viewport.name}.png`), fullPage: true });
-      const thirdSlot = page.locator(".bq-craft-card-drop-slot").nth(2);
-      const thirdSlotBox = await thirdSlot.boundingBox();
-      if (!thirdSlotBox) throw new Error("Third queue slot has no pointer geometry.");
-      await page.mouse.move(thirdSlotBox.x + thirdSlotBox.width / 2, thirdSlotBox.y + thirdSlotBox.height * 0.25, { steps: 8 });
+      await expect(page.locator(".bq-craft-card-drop-placeholder")).toHaveCount(1);
+      await expect(page.locator(".bq-craft-card-shell.is-dragging")).toBeVisible();
+      await expect(page.locator(".bq-craft-card-shell.is-drag-context:not(.is-dragging)").first()).toHaveCSS("opacity", "0.68");
+      const secondCard = page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66High}"] .bq-craft-card`);
+      const secondCardBox = await secondCard.boundingBox();
+      if (!secondCardBox) throw new Error("Second card has no pointer geometry.");
+      // This remains a one-position move until the cursor passes the next card midpoint.
+      await page.mouse.move(secondCardBox.x + secondCardBox.width / 2, secondCardBox.y + secondCardBox.height / 2 + 4, { steps: 8 });
+      await expect(page.locator(".bq-craft-card-drop-placeholder")).toBeVisible();
       await page.mouse.up();
       expect(await entryIds()).toEqual([
         FIXTURE_ITEM_IDS.fr66High,
-        FIXTURE_ITEM_IDS.fr66Precision,
         FIXTURE_ITEM_IDS.fr66,
+        FIXTURE_ITEM_IDS.fr66Precision,
         FIXTURE_ITEM_IDS.ad5b,
       ]);
 
@@ -489,18 +555,18 @@ test.describe("Build Queue stats fixture", () => {
       await keyboardHandle.focus();
       await page.keyboard.press("ArrowDown");
       expect(await entryIds()).toEqual([
-        FIXTURE_ITEM_IDS.fr66Precision,
-        FIXTURE_ITEM_IDS.fr66High,
         FIXTURE_ITEM_IDS.fr66,
+        FIXTURE_ITEM_IDS.fr66High,
+        FIXTURE_ITEM_IDS.fr66Precision,
         FIXTURE_ITEM_IDS.ad5b,
       ]);
 
       await page.reload({ waitUntil: "domcontentloaded" });
       await expect(page.locator(".bq-craft-card")).toHaveCount(4);
       expect(await entryIds()).toEqual([
-        FIXTURE_ITEM_IDS.fr66Precision,
-        FIXTURE_ITEM_IDS.fr66High,
         FIXTURE_ITEM_IDS.fr66,
+        FIXTURE_ITEM_IDS.fr66High,
+        FIXTURE_ITEM_IDS.fr66Precision,
         FIXTURE_ITEM_IDS.ad5b,
       ]);
 
@@ -515,6 +581,8 @@ test.describe("Build Queue stats fixture", () => {
       const groundBox = await groundDestination.boundingBox();
       if (!groundBox) throw new Error("Ground destination has no pointer geometry.");
       await page.mouse.move(groundBox.x + groundBox.width / 2, groundBox.y + groundBox.height / 2, { steps: 8 });
+      await expect(groundDestination).toHaveClass(/is-over/);
+      await expect(groundDestination).toHaveCSS("background-color", "rgba(40, 137, 179, 0.28)");
       await page.mouse.up();
       await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66High}"]`)).toHaveCount(0);
       await selectQueue(page, "Ground Team Loadout");
@@ -533,6 +601,8 @@ test.describe("Build Queue stats fixture", () => {
       const completedBox = await completedDestination.boundingBox();
       if (!completedBox) throw new Error("Completed destination has no pointer geometry.");
       await page.mouse.move(completedBox.x + completedBox.width / 2, completedBox.y + completedBox.height / 2, { steps: 8 });
+      await expect(completedDestination).toHaveClass(/is-over/);
+      await expect(completedDestination).toContainText("Move to Completed");
       await page.mouse.up();
 
       await expect(page.getByRole("tab", { name: /Completed/ })).toHaveAttribute("aria-selected", "true");
@@ -544,7 +614,119 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(".bq-balance--short")).toHaveCount(0);
       await expect(page.locator(".bq-stale-line")).toHaveCount(0);
       await expect(page.locator(".bq-materials-section")).not.toContainText("below target");
-      await page.screenshot({ path: path.join(orderingScreenshotDir, `completed-${viewport.name}.png`), fullPage: true });
+
+      await page.getByRole("tab", { name: /Active/ }).click();
+      const activeOrderBeforeCancel = await entryIds();
+      const cancelHandle = page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66}"] .bq-craft-card-drag-handle`);
+      const cancelHandleBox = await cancelHandle.boundingBox();
+      if (!cancelHandleBox) throw new Error("Cancel drag handle has no pointer geometry.");
+      await page.mouse.move(cancelHandleBox.x + cancelHandleBox.width / 2, cancelHandleBox.y + cancelHandleBox.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(cancelHandleBox.x + 16, cancelHandleBox.y + 16, { steps: 4 });
+      await expect(page.locator(".bq-drag-destinations")).toBeVisible();
+      await page.mouse.up();
+      await expect(page.locator(".bq-drag-destinations")).toHaveCount(0);
+      expect(await entryIds()).toEqual(activeOrderBeforeCancel);
+
+      const newQueueHandle = page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.ad5b}"] .bq-craft-card-drag-handle`);
+      const newQueueHandleBox = await newQueueHandle.boundingBox();
+      if (!newQueueHandleBox) throw new Error("New queue drag handle has no pointer geometry.");
+      await page.mouse.move(newQueueHandleBox.x + newQueueHandleBox.width / 2, newQueueHandleBox.y + newQueueHandleBox.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(newQueueHandleBox.x + 16, newQueueHandleBox.y + 16, { steps: 4 });
+      const newQueueDestination = page.locator(".bq-drag-destination--new-queue");
+      await expect(newQueueDestination).toBeVisible();
+      const newQueueBox = await newQueueDestination.boundingBox();
+      if (!newQueueBox) throw new Error("New queue destination has no pointer geometry.");
+      await page.mouse.move(newQueueBox.x + newQueueBox.width / 2, newQueueBox.y + newQueueBox.height / 2, { steps: 8 });
+      await expect(newQueueDestination).toHaveClass(/is-over/);
+      await page.mouse.up();
+
+      await expect(page.locator(".bq-queue-selector-trigger")).toContainText("New Queue");
+      await expect(page.locator('form[aria-label="Rename queue"]')).toBeVisible();
+      await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.ad5b}"]`)).toBeVisible();
+      await expect(page.locator(".bq-craft-card")).toHaveCount(1);
     }
+  });
+
+  test("integrates decorative SVG frames without intercepting the live workspace", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const frameScreenshotDir = path.resolve(process.cwd(), "artifacts/build-queue-frames");
+    await mkdir(frameScreenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080, screenshot: true },
+      { name: "1440x900", width: 1440, height: 900, screenshot: false },
+      { name: "1024x768", width: 1024, height: 768, screenshot: false },
+      { name: "768x900", width: 768, height: 900, screenshot: true },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
+
+      await expect(page.locator('[data-bq-fixture="stats"]')).toBeVisible();
+      await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+      await expect(page.locator('.bq-queue-col-head > img[src$="queue-header-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-center-shell > img[src$="content-shell-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-item-header > img[src$="detail-panel-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-item-visual > img[src$="item-preview-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-component-statistics > img[src$="stats-band-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-materials-section > img[src$="material-panel-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-mat-row > img[src$="material-row-frame.svg"]')).toHaveCount(await page.locator('.bq-mat-row').count());
+
+      const frames = page.locator(".bq-decorative-frame");
+      expect(await frames.count()).toBeGreaterThanOrEqual(8);
+      for (const frame of await frames.all()) {
+        await expect(frame).toHaveAttribute("alt", "");
+        await expect(frame).toHaveAttribute("aria-hidden", "true");
+        await expect(frame).toHaveCSS("pointer-events", "none");
+      }
+
+      const frameGeometry = await frames.evaluateAll((images) => images.map((image) => {
+        const frame = image.getBoundingClientRect();
+        const host = image.parentElement?.getBoundingClientRect();
+        return {
+          src: image.getAttribute("src"),
+          hostClass: image.parentElement?.className,
+          loaded: image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0,
+          widthDelta: host ? Math.abs(frame.width - host.width) : Number.POSITIVE_INFINITY,
+          heightDelta: host ? Math.abs(frame.height - host.height) : Number.POSITIVE_INFINITY,
+          tabIndex: (image as HTMLElement).tabIndex,
+        };
+      }));
+      expect(frameGeometry.every((frame) => frame.loaded)).toBe(true);
+      expect(frameGeometry.every((frame) => frame.widthDelta <= 1 && frame.heightDelta <= 1), JSON.stringify(frameGeometry, null, 2)).toBe(true);
+      expect(frameGeometry.every((frame) => frame.tabIndex === -1)).toBe(true);
+
+      if (viewport.width > 768) {
+        await expect(page.locator('.bq-craft-card.is-selected > img[src$="queue-item-frame-active.svg"]')).toHaveCount(1);
+        await expect(page.locator('.bq-craft-card:not(.is-selected) > img[src$="queue-item-frame.svg"]')).toHaveCount(3);
+      } else {
+        await expect(page.locator(".bq-queue-pill")).toHaveCount(4);
+        const mobileFlow = await page.locator(".bq-layout").evaluate((layout) => {
+          const queue = layout.querySelector(".bq-queue-col")?.getBoundingClientRect();
+          const workspace = layout.querySelector(".bq-center-col")?.getBoundingClientRect();
+          return { queueBottom: queue?.bottom ?? 0, workspaceTop: workspace?.top ?? 0 };
+        });
+        expect(mobileFlow.workspaceTop).toBeGreaterThanOrEqual(mobileFlow.queueBottom - 1);
+      }
+
+      await expect(page.getByRole("button", { name: /Complete FR-66/ })).toBeVisible();
+      await expect(page.getByRole("button", { name: /Auto reserve inventory for FR-66/ })).toBeVisible();
+      await expect(page.locator(".bq-item-visual .bq-product-icon")).toBeVisible();
+
+      const horizontalOverflow = await page.evaluate(() => (
+        Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth
+      ));
+      expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+      if (viewport.screenshot) {
+        await page.screenshot({
+          path: path.join(frameScreenshotDir, `build-queue-frames-${viewport.name}.png`),
+          fullPage: true,
+        });
+      }
+    }
+
+    expect(failures).toEqual([]);
   });
 });

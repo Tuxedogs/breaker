@@ -5,6 +5,7 @@ import { getBuildQueueItemInputs, getRecipeForQueueItem } from "../../lib/logist
 import { getMaterialReservationCoverage } from "../../lib/logistics/selectors";
 import { getRequirementLineKey } from "../../lib/logistics/buildQueueReservations";
 import { getBuildQueueItemProgress } from "../../lib/logistics/buildQueueProgress";
+import BuildQueueFrame from "./BuildQueueFrame";
 
 const FALLBACK_TYPE_LABELS: Record<string, string> = {
   component: "Component",
@@ -52,8 +53,9 @@ interface Props {
   highlighted?: boolean;
   onSelect: (id: string) => void;
   dragging?: boolean;
+  dragActive?: boolean;
   onDragStart?: (event: DragEvent<HTMLButtonElement>, id: string) => void;
-  onDragEnd?: () => void;
+  onDragEnd?: (event: DragEvent<HTMLButtonElement>) => void;
   onKeyboardReorder?: (id: string, direction: -1 | 1) => void;
 }
 
@@ -68,6 +70,7 @@ export default function BuildQueueCraftCard({
   highlighted = false,
   onSelect,
   dragging = false,
+  dragActive = false,
   onDragStart,
   onDragEnd,
   onKeyboardReorder,
@@ -96,7 +99,7 @@ export default function BuildQueueCraftCard({
   }
 
   return (
-    <div className={`bq-craft-card-shell${dragging ? " is-dragging" : ""}`} data-bq-entry-id={item.id}>
+    <div className={`bq-craft-card-shell${dragging ? " is-dragging" : ""}${dragActive ? " is-drag-context" : ""}`} data-bq-entry-id={item.id}>
       <button
         type="button"
         className={[
@@ -109,6 +112,7 @@ export default function BuildQueueCraftCard({
         onClick={() => onSelect(item.id)}
         aria-current={selected ? "true" : undefined}
       >
+        <BuildQueueFrame asset={selected ? "queue-item-frame-active.svg" : "queue-item-frame.svg"} />
         <span className="bq-craft-card-index">{index}</span>
         <span className="bq-craft-card-main">
           <span className="bq-craft-card-cat">{typeLabel}</span>

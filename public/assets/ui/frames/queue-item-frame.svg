@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 315 86" fill="none" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="edge" x1="5" y1="5" x2="310" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315361" stop-opacity=".78"/>
+      <stop offset=".55" stop-color="#1c3441" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#273d47" stop-opacity=".64"/>
+    </linearGradient>
+    <linearGradient id="rail" x1="0" y1="20" x2="0" y2="70" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#46c4ee" stop-opacity="0"/>
+      <stop offset=".25" stop-color="#46c4ee" stop-opacity=".34"/>
+      <stop offset=".78" stop-color="#3599bf" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#3599bf" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Compact version of the rounded double frame. -->
+  <path d="M10 1H305C310 1 314 5 314 10V76C314 81 310 85 305 85H10C5 85 1 81 1 76V10C1 5 5 1 10 1Z"
+        stroke="url(#edge)" stroke-width="1.15" vector-effect="non-scaling-stroke"/>
+  <path d="M13 5H301L310 14V36L307 41V68L302 81H13L5 74V61L8 57V13L13 5Z"
+        stroke="#274552" stroke-opacity=".44" stroke-width=".8" vector-effect="non-scaling-stroke"/>
+
+  <!-- Sparse top and bottom inset segments keep the card from looking boxed-in. -->
+  <path d="M14 5H112M143 5H249M263 5H300" stroke="#42606a" stroke-opacity=".25" stroke-width=".75" vector-effect="non-scaling-stroke"/>
+  <path d="M14 81H118M150 81H301" stroke="#294854" stroke-opacity=".23" stroke-width=".75" vector-effect="non-scaling-stroke"/>
+
+  <!-- Low-energy queue rail; selected state uses the active asset. -->
+  <path d="M1 20V65" stroke="url(#rail)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+  <path d="M5 61V72L10 77" stroke="#328eb1" stroke-opacity=".18" stroke-width=".9" vector-effect="non-scaling-stroke"/>
+</svg>

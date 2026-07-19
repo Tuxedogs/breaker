@@ -50,6 +50,8 @@ import { BuildQueueCraftIdentity, BuildQueueCraftStatistics, BuildQueueStatsProv
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 import { getCompletedPresentationItem } from '../../lib/logistics/buildQueueEntries';
+import TargetQualitySlider from '../shared/TargetQualitySlider';
+import BuildQueueFrame from './BuildQueueFrame';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -1062,53 +1064,6 @@ interface Props {
 
 // ─── Target Quality Popover ──────────────────────────────────────────────────
 
-function TargetQualityEditor({
-  label,
-  tone,
-  materialName,
-  value,
-  onChange,
-  onCommit,
-  disabled = false,
-}: {
-  label: string;
-  tone: string;
-  materialName: string;
-  value: number;
-  onChange: (value: number) => void;
-  onCommit: (value: number) => void;
-  disabled?: boolean;
-}) {
-  const normalizedValue = clampTargetQuality(value);
-
-  return (
-    <span className="bq-target-editor bq-target-editor--slider" data-bq-row-control="true">
-      <span className={`bq-target-quality bq-target-quality--${tone}`} aria-hidden="true">
-        <span>{label}</span>
-      </span>
-      <span className="bq-target-slider-shell">
-        <input
-          type="range"
-          min="1"
-          max="1000"
-          step="1"
-          className="bq-target-quality-slider"
-          value={normalizedValue}
-          aria-label={`Target quality for ${materialName}`}
-          aria-valuetext={`Target ${normalizedValue}`}
-          data-bq-row-control="true"
-          disabled={disabled}
-          onChange={(event) => onChange(clampTargetQuality(Number(event.target.value)))}
-          onBlur={(event) => onCommit(clampTargetQuality(Number(event.currentTarget.value)))}
-          onClick={(event) => event.stopPropagation()}
-          onPointerDown={(event) => event.stopPropagation()}
-        />
-        <output>{normalizedValue}</output>
-      </span>
-    </span>
-  );
-}
-
 // ─── Group ───────────────────────────────────────────────────────────────────
 
 export default function BuildQueueGroup({
@@ -1520,6 +1475,7 @@ export default function BuildQueueGroup({
             <BuildQueueStatsProvider blueprintId={item.blueprint_id} item={item} inputs={inputs}>
             {/* ── Craft header: identity | stock overview | artwork ── */}
             <div className="bq-item-sidebar bq-item-header">
+              <BuildQueueFrame asset="detail-panel-frame.svg" />
               <div className="bq-item-identity">
                 <div className="bq-item-name-block">
                   <span className="bq-item-cat">{readableType}</span>
@@ -1565,6 +1521,7 @@ export default function BuildQueueGroup({
               </div>
 
               <div className="bq-item-visual" aria-hidden="true">
+                <BuildQueueFrame asset="item-preview-frame.svg" />
                 <BuildQueueProductIcon
                   item={item}
                   recipe={recipe}
@@ -1581,6 +1538,7 @@ export default function BuildQueueGroup({
             <div className="bq-item-body">
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
+                <BuildQueueFrame asset="material-panel-frame.svg" />
                 <div className="bq-materials-section-header">
                   <div className="bq-materials-section-heading">
                     <h3 className="bq-materials-section-title">Material Allocation</h3>
@@ -1661,6 +1619,7 @@ export default function BuildQueueGroup({
                     >
                       {isMobileTouchLayout ? (
                       <div className="bq-mat-row bq-mat-row--mobile-card bq-mat-row--touch">
+                        <BuildQueueFrame asset="material-row-frame.svg" />
                         <div className="bq-mat-card-head">
                           <div className="bq-mat-name">
                             <span className="bq-material-name-cell">
@@ -1707,7 +1666,7 @@ export default function BuildQueueGroup({
                           <span><em>Need</em>{formatQuantity(group.requiredTotal, group.material)}</span>
                           <span className="bq-target-quality-cell">
                             <em>Target</em>
-                            <TargetQualityEditor
+                            <TargetQualitySlider
                               label={targetQualityLabel}
                               tone={targetQualityTone}
                               materialName={group.displayName}
@@ -1768,6 +1727,7 @@ export default function BuildQueueGroup({
                           openReserve();
                         }}
                       >
+                        <BuildQueueFrame asset="material-row-frame.svg" />
                         <div className="bq-mat-name">
                           <span className="bq-material-name-cell">
                             <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} size={34} />
@@ -1776,7 +1736,7 @@ export default function BuildQueueGroup({
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.requiredTotal, group.material)}</span>
-                        <TargetQualityEditor
+                        <TargetQualitySlider
                           label={targetQualityLabel}
                           tone={targetQualityTone}
                           materialName={group.displayName}

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent,
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
+import BuildQueueFrame from "../../components/logistics/BuildQueueFrame";
 import BuildQueueSelector from "../../components/logistics/BuildQueueSelector";
 import {
   readFittingIconMode,
@@ -36,6 +37,7 @@ function formatSummaryNumber(value: number): string {
 }
 
 type QueueTab = "active" | "completed";
+type DragDestinationId = string | "completed" | "new-queue";
 
 function sortQueueItems(items: BuildQueueItem[]) {
   return items.slice().sort(
@@ -80,7 +82,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
   const [draggingEntryId, setDraggingEntryId] = useState<string | null>(null);
   const [queueDropIndex, setQueueDropIndex] = useState<number | null>(null);
-  const [dragDestinationId, setDragDestinationId] = useState<string | "completed" | null>(null);
+  const [dragDestinationId, setDragDestinationId] = useState<DragDestinationId | null>(null);
+  const [queueRenameRequestToken, setQueueRenameRequestToken] = useState(0);
   const [typeLabelByBlueprintId, setTypeLabelByBlueprintId] = useState<Record<string, string>>({});
   const fixturePersistenceKey = useMemo(() => {
     if (!isFixture || typeof window === "undefined") return null;
@@ -110,6 +113,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [fixtureActiveQueueId, setFixtureActiveQueueId] = useState(() => initialFixtureState.activeQueueId);
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const queueListRef = useRef<HTMLDivElement>(null);
+  const dragDestinationRef = useRef<DragDestinationId | null>(null);
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
   const suppressMobileSelectorTapRef = useRef(false);
 
@@ -331,9 +336,15 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   }
 
   function clearDragState() {
+    dragDestinationRef.current = null;
     setDraggingEntryId(null);
     setQueueDropIndex(null);
     setDragDestinationId(null);
+  }
+
+  function setDragDestination(destination: DragDestinationId | null) {
+    dragDestinationRef.current = destination;
+    setDragDestinationId(destination);
   }
 
   function handleCraftDragStart(event: ReactDragEvent<HTMLButtonElement>, id: string) {
@@ -343,13 +354,32 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     setQueueDropIndex(activeRows.findIndex((row) => row.item.id === id));
   }
 
-  function handleQueueCardDragOver(event: ReactDragEvent<HTMLDivElement>, index: number) {
+  function getProjectedQueueIndex(cursorY: number): number {
+    if (!draggingEntryId || !queueListRef.current) return activeRows.length;
+    const remainingIds = activeRows
+      .map((row) => row.item.id)
+      .filter((id) => id !== draggingEntryId);
+    const cardsById = new Map(
+      Array.from(queueListRef.current.querySelectorAll<HTMLElement>(".bq-craft-card-shell[data-bq-entry-id]"))
+        .map((element) => [element.dataset.bqEntryId, element] as const),
+    );
+
+    for (const [index, id] of remainingIds.entries()) {
+      const card = cardsById.get(id);
+      if (!card) continue;
+      const bounds = card.getBoundingClientRect();
+      if (cursorY < bounds.top + bounds.height / 2) return index;
+    }
+    return remainingIds.length;
+  }
+
+  function handleQueueCardDragOver(event: ReactDragEvent<HTMLDivElement>) {
     if (!draggingEntryId) return;
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setQueueDropIndex(index + (event.clientY >= bounds.top + bounds.height / 2 ? 1 : 0));
-    setDragDestinationId(activeBuildQueueId);
+                  setDragDestination(null);
+    const nextIndex = getProjectedQueueIndex(event.clientY);
+    setQueueDropIndex((current) => current === nextIndex ? current : nextIndex);
   }
 
   function dropIntoQueue(destinationQueueId: string, destinationIndex?: number) {
@@ -374,7 +404,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     dropIntoQueue(activeBuildQueueId, queueDropIndex ?? activeRows.length);
   }
 
-  function handleDestinationDrop(event: ReactDragEvent<HTMLButtonElement>, destinationId: string | "completed") {
+  function handleDestinationDrop(event: ReactDragEvent<HTMLButtonElement>, destinationId: Exclude<DragDestinationId, "new-queue">) {
     event.preventDefault();
     event.stopPropagation();
     if (!draggingEntryId) return;
@@ -384,6 +414,42 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       return;
     }
     dropIntoQueue(destinationId);
+  }
+
+  function getNextTemporaryQueueName() {
+    const names = new Set(buildQueues.map((queue) => queue.name.trim().toLowerCase()));
+    if (!names.has("new queue")) return "New Queue";
+    let suffix = 2;
+    while (names.has(`new queue ${suffix}`)) suffix += 1;
+    return `New Queue ${suffix}`;
+  }
+
+  function moveDraggedCraftToNewQueue() {
+    if (!draggingEntryId) return;
+    const queueId = handleQueueCreate(getNextTemporaryQueueName());
+    if (!queueId) return clearDragState();
+    moveBuildQueueItem(draggingEntryId, queueId, 0);
+    setSelectedItemId(draggingEntryId);
+    setQueueTab("active");
+    setQueueRenameRequestToken((token) => token + 1);
+    clearDragState();
+  }
+
+  function handleNewQueueDrop(event: ReactDragEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    moveDraggedCraftToNewQueue();
+  }
+
+  function handleCraftDragEnd() {
+    const destination = dragDestinationRef.current;
+    if (!draggingEntryId || !destination) return clearDragState();
+    if (destination === "completed") {
+      handleStatusChange(draggingEntryId, "complete");
+      return clearDragState();
+    }
+    if (destination === "new-queue") return moveDraggedCraftToNewQueue();
+    dropIntoQueue(destination);
   }
 
   function handleKeyboardReorder(id: string, direction: -1 | 1) {
@@ -411,16 +477,20 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     setQueueTab("active");
   }
 
-  function handleQueueCreate(name: string) {
+  function handleQueueCreate(name: string): string {
     if (isFixture) {
       const id = createLocalBuildQueueId();
       setFixtureQueues((queues) => [...queues, { id, name, sourceType: "custom" }]);
       setFixtureActiveQueueId(id);
+      setSelectedItemId(null);
+      setQueueTab("active");
+      return id;
     } else {
-      storeCreateBuildQueue(name);
+      const id = storeCreateBuildQueue(name);
+      setSelectedItemId(null);
+      setQueueTab("active");
+      return id;
     }
-    setSelectedItemId(null);
-    setQueueTab("active");
   }
 
   function handleQueueRename(id: string, name: string) {
@@ -454,6 +524,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
         <aside className="bq-queue-col ops-primary-card" aria-label="Build queue list">
           <header className="bq-queue-col-head">
+            <BuildQueueFrame asset="queue-header-frame.svg" />
             <span className="bq-queue-col-title">
               Build Queue <em>{activeRows.length}/{MAX_QUEUE_SLOTS}</em>
             </span>
@@ -486,6 +557,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
             onCreate={handleQueueCreate}
             onRename={handleQueueRename}
             onDelete={handleQueueDelete}
+            renameRequestToken={queueRenameRequestToken}
           />
 
           <div className="bq-queue-col-body">
@@ -513,6 +585,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
             </div>
 
             <div
+              ref={queueListRef}
               className="bq-queue-list"
               onPointerDown={handleMobileSelectorPointerDown}
               onPointerMove={handleMobileSelectorPointerMove}
@@ -521,7 +594,10 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               onDragOver={(event) => {
                 if (!draggingEntryId) return;
                 event.preventDefault();
-                if (event.target === event.currentTarget) setQueueDropIndex(activeRows.length);
+                if (event.target === event.currentTarget) {
+                  setDragDestination(null);
+                  setQueueDropIndex(getProjectedQueueIndex(event.clientY));
+                }
               }}
               onDrop={handleQueueListDrop}
             >
@@ -553,30 +629,43 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
                   </button>
                 );
               })
-            ) : visibleRows.map((row, index) => (
-              <div
-                key={row.item.id}
-                className={`bq-craft-card-drop-slot${queueDropIndex === index && draggingEntryId !== row.item.id ? " is-drop-before" : ""}${queueDropIndex === index + 1 && draggingEntryId !== row.item.id ? " is-drop-after" : ""}`}
-                onDragOver={(event) => handleQueueCardDragOver(event, index)}
-                onDrop={handleQueueListDrop}
-              >
-                <BuildQueueCraftCard
-                  index={index + 1}
-                  item={row.item}
-                  itemTypeLabel={getItemTypeLabel(row.item)}
-                  recipes={recipes}
-                  recipeInputsByRecipeId={recipeInputsByRecipeId}
-                  inventory={inventoryEntries}
-                  selected={row.item.id === resolvedSelectedItemId}
-                  highlighted={row.item.id === allocationOwnerHighlightId}
-                  onSelect={setSelectedItemId}
-                  dragging={draggingEntryId === row.item.id}
-                  onDragStart={handleCraftDragStart}
-                  onDragEnd={clearDragState}
-                  onKeyboardReorder={handleKeyboardReorder}
-                />
-              </div>
-              ))}
+            ) : visibleRows.map((row, index) => {
+              const activeDrag = queueTab === "active" && Boolean(draggingEntryId);
+              const remainingIndex = activeRows
+                .filter((entry) => entry.item.id !== draggingEntryId)
+                .findIndex((entry) => entry.item.id === row.item.id);
+              const showPlaceholderBefore = activeDrag && remainingIndex >= 0 && queueDropIndex === remainingIndex;
+              const isLastRemaining = remainingIndex === activeRows.filter((entry) => entry.item.id !== draggingEntryId).length - 1;
+              const showPlaceholderAfter = activeDrag && isLastRemaining && queueDropIndex === remainingIndex + 1;
+
+              return (
+                <div
+                  key={row.item.id}
+                  className="bq-craft-card-drop-slot"
+                  onDragOver={handleQueueCardDragOver}
+                  onDrop={handleQueueListDrop}
+                >
+                  {showPlaceholderBefore ? <div className="bq-craft-card-drop-placeholder" aria-label="Projected reorder destination">Drop to reorder here</div> : null}
+                  <BuildQueueCraftCard
+                    index={index + 1}
+                    item={row.item}
+                    itemTypeLabel={getItemTypeLabel(row.item)}
+                    recipes={recipes}
+                    recipeInputsByRecipeId={recipeInputsByRecipeId}
+                    inventory={inventoryEntries}
+                    selected={row.item.id === resolvedSelectedItemId}
+                    highlighted={row.item.id === allocationOwnerHighlightId}
+                    onSelect={setSelectedItemId}
+                    dragging={draggingEntryId === row.item.id}
+                    dragActive={activeDrag}
+                    onDragStart={handleCraftDragStart}
+                    onDragEnd={handleCraftDragEnd}
+                    onKeyboardReorder={handleKeyboardReorder}
+                  />
+                  {showPlaceholderAfter ? <div className="bq-craft-card-drop-placeholder" aria-label="Projected reorder destination">Drop to reorder here</div> : null}
+                </div>
+              );
+            })}
             </div>
           </div>
 
@@ -588,30 +677,38 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
           {draggingEntryId ? (
             <div className="bq-drag-destinations" aria-label="Move craft destinations">
               <span className="bq-drag-destinations-title">Move craft to</span>
-              {buildQueues.filter((queue) => queue.sourceType === "custom").map((queue) => (
+              {buildQueues.filter((queue) => queue.sourceType === "custom" && queue.id !== activeBuildQueueId).map((queue) => (
                 <button
                   key={queue.id}
                   type="button"
                   className={`bq-drag-destination${dragDestinationId === queue.id ? " is-over" : ""}`}
-                  onDragEnter={() => setDragDestinationId(queue.id)}
+                  onDragEnter={() => { setDragDestination(queue.id); setQueueDropIndex(null); }}
                   onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }}
-                  onDragLeave={() => setDragDestinationId((current) => current === queue.id ? null : current)}
                   onDrop={(event) => handleDestinationDrop(event, queue.id)}
                 >
-                  <span>{queue.name}</span>
-                  {queue.id === activeBuildQueueId ? <small>Current queue</small> : <small>Move here</small>}
+                <span>{queue.name}</span>
+                <small>Move to this queue</small>
                 </button>
               ))}
               <button
                 type="button"
                 className={`bq-drag-destination bq-drag-destination--completed${dragDestinationId === "completed" ? " is-over" : ""}`}
-                onDragEnter={() => setDragDestinationId("completed")}
+                onDragEnter={() => { setDragDestination("completed"); setQueueDropIndex(null); }}
                 onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }}
-                onDragLeave={() => setDragDestinationId((current) => current === "completed" ? null : current)}
                 onDrop={(event) => handleDestinationDrop(event, "completed")}
               >
-                <span>Completed</span>
-                <small>Archive craft</small>
+                <span>Move to Completed</span>
+                <small>Archive this craft as complete</small>
+              </button>
+              <button
+                type="button"
+                className={`bq-drag-destination bq-drag-destination--new-queue${dragDestinationId === "new-queue" ? " is-over" : ""}`}
+                onDragEnter={() => { setDragDestination("new-queue"); setQueueDropIndex(null); }}
+                onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "move"; }}
+                onDrop={handleNewQueueDrop}
+              >
+                <span>New Queue</span>
+                <small>Create a queue and move this craft first</small>
               </button>
             </div>
           ) : null}
@@ -620,6 +717,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
             <div className="bq-center-shell ops-primary-card">
+            <BuildQueueFrame asset="content-shell-frame.svg" />
             <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}

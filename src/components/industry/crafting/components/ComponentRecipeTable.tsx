@@ -81,6 +81,7 @@ import {
   groupWeaponPerformanceStats,
   normalizeWeaponPerformanceDisplayStats,
 } from "@/lib/crafting/detailStatGroups";
+import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
 
 export type { FinalProductQuality } from "../utils/recipeQuality";
 
@@ -1395,7 +1396,7 @@ export function MaterialQualityRow({
   );
 }
 
-function DetailMaterialQualityRow({
+export function DetailMaterialQualityRow({
   mat,
   bandIndex,
   onBandChange,
@@ -1415,10 +1416,7 @@ function DetailMaterialQualityRow({
     quality,
     selectedQualityTierClass,
     atQuality,
-    railMarkers,
     findNearestBandForMappedValue,
-    bandOnePct,
-    fillPct,
     minQuality,
     maxQuality,
   } = useMaterialQualityModel({
@@ -1455,60 +1453,19 @@ function DetailMaterialQualityRow({
         <span className="craft-detail-quality-value">{quality}</span>
       </div>
       <div className="craft-detail-material-slider">
-        <input
-          type="range"
+        <TargetQualitySlider
+          label={`${quality}`}
+          tone="cyan"
+          materialName={materialName}
           min={minQuality}
           max={maxQuality}
           step={1}
           value={quality}
-          onChange={(e) => {
-            const rawValue = Number(e.target.value);
+          onChange={(rawValue) => {
             onBandChange(findNearestBandForMappedValue(rawValue));
           }}
-          className="craft-quality-input craft-detail-quality-input"
-          aria-label={`Quality band for ${materialName}`}
+          onCommit={(rawValue) => onBandChange(findNearestBandForMappedValue(rawValue))}
         />
-        <div
-          className={`craft-quality-rail craft-detail-quality-rail ${selectedQualityTierClass}`}
-          style={
-            {
-              "--band-one-pct": `${bandOnePct}%`,
-            } as React.CSSProperties
-          }
-        >
-          <div
-            className={`craft-quality-rail-fill craft-detail-quality-fill ${selectedQualityTierClass}`}
-            style={
-              {
-                "--band-one-pct": `${bandOnePct}%`,
-                "--fill-pct": `${fillPct}%`,
-              } as React.CSSProperties
-            }
-          />
-          {railMarkers.map((marker) => {
-            const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
-            const markerState =
-              marker.index < safeBandIndex
-                ? " is-before-active"
-                : marker.index === safeBandIndex
-                  ? " is-active"
-                  : "";
-
-            return (
-              <button
-                type="button"
-                key={`${marker.index}-${marker.mappedValue}`}
-                className={`craft-quality-marker craft-detail-band-marker ${markerTierClass}${markerState}`}
-                style={{ left: `${marker.left}%` }}
-                data-edge={marker.edge}
-                onClick={() => onBandChange(marker.index)}
-                aria-label={`Use mapped quality ${marker.mappedValue}`}
-              >
-                <span className="craft-quality-marker-line craft-detail-band-dot" />
-              </button>
-            );
-          })}
-        </div>
       </div>
       <div className="craft-detail-material-effects">
         {atQuality.map((m, i) => {
