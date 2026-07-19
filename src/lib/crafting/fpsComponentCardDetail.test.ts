@@ -66,6 +66,18 @@ test("FPS armor card fallback produces at least one valid Build Queue stat group
   assert.ok(groups.some((group) => group.kind === "matrix" && group.title === "Damage Taken Multipliers"));
 });
 
+test("vehicle ship-weapon cards cannot become fitting detail fallbacks", () => {
+  const legacyShipWeaponCard = {
+    id: "legacy-ship-weapon",
+    entityClass: "44444444-4444-4444-8444-444444444444",
+    kind: "vehicle",
+    type: "weapons",
+    name: "Legacy Weapon",
+    stats: { weapon: { dps: 999999, ammoCapacity: 999999 } },
+  };
+  assert.equal(buildFittingDetailFromFpsComponentCard(legacyShipWeaponCard as never), null);
+});
+
 test("ship weapon and established component projections expose their current labels", () => {
   const cases: Array<{ detail: FittingComponentDetail; expectedLabels: string[] }> = [
     {
