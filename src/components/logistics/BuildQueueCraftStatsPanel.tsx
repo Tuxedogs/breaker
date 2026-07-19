@@ -3,6 +3,7 @@ import type {
   CraftStatComparisonRowView,
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
+import BuildQueueFrame from "./BuildQueueFrame";
 
 type ConsolidatedStat =
   | { kind: "comparison"; row: CraftStatComparisonRowView }
@@ -17,6 +18,10 @@ function normalizeStatKey(value: string): string {
 
 function normalizeGroupKey(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function formatStatLabel(value: string): string {
+  return value.replace(/\s*\/\s*/g, " and ");
 }
 
 function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGroup[] {
@@ -59,10 +64,10 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
 function ComparisonDelta({ column }: { column: CraftStatComparisonColumnView }) {
   if (column.state !== "ready") return null;
   const delta = column.percentDelta ?? column.absoluteDelta;
-  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">(0%)</span>;
   return (
     <span className={`bq-stat-compare-delta ${column.impactClass ?? "bq-stat-compare-delta--neutral"}`}>
-      {delta}
+      ({delta})
     </span>
   );
 }
@@ -95,7 +100,9 @@ function ComparisonColumn({ column }: { column: CraftStatComparisonColumnView })
   }
   return (
     <span className="bq-stat-compare-cell">
-      <strong className="bq-stat-compare-value">{column.value}</strong>
+      <strong className={`bq-stat-compare-value ${column.impactClass ?? "bq-stat-compare-value--neutral"}`}>
+        {column.value}
+      </strong>
       <ComparisonDelta column={column} />
     </span>
   );
@@ -115,7 +122,7 @@ function ComparisonStat({ row }: { row: CraftStatComparisonRowView }) {
   return (
     <article className="bq-stat-compare-row" data-bq-benefit-direction={row.benefitDirection} aria-label={`${row.label} comparison`}>
       <div className="bq-stat-compare-heading">
-        <strong className="bq-stat-compare-label">{row.label}</strong>
+        <strong className="bq-stat-compare-label">{formatStatLabel(row.label)}</strong>
         {row.unit !== "-" ? <span className="bq-stat-compare-unit">{row.unit}</span> : null}
       </div>
       <div className="bq-stat-compare-values">
@@ -140,40 +147,46 @@ function ComparisonStat({ row }: { row: CraftStatComparisonRowView }) {
 function CompactStat({ label, value, unit }: { label: string; value: string; unit?: string }) {
   return (
     <div className="bq-stat-compact-row" role="listitem" aria-label={`${label}: ${value}${unit && unit !== "-" ? ` ${unit}` : ""}`}>
-      <span className="bq-stat-compact-label">{label}</span>
+      <span className="bq-stat-compact-label">{formatStatLabel(label)}</span>
       <strong className="bq-stat-compact-value">{value}</strong>
       {unit && unit !== "-" ? <span className="bq-stat-compact-unit">{unit}</span> : null}
     </div>
   );
 }
 
-function ConsolidatedGroup({ group }: { group: ConsolidatedStatGroup }) {
-  const unchangedStats = group.stats.filter((stat) => (
-    stat.kind === "static" || !comparisonIsModified(stat.row)
-  ));
-  const modifiedStats = group.stats.filter((stat): stat is Extract<ConsolidatedStat, { kind: "comparison" }> => (
+function getUnchangedStats(group: ConsolidatedStatGroup) {
+  return group.stats.filter((stat) => stat.kind === "static" || !comparisonIsModified(stat.row));
+}
+
+function getModifiedStats(group: ConsolidatedStatGroup) {
+  return group.stats.filter((stat): stat is Extract<ConsolidatedStat, { kind: "comparison" }> => (
     stat.kind === "comparison" && comparisonIsModified(stat.row)
   ));
+}
 
+function UnmodifiedStatGroup({ group }: { group: ConsolidatedStatGroup }) {
+  const unchangedStats = getUnchangedStats(group);
+  if (unchangedStats.length === 0) return null;
   return (
-    <section
-      className={`bq-stat-compare-group${modifiedStats.length === 0 ? " bq-stat-compare-group--unchanged-only" : ""}`}
-      aria-label={group.title}
-    >
-      <h4 className="bq-stat-compare-group-title">{group.title}</h4>
-      <div className="bq-stat-group-layout">
-        {unchangedStats.length > 0 ? (
-          <div className="bq-stat-compact-list" role="list" aria-label={`${group.title} unchanged statistics`}>
-            {unchangedStats.map((stat) => stat.kind === "comparison"
-              ? <CompactStat key={stat.row.statId} label={stat.row.label} value={stat.row.baseValue} unit={stat.row.unit} />
-              : <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />)}
-          </div>
-        ) : null}
-        {modifiedStats.length > 0 ? (
-          <div className="bq-stat-compare bq-stat-modified-list" role="list" aria-label={`${group.title} modified statistics`}>
-            {modifiedStats.map((stat) => <ComparisonStat key={stat.row.statId} row={stat.row} />)}
-          </div>
-        ) : null}
+    <section className="bq-stat-unmodified-group" aria-label={`${formatStatLabel(group.title)} unmodified statistics`}>
+      <h4 className="bq-stat-compare-group-title">{formatStatLabel(group.title)}</h4>
+      <div className="bq-stat-compact-list" role="list">
+        {unchangedStats.map((stat) => stat.kind === "comparison"
+          ? <CompactStat key={stat.row.statId} label={stat.row.label} value={stat.row.baseValue} unit={stat.row.unit} />
+          : <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />)}
+      </div>
+    </section>
+  );
+}
+
+function ModifiedStatGroup({ group }: { group: ConsolidatedStatGroup }) {
+  const modifiedStats = getModifiedStats(group);
+  if (modifiedStats.length === 0) return null;
+  return (
+    <section className="bq-stat-modified-group" aria-label={`${formatStatLabel(group.title)} modified statistics`}>
+      <h5>{formatStatLabel(group.title)}</h5>
+      <div className="bq-stat-compare bq-stat-modified-list" role="list">
+        {modifiedStats.map((stat) => <ComparisonStat key={stat.row.statId} row={stat.row} />)}
       </div>
     </section>
   );
@@ -183,8 +196,7 @@ function StatsLegend() {
   return (
     <div className="bq-stat-legend" aria-label="Comparison color legend">
       <span className="bq-stat-legend-item bq-stat-legend-item--benefit">+ Beneficial</span>
-      <span className="bq-stat-legend-item bq-stat-legend-item--harm">+ Harmful</span>
-      <span className="bq-stat-legend-item bq-stat-legend-item--neutral">+ Neutral</span>
+      <span className="bq-stat-legend-item bq-stat-legend-item--harm">− Detrimental</span>
     </div>
   );
 }
@@ -214,21 +226,31 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
 
 export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><BuildQueueFrame asset="stats-band-frame.svg" /><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
   }
   if (model.status !== "ready" || (model.comparisonGroups.length === 0 && model.overviewGroups.length === 0)) {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><BuildQueueFrame asset="stats-band-frame.svg" /><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
   }
 
   const consolidatedGroups = buildConsolidatedGroups(model);
+  const hasModifiedStats = consolidatedGroups.some((group) => getModifiedStats(group).length > 0);
   return (
     <section className="bq-component-statistics" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
+      <BuildQueueFrame asset="stats-band-frame.svg" />
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
         <StatsLegend />
       </header>
       <div className="bq-component-statistics-body">
-        {consolidatedGroups.map((group) => <ConsolidatedGroup key={group.title} group={group} />)}
+        <div className="bq-stat-unmodified-column" aria-label="Unmodified statistics">
+          {consolidatedGroups.map((group) => <UnmodifiedStatGroup key={group.title} group={group} />)}
+        </div>
+        {hasModifiedStats ? (
+          <aside className="bq-stat-modified-card" aria-label="Modified statistics">
+            <h4>Modified</h4>
+            {consolidatedGroups.map((group) => <ModifiedStatGroup key={group.title} group={group} />)}
+          </aside>
+        ) : null}
       </div>
     </section>
   );

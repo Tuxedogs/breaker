@@ -5,6 +5,7 @@ import {
   type RecipeInputTemplate,
 } from "../../data/logistics/seed";
 import type {
+  BuildQueue,
   BuildQueueItem,
   InventoryEntry,
   InventoryLocation,
@@ -17,6 +18,7 @@ const now = "2026-07-11T00:00:00.000Z";
 const fixtureLocationId = "orbituary";
 
 export const BUILD_QUEUE_STATS_FIXTURE_PATH = "/logistics/build-queue/__fixture/stats";
+export const INVENTORY_ADD_MODAL_FIXTURE_PATH = "/logistics/build-queue/__fixture/add-inventory";
 
 export const FIXTURE_BLUEPRINT_IDS = {
   fr66: "db3f4c97-8d40-4b36-b397-452dea1594fc",
@@ -27,6 +29,9 @@ export const FIXTURE_BLUEPRINT_IDS = {
 
 export const FIXTURE_ITEM_IDS = {
   fr66: "bq-fixture-fr66",
+  fr66High: "bq-fixture-fr66-high",
+  fr66Precision: "bq-fixture-fr66-precision",
+  fr66Completed: "bq-fixture-fr66-completed",
   ad5b: "bq-fixture-ad5b",
   fpsWeapon: "bq-fixture-fps-weapon",
   fpsArmor: "bq-fixture-fps-armor",
@@ -90,6 +95,7 @@ function allocation(
   requirementId: string,
   quality: number,
   rarity: InventoryEntry["rarity"],
+  unitType: RecipeInputTemplate["unitType"] = "scu",
 ): ReservedMaterialAllocation {
   return {
     id,
@@ -100,7 +106,7 @@ function allocation(
     selectedQuality: quality,
     quality,
     qualityBand: Math.max(1, Math.ceil(quality / 100)),
-    unitType: "scu",
+    unitType,
     materialName: materialById.get(materialId)?.name ?? materialId,
     rarity,
     locationId: fixtureLocationId,
@@ -158,6 +164,8 @@ const recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]> = {
 const buildQueue: BuildQueueItem[] = [
   {
     id: FIXTURE_ITEM_IDS.fr66,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-defense",
     recipeId: "recipe-fixture-fr66",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fr66,
     itemId: "fr66",
@@ -174,21 +182,63 @@ const buildQueue: BuildQueueItem[] = [
     reservedAllocations: [
       allocation("bq-fix-alloc-fr66-shell", "stileron", "bq-fix-inv-stileron", 0.15, "bq-fix-fr66:shell", 860, rarityCatalog.legendary),
       allocation("bq-fix-alloc-fr66-field", "stileron", "bq-fix-inv-stileron", 0.24, "bq-fix-fr66:field-array", 860, rarityCatalog.legendary),
-      allocation("bq-fix-alloc-fr66-freq", "feynmaline", "bq-fix-inv-feynmaline", 20, "bq-fix-fr66:frequency", 720, rarityCatalog.rare),
+      allocation("bq-fix-alloc-fr66-freq", "feynmaline", "bq-fix-inv-feynmaline", 20, "bq-fix-fr66:frequency", 720, rarityCatalog.rare, "unit"),
     ],
     blueprintSources: [
       { displayName: "Xenothreat 2 85 01", poolGuid: "ddb463e6-1bf8-47da-8816-e1eab8347beb", poolName: "BlueprintPoolRecord.BP_REWARDS_Xenothreat2_85_01", sourceFolder: "xenothreat2rewards", weight: 1 },
     ],
   },
   {
+    id: FIXTURE_ITEM_IDS.fr66High,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-defense",
+    recipeId: "recipe-fixture-fr66",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.fr66,
+    itemId: "fr66",
+    itemName: "FR-66",
+    quantity: 1,
+    status: "active",
+    priority: 2,
+    allowLowerQuality: false,
+    finalProductQualityBand: 9,
+    finalProductQualityAverage: 8.8,
+    finalProductRarity: "legendary",
+    materialRequirements: fr66Requirements.map((input) => ({ ...input, selectedQuality: 860 })),
+    reservedAllocations: [
+      allocation("bq-fix-alloc-fr66-high-shell", "stileron", "bq-fix-inv-stileron", 0.15, "bq-fix-fr66:shell", 860, rarityCatalog.legendary),
+      allocation("bq-fix-alloc-fr66-high-field", "stileron", "bq-fix-inv-stileron", 0.24, "bq-fix-fr66:field-array", 860, rarityCatalog.legendary),
+      allocation("bq-fix-alloc-fr66-high-freq", "feynmaline", "bq-fix-inv-feynmaline", 20, "bq-fix-fr66:frequency", 720, rarityCatalog.rare, "unit"),
+    ],
+  },
+  {
+    id: FIXTURE_ITEM_IDS.fr66Precision,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-defense",
+    recipeId: "recipe-fixture-fr66",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.fr66,
+    itemId: "fr66",
+    itemName: "FR-66",
+    quantity: 1,
+    status: "active",
+    priority: 3,
+    allowLowerQuality: true,
+    finalProductQualityBand: 7,
+    finalProductQualityAverage: 7.4,
+    finalProductRarity: "epic",
+    materialRequirements: fr66Requirements.map((input) => ({ ...input, selectedQuality: 740 })),
+    reservedAllocations: [],
+  },
+  {
     id: FIXTURE_ITEM_IDS.ad5b,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-defense",
     recipeId: "recipe-fixture-ad5b",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.ad5b,
     itemId: "ad5b",
     itemName: "AD5B Ballistic Gatling",
     quantity: 1,
     status: "active",
-    priority: 2,
+    priority: 4,
     allowLowerQuality: false,
     finalProductQualityBand: 7,
     finalProductQualityAverage: 7.0,
@@ -201,7 +251,45 @@ const buildQueue: BuildQueueItem[] = [
     ],
   },
   {
+    id: FIXTURE_ITEM_IDS.fr66Completed,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-defense",
+    recipeId: "recipe-fixture-fr66",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.fr66,
+    itemId: "fr66",
+    itemName: "FR-66",
+    quantity: 1,
+    status: "complete",
+    priority: 5,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 8.1,
+    finalProductRarity: "legendary",
+    materialRequirements: fr66Requirements.map((input) => ({ ...input, selectedQuality: 820 })),
+    reservedAllocations: [
+      allocation("bq-fix-alloc-fr66-done-shell", "stileron", "fixture-consumed-stileron", 0.15, "bq-fix-fr66:shell", 860, rarityCatalog.legendary),
+      allocation("bq-fix-alloc-fr66-done-field", "stileron", "fixture-consumed-stileron", 0.24, "bq-fix-fr66:field-array", 860, rarityCatalog.legendary),
+      allocation("bq-fix-alloc-fr66-done-freq", "feynmaline", "fixture-consumed-feynmaline", 20, "bq-fix-fr66:frequency", 720, rarityCatalog.rare, "unit"),
+    ],
+    completionSnapshot: {
+      completedAt: "2026-07-11T12:00:00.000Z",
+      quantity: 1,
+      allowLowerQuality: false,
+      finalProductQualityBand: 8,
+      finalProductQualityAverage: 8.1,
+      finalProductRarity: "legendary",
+      materialRequirements: fr66Requirements.map((input) => ({ ...input, selectedQuality: 820 })),
+      reservedAllocations: [
+        allocation("bq-fix-alloc-fr66-done-shell", "stileron", "fixture-consumed-stileron", 0.15, "bq-fix-fr66:shell", 860, rarityCatalog.legendary),
+        allocation("bq-fix-alloc-fr66-done-field", "stileron", "fixture-consumed-stileron", 0.24, "bq-fix-fr66:field-array", 860, rarityCatalog.legendary),
+        allocation("bq-fix-alloc-fr66-done-freq", "feynmaline", "fixture-consumed-feynmaline", 20, "bq-fix-fr66:frequency", 720, rarityCatalog.rare, "unit"),
+      ],
+    },
+  },
+  {
     id: FIXTURE_ITEM_IDS.fpsWeapon,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-ground",
     recipeId: "recipe-fixture-fps-weapon",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fpsWeapon,
     itemId: "p6-lr",
@@ -218,11 +306,13 @@ const buildQueue: BuildQueueItem[] = [
       allocation("bq-fix-alloc-fps-wpn-frame", "taranite", "bq-fix-inv-taranite", 0.06, "bq-fix-fps-weapon:frame", 820, rarityCatalog.epic),
       allocation("bq-fix-alloc-fps-wpn-stock", "hephaestanite", "bq-fix-inv-hephaestanite", 0.02, "bq-fix-fps-weapon:stock", 760, rarityCatalog.uncommon),
       allocation("bq-fix-alloc-fps-wpn-barrel", "iron", "bq-fix-inv-iron", 0.03, "bq-fix-fps-weapon:barrel", 640, rarityCatalog.common),
-      allocation("bq-fix-alloc-fps-wpn-precision", "hadanite", "bq-fix-inv-hadanite", 1, "bq-fix-fps-weapon:precision", 880, rarityCatalog.epic),
+      allocation("bq-fix-alloc-fps-wpn-precision", "hadanite", "bq-fix-inv-hadanite", 1, "bq-fix-fps-weapon:precision", 880, rarityCatalog.epic, "unit"),
     ],
   },
   {
     id: FIXTURE_ITEM_IDS.fpsArmor,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-expedition",
     recipeId: "recipe-fixture-fps-armor",
     blueprint_id: FIXTURE_BLUEPRINT_IDS.fpsArmor,
     itemId: "adp-mk4-arms",
@@ -242,7 +332,9 @@ const buildQueue: BuildQueueItem[] = [
 ];
 
 export type BuildQueuePageFixture = {
+  buildQueues: BuildQueue[];
   buildQueue: BuildQueueItem[];
+  activeBuildQueueId: string;
   inventoryEntries: InventoryEntry[];
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
@@ -252,7 +344,13 @@ export type BuildQueuePageFixture = {
 };
 
 export const buildQueueStatsFixture: BuildQueuePageFixture = {
+  buildQueues: [
+    { id: "bq-fixture-queue-defense", name: "Pyro Defense Refit", sourceType: "custom" },
+    { id: "bq-fixture-queue-ground", name: "Ground Team Loadout", sourceType: "custom" },
+    { id: "bq-fixture-queue-expedition", name: "Expedition Spares", sourceType: "fitting", sourceReference: "fixture-fit-600i-expedition" },
+  ],
   buildQueue,
+  activeBuildQueueId: "bq-fixture-queue-defense",
   inventoryEntries,
   materials: fixtureMaterials,
   locations: inventoryLocations.filter((location) => location.id === fixtureLocationId),

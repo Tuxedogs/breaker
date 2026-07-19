@@ -5,6 +5,7 @@ import {
   deleteBuildQueueItem,
   listBuildQueueItems,
   normalizeQuantity,
+  normalizeQueueEntryId,
   normalizeRecipeId,
   normalizeVariantId,
   updateBuildQueueItem,
@@ -48,6 +49,8 @@ export async function handleUserBuildQueueRoute(
       if (!recipeId) return safeError(400, "recipeId is required.");
 
       const item = await addBuildQueueItem(userId, {
+        id: normalizeQueueEntryId(body.id),
+        queueId: normalizeRecipeId(body.queueId),
         recipeId,
         variantId: normalizeVariantId(body.variantId),
         quantity: normalizeQuantity(body.quantity, 1),
@@ -61,7 +64,9 @@ export async function handleUserBuildQueueRoute(
       if (!recipeId) return safeError(400, "recipeId is required.");
 
       const item = await updateBuildQueueItem(userId, {
+        id: normalizeQueueEntryId(body.id),
         recipeId,
+        queueId: normalizeRecipeId(body.queueId),
         variantId: normalizeVariantId(body.variantId),
         quantity: body.quantity as number,
       });
@@ -71,7 +76,7 @@ export async function handleUserBuildQueueRoute(
     if (method === "DELETE") {
       if (!isRecord(body)) return safeError(400, "Invalid request body.");
       if (body.clearAll === true) {
-        await clearBuildQueue(userId);
+        await clearBuildQueue(userId, normalizeRecipeId(body.queueId));
         return { status: 200, body: { ok: true } };
       }
 
@@ -81,6 +86,7 @@ export async function handleUserBuildQueueRoute(
       await deleteBuildQueueItem(userId, {
         id,
         recipeId,
+        queueId: normalizeRecipeId(body.queueId),
         variantId: normalizeVariantId(body.variantId),
       });
       return { status: 200, body: { ok: true } };

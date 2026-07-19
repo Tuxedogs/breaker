@@ -29,7 +29,7 @@ export function persistBuildQueueDelete(item: Pick<BuildQueueItem, "id" | "recip
   }));
 }
 
-export function persistBuildQueueClear() {
+export function persistBuildQueueClear(queueId?: string) {
   if (!currentAccessToken) return null;
-  return runOnlinePersistenceMutation(() => clearUserBuildQueue(currentAccessToken as string));
+  return runOnlinePersistenceMutation(() => clearUserBuildQueue(currentAccessToken as string, queueId));
 }

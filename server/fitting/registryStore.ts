@@ -63,6 +63,9 @@ function validateRegistryEnvelope(
   if (payload.schemaVersion !== 1) {
     throw new FittingHttpError(409, "DATASET_SCHEMA_UNSUPPORTED", "Dataset schema unsupported", `Artifact schema ${payload.schemaVersion} is not supported by fitting API v1.`);
   }
+  if (fileName === "ship_weapons.json" && payload.recordSchemaVersion !== undefined && payload.recordSchemaVersion !== 2) {
+    throw new FittingHttpError(409, "DATASET_SCHEMA_UNSUPPORTED", "Dataset schema unsupported", `Ship weapon record schema ${payload.recordSchemaVersion} is not supported by fitting API v1.`);
+  }
   if (payload.registry && payload.registry !== fileName.replace(/\.json$/, "")) {
     throw new FittingHttpError(409, "DATASET_SCHEMA_UNSUPPORTED", "Dataset schema unsupported", "A fitting registry shard has an unexpected registry name.");
   }

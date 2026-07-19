@@ -49,6 +49,9 @@ import { BuildQueueProductIcon } from './BuildQueueProductIcon';
 import { BuildQueueCraftIdentity, BuildQueueCraftStatistics, BuildQueueStatsProvider } from './BuildQueueStatsBreakdown';
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
+import { getCompletedPresentationItem } from '../../lib/logistics/buildQueueEntries';
+import TargetQualitySlider from '../shared/TargetQualitySlider';
+import BuildQueueFrame from './BuildQueueFrame';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -1061,50 +1064,6 @@ interface Props {
 
 // ─── Target Quality Popover ──────────────────────────────────────────────────
 
-function TargetQualityEditor({
-  label,
-  tone,
-  materialName,
-  value,
-  onChange,
-  onCommit,
-}: {
-  label: string;
-  tone: string;
-  materialName: string;
-  value: number;
-  onChange: (value: number) => void;
-  onCommit: (value: number) => void;
-}) {
-  const normalizedValue = clampTargetQuality(value);
-
-  return (
-    <span className="bq-target-editor bq-target-editor--slider" data-bq-row-control="true">
-      <span className={`bq-target-quality bq-target-quality--${tone}`} aria-hidden="true">
-        <span>{label}</span>
-      </span>
-      <span className="bq-target-slider-shell">
-        <input
-          type="range"
-          min="1"
-          max="1000"
-          step="1"
-          className="bq-target-quality-slider"
-          value={normalizedValue}
-          aria-label={`Target quality for ${materialName}`}
-          aria-valuetext={`Target ${normalizedValue}`}
-          data-bq-row-control="true"
-          onChange={(event) => onChange(clampTargetQuality(Number(event.target.value)))}
-          onBlur={(event) => onCommit(clampTargetQuality(Number(event.currentTarget.value)))}
-          onClick={(event) => event.stopPropagation()}
-          onPointerDown={(event) => event.stopPropagation()}
-        />
-        <output>{normalizedValue}</output>
-      </span>
-    </span>
-  );
-}
-
 // ─── Group ───────────────────────────────────────────────────────────────────
 
 export default function BuildQueueGroup({
@@ -1250,7 +1209,8 @@ export default function BuildQueueGroup({
           </div>
         </div>
       ) : null}
-      {items.map((item) => {
+      {items.map((storedItem) => {
+        const item = getCompletedPresentationItem(storedItem);
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
@@ -1260,7 +1220,9 @@ export default function BuildQueueGroup({
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
         const readableType = itemTypeLabel ?? CATEGORY_LABELS[category] ?? category;
 
-        const summaryMetrics = inputs.reduce<BuildQueueSummaryMetrics>((metrics, input, inputIndex) => {
+        const summaryMetrics = isCompletedCraft
+          ? { coveredCount: inputs.length, totalShortfall: 0 }
+          : inputs.reduce<BuildQueueSummaryMetrics>((metrics, input, inputIndex) => {
           const materialKey = input.materialKey ?? input.materialId;
           const required = input.quantity * item.quantity;
           const requirementIdentity = {
@@ -1276,7 +1238,7 @@ export default function BuildQueueGroup({
             coveredCount: metrics.coveredCount + (isCovered ? 1 : 0),
             totalShortfall: metrics.totalShortfall + needSummary.stillNeeded,
           };
-        }, { coveredCount: 0, totalShortfall: 0 });
+          }, { coveredCount: 0, totalShortfall: 0 });
 
         const recipeDefaultInputs = recipeInputsByRecipeId[item.recipeId] ?? [];
         const materialRequirementRows = inputs.map((input, inputIndex) => {
@@ -1310,8 +1272,14 @@ export default function BuildQueueGroup({
           const allowLowerQuality = Boolean(item.allowLowerQuality);
           const requirementIdentity = { requirementId, selectedQuality: requirementSelectedQuality, unitType: input.unitType };
           const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
-          const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, effectiveRequirementIdentity);
-          const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, effectiveRequirementIdentity);
+          const liveCoverage = getMaterialReservationCoverage(item, materialKey, required, inventory, effectiveRequirementIdentity);
+          const coverage = isCompletedCraft
+            ? { ...liveCoverage, reservedQuantity: required, coverageState: 'covered' as const, validations: [] }
+            : liveCoverage;
+          const liveNeedSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, effectiveRequirementIdentity);
+          const needSummary = isCompletedCraft
+            ? { ...liveNeedSummary, reservedByThisQueueItem: required, stillNeeded: 0 }
+            : liveNeedSummary;
           const ownAllocations = item.reservedAllocations?.filter((a) => allocationMatchesRequirement(a, materialKey, effectiveRequirementIdentity)) ?? [];
           const ownReservedByStack = new Map(ownAllocations.map((a) => [a.inventoryEntryId, a.quantityReserved]));
           const effectiveReservedQuality = getWeightedEffectiveQuality(ownAllocations);
@@ -1374,14 +1342,14 @@ export default function BuildQueueGroup({
             qualityBands: first.qualityBands,
             qualityBreakdown,
             averageQuality: inventoryEffectiveQuality,
-            rowTone: getGroupedCoverageState(group.requirements.map((r) => r.coverage.coverageState)),
+            rowTone: isCompletedCraft ? 'covered' : getGroupedCoverageState(group.requirements.map((r) => r.coverage.coverageState)),
             reserveStatusLabel: first.reserveStatusLabel,
             requiredTotal: group.requirements.reduce((s, r) => s + r.required, 0),
             reservedTotal: group.requirements.reduce((s, r) => s + r.coverage.reservedQuantity, 0),
             allocatedTotal: group.requirements.reduce((s, r) => s + r.allocatedAmount, 0),
             ownedQuantity: Math.max(0, ...group.requirements.map((r) => r.needSummary.ownedQuantity)),
             availableQuantity: Math.max(0, ...group.requirements.map((r) => r.needSummary.availableQuantity)),
-            needTotal: group.requirements.reduce((s, r) => s + r.needSummary.stillNeeded, 0),
+            needTotal: isCompletedCraft ? 0 : group.requirements.reduce((s, r) => s + r.needSummary.stillNeeded, 0),
             hasStock: group.requirements.some((r) => r.allMaterialStacks.length > 0),
           };
         });
@@ -1507,6 +1475,7 @@ export default function BuildQueueGroup({
             <BuildQueueStatsProvider blueprintId={item.blueprint_id} item={item} inputs={inputs}>
             {/* ── Craft header: identity | stock overview | artwork ── */}
             <div className="bq-item-sidebar bq-item-header">
+              <BuildQueueFrame asset="detail-panel-frame.svg" />
               <div className="bq-item-identity">
                 <div className="bq-item-name-block">
                   <span className="bq-item-cat">{readableType}</span>
@@ -1552,6 +1521,7 @@ export default function BuildQueueGroup({
               </div>
 
               <div className="bq-item-visual" aria-hidden="true">
+                <BuildQueueFrame asset="item-preview-frame.svg" />
                 <BuildQueueProductIcon
                   item={item}
                   recipe={recipe}
@@ -1568,6 +1538,7 @@ export default function BuildQueueGroup({
             <div className="bq-item-body">
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
+                <BuildQueueFrame asset="material-panel-frame.svg" />
                 <div className="bq-materials-section-header">
                   <div className="bq-materials-section-heading">
                     <h3 className="bq-materials-section-title">Material Allocation</h3>
@@ -1599,7 +1570,7 @@ export default function BuildQueueGroup({
                   <span>Avg Quality</span>
                   <span>Shortfall / Excess</span>
                   <span>Quality Allocation</span>
-                  <span>Actions</span>
+                  <span>{isCompletedCraft ? 'Status' : 'Actions'}</span>
                 </div>
                 ) : null}
 
@@ -1611,7 +1582,7 @@ export default function BuildQueueGroup({
                   const qualityRequirement = group.requirements[0];
                   const targetEditorQuality = clampTargetQuality(group.targetQuality ?? group.selectedQuality ?? 500);
                   const targetEditorBands = qualityRequirement.qualityBands ?? FALLBACK_QUALITY_BANDS;
-                  const balanceAmount = group.allocatedTotal - group.requiredTotal;
+                  const balanceAmount = isCompletedCraft ? 0 : group.allocatedTotal - group.requiredTotal;
                   const balanceTone = balanceAmount < 0 ? 'short' : balanceAmount > 0 ? 'excess' : 'met';
                   const balanceLabel = formatQuantity(Math.abs(balanceAmount), group.material);
                   const balanceStateLabel = balanceTone === 'short' ? 'short' : balanceTone === 'excess' ? 'excess' : 'balanced';
@@ -1620,6 +1591,7 @@ export default function BuildQueueGroup({
                   const averageQualityLabel = formatAverageQuality(group.averageQuality);
                   const averageQualityTone = getAverageQualityTone(group.averageQuality);
                   const averageBelowTarget =
+                    !isCompletedCraft &&
                     group.averageQuality !== undefined &&
                     Number.isFinite(group.averageQuality) &&
                     group.averageQuality < targetEditorQuality;
@@ -1633,7 +1605,9 @@ export default function BuildQueueGroup({
                       req.ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
                     });
                   };
-                  const openReserve = () => toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                  const openReserve = () => {
+                    if (!isCompletedCraft) toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                  };
                   return (
                     <section
                       key={group.groupKey}
@@ -1645,6 +1619,7 @@ export default function BuildQueueGroup({
                     >
                       {isMobileTouchLayout ? (
                       <div className="bq-mat-row bq-mat-row--mobile-card bq-mat-row--touch">
+                        <BuildQueueFrame asset="material-row-frame.svg" />
                         <div className="bq-mat-card-head">
                           <div className="bq-mat-name">
                             <span className="bq-material-name-cell">
@@ -1691,11 +1666,12 @@ export default function BuildQueueGroup({
                           <span><em>Need</em>{formatQuantity(group.requiredTotal, group.material)}</span>
                           <span className="bq-target-quality-cell">
                             <em>Target</em>
-                            <TargetQualityEditor
+                            <TargetQualitySlider
                               label={targetQualityLabel}
                               tone={targetQualityTone}
                               materialName={group.displayName}
                               value={targetEditorQuality}
+                              disabled={isCompletedCraft}
                               onChange={(value) => updateTargetQuality(
                                 item,
                                 qualityRequirement.input,
@@ -1751,6 +1727,7 @@ export default function BuildQueueGroup({
                           openReserve();
                         }}
                       >
+                        <BuildQueueFrame asset="material-row-frame.svg" />
                         <div className="bq-mat-name">
                           <span className="bq-material-name-cell">
                             <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} size={34} />
@@ -1759,11 +1736,12 @@ export default function BuildQueueGroup({
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.requiredTotal, group.material)}</span>
-                        <TargetQualityEditor
+                        <TargetQualitySlider
                           label={targetQualityLabel}
                           tone={targetQualityTone}
                           materialName={group.displayName}
                           value={targetEditorQuality}
+                          disabled={isCompletedCraft}
                           onChange={(value) => updateTargetQuality(
                             item,
                             qualityRequirement.input,
@@ -1841,7 +1819,7 @@ export default function BuildQueueGroup({
                       </div>
                       )}
 
-                      {group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
+                      {!isCompletedCraft && group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
                         <div key={allocation.id} className="bq-stale-line">
                           <span>Stale: {allocation.materialName ?? allocation.materialId} ({STALE_REASON_LABELS[staleReason ?? ''] ?? 'invalid'})</span>
                           <button type="button" className="bq-btn" onClick={() => onClearStaleAllocations(item.id)}>Remove stale</button>

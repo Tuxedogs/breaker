@@ -20,6 +20,7 @@ const InventoryFixturePage = lazy(() => import("./pages/logistics/InventoryFixtu
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 const BuildQueueFixturePage = lazy(() => import("./pages/logistics/BuildQueueFixturePage"));
+const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/InventoryAddModalFixturePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
 const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
@@ -38,6 +39,7 @@ const ComponentMappingPage = lazy(() =>
 
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
+const CraftingTargetSliderFixturePage = lazy(() => import("./pages/industry/CraftingTargetSliderFixturePage"));
 const IndustryCraftingLayout = lazy(() =>
   import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
 );
@@ -170,10 +172,16 @@ export default function App() {
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />
         {import.meta.env.DEV ? (
-          <Route
-            path="logistics/build-queue/__fixture/stats"
-            element={<Suspense fallback={<RouteFallback />}><BuildQueueFixturePage /></Suspense>}
-          />
+          <>
+            <Route
+              path="logistics/build-queue/__fixture/stats"
+              element={<Suspense fallback={<RouteFallback />}><BuildQueueFixturePage /></Suspense>}
+            />
+            <Route
+              path="logistics/build-queue/__fixture/add-inventory"
+              element={<Suspense fallback={<RouteFallback />}><InventoryAddModalFixturePage /></Suspense>}
+            />
+          </>
         ) : null}
 
         {/* Combat tools */}
@@ -204,6 +212,12 @@ export default function App() {
             </Suspense>
           }
         >
+          {import.meta.env.DEV ? (
+            <Route
+              path="__fixture/target-slider"
+              element={<Suspense fallback={<RouteFallback />}><CraftingTargetSliderFixturePage /></Suspense>}
+            />
+          ) : null}
           <Route
             index
             element={

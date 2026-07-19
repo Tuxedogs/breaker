@@ -6,6 +6,7 @@ import {
   syncOnlinePersistenceState,
   type OnlinePersistencePayload,
 } from "./onlinePersistenceService.js";
+import { deleteBuildQueue } from "./buildQueueMetadataService.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;
@@ -31,7 +32,8 @@ export async function handleUserInventoryRoute(
 ): Promise<RouteResult | null> {
   const stackMatch = path.match(/^\/api\/user\/inventory\/stacks(?:\/([^/]+))?$/);
   const locationMatch = path.match(/^\/api\/user\/inventory\/locations(?:\/([^/]+))?$/);
-  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch && !locationMatch) return null;
+  const buildQueueMatch = path.match(/^\/api\/user\/inventory\/build-queues(?:\/([^/]+))?$/);
+  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch && !locationMatch && !buildQueueMatch) return null;
 
   try {
     const { userId } = await requireAuthenticatedUser(headers);
@@ -82,6 +84,13 @@ export async function handleUserInventoryRoute(
       const locationId = locationMatch[1];
       if (!locationId) return safeError(400, "Location id is required.");
       return { status: 200, body: await deleteInventoryLocation(userId, locationId) };
+    }
+
+    if (buildQueueMatch && method === "DELETE") {
+      const queueId = buildQueueMatch[1];
+      if (!queueId) return safeError(400, "Build queue id is required.");
+      await deleteBuildQueue(userId, queueId);
+      return { status: 200, body: await listOnlinePersistenceState(userId) };
     }
 
     return safeError(405, "Method not allowed.");

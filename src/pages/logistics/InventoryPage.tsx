@@ -1905,7 +1905,9 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       replaceOnlineState({
         locations: remote.locations,
         inventoryEntries: remote.inventoryEntries,
+        buildQueues: remote.buildQueues,
         buildQueue: remote.buildQueue,
+        activeBuildQueueId: remote.activeBuildQueueId,
       }, {
         userId: authenticatedUserId,
         requestId,

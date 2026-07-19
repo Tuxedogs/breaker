@@ -66,16 +66,28 @@ test("FPS armor card fallback produces at least one valid Build Queue stat group
   assert.ok(groups.some((group) => group.kind === "matrix" && group.title === "Damage Taken Multipliers"));
 });
 
-test("ship weapon / shield / quantum / cooler / power plant projections remain unchanged", () => {
+test("vehicle ship-weapon cards cannot become fitting detail fallbacks", () => {
+  const legacyShipWeaponCard = {
+    id: "legacy-ship-weapon",
+    entityClass: "44444444-4444-4444-8444-444444444444",
+    kind: "vehicle",
+    type: "weapons",
+    name: "Legacy Weapon",
+    stats: { weapon: { dps: 999999, ammoCapacity: 999999 } },
+  };
+  assert.equal(buildFittingDetailFromFpsComponentCard(legacyShipWeaponCard as never), null);
+});
+
+test("ship weapon and established component projections expose their current labels", () => {
   const cases: Array<{ detail: FittingComponentDetail; expectedLabels: string[] }> = [
     {
       detail: shipDetail("ship_weapon", {
         alphaDamage: 120,
         damagePhysical: 120,
         fireRateRpm: 240,
-        ammoCapacity: 80,
+        maxAmmoCount: 80,
         projectileSpeed: 900,
-        calculatedRange: 1800,
+        projectileMaxTravel: 1800,
         health: 400,
         mass: 80,
       }, {
@@ -86,7 +98,7 @@ test("ship weapon / shield / quantum / cooler / power plant projections remain u
         maxPenetrationThickness: null,
         penetrationParams: null,
       }),
-      expectedLabels: ["Alpha Damage", "Physical Damage", "Fire Rate", "Ammo Capacity"],
+      expectedLabels: ["Alpha Damage", "Physical Damage", "Fire Rate", "Ballistic Reserve"],
     },
     {
       detail: shipDetail("shield", {

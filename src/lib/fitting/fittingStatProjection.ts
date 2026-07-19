@@ -132,10 +132,13 @@ export function getFittingModifierBaseValue(
 }
 
 function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
-  const { stats, mitigation } = detail;
+  const { stats, mitigation, weapon } = detail;
   const rows: ComponentCardMetric[] = [];
 
   pushMetric(rows, "Alpha Damage", formatCompactNumber(stats.alphaDamage));
+  pushMetric(rows, "Theoretical DPS", formatCompactNumber(stats.theoreticalDps));
+  pushMetric(rows, "60s Sustained DPS", formatCompactNumber(stats.sustainedDps60));
+  pushMetric(rows, "Damage Over 60s", formatCompactNumber(stats.damageOver60Seconds));
   pushNonZeroMetric(rows, "Physical Damage", stats.damagePhysical);
   pushNonZeroMetric(rows, "Energy Damage", stats.damageEnergy);
   pushNonZeroMetric(rows, "Distortion Damage", stats.damageDistortion);
@@ -143,19 +146,46 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushNonZeroMetric(rows, "Biochemical Damage", stats.damageBiochemical);
   pushNonZeroMetric(rows, "Stun Damage", stats.damageStun);
   pushMetric(rows, "Fire Rate", formatCompactNumber(stats.fireRateRpm, " rpm"));
-  pushMetric(rows, "Ammo Capacity", formatCompactNumber(stats.ammoCapacity));
+  const ballisticReserve = stats.maxAmmoCount && stats.maxAmmoCount > 0 ? stats.maxAmmoCount : stats.ammoCapacity;
+  pushMetric(rows, "Ballistic Reserve", formatCompactNumber(ballisticReserve));
+  pushMetric(rows, "Energy Maximum Load", formatCompactNumber(stats.maxAmmoLoad));
+  pushMetric(rows, "Energy Regen", formatCompactNumber(stats.maxRegenPerSec, "/s"));
+  pushMetric(rows, "Energy Regen Delay", formatCompactNumber(stats.regenerationCooldown, "s"));
   pushMetric(rows, "Projectile Speed", formatCompactNumber(stats.projectileSpeed, " m/s"));
-  pushMetric(rows, "Projectile Range / Max Travel", formatCompactNumber(stats.calculatedRange, "m"));
+  pushMetric(rows, "Projectile Max Travel", formatCompactNumber(stats.projectileMaxTravel ?? stats.calculatedRange, "m"));
   pushMetric(rows, "Penetration", formatCompactNumber(readWeaponPenetration(stats, mitigation)));
   pushMetric(rows, "Penetration Distance", formatCompactNumber(readWeaponPenetrationDistance(mitigation), "m"));
   pushMetric(rows, "Heat Per Shot", formatCompactNumber(stats.heatPerShot));
-  pushMetric(rows, "Cooling Rate", formatCompactNumber(stats.cooldownRate));
-  pushMetric(rows, "Power", formatCompactNumber(readWeaponPower(stats)));
-  pushMetric(rows, "Online EM", formatCompactNumber(stats.electromagneticEmission));
-  pushMetric(rows, "EM Signature", formatCompactNumber(stats.crossSection ?? stats.radarEmission));
+  pushMetric(rows, "Cooling Rate", formatCompactNumber(stats.coolingPerSecond ?? stats.cooldownRate, "/s"));
+  pushMetric(rows, "Cooling Delay", formatCompactNumber(stats.timeTillCoolingStarts, "s"));
+  pushMetric(rows, "Overheat Fix Time", formatCompactNumber(stats.overheatFixTime, "s"));
+  if (stats.spreadMin != null && stats.spreadMax != null) {
+    pushMetric(rows, "Spread Min–Max", `${formatNumber(stats.spreadMin)} – ${formatNumber(stats.spreadMax)}`);
+  }
+  pushMetric(rows, "Spread First Attack", formatCompactNumber(stats.spreadFirstAttack));
+  pushMetric(rows, "Spread Per Attack", formatCompactNumber(stats.spreadPerAttack));
+  pushMetric(rows, "Spread Decay", formatCompactNumber(stats.spreadDecay));
+  pushMetric(rows, "Power Nominal", formatCompactNumber(stats.powerConsumptionNominal ?? readWeaponPower(stats)));
+  pushMetric(rows, "Power Minimum", formatCompactNumber(stats.powerConsumptionMinimum));
+  pushMetric(rows, "EM Nominal Signature", formatCompactNumber(stats.emSignatureNominal ?? stats.radarEmission));
+  pushMetric(rows, "EM Decay Rate", formatCompactNumber(stats.emSignatureDecayRate));
+  pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Baseline HP Restored", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionResistance));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
+
+  for (const action of weapon?.actions ?? []) {
+    const prefix = titleCase(action.kind);
+    pushMetric(rows, `${prefix} Charge Time`, formatCompactNumber(action.chargeTime, "s"));
+    pushMetric(rows, `${prefix} Charge-Up`, formatCompactNumber(action.chargeUpTime, "s"));
+    pushMetric(rows, `${prefix} Charge-Down`, formatCompactNumber(action.chargeDownTime, "s"));
+    pushMetric(rows, `${prefix} Cooldown`, formatCompactNumber(action.cooldownTime, "s"));
+    pushMetric(rows, `${prefix} Spin-Up`, formatCompactNumber(action.spinUpTime, "s"));
+    pushMetric(rows, `${prefix} Spin-Down`, formatCompactNumber(action.spinDownTime, "s"));
+    pushMetric(rows, `${prefix} Full-Damage Range`, formatCompactNumber(action.fullDamageRange, "m"));
+    pushMetric(rows, `${prefix} Zero-Damage Range`, formatCompactNumber(action.zeroDamageRange, "m"));
+  }
 
   return rows;
 }

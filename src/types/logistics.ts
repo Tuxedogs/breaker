@@ -69,6 +69,8 @@ export interface InventoryLocation {
 
 export interface InventoryEntry {
   id: string;
+  /** Physical boxes retain identity; omitted legacy entries keep aggregate merge behavior. */
+  recordKind?: "box" | "aggregate";
   /** Legacy material identifier used by refinery and build queue flows. */
   materialId?: string;
   materialName?: string;
@@ -164,8 +166,21 @@ export interface BuildQueueFinalProductQualitySnapshot {
   band?: number;
 }
 
+export type BuildQueueSourceType = "custom" | "fitting";
+
+export interface BuildQueue {
+  id: string;
+  name: string;
+  sourceType: BuildQueueSourceType;
+  sourceReference?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface BuildQueueItem {
   id: string;
+  entryKind?: "instance";
+  queueId?: string;
   recipeId: string;
   blueprint_id?: string;
   itemId?: string;
@@ -182,4 +197,17 @@ export interface BuildQueueItem {
   reservedAllocations?: ReservedMaterialAllocation[];
   materialRequirements?: RecipeInputTemplate[];
   blueprintSources?: BlueprintSourceSnapshot[];
+  completionSnapshot?: BuildQueueCompletionSnapshot;
+}
+
+export interface BuildQueueCompletionSnapshot {
+  completedAt: string;
+  quantity: number;
+  allowLowerQuality?: boolean;
+  finalProductQuality?: BuildQueueFinalProductQualitySnapshot;
+  finalProductQualityBand?: number;
+  finalProductQualityAverage?: number;
+  finalProductRarity?: string;
+  materialRequirements?: RecipeInputTemplate[];
+  reservedAllocations?: ReservedMaterialAllocation[];
 }

@@ -1,4 +1,4 @@
-import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../types/logistics";
+import type { BuildQueue, BuildQueueItem, InventoryEntry, InventoryLocation } from "../types/logistics";
 import { isAuthRecoveryFailed } from "./auth/authRecoveryState";
 import { SESSION_EXPIRED_SYNC_MESSAGE } from "./logistics/inventorySyncLifecycle";
 import { apiUrl } from "./apiUrl";
@@ -9,6 +9,7 @@ const INVENTORY_URL = "/api/user/inventory";
 const INVENTORY_SYNC_URL = "/api/user/inventory/sync";
 const INVENTORY_STACKS_URL = "/api/user/inventory/stacks";
 const INVENTORY_LOCATIONS_URL = "/api/user/inventory/locations";
+const BUILD_QUEUES_URL = "/api/user/inventory/build-queues";
 
 let onlineMutationCount = 0;
 let currentOnlineAccessToken: string | null = null;
@@ -28,7 +29,9 @@ export function getOnlinePersistenceAuth(): {
 export type OnlinePersistenceState = {
   locations: InventoryLocation[];
   inventoryEntries: InventoryEntry[];
+  buildQueues: BuildQueue[];
   buildQueue: BuildQueueItem[];
+  activeBuildQueueId?: string | null;
   sync?: {
     migratedAt?: string | null;
     lastSyncedAt?: string | null;
@@ -37,13 +40,16 @@ export type OnlinePersistenceState = {
     locations?: Record<string, string>;
     inventoryEntries?: Record<string, string>;
     buildQueue?: Record<string, string>;
+    buildQueues?: Record<string, string>;
   };
 };
 
 export type OnlinePersistencePayload = {
   locations?: InventoryLocation[];
   inventoryEntries?: InventoryEntry[];
+  buildQueues?: BuildQueue[];
   buildQueue?: BuildQueueItem[];
+  activeBuildQueueId?: string | null;
 };
 
 function authHeaders(accessToken: string) {
@@ -192,6 +198,43 @@ export function upsertOnlineBuildQueueItem(accessToken: string, item: BuildQueue
   return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
     buildQueue: [item],
   }));
+}
+
+export function upsertOnlineBuildQueue(accessToken: string, queue: BuildQueue, activeBuildQueueId?: string) {
+  return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
+    buildQueues: [queue],
+    activeBuildQueueId,
+  }));
+}
+
+export function persistOnlineActiveBuildQueue(activeBuildQueueId: string) {
+  return currentOnlineAccessToken
+    ? runOnlinePersistenceMutation(() => syncOnlinePersistenceState(currentOnlineAccessToken as string, { activeBuildQueueId }))
+    : null;
+}
+
+export function persistOnlineBuildQueue(queue: BuildQueue, activeBuildQueueId?: string) {
+  return currentOnlineAccessToken
+    ? upsertOnlineBuildQueue(currentOnlineAccessToken, queue, activeBuildQueueId)
+    : null;
+}
+
+export function deleteOnlineBuildQueue(accessToken: string, queueId: string) {
+  return runOnlinePersistenceMutation(async () => {
+    const url = apiUrl(`${BUILD_QUEUES_URL}/${encodeURIComponent(queueId)}`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return parseUserJsonResponse<OnlinePersistenceState>(response, {
+      label: "delete build queue",
+      url,
+    });
+  });
+}
+
+export function persistOnlineBuildQueueDelete(queueId: string) {
+  return currentOnlineAccessToken ? deleteOnlineBuildQueue(currentOnlineAccessToken, queueId) : null;
 }
 
 export function persistOnlineInventoryStack(entry: InventoryEntry, location?: InventoryLocation) {

@@ -409,10 +409,22 @@ export type FittingComponentStats = {
   electromagneticEmission?: number | null;
   alphaDamage?: number | null;
   dps?: number | null;
+  theoreticalDps?: number | null;
+  damageOver60Seconds?: number | null;
+  sustainedDps60?: number | null;
   projectileSpeed?: number | null;
   projectileLifetime?: number | null;
   calculatedRange?: number | null;
+  projectileMaxTravel?: number | null;
   ammoCapacity?: number | null;
+  initialAmmoCount?: number | null;
+  maxAmmoCount?: number | null;
+  requestedAmmoLoad?: number | null;
+  maxAmmoLoad?: number | null;
+  regenerationCostPerBullet?: number | null;
+  requestedRegenPerSec?: number | null;
+  maxRegenPerSec?: number | null;
+  regenerationCooldown?: number | null;
   shieldHp?: number | null;
   regenRate?: number | null;
   powerGenerated?: number | null;
@@ -438,11 +450,30 @@ export type FittingComponentStats = {
   heatCapacity?: number | null;
   overheatTemperature?: number | null;
   cooldownRate?: number | null;
+  coolingPerSecond?: number | null;
+  timeTillCoolingStarts?: number | null;
+  overheatFixTime?: number | null;
+  postOverheatTemperature?: number | null;
+  spreadMin?: number | null;
+  spreadMax?: number | null;
+  spreadFirstAttack?: number | null;
+  spreadPerAttack?: number | null;
+  spreadDecay?: number | null;
   powerUsage?: number | null;
+  powerConsumptionNominal?: number | null;
+  minimumConsumptionFraction?: number | null;
+  powerConsumptionMinimum?: number | null;
   maxPenetrationThickness?: number | null;
   distortionResistance?: number | null;
   crossSection?: number | null;
   radarEmission?: number | null;
+  emSignatureNominal?: number | null;
+  emSignatureDecayRate?: number | null;
+  repairRestoreRatio?: number | null;
+  selfRepairMaxCount?: number | null;
+  selfRepairTime?: number | null;
+  selfRepairHealthRatio?: number | null;
+  selfRepairBaselineHp?: number | null;
   miningPower?: number | null;
   extractionPower?: number | null;
   instabilityModifier?: number | null;
@@ -479,9 +510,47 @@ export type FittingComponentStats = {
   onlineIrSignature?: number | null;
 };
 
+export type FittingWeaponAction = {
+  kind: "standard" | "charged" | "beam" | "burst" | "rapid" | "unknown";
+  name: string | null;
+  actionIndex: number | null;
+  sourcePath: string | null;
+  fireRateRpm: number | null;
+  heatPerShot: number | null;
+  heatPerSecond: number | null;
+  ammoCost: number | null;
+  pelletCount: number | null;
+  damageMultiplier: number | null;
+  spreadMin: number | null;
+  spreadMax: number | null;
+  spreadFirstAttack: number | null;
+  spreadPerAttack: number | null;
+  spreadDecay: number | null;
+  chargeTime: number | null;
+  chargeUpTime: number | null;
+  chargeDownTime: number | null;
+  cooldownTime: number | null;
+  spinUpTime: number | null;
+  spinDownTime: number | null;
+  fireDuringSpinUp: boolean | null;
+  fullDamageRange: number | null;
+  zeroDamageRange: number | null;
+  damagePerSecondTotal: number | null;
+};
+
+export type FittingWeaponDetail = {
+  recordSchemaVersion: number | null;
+  actions: FittingWeaponAction[];
+  dpsModelVersion: string | null;
+  dpsAssumptions: string[];
+  dpsConfidence: string | null;
+  dpsPolicy: string | null;
+};
+
 export type FittingComponentDetail = FittingComponentSummary & {
   stats: FittingComponentStats;
   mitigation: FittingComponentMitigation | null;
+  weapon?: FittingWeaponDetail;
 };
 
 export type FittingPortConstraint = {

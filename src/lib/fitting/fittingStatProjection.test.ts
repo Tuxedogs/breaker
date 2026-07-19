@@ -101,12 +101,12 @@ test("buildDetailStatRowsFromFitting projects live weapon stat labels and groupi
       damageBiochemical: 0,
       damageStun: 0,
       fireRateRpm: 750,
-      ammoCapacity: 1200,
+      maxAmmoCount: 1200,
       projectileSpeed: 1196,
-      calculatedRange: 2702.96,
+      projectileMaxTravel: 2702.96,
       heatPerShot: 2.4,
       cooldownRate: null,
-      powerDraw: 0.1,
+      powerConsumptionNominal: 0.1,
       maxPenetrationThickness: 0.5,
       health: 850,
       mass: 192,
@@ -133,13 +133,13 @@ test("buildDetailStatRowsFromFitting projects live weapon stat labels and groupi
     "Alpha Damage",
     "Physical Damage",
     "Fire Rate",
-    "Ammo Capacity",
+    "Ballistic Reserve",
     "Projectile Speed",
-    "Projectile Range / Max Travel",
+    "Projectile Max Travel",
     "Penetration",
     "Penetration Distance",
     "Heat Per Shot",
-    "Power",
+    "Power Nominal",
     "Component HP",
     "Mass",
   ]);
@@ -157,6 +157,47 @@ test("buildBrowseStatPreviewFromFitting omits meta duplicate labels", () => {
   assert.ok(labels.includes("Coolant Generation"));
 });
 
+test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "ship_weapon",
+    stats: {
+      alphaDamage: 100,
+      theoreticalDps: 200,
+      sustainedDps60: 150,
+      damageOver60Seconds: 9000,
+      maxAmmoLoad: 25,
+      maxRegenPerSec: 3,
+      regenerationCooldown: 0.75,
+      spreadMin: 0.1,
+      spreadMax: 0.2,
+      coolingPerSecond: 12,
+      timeTillCoolingStarts: 0.5,
+    },
+    mitigation: null,
+    weapon: {
+      recordSchemaVersion: 2,
+      dpsModelVersion: "foundry-weapon-dps-v1",
+      dpsAssumptions: [],
+      dpsConfidence: "medium",
+      dpsPolicy: null,
+      actions: [{
+        kind: "rapid", name: "Rapid", actionIndex: 0, sourcePath: "weapon/action",
+        fireRateRpm: 120, heatPerShot: 1, heatPerSecond: null, ammoCost: 1,
+        pelletCount: 1, damageMultiplier: 1, spreadMin: 0.1, spreadMax: 0.2,
+        spreadFirstAttack: 0.01, spreadPerAttack: 0.02, spreadDecay: 0.03,
+        chargeTime: null, chargeUpTime: null, chargeDownTime: null, cooldownTime: null,
+        spinUpTime: 0.4, spinDownTime: 0.8, fireDuringSpinUp: true,
+        fullDamageRange: null, zeroDamageRange: null, damagePerSecondTotal: null,
+      }],
+    },
+  });
+  const labels = rows.map((row) => row.label);
+  for (const label of ["Theoretical DPS", "60s Sustained DPS", "Damage Over 60s", "Energy Maximum Load", "Spread Min–Max", "Cooling Rate", "Rapid Spin-Up", "Rapid Spin-Down"]) {
+    assert.ok(labels.includes(label), `missing ${label}`);
+  }
+});
+
 test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identical damage channel", () => {
   const preview = buildBrowseStatPreviewFromFitting({
     ...coolerDetail(),
@@ -165,9 +206,9 @@ test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identica
       alphaDamage: 72.99,
       damagePhysical: 72.99,
       fireRateRpm: 750,
-      ammoCapacity: 1200,
+      maxAmmoCount: 1200,
       projectileSpeed: 1196,
-      calculatedRange: 2702.96,
+      projectileMaxTravel: 2702.96,
     },
     mitigation: null,
   });
@@ -176,9 +217,9 @@ test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identica
   assert.deepEqual(labels, [
     "Alpha Damage",
     "Fire Rate",
-    "Ammo Capacity",
+    "Ballistic Reserve",
     "Projectile Speed",
-    "Projectile Range / Max Travel",
+    "Projectile Max Travel",
   ]);
 });
 

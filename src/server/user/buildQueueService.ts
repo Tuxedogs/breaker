@@ -1,9 +1,11 @@
 import { and, eq, sql } from "drizzle-orm";
 
 import { getDb } from "../../db/client.js";
-import { buildQueueItems } from "../../db/schema.js";
+import { buildQueueItems, buildQueues } from "../../db/schema.js";
 
 export type BuildQueuePayload = {
+  id?: string | null;
+  queueId?: string | null;
   recipeId: string;
   variantId?: string | null;
   quantity?: number;
@@ -13,6 +15,7 @@ export type DeleteBuildQueuePayload = {
   id?: string | null;
   recipeId?: string | null;
   variantId?: string | null;
+  queueId?: string | null;
   clearAll?: boolean;
 };
 
@@ -22,6 +25,13 @@ export function normalizeRecipeId(value: unknown): string | null {
 
 export function normalizeVariantId(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+export function normalizeQueueEntryId(value: unknown): string | null {
+  const normalized = normalizeRecipeId(value);
+  return normalized && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(normalized)
+    ? normalized
+    : null;
 }
 
 export function normalizeQuantity(value: unknown, fallback = 1): number {
@@ -36,6 +46,7 @@ function toDbVariantId(value: unknown): string {
 function selectBuildQueueFields() {
   return {
     id: buildQueueItems.id,
+    queueId: buildQueueItems.queueId,
     recipeId: buildQueueItems.recipeId,
     variantId: buildQueueItems.blueprintId,
     quantity: buildQueueItems.quantity,
@@ -49,6 +60,33 @@ function mapBuildQueueItem<T extends { variantId: string | null }>(item: T): T {
     ...item,
     variantId: item.variantId || null,
   };
+}
+
+async function getOrCreateDefaultQueueId(userId: string): Promise<string> {
+  const existing = await getDb().select({ id: buildQueues.id }).from(buildQueues)
+    .where(eq(buildQueues.userId, userId)).orderBy(buildQueues.createdAt).limit(1);
+  if (existing[0]) return existing[0].id;
+  const rows = await getDb().insert(buildQueues).values({
+    userId,
+    name: "Default Queue",
+    sourceType: "custom",
+  }).returning({ id: buildQueues.id });
+  if (!rows[0]) throw new Error("Failed to create default build queue.");
+  return rows[0].id;
+}
+
+function metadataLocalId(metadata: unknown): string | null {
+  if (typeof metadata !== "object" || metadata === null || Array.isArray(metadata)) return null;
+  const localId = (metadata as Record<string, unknown>).localId;
+  return typeof localId === "string" && localId.trim() ? localId.trim() : null;
+}
+
+async function resolveUserQueueId(userId: string, queueId?: string | null): Promise<string> {
+  if (!queueId) return getOrCreateDefaultQueueId(userId);
+  const queues = await getDb().select().from(buildQueues).where(eq(buildQueues.userId, userId));
+  const match = queues.find((queue) => queue.id === queueId || metadataLocalId(queue.metadata) === queueId);
+  if (!match) throw new TypeError("Build queue not found.");
+  return match.id;
 }
 
 export async function listBuildQueueItems(userId: string) {
@@ -67,27 +105,13 @@ export async function addBuildQueueItem(userId: string, payload: BuildQueuePaylo
 
   const quantity = normalizeQuantity(payload.quantity, 1);
   const variantId = toDbVariantId(payload.variantId);
-  const existingRows = await getDb()
-    .update(buildQueueItems)
-    .set({
-      quantity: sql`${buildQueueItems.quantity} + ${quantity}`,
-      updatedAt: sql`now()`,
-    })
-    .where(
-      and(
-        eq(buildQueueItems.userId, userId),
-        eq(buildQueueItems.recipeId, recipeId),
-        eq(buildQueueItems.blueprintId, variantId),
-      ),
-    )
-    .returning(selectBuildQueueFields());
-
-  if (existingRows[0]) return mapBuildQueueItem(existingRows[0]);
-
+  const queueId = await resolveUserQueueId(userId, payload.queueId);
   const rows = await getDb()
     .insert(buildQueueItems)
     .values({
+      ...(normalizeQueueEntryId(payload.id) ? { id: normalizeQueueEntryId(payload.id) as string } : {}),
       userId,
+      queueId,
       recipeId,
       blueprintId: variantId,
       quantity,
@@ -106,17 +130,25 @@ export async function updateBuildQueueItem(userId: string, payload: BuildQueuePa
   }
 
   const variantId = toDbVariantId(payload.variantId);
+  const queueId = await resolveUserQueueId(userId, payload.queueId);
   const quantity = Math.trunc(payload.quantity);
+  const entryId = normalizeQueueEntryId(payload.id);
+  const legacyMatch = entryId ? null : (await getDb()
+    .select({ id: buildQueueItems.id })
+    .from(buildQueueItems)
+    .where(and(
+      eq(buildQueueItems.userId, userId),
+      eq(buildQueueItems.queueId, queueId),
+      eq(buildQueueItems.recipeId, recipeId),
+      eq(buildQueueItems.blueprintId, variantId),
+    ))
+    .limit(1))[0];
+  const updateId = entryId ?? legacyMatch?.id;
+  if (!updateId) return null;
   const rows = await getDb()
     .update(buildQueueItems)
     .set({ quantity, updatedAt: sql`now()` })
-    .where(
-      and(
-        eq(buildQueueItems.userId, userId),
-        eq(buildQueueItems.recipeId, recipeId),
-        eq(buildQueueItems.blueprintId, variantId),
-      ),
-    )
+    .where(and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.id, updateId)))
     .returning(selectBuildQueueFields());
 
   return rows[0] ? mapBuildQueueItem(rows[0]) : null;
@@ -146,19 +178,30 @@ export async function deleteBuildQueueItem(userId: string, payload: DeleteBuildQ
   const recipeId = normalizeRecipeId(payload.recipeId);
   if (!recipeId) throw new TypeError("recipeId is required.");
 
-  await getDb()
-    .delete(buildQueueItems)
-    .where(
-      and(
-        eq(buildQueueItems.userId, userId),
-        eq(buildQueueItems.recipeId, recipeId),
-        eq(buildQueueItems.blueprintId, toDbVariantId(payload.variantId)),
-      ),
-    );
+  const queueId = await resolveUserQueueId(userId, payload.queueId);
+  const legacyMatch = (await getDb()
+    .select({ id: buildQueueItems.id })
+    .from(buildQueueItems)
+    .where(and(
+      eq(buildQueueItems.userId, userId),
+      eq(buildQueueItems.queueId, queueId),
+      eq(buildQueueItems.recipeId, recipeId),
+      eq(buildQueueItems.blueprintId, toDbVariantId(payload.variantId)),
+    ))
+    .limit(1))[0];
+  if (legacyMatch) {
+    await getDb()
+      .delete(buildQueueItems)
+      .where(and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.id, legacyMatch.id)));
+  }
 }
 
-export async function clearBuildQueue(userId: string) {
-  await getDb()
+export async function clearBuildQueue(userId: string, queueId?: string | null) {
+  const resolvedQueueId = queueId ? await resolveUserQueueId(userId, queueId) : null;
+  const query = getDb()
     .delete(buildQueueItems)
-    .where(eq(buildQueueItems.userId, userId));
+    .where(resolvedQueueId
+      ? and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.queueId, resolvedQueueId))
+      : eq(buildQueueItems.userId, userId));
+  await query;
 }

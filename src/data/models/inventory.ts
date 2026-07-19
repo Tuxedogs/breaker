@@ -5,6 +5,8 @@
  */
 export interface InventoryEntry {
   id: string;
+  /** Physical boxes retain identity; omitted legacy records remain aggregates. */
+  recordKind?: "box" | "aggregate";
   /** References Material.id */
   materialId: string;
   quantity: number;

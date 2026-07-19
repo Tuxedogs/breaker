@@ -8,6 +8,7 @@ export interface RegistryEnvelope<T extends Record<string, unknown>> {
   generatedAt?: string;
   registry?: string;
   recordCount?: number;
+  recordSchemaVersion?: number;
   records: T[];
 }
 

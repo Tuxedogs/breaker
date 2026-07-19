@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
 import { getDb } from "../../db/client.js";
-import { buildQueueItems, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema.js";
+import { buildQueueItems, buildQueues, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema.js";
 
 const seedInventoryEntryIds = new Set([
   "inv-1",
@@ -32,7 +32,9 @@ type UnknownRecord = Record<string, unknown>;
 export type OnlinePersistencePayload = {
   locations?: unknown[];
   inventoryEntries?: unknown[];
+  buildQueues?: unknown[];
   buildQueue?: unknown[];
+  activeBuildQueueId?: unknown;
 };
 
 function isRecord(value: unknown): value is UnknownRecord {
@@ -164,16 +166,45 @@ function rowStackMergeKey(row: typeof inventoryStacks.$inferSelect) {
   ].join("|").toLowerCase();
 }
 
-function buildQueueMergeKey(input: UnknownRecord) {
+function isDiscreteInventoryBox(input: UnknownRecord) {
+  return asString(input.recordKind) === "box";
+}
+
+export function shouldFallbackMergeInventoryRecord(input: unknown): boolean {
+  return !isRecord(input) || !isDiscreteInventoryBox(input);
+}
+
+export function getInventoryInsertId(input: unknown): string | undefined {
+  if (!isRecord(input) || !isDiscreteInventoryBox(input)) return undefined;
+  const id = asString(input.id);
+  return isUuid(id) ? id : undefined;
+}
+
+function buildQueueMergeKey(input: UnknownRecord, queueId: string) {
   return [
+    queueId,
     asString(input.recipeId) ?? "",
     asString(input.blueprint_id) ?? "",
     asString(input.itemId) ?? "",
   ].join("|").toLowerCase();
 }
 
-function rowBuildQueueMergeKey(row: { recipeId: string; blueprintId: string | null; itemId: string | null }) {
-  return [row.recipeId, row.blueprintId ?? "", row.itemId ?? ""].join("|").toLowerCase();
+function rowBuildQueueMergeKey(row: { queueId: string; recipeId: string; blueprintId: string | null; itemId: string | null }) {
+  return [row.queueId, row.recipeId, row.blueprintId ?? "", row.itemId ?? ""].join("|").toLowerCase();
+}
+
+function isBuildQueueEntryInstance(input: UnknownRecord) {
+  return asString(input.entryKind) === "instance";
+}
+
+export function shouldFallbackMergeBuildQueueRecord(input: unknown): boolean {
+  return !isRecord(input) || !isBuildQueueEntryInstance(input);
+}
+
+export function getBuildQueueInsertId(input: unknown): string | undefined {
+  if (!isRecord(input) || !isBuildQueueEntryInstance(input)) return undefined;
+  const id = asString(input.id);
+  return isUuid(id) ? id : undefined;
 }
 
 function remapAllocationIds(allocations: unknown[], inventoryIdMap: Record<string, string>) {
@@ -231,6 +262,7 @@ function mapBuildQueueRow(row: typeof buildQueueItems.$inferSelect) {
   return {
     ...(isRecord(snapshot.original) ? snapshot.original : {}),
     id: row.id,
+    queueId: row.queueId,
     recipeId: row.recipeId,
     blueprint_id: row.blueprintId ?? undefined,
     itemId: row.itemId ?? undefined,
@@ -246,6 +278,17 @@ function mapBuildQueueRow(row: typeof buildQueueItems.$inferSelect) {
     reservedAllocations: asJsonArray(row.reservedAllocations),
     materialRequirements: asJsonArray(row.materialRequirements),
     blueprintSources: asJsonArray(row.blueprintSources),
+  };
+}
+
+function mapBuildQueueMetadataRow(row: typeof buildQueues.$inferSelect) {
+  return {
+    id: row.id,
+    name: row.name,
+    sourceType: row.sourceType === "fitting" ? "fitting" as const : "custom" as const,
+    sourceReference: row.sourceReference ?? undefined,
+    createdAt: toDateString(row.createdAt),
+    updatedAt: toDateString(row.updatedAt),
   };
 }
 
@@ -269,9 +312,10 @@ async function setUserSettings(userId: string, settings: UnknownRecord) {
 }
 
 export async function listOnlinePersistenceState(userId: string) {
-  const [locations, stacks, queue, settings] = await Promise.all([
+  const [locations, stacks, queues, queue, settings] = await Promise.all([
     getDb().select().from(inventoryLocations).where(eq(inventoryLocations.userId, userId)).orderBy(inventoryLocations.createdAt),
     getDb().select().from(inventoryStacks).where(eq(inventoryStacks.userId, userId)).orderBy(inventoryStacks.createdAt),
+    getDb().select().from(buildQueues).where(eq(buildQueues.userId, userId)).orderBy(buildQueues.createdAt),
     getDb().select().from(buildQueueItems).where(eq(buildQueueItems.userId, userId)).orderBy(buildQueueItems.priority, buildQueueItems.createdAt),
     getUserSettings(userId),
   ]);
@@ -279,7 +323,11 @@ export async function listOnlinePersistenceState(userId: string) {
   return {
     locations: locations.map(mapLocationRow),
     inventoryEntries: stacks.filter((row) => !isSeedInventoryRow(row)).map(mapStackRow),
+    buildQueues: queues.map(mapBuildQueueMetadataRow),
     buildQueue: queue.filter((row) => !isSeedBuildQueueRow(row)).map(mapBuildQueueRow),
+    activeBuildQueueId: queues.some((row) => row.id === asString(settings.activeBuildQueueId))
+      ? asString(settings.activeBuildQueueId)
+      : queues[0]?.id ?? null,
     sync: {
       migratedAt: asString(settings.remoteMigratedAt),
       lastSyncedAt: asString(settings.lastSyncedAt),
@@ -291,6 +339,68 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
   const locationIdMap: Record<string, string> = {};
   const inventoryIdMap: Record<string, string> = {};
   const buildQueueIdMap: Record<string, string> = {};
+  const buildQueueMetadataIdMap: Record<string, string> = {};
+
+  const existingBuildQueues = await getDb()
+    .select()
+    .from(buildQueues)
+    .where(eq(buildQueues.userId, userId));
+  const buildQueuesById = new Map(existingBuildQueues.map((row) => [row.id, row]));
+  const buildQueuesByLocalId = new Map(existingBuildQueues.flatMap((row) => {
+    const localId = getSnapshotLocalId(row.metadata);
+    return localId ? [[localId, row] as const] : [];
+  }));
+
+  for (const raw of asArray(payload.buildQueues)) {
+    if (!isRecord(raw)) continue;
+    const localId = asString(raw.id);
+    const name = asString(raw.name);
+    if (!name) continue;
+    const match = (isUuid(localId) ? buildQueuesById.get(localId) : undefined)
+      ?? (localId ? buildQueuesByLocalId.get(localId) : undefined);
+    const values = {
+      userId,
+      name: name.slice(0, 80),
+      sourceType: asString(raw.sourceType) === "fitting" ? "fitting" : "custom",
+      sourceReference: asString(raw.sourceReference),
+      metadata: { localId },
+      updatedAt: sql`now()`,
+    };
+    const rows = match
+      ? await getDb().update(buildQueues).set(values)
+          .where(and(eq(buildQueues.userId, userId), eq(buildQueues.id, match.id))).returning()
+      : await getDb().insert(buildQueues).values(values).returning();
+    const saved = rows[0];
+    if (!saved) continue;
+    buildQueuesById.set(saved.id, saved);
+    if (localId) {
+      buildQueuesByLocalId.set(localId, saved);
+      buildQueueMetadataIdMap[localId] = saved.id;
+    }
+  }
+
+  let refreshedBuildQueues = await getDb()
+    .select()
+    .from(buildQueues)
+    .where(eq(buildQueues.userId, userId));
+  if (refreshedBuildQueues.length === 0 && asArray(payload.buildQueue).length > 0) {
+    const rows = await getDb().insert(buildQueues).values({
+      userId,
+      name: "Default Queue",
+      sourceType: "custom",
+      metadata: {},
+      updatedAt: sql`now()`,
+    }).returning();
+    refreshedBuildQueues = rows;
+  }
+  const validBuildQueueIds = new Set(refreshedBuildQueues.map((row) => row.id));
+  const resolvedBuildQueueIdByInput = new Map<string, string>();
+  for (const row of refreshedBuildQueues) {
+    resolvedBuildQueueIdByInput.set(row.id, row.id);
+    const localId = getSnapshotLocalId(row.metadata);
+    if (localId) resolvedBuildQueueIdByInput.set(localId, row.id);
+  }
+  const fallbackBuildQueueId = refreshedBuildQueues[0]?.id ?? null;
 
   const existingLocations = await getDb()
     .select()
@@ -367,14 +477,17 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
     const locationId = mappedLocationId && isUuid(mappedLocationId) && validLocationIds.has(mappedLocationId)
       ? mappedLocationId
       : null;
+    const isBox = isDiscreteInventoryBox(raw);
     const match = (isUuid(localId) ? stacksById.get(localId) : undefined)
       ?? (localId ? stacksByLocalId.get(localId) : undefined)
-      ?? stacksByMergeKey.get(stackMergeKey(raw, locationId));
+      ?? (shouldFallbackMergeInventoryRecord(raw) ? stacksByMergeKey.get(stackMergeKey(raw, locationId)) : undefined);
     const matchedStack = match;
     const addingToMatchedLocal = Boolean(matchedStack && localId && getSnapshotLocalId(matchedStack.snapshot) !== localId && !isUuid(localId));
     const nextQuantity = addingToMatchedLocal && matchedStack ? Number(matchedStack.quantity) + quantity : quantity;
+    const insertId = match ? undefined : getInventoryInsertId(raw);
 
     const values = {
+      ...(insertId ? { id: insertId } : {}),
       userId,
       locationId,
       materialId: asString(raw.materialId),
@@ -408,7 +521,14 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
       : await getDb().insert(inventoryStacks).values(values).returning();
 
     const saved = rows[0];
-    if (saved && localId) inventoryIdMap[localId] = saved.id;
+    if (saved) {
+      stacksById.set(saved.id, saved);
+      if (localId) {
+        inventoryIdMap[localId] = saved.id;
+        stacksByLocalId.set(localId, saved);
+      }
+      if (!isBox) stacksByMergeKey.set(rowStackMergeKey(saved), saved);
+    }
   }
 
   const existingQueue = await getDb()
@@ -429,13 +549,20 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
     const recipeId = asString(raw.recipeId);
     const quantity = asNumber(raw.quantity);
     if (!recipeId || quantity === null) continue;
+    const requestedQueueId = asString(raw.queueId);
+    const queueId = (requestedQueueId ? resolvedBuildQueueIdByInput.get(requestedQueueId) : null)
+      ?? fallbackBuildQueueId;
+    if (!queueId || !validBuildQueueIds.has(queueId)) continue;
 
     const match = (isUuid(localId) ? queueById.get(localId) : undefined)
       ?? (localId ? queueByLocalId.get(localId) : undefined)
-      ?? queueByMergeKey.get(buildQueueMergeKey(raw));
+      ?? (shouldFallbackMergeBuildQueueRecord(raw) ? queueByMergeKey.get(buildQueueMergeKey(raw, queueId)) : undefined);
+    const insertId = match ? undefined : getBuildQueueInsertId(raw);
     const reservedAllocations = remapAllocationIds(asJsonArray(raw.reservedAllocations), inventoryIdMap);
     const values = {
+      ...(insertId ? { id: insertId } : {}),
       userId,
+      queueId,
       recipeId,
       blueprintId: asString(raw.blueprint_id),
       itemId: asString(raw.itemId),
@@ -464,11 +591,22 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
       : await getDb().insert(buildQueueItems).values(values).returning();
 
     const saved = rows[0];
-    if (saved && localId) buildQueueIdMap[localId] = saved.id;
+    if (saved) {
+      queueById.set(saved.id, saved);
+      if (localId) {
+        buildQueueIdMap[localId] = saved.id;
+        queueByLocalId.set(localId, saved);
+      }
+      if (!isBuildQueueEntryInstance(raw)) queueByMergeKey.set(rowBuildQueueMergeKey(saved), saved);
+    }
   }
 
   const settings = {
     ...(await getUserSettings(userId)),
+    ...(payload.activeBuildQueueId !== undefined ? {
+      activeBuildQueueId: resolvedBuildQueueIdByInput.get(asString(payload.activeBuildQueueId) ?? "")
+        ?? fallbackBuildQueueId,
+    } : {}),
     remoteMigratedAt: new Date().toISOString(),
     lastSyncedAt: new Date().toISOString(),
   };
@@ -480,6 +618,7 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
       locations: locationIdMap,
       inventoryEntries: inventoryIdMap,
       buildQueue: buildQueueIdMap,
+      buildQueues: buildQueueMetadataIdMap,
     },
   };
 }
