@@ -562,7 +562,15 @@ function buildProductionNextFabricationRun(
 }
 
 export default function DashboardPage() {
-  const { inventoryEntries: allInventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
+  const {
+    inventoryEntries: allInventoryEntries,
+    materialTemplates,
+    buildQueue,
+    activeBuildQueueId,
+    recipeTemplates,
+    recipeInputTemplates,
+    locations,
+  } = useLogisticsStore();
   const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const userStats = deriveUserDashStats(inventoryEntries, materialTemplates as LogisticsMaterialTemplate[]);
   const [selectedNextRunId, setSelectedNextRunId] = useState<string | null>(null);
@@ -575,7 +583,10 @@ export default function DashboardPage() {
     () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials: materialTemplates, recipeInputsByRecipeId: recipeInputTemplates }),
     [buildQueue, inventoryEntries, materialTemplates, recipeInputTemplates]
   );
-  const activeQueueItems = useMemo(() => getActiveBuildQueueEntries(buildQueue), [buildQueue]);
+  const activeQueueItems = useMemo(
+    () => getActiveBuildQueueEntries(buildQueue, activeBuildQueueId),
+    [activeBuildQueueId, buildQueue],
+  );
   const completedQueueItems = useMemo(() => buildQueue.filter((item) => item.status === "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
   const locationNamesById = useMemo(() => new Map(locations.map((location) => [location.id, location.name])), [locations]);

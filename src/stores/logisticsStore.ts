@@ -682,6 +682,36 @@ function persistQueueSnapshot(action: string, item: BuildQueueItem) {
   persistBuildQueueItem(item)?.catch((error: unknown) => logBuildQueuePersistenceFailure(action, error));
 }
 
+function didQueueLineupItemChange(previous: BuildQueueItem | undefined, next: BuildQueueItem): boolean {
+  return previous === undefined
+    || previous.queueId !== next.queueId
+    || previous.status !== next.status
+    || previous.priority !== next.priority
+    || previous.priorityActive !== next.priorityActive;
+}
+
+function persistQueueLineupChange(
+  set: LogisticsSet,
+  action: string,
+  previousBuildQueue: BuildQueueItem[],
+  nextBuildQueue: BuildQueueItem[],
+) {
+  const previousById = new Map(previousBuildQueue.map((item) => [item.id, item]));
+  const changedItems = nextBuildQueue.filter((item) => didQueueLineupItemChange(previousById.get(item.id), item));
+  const requests = changedItems.flatMap((item) => {
+    const request = persistBuildQueueItem(item);
+    return request ? [request] : [];
+  });
+
+  if (requests.length === 0) return;
+
+  void Promise.all(requests).catch((error: unknown) => {
+    logBuildQueuePersistenceFailure(action, error);
+    // Do not overwrite a later queue mutation while rolling back this failed optimistic update.
+    set((state) => state.buildQueue === nextBuildQueue ? { buildQueue: previousBuildQueue } : {});
+  });
+}
+
 function getInventoryMutationBlockReasonFromState(
   state: Pick<LogisticsStoreState, "inventorySync">,
 ): string | null {
@@ -1219,7 +1249,10 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       updateBuildQueueItemStatus: (id, status) => {
+        let previousBuildQueue: BuildQueueItem[] | null = null;
+        let nextBuildQueue: BuildQueueItem[] | null = null;
         set((state) => {
+          previousBuildQueue = state.buildQueue;
           const buildQueue = state.buildQueue.map((item) => {
             if (item.id !== id) return item;
             if (status === "complete") {
@@ -1231,10 +1264,12 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             }
             return { ...item, status, completionSnapshot: undefined };
           });
-          const changed = buildQueue.find((item) => item.id === id);
-          if (changed) persistQueueSnapshot("update status", changed);
+          nextBuildQueue = buildQueue;
           return { buildQueue };
         });
+        if (previousBuildQueue && nextBuildQueue) {
+          persistQueueLineupChange(set, "update status", previousBuildQueue, nextBuildQueue);
+        }
       },
       updateBuildQueueItemPriority: (id, priority) => {
         set((state) => {
@@ -1247,33 +1282,30 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       reorderBuildQueueItems: (queueId, orderedEntryIds) => {
+        let previousBuildQueue: BuildQueueItem[] | null = null;
+        let nextBuildQueue: BuildQueueItem[] | null = null;
         set((state) => {
+          previousBuildQueue = state.buildQueue;
           const buildQueue = reorderActiveQueueEntries(state.buildQueue, queueId, orderedEntryIds);
-          buildQueue.forEach((item, index) => {
-            const previous = state.buildQueue[index];
-            if (previous && (previous.priority !== item.priority || previous.priorityActive !== item.priorityActive)) {
-              persistQueueSnapshot("reorder items", item);
-            }
-          });
+          nextBuildQueue = buildQueue;
           return { buildQueue };
         });
+        if (previousBuildQueue && nextBuildQueue) {
+          persistQueueLineupChange(set, "reorder items", previousBuildQueue, nextBuildQueue);
+        }
       },
       moveBuildQueueItem: (id, destinationQueueId, destinationIndex) => {
+        let previousBuildQueue: BuildQueueItem[] | null = null;
+        let nextBuildQueue: BuildQueueItem[] | null = null;
         set((state) => {
+          previousBuildQueue = state.buildQueue;
           const buildQueue = moveActiveQueueEntry(state.buildQueue, id, destinationQueueId, destinationIndex);
-          buildQueue.forEach((item, index) => {
-            const previous = state.buildQueue[index];
-            if (previous && (
-              previous.queueId !== item.queueId ||
-              previous.status !== item.status ||
-              previous.priority !== item.priority ||
-              previous.priorityActive !== item.priorityActive
-            )) {
-              persistQueueSnapshot("move item", item);
-            }
-          });
+          nextBuildQueue = buildQueue;
           return { buildQueue };
         });
+        if (previousBuildQueue && nextBuildQueue) {
+          persistQueueLineupChange(set, "move item", previousBuildQueue, nextBuildQueue);
+        }
       },
       toggleBuildQueueItemPriority: (id) => {
         set((state) => {

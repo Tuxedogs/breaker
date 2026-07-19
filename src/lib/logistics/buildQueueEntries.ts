@@ -12,8 +12,13 @@ export function createBuildQueueEntryId(): string {
   return globalThis.crypto?.randomUUID?.() ?? fallbackUuid();
 }
 
-export function getActiveBuildQueueEntries(items: BuildQueueItem[]): BuildQueueItem[] {
-  return items.filter((item) => item.status !== "complete");
+export function getActiveBuildQueueEntries(items: BuildQueueItem[], queueId?: string): BuildQueueItem[] {
+  return items
+    .filter((item) => item.status !== "complete" && (!queueId || item.queueId === queueId))
+    .sort((left, right) => (
+      Number(right.priorityActive ?? false) - Number(left.priorityActive ?? false)
+      || (left.priority ?? 0) - (right.priority ?? 0)
+    ));
 }
 
 export function createBuildQueueCompletionSnapshot(item: BuildQueueItem, completedAt = new Date().toISOString()): BuildQueueCompletionSnapshot {

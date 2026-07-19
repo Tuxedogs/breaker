@@ -110,3 +110,55 @@ test('dashboard queue selection never falls back to completed entries', () => {
   assert.deepEqual(getActiveBuildQueueEntries([completed]), []);
   assert.deepEqual(getActiveBuildQueueEntries([completed, entry('active', 2)]).map((item) => item.id), ['active']);
 });
+
+test('shared active queue selector follows canonical priority order', () => {
+  const items = [
+    entry('second', 2),
+    entry('other-queue', 1, queueB),
+    entry('first', 1),
+    entry('third', 3),
+  ];
+
+  assert.deepEqual(
+    getActiveBuildQueueEntries(items, queueA).map((item) => item.id),
+    ['first', 'second', 'third'],
+  );
+});
+
+test('queue mutations update the canonical dashboard lineup immediately', () => {
+  const original = useLogisticsStore.getState();
+  try {
+    useLogisticsStore.setState({
+      buildQueues: [
+        { id: queueA, name: 'Queue A', sourceType: 'custom' },
+        { id: queueB, name: 'Queue B', sourceType: 'custom' },
+      ],
+      activeBuildQueueId: queueA,
+      buildQueue: [entry('one', 1), entry('two', 2), entry('three', 3)],
+    });
+
+    useLogisticsStore.getState().reorderBuildQueueItems(queueA, ['three', 'one', 'two']);
+    assert.deepEqual(
+      getActiveBuildQueueEntries(useLogisticsStore.getState().buildQueue, queueA).map((item) => item.id),
+      ['three', 'one', 'two'],
+    );
+
+    useLogisticsStore.getState().moveBuildQueueItem('three', queueB, 0);
+    assert.deepEqual(
+      getActiveBuildQueueEntries(useLogisticsStore.getState().buildQueue, queueA).map((item) => item.id),
+      ['one', 'two'],
+    );
+    assert.deepEqual(
+      getActiveBuildQueueEntries(useLogisticsStore.getState().buildQueue, queueB).map((item) => item.id),
+      ['three'],
+    );
+
+    useLogisticsStore.getState().updateBuildQueueItemStatus('one', 'complete');
+    assert.deepEqual(
+      getActiveBuildQueueEntries(useLogisticsStore.getState().buildQueue, queueA).map((item) => item.id),
+      ['two'],
+    );
+  } finally {
+    useLogisticsStore.setState(original, true);
+  }
+});
