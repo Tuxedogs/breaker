@@ -12,6 +12,7 @@ import { runFittingApiHandler } from "../routes/fittingApi.ts";
 
 const shipId = "0079c5d5-1678-4f8c-85ba-18ca8f642af6";
 const componentId = "1f5be5de-b5ea-42c7-879f-289c4bf64f19";
+const weaponId = "44444444-4444-4444-8444-444444444444";
 const ammoId = "031a120e-db07-4100-8071-50346731964b";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
@@ -23,6 +24,7 @@ function envelope(registry: string, records: Record<string, unknown>[]) {
     records,
     registry,
     schemaVersion: 1,
+    ...(registry === "ship_weapons" ? { recordSchemaVersion: 2 } : {}),
   };
 }
 
@@ -42,6 +44,28 @@ async function fixtureRoot(): Promise<string> {
   records["stock_loadout_calculations.json"] = [{ shipKey: shipId, loadoutResolutionStatus: "resolved", componentCountsByType: { cooler: 1 }, categories: { power: { available: true, confidence: "high", unavailableReason: null, derived: { powerSurplus: 2 } } }, warnings: [], confidence: "high" }];
   records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: { "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true } } }];
   records["coolers.json"] = [{ entityClass: componentId, componentKey: componentId.replaceAll("-", "_"), name: "Test Cooler", displayName: "Test Cooler", componentType: "cooler", size: 1, coolingGenerated: 10, confidence: "high" }];
+  records["ship_weapons.json"] = [{
+    entityClass: weaponId,
+    componentKey: weaponId.replaceAll("-", "_"),
+    name: "Test Weapon",
+    displayName: "Test Weapon",
+    componentType: "ship_weapon",
+    recordSchemaVersion: 2,
+    alphaDamageTotal: 100,
+    theoreticalDps: 200,
+    damageOver60Seconds: 9000,
+    sustainedDps60: 150,
+    dps: 150,
+    dpsModelVersion: "foundry-weapon-dps-v1",
+    dpsAssumptions: ["single_selected_fire_action"],
+    dpsConfidence: "medium",
+    maxAmmoCount: 90,
+    spreadMin: 0.1,
+    spreadMax: 0.2,
+    coolingPerSecond: 12,
+    fireActions: [{ kind: "rapid", actionIndex: 0, sourcePath: "weapon/action", fireRateRpm: 120, spinUpTime: 0.5, fireDuringSpinUp: true }],
+    confidence: "high",
+  }];
   records["shields.json"] = [{
     entityClass: "22222222-2222-4222-8222-222222222222",
     componentKey: "22222222-2222-4222-8222-222222222222",
@@ -239,6 +263,24 @@ test("Vercel adapter supports GET, HEAD, ETag/304 and POST validate/calculate", 
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     if (previousRoot === undefined) delete process.env.FITTING_DATA_ROOT;
     else process.env.FITTING_DATA_ROOT = previousRoot;
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("projects versioned weapon stats, actions, and DPS metadata", async () => {
+  const root = await fixtureRoot();
+  try {
+    const response = await handleFittingRoute("GET", `/api/v1/fitting/components/${weaponId}?channel=LIVE&buildId=test-build`, "test-request", root);
+    const data = (response?.body as { data: { stats: Record<string, number>; weapon: { recordSchemaVersion: number; dpsModelVersion: string; dpsAssumptions: string[]; actions: Array<Record<string, unknown>> } } }).data;
+    assert.equal(data.stats.theoreticalDps, 200);
+    assert.equal(data.stats.sustainedDps60, 150);
+    assert.equal(data.stats.maxAmmoCount, 90);
+    assert.equal(data.weapon.recordSchemaVersion, 2);
+    assert.equal(data.weapon.dpsModelVersion, "foundry-weapon-dps-v1");
+    assert.deepEqual(data.weapon.dpsAssumptions, ["single_selected_fire_action"]);
+    assert.equal(data.weapon.actions[0]?.kind, "rapid");
+    assert.equal(data.weapon.actions[0]?.fireDuringSpinUp, true);
+  } finally {
     await rm(root, { recursive: true, force: true });
   }
 });

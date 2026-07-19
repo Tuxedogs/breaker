@@ -32,6 +32,10 @@ function booleanValue(value: unknown): boolean {
   return value === true;
 }
 
+function nullableBooleanValue(value: unknown): boolean | null {
+  return typeof value === "boolean" ? value : null;
+}
+
 function objectValue(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
 }
@@ -177,10 +181,22 @@ export function componentStats(row: Row): Record<string, number | null> {
     electromagneticEmission: "electromagneticEmission",
     alphaDamage: "alphaDamageTotal",
     dps: "dps",
+    theoreticalDps: "theoreticalDps",
+    damageOver60Seconds: "damageOver60Seconds",
+    sustainedDps60: "sustainedDps60",
     projectileSpeed: "projectileSpeed",
     projectileLifetime: "projectileLifetime",
     calculatedRange: "calculatedRange",
+    projectileMaxTravel: "projectileMaxTravel",
     ammoCapacity: "ammoCapacity",
+    initialAmmoCount: "initialAmmoCount",
+    maxAmmoCount: "maxAmmoCount",
+    requestedAmmoLoad: "requestedAmmoLoad",
+    maxAmmoLoad: "maxAmmoLoad",
+    regenerationCostPerBullet: "regenerationCostPerBullet",
+    requestedRegenPerSec: "requestedRegenPerSec",
+    maxRegenPerSec: "maxRegenPerSec",
+    regenerationCooldown: "regenerationCooldown",
     shieldHp: "shieldHP",
     regenRate: "regenRate",
     powerGenerated: "powerGenerated",
@@ -206,11 +222,30 @@ export function componentStats(row: Row): Record<string, number | null> {
     heatCapacity: "heatCapacity",
     overheatTemperature: "overheatTemperature",
     cooldownRate: "cooldownRate",
+    coolingPerSecond: "coolingPerSecond",
+    timeTillCoolingStarts: "timeTillCoolingStarts",
+    overheatFixTime: "overheatFixTime",
+    postOverheatTemperature: "postOverheatTemperature",
+    spreadMin: "spreadMin",
+    spreadMax: "spreadMax",
+    spreadFirstAttack: "spreadFirstAttack",
+    spreadPerAttack: "spreadPerAttack",
+    spreadDecay: "spreadDecay",
     powerUsage: "powerUsage",
+    powerConsumptionNominal: "powerConsumptionNominal",
+    minimumConsumptionFraction: "minimumConsumptionFraction",
+    powerConsumptionMinimum: "powerConsumptionMinimum",
     maxPenetrationThickness: "maxPenetrationThickness",
     distortionResistance: "distortionResistance",
     crossSection: "crossSection",
     radarEmission: "radarEmission",
+    emSignatureNominal: "emSignatureNominal",
+    emSignatureDecayRate: "emSignatureDecayRate",
+    repairRestoreRatio: "repairRestoreRatio",
+    selfRepairMaxCount: "selfRepairMaxCount",
+    selfRepairTime: "selfRepairTime",
+    selfRepairHealthRatio: "selfRepairHealthRatio",
+    selfRepairBaselineHp: "selfRepairBaselineHp",
     miningPower: "miningPower",
     extractionPower: "extractionPower",
     instabilityModifier: "instabilityModifier",
@@ -251,6 +286,48 @@ export function componentStats(row: Row): Record<string, number | null> {
     if (sourceName in row) stats[publicName] = numberValue(row[sourceName]);
   }
   return stats;
+}
+
+function componentWeapon(row: Row, fallbackType: string): Record<string, unknown> | null {
+  if (componentType(row, fallbackType) !== "ship_weapon") return null;
+  const actions = (arrayValue(row.fireActions) ?? []).map((raw) => {
+    const action = objectValue(raw) ?? {};
+    return {
+      kind: text(action.kind) ?? "unknown",
+      name: text(action.name),
+      actionIndex: numberValue(action.actionIndex),
+      sourcePath: text(action.sourcePath),
+      fireRateRpm: numberValue(action.fireRateRpm),
+      heatPerShot: numberValue(action.heatPerShot),
+      heatPerSecond: numberValue(action.heatPerSecond),
+      ammoCost: numberValue(action.ammoCost),
+      pelletCount: numberValue(action.pelletCount),
+      damageMultiplier: numberValue(action.damageMultiplier),
+      spreadMin: numberValue(action.spreadMin),
+      spreadMax: numberValue(action.spreadMax),
+      spreadFirstAttack: numberValue(action.spreadFirstAttack),
+      spreadPerAttack: numberValue(action.spreadPerAttack),
+      spreadDecay: numberValue(action.spreadDecay),
+      chargeTime: numberValue(action.chargeTime),
+      chargeUpTime: numberValue(action.chargeUpTime),
+      chargeDownTime: numberValue(action.chargeDownTime),
+      cooldownTime: numberValue(action.cooldownTime),
+      spinUpTime: numberValue(action.spinUpTime),
+      spinDownTime: numberValue(action.spinDownTime),
+      fireDuringSpinUp: nullableBooleanValue(action.fireDuringSpinUp),
+      fullDamageRange: numberValue(action.fullDamageRange),
+      zeroDamageRange: numberValue(action.zeroDamageRange),
+      damagePerSecondTotal: numberValue(action.damagePerSecondTotal),
+    };
+  });
+  return {
+    recordSchemaVersion: numberValue(row.recordSchemaVersion),
+    actions,
+    dpsModelVersion: text(row.dpsModelVersion),
+    dpsAssumptions: (arrayValue(row.dpsAssumptions) ?? []).filter((value): value is string => typeof value === "string"),
+    dpsConfidence: text(row.dpsConfidence),
+    dpsPolicy: text(row.dpsPolicy),
+  };
 }
 
 function shieldMitigation(row: Row): Record<string, unknown> {
@@ -576,6 +653,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   if (!found) throw new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No fitting component matched the supplied identifier.");
   const mitigation = componentMitigation(found.row, found.fallbackType);
   const data: Record<string, unknown> = { ...componentSummary(found.row, found.fallbackType), stats: componentStats(found.row), mitigation };
+  const weapon = componentWeapon(found.row, found.fallbackType);
+  if (weapon) data.weapon = weapon;
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);
   return { meta: await fittingApiMeta(selection), data };
 }

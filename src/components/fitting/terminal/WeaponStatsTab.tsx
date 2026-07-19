@@ -27,6 +27,17 @@ function statOrUnavailable(value: number | null | undefined, suffix = ""): strin
   return `${formatNumber(value)}${suffix}`;
 }
 
+function reserveOrLoad(stats: FittingComponentStats | null | undefined): string {
+  if (typeof stats?.maxAmmoCount === "number" && stats.maxAmmoCount > 0) return `${formatNumber(stats.maxAmmoCount)} reserve`;
+  if (typeof stats?.maxAmmoLoad === "number" && stats.maxAmmoLoad > 0) return `${formatNumber(stats.maxAmmoLoad)} load`;
+  return "—";
+}
+
+function spreadRange(stats: FittingComponentStats | null | undefined): string {
+  if (typeof stats?.spreadMin !== "number" || typeof stats.spreadMax !== "number") return "—";
+  return `${formatNumber(stats.spreadMin)}–${formatNumber(stats.spreadMax)}`;
+}
+
 const weaponGroupKeys = [
   "pilot-weapons",
   "remote-turrets",
@@ -116,15 +127,17 @@ function WeaponGroupTable({ group, entries }: { group: NamedGroup; entries: Reco
               <th>Type</th>
               <th>Damage</th>
               <th>Alpha</th>
+              <th>60s DPS</th>
               <th>Share</th>
               <th>Range</th>
               <th>Speed</th>
               <th>Lifetime</th>
               <th>Fire Rate</th>
-              <th>Ammo</th>
+              <th>Reserve / Load</th>
+              <th>Spread</th>
               <th>Power</th>
-              <th>Heat</th>
-              <th>Coolant</th>
+              <th>Heat / Shot</th>
+              <th>Cooling</th>
             </tr>
           </thead>
           <tbody>
@@ -139,15 +152,17 @@ function WeaponGroupTable({ group, entries }: { group: NamedGroup; entries: Reco
                   <td>{entry?.type ?? "—"}</td>
                   <td>{entry?.loading || !entry ? "…" : entry.damageType}</td>
                   <td>{entry?.loading || !entry ? "…" : entry.alpha}</td>
+                  <td>{statOrUnavailable(stats?.sustainedDps60)}</td>
                   <td>{entry?.alphaShare ?? "—"}</td>
-                  <td>{statOrUnavailable(stats?.calculatedRange)}</td>
+                  <td>{statOrUnavailable(stats?.projectileMaxTravel ?? stats?.calculatedRange)}</td>
                   <td>{statOrUnavailable(stats?.projectileSpeed)}</td>
                   <td>{statOrUnavailable(stats?.projectileLifetime)}</td>
                   <td>{statOrUnavailable(stats?.fireRateRpm, " RPM")}</td>
-                  <td>{statOrUnavailable(stats?.ammoCapacity)}</td>
-                  <td>{statOrUnavailable(stats?.powerDraw, " MW")}</td>
-                  <td>{statOrUnavailable(stats?.heatGenerated)}</td>
-                  <td>{statOrUnavailable(stats?.coolingDraw, " kW")}</td>
+                  <td>{reserveOrLoad(stats)}</td>
+                  <td>{spreadRange(stats)}</td>
+                  <td>{statOrUnavailable(stats?.powerConsumptionNominal ?? stats?.powerDraw, " MW")}</td>
+                  <td>{statOrUnavailable(stats?.heatPerShot)}</td>
+                  <td>{statOrUnavailable(stats?.coolingPerSecond, "/s")}</td>
                 </tr>
               );
             })}
