@@ -11,7 +11,7 @@ export default function BuildQueueSelector({
   onCreate,
   onRename,
   onDelete,
-  renameRequestToken = 0,
+  autoOpenRename = false,
 }: {
   queues: BuildQueue[];
   activeQueueId: string;
@@ -19,13 +19,13 @@ export default function BuildQueueSelector({
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
-  renameRequestToken?: number;
+  autoOpenRename?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const [editorMode, setEditorMode] = useState<EditorMode>(null);
-  const [name, setName] = useState("");
   const activeQueue = queues.find((queue) => queue.id === activeQueueId) ?? queues[0];
+  const [open, setOpen] = useState(autoOpenRename);
+  const [editorMode, setEditorMode] = useState<EditorMode>(autoOpenRename ? "rename" : null);
+  const [name, setName] = useState(() => autoOpenRename ? (activeQueue?.name ?? "") : "");
 
   useEffect(() => {
     if (!open) return;
@@ -38,13 +38,6 @@ export default function BuildQueueSelector({
     document.addEventListener("mousedown", handlePointerDown);
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [open]);
-
-  useEffect(() => {
-    if (!renameRequestToken) return;
-    setOpen(true);
-    setEditorMode("rename");
-    setName(activeQueue?.name ?? "");
-  }, [activeQueue?.id, activeQueue?.name, renameRequestToken]);
 
   function beginCreate() {
     setName("");

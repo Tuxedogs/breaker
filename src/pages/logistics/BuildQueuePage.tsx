@@ -551,13 +551,14 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
           </header>
 
           <BuildQueueSelector
+            key={queueRenameRequestToken}
             queues={buildQueues}
             activeQueueId={activeBuildQueueId}
             onSelect={handleQueueSelect}
             onCreate={handleQueueCreate}
             onRename={handleQueueRename}
             onDelete={handleQueueDelete}
-            renameRequestToken={queueRenameRequestToken}
+            autoOpenRename={queueRenameRequestToken > 0}
           />
 
           <div className="bq-queue-col-body">
