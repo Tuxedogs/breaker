@@ -85,6 +85,12 @@ export function getLegacyMaterialItemKind(material: MaterialTemplate | undefined
 }
 
 export function resolveInventoryItemName(entry: InventoryEntry, material?: MaterialTemplate): string {
+  if (material?.id === 'rawice') {
+    return 'Pressurized Ice';
+  }
+  if (material?.materialType === 'raw' || material?.materialType === 'special') {
+    return material.name;
+  }
   return entry.itemName ?? entry.materialName ?? material?.name ?? entry.materialId ?? entry.catalogItemId ?? 'Custom Item';
 }
 

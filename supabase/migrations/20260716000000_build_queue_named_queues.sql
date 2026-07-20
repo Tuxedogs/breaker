@@ -1,5 +1,15 @@
 begin;
 
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
 create table public.build_queues (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null,
@@ -41,10 +51,21 @@ for each row execute function public.set_updated_at();
 
 alter table public.build_queues enable row level security;
 
-create policy "build_queues_own_rows"
-on public.build_queues
-for all
-using (auth.uid() = user_id)
-with check (auth.uid() = user_id);
+do $policy$
+begin
+  if exists (
+    select 1
+    from pg_proc procedure
+    join pg_namespace namespace on namespace.oid = procedure.pronamespace
+    where namespace.nspname = 'auth'
+      and procedure.proname = 'uid'
+      and pg_get_function_identity_arguments(procedure.oid) = ''
+  ) then
+    execute 'create policy "build_queues_own_rows" on public.build_queues for all using (auth.uid() = user_id) with check (auth.uid() = user_id)';
+  else
+    alter table public.build_queues disable row level security;
+  end if;
+end;
+$policy$;
 
 commit;

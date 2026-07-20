@@ -156,14 +156,7 @@ export default function ComponentResultCard({
       && metrics.findIndex((candidate) => `${candidate.label}:${candidate.value}` === key) === index;
   }).slice(0, 5);
 
-  const showStatUnavailable = useMemo(() => {
-    if (!record || fittingLoading) return false;
-    return visibleStats.length === 0;
-  }, [
-    record,
-    fittingLoading,
-    visibleStats.length,
-  ]);
+  const showStatUnavailable = Boolean(record && !fittingLoading && visibleStats.length === 0);
 
   const statUnavailableMessage = "Base stats unavailable";
 

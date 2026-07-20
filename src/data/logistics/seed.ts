@@ -155,7 +155,9 @@ export const materialTemplates: LogisticsMaterialTemplate[] = [
   refineryMaterial("corundum", "Corundum"),
   refineryMaterial("gold", "Gold"),
   refineryMaterial("hephaestanite", "Hephaestanite"),
-  refineryMaterial("rawice", "Ice"),
+  // Legacy storage key retained for crafting/inventory compatibility. The active
+  // inventory surface represents the refined output; Raw Ice is future opt-in UI.
+  refineryMaterial("rawice", "Pressurized Ice"),
   refineryMaterial("iron", "Iron"),
   refineryMaterial("laranite", "Laranite"),
   refineryMaterial("lindinium", "Lindinium"),
