@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { createInventoryEntryDraft, type InventorySyncState, type InventoryUiState, useLogisticsStore } from '../../stores/logisticsStore';
-import type { BuildQueueItem, InventoryEntry, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
+import type { BuildQueueItem, InventoryEntry, InventoryItemKind, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryTransferDialog from '../../components/logistics/InventoryTransferDialog';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
@@ -35,6 +35,12 @@ import {
 import { useAuthSession } from '../../lib/auth/useAuthSession';
 import { useMaterialIdentityIndex, type MaterialIdentity } from '../../lib/logistics/materialIdentityIndex';
 import { createMaterialResolver } from '../../lib/logistics/materialResolver';
+import {
+  expectedInventoryCsvUnit,
+  inventoryCsvUnitMismatchMessage,
+  isRawIceInventoryInput,
+  resolveInventoryCsvUnit,
+} from '../../lib/logistics/inventoryCsvImport';
 import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
 import QualityTierBadge from '../../components/shared/QualityTierBadge';
 import '../../components/logistics/logistics.css';
@@ -205,6 +211,8 @@ type CsvPreviewRow = {
   status: 'valid' | 'warning' | 'error';
   materialName: string;
   materialId?: string;
+  materialType?: MaterialTemplate['materialType'];
+  itemKind: InventoryItemKind;
   quantity: number;
   boxSize: number | null;
   unitType: InventoryUnitType;
@@ -474,16 +482,6 @@ function normalizeCsvRawRows(rawRows: CsvRawRow[]): CsvParsedRow[] {
   });
 }
 
-function resolveCsvUnit(value: string): { unitType?: InventoryUnitType; label?: string; multiplier: number; warning?: string } {
-  const normalized = value.trim().toLowerCase();
-  if (!normalized) return { multiplier: 1 };
-  if (normalized === 'scu') return { unitType: 'scu', label: 'SCU', multiplier: 1 };
-  if (normalized === 'cscu') return { unitType: 'scu', label: 'SCU', multiplier: 0.01, warning: 'cSCU converted to SCU.' };
-  if (normalized === 'unit') return { unitType: 'unit', label: 'unit', multiplier: 1 };
-  if (normalized === 'units') return { unitType: 'unit', label: 'unit', multiplier: 1, warning: 'Unit normalized from "units" to "unit".' };
-  return { multiplier: 1 };
-}
-
 function parseCsvNumber(value: string): number | null {
   const trimmed = value.trim();
   if (!trimmed) return null;
@@ -619,7 +617,7 @@ function validateCsvRows(
     const location = locationNameInput
       ? resolveInventoryLocationByInput(locationNameInput, locationLookup)
       : undefined;
-    const unit = resolveCsvUnit(row.unitInput);
+    const unit = resolveInventoryCsvUnit(row.unitInput);
     const parsedQuantity = parseCsvNumber(row.quantityInput);
     const parsedQuality = parseCsvInteger(row.qualityInput);
     const parsedBoxSize = parseCsvNumber(row.boxSizeInput);
@@ -631,8 +629,10 @@ function validateCsvRows(
         : roundCsvQuantity(parsedBoxSize * unit.multiplier);
     const quality = parsedQuality ?? undefined;
 
+    const rawIceInput = isRawIceInventoryInput(materialNameInput);
     if (!materialNameInput) errors.push('Missing material.');
     else if (!material) errors.push('Unknown material.');
+    else if (rawIceInput) errors.push('Raw Ice import requires unrefined inventory support.');
     else if (normalizeLookup(material.name) !== normalizeLookup(materialNameInput)) {
       warnings.push(refinedName
         ? `Matched refined material name: ${refinedName}.`
@@ -644,7 +644,13 @@ function validateCsvRows(
 
     if (!row.unitInput.trim()) errors.push('Missing unit.');
     else if (!unit.unitType) errors.push('Unsupported unit.');
-    else if (unit.warning) warnings.push(unit.warning);
+    else {
+      if (material) {
+        const mismatch = inventoryCsvUnitMismatchMessage(material, unit.unitType);
+        if (mismatch) errors.push(mismatch);
+      }
+      if (unit.warning) warnings.push(unit.warning);
+    }
 
     if (!row.qualityInput.trim()) errors.push('Missing quality.');
     else if (parsedQuality === null || parsedQuality < 0 || parsedQuality > 1000) errors.push('Invalid quality.');
@@ -658,12 +664,15 @@ function validateCsvRows(
     else if (!location) warnings.push('New location will be created.');
     else if (location.name !== locationNameInput) warnings.push(`Location name normalized to ${location.name}.`);
 
+    const expectedUnitType = material ? expectedInventoryCsvUnit(material) : unit.unitType ?? 'unit';
     const baseRow: CsvPreviewRow = {
       id: `csv-row-${row.rowNumber}`,
       rowNumbers: [row.rowNumber],
       status: errors.length ? 'error' : warnings.length ? 'warning' : 'valid',
       materialName: refinedName ?? material?.name ?? materialNameInput,
       materialId: material?.id,
+      materialType: expectedUnitType === 'scu' ? 'refined' : material?.materialType,
+      itemKind: expectedUnitType === 'scu' ? 'refined' : 'raw_mineable',
       quantity,
       boxSize,
       unitType: unit.unitType ?? 'unit',
@@ -701,8 +710,9 @@ function buildInventoryEntryFromPreviewRow(row: CsvPreviewRow, locationId: strin
     id: createNewInventoryId(),
     materialId: row.materialId,
     materialName: row.materialName,
+    materialType: row.materialType,
     itemName: row.materialName,
-    itemKind: row.unitType === 'scu' ? 'refined' : 'raw_mineable',
+    itemKind: row.itemKind,
     unitType: row.unitType,
     catalogSource: 'api',
     quality: row.quality,

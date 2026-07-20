@@ -72,6 +72,7 @@ const TEXT_ALIASES: Record<string, string> = {
   ice: "rawice",
   rawice: "rawice",
   pressurizedice: "rawice",
+  jacliumore: "jaclium",
   carinitepure: "carinite-pure",
   savrillium: "savrilium",
   savrilium: "savrilium",

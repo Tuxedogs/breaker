@@ -99,7 +99,9 @@ function initDraftFromEntry(
   return {
     catalogMode: isCatalog ? 'catalog' : 'manual',
     materialId: entry.materialId ?? '',
-    mineableForm: kind === 'ore' ? 'raw' : kind === 'refined' || entry.materialType === 'refined' ? 'refined' : '',
+    mineableForm: mat?.id === 'rawice'
+      ? 'refined'
+      : kind === 'ore' ? 'raw' : kind === 'refined' || entry.materialType === 'refined' ? 'refined' : '',
     itemName: entry.itemName ?? entry.materialName ?? mat?.name ?? '',
     itemKind: kind,
     unitType: entry.unitType ?? KIND_DEFAULT_UNIT[kind],
@@ -237,6 +239,14 @@ function isRefinableScuMineable(material: MaterialTemplate | undefined, identity
   return hasRefinerySource && usesScu;
 }
 
+function isRawIceInput(value: string): boolean {
+  return normalizeItemLookup(value) === 'rawice';
+}
+
+function canonicalMineableDisplayName(material: MaterialTemplate): string {
+  return material.id === 'rawice' ? 'Pressurized Ice' : material.name;
+}
+
 function deriveInventoryKindFromForm(choice: MineableFormChoice): InventoryItemKind | undefined {
   if (choice === 'raw') return 'ore';
   if (choice === 'refined') return 'refined';
@@ -369,6 +379,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     for (const identity of materialIdentities) {
       lookup.set(normalizeItemLookup(identity.displayName), identity);
       lookup.set(normalizeItemLookup(identity.materialKey), identity);
+      if (identity.materialKey === 'pressurizedice') lookup.set('ice', identity);
     }
     return lookup;
   }, [materialIdentities]);
@@ -379,19 +390,25 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       if (!isKnownMineable(material)) continue;
       lookup.set(normalizeItemLookup(material.id), material);
       lookup.set(normalizeItemLookup(material.name), material);
+      if (material.id === 'jaclium') lookup.set('jacliumore', material);
+      if (material.id === 'carinite-pure') lookup.set('carinitepure', material);
     }
     return lookup;
   }, [materials]);
 
   const mineableIdentities = useMemo(() => {
-    return materialIdentities
-      .map<MineableSuggestion | null>((identity) => {
-        const material = materialByLookup.get(normalizeItemLookup(identity.materialKey)) ??
-          materialByLookup.get(normalizeItemLookup(identity.displayName));
-        return material ? { identity, material } : null;
-      })
-      .filter((item): item is MineableSuggestion => item !== null)
-      .sort((left, right) => left.identity.displayName.localeCompare(right.identity.displayName));
+    const byMaterialId = new Map<string, MineableSuggestion>();
+    for (const identity of materialIdentities) {
+      const material = materialByLookup.get(normalizeItemLookup(identity.materialKey)) ??
+        materialByLookup.get(normalizeItemLookup(identity.displayName));
+      if (!material) continue;
+      if (material.id === 'rawice' && identity.materialForm !== 'refined') continue;
+      if (!byMaterialId.has(material.id)) byMaterialId.set(material.id, { identity, material });
+    }
+    return [...byMaterialId.values()]
+      .sort((left, right) => (
+        canonicalMineableDisplayName(left.material).localeCompare(canonicalMineableDisplayName(right.material))
+      ));
   }, [materialByLookup, materialIdentities]);
 
   function patch(updates: Partial<DraftState>) {
@@ -402,6 +419,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   function findMineableIdentity(itemName: string): ResolvedMineable | undefined {
     const key = normalizeItemLookup(itemName);
     if (!key) return undefined;
+    if (isRawIceInput(itemName)) return undefined;
     const identity = identityByLookup.get(key);
     if (identity) {
       const material = materialByLookup.get(normalizeItemLookup(identity.materialKey)) ??
@@ -414,6 +432,16 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   }
 
   function resolveKnownItem(itemName: string): Partial<DraftState> {
+    if (isRawIceInput(itemName)) {
+      return {
+        catalogMode: 'catalog',
+        itemName,
+        materialId: '',
+        mineableForm: '',
+        itemKind: 'unknown',
+        unitType: 'scu',
+      };
+    }
     const resolved = findMineableIdentity(itemName);
     if (!resolved) {
       return {
@@ -427,11 +455,11 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     }
     const { identity, material } = resolved;
     const isRefinable = isRefinableScuMineable(material, identity);
-    const nextForm = isRefinable ? draft.mineableForm : '';
+    const nextForm = material.id === 'rawice' ? 'refined' : isRefinable ? draft.mineableForm : '';
     const nextKind = deriveInventoryKindFromForm(nextForm) ?? (isRefinable ? 'unknown' : deriveKindFromMaterial(material));
     return {
       catalogMode: 'catalog',
-      itemName: identity?.displayName ?? material.name,
+      itemName: canonicalMineableDisplayName(material),
       materialId: material.id,
       mineableForm: nextForm,
       itemKind: nextKind,
@@ -452,6 +480,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     : derivedUnitType === 'scu'
       ? `${qty} SCU`
       : `x${qty}`;
+  const rawIceRequested = isRawIceInput(draft.itemName);
 
   const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
 
@@ -472,6 +501,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   function buildEntry(overrideId?: string): InventoryEntry | null {
     if (Number.isNaN(qty) || qty <= 0) return null;
     if (!resolvedLocationId) return null;
+    if (rawIceRequested) return null;
 
     const resolvedMineable = findMineableIdentity(draft.itemName);
     if (!resolvedMineable) {
@@ -494,7 +524,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     }
 
     if (!isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity)) {
-      const resolvedItemName = resolvedMineable.identity?.displayName ?? resolvedMineable.material.name;
+      const resolvedItemName = canonicalMineableDisplayName(resolvedMineable.material);
       const derivedKind = deriveKindFromMaterial(resolvedMineable.material);
       return createInventoryEntryDraft({
         id: overrideId ?? entry?.id ?? createNewInventoryId(),
@@ -517,7 +547,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const derivedKind = deriveInventoryKindFromForm(draft.mineableForm);
     if (!derivedKind) return null;
 
-    const resolvedItemName = resolvedMineable.identity?.displayName ?? resolvedMineable.material.name;
+    const resolvedItemName = canonicalMineableDisplayName(resolvedMineable.material);
     if (!resolvedItemName) return null;
     const resolvedMaterialId = resolvedMineable.material.id;
     const catalogSource: InventoryCatalogSource = 'api';
@@ -548,6 +578,8 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       const resolvedMineable = findMineableIdentity(draft.itemName);
       const message = !draft.itemName.trim()
         ? 'Enter an item name.'
+        : rawIceRequested
+          ? 'Raw Ice import requires unrefined inventory support.'
         : Number.isNaN(qty) || qty <= 0
           ? 'Enter a quantity greater than zero.'
           : !resolvedLocationId
@@ -596,14 +628,18 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   const canSave = useMemo(() => {
     if (Number.isNaN(qty) || qty <= 0) return false;
     if (!resolvedLocationId) return false;
-    if (!draft.itemName.trim()) return false;
+    if (!draft.itemName.trim() || rawIceRequested) return false;
     if (!selectedIsKnownMineable) return true;
     if (!selectedIsRefinableScu) return true;
     return Boolean(deriveInventoryKindFromForm(draft.mineableForm));
-  }, [draft.itemName, draft.mineableForm, qty, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
+  }, [draft.itemName, draft.mineableForm, qty, rawIceRequested, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
 
   const fieldErrors = {
-    itemName: !draft.itemName.trim() ? 'Enter an item name.' : '',
+    itemName: !draft.itemName.trim()
+      ? 'Enter an item name.'
+      : rawIceRequested
+        ? 'Raw Ice requires unrefined inventory support.'
+        : '',
     mineableForm: selectedIsRefinableScu && !deriveInventoryKindFromForm(draft.mineableForm)
       ? 'Choose Raw or Refined for this known mineable.'
       : '',
@@ -654,15 +690,15 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             autoFocus={isNew}
           />
           <datalist id="inv-known-items">
-            {mineableIdentities.map(({ identity }) => (
-              <option key={identity.materialKey} value={identity.displayName} />
+            {mineableIdentities.map(({ material }) => (
+              <option key={material.id} value={canonicalMineableDisplayName(material)} />
             ))}
           </datalist>
           <span className="logi-form-hint">{itemHint}</span>
           {hasTriedSave && fieldErrors.itemName ? <span className="logi-form-error">{fieldErrors.itemName}</span> : null}
         </div>
 
-        {selectedIsRefinableScu ? (
+        {selectedIsRefinableScu && selectedMaterial?.id !== 'rawice' ? (
           <div className="logi-form-field">
             <span className="logi-form-label">Raw / Refined</span>
             <div className="logi-inv-segmented" role="group" aria-label="Raw or refined material">

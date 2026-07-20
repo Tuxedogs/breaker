@@ -84,6 +84,7 @@ function isRefinableMaterial(material: MaterialTemplate | undefined): boolean {
 function isRefinedInventory(entry: InventoryEntry): boolean {
   return (
     entry.materialType === "refined" ||
+    entry.itemKind === "refined" ||
     entry.itemKind === "material" ||
     entry.source === "screenshot_parser" ||
     entry.sourceHistory?.includes("screenshot_parser") === true ||

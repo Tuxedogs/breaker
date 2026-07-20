@@ -8,9 +8,9 @@ import type { MaterialIdentity } from "../../src/lib/logistics/materialIdentityI
 const materialIdentities: MaterialIdentity[] = [
   {
     materialKey: "rawice",
-    canonicalName: "Ice",
-    displayName: "Ice",
-    rawName: "Ice",
+    canonicalName: "Raw Ice",
+    displayName: "Raw Ice",
+    rawName: "Raw Ice",
     refinedName: "Pressurized Ice",
     materialForm: "raw",
     unitType: "scu",
@@ -20,9 +20,9 @@ const materialIdentities: MaterialIdentity[] = [
   },
   {
     materialKey: "pressurizedice",
-    canonicalName: "Ice",
+    canonicalName: "Pressurized Ice",
     displayName: "Pressurized Ice",
-    rawName: "Ice",
+    rawName: "Raw Ice",
     refinedName: "Pressurized Ice",
     materialForm: "refined",
     unitType: "scu",
@@ -30,7 +30,7 @@ const materialIdentities: MaterialIdentity[] = [
   },
 ];
 
-test("resolves raw and refined ice names to the existing Ice material identity", () => {
+test("resolves Ice aliases to the stable rawice inventory key", () => {
   const resolve = createMaterialResolver(materialTemplates, materialIdentities);
 
   assert.equal(resolve({ materialName: "Ice" })?.materialId, "rawice");
