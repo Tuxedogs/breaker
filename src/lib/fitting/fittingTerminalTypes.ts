@@ -20,6 +20,7 @@ export type PipCategory =
   | "engines"
   | "quantum"
   | "radar"
+  | "shields"
   | "lifeSupport"
   | "cooler1"
   | "cooler2";
@@ -33,6 +34,7 @@ export const DEFAULT_PIP_ASSIGNMENT: PipAssignment = {
   engines: 0,
   quantum: 0,
   radar: 0,
+  shields: 0,
   lifeSupport: 0,
   cooler1: 0,
   cooler2: 0,

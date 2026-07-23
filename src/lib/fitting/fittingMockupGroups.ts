@@ -22,9 +22,11 @@ export const mockupOffensiveGroupLabels: Record<string, string> = {
   "pilot-weapons": "Pilot Weapons",
   "remote-turrets": "Remote Turrets",
   "manned-turrets": "Manned Turrets",
+  "point-defense": "Point Defense",
   "installed-weapons": "Gimbals & Mounts",
   missiles: "Missiles",
-  torpedoes: "Missiles",
+  torpedoes: "Torpedoes",
+  bombs: "Bombs",
   "emp-qed": "EMP / QED",
   "tractor-mining-salvage": "Tractor / Mining / Salvage",
 };
@@ -34,8 +36,10 @@ export const mockupOffensiveGroupOrder = [
   "installed-weapons",
   "remote-turrets",
   "manned-turrets",
+  "point-defense",
   "missiles",
   "torpedoes",
+  "bombs",
   "emp-qed",
   "tractor-mining-salvage",
 ] as const;

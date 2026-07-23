@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { getShipThumbnailCandidates } from "../../../tools/alpha-threshold/lib/ships/thumbnail";
 import { derivedNum, extractedNum, valueOrUnavailable } from "../../../components/fitting/terminal/fittingPerformanceHelpers";
-import type { FittingCalculateResult, FittingComponentMitigation } from "../fittingApi";
+import type { FittingComponentMitigation } from "../fittingApi";
 import { getFittingSlotIcon, type FittingSlotIconInput } from "../getFittingSlotIcon";
 import {
   buildMockupOffensiveDisplayGroups,
@@ -24,9 +24,9 @@ import {
   type PortBreakdownRow,
 } from "../fittingPortGrouping";
 import type { FittingMockupLoadoutState } from "../useFittingMockupLoadout";
+import type { FittingSimulationState } from "../useFittingSimulation";
 import {
   buildMockupResistanceTable,
-  buildShieldThresholdReadout,
 } from "./fittingMockupDefensiveStats";
 import {
   deriveDisplayManufacturer,
@@ -52,10 +52,31 @@ function sumNullableDps(...values: Array<number | null | undefined>): number | n
   return nums.reduce((sum, value) => sum + value, 0);
 }
 
-function formatResourceMargin(mw: number | null, pct: number | null): string {
-  if (mw != null && pct != null) return `${formatNumber(mw)} MW (${pct}%)`;
-  if (pct != null) return `${pct}%`;
-  return "—";
+function simulationValue(
+  value: number | null | undefined,
+  simulation: FittingSimulationState,
+  suffix = "",
+): string {
+  if (simulation.loading) return "Updating…";
+  if (value == null || !Number.isFinite(value)) return "Unavailable";
+  return `${formatNumber(value)}${suffix}`;
+}
+
+function shieldRegenValue(
+  value: number | null | undefined,
+  simulation: FittingSimulationState,
+): string {
+  if (simulation.loading) return "Updating…";
+  if (value != null && Number.isFinite(value)) return `${formatNumber(value)}/s`;
+  const reason = simulation.data?.missingInputs.find((entry) => (
+    entry.path === "powerAllocation.shields"
+    || entry.path === "shield.regenByPowerAllocation"
+    || entry.path === "powerAllocation"
+  ))?.reason ?? "";
+  if (reason.includes("no per-generator distribution rule")) return "Unavailable · no distribution rule";
+  if (reason.includes("No extracted shield-regeneration value")) return "Unavailable · no exact pip step";
+  if (reason.includes("exceeds active reactor capacity")) return "Unavailable · allocation exceeds capacity";
+  return "Unavailable";
 }
 
 function offensiveRowTone(groupKey: string, index = 0): EquipmentRowTone {
@@ -64,9 +85,11 @@ function offensiveRowTone(groupKey: string, index = 0): EquipmentRowTone {
       return "pilot";
     case "remote-turrets":
     case "manned-turrets":
+    case "point-defense":
       return index === 1 ? "turret-alt" : index === 2 ? "turret-alt-2" : "turret";
     case "missiles":
     case "torpedoes":
+    case "bombs":
       return "missile";
     case "emp-qed":
       return "emp";
@@ -251,18 +274,20 @@ export function buildDefensiveGroups(
 export type MockupComputedStatsInput = {
   loadout: Pick<FittingMockupLoadoutState, "calculateResult" | "shipDetail">;
   combatStats: MockupCombatStats;
+  simulation: FittingSimulationState;
   armorMitigations: Array<Extract<FittingComponentMitigation, { kind: "armor" }>>;
   shieldMitigations: Array<Extract<FittingComponentMitigation, { kind: "shield" }>>;
   powerCardContent: ReactNode;
 };
 
 export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] {
-  const { loadout, combatStats, armorMitigations, shieldMitigations, powerCardContent } = input;
+  const { loadout, combatStats, simulation, armorMitigations, shieldMitigations, powerCardContent } = input;
   const ship = loadout.shipDetail?.ship;
   const calculateResult = loadout.calculateResult;
 
   const shieldHp = derivedNum(calculateResult, "shields", "totalShieldHP");
   const shieldRegen = derivedNum(calculateResult, "shields", "totalRegenRate");
+  const effectiveShieldRegen = simulation.data?.shields?.effectiveRegenPerSecond.value ?? null;
   const hullHP = loadout.shipDetail?.hullHP ?? loadout.shipDetail?.mitigation?.hullHp ?? null;
   const hpSummary = computeMockupHpSummary({ hullHP, shieldHp, armorMitigations });
 
@@ -279,13 +304,13 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
   const boostRegen = extractedNum(calculateResult, "performance", "boostRegen");
 
   const resistanceRows = buildMockupResistanceTable({ shieldMitigations, armorMitigations });
-  const thresholdReadout = buildShieldThresholdReadout(shieldHp);
 
   const formatRate = (value: number | null, suffix = " °/s") => (
     value != null ? `${formatNumber(value)}${suffix}` : "Not calculated yet"
   );
 
-  const sustainedDps = sumNullableDps(combatStats.pilotDps, combatStats.turretDps, combatStats.crewDps);
+  const sustainedDps = simulation.data?.weaponsSummary.dps.value ?? null;
+  const damageOver60 = simulation.data?.weaponsSummary.totalDamage.value ?? null;
   const burstAlpha = sumNullableDps(combatStats.pilotAlpha, combatStats.turretAlpha, combatStats.crewAlpha);
   const signatureSensitivity = derivedNum(calculateResult, "radar", "maxSignatureSensitivity");
 
@@ -297,7 +322,16 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
       sections: [{
         title: "Combat",
         rows: [
-          { label: "Sustained DPS", value: formatCombatValue(sustainedDps, combatStats.loading), tone: "accent" },
+          {
+            label: "Sustained DPS (60s)",
+            value: simulationValue(sustainedDps, simulation),
+            tone: sustainedDps != null ? "accent" : "muted",
+          },
+          {
+            label: "Damage over 60s",
+            value: simulationValue(damageOver60, simulation, damageOver60 != null ? " dmg" : ""),
+            tone: damageOver60 != null ? "default" : "muted",
+          },
           { label: "Burst Alpha", value: formatCombatValue(burstAlpha, combatStats.loading) },
           { label: "Pilot Alpha", value: formatAlphaWithDps(combatStats.pilotAlpha, combatStats.pilotDps, combatStats.loading) },
           {
@@ -330,14 +364,14 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
         { label: "Total HP", value: valueOrUnavailable(hpSummary.totalHp, " HP") },
         { label: "Armor HP", value: valueOrUnavailable(hpSummary.armorHp, " HP") },
         { label: "Shield HP", value: valueOrUnavailable(shieldHp, " HP"), tone: "accent" },
-        { label: "Shield Regen", value: valueOrUnavailable(shieldRegen, "/s") },
+        {
+          label: "Shield Regen @ Allocation",
+          value: shieldRegenValue(effectiveShieldRegen, simulation),
+          tone: effectiveShieldRegen != null ? "accent" : "muted",
+        },
+        { label: "Max Shield Regen", value: valueOrUnavailable(shieldRegen, "/s") },
       ],
       sections: [
-        ...(thresholdReadout ? [{
-          title: thresholdReadout.label,
-          rows: [],
-          thresholdReadout,
-        }] : []),
         {
           title: "Resistances",
           rows: [],
@@ -400,34 +434,27 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
 }
 
 export function buildResourceSummary(
-  calculateResult: FittingCalculateResult | null,
+  simulation: FittingSimulationState,
   fittingValid: boolean,
 ): ResourceSummaryView {
-  const powerProduced = derivedNum(calculateResult, "power", "totalPowerGenerated");
-  const powerRequired = derivedNum(calculateResult, "power", "totalPowerRequired");
-  const coolingProduced = derivedNum(calculateResult, "cooling", "totalCoolingGenerated");
-  const coolingRequired = derivedNum(calculateResult, "cooling", "totalCoolingRequired");
-
-  const powerMarginMw = powerProduced != null && powerRequired != null ? powerProduced - powerRequired : null;
-  const coolingMarginMw = coolingProduced != null && coolingRequired != null ? coolingProduced - coolingRequired : null;
-  const powerMarginPct = powerProduced != null && powerRequired != null && powerProduced > 0
-    ? Math.round(((powerProduced - powerRequired) / powerProduced) * 100)
-    : null;
-  const coolingMarginPct = coolingProduced != null && coolingRequired != null && coolingProduced > 0
-    ? Math.round(((coolingProduced - coolingRequired) / coolingProduced) * 100)
-    : null;
+  const powerCapacity = simulation.data?.power.capacitySegments.value ?? null;
+  const powerAllocated = simulation.data?.power.allocatedSegments.value ?? null;
+  const powerMargin = simulation.data?.power.marginSegments.value ?? null;
+  const coolingCapacity = simulation.data?.cooling.capacity.value ?? null;
+  const coolingDemand = simulation.data?.cooling.demand.value ?? null;
+  const coolingUtilization = simulation.data?.cooling.utilizationPercent.value ?? null;
 
   const blocks: ResourceBlockView[] = [
     {
       key: "power",
       title: "Power",
       metrics: [
-        { label: "Output", value: valueOrUnavailable(powerProduced, " MW") },
-        { label: "Used", value: valueOrUnavailable(powerRequired, " MW") },
-        { label: "Margin", value: formatResourceMargin(powerMarginMw, powerMarginPct), highlighted: true },
+        { label: "Capacity", value: simulationValue(powerCapacity, simulation, powerCapacity != null ? " segments" : "") },
+        { label: "Allocated", value: simulationValue(powerAllocated, simulation, powerAllocated != null ? " segments" : "") },
+        { label: "Margin", value: simulationValue(powerMargin, simulation, powerMargin != null ? " segments" : ""), highlighted: true },
       ],
-      barFillPct: powerProduced != null && powerRequired != null && powerProduced > 0
-        ? Math.min(100, (powerRequired / powerProduced) * 100)
+      barFillPct: powerCapacity != null && powerAllocated != null && powerCapacity > 0
+        ? Math.min(100, (powerAllocated / powerCapacity) * 100)
         : 0,
       barKind: "power",
     },
@@ -435,12 +462,12 @@ export function buildResourceSummary(
       key: "cooling",
       title: "Cooling",
       metrics: [
-        { label: "Output", value: valueOrUnavailable(coolingProduced) },
-        { label: "Used", value: valueOrUnavailable(coolingRequired) },
-        { label: "Margin", value: formatResourceMargin(coolingMarginMw, coolingMarginPct), highlighted: true },
+        { label: "Capacity", value: simulationValue(coolingCapacity, simulation) },
+        { label: "Demand", value: simulationValue(coolingDemand, simulation) },
+        { label: "Utilization", value: simulationValue(coolingUtilization, simulation, coolingUtilization != null ? "%" : ""), highlighted: true },
       ],
-      barFillPct: coolingProduced != null && coolingRequired != null && coolingProduced > 0
-        ? Math.min(100, (coolingRequired / coolingProduced) * 100)
+      barFillPct: coolingUtilization != null
+        ? Math.min(100, Math.max(0, coolingUtilization))
         : 0,
       barKind: "cooling",
     },

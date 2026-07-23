@@ -33,9 +33,11 @@ export function selectFittingResourceGroups(portRows: PortBreakdownRow[]): Fitti
     "pilot-weapons",
     "remote-turrets",
     "manned-turrets",
+    "point-defense",
     "installed-weapons",
     "missiles",
     "torpedoes",
+    "bombs",
     "emp-qed",
     "tractor-mining-salvage",
   ]);
@@ -54,6 +56,9 @@ export function selectFittingResourceGroups(portRows: PortBreakdownRow[]): Fitti
 }
 
 export function sumArmorHp(mitigations: Array<Extract<FittingComponentMitigation, { kind: "armor" }>>): number | null {
+  if (mitigations.length === 0 || mitigations.some((entry) => entry.health == null || !Number.isFinite(entry.health))) {
+    return null;
+  }
   const values = mitigations
     .map((entry) => entry.health)
     .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
@@ -72,8 +77,10 @@ export function computeMockupHpSummary(input: {
 } {
   const vitalHp = input.hullHP;
   const armorHp = sumArmorHp(input.armorMitigations);
-  const parts = [input.shieldHp, armorHp, vitalHp].filter((value): value is number => typeof value === "number");
-  const totalHp = parts.length > 0 ? parts.reduce((sum, value) => sum + value, 0) : null;
+  const armorComplete = input.armorMitigations.length === 0 || armorHp !== null;
+  const totalHp = vitalHp !== null && input.shieldHp !== null && armorComplete
+    ? vitalHp + input.shieldHp + (armorHp ?? 0)
+    : null;
   return { vitalHp, armorHp, totalHp };
 }
 
@@ -88,5 +95,5 @@ export function shieldSummaryLabel(rows: PortBreakdownRow[]): string | null {
 export function powerSummaryFromCalculate(result: FittingCalculateResult | null): string | null {
   const produced = derivedNum(result, "power", "totalPowerGenerated");
   if (produced == null) return null;
-  return `${produced} MW`;
+  return `${produced} segments`;
 }

@@ -61,7 +61,7 @@ export default function FittingMockupShell({
   onSaveLoadout,
 }: FittingMockupShellProps) {
   return (
-    <div className="fm-shell" role="application" aria-label="Ship fitting overview">
+    <main className="fm-shell" aria-label="Ship fitting overview">
       <FittingTopBar view={topBar} onSelectShip={onSelectShip} onSaveLoadout={onSaveLoadout} />
 
       {errorMessage ? <div className="fm-error">{errorMessage}</div> : null}
@@ -96,6 +96,6 @@ export default function FittingMockupShell({
       </div>
 
       <FittingStatsGrid cards={statCards} onCardAction={onStatCardAction} />
-    </div>
+    </main>
   );
 }

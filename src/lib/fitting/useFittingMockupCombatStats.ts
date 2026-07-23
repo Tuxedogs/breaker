@@ -97,7 +97,7 @@ export function formatAlphaWithDps(alpha: number | null, dps: number | null, loa
   const dpsText = formatCombatValue(dps, loading);
   if (alphaText === "Not calculated yet" && dpsText === "Not calculated yet") return "Not calculated yet";
   if (dpsText === "Not calculated yet") return alphaText;
-  return `${alphaText} · ${dpsText} DPS`;
+  return `${alphaText} · ${dpsText} reference DPS`;
 }
 
 export function damageFamilyForRow(

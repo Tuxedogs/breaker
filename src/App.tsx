@@ -24,6 +24,9 @@ const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/Invent
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
 const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
+const FittingFixturePage = import.meta.env.DEV
+  ? lazy(() => import("./pages/FittingFixturePage"))
+  : null;
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -76,7 +79,7 @@ function RedirectLegacyDoctrineModule() {
   return <Navigate to={`/dashboard/doctrine/module/${location.pathname.split("/").pop() ?? ""}`} replace />;
 }
 
-function FittingRoute() {
+function LegacyFittingRoute() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <FittingPage />
@@ -197,8 +200,8 @@ export default function App() {
             </Suspense>
           }
         />
-        <Route path="fitting" element={<FittingRoute />} />
-        <Route path="fitting/:shipKey" element={<FittingRoute />} />
+        <Route path="fitting-legacy" element={<LegacyFittingRoute />} />
+        <Route path="fitting-legacy/:shipKey" element={<LegacyFittingRoute />} />
         {/* Legacy redirect — preserve old gunnery URL */}
         <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
         <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />
@@ -271,6 +274,32 @@ export default function App() {
       </Route>
 
         {/* Full-viewport fitting mockup — outside dashboard shell */}
+        <Route
+          path="fitting"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <FittingMockupPage />
+            </Suspense>
+          }
+        />
+        {FittingFixturePage ? (
+          <Route
+            path="fitting/__fixture/:scenario"
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <FittingFixturePage />
+              </Suspense>
+            }
+          />
+        ) : null}
+        <Route
+          path="fitting/:shipKey"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <FittingMockupPage />
+            </Suspense>
+          }
+        />
         <Route
           path="fitting-mockup"
           element={

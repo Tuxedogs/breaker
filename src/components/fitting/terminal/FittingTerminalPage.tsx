@@ -12,6 +12,7 @@ import {
 import { useCombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
 import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import { useFittingTerminalState } from "../../../lib/fitting/useFittingTerminalState";
+import { useFittingSimulation } from "../../../lib/fitting/useFittingSimulation";
 import { pipAssignmentFromDraws } from "../../../lib/fitting/fittingPipPower";
 import { usePipSystemPowerDraw } from "../../../lib/fitting/usePipSystemPowerDraw";
 import {
@@ -89,6 +90,12 @@ export default function FittingTerminalPage({
   const terminal = useFittingTerminalState(shipId);
   const equippedDetails = useEquippedComponentDetailsForPortRows(portRows);
   const pipPower = usePipSystemPowerDraw(portRows, equippedDetails.statsById, equippedDetails.loading);
+  const simulation = useFittingSimulation(
+    shipId,
+    portRows,
+    terminal.pipAssignment,
+    !loading && pipPower.ready,
+  );
   const pipSyncedShipRef = useRef<string | null>(null);
   const combatAlpha = useCombatAlphaBreakdown(portRows, equippedDetails.statsById, equippedDetails.loading);
   const mitigationByComponentId = useMemo(() => {
@@ -179,10 +186,10 @@ export default function FittingTerminalPage({
   }, [shipId]);
 
   useEffect(() => {
-    if (!shipId || !pipPower.ready || pipSyncedShipRef.current === shipId) return;
+    if (!shipId || portRows.length === 0 || !pipPower.ready || pipSyncedShipRef.current === shipId) return;
     pipSyncedShipRef.current = shipId;
     syncPipsFromDraws(pipAssignmentFromDraws(pipPower.draws));
-  }, [shipId, pipPower.ready, pipPower.draws, syncPipsFromDraws]);
+  }, [shipId, portRows.length, pipPower.ready, pipPower.draws, syncPipsFromDraws]);
 
   return (
     <div className="fit-page fit-term-page">
@@ -268,11 +275,11 @@ export default function FittingTerminalPage({
           </div>
           <FittingPerformanceGrid
             calculateResult={calculateResult}
+            simulation={simulation}
             shipPerformance={ship ?? null}
             hullHP={shipDetail?.hullHP ?? null}
             cargoCapacityScu={ship?.cargoCapacityScu ?? null}
-            portRows={portRows}
-            combatAlpha={combatAlpha}
+          combatAlpha={combatAlpha}
             pipAssignment={terminal.pipAssignment}
             systemDraws={pipPower.draws}
             mitigationByComponentId={mitigationByComponentId}

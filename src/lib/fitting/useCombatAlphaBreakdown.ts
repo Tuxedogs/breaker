@@ -12,6 +12,7 @@ export type CombatAlphaBreakdown = {
   crewAlpha: number | null;
   missileAlpha: number | null;
   torpedoAlpha: number | null;
+  bombAlpha: number | null;
   byDamageType: Record<string, number | null>;
   loading: boolean;
 };
@@ -35,7 +36,7 @@ export function useCombatAlphaBreakdown(
     const groups = buildOffensiveGroups(portRows);
     return [...new Set(
       groups
-        .filter((group) => gunGroupKeys.has(group.key) || group.key === "missiles" || group.key === "torpedoes")
+        .filter((group) => gunGroupKeys.has(group.key) || group.key === "missiles" || group.key === "torpedoes" || group.key === "bombs")
         .flatMap((group) => group.rows)
         .map((row) => row.equippedComponentKey)
         .filter(Boolean),
@@ -77,6 +78,7 @@ export function useCombatAlphaBreakdown(
       crewAlpha: alphaForGroups(crewGroupKeys),
       missileAlpha: alphaForGroup("missiles"),
       torpedoAlpha: alphaForGroup("torpedoes"),
+      bombAlpha: alphaForGroup("bombs"),
       byDamageType,
       loading: detailsLoading || !weaponStatsReady,
     };

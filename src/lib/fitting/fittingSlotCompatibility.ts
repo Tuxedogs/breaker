@@ -27,7 +27,15 @@ const PORT_TYPE_TO_COMPONENT_TYPES: Record<string, string[]> = {
 
   WeaponGun: ["ship_weapon"],
 
-  WeaponMissile: ["ship_weapon"],
+  Missile: ["missile"],
+
+  MissileLauncher: ["missile_rack"],
+
+  Bomb: ["bomb"],
+
+  BombLauncher: ["bomb_rack"],
+
+  WeaponMissile: ["missile"],
 
   WeaponDefensive: ["ship_weapon"],
 

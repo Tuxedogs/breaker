@@ -73,18 +73,3 @@ export function buildMockupResistanceTable(input: {
     { label: "EHP", values: ehpValues },
   ];
 }
-
-export function buildShieldThresholdReadout(shieldHp: number | null): {
-  label: string;
-  valueLabel: string;
-  fillPct: number;
-} | null {
-  if (shieldHp == null || shieldHp <= 0) return null;
-  const thresholdHp = Math.round(shieldHp * 0.6);
-  const fillPct = Math.min(100, Math.round((thresholdHp / shieldHp) * 100));
-  return {
-    label: "Shield Threshold",
-    valueLabel: `${formatNumber(thresholdHp)} HP (${fillPct}%)`,
-    fillPct,
-  };
-}

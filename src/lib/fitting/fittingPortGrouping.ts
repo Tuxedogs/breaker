@@ -84,9 +84,11 @@ export const offensiveGroupDefs = [
   { key: "pilot-weapons", label: "Pilot Weapons" },
   { key: "remote-turrets", label: "Remote Turrets" },
   { key: "manned-turrets", label: "Manned Turrets" },
+  { key: "point-defense", label: "Point Defense" },
   { key: "installed-weapons", label: "Installed Weapons" },
   { key: "missiles", label: "Missiles" },
   { key: "torpedoes", label: "Torpedoes" },
+  { key: "bombs", label: "Bombs" },
   { key: "emp-qed", label: "EMP / QED" },
   { key: "tractor-mining-salvage", label: "Tractor / Mining / Salvage" },
 ] as const;
@@ -302,6 +304,7 @@ export function rowText(row: PortBreakdownRow): string {
     row.portCategory,
     row.ruleCategory,
     row.componentCategory,
+    row.componentSubtype,
     row.equippedComponentName,
   ].filter(Boolean).join(" ").toLowerCase();
 }
@@ -325,14 +328,19 @@ export function isMissileItemRow(row: PortBreakdownRow): boolean {
 
 function isTorpedoRow(row: PortBreakdownRow): boolean {
   const text = rowText(row);
-  return text.includes("torpedo") || (text.includes("bomb") && !text.includes("rack"));
+  return text.includes("torpedo");
+}
+
+function isBombRow(row: PortBreakdownRow): boolean {
+  const text = rowText(row);
+  return row.componentCategory === "bomb" || (text.includes("bomb") && !text.includes("rack"));
 }
 
 function isMissileOnlyRow(row: PortBreakdownRow): boolean {
   const text = rowText(row);
   const category = row.ruleCategory ?? row.portCategory ?? "";
   if (text.includes("missile rack")) return false;
-  if (isTorpedoRow(row)) return false;
+  if (isTorpedoRow(row) || isBombRow(row)) return false;
   return category === "missile" || (text.includes("missile") && Boolean(row.equippedComponentKey));
 }
 
@@ -446,6 +454,14 @@ function isPilotWeaponChain(row: PortBreakdownRow, lookup: Map<string, PortBreak
     || combined.includes("chin");
 }
 
+function isPointDefenseChain(row: PortBreakdownRow, lookup: Map<string, PortBreakdownRow>): boolean {
+  return getPortChain(row, lookup).some((entry) => {
+    const subtype = normalizedPortSubtype(entry);
+    const identity = `${hardpointIdentityText(entry)} ${rowText(entry)}`;
+    return subtype === "pdcturret" || identity.includes("pdc") || identity.includes("point defense");
+  });
+}
+
 export function offensiveGroupKey(row: PortBreakdownRow, lookup: Map<string, PortBreakdownRow>): string | null {
   if (isControllerRow(row)) return null;
   if (!row.equippedComponentKey && !row.equippedComponentName) return null;
@@ -454,12 +470,15 @@ export function offensiveGroupKey(row: PortBreakdownRow, lookup: Map<string, Por
 
   if (text.includes("qed") || text.includes("qid") || text.includes("emp")) return "emp-qed";
   if (text.includes("tractor") || text.includes("mining") || text.includes("salvage")) return "tractor-mining-salvage";
+  if (isBombRow(row)) return "bombs";
   if (isTorpedoRow(row)) return "torpedoes";
   if (isMissileOnlyRow(row) || isMissileItemRow(row)) return "missiles";
 
   if (isEquippedWeaponRow(row)) {
     const chain = getPortChain(row, lookup);
     const combined = chainText(chain);
+
+    if (isPointDefenseChain(row, lookup)) return "point-defense";
 
     const turretRoot = findTurretRoot(row, lookup);
     if (turretRoot) {
@@ -530,8 +549,10 @@ const INDIVIDUAL_ROW_GROUP_KEYS = new Set([
   ...defensiveGroupDefs.map((def) => def.key),
   "pilot-weapons",
   "installed-weapons",
+  "point-defense",
   "missiles",
   "torpedoes",
+  "bombs",
   "emp-qed",
   "tractor-mining-salvage",
 ]);

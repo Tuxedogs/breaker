@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { FittingComponentSummary } from "../../../lib/fitting/fittingApi";
 
 type CompactStat = { label: string; value: string };
@@ -33,8 +34,26 @@ export default function FittingSelectorDrawer({
   onInstall,
   onOpenDetails,
 }: FittingSelectorDrawerProps) {
+  const drawerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    drawerRef.current?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   return (
-    <aside className="fm-drawer" aria-label="Select Component">
+    <aside
+      ref={drawerRef}
+      className="fm-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Select Component"
+      tabIndex={-1}
+    >
       <header className="fm-drawer-head">
         <div>
           <span className="fm-drawer-kicker">Select Component</span>
@@ -55,15 +74,7 @@ export default function FittingSelectorDrawer({
             return (
               <div
                 key={component.id}
-                role="button"
-                tabIndex={0}
                 className={["fm-drawer-row", installed ? "is-installed" : ""].filter(Boolean).join(" ")}
-                onClick={() => onInstall(component.id)}
-                onKeyDown={(event) => {
-                  if (event.key !== "Enter" && event.key !== " ") return;
-                  event.preventDefault();
-                  onInstall(component.id);
-                }}
               >
                 <span className="fm-drawer-row-icons">
                   <button
@@ -81,19 +92,26 @@ export default function FittingSelectorDrawer({
                     <img src={itemIconSrc(component)} alt="" draggable={false} />
                   </span>
                 </span>
-                <span className="fm-drawer-row-main">
-                  <strong>{component.displayName || component.name}</strong>
-                  <span>{itemMeta(component)}</span>
-                </span>
-                <span className="fm-drawer-row-stats">
-                  {stats.map((stat) => (
-                    <span key={`${component.id}-${stat.label}`}>
-                      <em>{stat.label}</em>
-                      <strong>{stat.value}</strong>
-                    </span>
-                  ))}
-                  {installed ? <span className="fm-drawer-installed">Installed</span> : null}
-                </span>
+                <button
+                  type="button"
+                  className="fm-drawer-row-select"
+                  onClick={() => onInstall(component.id)}
+                  aria-label={`${installed ? "Reinstall" : "Install"} ${component.displayName || component.name}`}
+                >
+                  <span className="fm-drawer-row-main">
+                    <strong>{component.displayName || component.name}</strong>
+                    <span>{itemMeta(component)}</span>
+                  </span>
+                  <span className="fm-drawer-row-stats">
+                    {stats.map((stat) => (
+                      <span key={`${component.id}-${stat.label}`}>
+                        <em>{stat.label}</em>
+                        <strong>{stat.value}</strong>
+                      </span>
+                    ))}
+                    {installed ? <span className="fm-drawer-installed">Installed</span> : null}
+                  </span>
+                </button>
               </div>
             );
           })}

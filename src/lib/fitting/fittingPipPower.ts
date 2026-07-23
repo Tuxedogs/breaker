@@ -6,6 +6,7 @@ export const PIP_CATEGORIES: PipCategory[] = [
   "engines",
   "quantum",
   "radar",
+  "shields",
   "lifeSupport",
   "cooler1",
   "cooler2",
@@ -18,6 +19,7 @@ export const EMPTY_PIP_DRAWS: PipSystemPowerDraw = {
   engines: 0,
   quantum: 0,
   radar: 0,
+  shields: 0,
   lifeSupport: 0,
   cooler1: 0,
   cooler2: 0,
@@ -72,6 +74,13 @@ function isRadarRow(row: PortBreakdownRow): boolean {
   return cat === "radar" || portText(row).includes("radar") || portText(row).includes("scanner");
 }
 
+function isShieldRow(row: PortBreakdownRow): boolean {
+  const comp = row.componentCategory ?? "";
+  if (comp === "shield") return true;
+  const cat = row.ruleCategory ?? row.portCategory ?? "";
+  return cat === "shield" || portText(row).includes("shield");
+}
+
 function isLifeSupportRow(row: PortBreakdownRow): boolean {
   const text = portText(row);
   return text.includes("life_support")
@@ -102,6 +111,7 @@ export function mapRowToPipCategory(
   if (isEngineRow(row)) return "engines";
   if (isQuantumRow(row)) return "quantum";
   if (isRadarRow(row)) return "radar";
+  if (isShieldRow(row)) return "shields";
   if (isLifeSupportRow(row)) return "lifeSupport";
   return null;
 }

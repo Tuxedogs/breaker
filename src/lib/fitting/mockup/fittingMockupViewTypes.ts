@@ -63,9 +63,12 @@ export type StatSectionView = {
 };
 
 export type PowerOutputView = {
-  open: number | null;
+  allocated: number | null;
   total: number | null;
   overBudget: boolean;
+  unavailable: boolean;
+  loading: boolean;
+  status: string | null;
 };
 
 export type PowerCoolingBarView = {
@@ -73,6 +76,8 @@ export type PowerCoolingBarView = {
   fillPct: number;
   unavailable: boolean;
   overCapacity: boolean;
+  loading: boolean;
+  status: string | null;
 };
 
 export type PowerCardHeaderView = {

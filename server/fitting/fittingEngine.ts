@@ -1,7 +1,14 @@
 import type { Confidence, DatasetSelection } from "./fitting.types.js";
 import { FittingHttpError } from "./fitting.types.js";
 import { canonicalId, componentStats, componentSummary, componentType } from "./fitting.service.js";
-import { loadRegistry } from "./registryStore.js";
+import {
+  FITTING_SIMULATION_MODEL_VERSION,
+  simulateFitting,
+  type FittingSimulationAllocation,
+  type FittingSimulationPowerCategory,
+  type NormalizedFittingSimulationComponent,
+} from "./fittingSimulation.js";
+import { loadRegistry, OPTIONAL_PUBLIC_REGISTRIES } from "./registryStore.js";
 
 type Row = Record<string, unknown>;
 
@@ -12,6 +19,10 @@ const FITTING_PORT_TYPES = new Set([
   "QuantumDrive",
   "Radar",
   "WeaponGun",
+  "Missile",
+  "MissileLauncher",
+  "Bomb",
+  "BombLauncher",
   "WeaponMissile",
   "WeaponDefensive",
 ]);
@@ -23,7 +34,11 @@ const PORT_TYPE_TO_COMPONENT_TYPES: Record<string, string[]> = {
   QuantumDrive: ["quantum_drive"],
   Radar: ["radar"],
   WeaponGun: ["ship_weapon"],
-  WeaponMissile: ["ship_weapon"],
+  Missile: ["missile"],
+  MissileLauncher: ["missile_rack"],
+  Bomb: ["bomb"],
+  BombLauncher: ["bomb_rack"],
+  WeaponMissile: ["missile"],
   WeaponDefensive: ["ship_weapon"],
 };
 
@@ -31,6 +46,75 @@ export interface FittingLoadoutInput {
   shipId: string;
   loadout: Record<string, string | null>;
   options?: { compareToStock?: boolean };
+  simulation?: {
+    modelVersion: typeof FITTING_SIMULATION_MODEL_VERSION;
+    durationSeconds: number;
+    powerAllocation: FittingSimulationAllocation;
+    defaultedPowerAllocationCategories?: FittingSimulationPowerCategory[];
+  };
+}
+
+const SIMULATION_POWER_CATEGORIES = new Set<FittingSimulationPowerCategory>([
+  "weapons",
+  "engines",
+  "quantum",
+  "radar",
+  "shields",
+  "lifeSupport",
+  "cooler1",
+  "cooler2",
+]);
+const OPTIONAL_ADDITIVE_SIMULATION_POWER_CATEGORIES = new Set<FittingSimulationPowerCategory>([
+  "shields",
+]);
+
+function parseSimulationRequest(value: unknown): FittingLoadoutInput["simulation"] {
+  if (value === undefined) return undefined;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "simulation must be an object.");
+  }
+
+  const simulation = value as Row;
+  if (simulation.modelVersion !== FITTING_SIMULATION_MODEL_VERSION) {
+    throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", `simulation.modelVersion must be ${FITTING_SIMULATION_MODEL_VERSION}.`);
+  }
+  const durationSeconds = numberValue(simulation.durationSeconds);
+  if (durationSeconds === null || durationSeconds <= 0 || durationSeconds > 300) {
+    throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "simulation.durationSeconds must be greater than 0 and no more than 300.");
+  }
+  if (!simulation.powerAllocation || typeof simulation.powerAllocation !== "object" || Array.isArray(simulation.powerAllocation)) {
+    throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "simulation.powerAllocation must be an object.");
+  }
+
+  const powerAllocation: FittingSimulationAllocation = {};
+  const defaultedPowerAllocationCategories: FittingSimulationPowerCategory[] = [];
+  for (const [category, rawAllocation] of Object.entries(simulation.powerAllocation as Row)) {
+    if (!SIMULATION_POWER_CATEGORIES.has(category as FittingSimulationPowerCategory)) {
+      throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", `simulation.powerAllocation.${category} is not a supported category.`);
+    }
+    const allocation = numberValue(rawAllocation);
+    if (allocation === null || allocation < 0 || allocation > 100) {
+      throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", `simulation.powerAllocation.${category} must be between 0 and 100.`);
+    }
+    powerAllocation[category as FittingSimulationPowerCategory] = allocation;
+  }
+  for (const category of SIMULATION_POWER_CATEGORIES) {
+    if (powerAllocation[category] === undefined) {
+      if (OPTIONAL_ADDITIVE_SIMULATION_POWER_CATEGORIES.has(category)) {
+        powerAllocation[category] = 0;
+        defaultedPowerAllocationCategories.push(category);
+        continue;
+      }
+      throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", `simulation.powerAllocation.${category} is required.`);
+    }
+  }
+
+  return {
+    modelVersion: FITTING_SIMULATION_MODEL_VERSION,
+    durationSeconds,
+    powerAllocation,
+    defaultedPowerAllocationCategories,
+  };
 }
 
 interface ComponentLookup {
@@ -70,6 +154,10 @@ function booleanValue(value: unknown): boolean {
   return value === true;
 }
 
+function isDatasetUnavailable(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "DATASET_UNAVAILABLE";
+}
+
 function confidenceValue(value: unknown): Confidence {
   return value === "high" || value === "medium" ? value : "low";
 }
@@ -83,6 +171,10 @@ function lowestConfidence(values: Confidence[]): Confidence {
 async function componentLookup(selection: DatasetSelection): Promise<ComponentLookup> {
   const families = [
     ["ship_weapons.json", "ship_weapon"],
+    ["missiles.json", "missile"],
+    ["missile_racks.json", "missile_rack"],
+    ["bombs.json", "bomb"],
+    ["bomb_racks.json", "bomb_rack"],
     ["shields.json", "shield"],
     ["power_plants.json", "power_plant"],
     ["coolers.json", "cooler"],
@@ -92,7 +184,13 @@ async function componentLookup(selection: DatasetSelection): Promise<ComponentLo
   ] as const;
   const byId = new Map<string, { row: Row; fallbackType: string }>();
   for (const [fileName, fallbackType] of families) {
-    const payload = await loadRegistry(selection, fileName);
+    let payload;
+    try {
+      payload = await loadRegistry(selection, fileName);
+    } catch (error) {
+      if (OPTIONAL_PUBLIC_REGISTRIES.has(fileName) && isDatasetUnavailable(error)) continue;
+      throw error;
+    }
     for (const row of payload.records) {
       const id = canonicalId(row.entityClass ?? row.componentKey ?? row.thrusterKey);
       if (id) byId.set(id, { row, fallbackType });
@@ -156,6 +254,11 @@ function parseLoadoutInput(body: unknown): FittingLoadoutInput {
       { path: "loadout", code: "INVALID_VALUE", message: "Expected an object." },
     ]);
   }
+  const simulation = parseSimulationRequest(payload.simulation);
+  const loadoutEntryCount = Object.keys(payload.loadout).length;
+  if (simulation && loadoutEntryCount > 512) {
+    throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Simulation requests support at most 512 loadout entries.");
+  }
   const loadout: Record<string, string | null> = {};
   for (const [portId, value] of Object.entries(payload.loadout as Row)) {
     if (typeof portId !== "string" || portId.length === 0 || portId.length > 1024) {
@@ -182,7 +285,12 @@ function parseLoadoutInput(body: unknown): FittingLoadoutInput {
   }
   const options = payload.options && typeof payload.options === "object" ? payload.options as Row : {};
   const compareToStock = options.compareToStock !== false;
-  return { shipId, loadout, options: { compareToStock } };
+  return {
+    shipId,
+    loadout,
+    options: { compareToStock },
+    simulation,
+  };
 }
 
 function sizeMismatch(rule: CompatRule, componentSize: number | null): string | null {
@@ -381,25 +489,260 @@ function statNumber(stats: Record<string, number | null>, key: string): number |
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
+function simulationPowerCategory(
+  type: string,
+  portId: string,
+  coolerPortIds: string[],
+): FittingSimulationPowerCategory | undefined {
+  if (type === "ship_weapon") return "weapons";
+  if (type === "thruster") return "engines";
+  if (type === "quantum_drive") return "quantum";
+  if (type === "radar") return "radar";
+  if (type === "shield") return "shields";
+  if (type === "cooler") return coolerPortIds.indexOf(portId) <= 0 ? "cooler1" : "cooler2";
+  return undefined;
+}
+
+function powerDemandUnitType(row: Row): string | null {
+  const directUnit = text(row.powerInputUnitType);
+  if (directUnit) return directUnit;
+  const provenance = row.powerDrawProvenance && typeof row.powerDrawProvenance === "object"
+    ? row.powerDrawProvenance as Row
+    : {};
+  const unitNode = text(provenance.unitNode);
+  if (unitNode === "SPowerSegmentResourceUnit") return "PowerSegment";
+  if (unitNode === "SStandardResourceUnit") return "StandardResource";
+  return null;
+}
+
+function weaponMountTopologies(tree: unknown[]): Map<string, "turret" | "pilot"> {
+  const topologies = new Map<string, "turret" | "pilot">();
+  const visit = (
+    nodes: unknown[],
+    inherited: "turret" | "pilot" | null,
+    depth: number,
+  ): void => {
+    for (const candidate of nodes) {
+      if (!candidate || typeof candidate !== "object") continue;
+      const node = candidate as Row;
+      let topology = inherited;
+      const portType = text(node.portType)?.toLowerCase() ?? "";
+      const portSubtype = text(node.portSubType)?.toLowerCase() ?? "";
+      if (
+        portType === "turretbase"
+        || (portType === "turret" && portSubtype !== "" && portSubtype !== "gunturret")
+      ) {
+        topology = "turret";
+      } else if (topology === null && portType === "turret" && portSubtype === "gunturret") {
+        topology = "pilot";
+      }
+      const connections = Array.isArray(node.resourceConnections) ? node.resourceConnections : [];
+      for (const connectionCandidate of connections) {
+        if (!connectionCandidate || typeof connectionCandidate !== "object") continue;
+        const connection = connectionCandidate as Row;
+        if (text(connection.class)?.toLowerCase() !== "weaponammoload") continue;
+        const name = text(connection.name)?.toLowerCase() ?? "";
+        topology = name.includes("turret") ? "turret" : "pilot";
+      }
+      const portId = text(node.portId ?? node.id);
+      if (
+        topology === null
+        && portType === "weapongun"
+        && depth === 0
+        && portId
+        && text(node.parentPath) === null
+      ) {
+        topology = "pilot";
+      }
+      if (portId && topology) topologies.set(portId, topology);
+      visit(Array.isArray(node.children) ? node.children : [], topology, depth + 1);
+    }
+  };
+  visit(tree, null, 0);
+  return topologies;
+}
+
+function hardpointPortIds(tree: unknown[]): Set<string> {
+  const ids = new Set<string>();
+  const visit = (nodes: unknown[]): void => {
+    for (const candidate of nodes) {
+      if (!candidate || typeof candidate !== "object") continue;
+      const node = candidate as Row;
+      const portId = text(node.portId ?? node.id);
+      if (portId) ids.add(portId);
+      visit(Array.isArray(node.children) ? node.children : []);
+    }
+  };
+  visit(tree);
+  return ids;
+}
+
+function weaponFixedPowerPool(row: Row | undefined): { value: number; sourcePath: string } | null {
+  if (!row || !row.resourceNetworkPowerPools || typeof row.resourceNetworkPowerPools !== "object") {
+    return null;
+  }
+  const pools = row.resourceNetworkPowerPools as Row;
+  const fixed = Array.isArray(pools.fixed) ? pools.fixed : [];
+  for (const candidate of fixed) {
+    if (!candidate || typeof candidate !== "object") continue;
+    const pool = candidate as Row;
+    if (text(pool.itemType)?.toLowerCase() !== "weapongun") continue;
+    const value = numberValue(pool.poolSize);
+    if (value === null || value < 0) return null;
+    return {
+      value,
+      sourcePath: text(pool.sourcePath)
+        ?? "SItemPortContainerComponentParams/resourceNetworkPowerPools/itemPools/FixedPowerPool[@itemType=WeaponGun]/@poolSize",
+    };
+  }
+  return null;
+}
+
+function normalizeSimulationComponents(
+  fitted: Array<{
+    portId: string;
+    componentId: string;
+    row: Row;
+    fallbackType: string;
+    weaponMountTopology: "turret" | "pilot" | null;
+  }>,
+): NormalizedFittingSimulationComponent[] {
+  const coolerPortIds = fitted
+    .filter((item) => componentType(item.row, item.fallbackType) === "cooler")
+    .map((item) => item.portId)
+    .sort((left, right) => left.localeCompare(right));
+
+  return fitted.map((item) => {
+    const stats = componentStats(item.row);
+    const type = componentType(item.row, item.fallbackType);
+    const firstFireAction = Array.isArray(item.row.fireActions)
+      && item.row.fireActions[0]
+      && typeof item.row.fireActions[0] === "object"
+      ? item.row.fireActions[0] as Row
+      : {};
+    const nominalPowerDemand = numberValue(
+      item.row.powerInputMaximum
+      ?? item.row.powerConsumptionNominal
+      ?? item.row.powerDraw,
+    );
+    const coolingCapacityByPowerAllocation = Array.isArray(item.row.coolingGeneratedByPowerPip)
+      ? item.row.coolingGeneratedByPowerPip.flatMap((entry) => {
+          if (!entry || typeof entry !== "object") return [];
+          const allocation = numberValue((entry as Row).pips);
+          const capacity = numberValue((entry as Row).value);
+          return allocation !== null && capacity !== null ? [{ allocation, capacity }] : [];
+        })
+      : [];
+    const shieldRegenByPowerAllocation = Array.isArray(item.row.shieldRegenByPowerPip)
+      ? item.row.shieldRegenByPowerPip.flatMap((entry, index) => {
+          if (!entry || typeof entry !== "object") return [];
+          const allocation = numberValue((entry as Row).pips);
+          const value = numberValue((entry as Row).value);
+          return allocation !== null && allocation >= 0 && value !== null && value >= 0
+            ? [{
+                allocation,
+                value,
+                allocationSourcePath: `shieldRegenByPowerPip[${index}].pips`,
+                valueSourcePath: `shieldRegenByPowerPip[${index}].value`,
+              }]
+            : [];
+        })
+      : [];
+
+    return {
+      id: item.portId,
+      componentId: item.componentId,
+      componentType: type,
+      powerCategory: simulationPowerCategory(type, item.portId, coolerPortIds),
+      powerCapacitySegments: statNumber(stats, "powerGenerated"),
+      nominalPowerDemandSegments: nominalPowerDemand,
+      minimumPowerDemandSegments: numberValue(
+        item.row.powerInputMinimum
+        ?? item.row.powerConsumptionMinimum
+        ?? item.row.minimumPowerRequired,
+      ),
+      nominalPowerDemandUnitType: powerDemandUnitType(item.row),
+      coolingCapacity: statNumber(stats, "coolingGenerated"),
+      coolingCapacityByPowerAllocation,
+      weaponMountTopology: item.weaponMountTopology,
+      shield: type === "shield" ? {
+        maxRegenPerSecond: statNumber(stats, "regenRate") ?? numberValue(item.row.maxShieldRegen),
+        maxRegenSourcePath: statNumber(stats, "regenRate") !== null
+          ? "regenRate"
+          : numberValue(item.row.maxShieldRegen) !== null
+            ? "maxShieldRegen"
+            : null,
+        regenByPowerAllocation: shieldRegenByPowerAllocation,
+      } : null,
+      weapon: type === "ship_weapon" ? {
+        alphaDamage: statNumber(stats, "alphaDamage"),
+        fireRateRpm: statNumber(stats, "fireRateRpm") ?? numberValue(firstFireAction.fireRateRpm),
+        maxAmmoLoad: statNumber(stats, "maxAmmoLoad"),
+        maxRegenPerSecond: statNumber(stats, "maxRegenPerSec"),
+        regenCooldownSeconds: statNumber(stats, "regenerationCooldown"),
+        ammoCapacity: statNumber(stats, "ammoCapacity")
+          ?? statNumber(stats, "maxAmmoCount")
+          ?? statNumber(stats, "initialAmmoCount"),
+        ammoCostPerShot: numberValue(item.row.ammoCostPerShot ?? firstFireAction.ammoCost),
+        heatPerShot: statNumber(stats, "heatPerShot") ?? numberValue(firstFireAction.heatPerShot),
+        minimumTemperature: numberValue(item.row.minimumTemperature),
+        overheatTemperature: statNumber(stats, "overheatTemperature"),
+        coolingPerSecond: statNumber(stats, "coolingPerSecond"),
+        coolingDelaySeconds: statNumber(stats, "timeTillCoolingStarts"),
+        overheatRecoverySeconds: statNumber(stats, "overheatFixTime"),
+        temperatureAfterOverheatRecovery: statNumber(stats, "postOverheatTemperature"),
+      } : null,
+    };
+  });
+}
+
 export async function calculateFittingLoadout(selection: DatasetSelection, body: unknown): Promise<unknown> {
   const input = parseLoadoutInput(body);
-  const [ships, performance, stockCalcs, lookup] = await Promise.all([
+  const [ships, performance, stockCalcs, hardpoints, lookup] = await Promise.all([
     loadRegistry(selection, "ships.json"),
     loadRegistry(selection, "ship_performance.json"),
     loadRegistry(selection, "stock_loadout_calculations.json"),
+    input.simulation ? loadRegistry(selection, "ship_hardpoints.json") : Promise.resolve(null),
     componentLookup(selection),
   ]);
 
   const shipRow = ships.records.find((item) => canonicalId(item.entityClass ?? item.shipKey) === input.shipId);
   if (!shipRow) throw new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No fitting ship matched the supplied identifier.");
 
-  const fitted: Array<{ portId: string; componentId: string; row: Row; fallbackType: string }> = [];
+  const hardpointRow = hardpoints?.records.find((item) => canonicalId(item.shipKey) === input.shipId);
+  const hardpointTree = hardpointRow && Array.isArray(hardpointRow.tree) ? hardpointRow.tree : [];
+  if (input.simulation) {
+    const knownPorts = hardpointPortIds(hardpointTree);
+    for (const [portId, componentId] of Object.entries(input.loadout)) {
+      if (componentId && !knownPorts.has(portId)) {
+        throw new FittingHttpError(
+          400,
+          "INVALID_REQUEST",
+          "Invalid request",
+          `Simulation loadout port ${portId} is not present in the selected ship hardpoint tree.`,
+        );
+      }
+    }
+  }
+  const weaponPowerPool = weaponFixedPowerPool(hardpointRow);
+  const mountTopologies = weaponMountTopologies(
+    hardpointTree,
+  );
+  const fitted: Array<{
+    portId: string;
+    componentId: string;
+    row: Row;
+    fallbackType: string;
+    weaponMountTopology: "turret" | "pilot" | null;
+  }> = [];
   const unknownItemIds: string[] = [];
   const unresolvedReferences: Array<{ kind: string; message: string; confidence: Confidence }> = [];
   const warnings: string[] = [
     "Custom loadout calculations use extracted component stats only; excluded mechanics remain unmodeled (armor thresholds, ballistic passthrough, shield penetration, distortion/disable).",
   ];
   const missingStats: Array<{ portId: string; componentId: string; fields: string[]; confidence: Confidence }> = [];
+  const missileMissingStats: Array<{ portId: string; componentId: string; fields: string[]; confidence: Confidence }> = [];
+  const bombMissingStats: Array<{ portId: string; componentId: string; fields: string[]; confidence: Confidence }> = [];
 
   for (const [portId, componentId] of Object.entries(input.loadout)) {
     if (!componentId) continue;
@@ -413,7 +756,13 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       });
       continue;
     }
-    fitted.push({ portId, componentId, row: found.row, fallbackType: found.fallbackType });
+    fitted.push({
+      portId,
+      componentId,
+      row: found.row,
+      fallbackType: found.fallbackType,
+      weaponMountTopology: mountTopologies.get(portId) ?? null,
+    });
   }
 
   const componentCountsByType: Record<string, number> = {};
@@ -429,6 +778,12 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
   const shieldHpValues: number[] = [];
   const regenValues: number[] = [];
   const weaponAlphaValues: number[] = [];
+  const missileAlphaValues: number[] = [];
+  let fittedMissileCount = 0;
+  const torpedoAlphaValues: number[] = [];
+  let fittedTorpedoCount = 0;
+  const bombAlphaValues: number[] = [];
+  let fittedBombCount = 0;
   const signatureValues: number[] = [];
 
   const quantumComponents: Row[] = [];
@@ -444,7 +799,21 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     if (statNumber(stats, "coolingDraw") !== null) coolingRequiredValues.push(statNumber(stats, "coolingDraw")!);
     if (statNumber(stats, "shieldHp") !== null) shieldHpValues.push(statNumber(stats, "shieldHp")!);
     if (statNumber(stats, "regenRate") !== null) regenValues.push(statNumber(stats, "regenRate")!);
-    if (statNumber(stats, "alphaDamage") !== null) weaponAlphaValues.push(statNumber(stats, "alphaDamage")!);
+    if (type === "ship_weapon" && statNumber(stats, "alphaDamage") !== null) weaponAlphaValues.push(statNumber(stats, "alphaDamage")!);
+    if (type === "missile") {
+      const isTorpedo = text(item.row.ordnanceClass ?? item.row.componentSubType)?.toLowerCase() === "torpedo";
+      if (isTorpedo) {
+        fittedTorpedoCount += 1;
+        if (statNumber(stats, "alphaDamage") !== null) torpedoAlphaValues.push(statNumber(stats, "alphaDamage")!);
+      } else {
+        fittedMissileCount += 1;
+        if (statNumber(stats, "alphaDamage") !== null) missileAlphaValues.push(statNumber(stats, "alphaDamage")!);
+      }
+    }
+    if (type === "bomb") {
+      fittedBombCount += 1;
+      if (statNumber(stats, "alphaDamage") !== null) bombAlphaValues.push(statNumber(stats, "alphaDamage")!);
+    }
     if (statNumber(stats, "signatureSensitivity") !== null) signatureValues.push(statNumber(stats, "signatureSensitivity")!);
 
     if (type === "quantum_drive") quantumComponents.push({ portId: item.portId, componentId: item.componentId, stats, summary: componentSummary(item.row, item.fallbackType) });
@@ -456,7 +825,14 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     if (type === "power_plant" && statNumber(stats, "powerGenerated") === null) missing.push("powerGenerated");
     if (type === "cooler" && statNumber(stats, "coolingGenerated") === null) missing.push("coolingGenerated");
     if (type === "ship_weapon" && statNumber(stats, "alphaDamage") === null) missing.push("alphaDamage");
-    if (missing.length > 0) missingStats.push({ portId: item.portId, componentId: item.componentId, fields: missing, confidence: "medium" });
+    if (type === "missile" && statNumber(stats, "alphaDamage") === null) missing.push("alphaDamage");
+    if (type === "bomb" && statNumber(stats, "alphaDamage") === null) missing.push("alphaDamage");
+    if (missing.length > 0) {
+      const missingEntry = { portId: item.portId, componentId: item.componentId, fields: missing, confidence: "medium" as const };
+      missingStats.push(missingEntry);
+      if (type === "missile") missileMissingStats.push(missingEntry);
+      if (type === "bomb") bombMissingStats.push(missingEntry);
+    }
   }
 
   const totalPowerGenerated = sumNullable(powerGeneratedValues);
@@ -465,6 +841,22 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
   const totalCoolingRequired = sumNullable(coolingRequiredValues);
   const powerMargin = totalPowerGenerated !== null && totalPowerRequired !== null ? totalPowerGenerated - totalPowerRequired : null;
   const coolingMargin = totalCoolingGenerated !== null && totalCoolingRequired !== null ? totalCoolingGenerated - totalCoolingRequired : null;
+  const missilePayloadDamage = fittedMissileCount > 0 && missileAlphaValues.length === fittedMissileCount
+    ? sumNullable(missileAlphaValues)
+    : null;
+  const torpedoPayloadDamage = fittedTorpedoCount > 0 && torpedoAlphaValues.length === fittedTorpedoCount
+    ? sumNullable(torpedoAlphaValues)
+    : null;
+  const bombPayloadDamage = fittedBombCount > 0 && bombAlphaValues.length === fittedBombCount
+    ? sumNullable(bombAlphaValues)
+    : null;
+  const ordnancePayloadComplete = (fittedMissileCount === 0 || missilePayloadDamage !== null)
+    && (fittedTorpedoCount === 0 || torpedoPayloadDamage !== null)
+    && (fittedBombCount === 0 || bombPayloadDamage !== null);
+  const fittedOrdnanceCount = fittedMissileCount + fittedTorpedoCount + fittedBombCount;
+  const totalOrdnancePayloadDamage = ordnancePayloadComplete && fittedOrdnanceCount > 0
+    ? (missilePayloadDamage ?? 0) + (torpedoPayloadDamage ?? 0) + (bombPayloadDamage ?? 0)
+    : null;
 
   if (coolingRequiredValues.length === 0 && fitted.some((item) => numberValue(item.row.heatGenerated) !== null)) {
     unresolvedReferences.push({
@@ -540,6 +932,28 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       weaponAlphaValues.length === 0 ? "No weapon alpha damage values were available for the supplied loadout." : null,
       [],
       ["DPS and fire-rate cadence are intentionally excluded from runtime custom calculations."],
+    ),
+    ordnance: buildCategory(
+      fittedOrdnanceCount > 0,
+      ordnancePayloadComplete ? "high" : fittedOrdnanceCount > 0 ? "medium" : "low",
+      {
+        missilePayloadDamage,
+        torpedoPayloadDamage,
+        bombPayloadDamage,
+        totalOrdnancePayloadDamage,
+        installedMissileCount: fittedMissileCount,
+        installedTorpedoCount: fittedTorpedoCount,
+        installedBombCount: fittedBombCount,
+      },
+      {
+        missileDamageValuesAvailable: missileAlphaValues.length,
+        torpedoDamageValuesAvailable: torpedoAlphaValues.length,
+        bombDamageValuesAvailable: bombAlphaValues.length,
+        payloadPolicy: "one direct SCItemMissileParams or SCItemBombParams explosion payload per installed ordnance component",
+      },
+      fittedOrdnanceCount === 0 ? "No missile, torpedo, or bomb components were present in the supplied loadout." : null,
+      [...missileMissingStats, ...bombMissingStats],
+      ["Rack launch sequencing, reloads, and missile DPS are not modeled."],
     ),
     quantum: buildCategory(
       quantumComponents.length > 0,
@@ -623,6 +1037,17 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       confidence: weaponAlphaValues.length > 0 ? "high" : "low",
       inferred: false,
     },
+    ordnance: {
+      missilePayloadDamage,
+      torpedoPayloadDamage,
+      bombPayloadDamage,
+      totalOrdnancePayloadDamage,
+      installedMissileCount: fittedMissileCount,
+      installedTorpedoCount: fittedTorpedoCount,
+      installedBombCount: fittedBombCount,
+      confidence: fittedOrdnanceCount > 0 && ordnancePayloadComplete ? "high" : fittedOrdnanceCount > 0 ? "medium" : "low",
+      inferred: false,
+    },
     shields: {
       totalShieldHP: sumNullable(shieldHpValues),
       totalRegenRate: sumNullable(regenValues),
@@ -656,6 +1081,17 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
     },
   };
 
+  const simulation = input.simulation
+    ? simulateFitting({
+        components: normalizeSimulationComponents(fitted),
+        durationSeconds: input.simulation.durationSeconds,
+        powerAllocation: input.simulation.powerAllocation,
+        defaultedPowerAllocationCategories: input.simulation.defaultedPowerAllocationCategories,
+        weaponPowerPoolSegments: weaponPowerPool?.value ?? null,
+        weaponPowerPoolSourcePath: weaponPowerPool?.sourcePath ?? null,
+      })
+    : undefined;
+
   return {
     data: {
       shipId: input.shipId,
@@ -670,6 +1106,7 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
       missingStats,
       unknownItemIds,
       stockComparison,
+      ...(simulation ? { simulation } : {}),
     },
   };
 }

@@ -1,12 +1,14 @@
+import { NavLink } from "react-router-dom";
+
 const RAIL_ITEMS = [
-  { key: "home", label: "Home", active: false },
-  { key: "ship", label: "Ships", active: true },
-  { key: "cargo", label: "Cargo", active: false },
-  { key: "tools", label: "Tools", active: false },
-  { key: "wrench", label: "Industry", active: false },
-  { key: "crosshair", label: "Combat", active: false },
-  { key: "shield", label: "Defense", active: false },
-  { key: "hex", label: "Systems", active: false },
+  { key: "home", label: "Home", to: "/dashboard" },
+  { key: "ship", label: "Ships", to: "/fitting" },
+  { key: "cargo", label: "Inventory", to: "/logistics/inventory" },
+  { key: "tools", label: "Tools", to: "/modules" },
+  { key: "wrench", label: "Industry", to: "/industry/crafting" },
+  { key: "crosshair", label: "Combat", to: "/combat/component-mapping" },
+  { key: "shield", label: "Defense", to: "/dashboard/doctrine/armor-threshold" },
+  { key: "hex", label: "Systems", to: "/dashboard/doctrine" },
 ] as const;
 
 function RailIcon({ kind }: { kind: (typeof RAIL_ITEMS)[number]["key"] }) {
@@ -34,15 +36,14 @@ export default function FittingRail() {
   return (
     <nav className="fm-rail" aria-label="Primary navigation">
       {RAIL_ITEMS.map((item) => (
-        <button
+        <NavLink
           key={item.key}
-          type="button"
-          className={["fm-rail-btn", item.active ? "is-active" : ""].filter(Boolean).join(" ")}
+          to={item.to}
+          className={({ isActive }) => ["fm-rail-btn", isActive ? "is-active" : ""].filter(Boolean).join(" ")}
           aria-label={item.label}
-          aria-current={item.active ? "page" : undefined}
         >
           <RailIcon kind={item.key} />
-        </button>
+        </NavLink>
       ))}
     </nav>
   );

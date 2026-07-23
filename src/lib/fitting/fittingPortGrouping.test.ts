@@ -52,6 +52,55 @@ test("standalone nose guns group under pilot-weapons, not turret groups", () => 
   assert.equal(offensiveGroupKey(right, lookup), "pilot-weapons");
 });
 
+test("PDC turret weapons group separately from pilot and attack turrets", () => {
+  const pdcRoot = weaponRow({
+    portId: "hardpoint_pdc",
+    portName: "hardpoint_pdc",
+    portType: "Turret",
+    portSubtype: "PDCTurret",
+    parentPortId: null,
+    equippedComponentKey: null,
+    equippedComponentName: null,
+    componentCategory: null,
+  });
+  const pdcWeapon = weaponRow({
+    portId: "hardpoint_pdc/hardpoint_turret_weapon",
+    portName: "hardpoint_turret_weapon",
+    parentPortId: "hardpoint_pdc",
+  });
+  const lookup = new Map([pdcRoot, pdcWeapon].map((row) => [row.portId, row]));
+
+  assert.equal(offensiveGroupKey(pdcWeapon, lookup), "point-defense");
+});
+
+test("bombs and torpedoes remain distinct ordnance groups", () => {
+  const bomb = weaponRow({
+    portId: "bomb_launcher/bomb_01",
+    portName: "bomb_01",
+    portType: "Bomb",
+    portCategory: "missile",
+    ruleCategory: "missile",
+    componentCategory: "bomb",
+    equippedComponentKey: "bomb-1",
+    equippedComponentName: "Thunderball Bomb",
+  });
+  const torpedo = weaponRow({
+    portId: "torpedo_launcher/torpedo_01",
+    portName: "torpedo_01",
+    portType: "Missile",
+    portCategory: "missile",
+    ruleCategory: "missile",
+    componentCategory: "missile",
+    componentSubtype: "Torpedo",
+    equippedComponentKey: "torpedo-1",
+    equippedComponentName: "Valkyrie V Missile",
+  });
+  const lookup = new Map([bomb, torpedo].map((row) => [row.portId, row]));
+
+  assert.equal(offensiveGroupKey(bomb, lookup), "bombs");
+  assert.equal(offensiveGroupKey(torpedo, lookup), "torpedoes");
+});
+
 test("pilot weapon summaries use compatibility signature keys with real port ids", () => {
   const row = weaponRow();
   const [summary] = summarizeGroupRows([row], "pilot-weapons");

@@ -45,33 +45,17 @@ export default function FittingTopBar({ view, onSelectShip, onSaveLoadout }: Fit
 
       <nav className="fm-topbar-tabs" aria-label="Fitting sections">
         {view.tabs.map((tab) => (
-          <button
+          <span
             key={tab}
-            type="button"
             className={["fm-topbar-tab", view.activeTab === tab ? "is-active" : ""].filter(Boolean).join(" ")}
+            aria-current={view.activeTab === tab ? "page" : undefined}
           >
             {tab}
-          </button>
+          </span>
         ))}
       </nav>
 
       <div className="fm-topbar-actions">
-        <div className="fm-topbar-wallet" aria-hidden>
-          <span className="fm-topbar-wallet-chip"><i>◆</i> — UEC</span>
-          <span className="fm-topbar-wallet-chip is-rec"><i>◇</i> — REC</span>
-        </div>
-        <div className="fm-topbar-icons" aria-hidden>
-          <button type="button" className="fm-topbar-icon-btn" aria-label="Notifications">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5" /><path d="M9.5 17a2.5 2.5 0 005 0" /></svg>
-          </button>
-          <button type="button" className="fm-topbar-icon-btn" aria-label="Messages">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="5" width="18" height="14" rx="1" /><path d="M3 7l9 6 9-6" /></svg>
-          </button>
-          <button type="button" className="fm-topbar-icon-btn" aria-label="Profile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M12 2v10" /><path d="M8.5 8.5L12 12l3.5-3.5" /><path d="M4 14v4h16v-4" /></svg>
-          </button>
-        </div>
-
         <div className="fm-topbar-ship-menu" ref={menuRef}>
           <button
             type="button"
@@ -98,14 +82,16 @@ export default function FittingTopBar({ view, onSelectShip, onSaveLoadout }: Fit
                   <option key={entry.shipKey} value={entry.shipKey}>{entry.name}</option>
                 ))}
               </select>
-              <button
-                type="button"
-                className="fm-topbar-ship-menu-save"
-                disabled={!view.isModified}
-                onClick={onSaveLoadout}
-              >
-                Save Loadout
-              </button>
+              {onSaveLoadout ? (
+                <button
+                  type="button"
+                  className="fm-topbar-ship-menu-save"
+                  disabled={!view.isModified}
+                  onClick={onSaveLoadout}
+                >
+                  Save Loadout
+                </button>
+              ) : null}
               {view.isModified ? <span className="fm-topbar-ship-menu-flag">Modified</span> : null}
             </div>
           ) : null}

@@ -2,14 +2,12 @@ import { useMemo } from "react";
 import type { FittingCalculateResult, FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
 import type { CombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
 import {
-  buildOffensiveGroups,
   formatNumber,
-  summarizeGroupRows,
   type FittingShipSummary,
-  type PortBreakdownRow,
 } from "../../../lib/fitting/fittingPortGrouping";
 import type { PipAssignment } from "../../../lib/fitting/fittingTerminalTypes";
 import type { PipSystemPowerDraw } from "../../../lib/fitting/fittingPipPower";
+import type { FittingSimulationState } from "../../../lib/fitting/useFittingSimulation";
 import PowerPipAssignment from "./PowerPipAssignment";
 import DefensiveCapabilitiesCard from "./DefensiveCapabilitiesCard";
 import {
@@ -21,10 +19,10 @@ import { derivedNum, extractedNum } from "./fittingPerformanceHelpers";
 
 type FittingPerformanceGridProps = {
   calculateResult: FittingCalculateResult | null;
+  simulation: FittingSimulationState;
   shipPerformance: FittingShipSummary | null;
   hullHP: number | null;
   cargoCapacityScu: number | null;
-  portRows: PortBreakdownRow[];
   combatAlpha: CombatAlphaBreakdown;
   pipAssignment: PipAssignment;
   systemDraws: PipSystemPowerDraw;
@@ -47,10 +45,10 @@ function sumNullable(values: Array<number | null | undefined>): number | null {
 
 export default function FittingPerformanceGrid({
   calculateResult,
+  simulation,
   shipPerformance,
   hullHP,
   cargoCapacityScu,
-  portRows,
   combatAlpha,
   pipAssignment,
   systemDraws,
@@ -59,8 +57,11 @@ export default function FittingPerformanceGrid({
   onViewWeaponStats,
 }: FittingPerformanceGridProps) {
   const powerOut = derivedNum(calculateResult, "power", "totalPowerGenerated");
-  const powerUsed = derivedNum(calculateResult, "power", "totalPowerRequired");
-  const powerMargin = derivedNum(calculateResult, "power", "powerSurplus");
+  const simulatedPowerCapacity = simulation.data?.power.capacitySegments.value ?? null;
+  const simulatedPowerAllocated = simulation.data?.power.allocatedSegments.value ?? null;
+  const coolingUtilization = simulation.data?.cooling.utilizationPercent.value ?? null;
+  const sustainedWeaponDps = simulation.data?.weaponsSummary.dps.value ?? null;
+  const sustainedWeaponDamage = simulation.data?.weaponsSummary.totalDamage.value ?? null;
   const shieldHp = derivedNum(calculateResult, "shields", "totalShieldHP");
   const shieldRegen = derivedNum(calculateResult, "shields", "totalRegenRate");
 
@@ -73,7 +74,7 @@ export default function FittingPerformanceGrid({
   const boostCapacity = extractedNum(calculateResult, "performance", "boostCapacity");
   const boostRegen = extractedNum(calculateResult, "performance", "boostRegen");
 
-  const missilePayload = sumNullable([combatAlpha.missileAlpha, combatAlpha.torpedoAlpha]);
+  const ordnancePayload = derivedNum(calculateResult, "ordnance", "totalOrdnancePayloadDamage");
 
   const componentMitigations = useMemo(
     () => Object.values(mitigationByComponentId),
@@ -88,20 +89,16 @@ export default function FittingPerformanceGrid({
     [componentMitigations],
   );
 
-  const missileArmedCount = useMemo(() => {
-    const lookup = new Map(portRows.map((row) => [row.portId, row]));
-    const missileGroup = buildOffensiveGroups(portRows).find((group) => group.key === "missiles");
-    if (!missileGroup) return null;
-    const summarized = summarizeGroupRows(missileGroup.rows, "missiles", lookup);
-    const total = summarized.reduce((sum, row) => sum + row.quantity, 0);
-    return total > 0 ? total : null;
-  }, [portRows]);
+  const ordnanceCountValues = [
+    derivedNum(calculateResult, "ordnance", "installedMissileCount"),
+    derivedNum(calculateResult, "ordnance", "installedTorpedoCount"),
+    derivedNum(calculateResult, "ordnance", "installedBombCount"),
+  ];
+  const ordnanceArmedCount = ordnanceCountValues.every((value) => value !== null)
+    ? ordnanceCountValues.reduce((sum, value) => sum + value!, 0)
+    : null;
 
   const totalHp = sumNullable([shieldHp, hullHP]);
-  const marginHighlight = powerMargin != null
-    ? powerMargin >= 0 ? "good" as const : "bad" as const
-    : undefined;
-
   const formatSpeed = (value: number | null) => (
     value != null ? `${formatNumber(value)} m/s` : "Not calculated yet"
   );
@@ -116,12 +113,11 @@ export default function FittingPerformanceGrid({
         <PowerPipAssignment
           pipAssignment={pipAssignment}
           systemDraws={systemDraws}
-          powerBudget={powerOut}
+          powerBudget={simulatedPowerCapacity ?? powerOut}
+          allocatedPower={simulatedPowerAllocated}
+          coolingUtilization={coolingUtilization}
+          simulationLoading={simulation.loading}
           onPipChange={onPipChange}
-          reactorOutput={powerOut != null ? `${formatNumber(powerOut)} MW` : "Not calculated yet"}
-          totalDraw={powerUsed != null ? `${formatNumber(powerUsed)} MW` : "Not calculated yet"}
-          margin={powerMargin != null ? `${powerMargin >= 0 ? "+" : ""}${formatNumber(powerMargin)} MW` : "Not calculated yet"}
-          marginHighlight={marginHighlight}
         />
       </div>
 
@@ -153,20 +149,32 @@ export default function FittingPerformanceGrid({
           value={formatAlpha(combatAlpha.crewAlpha, combatAlpha.loading)}
           unavailable={combatAlpha.crewAlpha == null && !combatAlpha.loading}
         />
+        <FittingStatRow
+          label="Sustained DPS (60s)"
+          value={simulation.loading ? "…" : sustainedWeaponDps != null ? formatNumber(sustainedWeaponDps) : "Not calculated yet"}
+          unavailable={sustainedWeaponDps == null && !simulation.loading}
+          highlight={sustainedWeaponDps != null ? "accent" : undefined}
+        />
+        <FittingStatRow
+          label="Damage over 60s"
+          value={simulation.loading ? "…" : sustainedWeaponDamage != null ? formatNumber(sustainedWeaponDamage) : "Not calculated yet"}
+          unit={sustainedWeaponDamage != null ? " Dmg" : undefined}
+          unavailable={sustainedWeaponDamage == null && !simulation.loading}
+        />
 
         <FittingStatSection title="Missiles & Bombs">
           <FittingStatRow
             label="Total Payload Output"
-            value={missilePayload != null ? formatNumber(missilePayload) : "Not calculated yet"}
+            value={ordnancePayload != null ? formatNumber(ordnancePayload) : "Not calculated yet"}
             unit=" Dmg"
-            unavailable={missilePayload == null}
-            highlight={missilePayload != null ? "accent" : undefined}
+            unavailable={ordnancePayload == null}
+            highlight={ordnancePayload != null ? "accent" : undefined}
           />
           <FittingStatRow
             label="Armed Count"
-            value={missileArmedCount != null ? formatNumber(missileArmedCount) : "Not calculated yet"}
+            value={ordnanceArmedCount != null ? formatNumber(ordnanceArmedCount) : "Not calculated yet"}
             nested
-            unavailable={missileArmedCount == null}
+            unavailable={ordnanceArmedCount == null}
           />
         </FittingStatSection>
 

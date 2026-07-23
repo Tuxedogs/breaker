@@ -16,7 +16,6 @@ export default function FittingResourcesPanel({ summary, selectedDetail }: Fitti
             <span className="fm-resources-dot" aria-hidden />
             {summary.fittingValid ? "Valid" : "Unavailable"}
           </span>
-          <button type="button" className="fm-resources-link" disabled>View Full Stats</button>
         </div>
 
         <h3 className="fm-resources-title">Resources</h3>

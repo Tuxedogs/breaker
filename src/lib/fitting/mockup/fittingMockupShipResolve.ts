@@ -37,12 +37,16 @@ export function isFittingShipGuid(value: string): boolean {
   return GUID_RE.test(value);
 }
 
-/** Resolve ?ship= query: GUID, slug (e.g. polaris), or default Polaris. */
+/** Resolve a GUID or legacy ship slug, preferring the validated mockup ship when absent. */
 export function resolveMockupShipKey(
   queryParam: string | null,
   ships: Pick<FittingShipSummary, "shipKey" | "name">[],
 ): string {
-  if (!queryParam) return FITTING_MOCKUP_POLARIS_SHIP_KEY;
+  const fallback = ships.find((ship) => ship.shipKey === FITTING_MOCKUP_POLARIS_SHIP_KEY)?.shipKey
+    ?? ships.find((ship) => ship.name.toLowerCase().includes("gladius"))?.shipKey
+    ?? ships[0]?.shipKey
+    ?? FITTING_MOCKUP_POLARIS_SHIP_KEY;
+  if (!queryParam) return fallback;
   if (isFittingShipGuid(queryParam)) return queryParam;
 
   const slug = slugify(queryParam);
@@ -60,7 +64,7 @@ export function resolveMockupShipKey(
     );
   });
 
-  return match?.shipKey ?? FITTING_MOCKUP_POLARIS_SHIP_KEY;
+  return match?.shipKey ?? fallback;
 }
 
 /** Derive wiki manufacturer code when fitting API manufacturer is null. */

@@ -1,11 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import PowerPipIcon from "../terminal/PowerPipIcons";
 import { resolvePowerChannelLabel } from "../../../lib/fitting/mockup/resolvePowerChannelLabel";
-import type { PipAssignment, PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
-import { INITIAL_MOCK_PIP_ASSIGNMENT, sumMockPipAssignment } from "./mockPipAssignment";
+import {
+  PIP_MAX_PER_CATEGORY,
+  type PipAssignment,
+  type PipCategory,
+} from "../../../lib/fitting/fittingTerminalTypes";
+import type { FittingSimulationState } from "../../../lib/fitting/useFittingSimulation";
+import { sumMockPipAssignment } from "./mockPipAssignment";
 
-const MOCK_PIP_TOTAL = 18;
-const MOCK_PIP_SEGMENT_COUNT = 8;
+const MOCK_PIP_SEGMENT_COUNT = PIP_MAX_PER_CATEGORY;
 
 type MockPipColumnDef = {
   key: PipCategory;
@@ -15,8 +19,9 @@ type MockPipColumnDef = {
 const MOCK_PIP_COLUMNS: MockPipColumnDef[] = [
   { key: "weapons", min: 0 },
   { key: "engines", min: 0 },
-  { key: "quantum", min: 3 },
+  { key: "quantum", min: 0 },
   { key: "radar", min: 0 },
+  { key: "shields", min: 0 },
   { key: "lifeSupport", min: 0 },
   { key: "cooler1", min: 0 },
   { key: "cooler2", min: 0 },
@@ -26,23 +31,7 @@ type PipStackPart =
   | { kind: "segment"; slot: number }
   | { kind: "merged"; minSlots: number };
 
-type PipUnitState = "on" | "over";
-
-type OverByChannel = Record<PipCategory, number>;
-
-const EMPTY_OVER_BY_CHANNEL: OverByChannel = {
-  weapons: 0,
-  engines: 0,
-  quantum: 0,
-  radar: 0,
-  lifeSupport: 0,
-  cooler1: 0,
-  cooler2: 0,
-};
-
-function sumOverByChannel(overByChannel: OverByChannel): number {
-  return Object.values(overByChannel).reduce((sum, value) => sum + value, 0);
-}
+type PipUnitState = "on";
 
 function buildPipStackParts(min: number, segmentCount: number): PipStackPart[] {
   if (min <= 1) {
@@ -59,105 +48,21 @@ function buildPipStackParts(min: number, segmentCount: number): PipStackPart[] {
   return parts;
 }
 
-/** Clamp per-channel over counts to assignment levels, then match target excess. */
-function reconcileOverByChannel(
-  assignment: PipAssignment,
-  previous: OverByChannel,
-  budget: number,
-  preferredChannel: PipCategory | null,
-): OverByChannel {
-  const next: OverByChannel = { ...EMPTY_OVER_BY_CHANNEL };
-  for (const { key } of MOCK_PIP_COLUMNS) {
-    next[key] = Math.max(0, Math.min(previous[key], assignment[key]));
-  }
-
-  const assignedTotal = sumMockPipAssignment(assignment);
-  const targetOver = Math.max(0, assignedTotal - budget);
-  const currentOver = sumOverByChannel(next);
-
-  if (currentOver > targetOver) {
-    let toRelease = currentOver - targetOver;
-    const releaseOrder = preferredChannel
-      ? [
-          ...MOCK_PIP_COLUMNS.map((column) => column.key).filter((key) => key !== preferredChannel),
-          preferredChannel,
-        ]
-      : MOCK_PIP_COLUMNS.map((column) => column.key);
-
-    for (const key of releaseOrder) {
-      if (toRelease <= 0) break;
-      const release = Math.min(next[key], toRelease);
-      next[key] -= release;
-      toRelease -= release;
-    }
-    return next;
-  }
-
-  if (currentOver < targetOver) {
-    let toAssign = targetOver - currentOver;
-    const assignOrder = preferredChannel
-      ? [
-          preferredChannel,
-          ...MOCK_PIP_COLUMNS.map((column) => column.key).filter((key) => key !== preferredChannel),
-        ]
-      : MOCK_PIP_COLUMNS.map((column) => column.key);
-
-    for (const key of assignOrder) {
-      if (toAssign <= 0) break;
-      const room = assignment[key] - next[key];
-      if (room <= 0) continue;
-      const add = Math.min(room, toAssign);
-      next[key] += add;
-      toAssign -= add;
-    }
-  }
-
-  return next;
-}
-
 /**
- * Mark unit states from per-channel over counts.
- * Within a channel, covered (blue) pips fill from the bottom; over (red) sit on top.
+ * Do not assign an aggregate reactor shortfall to individual categories. The
+ * server intentionally has no priority rule for deciding which segments win.
  */
-function buildPipUnitStates(assignment: PipAssignment, overByChannel: OverByChannel): Map<string, PipUnitState> {
+function buildPipUnitStates(assignment: PipAssignment): Map<string, PipUnitState> {
   const result = new Map<string, PipUnitState>();
 
   for (const { key } of MOCK_PIP_COLUMNS) {
     const level = assignment[key];
-    const over = Math.max(0, Math.min(overByChannel[key], level));
-    const covered = level - over;
     for (let fromBottom = 0; fromBottom < level; fromBottom += 1) {
-      result.set(`${key}:${fromBottom}`, fromBottom < covered ? "on" : "over");
+      result.set(`${key}:${fromBottom}`, "on");
     }
   }
 
   return result;
-}
-
-function applyLevelChangeOver(
-  previousAssignment: PipAssignment,
-  category: PipCategory,
-  nextLevel: number,
-  previousOver: OverByChannel,
-  budget: number,
-): OverByChannel {
-  const prevLevel = previousAssignment[category];
-  const delta = nextLevel - prevLevel;
-  const nextOver: OverByChannel = { ...previousOver };
-
-  if (delta > 0) {
-    const remainingBefore = budget - sumMockPipAssignment(previousAssignment);
-    const coveredAdds = Math.max(0, Math.min(delta, remainingBefore));
-    const overAdds = delta - coveredAdds;
-    nextOver[category] = previousOver[category] + overAdds;
-  } else if (delta < 0) {
-    const removed = -delta;
-    const overRemoved = Math.min(previousOver[category], removed);
-    nextOver[category] = previousOver[category] - overRemoved;
-  }
-
-  const nextAssignment = { ...previousAssignment, [category]: nextLevel };
-  return reconcileOverByChannel(nextAssignment, nextOver, budget, category);
 }
 
 function pipUnitState(
@@ -173,118 +78,89 @@ function mergedFillState(
   category: PipCategory,
   min: number,
   level: number,
-): "off" | "on" | "over" | "partial" {
+): "off" | "on" | "partial" {
   if (level <= 0) return "off";
   if (level < min) return "partial";
 
   const states = Array.from({ length: min }, (_, index) => pipUnitState(unitStates, category, index));
   if (states.every((state) => state === "on")) return "on";
-  if (states.every((state) => state === "over")) return "over";
   return "partial";
 }
 
 function iconPowerClass(
   level: number,
-  category: PipCategory,
-  unitStates: Map<string, PipUnitState>,
-): "is-off" | "is-powered" | "is-over" {
+): "is-off" | "is-powered" {
   if (level <= 0) return "is-off";
-
-  let hasOn = false;
-  let hasOver = false;
-  for (let fromBottom = 0; fromBottom < level; fromBottom += 1) {
-    const state = pipUnitState(unitStates, category, fromBottom);
-    if (state === "on") hasOn = true;
-    if (state === "over") hasOver = true;
-  }
-
-  if (hasOver && !hasOn) return "is-over";
   return "is-powered";
 }
 
-function coolerEfficiencyPercent(level: number): number {
-  if (level <= 0) return 0;
-  return Math.round(35 + (level / MOCK_PIP_SEGMENT_COUNT) * 65);
+function formatSimulationValue(value: number): string {
+  return new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(value);
 }
 
-function mockSystemReadout(key: PipCategory, level: number, min: number): string {
-  if (key === "cooler1" || key === "cooler2") return `Cooling ${coolerEfficiencyPercent(level)}%`;
-  if (key === "quantum") return level >= min ? `Spool ready · ${level} pips` : `Offline · need ${min} min`;
-  if (key === "weapons") return level > 0 ? `Weapon regen ${Math.round(40 + level * 8)}%` : "Weapons depowered";
-  if (key === "engines") return level > 0 ? `Thrust cap ${Math.round(55 + level * 5)}%` : "Thrusters limited";
-  return level > 0 ? `${level} pips allocated` : "Powered off";
+function systemReadout(
+  key: PipCategory,
+  level: number,
+  simulation: FittingSimulationState | undefined,
+): string {
+  if (simulation?.loading) return "Updating simulation…";
+  if (simulation?.error) return "Simulation unavailable";
+
+  if (key === "weapons") {
+    const dps = simulation?.data?.weaponsSummary.dps.value ?? null;
+    return dps != null ? `${formatSimulationValue(dps)} sustained DPS (60s)` : `${level} segments assigned`;
+  }
+  if (key === "cooler1" || key === "cooler2") {
+    const utilization = simulation?.data?.cooling.utilizationPercent.value ?? null;
+    return utilization != null ? `${formatSimulationValue(utilization)}% total utilization` : `${level} segments assigned`;
+  }
+  if (key === "shields") {
+    const regen = simulation?.data?.shields?.effectiveRegenPerSecond.value ?? null;
+    if (regen != null) return `${formatSimulationValue(regen)}/s shield regeneration`;
+    if (!simulation?.data?.shields) return `${level} segments assigned`;
+    const reason = simulation.data.missingInputs.find((entry) => (
+      entry.path === "powerAllocation.shields"
+      || entry.path === "shield.regenByPowerAllocation"
+      || entry.path === "powerAllocation"
+    ))?.reason ?? "";
+    if (reason.includes("no per-generator distribution rule")) return "regeneration unavailable · no distribution rule";
+    if (reason.includes("No extracted shield-regeneration value")) return "regeneration unavailable · no exact pip step";
+    if (reason.includes("exceeds active reactor capacity")) return "regeneration unavailable · allocation exceeds capacity";
+    return "shield regeneration unavailable";
+  }
+  return `${level} segments assigned`;
 }
 
 type MockPowerPipHudProps = {
+  assignment: PipAssignment;
   hideOutputFooter?: boolean;
   powerBudget?: number | null;
-  onAssignmentChange?: (assignment: PipAssignment) => void;
-};
-
-type PipHudState = {
-  assignment: PipAssignment;
-  overByChannel: OverByChannel;
+  simulation?: FittingSimulationState;
+  onPipChange: (category: PipCategory, value: number) => void;
 };
 
 export default function MockPowerPipHud({
+  assignment,
   hideOutputFooter = false,
-  powerBudget = MOCK_PIP_TOTAL,
-  onAssignmentChange,
+  powerBudget = null,
+  simulation,
+  onPipChange,
 }: MockPowerPipHudProps) {
-  const [state, setState] = useState<PipHudState>({
-    assignment: INITIAL_MOCK_PIP_ASSIGNMENT,
-    overByChannel: EMPTY_OVER_BY_CHANNEL,
-  });
   const [activeColumn, setActiveColumn] = useState<PipCategory | null>(null);
-  const lastChangedChannelRef = useRef<PipCategory | null>(null);
-  const { assignment, overByChannel } = state;
   const assignedTotal = sumMockPipAssignment(assignment);
-  const budget = powerBudget != null && Number.isFinite(powerBudget) ? Math.round(powerBudget) : MOCK_PIP_TOTAL;
-  const remaining = budget - assignedTotal;
-  const overBudget = remaining < 0;
+  const budget = powerBudget != null && Number.isFinite(powerBudget) ? powerBudget : null;
+  const remaining = budget != null ? budget - assignedTotal : null;
+  const overBudget = remaining != null && remaining < 0;
 
   const unitStates = useMemo(
-    () => buildPipUnitStates(assignment, overByChannel),
-    [assignment, overByChannel],
+    () => buildPipUnitStates(assignment),
+    [assignment],
   );
-
-  useEffect(() => {
-    onAssignmentChange?.(assignment);
-  }, [assignment, onAssignmentChange]);
-
-  // Load-time / budget-change reconcile when no fresh action history for the new excess.
-  useEffect(() => {
-    queueMicrotask(() => {
-      setState((current) => {
-        const reconciled = reconcileOverByChannel(
-          current.assignment,
-          current.overByChannel,
-          budget,
-          lastChangedChannelRef.current,
-        );
-        if (sumOverByChannel(reconciled) === sumOverByChannel(current.overByChannel)
-          && MOCK_PIP_COLUMNS.every(({ key }) => reconciled[key] === current.overByChannel[key])) {
-          return current;
-        }
-        return { ...current, overByChannel: reconciled };
-      });
-    });
-  }, [budget]);
 
   const setCategoryLevel = (category: PipCategory, nextLevel: number) => {
     const clamped = Math.max(0, Math.min(MOCK_PIP_SEGMENT_COUNT, nextLevel));
-    lastChangedChannelRef.current = category;
     setActiveColumn(category);
-    setState((current) => ({
-      assignment: { ...current.assignment, [category]: clamped },
-      overByChannel: applyLevelChangeOver(
-        current.assignment,
-        category,
-        clamped,
-        current.overByChannel,
-        budget,
-      ),
-    }));
+    onPipChange(category, clamped);
   };
 
   const handleSegmentClick = (category: PipCategory, slotFromBottom: number, min: number) => {
@@ -303,13 +179,12 @@ export default function MockPowerPipHud({
         {MOCK_PIP_COLUMNS.map(({ key, min }) => {
           const label = resolvePowerChannelLabel(key);
           const level = assignment[key];
-          const quantumOnline = key !== "quantum" || level >= min;
           const stackParts = buildPipStackParts(min, MOCK_PIP_SEGMENT_COUNT);
-          const iconClass = iconPowerClass(level, key, unitStates);
+          const iconClass = iconPowerClass(level);
 
           return (
             <div key={key} className={["fit-mock-pip-col", activeColumn === key ? "is-active" : "", level <= 0 ? "is-off" : ""].filter(Boolean).join(" ")}>
-              <div className="fit-mock-pip-stack" aria-label={`${label} ${level} of ${MOCK_PIP_SEGMENT_COUNT} pips assigned`}>
+              <div className="fit-mock-pip-stack" aria-label={`${label} ${level} of ${MOCK_PIP_SEGMENT_COUNT} segments assigned`}>
                 {stackParts.map((part) => {
                   if (part.kind === "merged") {
                     const mergedState = mergedFillState(unitStates, key, min, level);
@@ -321,11 +196,11 @@ export default function MockPowerPipHud({
                         className={[
                           "fit-mock-pip-merged",
                           mergedState === "on" ? "is-on" : "",
-                          mergedState === "over" ? "is-over" : "",
                           partial ? "is-partial" : "",
                           min > 0 && mergedState === "off" ? "is-min" : "",
                         ].filter(Boolean).join(" ")}
                         style={{ flex: part.minSlots }}
+                        aria-label={`Set ${label} allocation to ${level >= min ? 0 : min} segments`}
                         onClick={() => setCategoryLevel(key, level >= min ? 0 : min)}
                       />
                     );
@@ -340,28 +215,25 @@ export default function MockPowerPipHud({
                       className={[
                         "fit-mock-pip-seg",
                         fillState === "on" ? "is-on" : "",
-                        fillState === "over" ? "is-over" : "",
                         min > 0 && part.slot < min && !isOn ? "is-min" : "",
                       ].filter(Boolean).join(" ")}
+                      aria-label={`Set ${label} allocation to ${part.slot + 1 === level ? part.slot : part.slot + 1} segments`}
+                      aria-pressed={isOn}
                       onClick={() => handleSegmentClick(key, part.slot, min)}
                     />
                   );
                 })}
               </div>
-              {key === "quantum" ? (
-                <span className={["fit-mock-pip-qd-status", quantumOnline ? "is-online" : "is-offline"].filter(Boolean).join(" ")}>
-                  {quantumOnline ? "Online" : "Offline"}
-                </span>
-              ) : null}
               <button
                 type="button"
                 className={["fit-mock-pip-icon", iconClass].filter(Boolean).join(" ")}
+                aria-label={`${level > 0 ? "Turn off" : "Turn on"} ${label}`}
+                aria-pressed={level > 0}
                 onClick={() => setCategoryLevel(key, level > 0 ? 0 : Math.max(min, 1))}
               >
                 <PowerPipIcon category={key} />
               </button>
               <span className="fit-mock-pip-label">{label}</span>
-              {min > 0 ? <span className="fit-mock-pip-min">Min {min}</span> : null}
             </div>
           );
         })}
@@ -369,15 +241,15 @@ export default function MockPowerPipHud({
       {hideOutputFooter ? null : (
         <div className="fit-mock-pips-footer">
           <div className={["fit-mock-pips-output-block", overBudget ? "is-over-budget" : ""].filter(Boolean).join(" ")}>
-            <span className="fit-mock-pips-output-label">Output</span>
+            <span className="fit-mock-pips-output-label">Remaining / Capacity</span>
             <strong className="fit-mock-pips-output-value">
-              <span className="fit-mock-pips-open">{remaining}</span>
+              <span className="fit-mock-pips-open">{remaining != null ? formatSimulationValue(remaining) : "—"}</span>
               <span className="fit-mock-pips-slash"> / </span>
-              <span className="fit-mock-pips-total">{budget}</span>
+              <span className="fit-mock-pips-total">{budget != null ? formatSimulationValue(budget) : "—"}</span>
             </strong>
             {activeDef ? (
               <span className="fit-mock-pips-system-readout">
-                {resolvePowerChannelLabel(activeDef.key)} · {mockSystemReadout(activeDef.key, assignment[activeDef.key], activeDef.min)}
+                {resolvePowerChannelLabel(activeDef.key)} · {systemReadout(activeDef.key, assignment[activeDef.key], simulation)}
               </span>
             ) : null}
           </div>

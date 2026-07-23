@@ -14,6 +14,10 @@ export const PUBLIC_REGISTRIES = [
   "components.json",
   "component_identity_index.json",
   "ship_weapons.json",
+  "missiles.json",
+  "missile_racks.json",
+  "bombs.json",
+  "bomb_racks.json",
   "mining_lasers.json",
   "salvage_heads.json",
   "salvage_modifiers.json",
@@ -30,6 +34,13 @@ export const PUBLIC_REGISTRIES = [
   "compatibility_rules.json",
   "stock_loadout_calculations.json",
 ] as const;
+
+export const OPTIONAL_PUBLIC_REGISTRIES = new Set<(typeof PUBLIC_REGISTRIES)[number]>([
+  "missiles.json",
+  "missile_racks.json",
+  "bombs.json",
+  "bomb_racks.json",
+]);
 
 function registryPath(selection: DatasetSelection, fileName: string): string {
   if (!PUBLIC_REGISTRIES.includes(fileName as (typeof PUBLIC_REGISTRIES)[number])) {
@@ -159,7 +170,7 @@ export async function readRegistryHeader(
         generatedAt: headers[0]?.generatedAt ?? null,
       };
     }
-    return readRegistryHeaderFromFile(registryPath(selection, fileName), fileName);
+    return await readRegistryHeaderFromFile(registryPath(selection, fileName), fileName);
   } catch {
     throw new FittingHttpError(503, "DATASET_UNAVAILABLE", "Dataset unavailable", `Required fitting registry ${fileName} is missing or unreadable.`);
   }

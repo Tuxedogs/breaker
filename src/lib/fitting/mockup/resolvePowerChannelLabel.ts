@@ -11,6 +11,8 @@ export function resolvePowerChannelLabel(channel: PipCategory): string {
       return "QT";
     case "radar":
       return "RDR";
+    case "shields":
+      return "SHD";
     case "lifeSupport":
       return "LS";
     case "cooler1":

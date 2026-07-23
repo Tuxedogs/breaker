@@ -5,6 +5,7 @@ import QuantumIcon from "@/assets/icons/sc-system/sc-system-quantum.svg?react";
 import LifeSupportIcon from "@/assets/icons/sc-system/sc-system-life-support.svg?react";
 import RadarIcon from "@/assets/icons/sc-system/sc-system-radar.svg?react";
 import CoolerIcon from "@/assets/icons/sc-system/sc-system-cooler.svg?react";
+import ShieldIcon from "@/assets/icons/engineering/Engineering_Icon_ItemShieldGenerator.svg?react";
 
 /** Semantic ship system icon kinds for the fitting terminal. */
 export type SystemIconKind =
@@ -13,6 +14,7 @@ export type SystemIconKind =
   | "quantum"
   | "lifeSupport"
   | "radar"
+  | "shields"
   | "cooler";
 
 const SYSTEM_ICONS: Record<SystemIconKind, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -21,6 +23,7 @@ const SYSTEM_ICONS: Record<SystemIconKind, ComponentType<SVGProps<SVGSVGElement>
   quantum: QuantumIcon,
   lifeSupport: LifeSupportIcon,
   radar: RadarIcon,
+  shields: ShieldIcon,
   cooler: CoolerIcon,
 };
 

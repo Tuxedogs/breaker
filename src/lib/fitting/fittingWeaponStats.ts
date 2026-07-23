@@ -130,7 +130,7 @@ function describeMissingDpsFields(statsList: Array<WeaponStatSlice | null | unde
 export function formatWeaponRailStats(display: AggregatedWeaponDisplay): string {
   const parts: string[] = [];
   if (display.dps != null) {
-    parts.push(`${formatNumber(display.dps)} DPS`);
+    parts.push(`${formatNumber(display.dps)} reference DPS`);
   }
   if (display.projectileSpeed != null) {
     parts.push(`${formatNumber(display.projectileSpeed)} m/s`);

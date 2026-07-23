@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FittingMockupShell from "../components/fitting/mockup/FittingMockupShell";
 import FittingSelectorDrawer from "../components/fitting/mockup/FittingSelectorDrawer";
 import PowerCardContent from "../components/fitting/mockup/PowerCardContent";
@@ -7,6 +7,7 @@ import {
   type FittingComponentDetail,
   type FittingComponentMitigation,
   type FittingComponentSummary,
+  type FittingWeaponSimulationResult,
 } from "../lib/fitting/fittingApi";
 import { loadVehicleFittingComponent } from "../lib/fitting/fittingComponentStore";
 import { getFittingSlotIcon } from "../lib/fitting/getFittingSlotIcon";
@@ -62,22 +63,24 @@ import {
   useFittingMockupCombatStats,
 } from "../lib/fitting/useFittingMockupCombatStats";
 import { useFittingMockupLoadout } from "../lib/fitting/useFittingMockupLoadout";
+import { pipAssignmentFromDraws } from "../lib/fitting/fittingPipPower";
+import {
+  DEFAULT_PIP_ASSIGNMENT,
+  PIP_MAX_PER_CATEGORY,
+  type PipAssignment,
+  type PipCategory,
+} from "../lib/fitting/fittingTerminalTypes";
+import { useFittingSimulation } from "../lib/fitting/useFittingSimulation";
+import { usePipSystemPowerDraw } from "../lib/fitting/usePipSystemPowerDraw";
 import { collectMitigationComponentIds } from "../lib/fitting/useEquippedComponentDetails";
 import { useTurretGroupCompatibleComponents } from "../lib/fitting/useTurretGroupCompatibleComponents";
 import {
-  FITTING_MOCKUP_POLARIS_SHIP_KEY,
   isFittingShipGuid,
   resolveMockupShipKey,
 } from "../lib/fitting/mockup/fittingMockupShipResolve";
 
 const MAIN_TABS = [
   "Overview",
-  "Loadout",
-  "Compare",
-  "Hardpoints",
-  "Shopping List",
-  "Damage Lab",
-  "Weapon Stats",
 ] as const;
 
 type CompactStat = { label: string; value: string };
@@ -105,18 +108,18 @@ function itemPrimaryStats(component: FittingComponentSummary, detail: FittingCom
   const parts: CompactStat[] = [];
 
   if (typeText.includes("weapon")) {
-    addStat(parts, "DPS", resolveDrawerWeaponDps(stats));
+    addStat(parts, "Reference DPS", resolveDrawerWeaponDps(stats));
     addStat(parts, "Alpha", stats?.alphaDamage);
     addStat(parts, "Speed", stats?.projectileSpeed, " m/s");
     return parts.slice(0, 4);
   }
 
   if (typeText.includes("power")) {
-    addStat(parts, "Output", stats?.powerGenerated, " MW");
-    addStat(parts, "Draw", stats?.powerDraw, " MW");
+    addStat(parts, "Capacity", stats?.powerGenerated, " segments");
+    addStat(parts, "Power demand", stats?.powerDraw);
   } else if (typeText.includes("cooler")) {
     addStat(parts, "Cooling", stats?.coolingGenerated);
-    addStat(parts, "Draw", stats?.powerDraw, " MW");
+    addStat(parts, "Power demand", stats?.powerDraw);
   } else if (typeText.includes("shield")) {
     addStat(parts, "HP", stats?.shieldHp);
     addStat(parts, "Regen", stats?.regenRate, "/s");
@@ -160,7 +163,17 @@ function DetailStatRow({
   );
 }
 
-function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDetail | null; loading: boolean }) {
+function ComponentStatsDrawer({
+  detail,
+  loading,
+  weaponSimulation,
+  simulationLoading,
+}: {
+  detail: FittingComponentDetail | null;
+  loading: boolean;
+  weaponSimulation: FittingWeaponSimulationResult | null;
+  simulationLoading: boolean;
+}) {
   const stats = detail?.stats;
   if (loading) {
     return (
@@ -184,7 +197,13 @@ function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDet
       <section className="fm-detail-section">
         <h4>Damage</h4>
         <DetailStatRow label="Alpha Strike" value={statText(stats?.alphaDamage)} tone="accent" />
-        <DetailStatRow label="Sustained DPS" value={statText(resolveDrawerWeaponDps(stats))} tone={resolveDrawerWeaponDps(stats) == null ? "muted" : "default"} nested />
+        <DetailStatRow label="Reference DPS" value={statText(resolveDrawerWeaponDps(stats))} tone={resolveDrawerWeaponDps(stats) == null ? "muted" : "default"} nested />
+        <DetailStatRow
+          label="Sustained DPS (60s)"
+          value={simulationLoading ? "Updating…" : statText(weaponSimulation?.dps.value)}
+          tone={weaponSimulation?.dps.value == null ? "muted" : "default"}
+          nested
+        />
         <DetailStatRow label="Damage Type" value={damageType ?? "Not calculated yet"} nested />
       </section>
       <section className="fm-detail-section">
@@ -194,7 +213,7 @@ function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDet
       </section>
       <section className="fm-detail-section">
         <h4>Power / Signature</h4>
-        <DetailStatRow label="Power Draw" value={statText(stats?.powerDraw, " MW")} tone={stats?.powerDraw == null ? "muted" : "default"} />
+        <DetailStatRow label="Power demand" value={statText(stats?.powerDraw)} tone={stats?.powerDraw == null ? "muted" : "default"} />
         <DetailStatRow label="EM Signature" value={statText(stats?.electromagneticEmission)} tone="muted" nested />
       </section>
       <section className="fm-detail-section">
@@ -209,12 +228,17 @@ function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDet
 }
 
 export default function FittingMockupPage() {
+  const { shipKey: routeShipKey } = useParams<{ shipKey: string }>();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const queryShip = searchParams.get("ship");
-  const initialShipKey = queryShip && isFittingShipGuid(queryShip)
-    ? queryShip
-    : FITTING_MOCKUP_POLARIS_SHIP_KEY;
+  const requestedShipKey = routeShipKey ?? queryShip;
+  const initialShipKey = requestedShipKey && isFittingShipGuid(requestedShipKey)
+    ? requestedShipKey
+    : null;
   const [mainTab] = useState<(typeof MAIN_TABS)[number]>("Overview");
+  const [pipAssignment, setPipAssignment] = useState<PipAssignment>({ ...DEFAULT_PIP_ASSIGNMENT });
+  const pipSyncedShipRef = useRef<string | null>(null);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [weaponStatsOpen, setWeaponStatsOpen] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<FittingComponentDetail | null>(null);
@@ -231,6 +255,35 @@ export default function FittingMockupPage() {
     selectShip: loadoutSelectShip,
   } = loadout;
   const combatStats = useFittingMockupCombatStats(loadout.portRows);
+  const pipPower = usePipSystemPowerDraw(
+    loadout.portRows,
+    loadout.statsById,
+    !loadout.equippedDetailsReady,
+  );
+  const simulation = useFittingSimulation(
+    loadout.selectedShipKey,
+    loadout.portRows,
+    pipAssignment,
+    !loadout.loading && pipPower.ready,
+  );
+
+  useEffect(() => {
+    const shipKey = loadout.selectedShipKey;
+    if (!shipKey || !pipPower.ready || loadout.portRows.length === 0) return;
+    if (loadout.portRows.some((row) => row.shipKey !== shipKey)) return;
+    if (pipSyncedShipRef.current === shipKey) return;
+    pipSyncedShipRef.current = shipKey;
+    setPipAssignment(pipAssignmentFromDraws(pipPower.draws));
+  }, [loadout.portRows, loadout.selectedShipKey, pipPower.draws, pipPower.ready]);
+
+  function updatePip(category: PipCategory, value: number) {
+    setPipAssignment((current) => ({
+      ...current,
+      [category]: Math.max(0, Math.min(PIP_MAX_PER_CATEGORY, Math.round(value))),
+    }));
+  }
+
+  const closeSelector = useCallback(() => setSelectorOpen(false), []);
 
   const mitigationByComponentId = useMemo(() => {
     if (!loadout.equippedDetailsReady) return {};
@@ -258,10 +311,27 @@ export default function FittingMockupPage() {
   );
 
   useEffect(() => {
-    if (!loadoutShips.length || !queryShip || isFittingShipGuid(queryShip)) return;
-    const resolved = resolveMockupShipKey(queryShip, loadoutShips);
-    if (resolved !== loadoutSelectedShipKey) loadoutSelectShip(resolved);
-  }, [loadoutShips, loadoutSelectedShipKey, loadoutSelectShip, queryShip]);
+    if (!loadoutShips.length) return;
+
+    const resolvedRequest = requestedShipKey
+      ? resolveMockupShipKey(requestedShipKey, loadoutShips)
+      : loadoutSelectedShipKey ?? resolveMockupShipKey(null, loadoutShips);
+    const resolvedShipKey = loadoutShips.some((ship) => ship.shipKey === resolvedRequest)
+      ? resolvedRequest
+      : loadoutSelectedShipKey && loadoutShips.some((ship) => ship.shipKey === loadoutSelectedShipKey)
+        ? loadoutSelectedShipKey
+        : loadoutShips[0]?.shipKey ?? null;
+    if (!resolvedShipKey) return;
+
+    if (resolvedShipKey !== loadoutSelectedShipKey) loadoutSelectShip(resolvedShipKey);
+
+    if (routeShipKey !== resolvedShipKey || queryShip) {
+      const nextSearch = new URLSearchParams(searchParams);
+      nextSearch.delete("ship");
+      const suffix = nextSearch.size > 0 ? `?${nextSearch.toString()}` : "";
+      navigate(`/fitting/${encodeURIComponent(resolvedShipKey)}${suffix}`, { replace: true });
+    }
+  }, [loadoutShips, loadoutSelectedShipKey, loadoutSelectShip, navigate, queryShip, requestedShipKey, routeShipKey, searchParams]);
 
   const offensiveDisplaySelections = useMemo(
     () => buildMockupOffensiveDisplayGroups(loadout.portRows).flatMap((group) => group.selections),
@@ -378,7 +448,7 @@ export default function FittingMockupPage() {
   }, [loadout.selectedPortId, selectorOpen]);
 
   const ship = loadout.shipDetail?.ship;
-  const fittingValid = !loadout.error && Boolean(loadout.calculateResult);
+  const fittingValid = !loadout.error && loadout.portRows.length > 0 && Boolean(loadout.calculateResult);
   const drawerItemKind = selectedWeaponSelection ? "weapon" : "component";
 
   function selectWeaponSelection(selection: MockupWeaponSelection) {
@@ -471,7 +541,13 @@ export default function FittingMockupPage() {
     slotTitle: mockupSlotLabel,
     drawerSlotLabel: mockupDrawerSlotLabel,
   });
-  const resourceSummary = buildResourceSummary(loadout.calculateResult, fittingValid);
+  const resourceSummary = buildResourceSummary(simulation, fittingValid);
+  const selectedWeaponSimulation = selectedRow
+    ? simulation.data?.weapons.find((weapon) => (
+        weapon.mountId === selectedRow.portId
+        || weapon.componentId === selectedRow.equippedComponentKey
+      )) ?? null
+    : null;
   const selectedDetailPanel = selectedRow ? (
     <div className={weaponStatsOpen ? "fm-selected-detail is-open" : "fm-selected-detail"}>
       <span className="fm-detail-kicker">Selected</span>
@@ -485,17 +561,29 @@ export default function FittingMockupPage() {
         Component Stats
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d={weaponStatsOpen ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6"} /></svg>
       </button>
-      {weaponStatsOpen ? <ComponentStatsDrawer detail={selectedDetail} loading={detailLoading} /> : null}
+      {weaponStatsOpen ? (
+        <ComponentStatsDrawer
+          detail={selectedDetail}
+          loading={detailLoading}
+          weaponSimulation={selectedWeaponSimulation}
+          simulationLoading={simulation.loading}
+        />
+      ) : null}
     </div>
   ) : null;
 
   const statCardsWithActions = buildStatCards({
     loadout,
     combatStats,
+    simulation,
     armorMitigations,
     shieldMitigations,
     powerCardContent: (
-      <PowerCardContent calculateResult={loadout.calculateResult} />
+      <PowerCardContent
+        pipAssignment={pipAssignment}
+        simulation={simulation}
+        onPipChange={updatePip}
+      />
     ),
   }).map((card) => (
     card.key === "performance"
@@ -519,7 +607,7 @@ export default function FittingMockupPage() {
           ? selectedWeaponSelection.childRows.every((row) => canonicalFittingId(row.equippedComponentKey) === canonicalFittingId(component.id))
           : canonicalFittingId(selectedRow.equippedComponentKey) === canonicalFittingId(component.id)
       )}
-      onClose={() => setSelectorOpen(false)}
+      onClose={closeSelector}
       onInstall={(componentId) => { void installComponent(componentId); }}
       onOpenDetails={(componentId) => { void openComponentDetails(componentId); }}
     />
@@ -542,19 +630,21 @@ export default function FittingMockupPage() {
       ) : null}
       selectorDrawer={selectorDrawer}
       selectedDetail={selectedDetailPanel}
-      onSelectShip={(shipKey) => loadout.selectShip(shipKey)}
+      onSelectShip={(shipKey) => {
+        const nextSearch = new URLSearchParams(searchParams);
+        nextSearch.delete("ship");
+        const suffix = nextSearch.size > 0 ? `?${nextSearch.toString()}` : "";
+        navigate(`/fitting/${encodeURIComponent(shipKey)}${suffix}`);
+      }}
       onSelectOffensiveRow={(id) => {
         const selection = offensiveDisplaySelections.find((entry) => entry.selectionPortId === id);
         if (selection) selectWeaponSelection(selection);
       }}
       onSelectDefensiveRow={selectPort}
-      onExitInspect={() => setSelectorOpen(false)}
+      onExitInspect={closeSelector}
       onViewHeroDetails={() => setWeaponStatsOpen(true)}
       onStatCardAction={(key) => {
         if (key === "performance") setWeaponStatsOpen(true);
-      }}
-      onSaveLoadout={() => {
-        /* Save wiring preserved — no remote persistence in mockup yet */
       }}
     />
   );

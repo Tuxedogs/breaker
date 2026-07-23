@@ -36,13 +36,9 @@ export default function FittingHero({
   onViewDetails,
   selectorDrawer,
 }: FittingHeroProps) {
-  const [candidateIndex, setCandidateIndex] = useState(0);
-  const [candidates, setCandidates] = useState(asset.candidates);
-
-  if (asset.candidates !== candidates) {
-    setCandidates(asset.candidates);
-    setCandidateIndex(0);
-  }
+  const candidateKey = asset.candidates.map((candidate) => candidate.src).join("\0");
+  const [candidateState, setCandidateState] = useState({ key: candidateKey, index: 0 });
+  const candidateIndex = candidateState.key === candidateKey ? candidateState.index : 0;
 
   const activeCandidate = asset.candidates[candidateIndex] ?? null;
 
@@ -60,8 +56,8 @@ export default function FittingHero({
               alt={activeCandidate.alt}
               draggable={false}
               onError={() => {
-                if (candidateIndex < asset.candidates.length - 1) {
-                  setCandidateIndex((index) => index + 1);
+                if (candidateIndex < asset.candidates.length) {
+                  setCandidateState({ key: candidateKey, index: candidateIndex + 1 });
                 }
               }}
             />
@@ -79,9 +75,6 @@ export default function FittingHero({
             <button type="button" className="fm-hero-inspect-btn" onClick={onViewDetails}>View Details</button>
           </div>
         ) : null}
-
-        <button type="button" className="fm-hero-nav fm-hero-nav--prev" aria-label="Previous view">‹</button>
-        <button type="button" className="fm-hero-nav fm-hero-nav--next" aria-label="Next view">›</button>
 
         {inspect.selectorOpen ? (
           <button type="button" className="fm-hero-exit" onClick={onExitInspect}>

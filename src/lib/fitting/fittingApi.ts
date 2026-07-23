@@ -243,7 +243,7 @@ export type FittingCalculation = {
   scope: "stock_default_loadout";
   resolutionStatus: string;
   componentCountsByType: Record<string, number>;
-  categories: Partial<Record<"power" | "cooling" | "shields" | "weapons" | "quantum" | "radar" | "performance", FittingCalculationCategory>>;
+  categories: Partial<Record<"power" | "cooling" | "shields" | "weapons" | "ordnance" | "quantum" | "radar" | "performance", FittingCalculationCategory>>;
   warnings: string[];
 };
 
@@ -270,6 +270,17 @@ export type FittingCalculateResult = {
   categories: FittingCalculation["categories"];
   summary: {
     firepower: { weaponAlphaTotal: number | null; weaponDpsTotal: number | null; weaponCount: number; confidence: FittingConfidence; inferred: boolean };
+    ordnance: {
+      missilePayloadDamage: number | null;
+      torpedoPayloadDamage: number | null;
+      bombPayloadDamage: number | null;
+      totalOrdnancePayloadDamage: number | null;
+      installedMissileCount: number;
+      installedTorpedoCount: number;
+      installedBombCount: number;
+      confidence: FittingConfidence;
+      inferred: boolean;
+    };
     shields: { totalShieldHP: number | null; totalRegenRate: number | null; confidence: FittingConfidence; inferred: boolean };
     power: { produced: number | null; required: number | null; margin: number | null; confidence: FittingConfidence; inferred: boolean };
     cooling: { produced: number | null; required: number | null; margin: number | null; confidence: FittingConfidence; inferred: boolean };
@@ -282,12 +293,112 @@ export type FittingCalculateResult = {
   missingStats: Array<{ portId: string; componentId: string; fields: string[]; confidence: FittingConfidence }>;
   unknownItemIds: string[];
   stockComparison?: Record<string, unknown>;
+  simulation?: FittingSimulationResult;
+};
+
+export const FITTING_SIMULATION_MODEL_VERSION = "fitting-simulation-v1" as const;
+
+export type FittingSimulationPowerCategory =
+  | "weapons"
+  | "engines"
+  | "quantum"
+  | "radar"
+  | "shields"
+  | "lifeSupport"
+  | "cooler1"
+  | "cooler2";
+
+export type FittingSimulationPowerAllocation = Record<FittingSimulationPowerCategory, number>;
+export type FittingSimulationPowerAllocationRequest =
+  Record<Exclude<FittingSimulationPowerCategory, "shields">, number>
+  & Partial<Pick<FittingSimulationPowerAllocation, "shields">>;
+
+export type FittingSimulationSourceFact = {
+  componentId: string;
+  mountId: string | null;
+  path: string;
+  value: number;
+};
+
+export type FittingSimulationMetric = {
+  value: number | null;
+  provenance: "derived" | "unavailable";
+  formula: string | null;
+  sources: FittingSimulationSourceFact[];
+};
+
+export type FittingSimulationMissingInput = {
+  componentId: string | null;
+  mountId: string | null;
+  path: string;
+  reason: string;
+};
+
+export type FittingWeaponSimulationResult = {
+  componentId: string;
+  mountId: string | null;
+  mountTopology: "turret" | "pilot" | null;
+  ammunitionModel: "energy" | "ballistic" | "unavailable";
+  allocationRatio: FittingSimulationMetric;
+  effectiveAmmo: FittingSimulationMetric;
+  effectiveRegenPerSecond: FittingSimulationMetric;
+  maxShotsBeforeOverheat: FittingSimulationMetric;
+  overheatInterruptions: FittingSimulationMetric;
+  overheatTimeSeconds: FittingSimulationMetric;
+  shotsFired: FittingSimulationMetric;
+  damage: FittingSimulationMetric;
+  dps: FittingSimulationMetric;
+  completeMagazinesFired: number | null;
+  magazineStartTimesSeconds: number[];
+  directInputs: FittingSimulationSourceFact[];
+  assumptions: string[];
+  missingInputs: FittingSimulationMissingInput[];
+};
+
+export type FittingSimulationResult = {
+  modelVersion: typeof FITTING_SIMULATION_MODEL_VERSION;
+  durationSeconds: number;
+  power: {
+    capacitySegments: FittingSimulationMetric;
+    weaponPoolCapacitySegments: FittingSimulationMetric;
+    allocatedSegments: FittingSimulationMetric;
+    marginSegments: FittingSimulationMetric;
+    allocatedByCategory: FittingSimulationPowerAllocation;
+  };
+  cooling: {
+    capacity: FittingSimulationMetric;
+    demand: FittingSimulationMetric;
+    utilizationPercent: FittingSimulationMetric;
+  };
+  shields?: {
+    maxRegenPerSecond: FittingSimulationMetric;
+    effectiveRegenPerSecond: FittingSimulationMetric;
+  };
+  weapons: FittingWeaponSimulationResult[];
+  weaponsSummary: {
+    totalDamage: FittingSimulationMetric;
+    dps: FittingSimulationMetric;
+    simulatedWeaponCount: FittingSimulationMetric;
+  };
+  provenance: {
+    directInputs: FittingSimulationSourceFact[];
+    derivedModel: typeof FITTING_SIMULATION_MODEL_VERSION;
+  };
+  assumptions: string[];
+  missingInputs: FittingSimulationMissingInput[];
+};
+
+export type FittingSimulationRequest = {
+  modelVersion: typeof FITTING_SIMULATION_MODEL_VERSION;
+  durationSeconds: number;
+  powerAllocation: FittingSimulationPowerAllocationRequest;
 };
 
 export type FittingLoadoutRequest = {
   shipId: string;
   loadout: Record<string, string | null>;
   options?: { compareToStock?: boolean };
+  simulation?: FittingSimulationRequest;
 };
 
 async function writeJson<T>(path: string, payload: unknown, signal?: AbortSignal): Promise<T> {
@@ -408,6 +519,31 @@ export type FittingComponentStats = {
   infraredEmission?: number | null;
   electromagneticEmission?: number | null;
   alphaDamage?: number | null;
+  explosionRadiusMin?: number | null;
+  explosionRadiusMax?: number | null;
+  maxLifetime?: number | null;
+  armTime?: number | null;
+  igniteTime?: number | null;
+  collisionDelayTime?: number | null;
+  explosionSafetyDistance?: number | null;
+  projectileProximity?: number | null;
+  linearSpeed?: number | null;
+  boostPhaseDuration?: number | null;
+  fuelTankSize?: number | null;
+  trackingSignalMin?: number | null;
+  lockTime?: number | null;
+  lockingAngle?: number | null;
+  lockRangeMin?: number | null;
+  lockRangeMax?: number | null;
+  signalResilienceMin?: number | null;
+  signalResilienceMax?: number | null;
+  launchDelay?: number | null;
+  missileSlotCount?: number | null;
+  bombSlotCount?: number | null;
+  ordnanceSlotCount?: number | null;
+  dragAreaRadius?: number | null;
+  centreOfPressureOffsetY?: number | null;
+  maximumDropAngleFromFlatFlight?: number | null;
   dps?: number | null;
   theoreticalDps?: number | null;
   damageOver60Seconds?: number | null;
@@ -547,10 +683,26 @@ export type FittingWeaponDetail = {
   dpsPolicy: string | null;
 };
 
+export type FittingOrdnanceDetail = {
+  kind: "missile";
+  ordnanceClass: string | null;
+  trackingSignalType: string | null;
+  requiresLauncher: boolean | null;
+} | {
+  kind: "bomb";
+  ordnanceClass: string;
+  requiresLauncher: boolean | null;
+} | {
+  kind: "missile_rack" | "bomb_rack";
+  supportedOrdnanceSizes: number[];
+  ports: Array<{ name: string | null; minSize: number | null; maxSize: number | null }>;
+};
+
 export type FittingComponentDetail = FittingComponentSummary & {
   stats: FittingComponentStats;
   mitigation: FittingComponentMitigation | null;
   weapon?: FittingWeaponDetail;
+  ordnance?: FittingOrdnanceDetail;
 };
 
 export type FittingPortConstraint = {

@@ -1,13 +1,17 @@
 import { createHash } from "node:crypto";
 import type { ApiMeta, Confidence, DatasetSelection } from "./fitting.types.js";
 import { FittingHttpError } from "./fitting.types.js";
-import { loadRegistry, PUBLIC_REGISTRIES, readRegistryHeader } from "./registryStore.js";
+import { loadRegistry, OPTIONAL_PUBLIC_REGISTRIES, PUBLIC_REGISTRIES, readRegistryHeader } from "./registryStore.js";
 
 type Row = Record<string, unknown>;
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const COMPONENT_FILES = [
   ["ship_weapons.json", "ship_weapon"],
+  ["missiles.json", "missile"],
+  ["missile_racks.json", "missile_rack"],
+  ["bombs.json", "bomb"],
+  ["bomb_racks.json", "bomb_rack"],
   ["mining_lasers.json", "mining_laser"],
   ["salvage_heads.json", "salvage_head"],
   ["salvage_modifiers.json", "salvage_modifier"],
@@ -42,6 +46,10 @@ function objectValue(value: unknown): Record<string, unknown> | null {
 
 function arrayValue(value: unknown): unknown[] | null {
   return Array.isArray(value) ? value : null;
+}
+
+function isDatasetUnavailable(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "DATASET_UNAVAILABLE";
 }
 
 function publicLabel(value: unknown): string | null {
@@ -136,6 +144,12 @@ export function componentType(row: Row, fallback: string): string {
   const aliases: Record<string, string> = {
     ship_weapon: "ship_weapon",
     weapon: "ship_weapon",
+    missile: "missile",
+    missile_rack: "missile_rack",
+    missilerack: "missile_rack",
+    bomb: "bomb",
+    bomb_rack: "bomb_rack",
+    bombrack: "bomb_rack",
     shield: "shield",
     armor: "armor",
     power_plant: "power_plant",
@@ -180,6 +194,31 @@ export function componentStats(row: Row): Record<string, number | null> {
     infraredEmission: "infraredEmission",
     electromagneticEmission: "electromagneticEmission",
     alphaDamage: "alphaDamageTotal",
+    explosionRadiusMin: "explosionRadiusMin",
+    explosionRadiusMax: "explosionRadiusMax",
+    maxLifetime: "maxLifetime",
+    armTime: "armTime",
+    igniteTime: "igniteTime",
+    collisionDelayTime: "collisionDelayTime",
+    explosionSafetyDistance: "explosionSafetyDistance",
+    projectileProximity: "projectileProximity",
+    linearSpeed: "linearSpeed",
+    boostPhaseDuration: "boostPhaseDuration",
+    fuelTankSize: "fuelTankSize",
+    trackingSignalMin: "trackingSignalMin",
+    lockTime: "lockTime",
+    lockingAngle: "lockingAngle",
+    lockRangeMin: "lockRangeMin",
+    lockRangeMax: "lockRangeMax",
+    signalResilienceMin: "signalResilienceMin",
+    signalResilienceMax: "signalResilienceMax",
+    launchDelay: "launchDelay",
+    missileSlotCount: "missileSlotCount",
+    bombSlotCount: "bombSlotCount",
+    ordnanceSlotCount: "ordnanceSlotCount",
+    dragAreaRadius: "dragAreaRadius",
+    centreOfPressureOffsetY: "centreOfPressureOffsetY",
+    maximumDropAngleFromFlatFlight: "maximumDropAngleFromFlatFlight",
     dps: "dps",
     theoreticalDps: "theoreticalDps",
     damageOver60Seconds: "damageOver60Seconds",
@@ -330,6 +369,47 @@ function componentWeapon(row: Row, fallbackType: string): Record<string, unknown
   };
 }
 
+function componentOrdnance(row: Row, fallbackType: string): Record<string, unknown> | null {
+  const type = componentType(row, fallbackType);
+  if (type === "missile") {
+    const requiresLauncher = numberValue(row.requiresLauncher);
+    return {
+      kind: "missile",
+      ordnanceClass: text(row.ordnanceClass),
+      trackingSignalType: text(row.trackingSignalType),
+      requiresLauncher: requiresLauncher === null ? null : requiresLauncher === 1,
+    };
+  }
+  if (type === "bomb") {
+    const requiresLauncher = numberValue(row.requiresLauncher);
+    return {
+      kind: "bomb",
+      ordnanceClass: text(row.ordnanceClass) ?? "Bomb",
+      requiresLauncher: requiresLauncher === null ? null : requiresLauncher === 1,
+    };
+  }
+  if (type === "missile_rack" || type === "bomb_rack") {
+    const supportedSizes = type === "bomb_rack" ? row.supportedBombSizes : row.supportedMissileSizes;
+    const rawPorts = type === "bomb_rack" ? row.bombPorts : row.missilePorts;
+    return {
+      kind: type,
+      supportedOrdnanceSizes: (arrayValue(supportedSizes) ?? []).filter(
+        (value): value is number => typeof value === "number" && Number.isFinite(value),
+      ),
+      ports: (arrayValue(rawPorts) ?? []).flatMap((raw) => {
+        const port = objectValue(raw);
+        if (!port) return [];
+        return [{
+          name: text(port.name),
+          minSize: numberValue(port.minSize),
+          maxSize: numberValue(port.maxSize),
+        }];
+      }),
+    };
+  }
+  return null;
+}
+
 function shieldMitigation(row: Row): Record<string, unknown> {
   return {
     shieldHp: numberValue(row.shieldHP ?? row.maxShieldHealth),
@@ -444,7 +524,16 @@ function querySignature(selection: DatasetSelection, route: string, search: URLS
 
 async function componentRows(selection: DatasetSelection): Promise<Array<{ row: Row; fallbackType: string }>> {
   const families = await Promise.all(
-    COMPONENT_FILES.map(async ([fileName, fallbackType]) => ({ payload: await loadRegistry(selection, fileName), fallbackType })),
+    COMPONENT_FILES.map(async ([fileName, fallbackType]) => {
+      try {
+        return { payload: await loadRegistry(selection, fileName), fallbackType };
+      } catch (error) {
+        if (OPTIONAL_PUBLIC_REGISTRIES.has(fileName) && isDatasetUnavailable(error)) {
+          return { payload: { records: [] }, fallbackType };
+        }
+        throw error;
+      }
+    }),
   );
   const byId = new Map<string, { row: Row; fallbackType: string }>();
   for (const family of families) {
@@ -457,7 +546,14 @@ async function componentRows(selection: DatasetSelection): Promise<Array<{ row: 
 }
 
 export async function getMeta(selection: DatasetSelection): Promise<unknown> {
-  const headers = await Promise.all(PUBLIC_REGISTRIES.map((name) => readRegistryHeader(selection, name)));
+  const headers = (await Promise.all(PUBLIC_REGISTRIES.map(async (name) => {
+    try {
+      return await readRegistryHeader(selection, name);
+    } catch (error) {
+      if (OPTIONAL_PUBLIC_REGISTRIES.has(name) && isDatasetUnavailable(error)) return null;
+      throw error;
+    }
+  }))).filter((header) => header !== null);
   return {
     meta: await fittingApiMeta(selection),
     data: { registries: headers.map((entry) => ({ name: entry.name, recordCount: entry.recordCount })) },
@@ -592,7 +688,7 @@ export async function getCalculations(selection: DatasetSelection, shipIdInput: 
   if (!row) throw new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No stock calculations were found for the supplied ship.");
   const sourceCategories = row.categories && typeof row.categories === "object" ? row.categories as Row : {};
   const categories: Record<string, unknown> = {};
-  for (const name of ["power", "cooling", "shields", "weapons", "quantum", "radar", "performance"]) {
+  for (const name of ["power", "cooling", "shields", "weapons", "ordnance", "quantum", "radar", "performance"]) {
     const source = sourceCategories[name] && typeof sourceCategories[name] === "object" ? sourceCategories[name] as Row : null;
     if (!source) continue;
     const derivedSource = source.derived && typeof source.derived === "object" ? source.derived as Row : {};
@@ -628,7 +724,25 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
   const classFilter = (search.get("class") ?? "").toLowerCase();
   const manufacturer = (search.get("manufacturer") ?? "").toLowerCase();
   if (sizeFilter !== null && (!Number.isInteger(Number(sizeFilter)) || Number(sizeFilter) < 0)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "size must be a non-negative integer.");
-  const allowedTypes = ["ship_weapon", "mining_laser", "salvage_head", "salvage_modifier", "fuel_nozzle", "shield", "armor", "power_plant", "cooler", "quantum_drive", "radar", "thruster", "other"];
+  const allowedTypes = [
+    "ship_weapon",
+    "missile",
+    "missile_rack",
+    "bomb",
+    "bomb_rack",
+    "mining_laser",
+    "salvage_head",
+    "salvage_modifier",
+    "fuel_nozzle",
+    "shield",
+    "armor",
+    "power_plant",
+    "cooler",
+    "quantum_drive",
+    "radar",
+    "thruster",
+    "other",
+  ];
   if (typeFilter !== null && !allowedTypes.includes(typeFilter)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component type.");
   const sort = search.get("sort") ?? "displayName";
   if (!["displayName", "-displayName", "size", "-size", "grade", "-grade"].includes(sort)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component sort.");
@@ -655,6 +769,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   const data: Record<string, unknown> = { ...componentSummary(found.row, found.fallbackType), stats: componentStats(found.row), mitigation };
   const weapon = componentWeapon(found.row, found.fallbackType);
   if (weapon) data.weapon = weapon;
+  const ordnance = componentOrdnance(found.row, found.fallbackType);
+  if (ordnance) data.ordnance = ordnance;
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);
   return { meta: await fittingApiMeta(selection), data };
 }

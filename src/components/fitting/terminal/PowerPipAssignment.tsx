@@ -20,6 +20,7 @@ const pipColumns: PipColumnDef[] = [
   { key: "engines", label: "ENG", iconLabel: "Engines" },
   { key: "quantum", label: "QT", iconLabel: "Quantum" },
   { key: "radar", label: "RAD", iconLabel: "Radar" },
+  { key: "shields", label: "SHD", iconLabel: "Shields" },
   { key: "lifeSupport", label: "LSS", iconLabel: "Life Support" },
   { key: "cooler1", label: "CL1", iconLabel: "Cooler" },
   { key: "cooler2", label: "CL2", iconLabel: "Cooler" },
@@ -29,16 +30,15 @@ type PowerPipAssignmentProps = {
   pipAssignment: PipAssignment;
   systemDraws: PipSystemPowerDraw;
   powerBudget: number | null;
+  allocatedPower: number | null;
+  coolingUtilization: number | null;
+  simulationLoading: boolean;
   onPipChange: (category: PipCategory, value: number) => void;
-  reactorOutput: string;
-  totalDraw: string;
-  margin: string;
-  marginHighlight?: "good" | "bad";
   panelTitle?: string;
 };
 
-function formatMw(value: number): string {
-  return `${formatNumber(value)} MW`;
+function formatDemand(value: number): string {
+  return formatNumber(value);
 }
 
 type PipSegmentState = "off" | "on" | "over";
@@ -77,19 +77,16 @@ export default function PowerPipAssignment({
   pipAssignment,
   systemDraws,
   powerBudget,
+  allocatedPower,
+  coolingUtilization,
+  simulationLoading,
   onPipChange,
   panelTitle = "Power Assignment",
 }: PowerPipAssignmentProps) {
   const assignedTotal = sumPipAssignment(pipAssignment);
   const budget = powerBudget != null && Number.isFinite(powerBudget) ? powerBudget : null;
   const overBudget = budget != null && assignedTotal > budget;
-  const overage = overBudget ? assignedTotal - budget! : 0;
-
-  const outputPrimary = budget != null
-    ? overBudget
-      ? `-${formatNumber(overage)}`
-      : formatNumber(assignedTotal)
-    : String(assignedTotal);
+  const outputPrimary = formatNumber(allocatedPower ?? assignedTotal);
   const outputSecondary = budget != null ? formatNumber(budget) : "—";
   const segmentStates = buildPipSegmentStates(pipAssignment, budget);
 
@@ -109,7 +106,9 @@ export default function PowerPipAssignment({
               <span> / {outputSecondary}</span>
             </strong>
             <span className="fit-mfd-output-note">
-              {budget != null ? "Assigned MW / reactor output" : "Assigned MW"}
+              {budget != null ? "Allocated segments / capacity" : "Allocated segments"}
+              {coolingUtilization != null ? ` · Cooling ${formatNumber(coolingUtilization)}%` : ""}
+              {simulationLoading ? " · Updating…" : ""}
             </span>
           </div>
 
@@ -120,7 +119,7 @@ export default function PowerPipAssignment({
               return (
                 <div key={key} className="fit-mfd-col">
                   
-                  <div className="fit-mfd-pip-stack" aria-label={`${iconLabel} ${level} of ${PIP_MAX_PER_CATEGORY} MW allocated`}>
+                  <div className="fit-mfd-pip-stack" aria-label={`${iconLabel} ${level} of ${PIP_MAX_PER_CATEGORY} segments allocated`}>
                     {segmentStates[key].map((state, slotFromTop) => {
                       const fromBottom = PIP_MAX_PER_CATEGORY - 1 - slotFromTop;
                       const isActiveEdge = fromBottom === level - 1 && level > 0;
@@ -153,8 +152,8 @@ export default function PowerPipAssignment({
                   >
                     −
                   </button>
-                  <span className="fit-mfd-col-draw" title="Fitted component draw">
-                    {formatMw(draw)}
+                  <span className="fit-mfd-col-draw" title="Fitted nominal demand in its published source units">
+                    {formatDemand(draw)}
                   </span>
                   <div className="fit-mfd-icon-cell" title={iconLabel}>
                     <PowerPipIcon category={key} className="fit-mfd-icon" />

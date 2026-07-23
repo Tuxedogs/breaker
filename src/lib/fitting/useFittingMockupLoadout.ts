@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   calculateFittingLoadout,
   getFittingHardpoints,
@@ -62,8 +62,11 @@ export type FittingMockupLoadoutState = {
   selectedShipKey: string | null;
   shipDetail: FittingShipDetail | null;
   portRows: PortBreakdownRow[];
+  loadoutMap: Readonly<Record<string, string | null>>;
+  stockLoadoutMap: Readonly<Record<string, string | null>>;
   calculateResult: FittingCalculateResult | null;
   componentLookup: Map<string, FittingComponentRecord>;
+  statsById: EquippedComponentDetailsState["statsById"];
   mitigationById: EquippedComponentDetailsState["mitigationById"];
   equippedDetailsReady: boolean;
   loading: boolean;
@@ -88,7 +91,7 @@ export type FittingMockupLoadoutState = {
 
 export function useFittingMockupLoadout(initialShipKey?: string | null): FittingMockupLoadoutState {
   const [shipsState, setShipsState] = useState<LoadState<FittingShipSummary[]>>(emptyLoad);
-  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(initialShipKey ?? FITTING_MOCKUP_POLARIS_SHIP_KEY);
+  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(initialShipKey ?? null);
   const [shipState, setShipState] = useState<LoadState<FittingShipDetail>>(emptyLoad);
   const [basePortRows, setBasePortRows] = useState<PortBreakdownRow[]>([]);
   const [stockLoadoutMap, setStockLoadoutMap] = useState<Record<string, string | null>>({});
@@ -96,6 +99,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
   const [calculateState, setCalculateState] = useState<LoadState<FittingCalculateResult>>(emptyLoad);
   const [selectedPortId, setSelectedPortId] = useState<string | null>(null);
   const [shipLoading, setShipLoading] = useState(false);
+  const recalculationSequenceRef = useRef(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -107,7 +111,6 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
         if (controller.signal.aborted) return;
         const ships = records.filter(isDisplayableFittingShip).map(adaptShipSummary);
         setShipsState({ status: "loaded", data: ships });
-        setSelectedShipKey((current) => current ?? FITTING_MOCKUP_POLARIS_SHIP_KEY);
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipsState({ status: "error", data: null });
@@ -121,16 +124,18 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     if (ships.length === 0) return;
     queueMicrotask(() => {
       setSelectedShipKey((current) => {
-        if (current && ships.some((ship) => ship.shipKey === current)) return current;
         if (initialShipKey && ships.some((ship) => ship.shipKey === initialShipKey)) return initialShipKey;
+        if (current && ships.some((ship) => ship.shipKey === current)) return current;
+        const validatedMockupShip = ships.find((ship) => ship.shipKey === FITTING_MOCKUP_POLARIS_SHIP_KEY);
         const gladius = ships.find((ship) => ship.name.toLowerCase().includes("gladius"));
-        return gladius?.shipKey ?? ships[0]?.shipKey ?? null;
+        return validatedMockupShip?.shipKey ?? gladius?.shipKey ?? ships[0]?.shipKey ?? null;
       });
     });
   }, [initialShipKey, ships]);
 
   useEffect(() => {
     if (!selectedShipKey) return;
+    recalculationSequenceRef.current += 1;
     const controller = new AbortController();
     queueMicrotask(() => {
       if (controller.signal.aborted) return;
@@ -216,6 +221,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     }
 
     const nextLoadout = { ...loadoutMap, [portId]: componentId };
+    const sequence = ++recalculationSequenceRef.current;
 
     try {
       const validation = await validateFittingLoadout({
@@ -223,11 +229,13 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
         loadout: nextLoadout,
         options: { compareToStock: true },
       });
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       const portFailure = validationFailureForPort(validation, portId);
       if (portFailure) {
         return { ok: false, reason: portFailure };
       }
     } catch {
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       return { ok: false, reason: "Could not validate loadout compatibility." };
     }
 
@@ -237,9 +245,12 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
       const result = await calculateFittingLoadout(
         { shipId: selectedShipKey, loadout: nextLoadout, options: { compareToStock: true } },
       );
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       setCalculateState({ status: "loaded", data: result });
     } catch {
-      setCalculateState({ status: "error", data: null });
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      setLoadoutMap(loadoutMap);
+      setCalculateState((previous) => ({ status: "error", data: previous.data }));
       return { ok: false, reason: "Installed item failed to recalculate loadout stats." };
     }
 
@@ -260,6 +271,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     }
 
     const nextLoadout = { ...loadoutMap };
+    const sequence = ++recalculationSequenceRef.current;
     for (const portId of portIds) {
       const slot = portRows.find((row) => row.portId === portId);
       const compatibilityIndex = compatibilityIndexes[portId];
@@ -281,6 +293,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
         loadout: nextLoadout,
         options: { compareToStock: true },
       });
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       for (const portId of portIds) {
         const portFailure = validationFailureForPort(validation, portId);
         if (portFailure) {
@@ -288,6 +301,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
         }
       }
     } catch {
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       return { ok: false, reason: "Could not validate loadout compatibility." };
     }
 
@@ -297,9 +311,12 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
       const result = await calculateFittingLoadout(
         { shipId: selectedShipKey, loadout: nextLoadout, options: { compareToStock: true } },
       );
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
       setCalculateState({ status: "loaded", data: result });
     } catch {
-      setCalculateState({ status: "error", data: null });
+      if (sequence !== recalculationSequenceRef.current) return { ok: true };
+      setLoadoutMap(loadoutMap);
+      setCalculateState((previous) => ({ status: "error", data: previous.data }));
       return { ok: false, reason: "Installed item failed to recalculate loadout stats." };
     }
 
@@ -308,13 +325,22 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
 
   const resetLoadout = useCallback(() => {
     if (!selectedShipKey) return;
+    const sequence = ++recalculationSequenceRef.current;
     setLoadoutMap(stockLoadoutMap);
     setCalculateState({ status: "loading", data: null });
     void calculateFittingLoadout(
       { shipId: selectedShipKey, loadout: stockLoadoutMap, options: { compareToStock: true } },
     )
-      .then((result) => setCalculateState({ status: "loaded", data: result }))
-      .catch(() => setCalculateState({ status: "error", data: null }));
+      .then((result) => {
+        if (sequence === recalculationSequenceRef.current) {
+          setCalculateState({ status: "loaded", data: result });
+        }
+      })
+      .catch(() => {
+        if (sequence === recalculationSequenceRef.current) {
+          setCalculateState({ status: "error", data: null });
+        }
+      });
   }, [selectedShipKey, stockLoadoutMap]);
 
   const resourceGroups = useMemo(() => selectFittingResourceGroups(portRows), [portRows]);
@@ -325,8 +351,11 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     selectedShipKey,
     shipDetail: shipState.data,
     portRows,
+    loadoutMap,
+    stockLoadoutMap,
     calculateResult: calculateState.data,
     componentLookup,
+    statsById: equippedDetails.statsById,
     mitigationById: equippedDetails.mitigationById,
     equippedDetailsReady: equippedDetails.ready,
     loading: shipLoading || calculateState.status === "loading" || shipState.status === "loading",

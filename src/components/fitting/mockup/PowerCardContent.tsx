@@ -1,37 +1,42 @@
-import { useMemo, useState } from "react";
-import type { FittingCalculateResult } from "../../../lib/fitting/fittingApi";
-import { derivedNum } from "../../../components/fitting/terminal/fittingPerformanceHelpers";
+import { useMemo } from "react";
+import type { PipAssignment, PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
+import type { FittingSimulationState } from "../../../lib/fitting/useFittingSimulation";
 import { buildPowerCardHeaderView } from "../../../lib/fitting/mockup/buildPowerCardViews";
 import MockPowerPipHud from "./MockPowerPipHud";
-import { INITIAL_MOCK_PIP_ASSIGNMENT, sumMockPipAssignment } from "./mockPipAssignment";
 import PowerStatusHeader from "./PowerStatusHeader";
 
 type PowerCardContentProps = {
-  calculateResult: FittingCalculateResult | null;
+  pipAssignment: PipAssignment;
+  simulation: FittingSimulationState;
+  onPipChange: (category: PipCategory, value: number) => void;
 };
 
-export default function PowerCardContent({ calculateResult }: PowerCardContentProps) {
-  const [assignedTotal, setAssignedTotal] = useState(() => sumMockPipAssignment(INITIAL_MOCK_PIP_ASSIGNMENT));
-
-  const powerBudget = useMemo(() => {
-    const reactorOutput = derivedNum(calculateResult, "power", "totalPowerGenerated");
-    return reactorOutput != null ? Math.round(reactorOutput) : null;
-  }, [calculateResult]);
-
+export default function PowerCardContent({ pipAssignment, simulation, onPipChange }: PowerCardContentProps) {
+  const powerBudget = simulation.data?.power.capacitySegments.value ?? null;
   const powerHeader = useMemo(
-    () => buildPowerCardHeaderView(calculateResult, assignedTotal),
-    [calculateResult, assignedTotal],
+    () => buildPowerCardHeaderView(simulation),
+    [simulation],
   );
-
-  const handleAssignmentChange = (assignment: typeof INITIAL_MOCK_PIP_ASSIGNMENT) => {
-    setAssignedTotal(sumMockPipAssignment(assignment));
-  };
+  const modelNotice = simulation.error
+    ? `Simulation unavailable: ${simulation.error}`
+    : simulation.data?.missingInputs.find((entry) => (
+        entry.path === "powerAllocation" || entry.path === "powerCategory"
+      ))?.reason
+      ?? simulation.data?.assumptions.find((entry) => entry.includes("Heat"))
+      ?? null;
 
   return (
     <>
       <PowerStatusHeader header={powerHeader} />
+      {modelNotice ? <p className="fm-power-model-note" role="status">{modelNotice}</p> : null}
       <div className="fit-mock-pips fit-mock-pips--card" aria-label="Power Management">
-        <MockPowerPipHud hideOutputFooter powerBudget={powerBudget} onAssignmentChange={handleAssignmentChange} />
+        <MockPowerPipHud
+          hideOutputFooter
+          assignment={pipAssignment}
+          powerBudget={powerBudget}
+          simulation={simulation}
+          onPipChange={onPipChange}
+        />
       </div>
     </>
   );
