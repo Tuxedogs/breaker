@@ -82,7 +82,27 @@ async function fixtureRoot(): Promise<string> {
   records["default_loadouts.json"] = [{ shipKey: shipId, confidence: "high", entries: [{ portPath: "weapon/main", resolvedDefaultComponentKey: componentId.replaceAll("-", "_"), confidence: "high" }] }];
   records["stock_loadout_calculations.json"] = [{ shipKey: shipId, loadoutResolutionStatus: "resolved", componentCountsByType: { cooler: 1 }, categories: { power: { available: true, confidence: "high", unavailableReason: null, derived: { powerSurplus: 2 } } }, warnings: [], confidence: "high" }];
   records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: { "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true } } }];
-  records["coolers.json"] = [{ entityClass: componentId, componentKey: componentId.replaceAll("-", "_"), name: "Test Cooler", displayName: "Test Cooler", componentType: "cooler", size: 1, coolingGenerated: 10, powerInputMaximum: 1, powerDraw: 1, confidence: "high" }];
+  records["coolers.json"] = [{
+    entityClass: componentId,
+    componentKey: componentId.replaceAll("-", "_"),
+    name: "Test Cooler",
+    displayName: "Test Cooler",
+    componentType: "cooler",
+    size: 1,
+    coolingGenerated: 10,
+    powerInputMaximum: 1,
+    powerInputMinimum: 0.5,
+    powerDraw: 1,
+    electromagneticEmission: 250,
+    emSignatureNominal: 250,
+    emSignatureDecayRate: 0.15,
+    selfRepairMaxCount: 1,
+    selfRepairTime: 25.5,
+    selfRepairHealthRatio: 0.2,
+    selfRepairBaselineHp: 28,
+    repairRestoreRatio: 0.1,
+    confidence: "high",
+  }];
   records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, confidence: "high" }];
   records["ship_weapons.json"] = [{
     entityClass: weaponId,
@@ -272,6 +292,14 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal((shield?.body as { data: { mitigation: { kind: string; resistanceByDamageType: { physical: { max: number } } } } }).data.mitigation.kind, "shield");
     assert.equal((shield?.body as { data: { mitigation: { resistanceByDamageType: { physical: { max: number } } } } }).data.mitigation.resistanceByDamageType.physical.max, 0.25);
     assert.equal(JSON.stringify(shield?.body).includes("sourceFile"), false);
+
+    const cooler = await handleFittingRoute("GET", `/api/v1/fitting/components/${componentId}?${query}`, "test-request", root);
+    const coolerStats = (cooler?.body as { data: { stats: Record<string, number> } }).data.stats;
+    assert.equal(coolerStats.powerInputMaximum, 1);
+    assert.equal(coolerStats.powerInputMinimum, 0.5);
+    assert.equal(coolerStats.emSignatureDecayRate, 0.15);
+    assert.equal(coolerStats.selfRepairTime, 25.5);
+    assert.equal(coolerStats.selfRepairBaselineHp, 28);
 
     const armor = await handleFittingRoute("GET", `/api/v1/fitting/components/33333333-3333-4333-8333-333333333333?${query}`, "test-request", root);
     assert.equal((armor?.body as { data: { type: string; mitigation: { kind: string; deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.type, "armor");

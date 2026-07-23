@@ -139,7 +139,7 @@ test("buildDetailStatRowsFromFitting projects live weapon stat labels and groupi
     "Penetration",
     "Penetration Distance",
     "Heat Per Shot",
-    "Power Nominal",
+    "Power Maximum",
     "Component HP",
     "Mass",
   ]);
@@ -167,12 +167,26 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
       sustainedDps60: 150,
       damageOver60Seconds: 9000,
       maxAmmoLoad: 25,
+      ammoCostPerShot: 1,
       maxRegenPerSec: 3,
       regenerationCooldown: 0.75,
       spreadMin: 0.1,
       spreadMax: 0.2,
       coolingPerSecond: 12,
       timeTillCoolingStarts: 0.5,
+      minimumTemperature: -10,
+      overheatTemperature: 100,
+      overheatFixTime: 3,
+      postOverheatTemperature: 20,
+      powerInputMaximum: 0.704,
+      powerInputMinimum: 0.352,
+      emSignatureNominal: 348,
+      emSignatureDecayRate: 0.15,
+      selfRepairMaxCount: 1,
+      selfRepairTime: 14.1,
+      selfRepairHealthRatio: 0.2,
+      selfRepairBaselineHp: 20,
+      repairRestoreRatio: 0.1,
     },
     mitigation: null,
     weapon: {
@@ -194,6 +208,17 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
   });
   const labels = rows.map((row) => row.label);
   for (const label of ["Theoretical DPS", "60s Sustained DPS", "Damage Over 60s", "Energy Maximum Load", "Spread Min–Max", "Cooling Rate", "Rapid Spin-Up", "Rapid Spin-Down"]) {
+    assert.ok(labels.includes(label), `missing ${label}`);
+  }
+  for (const label of [
+    "Energy Cost Per Shot",
+    "Power Maximum",
+    "Power Minimum (derived)",
+    "EM Maximum",
+    "EM Decay Rate",
+    "Self-Repair Uses",
+    "Baseline HP Restored (derived)",
+  ]) {
     assert.ok(labels.includes(label), `missing ${label}`);
   }
 });

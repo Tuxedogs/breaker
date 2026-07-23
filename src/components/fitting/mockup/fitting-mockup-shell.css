@@ -737,7 +737,7 @@
   background: rgba(8, 11, 14, 0.72);
 }
 
-.fm-selected-detail.is-open { max-height: 10rem; }
+.fm-selected-detail.is-open { max-height: min(42vh, 28rem); }
 
 .fm-detail-kicker { display: block; font-size: var(--mock-type-2xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fm-muted); margin-bottom: 0.12rem; }
 .fm-detail-title { margin: 0 0 0.4rem; font-size: var(--mock-type-sm); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -748,7 +748,7 @@
   padding: 0.38rem 0.45rem; cursor: pointer; border-radius: 2px;
 }
 .fm-detail-toggle.is-open { border-color: rgba(90, 154, 170, 0.28); background: rgba(90, 154, 170, 0.06); }
-.fm-detail-drawer { flex: 1; min-height: 0; max-height: 14rem; overflow-y: auto; margin-top: 0.35rem; padding-top: 0.35rem; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+.fm-detail-drawer { flex: 1; min-height: 0; overflow-y: auto; margin-top: 0.35rem; padding-top: 0.35rem; border-top: 1px solid rgba(255, 255, 255, 0.06); }
 .fm-detail-section { border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 3px; background: rgba(4, 8, 12, 0.55); padding: 0.42rem 0.48rem; margin-bottom: 0.35rem; }
 .fm-detail-section h4 { margin: 0 0 0.25rem; font-size: var(--mock-type-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fm-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.2rem; }
 .fm-detail-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem; font-size: var(--mock-type-xs); line-height: 1.45; }

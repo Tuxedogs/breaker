@@ -113,6 +113,9 @@ test("fires full Quarreler magazines and waits for complete refills over 60 seco
     assert.equal(weapon.allocationRatio.value, 1);
     assert.equal(weapon.effectiveAmmo.value, 25);
     assert.equal(weapon.effectiveRegenPerSecond.value, 3);
+    assert.equal(Number(weapon.capacitorFillTimeSeconds.value?.toFixed(3)), 8.333);
+    assert.equal(Number(weapon.capacitorFullRechargeTimeSeconds.value?.toFixed(3)), 10.093);
+    assert.equal(Number(weapon.triggerTimeSeconds.value?.toFixed(3)), 30);
     assert.equal(weapon.shotsFired.value, 75);
     assert.equal(weapon.damage.value, 16_402.5);
     assert.equal(weapon.dps.value, 273.375);
@@ -522,7 +525,15 @@ test("suppresses dependent results when allocation exceeds reactor capacity", ()
         componentType: "ship_weapon",
         powerCategory: "weapons",
         nominalPowerDemandSegments: 2,
-        weapon: { alphaDamage: 10, fireRateRpm: 60, ammoCapacity: 60, ammoCostPerShot: 1, heatPerShot: 0 },
+        weapon: {
+          alphaDamage: 10,
+          fireRateRpm: 60,
+          ammoCostPerShot: 1,
+          maxAmmoLoad: 60,
+          maxRegenPerSecond: 6,
+          regenCooldownSeconds: 2,
+          heatPerShot: 0,
+        },
       },
     ],
     powerAllocation: { weapons: 2 },
@@ -789,6 +800,10 @@ test("keeps a weapon offline below its extracted minimum power input", () => {
 
   assert.equal(result.weapons[0]?.shotsFired.value, 0);
   assert.equal(result.weapons[0]?.dps.value, 0);
+  assert.equal(result.weapons[0]?.capacitorFillTimeSeconds.value, null);
+  assert.equal(result.weapons[0]?.capacitorFillTimeSeconds.provenance, "unavailable");
+  assert.equal(result.weapons[0]?.capacitorFullRechargeTimeSeconds.value, null);
+  assert.equal(result.weapons[0]?.capacitorFullRechargeTimeSeconds.provenance, "unavailable");
   assert.ok(result.weapons[0]?.assumptions.some((entry) => entry.includes("minimum-online")));
 });
 

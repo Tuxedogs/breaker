@@ -3,8 +3,14 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import FittingMockupShell from "../components/fitting/mockup/FittingMockupShell";
 import PowerCardContent from "../components/fitting/mockup/PowerCardContent";
+import { ComponentStatsDrawer } from "./FittingMockupPage";
 import { getFittingSlotIcon } from "../lib/fitting/getFittingSlotIcon";
-import type { FittingSimulationMetric, FittingSimulationResult } from "../lib/fitting/fittingApi";
+import type {
+  FittingComponentDetail,
+  FittingSimulationMetric,
+  FittingSimulationResult,
+  FittingWeaponSimulationResult,
+} from "../lib/fitting/fittingApi";
 import { buildResourceSummary } from "../lib/fitting/mockup/fittingMockupAdapters";
 import type {
   EquipmentRowTone,
@@ -269,6 +275,79 @@ const scenarios: Record<FixtureScenarioKey, FixtureScenario> = {
   },
 };
 
+const fixtureQuarrelerDetail: FittingComponentDetail = {
+  id: "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
+  name: "KRIG_LaserCannon_S3",
+  displayName: "Quarreler Cannon",
+  manufacturer: "Kruger Intergalactic",
+  type: "ship_weapon",
+  subtype: "LaserCannon",
+  size: 3,
+  grade: null,
+  class: null,
+  confidence: "high",
+  stats: {
+    alphaDamage: 218.7,
+    damageEnergy: 218.7,
+    theoreticalDps: 546.75,
+    fireRateRpm: 150,
+    projectileSpeed: 1_184,
+    calculatedRange: 2_403.52,
+    maxAmmoLoad: 25,
+    ammoCostPerShot: 1,
+    maxRegenPerSec: 3,
+    regenerationCooldown: 1.76,
+    heatPerShot: 0,
+    spreadMin: 0.45,
+    spreadMax: 0.45,
+    spreadFirstAttack: 0.025,
+    spreadPerAttack: 0.025,
+    spreadDecay: 0.05,
+    powerInputMaximum: 1.73,
+    powerInputMinimum: 0,
+    emSignatureNominal: 649,
+    emSignatureDecayRate: 0.15,
+    selfRepairMaxCount: 1,
+    selfRepairTime: 48,
+    selfRepairHealthRatio: 0.2,
+    selfRepairBaselineHp: 570,
+    repairRestoreRatio: 0.1,
+    health: 2_850,
+  },
+  mitigation: {
+    kind: "weapon_projectile",
+    damage: { physical: 0, energy: 218.7, distortion: 0, thermal: 0, biochemical: 0, stun: 0 },
+    ammoPenetration: null,
+    basePenetrationDistance: 0.22,
+    maxPenetrationThickness: null,
+    penetrationParams: null,
+  },
+};
+
+const fixtureQuarrelerSimulation: FittingWeaponSimulationResult = {
+  componentId: fixtureQuarrelerDetail.id,
+  mountId: "weapon-1",
+  mountTopology: "pilot",
+  ammunitionModel: "energy",
+  allocationRatio: metric(1, "assigned weapon segments / summed nominal demand"),
+  effectiveAmmo: metric(25, "round(maxAmmoLoad * allocationRatio)"),
+  effectiveRegenPerSecond: metric(3, "maxRegenPerSecond * allocationRatio"),
+  capacitorFillTimeSeconds: metric(25 / 3, "effectiveAmmo / effectiveRegenPerSecond"),
+  capacitorFullRechargeTimeSeconds: metric(1.76 + 25 / 3, "regen cooldown + capacitor fill"),
+  triggerTimeSeconds: metric(30, "sum active firing intervals inside 60 seconds"),
+  maxShotsBeforeOverheat: metric(null),
+  overheatInterruptions: metric(0, "heatPerShot is zero"),
+  overheatTimeSeconds: metric(0, "heatPerShot is zero"),
+  shotsFired: metric(75, "count shot timestamps inside 60 seconds"),
+  damage: metric(16_402.5, "shotsFired * alphaDamage"),
+  dps: metric(273.375, "damage / 60"),
+  completeMagazinesFired: 3,
+  magazineStartTimesSeconds: [0, 20.093, 40.187],
+  directInputs: [],
+  assumptions: ["Fixture mirrors the source-backed Quarreler pilot-capacitor model."],
+  missingInputs: [],
+};
+
 function equipmentRow(input: {
   id: string;
   title: string;
@@ -402,7 +481,16 @@ export default function FittingFixturePage() {
       resourceSummary={buildResourceSummary(scenario.simulation, scenario.fittingValid)}
       errorMessage={scenario.key === "api-error" ? "Fixture API failure: the fitting page remains usable and reports unavailable values." : null}
       debugNode={<div className="fm-fixture-banner">Development fixture · static expected response</div>}
-      selectedDetail={selectedId ? <div className="fm-fixture-selected">Selected fixture component: {selectedId}</div> : null}
+      selectedDetail={selectedId?.startsWith("weapon") ? (
+        <div className="fm-selected-detail is-open">
+          <ComponentStatsDrawer
+            detail={fixtureQuarrelerDetail}
+            loading={false}
+            weaponSimulation={fixtureQuarrelerSimulation}
+            simulationLoading={false}
+          />
+        </div>
+      ) : selectedId ? <div className="fm-fixture-selected">Selected fixture component: {selectedId}</div> : null}
       onSelectShip={(key) => {
         setSelectedId(null);
         const next = scenarios[key as FixtureScenarioKey];

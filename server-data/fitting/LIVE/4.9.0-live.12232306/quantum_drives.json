@@ -15,14 +15,14 @@
   "fallbackSource": null,
   "fallbackUsed": false,
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-16T04:22:19Z",
+  "generatedAt": "2026-07-23T03:10:58Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/components/quantum_drive_registry.py",
   "legacyApiRoot": null,
   "localizationFallbackReason": null,
   "localizationFallbackUsed": false,
   "localizationPath": "D:\\scintel\\out\\LIVE\\4.9.0-live.12232306\\Data\\Localization\\english\\global.ini",
-  "localizationSourceKind": "explicit",
+  "localizationSourceKind": "nearbyChannelLocalization",
   "localizationWarnings": [],
   "recordCount": 63,
   "records": [
@@ -78,6 +78,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 54500,
       "entityClass": "d8c217a9-531a-4b02-90bc-3cb48f169149",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -219,6 +228,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -257,6 +267,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 24000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 766,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -332,6 +354,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 15000,
       "entityClass": "42b4e617-9fdc-4b28-b39f-7e32f3025325",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -473,6 +504,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_S01_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_S01_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -511,6 +543,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_S01_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 33.3,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_S01_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -586,6 +630,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 22500,
       "entityClass": "f29cf188-3d83-4699-b28e-4194e27b56b5",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -727,6 +780,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_S02_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_S02_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -765,6 +819,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 108.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_S02_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 58.3,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_S02_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -840,6 +906,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 30000,
       "entityClass": "983f60bc-bf51-40e7-b2b6-c5e5a9b1ba1c",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -981,6 +1056,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_S03_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_S03_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1019,6 +1095,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 300.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_S03_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 102,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_S03_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1094,6 +1182,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_S04_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 37500,
       "entityClass": "eef13cc2-afb4-4047-813d-f46abd5a8aea",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -1235,6 +1332,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_S04_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_S04_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_S04_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1273,6 +1371,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 820.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_S04_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 179,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_S04_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1348,6 +1458,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 44600,
       "entityClass": "069689b2-0abf-47e6-a584-e20819764711",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -1489,6 +1608,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1527,6 +1647,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 320.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 89.1,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1600,6 +1732,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "fcfa0140-7d88-452f-aac4-668cd65c4053",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -1741,6 +1882,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1779,6 +1921,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 94.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 50.9,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1852,6 +2006,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 41300,
       "entityClass": "70163f66-522d-4161-824e-18eb08299258",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -1993,6 +2156,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -2031,6 +2195,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 1980.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 250,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2105,6 +2281,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "934ac478-9c87-48d1-8fd3-e5359171983c",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -2246,6 +2431,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -2284,6 +2470,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 26.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2357,6 +2555,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 33800,
       "entityClass": "a7375ca6-be9c-4155-89fb-c507e866ff03",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -2498,6 +2705,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -2536,6 +2744,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 420.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 134,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2609,6 +2829,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18800,
       "entityClass": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -2750,6 +2979,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -2788,6 +3018,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 48.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 48,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2861,6 +3103,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 34700,
       "entityClass": "74cc0d0b-1bf5-436c-a38c-1baf93962b89",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -3002,6 +3253,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -3040,6 +3292,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 100.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 56,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3113,6 +3377,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 12500,
       "entityClass": "d6dac840-51e4-4872-b731-2072f3bcfda9",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -3254,6 +3527,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -3292,6 +3566,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 80.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 57.3,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3365,6 +3651,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "4a8d0265-7476-401a-a50f-5780cd212656",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -3506,6 +3801,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -3544,6 +3840,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.1,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3617,6 +3925,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "da31a82e-30ac-4924-90ad-dc88bc39e7a5",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -3758,6 +4075,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -3796,6 +4114,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 72.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 61.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3869,6 +4199,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 24800,
       "entityClass": "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -4010,6 +4349,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -4048,6 +4388,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 42.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.1,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4121,6 +4473,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 26300,
       "entityClass": "9e3a3bcb-d90a-46c5-912b-079fd15157cc",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -4262,6 +4623,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -4300,6 +4662,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 132.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 84,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4373,6 +4747,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 7500,
       "entityClass": "c933bab5-5eec-42fe-ae83-b2c5ff91502f",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -4514,6 +4897,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -4552,6 +4936,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 36,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4625,6 +5021,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 30000,
       "entityClass": "1546dd53-4a3d-4fd7-b1ed-bf207bfc9a9f",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -4766,6 +5171,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -4804,6 +5210,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 198.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 135,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4877,6 +5295,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "85e4dfef-4a24-48ae-8e3f-0998fa1745ab",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -5018,6 +5445,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5056,6 +5484,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 198.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 108,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5129,6 +5569,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "08a5bfdb-1972-421f-83fe-be03b7ac5222",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -5270,6 +5719,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5308,6 +5758,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 32,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5381,6 +5843,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "27a34dd7-30aa-4eca-ae37-1f87e343e238",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -5522,6 +5993,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5560,6 +6032,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 300.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 81.7,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5633,6 +6117,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 15000,
       "entityClass": "4702547f-fa0f-4f6c-b2ed-9782ee9f518b",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -5774,6 +6267,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5812,6 +6306,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 40,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5885,6 +6391,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "63fba040-d2ce-40fc-92a4-1541d022e4e3",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -6026,6 +6541,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6064,6 +6580,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 220.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 98,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6137,6 +6665,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "64fb8d1b-50c0-4919-8048-fa813356bbc5",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -6278,6 +6815,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6316,6 +6854,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 94.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 50.9,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6389,6 +6939,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "692899e0-b637-40a4-803d-88c43f40d746",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -6530,6 +7089,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6568,6 +7128,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 35.2,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6641,6 +7213,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 21600,
       "entityClass": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -6782,6 +7363,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6820,6 +7402,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 24.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.1,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6893,6 +7487,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 41300,
       "entityClass": "02287bd1-e17b-4f73-bca2-0cded92a9423",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -7034,6 +7637,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7072,6 +7676,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 9600.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 657,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7147,6 +7763,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 24800,
       "entityClass": "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -7288,6 +7913,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7326,6 +7952,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 36.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 32,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7399,6 +8037,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "3bd1502d-f593-456f-a3a9-14fec5b8c1a5",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -7540,6 +8187,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7578,6 +8226,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 108.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 46.7,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7651,6 +8311,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 34700,
       "entityClass": "1ed8932d-3d51-4a5d-a323-d696bad07bef",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -7792,6 +8461,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7830,6 +8500,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 114.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 50.9,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7903,6 +8585,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "aaf32974-612a-4287-a2ba-98f590b193a1",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -8044,6 +8735,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8082,6 +8774,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.1,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8155,6 +8859,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "cbcfa21a-a9b8-4932-945a-ad2a93971157",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -8296,6 +9009,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8334,6 +9048,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 89.1,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8407,6 +9133,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 44600,
       "entityClass": "e2599be8-160c-4d20-87d0-3c080109842d",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -8548,6 +9283,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8586,6 +9322,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 280.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 98,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8659,6 +9407,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "1a7eabcd-1c1f-4641-bf5b-41089a774fb6",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -8800,6 +9557,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8838,6 +9596,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 82.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 56,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8911,6 +9681,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 21600,
       "entityClass": "f3ceefa2-670f-47c5-8c13-a80c8cf93c52",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -9052,6 +9831,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9090,6 +9870,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 22.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 32,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9163,6 +9955,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_S04_VNCL_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 49900,
       "entityClass": "aa2eb7d5-6591-45ed-a4db-abbb236cf83f",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -9304,6 +10105,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_S04_VNCL_Mauler/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_S04_VNCL_Mauler/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_S04_VNCL_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9342,6 +10144,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 30000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_S04_VNCL_Mauler/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 1050,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_S04_VNCL_Mauler/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9417,6 +10231,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "8f5a16f2-5a4d-4a7f-b625-94bae1d16506",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -9558,6 +10381,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9596,6 +10420,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 220.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 98,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9669,6 +10505,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 12500,
       "entityClass": "50a21fb7-c45d-408a-8aa3-4d12e1728811",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -9810,6 +10655,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9848,6 +10694,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 70.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 63,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9921,6 +10779,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 22500,
       "entityClass": "16ba45f1-bd70-4b58-96d6-0ef822f59803",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -10062,6 +10929,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10100,6 +10968,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 82.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 70,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10173,6 +11053,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 33800,
       "entityClass": "419bff00-12eb-43f7-b284-f8850519b9c6",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -10314,6 +11203,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10352,6 +11242,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 360.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 147,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10425,6 +11327,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 22500,
       "entityClass": "e4b7bb25-c233-458b-a2b0-b8534733d6be",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -10566,6 +11477,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10604,6 +11516,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 72.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 77,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10677,6 +11601,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 30000,
       "entityClass": "23652e98-de0a-4b72-a669-9a094cc7471d",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -10818,6 +11751,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10856,6 +11790,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 111,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10929,6 +11875,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18000,
       "entityClass": "4e256229-5224-40af-8806-72223f753da2",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -11070,6 +12025,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11108,6 +12064,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 32,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11181,6 +12149,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18800,
       "entityClass": "95a43815-970e-4a70-87df-0658c32495d8",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -11322,6 +12299,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11360,6 +12338,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 54.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 43.6,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11433,6 +12423,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 22500,
       "entityClass": "4e2d202e-4336-4afc-bada-fbb20450755f",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -11574,6 +12573,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11612,6 +12612,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 94.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 63.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11685,6 +12697,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 32400,
       "entityClass": "83ecc7c9-7869-42c9-9b67-c58948a89e58",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -11826,6 +12847,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11864,6 +12886,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 58.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 56,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11937,6 +12971,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 7500,
       "entityClass": "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -12078,6 +13121,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12116,6 +13160,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12189,6 +13245,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 12500,
       "entityClass": "9ade5d70-fab6-43d5-9f12-72394fa2d5a0",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -12330,6 +13395,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12368,6 +13434,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 92.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 52.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12441,6 +13519,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 32400,
       "entityClass": "f0790cc0-4ebd-45b9-8419-668635c7f04b",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -12582,6 +13669,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12620,6 +13708,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 66.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 50.9,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12693,6 +13793,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 33800,
       "entityClass": "8ea47c7e-f70f-469d-abc2-911cc5013854",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -12834,6 +13943,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12872,6 +13982,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 460.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 123,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12945,6 +14067,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 27000,
       "entityClass": "d1b9fbc4-797b-4777-a9da-f2e58c095922",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -13086,6 +14217,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13124,6 +14256,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 82.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 56,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13197,6 +14341,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 36000,
       "entityClass": "68e9b393-0b32-457b-901b-bee326c88b00",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -13338,6 +14491,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13376,6 +14530,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 89.1,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13449,6 +14615,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 18800,
       "entityClass": "995c2de5-f7e6-4646-83e3-4627ba5a5865",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -13590,6 +14765,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13628,6 +14804,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 60.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 40,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13701,6 +14889,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 44600,
       "entityClass": "5d57c71c-7122-4567-86ee-0936091ee182",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -13842,6 +15039,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13880,6 +15078,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 240.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 108,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13953,6 +15163,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 15000,
       "entityClass": "0d1169c1-65e4-4ee0-bb1a-f967ab0f3c45",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -14094,6 +15313,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14132,6 +15352,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 36.4,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14205,6 +15437,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 24800,
       "entityClass": "ead4350a-695e-4d5d-86c3-e33f99d08217",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -14346,6 +15587,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14384,6 +15626,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 32.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 35.2,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14457,6 +15711,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 30000,
       "entityClass": "9e3ee84d-86f3-48f3-a4e0-e26899575c5b",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -14598,6 +15861,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14636,6 +15900,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 220.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 123,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14709,6 +15985,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 15000,
       "entityClass": "f942fa3b-d450-4c4d-a797-49f1a4685d16",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -14850,6 +16135,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14888,6 +16174,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 44,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14961,6 +16259,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 26300,
       "entityClass": "fce50a6d-690e-4b2d-9104-f3743387e1f0",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -15102,6 +16409,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15140,6 +16448,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 168.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 70,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15213,6 +16533,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 34700,
       "entityClass": "2f4b842b-6261-402d-ab6d-f49c2770c011",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -15354,6 +16683,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15392,6 +16722,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 86.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 61.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15465,6 +16807,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 26300,
       "entityClass": "903b3f33-f3de-412f-8804-19090436c525",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -15606,6 +16957,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15644,6 +16996,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 150.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 76.4,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15717,6 +17081,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 7500,
       "entityClass": "94b56098-d5c0-4796-a502-790cbccf34c6",
       "fuelRate": null,
       "fuelRateProvenance": null,
@@ -15858,6 +17231,7 @@
       "rawComponentSubTypeSourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15896,6 +17270,18 @@
         "unitNode": "SStandardResourceUnit",
         "unitType": "StandardResource"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 32.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/SAttachableComponentParams/AttachDef@Size",

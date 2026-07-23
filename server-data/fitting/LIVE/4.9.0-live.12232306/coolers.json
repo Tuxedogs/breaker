@@ -15,14 +15,14 @@
   "fallbackSource": null,
   "fallbackUsed": false,
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-16T04:22:19Z",
+  "generatedAt": "2026-07-23T03:10:58Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/components/cooler_registry.py",
   "legacyApiRoot": null,
   "localizationFallbackReason": null,
   "localizationFallbackUsed": false,
   "localizationPath": "D:\\scintel\\out\\LIVE\\4.9.0-live.12232306\\Data\\Localization\\english\\global.ini",
-  "localizationSourceKind": "explicit",
+  "localizationSourceKind": "nearbyChannelLocalization",
   "localizationWarnings": [],
   "recordCount": 81,
   "records": [
@@ -106,6 +106,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "1f5be5de-b5ea-42c7-879f-289c4bf64f19",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -285,6 +294,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -323,6 +333,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 20000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 651,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S04_Javelin_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -427,6 +449,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "a2472bfc-17ff-461d-8d99-ec68da5d04b1",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -606,6 +637,7 @@
       "rawComponentSubTypeSourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -644,6 +676,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 56000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 1140,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_RSI_S04_Bengal_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -719,6 +763,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "209c4920-36d6-4e32-8cea-8865083d8906",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -898,6 +951,7 @@
       "rawComponentSubTypeSourcePath": "COOL_S01_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_S01_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -936,6 +990,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_S01_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 28.3,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_S01_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1011,6 +1077,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "b4341403-9a37-435a-8aa6-92b57f76c2fd",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -1190,6 +1265,7 @@
       "rawComponentSubTypeSourcePath": "COOL_S02_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_S02_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -1228,6 +1304,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 92.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_S02_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 49.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_S02_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1303,6 +1391,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "56c08571-e1e3-4947-90e9-ae52f90bc182",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -1482,6 +1579,7 @@
       "rawComponentSubTypeSourcePath": "COOL_S03_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_S03_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -1520,6 +1618,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_S03_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 86.8,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_S03_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1595,6 +1705,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_S04_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1880,
       "entityClass": "d64ec530-c040-4272-8f9f-7ef3503e5e5f",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -1774,6 +1893,7 @@
       "rawComponentSubTypeSourcePath": "COOL_S04_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_S04_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_S04_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -1812,6 +1932,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 680.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_S04_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 152,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_S04_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -1887,6 +2019,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "6206cb1d-3018-4c74-92d7-9b343f87e04d",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -2066,6 +2207,7 @@
       "rawComponentSubTypeSourcePath": "COOL_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -2104,6 +2246,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 28.3,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_Template/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2187,6 +2341,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1230,
       "entityClass": "67b6c401-1017-4c39-93f6-8305c4c67f69",
       "grade": "B",
       "gradeConfidence": "high",
@@ -2366,6 +2529,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -2404,6 +2568,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 42.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 54.1,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S02_AbsoluteZero_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2492,6 +2668,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S04_Reclaimer/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "115aaff9-c8c5-4b93-bc14-9f22524fe8a8",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -2671,6 +2856,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S04_Reclaimer/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S04_Reclaimer/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S04_Reclaimer/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -2709,6 +2895,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 820.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S04_Reclaimer/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 121,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S04_Reclaimer/Components/SAttachableComponentParams/AttachDef@Size",
@@ -2812,6 +3010,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "e41f4682-381a-453e-802b-521ce84a26b6",
       "grade": "C",
       "gradeConfidence": "high",
@@ -2991,6 +3198,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -3029,6 +3237,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 98.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 47.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S02_Arctic_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3117,6 +3337,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "d98450a2-605a-47b6-a8cd-f43df14ddf0e",
       "grade": "C",
       "gradeConfidence": "high",
@@ -3296,6 +3525,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -3334,6 +3564,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S01_ArcticStorm_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3415,6 +3657,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "308a2992-585b-40ba-9cfb-51251a3e0683",
       "grade": "A",
       "gradeConfidence": "high",
@@ -3594,6 +3845,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -3632,6 +3884,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 92.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 49.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S02_Aufeis_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -3734,6 +3998,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "a52245d7-a95e-46d5-a933-32267371e156",
       "grade": "A",
       "gradeConfidence": "high",
@@ -3913,6 +4186,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -3951,6 +4225,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 128.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 39.7,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S02_Avalanche_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4039,6 +4325,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "f68e5fb2-2388-43d1-9aab-bed82da648c8",
       "grade": "C",
       "gradeConfidence": "high",
@@ -4218,6 +4513,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -4256,6 +4552,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S01_Berian_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4344,6 +4652,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "94ea5bb5-070c-4c75-b90d-66c26c38bb2a",
       "grade": "D",
       "gradeConfidence": "high",
@@ -4523,6 +4840,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -4561,6 +4879,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 22.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 37.4,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S01_BlastChill_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4663,6 +4993,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "2c93a027-3b9a-4c8b-b5b0-b03676b35e2d",
       "grade": "A",
       "gradeConfidence": "high",
@@ -4842,6 +5181,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -4880,6 +5220,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 360.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 69.4,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S03_Blizzard_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -4982,6 +5334,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "62f0d8cc-ed06-47d6-9522-bd3950faa19d",
       "grade": "D",
       "gradeConfidence": "high",
@@ -5161,6 +5522,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -5199,6 +5561,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 86.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 52.4,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S02_Boreal_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5294,6 +5668,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "4ec3037b-4b6f-4837-b00d-cd9b4836a82a",
       "grade": "C",
       "gradeConfidence": "high",
@@ -5473,6 +5856,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -5511,6 +5895,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 36.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 27.2,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S01_Bracer_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5599,6 +5995,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "98180be7-076c-4621-994a-284d1c17a366",
       "grade": "A",
       "gradeConfidence": "high",
@@ -5778,6 +6183,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -5816,6 +6222,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 300.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 69.4,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S03_ChillMax_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -5897,6 +6315,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "b5543ea6-b332-47d7-a02c-5f25620d2fd1",
       "grade": "C",
       "gradeConfidence": "high",
@@ -6076,6 +6503,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -6114,6 +6542,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 70.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 59.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S02_ColdSnap_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6209,6 +6649,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "771caf70-effc-49c2-aaf4-c240065db14d",
       "grade": "D",
       "gradeConfidence": "high",
@@ -6388,6 +6837,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -6426,6 +6876,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 168.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 115,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S03_ColdSurge_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6514,6 +6976,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "553f7473-1d24-41b5-bd53-baa4190464d0",
       "grade": "C",
       "gradeConfidence": "high",
@@ -6693,6 +7164,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -6731,6 +7203,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 84.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 47.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S02_CoolCore_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -6819,6 +7303,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "0a190bad-bbb1-4988-9622-61b7af717d6f",
       "grade": "B",
       "gradeConfidence": "high",
@@ -6998,6 +7491,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -7036,6 +7530,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S01_CryoStar_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7117,6 +7623,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "b3e803cc-f907-494d-8e35-51703eae4b6f",
       "grade": "B",
       "gradeConfidence": "high",
@@ -7296,6 +7811,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -7334,6 +7850,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 80.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 54.1,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S02_CryoStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7415,6 +7943,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "7db13b34-c8b1-4e1a-9aba-3dcd7087e995",
       "grade": "B",
       "gradeConfidence": "high",
@@ -7594,6 +8131,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -7632,6 +8170,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 10.600000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 17.7,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S00_CryoStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -7727,6 +8277,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "d36feefd-7377-4188-9271-355709039a39",
       "grade": "B",
       "gradeConfidence": "high",
@@ -7906,6 +8465,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -7944,6 +8504,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 220.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 94.7,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S03_CryoStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8039,6 +8611,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "16dc5148-59f5-497b-a2b1-8f6f66513a8f",
       "grade": "C",
       "gradeConfidence": "high",
@@ -8218,6 +8799,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -8256,6 +8838,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 86.8,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S03_Draug_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8337,6 +8931,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "b2279e37-c5fb-49ab-b008-b32f3c528706",
       "grade": "B",
       "gradeConfidence": "high",
@@ -8516,6 +9119,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -8554,6 +9158,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 36.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 24.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S01_EcoFlow_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8649,6 +9265,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "c0f30e06-78e9-4df9-846a-8ff0716111f5",
       "grade": "B",
       "gradeConfidence": "high",
@@ -8828,6 +9453,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -8866,6 +9492,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 86.8,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S03_Elsen_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -8954,6 +9592,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "f6ab217a-2506-42ad-b6f2-90bdf939c0af",
       "grade": "B",
       "gradeConfidence": "high",
@@ -9133,6 +9780,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -9171,6 +9819,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S01_Endo_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9273,6 +9933,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "45c6aee2-f38c-4d59-88a8-8cbbc395e938",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -9452,6 +10121,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -9490,6 +10160,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 7200.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 372,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S04_Idris_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9580,6 +10262,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "96860a78-4b34-4888-93a5-12efb259a5ff",
       "grade": "B",
       "gradeConfidence": "high",
@@ -9759,6 +10450,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -9797,6 +10489,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S01_FlashFreeze_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -9878,6 +10582,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "97bf2cfe-efb8-469b-9d43-6e4a88130417",
       "grade": "C",
       "gradeConfidence": "high",
@@ -10057,6 +10770,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -10095,6 +10809,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 9.200000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 19.4,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S00_Fridan_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10183,6 +10909,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "d8059126-352a-4be5-bfc9-15cf4fb05439",
       "grade": "C",
       "gradeConfidence": "high",
@@ -10362,6 +11097,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -10400,6 +11136,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S01_FrostStar_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10481,6 +11229,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "59a37716-f4d3-4dcb-a41e-0f2c3064e169",
       "grade": "C",
       "gradeConfidence": "high",
@@ -10660,6 +11417,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -10698,6 +11456,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 70.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 59.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S02_FrostStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -10779,6 +11549,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "387da568-31d2-4479-81da-21dd015db668",
       "grade": "C",
       "gradeConfidence": "high",
@@ -10958,6 +11737,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -10996,6 +11776,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 9.200000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 19.4,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S00_FrostStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11091,6 +11883,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "bea66e66-0d30-4f9c-8eaa-b15002fb2299",
       "grade": "C",
       "gradeConfidence": "high",
@@ -11270,6 +12071,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -11308,6 +12110,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 192.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 104,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S03_FrostStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11403,6 +12217,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "65c269cf-5094-4984-9dbf-d6675a4a785b",
       "grade": "B",
       "gradeConfidence": "high",
@@ -11582,6 +12405,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -11620,6 +12444,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 220.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 94.7,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S03_FrostBite_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -11715,6 +12551,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "4f61e805-f5f4-49b2-a834-cfda713f48db",
       "grade": "C",
       "gradeConfidence": "high",
@@ -11894,6 +12739,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -11932,6 +12778,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 192.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 104,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S03_FrostBurn_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12013,6 +12871,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "572580a2-c164-4f99-beaa-d71cd1bd99a7",
       "grade": "B",
       "gradeConfidence": "high",
@@ -12192,6 +13059,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -12230,6 +13098,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 80.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 54.1,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S02_FullFrost_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12332,6 +13212,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "7751572b-05ba-4a0c-816e-fdbd6bc68e6b",
       "grade": "D",
       "gradeConfidence": "high",
@@ -12511,6 +13400,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -12549,6 +13439,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 240.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 91.6,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S03_Galinstan_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12637,6 +13539,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "5e5e363e-2ae2-455f-8062-49189906fdc9",
       "grade": "A",
       "gradeConfidence": "high",
@@ -12816,6 +13727,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -12854,6 +13766,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 28.3,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S01_Gelid_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -12949,6 +13873,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "5748cdbc-5a26-477a-a4ad-b20a593bde59",
       "grade": "A",
       "gradeConfidence": "high",
@@ -13128,6 +14061,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -13166,6 +14100,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 46.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 22.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S01_Glacier_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13247,6 +14193,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "8d2c7d2d-7359-474b-90cd-c0ba9c31ac7f",
       "grade": "C",
       "gradeConfidence": "high",
@@ -13426,6 +14381,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -13464,6 +14420,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 70.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 59.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S02_Graupel_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13545,6 +14513,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 250,
       "entityClass": "b4be7e39-8cd9-4d38-af89-61ace9c67796",
       "grade": "C",
       "gradeConfidence": "high",
@@ -13724,6 +14701,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -13762,6 +14740,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 22.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.6,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S01_HeatSafe_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -13850,6 +14840,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 500,
       "entityClass": "4df4557d-6c24-421a-9db6-36d731dcffe4",
       "grade": "C",
       "gradeConfidence": "high",
@@ -14029,6 +15028,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -14067,6 +15067,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 60.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 53.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S02_HeatSink_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14155,6 +15167,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "866c76c0-8c22-44ad-b1dc-167ee5fbe347",
       "grade": "D",
       "gradeConfidence": "high",
@@ -14334,6 +15355,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -14372,6 +15394,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 74.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 52.4,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S02_Hydrojet_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14453,6 +15487,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "a5107834-61e1-481d-b836-7ed6c08b14d5",
       "grade": "D",
       "gradeConfidence": "high",
@@ -14632,6 +15675,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -14670,6 +15714,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 26.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S01_Hydrocel_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -14758,6 +15814,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "3127738f-d2ba-44bb-913c-eb380182bef8",
       "grade": "D",
       "gradeConfidence": "high",
@@ -14937,6 +16002,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -14975,6 +16041,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 200.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 91.6,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S03_Hydropulse_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15063,6 +16141,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "41ac4e69-f4f8-4efe-b499-0257bdf1aba3",
       "grade": "B",
       "gradeConfidence": "high",
@@ -15242,6 +16329,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -15280,6 +16368,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 75.7,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S03_IceFlush_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15368,6 +16468,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 500,
       "entityClass": "e6ad7280-57d0-4222-942e-6c2a23e78bf6",
       "grade": "B",
       "gradeConfidence": "high",
@@ -15547,6 +16656,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -15585,6 +16695,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 68.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 48.7,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S02_IceBox_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15666,6 +16788,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1230,
       "entityClass": "c5b36e51-f6ea-4823-be8b-f3dd12fbda3c",
       "grade": "C",
       "gradeConfidence": "high",
@@ -15845,6 +16976,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -15883,6 +17015,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 38.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 59.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S02_IceDive_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -15964,6 +17108,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 818,
       "entityClass": "f59a0b33-5bbe-439e-8bd5-111db00b5ff6",
       "grade": "C",
       "gradeConfidence": "high",
@@ -16143,6 +17296,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -16181,6 +17335,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 13.8,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S01_IcePlunge_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -16262,6 +17428,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "c9eecfff-8ab2-4cd1-b7f8-1ea6aa86fd5a",
       "grade": "B",
       "gradeConfidence": "high",
@@ -16441,6 +17616,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -16479,6 +17655,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 10.600000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 17.7,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S00_Kelvid_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -16574,6 +17762,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "3c5a56d9-ff6e-426c-a0dd-6fe0d64037f7",
       "grade": "A",
       "gradeConfidence": "high",
@@ -16753,6 +17950,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -16791,6 +17989,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 86.8,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S03_Kragen_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -16893,6 +18103,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_VNCL_S04_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2720,
       "entityClass": "16f48b55-cfe8-4545-bccb-d1e35c3a47a7",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -17072,6 +18291,7 @@
       "rawComponentSubTypeSourcePath": "COOL_VNCL_S04_Mauler/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_VNCL_S04_Mauler/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_VNCL_S04_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -17110,6 +18330,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 9000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_VNCL_S04_Mauler/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 512,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_VNCL_S04_Mauler/Components/SAttachableComponentParams/AttachDef@Size",
@@ -17214,6 +18446,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "335e94ef-d8e9-4ac3-8966-655881c1ea14",
       "grade": "C",
       "gradeConfidence": "high",
@@ -17393,6 +18634,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -17431,6 +18673,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 83.3,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S03_Mercury_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -17519,6 +18773,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 500,
       "entityClass": "acb949b6-488a-4d10-b0f3-6597ef22925e",
       "grade": "A",
       "gradeConfidence": "high",
@@ -17698,6 +18961,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -17736,6 +19000,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 78.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 44.6,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S02_NightFall_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -17838,6 +19114,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "5e8af166-4930-4fbc-be29-881fc605f067",
       "grade": "B",
       "gradeConfidence": "high",
@@ -18017,6 +19302,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -18055,6 +19341,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 112.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 43.3,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S02_Permafrost_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -18150,6 +19448,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "9afd1cd3-ce6b-4b0a-abdd-cd7d479ec360",
       "grade": "B",
       "gradeConfidence": "high",
@@ -18329,6 +19636,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -18367,6 +19675,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 42.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 24.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S01_Polar_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -18448,6 +19768,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 818,
       "entityClass": "34334a56-0045-40e5-b573-5891e8e2dbbf",
       "grade": "D",
       "gradeConfidence": "high",
@@ -18627,6 +19956,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -18665,6 +19995,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 12.4,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 37.4,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S01_QuickCool_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -18746,6 +20088,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1230,
       "entityClass": "8db577f4-7874-4c0d-950f-1722015b6f5f",
       "grade": "D",
       "gradeConfidence": "high",
@@ -18925,6 +20276,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -18963,6 +20315,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 34.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 65.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S02_RapidCool_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -19058,6 +20422,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2060,
       "entityClass": "18600693-df8b-4898-a9a6-e91291e69dd4",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -19237,6 +20610,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -19275,6 +20649,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 1680.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 213,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ORIG_S04_890J_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -19371,6 +20757,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2250,
       "entityClass": "d0b4ce5b-c8ba-4a9f-90b1-c9567a6c90e9",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -19550,6 +20945,7 @@
       "rawComponentSubTypeSourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -19588,6 +20984,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 1900.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 213,
       "size": 4,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_RSI_S04_Polaris_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -19670,6 +21078,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 250,
       "entityClass": "f50cc3fd-dd83-4aec-b74a-270428f22797",
       "grade": "A",
       "gradeConfidence": "high",
@@ -19849,6 +21266,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -19887,6 +21305,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 28.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 25.5,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S01_SnowBlind_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -19975,6 +21405,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "f0429b13-6f0d-4ffb-9160-6ae0df03b5cb",
       "grade": "B",
       "gradeConfidence": "high",
@@ -20154,6 +21593,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -20192,6 +21632,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 96.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 43.3,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S02_Snowfall_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -20280,6 +21732,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "04285ce3-561f-4377-b0db-c641e3fad1de",
       "grade": "A",
       "gradeConfidence": "high",
@@ -20459,6 +21920,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -20497,6 +21959,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 110.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 39.7,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S02_Snowpack_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -20578,6 +22052,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "576b939f-1596-42ee-95b4-d5c871542d8c",
       "grade": "B",
       "gradeConfidence": "high",
@@ -20757,6 +22240,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -20795,6 +22279,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 80.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 54.1,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S02_Taiga_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -20897,6 +22393,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "3a5723b0-17f6-4741-b421-43ed7cb7dd29",
       "grade": "B",
       "gradeConfidence": "high",
@@ -21076,6 +22581,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -21114,6 +22620,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 320.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 75.7,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S03_Tempest_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -21195,6 +22713,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "9bfb25e0-b507-4d6f-b8e5-d7d2d91f9670",
       "grade": "A",
       "gradeConfidence": "high",
@@ -21374,6 +22901,7 @@
       "rawComponentSubTypeSourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -21412,6 +22940,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 12.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 16.2,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_WCPR_S00_Tepilo_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -21500,6 +23040,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2480,
       "entityClass": "fd9f41c7-f60b-4ac8-95be-cb501fc5dd5d",
       "grade": "C",
       "gradeConfidence": "high",
@@ -21679,6 +23228,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -21717,6 +23267,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 240.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 83.3,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S03_ThermalCore_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -21798,6 +23360,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "bba050c3-1348-45a8-91c6-73e4ecf5082f",
       "grade": "C",
       "gradeConfidence": "high",
@@ -21977,6 +23548,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -22015,6 +23587,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 30.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 27.2,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S01_Thermax_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -22110,6 +23694,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "30ffee03-ee0a-47c5-9b4c-b24203c148d7",
       "grade": "D",
       "gradeConfidence": "high",
@@ -22289,6 +23882,7 @@
       "rawComponentSubTypeSourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -22327,6 +23921,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 32.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 29.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_AEGS_S01_Tundra_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -22408,6 +24014,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1490,
       "entityClass": "5ffb1abc-c4ed-4413-b882-ccd848ca09a2",
       "grade": "A",
       "gradeConfidence": "high",
@@ -22587,6 +24202,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -22625,6 +24241,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 22.7,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JUST_S01_UltraFlow_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -22706,6 +24334,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 250,
       "entityClass": "5f474dec-75e8-4626-9c0a-f5a48f841f33",
       "grade": "B",
       "gradeConfidence": "high",
@@ -22885,6 +24522,7 @@
       "rawComponentSubTypeSourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -22923,6 +24561,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 24.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 27.8,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_TYDT_S01_VaporBlock_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -23004,6 +24654,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "29026bad-ef1d-4a72-8059-f1fe2c397603",
       "grade": "D",
       "gradeConfidence": "high",
@@ -23183,6 +24842,7 @@
       "rawComponentSubTypeSourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -23221,6 +24881,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 60.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 65.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_LPLT_S02_WhiteOut_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -23309,6 +24981,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 750,
       "entityClass": "ec636cbd-21c6-4b9c-a095-c8ef04f1a9fa",
       "grade": "D",
       "gradeConfidence": "high",
@@ -23488,6 +25169,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -23526,6 +25208,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 22.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 37.4,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S01_WinterStar_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -23607,6 +25301,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1130,
       "entityClass": "5800c752-938f-4b6a-b39b-7f770c6fa060",
       "grade": "D",
       "gradeConfidence": "high",
@@ -23786,6 +25489,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -23824,6 +25528,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 60.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 65.5,
       "size": 2,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S02_WinterStarEX_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -23905,6 +25621,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "26f6ac67-8c44-4160-8be2-d64d07d3ec3a",
       "grade": "D",
       "gradeConfidence": "high",
@@ -24084,6 +25809,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -24122,6 +25848,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 8.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.4,
       "size": 0,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S00_WinterStarSL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -24217,6 +25955,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1500,
       "entityClass": "71df1f43-b44d-47e7-9d29-2a4e090aee07",
       "grade": "D",
       "gradeConfidence": "high",
@@ -24396,6 +26143,7 @@
       "rawComponentSubTypeSourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -24434,6 +26182,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 168.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 115,
       "size": 3,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_JSPN_S03_WinterStarXL_SCItem/Components/SAttachableComponentParams/AttachDef@Size",
@@ -24515,6 +26275,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 818,
       "entityClass": "d1790ef8-ec9e-4193-887c-e92d0889e326",
       "grade": "B",
       "gradeConfidence": "high",
@@ -24694,6 +26463,7 @@
       "rawComponentSubTypeSourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConversion",
@@ -24732,6 +26502,18 @@
         "unitNode": "SPowerSegmentResourceUnit",
         "unitType": "PowerSegment"
       },
+      "selfRepairBaselineHp": 15.600000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.9,
       "size": 1,
       "sizeSource": "AttachDef.Size",
       "sizeSourcePath": "COOL_ACOM_S01_ZeroRush_SCItem/Components/SAttachableComponentParams/AttachDef@Size",

@@ -43,9 +43,7 @@ export default function FittingResourcesPanel({ summary, selectedDetail }: Fitti
         ))}
       </section>
 
-      {selectedDetail ? (
-        <section className="fm-selected-detail">{selectedDetail}</section>
-      ) : null}
+      {selectedDetail ?? null}
     </div>
   );
 }

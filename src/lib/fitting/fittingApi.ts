@@ -342,6 +342,9 @@ export type FittingWeaponSimulationResult = {
   allocationRatio: FittingSimulationMetric;
   effectiveAmmo: FittingSimulationMetric;
   effectiveRegenPerSecond: FittingSimulationMetric;
+  capacitorFillTimeSeconds: FittingSimulationMetric;
+  capacitorFullRechargeTimeSeconds: FittingSimulationMetric;
+  triggerTimeSeconds: FittingSimulationMetric;
   maxShotsBeforeOverheat: FittingSimulationMetric;
   overheatInterruptions: FittingSimulationMetric;
   overheatTimeSeconds: FittingSimulationMetric;
@@ -555,6 +558,7 @@ export type FittingComponentStats = {
   ammoCapacity?: number | null;
   initialAmmoCount?: number | null;
   maxAmmoCount?: number | null;
+  ammoCostPerShot?: number | null;
   requestedAmmoLoad?: number | null;
   maxAmmoLoad?: number | null;
   regenerationCostPerBullet?: number | null;
@@ -584,6 +588,7 @@ export type FittingComponentStats = {
   fireRateRpm?: number | null;
   heatPerShot?: number | null;
   heatCapacity?: number | null;
+  minimumTemperature?: number | null;
   overheatTemperature?: number | null;
   cooldownRate?: number | null;
   coolingPerSecond?: number | null;
@@ -599,6 +604,10 @@ export type FittingComponentStats = {
   powerConsumptionNominal?: number | null;
   minimumConsumptionFraction?: number | null;
   powerConsumptionMinimum?: number | null;
+  powerInputMaximum?: number | null;
+  powerInputMinimum?: number | null;
+  powerInputMaximumPips?: number | null;
+  powerInputMinimumPips?: number | null;
   maxPenetrationThickness?: number | null;
   distortionResistance?: number | null;
   crossSection?: number | null;

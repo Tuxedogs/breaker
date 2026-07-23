@@ -149,6 +149,7 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   const ballisticReserve = stats.maxAmmoCount && stats.maxAmmoCount > 0 ? stats.maxAmmoCount : stats.ammoCapacity;
   pushMetric(rows, "Ballistic Reserve", formatCompactNumber(ballisticReserve));
   pushMetric(rows, "Energy Maximum Load", formatCompactNumber(stats.maxAmmoLoad));
+  pushMetric(rows, "Energy Cost Per Shot", formatCompactNumber(stats.ammoCostPerShot));
   pushMetric(rows, "Energy Regen", formatCompactNumber(stats.maxRegenPerSec, "/s"));
   pushMetric(rows, "Energy Regen Delay", formatCompactNumber(stats.regenerationCooldown, "s"));
   pushMetric(rows, "Projectile Speed", formatCompactNumber(stats.projectileSpeed, " m/s"));
@@ -156,21 +157,27 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "Penetration", formatCompactNumber(readWeaponPenetration(stats, mitigation)));
   pushMetric(rows, "Penetration Distance", formatCompactNumber(readWeaponPenetrationDistance(mitigation), "m"));
   pushMetric(rows, "Heat Per Shot", formatCompactNumber(stats.heatPerShot));
+  pushMetric(rows, "Minimum Temperature", formatCompactNumber(stats.minimumTemperature));
+  pushMetric(rows, "Overheat Temperature", formatCompactNumber(stats.overheatTemperature));
   pushMetric(rows, "Cooling Rate", formatCompactNumber(stats.coolingPerSecond ?? stats.cooldownRate, "/s"));
   pushMetric(rows, "Cooling Delay", formatCompactNumber(stats.timeTillCoolingStarts, "s"));
-  pushMetric(rows, "Overheat Fix Time", formatCompactNumber(stats.overheatFixTime, "s"));
+  pushMetric(rows, "Overheat Recovery", formatCompactNumber(stats.overheatFixTime, "s"));
+  pushMetric(rows, "Post-Overheat Temperature", formatCompactNumber(stats.postOverheatTemperature));
   if (stats.spreadMin != null && stats.spreadMax != null) {
     pushMetric(rows, "Spread Min–Max", `${formatNumber(stats.spreadMin)} – ${formatNumber(stats.spreadMax)}`);
   }
   pushMetric(rows, "Spread First Attack", formatCompactNumber(stats.spreadFirstAttack));
   pushMetric(rows, "Spread Per Attack", formatCompactNumber(stats.spreadPerAttack));
   pushMetric(rows, "Spread Decay", formatCompactNumber(stats.spreadDecay));
-  pushMetric(rows, "Power Nominal", formatCompactNumber(stats.powerConsumptionNominal ?? readWeaponPower(stats)));
-  pushMetric(rows, "Power Minimum", formatCompactNumber(stats.powerConsumptionMinimum));
-  pushMetric(rows, "EM Nominal Signature", formatCompactNumber(stats.emSignatureNominal ?? stats.radarEmission));
+  pushMetric(rows, "Power Maximum", formatCompactNumber(stats.powerInputMaximum ?? stats.powerConsumptionNominal ?? readWeaponPower(stats)));
+  pushMetric(rows, "Power Minimum (derived)", formatCompactNumber(stats.powerInputMinimum ?? stats.powerConsumptionMinimum));
+  pushMetric(rows, "EM Maximum", formatCompactNumber(stats.emSignatureNominal ?? stats.electromagneticEmission ?? stats.radarEmission));
   pushMetric(rows, "EM Decay Rate", formatCompactNumber(stats.emSignatureDecayRate));
+  pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
   pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
-  pushMetric(rows, "Baseline HP Restored", formatCompactNumber(stats.selfRepairBaselineHp));
+  pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
+  pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
+  pushMetric(rows, "Repair Restore Ratio", stats.repairRestoreRatio != null ? `${formatNumber(stats.repairRestoreRatio * 100)}%` : null);
   pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionResistance));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
@@ -208,10 +215,20 @@ function buildShieldStatRows(detail: FittingComponentDetail): ComponentCardMetri
     "Energy Absorption",
     formatDamageTypeMap(shieldMitigation?.absorptionByDamageType ?? null),
   );
+  pushMetric(rows, "Power Maximum", formatCompactNumber(stats.powerInputMaximum ?? stats.powerDraw));
+  pushMetric(rows, "Power Minimum (derived)", formatCompactNumber(stats.powerInputMinimum));
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
   pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
-  pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
+  if (stats.emSignatureNominal != null) {
+    pushMetric(rows, "EM Maximum", formatCompactNumber(stats.emSignatureNominal));
+  } else {
+    pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
+  }
+  pushMetric(rows, "EM Decay Rate", formatCompactNumber(stats.emSignatureDecayRate));
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
+  pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
+  pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
   if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);
@@ -229,11 +246,21 @@ function buildResourceStatRows(
   const rows: ComponentCardMetric[] = [];
 
   pushMetric(rows, primary.label, formatCompactNumber(primary.value));
+  pushMetric(rows, "Power Maximum", formatCompactNumber(stats.powerInputMaximum ?? stats.powerDraw));
+  pushMetric(rows, "Power Minimum (derived)", formatCompactNumber(stats.powerInputMinimum));
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
   pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw));
   pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
-  pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
+  if (stats.emSignatureNominal != null) {
+    pushMetric(rows, "EM Maximum", formatCompactNumber(stats.emSignatureNominal));
+  } else {
+    pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
+  }
+  pushMetric(rows, "EM Decay Rate", formatCompactNumber(stats.emSignatureDecayRate));
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
+  pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
+  pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
   if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);

@@ -15,14 +15,14 @@
   "fallbackSource": null,
   "fallbackUsed": false,
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-16T04:22:19Z",
+  "generatedAt": "2026-07-23T03:10:58Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/components/radar_registry.py",
   "legacyApiRoot": null,
   "localizationFallbackReason": null,
   "localizationFallbackUsed": false,
   "localizationPath": "D:\\scintel\\out\\LIVE\\4.9.0-live.12232306\\Data\\Localization\\english\\global.ini",
-  "localizationSourceKind": "explicit",
+  "localizationSourceKind": "nearbyChannelLocalization",
   "localizationWarnings": [],
   "recordCount": 76,
   "records": [
@@ -83,6 +83,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_AntiPersonnel_Turret/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 800,
       "entityClass": "c818ab50-4350-42dc-b285-388adec321ec",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -354,6 +363,7 @@
       "rawComponentSubTypeSourcePath": "RADR_AntiPersonnel_Turret/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_AntiPersonnel_Turret/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_AntiPersonnel_Turret/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -404,6 +414,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_AntiPersonnel_Turret/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -549,6 +571,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_S00_Fake/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 800,
       "entityClass": "1c7cba80-f570-4b4b-ba6d-35a2a121c78c",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -704,6 +735,7 @@
       "rawComponentSubTypeSourcePath": "RADR_S00_Fake/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_S00_Fake/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -717,6 +749,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_S00_Fake/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 26.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -871,6 +915,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1600,
       "entityClass": "7c939489-2a58-4c37-a6b1-26c3eca8e80f",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -1142,6 +1195,7 @@
       "rawComponentSubTypeSourcePath": "RADR_S01_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_S01_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1192,6 +1246,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 100.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_S01_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -1346,6 +1412,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2400,
       "entityClass": "260e9172-e16a-4a44-a09b-537355f2905c",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -1617,6 +1692,7 @@
       "rawComponentSubTypeSourcePath": "RADR_S02_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_S02_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -1667,6 +1743,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 200.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_S02_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -1821,6 +1909,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3200,
       "entityClass": "632e284a-5c31-4a66-9163-72142d15efc2",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -2092,6 +2189,7 @@
       "rawComponentSubTypeSourcePath": "RADR_S03_Template/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_S03_Template/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -2142,6 +2240,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 600.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_S03_Template/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -2287,6 +2397,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S00/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "deececc4-b4bb-4592-b0e9-0889f95639f8",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -2442,6 +2561,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S00/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S00/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -2455,6 +2575,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S00/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -2600,6 +2732,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S01/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "66470a96-5d9f-42d8-a164-9f4c6e3bc0bb",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -2755,6 +2896,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S01/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S01/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -2768,6 +2910,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S01/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -2913,6 +3067,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S02/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "e057f703-23ef-4794-b7d5-bec4f7384185",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -3068,6 +3231,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S02/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S02/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -3081,6 +3245,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S02/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -3226,6 +3402,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S03/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "4a0cd14c-a738-4700-8f4d-5a286e7451dc",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -3381,6 +3566,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S03/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S03/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -3394,6 +3580,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S03/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -3539,6 +3737,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S04/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "be2a239d-885d-41ad-82a7-6e51a830d8dd",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -3694,6 +3901,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S04/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S04/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -3707,6 +3915,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S04/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -3852,6 +4072,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S05/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "144a6f62-0f38-4146-9ad7-c70ca9a9dc47",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -4007,6 +4236,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S05/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S05/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -4020,6 +4250,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S05/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -4165,6 +4407,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Unmanned_AI_S05_TSGLaser/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 375,
       "entityClass": "2a6bcd31-8dcb-423f-9dd4-cb25ede14344",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -4320,6 +4571,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Unmanned_AI_S05_TSGLaser/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Unmanned_AI_S05_TSGLaser/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -4333,6 +4585,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 44.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Unmanned_AI_S05_TSGLaser/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -4487,6 +4751,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S01_Abetti/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1280,
       "entityClass": "1c6c2145-5f0f-4a69-adf6-82339a0b2559",
       "grade": "A",
       "gradeConfidence": "high",
@@ -4758,6 +5031,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S01_Abetti/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_WLOP_S01_Abetti/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S01_Abetti/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -4808,6 +5082,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 115.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S01_Abetti/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -4959,6 +5245,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S02_Agrippa/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1920,
       "entityClass": "85d23bcf-e781-4321-a4ed-f8cc3e36e299",
       "grade": "A",
       "gradeConfidence": "high",
@@ -5230,6 +5525,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S02_Agrippa/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_WLOP_S02_Agrippa/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S02_Agrippa/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5280,6 +5576,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 230.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S02_Agrippa/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -5431,6 +5739,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNO_S00_Agure/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 990,
       "entityClass": "94e97499-375e-4c63-a2ea-c605a4d3f461",
       "grade": "D",
       "gradeConfidence": "high",
@@ -5702,6 +6019,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNO_S00_Agure/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_GRNO_S00_Agure/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNO_S00_Agure/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -5752,6 +6070,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 43.2,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNO_S00_Agure/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -5903,6 +6233,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S03_Anysta/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2560,
       "entityClass": "d3b9d505-5bbc-48cc-b6e3-2ca49ac4a390",
       "grade": "A",
       "gradeConfidence": "high",
@@ -6174,6 +6513,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S03_Anysta/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_WLOP_S03_Anysta/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S03_Anysta/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6224,6 +6564,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 690.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S03_Anysta/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -6375,6 +6727,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S01_Backlund/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1440,
       "entityClass": "5fd25232-339f-4a6b-beba-5e0ee1d83cc8",
       "grade": "B",
       "gradeConfidence": "high",
@@ -6646,6 +7007,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S01_Backlund/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_WLOP_S01_Backlund/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S01_Backlund/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -6696,6 +7058,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 105.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S01_Backlund/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -6847,6 +7221,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S02_Battani/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2160,
       "entityClass": "913c5d24-0a71-4c92-b94d-73da62915af7",
       "grade": "B",
       "gradeConfidence": "high",
@@ -7118,6 +7501,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S02_Battani/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_WLOP_S02_Battani/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S02_Battani/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7168,6 +7552,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 210.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S02_Battani/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -7319,6 +7715,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S02_BroadSpec_Lite/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2430,
       "entityClass": "42fb9080-c177-466a-b843-d3f0e82e1633",
       "grade": "B",
       "gradeConfidence": "high",
@@ -7590,6 +7995,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S02_BroadSpec_Lite/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_CHCO_S02_BroadSpec_Lite/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S02_BroadSpec_Lite/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -7640,6 +8046,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 273.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S02_BroadSpec_Lite/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 53.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -7791,6 +8209,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S03_BroudSpec/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3240,
       "entityClass": "c802e513-66a1-462f-bfef-a4faa1ab5f1a",
       "grade": "B",
       "gradeConfidence": "high",
@@ -8062,6 +8489,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S03_BroudSpec/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_CHCO_S03_BroudSpec/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S03_BroudSpec/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8112,6 +8540,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 819.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S03_BroudSpec/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -8263,6 +8703,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S00_BroadSpecGo/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 810,
       "entityClass": "ad6617d1-ccbf-45e4-9ac3-8bd0bc6b8ff5",
       "grade": "B",
       "gradeConfidence": "high",
@@ -8534,6 +8983,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S00_BroadSpecGo/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_CHCO_S00_BroadSpecGo/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S00_BroadSpecGo/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -8584,6 +9034,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 54.6,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S00_BroadSpecGo/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -8735,6 +9197,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S04_BroadSpecMax/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 4050,
       "entityClass": "441e0d9d-f432-4e7a-825f-6c4c5e10d9da",
       "grade": "B",
       "gradeConfidence": "high",
@@ -9006,6 +9477,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S04_BroadSpecMax/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_CHCO_S04_BroadSpecMax/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S04_BroadSpecMax/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9056,6 +9528,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 1365.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S04_BroadSpecMax/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 205,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -9207,6 +9691,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S01_Capstan/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1600,
       "entityClass": "22121214-6333-4edd-826a-0d06c15b5636",
       "grade": "C",
       "gradeConfidence": "high",
@@ -9478,6 +9971,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S01_Capstan/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_WLOP_S01_Capstan/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S01_Capstan/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -9528,6 +10022,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 100.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S01_Capstan/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -9679,6 +10185,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S03_Capsulo/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2880,
       "entityClass": "9793a9fd-a521-48be-92fe-86da036b8e2a",
       "grade": "B",
       "gradeConfidence": "high",
@@ -9950,6 +10465,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S03_Capsulo/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_WLOP_S03_Capsulo/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S03_Capsulo/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10000,6 +10516,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 630.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S03_Capsulo/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -10151,6 +10679,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S02_Cassandra/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1560,
       "entityClass": "f2120aaa-2b36-4d5c-9e08-8a5ab0a2802a",
       "grade": "A",
       "gradeConfidence": "high",
@@ -10422,6 +10959,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S02_Cassandra/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_BLTR_S02_Cassandra/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S02_Cassandra/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10472,6 +11010,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 184.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S02_Cassandra/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -10623,6 +11173,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S02_Chernykh/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2400,
       "entityClass": "5b0d1308-b34a-4b55-94f5-7270e03ca82a",
       "grade": "C",
       "gradeConfidence": "high",
@@ -10894,6 +11453,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S02_Chernykh/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_WLOP_S02_Chernykh/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S02_Chernykh/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -10944,6 +11504,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 200.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S02_Chernykh/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -11095,6 +11667,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S00_Denning/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 800,
       "entityClass": "28e81323-a16a-4995-9da5-1aca23b4044c",
       "grade": "C",
       "gradeConfidence": "high",
@@ -11366,6 +11947,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S00_Denning/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_WLOP_S00_Denning/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S00_Denning/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11416,6 +11998,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 40.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S00_Denning/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -11567,6 +12161,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S03_Devoue/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3240,
       "entityClass": "b3b162b0-e1ac-433c-961b-9494790344d4",
       "grade": "B",
       "gradeConfidence": "high",
@@ -11838,6 +12441,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S03_Devoue/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_GRNP_S03_Devoue/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S03_Devoue/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -11888,6 +12492,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 756.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S03_Devoue/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -12039,6 +12655,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S01_Ecouter/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1800,
       "entityClass": "b0ccd135-4424-417c-95e4-594a88d9b72f",
       "grade": "C",
       "gradeConfidence": "high",
@@ -12310,6 +12935,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S01_Ecouter/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_GRNP_S01_Ecouter/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S01_Ecouter/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12360,6 +12986,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 120.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S01_Ecouter/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -12511,6 +13149,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S01_Ecouter_Piercing/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1800,
       "entityClass": "3e11d2f3-0617-4e42-afd7-72ba8302fcdb",
       "grade": "C",
       "gradeConfidence": "high",
@@ -12782,6 +13429,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S01_Ecouter_Piercing/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_GRNP_S01_Ecouter_Piercing/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S01_Ecouter_Piercing/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -12832,6 +13480,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 120.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S01_Ecouter_Piercing/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -12983,6 +13643,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S02_Epier/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2700,
       "entityClass": "c00521d8-7551-4c26-889f-30bf09d9a821",
       "grade": "C",
       "gradeConfidence": "high",
@@ -13254,6 +13923,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S02_Epier/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_GRNP_S02_Epier/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S02_Epier/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13304,6 +13974,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 240.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S02_Epier/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 53.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -13455,6 +14137,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S00_Fabian/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 640,
       "entityClass": "5d040910-6c55-453e-970d-842d4b4fd710",
       "grade": "A",
       "gradeConfidence": "high",
@@ -13726,6 +14417,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S00_Fabian/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_WLOP_S00_Fabian/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S00_Fabian/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -13776,6 +14468,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 46.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S00_Fabian/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -13927,6 +14631,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S02_Fawad/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2640,
       "entityClass": "dc56860d-0727-4c69-883c-0606f5307822",
       "grade": "D",
       "gradeConfidence": "high",
@@ -14198,6 +14911,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S02_Fawad/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_WLOP_S02_Fawad/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S02_Fawad/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14248,6 +14962,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 180.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S02_Fawad/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -14399,6 +15125,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S03_Fidele/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3960,
       "entityClass": "a212bfbf-a0d3-439e-86c9-c97078bd0720",
       "grade": "D",
       "gradeConfidence": "high",
@@ -14670,6 +15405,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S03_Fidele/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_GRNP_S03_Fidele/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S03_Fidele/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -14720,6 +15456,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 648.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S03_Fidele/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -14871,6 +15619,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S01_Fleming/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1760,
       "entityClass": "5b8750fa-a271-4b5a-a8fd-53c8d06841c9",
       "grade": "D",
       "gradeConfidence": "high",
@@ -15142,6 +15899,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S01_Fleming/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_WLOP_S01_Fleming/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S01_Fleming/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15192,6 +15950,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 90.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S01_Fleming/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -15343,6 +16113,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S02_FullSpec/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2160,
       "entityClass": "4e802779-f88e-41d0-b3ba-4dcdd352cd75",
       "grade": "A",
       "gradeConfidence": "high",
@@ -15614,6 +16393,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S02_FullSpec/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_CHCO_S02_FullSpec/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S02_FullSpec/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -15664,6 +16444,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 299.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S02_FullSpec/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -15815,6 +16607,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S00_FullSpecGo/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 720,
       "entityClass": "a4412aa5-2593-4139-b2d8-88b6bd05df07",
       "grade": "A",
       "gradeConfidence": "high",
@@ -16086,6 +16887,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S00_FullSpecGo/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_CHCO_S00_FullSpecGo/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S00_FullSpecGo/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -16136,6 +16938,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 59.800000000000004,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S00_FullSpecGo/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -16287,6 +17101,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S03_FullSpecMax/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2880,
       "entityClass": "6bd2ac52-cb7d-43b8-8f92-efe11079d914",
       "grade": "A",
       "gradeConfidence": "high",
@@ -16558,6 +17381,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S03_FullSpecMax/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_CHCO_S03_FullSpecMax/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S03_FullSpecMax/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -16608,6 +17432,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 897.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S03_FullSpecMax/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -16759,6 +17595,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S01_Hunter/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1170,
       "entityClass": "ddc4c394-da22-4ecf-8df9-30db6edc7535",
       "grade": "B",
       "gradeConfidence": "high",
@@ -17030,6 +17875,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S01_Hunter/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_BLTR_S01_Hunter/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S01_Hunter/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -17080,6 +17926,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 84.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S01_Hunter/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34.5,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -17231,6 +18089,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_VNCL_S02_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2270,
       "entityClass": "cb302b31-5ba1-48c1-83e7-6f77f3b1476f",
       "grade": "B",
       "gradeConfidence": "medium",
@@ -17502,6 +18369,7 @@
       "rawComponentSubTypeSourcePath": "RADR_VNCL_S02_Mauler/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_VNCL_S02_Mauler/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_VNCL_S02_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -17552,6 +18420,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 1460.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_VNCL_S02_Mauler/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 247,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -17706,6 +18586,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S02_Observer/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "bf787055-6969-4215-a507-2a3b1dc00eac",
       "grade": "D",
       "gradeConfidence": "high",
@@ -17977,6 +18866,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S02_Observer/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_CHCO_S02_Observer/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S02_Observer/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -18027,6 +18917,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 234.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S02_Observer/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -18178,6 +19080,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S00_ObserverGo/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 990,
       "entityClass": "f28b4e31-b9a2-4b39-8ede-7023985e6cf9",
       "grade": "D",
       "gradeConfidence": "high",
@@ -18449,6 +19360,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S00_ObserverGo/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_CHCO_S00_ObserverGo/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S00_ObserverGo/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -18499,6 +19411,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 46.800000000000004,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S00_ObserverGo/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -18650,6 +19574,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S01_ObserverLite/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "28c7f719-37c3-432e-ab94-59dab4c3a0f7",
       "grade": "D",
       "gradeConfidence": "high",
@@ -18921,6 +19854,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S01_ObserverLite/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_CHCO_S01_ObserverLite/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S01_ObserverLite/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -18971,6 +19905,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 117.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S01_ObserverLite/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -19122,6 +20068,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S03_ObserverMax/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3960,
       "entityClass": "ae505920-b4f2-4a3e-b1fd-ec46fa35ac51",
       "grade": "D",
       "gradeConfidence": "high",
@@ -19393,6 +20348,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S03_ObserverMax/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_CHCO_S03_ObserverMax/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S03_ObserverMax/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -19443,6 +20399,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 702.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S03_ObserverMax/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -19594,6 +20562,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S01_Pelerous/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1300,
       "entityClass": "62567423-2d97-4515-ab39-b90756c3fe54",
       "grade": "C",
       "gradeConfidence": "high",
@@ -19865,6 +20842,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S01_Pelerous/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_BLTR_S01_Pelerous/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S01_Pelerous/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -19915,6 +20893,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 80.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S01_Pelerous/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 34.5,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -20066,6 +21056,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S02_Predator/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1755,
       "entityClass": "8e6d2e32-dce8-4762-9fc5-b9def5e1e2ac",
       "grade": "B",
       "gradeConfidence": "high",
@@ -20337,6 +21336,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S02_Predator/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_BLTR_S02_Predator/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S02_Predator/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -20387,6 +21387,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 168.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S02_Predator/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -20538,6 +21550,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S00_Prevenir/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 900,
       "entityClass": "d8a9b395-4438-4995-a797-9d984c7fd4c0",
       "grade": "C",
       "gradeConfidence": "high",
@@ -20809,6 +21830,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S00_Prevenir/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_GRNP_S00_Prevenir/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S00_Prevenir/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -20859,6 +21881,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 48.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S00_Prevenir/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 17.5,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -21010,6 +22044,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S01_Prophet/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1040,
       "entityClass": "fb4c8baa-4d8e-4a2e-8102-675d3bd72640",
       "grade": "A",
       "gradeConfidence": "high",
@@ -21281,6 +22324,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S01_Prophet/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_BLTR_S01_Prophet/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S01_Prophet/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -21331,6 +22375,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 92.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S01_Prophet/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -21482,6 +22538,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GNRP_S03_Idris_TEMP/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3600,
       "entityClass": "944a73bb-974c-4e4c-ab0f-6f9cd062c5a5",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -21753,6 +22818,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GNRP_S03_Idris_TEMP/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_GNRP_S03_Idris_TEMP/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GNRP_S03_Idris_TEMP/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -21803,6 +22869,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 600.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GNRP_S03_Idris_TEMP/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 93.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -21957,6 +23035,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_RSI_S04_Polaris/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 4000,
       "entityClass": "a39d0aa5-f1af-49fb-aad0-0c1cde0f133f",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -22228,6 +23315,7 @@
       "rawComponentSubTypeSourcePath": "RADR_RSI_S04_Polaris/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_RSI_S04_Polaris/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_RSI_S04_Polaris/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -22278,6 +23366,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 1000.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_RSI_S04_Polaris/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 288,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -22432,6 +23532,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S03_Lephari/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3200,
       "entityClass": "462c1e37-6259-4942-91e1-9c4de47ef0e4",
       "grade": "C",
       "gradeConfidence": "medium",
@@ -22703,6 +23812,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S03_Lephari/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_WLOP_S03_Lephari/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S03_Lephari/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -22753,6 +23863,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 600.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S03_Lephari/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -22907,6 +24029,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_Default/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1600,
       "entityClass": "05166c08-0e57-47ca-be82-7b8aee16e831",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -23178,6 +24309,7 @@
       "rawComponentSubTypeSourcePath": "RADR_Default/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_Default/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_Default/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -23228,6 +24360,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 100.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_Default/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -23373,6 +24517,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_S02_Fake/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2400,
       "entityClass": "06de143e-4e28-4cb7-8e1d-e04017aae514",
       "grade": "A",
       "gradeConfidence": "medium",
@@ -23528,6 +24681,7 @@
       "rawComponentSubTypeSourcePath": "RADR_S02_Fake/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_S02_Fake/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": null,
       "scanCooldownTime": 2.5,
       "scanCooldownTimeProvenance": {
@@ -23541,6 +24695,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 200.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_S02_Fake/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 80.5,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -23695,6 +24861,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S03_Resolu/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3600,
       "entityClass": "188ec15a-2fc2-46f4-9679-2b78c86a8a7d",
       "grade": "C",
       "gradeConfidence": "high",
@@ -23966,6 +25141,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S03_Resolu/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_GRNP_S03_Resolu/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S03_Resolu/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -24016,6 +25192,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 720.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S03_Resolu/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -24167,6 +25355,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S02_SNSR5x/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3300,
       "entityClass": "55a63f5c-3406-48ef-97fb-b3ced8858069",
       "grade": "D",
       "gradeConfidence": "high",
@@ -24438,6 +25635,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S02_SNSR5x/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_NAVE_S02_SNSR5x/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S02_SNSR5x/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -24488,6 +25686,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 126.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S02_SNSR5x/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -24639,6 +25849,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S01_SNSR6/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2000,
       "entityClass": "809c5792-ae9b-4a09-8fd2-0001296dfc9b",
       "grade": "C",
       "gradeConfidence": "high",
@@ -24910,6 +26129,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S01_SNSR6/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_NAVE_S01_SNSR6/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S01_SNSR6/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -24960,6 +26180,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 70.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S01_SNSR6/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -25111,6 +26343,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S02_SNS_R6x/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3000,
       "entityClass": "d048771d-6001-4176-9b48-2788927f5d30",
       "grade": "C",
       "gradeConfidence": "high",
@@ -25382,6 +26623,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S02_SNS_R6x/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_NAVE_S02_SNS_R6x/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S02_SNS_R6x/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -25432,6 +26674,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 140.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S02_SNS_R6x/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 53.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -25583,6 +26837,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S02_SNSR7x/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2700,
       "entityClass": "01d37caa-d580-4443-b3bd-c1f856ec5bf6",
       "grade": "B",
       "gradeConfidence": "high",
@@ -25854,6 +27117,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S02_SNSR7x/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_NAVE_S02_SNSR7x/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S02_SNSR7x/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -25904,6 +27168,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 147.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S02_SNSR7x/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -26055,6 +27331,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S01_SNSR5/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2200,
       "entityClass": "7a1e134a-6322-4035-ae65-10af4b0bb545",
       "grade": "D",
       "gradeConfidence": "high",
@@ -26326,6 +27611,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S01_SNSR5/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_NAVE_S01_SNSR5/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S01_SNSR5/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -26376,6 +27662,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 63.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S01_SNSR5/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -26527,6 +27825,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_NAVE_S01_SNSR7/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1800,
       "entityClass": "c91b0d85-f839-4450-95a4-f98c00ea5e37",
       "grade": "B",
       "gradeConfidence": "high",
@@ -26798,6 +28105,7 @@
       "rawComponentSubTypeSourcePath": "RADR_NAVE_S01_SNSR7/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_NAVE_S01_SNSR7/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_NAVE_S01_SNSR7/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -26848,6 +28156,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 73.60000000000001,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_NAVE_S01_SNSR7/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -26999,6 +28319,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S02_Savoir/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2970,
       "entityClass": "86c8ec89-6fa6-4bbe-852c-d9e98bb41325",
       "grade": "D",
       "gradeConfidence": "high",
@@ -27270,6 +28599,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S02_Savoir/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_GRNP_S02_Savoir/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S02_Savoir/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -27320,6 +28650,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 216.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S02_Savoir/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -27471,6 +28813,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S00_Sens/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 810,
       "entityClass": "6259d636-2086-4555-930f-883dcd491ccf",
       "grade": "B",
       "gradeConfidence": "high",
@@ -27742,6 +29093,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S00_Sens/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_GRNP_S00_Sens/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S00_Sens/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -27792,6 +29144,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 50.400000000000006,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S00_Sens/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 17.5,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -27943,6 +29307,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S03_Socoria/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3520,
       "entityClass": "c2ee37cb-4267-4075-9f50-104c4781e7c6",
       "grade": "D",
       "gradeConfidence": "high",
@@ -28214,6 +29587,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S03_Socoria/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_WLOP_S03_Socoria/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S03_Socoria/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -28264,6 +29638,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 540.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S03_Socoria/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -28415,6 +29801,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_BLTR_S02_Spyglass/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1950,
       "entityClass": "458ad6a8-b422-412b-b2f4-10ee2a9f5f3b",
       "grade": "C",
       "gradeConfidence": "high",
@@ -28686,6 +30081,7 @@
       "rawComponentSubTypeSourcePath": "RADR_BLTR_S02_Spyglass/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_BLTR_S02_Spyglass/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_BLTR_S02_Spyglass/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -28736,6 +30132,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 160.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_BLTR_S02_Spyglass/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -28887,6 +30295,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S02_Surveyor/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2700,
       "entityClass": "3260e018-64ca-42e9-b85a-8b80d24d5375",
       "grade": "C",
       "gradeConfidence": "high",
@@ -29158,6 +30575,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S02_Surveyor/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_CHCO_S02_Surveyor/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S02_Surveyor/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -29208,6 +30626,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 260.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S02_Surveyor/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 53.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -29359,6 +30789,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S00_SurveyorGo/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 900,
       "entityClass": "e5bccaed-85de-483b-b4b8-dfb62f085b43",
       "grade": "C",
       "gradeConfidence": "high",
@@ -29630,6 +31069,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S00_SurveyorGo/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_CHCO_S00_SurveyorGo/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S00_SurveyorGo/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -29680,6 +31120,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 52.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S00_SurveyorGo/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -29831,6 +31283,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S01_SurveyorLite/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1800,
       "entityClass": "87008b2d-438a-4091-8ae4-303be47190d8",
       "grade": "C",
       "gradeConfidence": "high",
@@ -30102,6 +31563,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S01_SurveyorLite/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_CHCO_S01_SurveyorLite/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S01_SurveyorLite/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -30152,6 +31614,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 130.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S01_SurveyorLite/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -30303,6 +31777,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_CHCO_S03_SurveyorMax/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 3600,
       "entityClass": "d055fbff-ec64-4a81-8d0b-c6ffcbd2b83e",
       "grade": "C",
       "gradeConfidence": "high",
@@ -30574,6 +32057,7 @@
       "rawComponentSubTypeSourcePath": "RADR_CHCO_S03_SurveyorMax/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "3",
       "rawGradeSourcePath": "RADR_CHCO_S03_SurveyorMax/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_CHCO_S03_SurveyorMax/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -30624,6 +32108,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 780.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_CHCO_S03_SurveyorMax/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -30775,6 +32271,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S01_Tige/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1620,
       "entityClass": "bd38baac-4671-4e84-afb5-6b79f62dfaec",
       "grade": "B",
       "gradeConfidence": "high",
@@ -31046,6 +32551,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S01_Tige/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_GRNP_S01_Tige/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S01_Tige/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -31096,6 +32602,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 126.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S01_Tige/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -31247,6 +32765,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S00_V6026/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 720,
       "entityClass": "ad4f59d3-1fca-470a-bece-a14484e9ff61",
       "grade": "A",
       "gradeConfidence": "high",
@@ -31518,6 +33045,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S00_V6026/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_GRNP_S00_V6026/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S00_V6026/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -31568,6 +33096,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 55.2,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S00_V6026/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -31719,6 +33259,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S01_V80111/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1440,
       "entityClass": "e0750711-1aba-4141-8470-090b1dfc4a6e",
       "grade": "A",
       "gradeConfidence": "high",
@@ -31990,6 +33539,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S01_V80111/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_GRNP_S01_V80111/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S01_V80111/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -32040,6 +33590,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 138.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S01_V80111/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 38.3,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -32191,6 +33753,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S02_VB80112/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2160,
       "entityClass": "69b8ba78-889f-4547-97eb-1d477002fedc",
       "grade": "A",
       "gradeConfidence": "high",
@@ -32462,6 +34033,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S02_VB80112/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_GRNP_S02_VB80112/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S02_VB80112/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -32512,6 +34084,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 276.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S02_VB80112/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -32663,6 +34247,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S03_V880/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2880,
       "entityClass": "5fd1c4a5-853e-4643-ae44-606d03a8edd8",
       "grade": "A",
       "gradeConfidence": "high",
@@ -32934,6 +34527,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S03_V880/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "1",
       "rawGradeSourcePath": "RADR_GRNP_S03_V880/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S03_V880/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -32984,6 +34578,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 828.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S03_V880/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 117,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -33135,6 +34741,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S02_Vigilance/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 2430,
       "entityClass": "d395fb78-542f-4cb2-afa4-8e787ec15635",
       "grade": "B",
       "gradeConfidence": "high",
@@ -33406,6 +35021,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S02_Vigilance/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_GRNP_S02_Vigilance/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S02_Vigilance/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -33456,6 +35072,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 252.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S02_Vigilance/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 67.1,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -33607,6 +35235,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_WLOP_S00_Vogel/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 720,
       "entityClass": "5b19ed1b-c24b-45ef-975a-70630519ea22",
       "grade": "B",
       "gradeConfidence": "high",
@@ -33878,6 +35515,7 @@
       "rawComponentSubTypeSourcePath": "RADR_WLOP_S00_Vogel/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "2",
       "rawGradeSourcePath": "RADR_WLOP_S00_Vogel/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_WLOP_S00_Vogel/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -33928,6 +35566,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 42.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_WLOP_S00_Vogel/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 21.9,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [
@@ -34079,6 +35729,15 @@
         "unitConfidence": "low",
         "unitUnknown": true
       },
+      "emSignatureDecayRate": 0.15,
+      "emSignatureDecayRateProvenance": {
+        "attribute": "decayRate",
+        "confidence": "high",
+        "sourcePath": "RADR_GRNP_S01_Voir/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
+      "emSignatureNominal": 1980,
       "entityClass": "c0cf2b46-a1d9-4f8c-8ff4-1c8550dbe7e4",
       "grade": "D",
       "gradeConfidence": "high",
@@ -34350,6 +36009,7 @@
       "rawComponentSubTypeSourcePath": "RADR_GRNP_S01_Voir/Components/SAttachableComponentParams/AttachDef@SubType",
       "rawGrade": "4",
       "rawGradeSourcePath": "RADR_GRNP_S01_Voir/Components/SAttachableComponentParams/AttachDef@Grade",
+      "repairRestoreRatio": 0.1,
       "resourceInput": {
         "confidence": "high",
         "deltaSourcePath": "RADR_GRNP_S01_Voir/Components/ItemResourceComponentParams/states/ItemResourceState/deltas/ItemResourceDeltaConsumption",
@@ -34400,6 +36060,18 @@
       "scanRangeProvenance": null,
       "scanRate": null,
       "scanRateProvenance": null,
+      "selfRepairBaselineHp": 108.0,
+      "selfRepairHealthRatio": 0.2,
+      "selfRepairMaxCount": 1,
+      "selfRepairProvenance": {
+        "baselineHpFormula": "health * selfRepairHealthRatio",
+        "confidence": "high",
+        "healthRatioAttribute": "healthRatio",
+        "maxRepairCountAttribute": "maxRepairCount",
+        "sourcePath": "RADR_GRNP_S01_Voir/Components/ItemResourceComponentParams/selfRepair",
+        "timeToRepairAttribute": "timeToRepair"
+      },
+      "selfRepairTime": 30.7,
       "signatureSensitivity": 1,
       "signatureSensitivityAggregation": "max",
       "signatureSensitivityCandidates": [

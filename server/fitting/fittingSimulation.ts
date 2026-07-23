@@ -105,6 +105,9 @@ export interface WeaponSimulationResult {
   allocationRatio: SimulationMetric;
   effectiveAmmo: SimulationMetric;
   effectiveRegenPerSecond: SimulationMetric;
+  capacitorFillTimeSeconds: SimulationMetric;
+  capacitorFullRechargeTimeSeconds: SimulationMetric;
+  triggerTimeSeconds: SimulationMetric;
   maxShotsBeforeOverheat: SimulationMetric;
   overheatInterruptions: SimulationMetric;
   overheatTimeSeconds: SimulationMetric;
@@ -320,6 +323,9 @@ function simulateWeapon(args: {
       allocationRatio: unavailable(allocationSources),
       effectiveAmmo: unavailable(),
       effectiveRegenPerSecond: unavailable(),
+      capacitorFillTimeSeconds: unavailable(),
+      capacitorFullRechargeTimeSeconds: unavailable(),
+      triggerTimeSeconds: unavailable(),
       maxShotsBeforeOverheat: unavailable(),
       overheatInterruptions: unavailable(),
       overheatTimeSeconds: unavailable(),
@@ -523,6 +529,9 @@ function simulateWeapon(args: {
       allocationRatio: ratioMetric,
       effectiveAmmo: unavailable(directInputs),
       effectiveRegenPerSecond: unavailable(directInputs),
+      capacitorFillTimeSeconds: unavailable(directInputs),
+      capacitorFullRechargeTimeSeconds: unavailable(directInputs),
+      triggerTimeSeconds: unavailable(directInputs),
       maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
       overheatInterruptions: unavailable(directInputs),
       overheatTimeSeconds: unavailable(directInputs),
@@ -541,6 +550,9 @@ function simulateWeapon(args: {
   let shotsFired = 0;
   let effectiveAmmo = 0;
   let effectiveRegen: number | null = null;
+  let capacitorFillTimeSecondsMetric = unavailable();
+  let capacitorFullRechargeTimeSecondsMetric = unavailable();
+  let triggerTimeSeconds = 0;
   let completeMagazinesFired = 0;
   const magazineStartTimesSeconds: number[] = [];
   const minimumPowerDemand = directNumber(
@@ -566,6 +578,9 @@ function simulateWeapon(args: {
       effectiveRegenPerSecond: isEnergy
         ? derived(0, "weapon offline below minimumPowerDemandSegments", directInputs)
         : unavailable(),
+      capacitorFillTimeSeconds: unavailable(),
+      capacitorFullRechargeTimeSeconds: unavailable(),
+      triggerTimeSeconds: derived(0, "weapon offline below minimumPowerDemandSegments", directInputs),
       maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
       overheatInterruptions: derived(0, "weapon offline below minimumPowerDemandSegments", directInputs),
       overheatTimeSeconds: derived(0, "weapon offline below minimumPowerDemandSegments", directInputs),
@@ -589,6 +604,9 @@ function simulateWeapon(args: {
       allocationRatio: ratioMetric,
       effectiveAmmo: unavailable(directInputs),
       effectiveRegenPerSecond: unavailable(directInputs),
+      capacitorFillTimeSeconds: unavailable(directInputs),
+      capacitorFullRechargeTimeSeconds: unavailable(directInputs),
+      triggerTimeSeconds: unavailable(directInputs),
       maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
       overheatInterruptions: unavailable(directInputs),
       overheatTimeSeconds: unavailable(directInputs),
@@ -621,6 +639,9 @@ function simulateWeapon(args: {
         allocationRatio: ratioMetric,
         effectiveAmmo: unavailable(directInputs),
         effectiveRegenPerSecond: unavailable(directInputs),
+        capacitorFillTimeSeconds: unavailable(directInputs),
+        capacitorFullRechargeTimeSeconds: unavailable(directInputs),
+        triggerTimeSeconds: unavailable(directInputs),
         maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
         overheatInterruptions: unavailable(directInputs),
         overheatTimeSeconds: unavailable(directInputs),
@@ -638,6 +659,17 @@ function simulateWeapon(args: {
     effectiveAmmo = Math.round(maxAmmoLoad * weaponAllocationRatio);
     effectiveRegen = regen * weaponAllocationRatio;
     if (effectiveAmmo > 0 && effectiveRegen > 0) {
+      const capacitorFillTimeSeconds = effectiveAmmo / effectiveRegen;
+      capacitorFillTimeSecondsMetric = derived(
+        capacitorFillTimeSeconds,
+        "effectiveAmmo / effectiveRegenPerSecond",
+        directInputs,
+      );
+      capacitorFullRechargeTimeSecondsMetric = derived(
+        cooldown + capacitorFillTimeSeconds,
+        "regenCooldownSeconds + effectiveAmmo / effectiveRegenPerSecond",
+        directInputs,
+      );
       const shotsPerMagazine = Math.floor(effectiveAmmo / ammoCostPerShot);
       if (shotsPerMagazine === 0) {
         return {
@@ -656,6 +688,9 @@ function simulateWeapon(args: {
             "maxRegenPerSecond * allocationRatio",
             directInputs,
           ),
+          capacitorFillTimeSeconds: capacitorFillTimeSecondsMetric,
+          capacitorFullRechargeTimeSeconds: capacitorFullRechargeTimeSecondsMetric,
+          triggerTimeSeconds: derived(0, "no ammunition shots available", directInputs),
           maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
           overheatInterruptions: derived(0, "no ammunition shots available", directInputs),
           overheatTimeSeconds: derived(0, "no ammunition shots available", directInputs),
@@ -677,6 +712,7 @@ function simulateWeapon(args: {
       let overheatTimeSeconds = 0;
       magazineStartTimesSeconds.push(0);
       while (shotTime < durationSeconds) {
+        triggerTimeSeconds += Math.min(1 / shotsPerSecond, durationSeconds - shotTime);
         shotsFired += 1;
         ammunitionShotsRemaining -= 1;
         shotsSinceThermalRecovery += 1;
@@ -736,6 +772,7 @@ function simulateWeapon(args: {
       let overheatTimeSeconds = 0;
       if (availableShots > 0) magazineStartTimesSeconds.push(0);
       while (availableShots > 0 && shotTime < durationSeconds) {
+        triggerTimeSeconds += Math.min(1 / shotsPerSecond, durationSeconds - shotTime);
         shotsFired += 1;
         availableShots -= 1;
         shotsSinceThermalRecovery += 1;
@@ -794,6 +831,13 @@ function simulateWeapon(args: {
     effectiveRegenPerSecond: isEnergy
       ? derived(effectiveRegen ?? 0, "maxRegenPerSecond * allocationRatio", directInputs)
       : unavailable(),
+    capacitorFillTimeSeconds: capacitorFillTimeSecondsMetric,
+    capacitorFullRechargeTimeSeconds: capacitorFullRechargeTimeSecondsMetric,
+    triggerTimeSeconds: derived(
+      triggerTimeSeconds,
+      "sum min(60 / fireRateRpm, durationSeconds - shotTimestamp)",
+      directInputs,
+    ),
     maxShotsBeforeOverheat: maxShotsBeforeOverheatMetric,
     overheatInterruptions: overheatInterruptionsMetric,
     overheatTimeSeconds: overheatTimeSecondsMetric,

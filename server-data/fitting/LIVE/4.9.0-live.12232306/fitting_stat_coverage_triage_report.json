@@ -7,9 +7,9 @@
     "extractedButNotConsumed": "Component power/cooling demand fields are present for non-weapon modeled components and consumed by stock cooling summaries.",
     "linkedRecordNotResolved": {
       "missing_cooling_fields": {
-        "coolantUsage": 1988,
-        "coolingDraw": 1988,
-        "coolingRequired": 1988
+        "coolantUsage": 5720,
+        "coolingDraw": 5720,
+        "coolingRequired": 5720
       },
       "missing_performance_fields": {
         "boostSpeedForward": 12,
@@ -20,10 +20,10 @@
         "yawRate": 12
       },
       "missing_power_fields": {
-        "minimumPowerRequired": 76,
-        "powerDraw": 76,
-        "powerInputMinimum": 76,
-        "powerUsage": 76
+        "minimumPowerRequired": 3585,
+        "powerDraw": 3585,
+        "powerInputMinimum": 3585,
+        "powerUsage": 3585
       },
       "missing_quantum_fields": {
         "fuelRate": 303
@@ -538,9 +538,9 @@
           "present": 186
         },
         "dps": {
-          "coveragePct": 0.0,
-          "missing": 193,
-          "present": 0
+          "coveragePct": 98.96,
+          "missing": 2,
+          "present": 191
         },
         "fireRateRpm": {
           "coveragePct": 97.41,
@@ -558,14 +558,14 @@
           "present": 191
         },
         "spreadMax": {
-          "coveragePct": 0.0,
-          "missing": 193,
-          "present": 0
+          "coveragePct": 96.89,
+          "missing": 6,
+          "present": 187
         },
         "spreadMin": {
-          "coveragePct": 0.0,
-          "missing": 193,
-          "present": 0
+          "coveragePct": 96.89,
+          "missing": 6,
+          "present": 187
         }
       },
       "fields": [
@@ -643,9 +643,9 @@
             "SWeaponActionFireSingleParams@fireRate"
           ],
           "field": "dps",
-          "missingCount": 193,
+          "missingCount": 2,
           "missingReason": "not_modeled_by_choice",
-          "presentCount": 0,
+          "presentCount": 191,
           "recommendedFixOrDeferral": "Do not calculate DPS from alpha damage or cadence."
         },
         {
@@ -678,9 +678,9 @@
             "weapon power-state spreadModifier@minMultiplier"
           ],
           "field": "spreadMin",
-          "missingCount": 193,
+          "missingCount": 6,
           "missingReason": "field_found_but_uncertain_mapping",
-          "presentCount": 0,
+          "presentCount": 187,
           "recommendedFixOrDeferral": "Do not promote until fire-mode selection and modifier semantics are modeled."
         },
         {
@@ -689,9 +689,9 @@
             "weapon power-state spreadModifier@maxMultiplier"
           ],
           "field": "spreadMax",
-          "missingCount": 193,
+          "missingCount": 6,
           "missingReason": "field_found_but_uncertain_mapping",
-          "presentCount": 0,
+          "presentCount": 187,
           "recommendedFixOrDeferral": "Do not promote until fire-mode selection and modifier semantics are modeled."
         },
         {
@@ -928,12 +928,12 @@
     }
   },
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-16T04:22:25Z",
+  "generatedAt": "2026-07-23T00:38:47Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/reports/stat_coverage_triage.py",
   "missingReasonCounts": {
-    "field_found_but_uncertain_mapping": 740,
-    "not_modeled_by_choice": 193,
+    "field_found_but_uncertain_mapping": 366,
+    "not_modeled_by_choice": 2,
     "source_field_absent": 952
   },
   "radarAimAssistPolicy": {
@@ -952,10 +952,10 @@
   "registry": "fitting_stat_coverage_triage_report",
   "registryHygiene": {
     "classificationCounts": {
-      "fittable_candidate": 626,
-      "internal_or_placeholder": 121,
-      "special_capital": 25,
-      "template": 41
+      "fittable_candidate": 846,
+      "internal_or_placeholder": 125,
+      "special_capital": 30,
+      "template": 43
     },
     "examples": [
       {
@@ -1184,7 +1184,7 @@
         "alphaDamageTotal": 567,
         "basePenetrationDistance": 0.125,
         "calculatedRange": 2502.417,
-        "dps": null,
+        "dps": 841.05,
         "fireRateRpm": 200,
         "maxPenetrationThickness": 0.5,
         "projectileLifetime": 3.53,
@@ -1204,7 +1204,7 @@
         "ammoParamsRecord": "b92725e5-e98c-4cf4-a9bd-48d2c8415973",
         "damageDistortion": null,
         "damageEnergy": null,
-        "dps": null,
+        "dps": 14500,
         "fireRateRpm": null
       }
     },
@@ -1219,8 +1219,8 @@
       "values": {
         "alphaDamageTotal": 90,
         "ammoParamsRecord": "6f48e75d-1082-4604-9903-0eb16b9b7406",
-        "spreadMax": null,
-        "spreadMin": null
+        "spreadMax": 4,
+        "spreadMin": 4
       }
     },
     {

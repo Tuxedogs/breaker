@@ -163,7 +163,13 @@ function DetailStatRow({
   );
 }
 
-function ComponentStatsDrawer({
+function ratioText(value: number | null | undefined): string {
+  return typeof value === "number" && Number.isFinite(value)
+    ? `${formatNumber(value * 100)}%`
+    : "Not calculated yet";
+}
+
+export function ComponentStatsDrawer({
   detail,
   loading,
   weaponSimulation,
@@ -191,6 +197,30 @@ function ComponentStatsDrawer({
   }
 
   const damageType = stats ? inferDamageType(stats) : null;
+  const ballisticReserve = stats?.maxAmmoCount && stats.maxAmmoCount > 0
+    ? stats.maxAmmoCount
+    : stats?.ammoCapacity;
+  const emMaximum = stats?.emSignatureNominal
+    ?? stats?.electromagneticEmission
+    ?? stats?.radarEmission;
+  const powerMaximum = stats?.powerInputMaximum
+    ?? stats?.powerConsumptionNominal
+    ?? stats?.powerDraw;
+  const powerMinimum = stats?.powerInputMinimum ?? stats?.powerConsumptionMinimum;
+  const penetration = detail.mitigation?.kind === "weapon_projectile"
+    ? detail.mitigation.ammoPenetration ?? detail.mitigation.maxPenetrationThickness ?? stats?.maxPenetrationThickness
+    : stats?.maxPenetrationThickness;
+  const penetrationDistance = detail.mitigation?.kind === "weapon_projectile"
+    ? detail.mitigation.basePenetrationDistance
+    : null;
+  const actionTimingRows = (detail.weapon?.actions ?? []).flatMap((action) => [
+    { key: `${action.actionIndex}-charge-time`, label: `${action.kind} charge time`, value: action.chargeTime },
+    { key: `${action.actionIndex}-charge-up`, label: `${action.kind} charge-up`, value: action.chargeUpTime },
+    { key: `${action.actionIndex}-charge-down`, label: `${action.kind} charge-down`, value: action.chargeDownTime },
+    { key: `${action.actionIndex}-cooldown`, label: `${action.kind} cooldown`, value: action.cooldownTime },
+    { key: `${action.actionIndex}-spin-up`, label: `${action.kind} spin-up`, value: action.spinUpTime },
+    { key: `${action.actionIndex}-spin-down`, label: `${action.kind} spin-down`, value: action.spinDownTime },
+  ]).filter((row) => typeof row.value === "number" && Number.isFinite(row.value));
 
   return (
     <div className="fm-detail-drawer">
@@ -204,18 +234,74 @@ function ComponentStatsDrawer({
           tone={weaponSimulation?.dps.value == null ? "muted" : "default"}
           nested
         />
+        <DetailStatRow label="Damage Over 60s" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.damage.value, " dmg")} nested />
+        <DetailStatRow label="Trigger Time (60s)" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.triggerTimeSeconds.value, " s")} nested />
+        <DetailStatRow label="Shots Fired (60s)" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.shotsFired.value)} nested />
+        <DetailStatRow label="Fire Rate" value={statText(stats?.fireRateRpm, " rpm")} nested />
         <DetailStatRow label="Damage Type" value={damageType ?? "Not calculated yet"} nested />
       </section>
       <section className="fm-detail-section">
-        <h4>Projectile</h4>
+        <h4>Ammo / Capacitor</h4>
+        <DetailStatRow label="Model" value={weaponSimulation?.ammunitionModel ?? "Not calculated yet"} tone="accent" />
+        <DetailStatRow label="Ballistic Reserve" value={statText(ballisticReserve)} nested />
+        <DetailStatRow label="Base Maximum Load" value={statText(stats?.maxAmmoLoad)} nested />
+        <DetailStatRow label="Effective Maximum Load" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.effectiveAmmo.value)} nested />
+        <DetailStatRow label="Cost Per Shot" value={statText(stats?.ammoCostPerShot)} nested />
+        <DetailStatRow label="Base Regen" value={statText(stats?.maxRegenPerSec, "/s")} nested />
+        <DetailStatRow label="Effective Regen" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.effectiveRegenPerSecond.value, "/s")} nested />
+        <DetailStatRow label="Regen Delay" value={statText(stats?.regenerationCooldown, " s")} nested />
+        <DetailStatRow label="Time to Fill Capacitor" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.capacitorFillTimeSeconds.value, " s")} nested />
+        <DetailStatRow label="Time to Full Recharge" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.capacitorFullRechargeTimeSeconds.value, " s")} nested />
+        <DetailStatRow label="Complete Magazines (60s)" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.completeMagazinesFired)} nested />
+      </section>
+      <section className="fm-detail-section">
+        <h4>Projectile / Spread</h4>
         <DetailStatRow label="Velocity" value={statText(stats?.projectileSpeed, " m/s")} tone="accent" />
         <DetailStatRow label="Range" value={statText(stats?.calculatedRange, " m")} tone={stats?.calculatedRange == null ? "muted" : "default"} nested />
+        <DetailStatRow label="Penetration" value={statText(penetration)} nested />
+        <DetailStatRow label="Penetration Distance" value={statText(penetrationDistance, " m")} nested />
+        <DetailStatRow label="Spread Minâ€“Max" value={stats?.spreadMin != null && stats.spreadMax != null ? `${formatNumber(stats.spreadMin)} â€“ ${formatNumber(stats.spreadMax)}` : "Not calculated yet"} nested />
+        <DetailStatRow label="First Attack" value={statText(stats?.spreadFirstAttack)} nested />
+        <DetailStatRow label="Per Attack" value={statText(stats?.spreadPerAttack)} nested />
+        <DetailStatRow label="Decay" value={statText(stats?.spreadDecay)} nested />
+      </section>
+      <section className="fm-detail-section">
+        <h4>Thermal</h4>
+        <DetailStatRow label="Heat Per Shot" value={statText(stats?.heatPerShot)} tone="accent" />
+        <DetailStatRow label="Cooling Delay" value={statText(stats?.timeTillCoolingStarts, " s")} nested />
+        <DetailStatRow label="Cooling Rate" value={statText(stats?.coolingPerSecond ?? stats?.cooldownRate, "/s")} nested />
+        <DetailStatRow label="Minimum Temperature" value={statText(stats?.minimumTemperature)} nested />
+        <DetailStatRow label="Overheat Temperature" value={statText(stats?.overheatTemperature)} nested />
+        <DetailStatRow label="Overheat Recovery" value={statText(stats?.overheatFixTime, " s")} nested />
+        <DetailStatRow label="Post-Overheat Temperature" value={statText(stats?.postOverheatTemperature)} nested />
+        <DetailStatRow label="Maximum Shots Before Overheat" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.maxShotsBeforeOverheat.value)} nested />
+        <DetailStatRow label="Overheat Interruptions (60s)" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.overheatInterruptions.value)} nested />
+        <DetailStatRow label="Overheat Downtime (60s)" value={simulationLoading ? "Updatingâ€¦" : statText(weaponSimulation?.overheatTimeSeconds.value, " s")} nested />
       </section>
       <section className="fm-detail-section">
         <h4>Power / Signature</h4>
-        <DetailStatRow label="Power demand" value={statText(stats?.powerDraw)} tone={stats?.powerDraw == null ? "muted" : "default"} />
-        <DetailStatRow label="EM Signature" value={statText(stats?.electromagneticEmission)} tone="muted" nested />
+        <DetailStatRow label="Power Maximum" value={statText(powerMaximum)} tone={powerMaximum == null ? "muted" : "accent"} />
+        <DetailStatRow label="Power Minimum (derived)" value={statText(powerMinimum)} nested />
+        <DetailStatRow label="EM Maximum" value={statText(emMaximum)} nested />
+        <DetailStatRow label="EM Decay Rate" value={statText(stats?.emSignatureDecayRate)} nested />
       </section>
+      <section className="fm-detail-section">
+        <h4>Integrity</h4>
+        <DetailStatRow label="Self-Repair Uses" value={statText(stats?.selfRepairMaxCount)} tone="accent" />
+        <DetailStatRow label="Self-Repair Cycle" value={statText(stats?.selfRepairTime, " s")} nested />
+        <DetailStatRow label="Health Ratio" value={ratioText(stats?.selfRepairHealthRatio)} nested />
+        <DetailStatRow label="Baseline HP Restored (derived)" value={statText(stats?.selfRepairBaselineHp, " hp")} nested />
+        <DetailStatRow label="Repair Restore Ratio" value={ratioText(stats?.repairRestoreRatio)} nested />
+        <DetailStatRow label="Component HP" value={statText(stats?.health, " hp")} nested />
+      </section>
+      {actionTimingRows.length > 0 ? (
+        <section className="fm-detail-section">
+          <h4>Action Timing</h4>
+          {actionTimingRows.map((row) => (
+            <DetailStatRow key={row.key} label={row.label} value={statText(row.value, " s")} nested />
+          ))}
+        </section>
+      ) : null}
       <section className="fm-detail-section">
         <h4>Compatibility</h4>
         <DetailStatRow label="Type" value={categoryLabel(detail.type)} />
