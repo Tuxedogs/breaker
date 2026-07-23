@@ -399,6 +399,19 @@ export default function FittingFixturePage() {
       })),
     },
     {
+      key: "rockets",
+      label: "Rockets",
+      count: 2,
+      rows: Array.from({ length: 2 }, (_, index) => equipmentRow({
+        id: `rocket-${index + 1}`,
+        title: "S3 Jericho XL Rocket Pod",
+        subtitle: "Rocket · 18 rounds · 45 DPS over 60s",
+        tone: "pilot",
+        selected: selectedId === `rocket-${index + 1}`,
+        slotKind: "ship_weapon",
+      })),
+    },
+    {
       key: "bombs",
       label: "Bombs",
       count: 1,

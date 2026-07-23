@@ -82,6 +82,7 @@ export type NamedGroup = {
 
 export const offensiveGroupDefs = [
   { key: "pilot-weapons", label: "Pilot Weapons" },
+  { key: "rockets", label: "Rockets" },
   { key: "remote-turrets", label: "Remote Turrets" },
   { key: "manned-turrets", label: "Manned Turrets" },
   { key: "point-defense", label: "Point Defense" },
@@ -320,6 +321,11 @@ export function isEquippedWeaponRow(row: PortBreakdownRow): boolean {
   return row.componentCategory === "ship_weapon" && Boolean(row.equippedComponentName ?? row.equippedComponentKey);
 }
 
+function isRocketWeaponRow(row: PortBreakdownRow): boolean {
+  return isEquippedWeaponRow(row)
+    && row.componentSubtype?.trim().toLowerCase() === "rocket";
+}
+
 export function isMissileItemRow(row: PortBreakdownRow): boolean {
   if (isControllerRow(row)) return false;
   const category = row.ruleCategory ?? row.portCategory;
@@ -472,6 +478,7 @@ export function offensiveGroupKey(row: PortBreakdownRow, lookup: Map<string, Por
   if (text.includes("tractor") || text.includes("mining") || text.includes("salvage")) return "tractor-mining-salvage";
   if (isBombRow(row)) return "bombs";
   if (isTorpedoRow(row)) return "torpedoes";
+  if (isRocketWeaponRow(row)) return "rockets";
   if (isMissileOnlyRow(row) || isMissileItemRow(row)) return "missiles";
 
   if (isEquippedWeaponRow(row)) {
@@ -548,6 +555,7 @@ const TURRET_WEAPON_GROUP_KEYS = new Set(["remote-turrets", "manned-turrets"]);
 const INDIVIDUAL_ROW_GROUP_KEYS = new Set([
   ...defensiveGroupDefs.map((def) => def.key),
   "pilot-weapons",
+  "rockets",
   "installed-weapons",
   "point-defense",
   "missiles",

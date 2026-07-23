@@ -175,6 +175,7 @@ async function componentLookup(selection: DatasetSelection): Promise<ComponentLo
     ["missile_racks.json", "missile_rack"],
     ["bombs.json", "bomb"],
     ["bomb_racks.json", "bomb_rack"],
+    ["missile_controllers.json", "missile_controller"],
     ["shields.json", "shield"],
     ["power_plants.json", "power_plant"],
     ["coolers.json", "cooler"],
@@ -382,6 +383,17 @@ export async function validateFittingLoadout(selection: DatasetSelection, body: 
     if (!found) {
       unknownItemIds.push({ portId, componentId });
       confidenceLevels.push("medium");
+      continue;
+    }
+
+    if (found.row.selectionEligible === false) {
+      const referenceStatus = text(found.row.referenceStatus);
+      const reason = referenceStatus
+        ? `Component is not eligible for fitting selection (${referenceStatus}).`
+        : "Component is not eligible for fitting selection.";
+      incompatibleItems.push({ portId, componentId, reason, confidence: "high" });
+      mismatchReasons.push({ portId, componentId, kind: "selection_ineligible", message: reason, confidence: "high" });
+      confidenceLevels.push("high");
       continue;
     }
 
@@ -753,6 +765,14 @@ export async function calculateFittingLoadout(selection: DatasetSelection, body:
         kind: "unknown_component",
         message: `Component ${componentId} on port ${portId} was not found in published component registries.`,
         confidence: "medium",
+      });
+      continue;
+    }
+    if (found.row.selectionEligible === false) {
+      unresolvedReferences.push({
+        kind: "selection_ineligible",
+        message: `Component ${componentId} on port ${portId} is retained for audit but is not eligible for fitting selection.`,
+        confidence: "high",
       });
       continue;
     }

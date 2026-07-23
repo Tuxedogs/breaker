@@ -20,6 +20,7 @@ export type MockupOffensiveDisplayGroup = {
 
 export const mockupOffensiveGroupLabels: Record<string, string> = {
   "pilot-weapons": "Pilot Weapons",
+  rockets: "Rockets",
   "remote-turrets": "Remote Turrets",
   "manned-turrets": "Manned Turrets",
   "point-defense": "Point Defense",
@@ -33,6 +34,7 @@ export const mockupOffensiveGroupLabels: Record<string, string> = {
 
 export const mockupOffensiveGroupOrder = [
   "pilot-weapons",
+  "rockets",
   "installed-weapons",
   "remote-turrets",
   "manned-turrets",

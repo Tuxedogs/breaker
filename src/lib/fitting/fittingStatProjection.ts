@@ -421,6 +421,10 @@ function buildGenericStatRows(detail: FittingComponentDetail): ComponentCardMetr
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
   pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw));
   pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
+  pushMetric(rows, "Minimum Lock Angle", formatCompactNumber(stats.lockAngleAtMin));
+  pushMetric(rows, "Maximum Lock Angle", formatCompactNumber(stats.lockAngleAtMax));
+  pushMetric(rows, "Maximum Armed Missiles", formatCompactNumber(stats.maxArmedMissiles));
+  pushMetric(rows, "Launch Cooldown", formatCompactNumber(stats.launchCooldownTime, "s"));
   pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
   if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);

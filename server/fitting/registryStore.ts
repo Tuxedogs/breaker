@@ -18,6 +18,7 @@ export const PUBLIC_REGISTRIES = [
   "missile_racks.json",
   "bombs.json",
   "bomb_racks.json",
+  "missile_controllers.json",
   "mining_lasers.json",
   "salvage_heads.json",
   "salvage_modifiers.json",
@@ -40,6 +41,7 @@ export const OPTIONAL_PUBLIC_REGISTRIES = new Set<(typeof PUBLIC_REGISTRIES)[num
   "missile_racks.json",
   "bombs.json",
   "bomb_racks.json",
+  "missile_controllers.json",
 ]);
 
 function registryPath(selection: DatasetSelection, fileName: string): string {

@@ -21,6 +21,8 @@ const torpedoId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const missileRackId = "77777777-7777-4777-8777-777777777777";
 const bombId = "88888888-8888-4888-8888-888888888888";
 const bombRackId = "99999999-9999-4999-8999-999999999999";
+const templateMissileId = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+const missileControllerId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
 
 function envelope(registry: string, records: Record<string, unknown>[]) {
   return {
@@ -62,6 +64,7 @@ async function fixtureRoot(): Promise<string> {
       { id: "cooler/main", portId: "cooler/main", portName: "Cooler", portType: "Cooler", editable: true, children: [] },
       { id: "shield/main", portId: "shield/main", portName: "Shield", portType: "Shield", editable: true, children: [] },
       { id: "weapon/main", portId: "weapon/main", portName: "Main weapon", portType: "WeaponGun", editable: true, children: [], confidence: "high", resolvedDefaultComponentKey: componentId.replaceAll("-", "_") },
+      { id: "missile/main", portId: "missile/main", portName: "Missile", portType: "Missile", editable: true, children: [] },
       {
         id: "turret/main",
         portId: "turret/main",
@@ -81,7 +84,10 @@ async function fixtureRoot(): Promise<string> {
   }];
   records["default_loadouts.json"] = [{ shipKey: shipId, confidence: "high", entries: [{ portPath: "weapon/main", resolvedDefaultComponentKey: componentId.replaceAll("-", "_"), confidence: "high" }] }];
   records["stock_loadout_calculations.json"] = [{ shipKey: shipId, loadoutResolutionStatus: "resolved", componentCountsByType: { cooler: 1 }, categories: { power: { available: true, confidence: "high", unavailableReason: null, derived: { powerSurplus: 2 } } }, warnings: [], confidence: "high" }];
-  records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: { "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true } } }];
+  records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: {
+    "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true },
+    "missile/main": { portId: "missile/main", compatibilityStatus: "known", compatibleComponentKeys: [missileId, templateMissileId], portType: "Missile", editable: true },
+  } }];
   records["coolers.json"] = [{
     entityClass: componentId,
     componentKey: componentId.replaceAll("-", "_"),
@@ -149,6 +155,8 @@ async function fixtureRoot(): Promise<string> {
       explosionRadiusMax: 8,
       lockRangeMax: 10000,
       trackingSignalType: "Infrared",
+      selectionEligible: true,
+      referenceStatus: "referenced",
       confidence: "high",
     },
     {
@@ -162,6 +170,20 @@ async function fixtureRoot(): Promise<string> {
       size: 5,
       alphaDamageTotal: 9000,
       damagePhysical: 9000,
+      confidence: "high",
+    },
+    {
+      entityClass: templateMissileId,
+      componentKey: templateMissileId,
+      name: "MISL_S10_Template",
+      displayName: "Template Torpedo",
+      componentType: "missile",
+      itemType: "Missile",
+      ordnanceClass: "Torpedo",
+      size: 10,
+      alphaDamageTotal: 10000,
+      selectionEligible: false,
+      referenceStatus: "unreferenced_template",
       confidence: "high",
     },
   ];
@@ -210,6 +232,20 @@ async function fixtureRoot(): Promise<string> {
     bombSlotCount: 1,
     supportedBombSizes: [5],
     bombPorts: [{ name: "bomb_01_attach", minSize: 5, maxSize: 5 }],
+    confidence: "high",
+  }];
+  records["missile_controllers.json"] = [{
+    entityClass: missileControllerId,
+    componentKey: missileControllerId,
+    name: "Controller_Missile",
+    displayName: "Missile Controller",
+    componentType: "missile_controller",
+    lockAngleAtMin: 18,
+    lockAngleAtMax: 18,
+    maxArmedMissiles: 4,
+    launchCooldownTime: 4,
+    selectionEligible: false,
+    referenceStatus: "referenced_internal",
     confidence: "high",
   }];
   records["shields.json"] = [{
@@ -264,12 +300,14 @@ test("older datasets remain readable when additive ordnance registries are absen
     await unlink(path.join(fittingRoot, "missile_racks.json"));
     await unlink(path.join(fittingRoot, "bombs.json"));
     await unlink(path.join(fittingRoot, "bomb_racks.json"));
+    await unlink(path.join(fittingRoot, "missile_controllers.json"));
     const meta = await handleFittingRoute("GET", "/api/v1/fitting/meta?channel=LIVE&buildId=test-build", "test-request", root);
     const components = await handleFittingRoute("GET", "/api/v1/fitting/components?channel=LIVE&buildId=test-build", "test-request", root);
     assert.equal(meta?.status, 200, JSON.stringify(meta?.body));
     assert.equal(components?.status, 200, JSON.stringify(components?.body));
     assert.equal(JSON.stringify(meta?.body).includes("missiles"), false);
     assert.equal(JSON.stringify(meta?.body).includes("bombs"), false);
+    assert.equal(JSON.stringify(meta?.body).includes("missile_controllers"), false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -331,6 +369,36 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal(bombList?.status, 200);
     assert.equal((bombList?.body as { data: Array<{ id: string }> }).data.length, 1);
     assert.equal((bombList?.body as { data: Array<{ id: string }> }).data[0]?.id, bombId);
+
+    const controller = await handleFittingRoute("GET", `/api/v1/fitting/components/${missileControllerId}?${query}`, "test-request", root);
+    const controllerData = (controller?.body as {
+      data: {
+        type: string;
+        selectionEligible: boolean;
+        referenceStatus: string;
+        stats: { lockAngleAtMin: number; lockAngleAtMax: number; maxArmedMissiles: number; launchCooldownTime: number };
+      };
+    }).data;
+    assert.equal(controllerData.type, "missile_controller");
+    assert.equal(controllerData.selectionEligible, false);
+    assert.equal(controllerData.referenceStatus, "referenced_internal");
+    assert.deepEqual(controllerData.stats, {
+      lockAngleAtMin: 18,
+      lockAngleAtMax: 18,
+      maxArmedMissiles: 4,
+      launchCooldownTime: 4,
+    });
+
+    const compatibleMissiles = await handleFittingRoute(
+      "GET",
+      `/api/v1/fitting/ships/${shipId}/ports/missile%2Fmain/compatible-components?${query}`,
+      "test-request",
+      root,
+    );
+    assert.deepEqual(
+      (compatibleMissiles?.body as { data: { components: Array<{ id: string }> } }).data.components.map((item) => item.id),
+      [missileId],
+    );
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -383,6 +451,27 @@ test("keeps read routes read-only and supports POST validate/calculate", async (
     const validate = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, loadoutPayload);
     assert.equal(validate?.status, 200);
     assert.equal((validate?.body as { data: { valid: boolean } }).data.valid, false);
+
+    const ineligibleValidation = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId,
+      loadout: { "missile/main": templateMissileId },
+    });
+    const ineligibleValidationData = (ineligibleValidation?.body as {
+      data: { valid: boolean; mismatchReasons: Array<{ kind: string }> };
+    }).data;
+    assert.equal(ineligibleValidationData.valid, false);
+    assert.ok(ineligibleValidationData.mismatchReasons.some((reason) => reason.kind === "selection_ineligible"));
+
+    const ineligibleCalculation = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId,
+      loadout: { "missile/main": templateMissileId },
+      options: { compareToStock: false },
+    });
+    const ineligibleCalculationData = (ineligibleCalculation?.body as {
+      data: { componentCountsByType: Record<string, number>; unresolvedReferences: Array<{ kind: string }> };
+    }).data;
+    assert.deepEqual(ineligibleCalculationData.componentCountsByType, {});
+    assert.ok(ineligibleCalculationData.unresolvedReferences.some((reference) => reference.kind === "selection_ineligible"));
 
     const calculate = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
       shipId: shipId,

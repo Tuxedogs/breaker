@@ -12,6 +12,7 @@ const COMPONENT_FILES = [
   ["missile_racks.json", "missile_rack"],
   ["bombs.json", "bomb"],
   ["bomb_racks.json", "bomb_rack"],
+  ["missile_controllers.json", "missile_controller"],
   ["mining_lasers.json", "mining_laser"],
   ["salvage_heads.json", "salvage_head"],
   ["salvage_modifiers.json", "salvage_modifier"],
@@ -150,6 +151,8 @@ export function componentType(row: Row, fallback: string): string {
     bomb: "bomb",
     bomb_rack: "bomb_rack",
     bombrack: "bomb_rack",
+    missile_controller: "missile_controller",
+    missilecontroller: "missile_controller",
     shield: "shield",
     armor: "armor",
     power_plant: "power_plant",
@@ -180,6 +183,8 @@ export function componentSummary(row: Row, fallbackType = "other"): Record<strin
     grade: text(row.grade),
     class: text(row.class),
     confidence: confidence(row.confidence),
+    selectionEligible: nullableBooleanValue(row.selectionEligible),
+    referenceStatus: text(row.referenceStatus),
   };
 }
 
@@ -216,6 +221,10 @@ export function componentStats(row: Row): Record<string, number | null> {
     missileSlotCount: "missileSlotCount",
     bombSlotCount: "bombSlotCount",
     ordnanceSlotCount: "ordnanceSlotCount",
+    lockAngleAtMin: "lockAngleAtMin",
+    lockAngleAtMax: "lockAngleAtMax",
+    maxArmedMissiles: "maxArmedMissiles",
+    launchCooldownTime: "launchCooldownTime",
     dragAreaRadius: "dragAreaRadius",
     centreOfPressureOffsetY: "centreOfPressureOffsetY",
     maximumDropAngleFromFlatFlight: "maximumDropAngleFromFlatFlight",
@@ -736,6 +745,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
     "missile_rack",
     "bomb",
     "bomb_rack",
+    "missile_controller",
     "mining_laser",
     "salvage_head",
     "salvage_modifier",
@@ -822,7 +832,7 @@ export async function listCompatibleComponents(
   if (!rule) throw new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No fitting port matched the supplied identifier.");
   const keys = Array.isArray(rule.compatibleComponentKeys) ? rule.compatibleComponentKeys : [];
   const components = new Map((await componentRows(selection)).map(({ row, fallbackType }) => [canonicalId(row.entityClass ?? row.componentKey ?? row.thrusterKey), componentSummary(row, fallbackType)]));
-  const records = keys.map(canonicalId).filter((id): id is string => id !== null).map((id) => components.get(id)).filter((item): item is Record<string, unknown> => !!item)
+  const records = keys.map(canonicalId).filter((id): id is string => id !== null).map((id) => components.get(id)).filter((item): item is Record<string, unknown> => !!item && item.selectionEligible !== false)
     .sort((a, b) => String(a.displayName).localeCompare(String(b.displayName)) || String(a.id).localeCompare(String(b.id)));
   const paged = page(records, pagination(search, querySignature(selection, `compatibility:${shipId}:${portId}`, search)));
   const rawStatus = text(rule.compatibilityStatus);

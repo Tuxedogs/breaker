@@ -205,6 +205,8 @@ export type FittingComponentSummary = {
   grade: string | null;
   class: string | null;
   confidence: FittingConfidence;
+  selectionEligible?: boolean | null;
+  referenceStatus?: string | null;
 };
 
 export type FittingHardpoint = {
@@ -544,6 +546,10 @@ export type FittingComponentStats = {
   missileSlotCount?: number | null;
   bombSlotCount?: number | null;
   ordnanceSlotCount?: number | null;
+  lockAngleAtMin?: number | null;
+  lockAngleAtMax?: number | null;
+  maxArmedMissiles?: number | null;
+  launchCooldownTime?: number | null;
   dragAreaRadius?: number | null;
   centreOfPressureOffsetY?: number | null;
   maximumDropAngleFromFlatFlight?: number | null;

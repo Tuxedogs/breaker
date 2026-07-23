@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { PortBreakdownRow } from "./fittingPortGrouping.ts";
+import { buildMockupOffensiveDisplayGroups } from "./fittingMockupGroups.ts";
 import {
+  buildOffensiveGroups,
   offensiveGroupKey,
   portCompatibilitySignature,
   summarizeGroupRows,
@@ -50,6 +52,73 @@ test("standalone nose guns group under pilot-weapons, not turret groups", () => 
 
   assert.equal(offensiveGroupKey(left, lookup), "pilot-weapons");
   assert.equal(offensiveGroupKey(right, lookup), "pilot-weapons");
+});
+
+test("source-backed ship weapon rockets group under rockets", () => {
+  const rocket = weaponRow({
+    portId: "hardpoint_gun_wing/hardpoint_class_2",
+    parentPortId: "hardpoint_gun_wing",
+    equippedComponentKey: "rocket-pod-1",
+    equippedComponentName: "Jericho XL Rocket Pod",
+    componentSubtype: "Rocket",
+  });
+  const lookup = new Map([[rocket.portId, rocket]]);
+
+  assert.equal(offensiveGroupKey(rocket, lookup), "rockets");
+
+  const rockets = buildOffensiveGroups([rocket]).find((group) => group.key === "rockets");
+  assert.ok(rockets);
+  assert.equal(rockets.label, "Rockets");
+  assert.deepEqual(rockets.rows, [rocket]);
+});
+
+test("Rocket subtype does not reclassify standalone missile records", () => {
+  const missile = weaponRow({
+    portId: "missile_rack/rocket_01",
+    parentPortId: "missile_rack",
+    portType: "Missile",
+    portCategory: "missile",
+    ruleCategory: "missile",
+    componentCategory: "missile",
+    componentSubtype: "Rocket",
+    equippedComponentKey: "rocket-1",
+    equippedComponentName: "Venom Rocket",
+  });
+  const lookup = new Map([[missile.portId, missile]]);
+
+  assert.equal(offensiveGroupKey(missile, lookup), "missiles");
+});
+
+test("ordinary ship weapons remain in pilot-weapons when rockets are present", () => {
+  const gun = weaponRow();
+  const rocket = weaponRow({
+    portId: "hardpoint_gun_wing/hardpoint_class_2",
+    parentPortId: "hardpoint_gun_wing",
+    equippedComponentKey: "rocket-pod-1",
+    equippedComponentName: "Jericho XL Rocket Pod",
+    componentSubtype: "rocket",
+  });
+  const lookup = new Map([gun, rocket].map((row) => [row.portId, row]));
+
+  assert.equal(offensiveGroupKey(gun, lookup), "pilot-weapons");
+  assert.equal(offensiveGroupKey(rocket, lookup), "rockets");
+});
+
+test("mockup renders rocket pods in a distinct Rockets group", () => {
+  const gun = weaponRow();
+  const rocket = weaponRow({
+    portId: "hardpoint_gun_wing/hardpoint_class_2",
+    parentPortId: "hardpoint_gun_wing",
+    equippedComponentKey: "rocket-pod-1",
+    equippedComponentName: "Jericho XL Rocket Pod",
+    componentSubtype: "Rocket",
+  });
+
+  const groups = buildMockupOffensiveDisplayGroups([gun, rocket]);
+
+  assert.deepEqual(groups.map((group) => group.key), ["pilot-weapons", "rockets"]);
+  assert.equal(groups[1]?.label, "Rockets");
+  assert.deepEqual(groups[1]?.summaries[0]?.rows, [rocket]);
 });
 
 test("PDC turret weapons group separately from pilot and attack turrets", () => {
@@ -101,11 +170,11 @@ test("bombs and torpedoes remain distinct ordnance groups", () => {
   assert.equal(offensiveGroupKey(torpedo, lookup), "torpedoes");
 });
 
-test("pilot weapon summaries use compatibility signature keys with real port ids", () => {
+test("pilot weapon summaries preserve real port ids for individual selection", () => {
   const row = weaponRow();
   const [summary] = summarizeGroupRows([row], "pilot-weapons");
 
-  assert.notEqual(summary.key, row.portId);
+  assert.equal(summary.key, row.portId);
   assert.deepEqual(summary.portIds, [row.portId]);
   assert.equal(summary.turretLabel, null);
 });
