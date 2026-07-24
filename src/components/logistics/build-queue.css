@@ -554,7 +554,6 @@
   min-height: 18px;
   padding: 2px 6px;
   border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 999px;
   background: rgba(3, 18, 28, 0.62);
   font-size: 9px;
   font-weight: 800;
@@ -643,7 +642,7 @@
 .bq-center-shell .bq-category {
   display: block;
   min-width: 0;
-  background: transparent;
+  background: none !important;
 }
 
 .bq-center-shell .bq-item {
@@ -874,7 +873,6 @@
   display: grid;
   gap: 0.5rem;
   min-width: 0;
-  background: var(--mb-bg-card);
 }
 
 .bq-item {
@@ -1822,7 +1820,6 @@
   min-height: 19px;
   padding: 0.05rem 0.34rem;
   border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 8px;
   background: rgba(255, 255, 255, 0.022);
   font-size: 0.68rem;
   font-weight: 600;
@@ -7190,6 +7187,952 @@
   }
 }
 
+/* Material allocation cards: one recipe-driven grid item per required material. */
+.bq-mat-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  align-items: start;
+  gap: 10px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
 
+.bq-mat-group,
+.bq-mat-group:hover,
+.bq-item--completed-craft .bq-mat-group,
+.bq-item--completed-craft .bq-mat-group:hover {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  border: 1px solid rgba(91, 151, 177, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(15, 38, 53, 0.94) 0%, rgba(7, 25, 37, 0.97) 44%, rgba(4, 17, 27, 0.99) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(181, 225, 241, 0.09),
+    inset 0 -18px 30px rgba(0, 7, 13, 0.18),
+    inset 12px 0 24px rgba(22, 95, 126, 0.025),
+    0 0 0 1px rgba(29, 94, 122, 0.035),
+    0 0 18px rgba(37, 138, 178, 0.045),
+    0 10px 24px rgba(0, 6, 11, 0.24);
+}
 
+.bq-mat-group::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+  opacity: 0.035;
+  pointer-events: none;
+}
 
+.bq-page .bq-mat-row--mobile-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+  min-height: 100%;
+  padding: 22px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.bq-mat-group:hover,
+.bq-item--completed-craft .bq-mat-group:hover {
+  border-color: rgba(101, 168, 196, 0.27);
+  background:
+    linear-gradient(180deg, rgba(17, 42, 58, 0.96) 0%, rgba(8, 27, 40, 0.98) 44%, rgba(4, 18, 28, 1) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(190, 230, 244, 0.11),
+    inset 0 -18px 30px rgba(0, 7, 13, 0.18),
+    0 0 20px rgba(37, 138, 178, 0.065),
+    0 12px 28px rgba(0, 6, 11, 0.28);
+}
+
+.bq-mat-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bq-mat-card-head .bq-mat-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bq-mat-card-head .bq-material-name-cell {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bq-mat-card-head .bq-material-name-cell strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.2rem;
+}
+
+.bq-mat-card-head .bq-mat-actions {
+  flex: 0 0 auto;
+}
+
+.bq-mat-card-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  align-items: start;
+  min-width: 0;
+}
+
+.bq-mat-card-metrics > span {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  color: var(--alloc-text-primary);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.bq-mat-card-metrics em,
+.bq-mat-card-status em,
+.bq-mat-card-quality-label {
+  color: var(--alloc-text-secondary);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-mat-card-metrics .bq-target-quality-cell {
+  overflow: visible;
+}
+
+.bq-mat-card-metrics .bq-target-quality-cell .bq-target-editor {
+  margin-top: 0;
+}
+
+.bq-mat-card-status {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.bq-mat-card-status em {
+  flex-basis: 100%;
+}
+
+.bq-mat-card-status strong {
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.bq-mat-card-status span {
+  color: currentColor;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bq-mat-card-quality-label {
+  display: block;
+}
+
+.bq-mat-card-quality {
+  width: 100%;
+  min-width: 0;
+}
+
+.bq-mat-card-quality .bq-quality-chips {
+  width: 100%;
+}
+
+.bq-materials-section-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bq-inventory-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(100, 116, 139, 0.32);
+  border-radius: 8px;
+  background: rgba(8, 18, 27, 0.72);
+  color: var(--alloc-text-secondary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bq-inventory-toggle:hover {
+  border-color: rgba(65, 132, 160, 0.5);
+  color: var(--alloc-text-primary);
+}
+
+.bq-inventory-toggle.is-active {
+  border-color: rgba(45, 212, 191, 0.34);
+  color: rgba(153, 246, 228, 0.9);
+}
+
+.bq-inventory-toggle-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.7);
+}
+
+.bq-inventory-toggle.is-active .bq-inventory-toggle-indicator {
+  background: rgb(45, 212, 191);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.34);
+}
+
+.bq-mat-card-primary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+  min-width: 0;
+  padding: 14px 0;
+  border-block: 1px solid rgba(65, 132, 160, 0.14);
+}
+
+.bq-mat-card-target,
+.bq-mat-card-need {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  min-width: 0;
+}
+
+.bq-mat-card-primary em,
+.bq-mat-card-need em {
+  color: var(--alloc-text-secondary);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-mat-card-target .bq-target-editor {
+  justify-self: start;
+  margin: 0;
+}
+
+.bq-mat-card-target .bq-avg-quality {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  margin-top: 5px;
+}
+
+.bq-mat-card-target .bq-avg-quality > span {
+  font-size: 15px;
+}
+
+.bq-mat-card-need {
+  justify-items: end;
+  text-align: right;
+}
+
+.bq-mat-card-need strong {
+  color: var(--alloc-text-primary);
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.bq-item > .bq-component-statistics {
+  margin-top: 18px;
+  border-top: 1px solid rgba(79, 137, 161, 0.3);
+  box-shadow: 0 -10px 24px rgba(0, 5, 10, 0.16);
+}
+
+@media (max-width: 520px) {
+  .bq-mat-table {
+    grid-template-columns: 1fr;
+  }
+
+  .bq-materials-section-header {
+    align-items: flex-start;
+  }
+
+  .bq-materials-section-actions {
+    justify-content: flex-start;
+  }
+
+  .bq-page .bq-mat-row--mobile-card {
+    padding: 20px;
+  }
+}
+
+/* Build Queue reference replication: selected-craft workspace only.
+   The global navigation and queue sidebar deliberately retain their existing geometry. */
+@media (min-width: 1200px) {
+  .bq-center-shell .bq-item-header {
+    height: 203px;
+    min-height: 203px;
+    padding: 10px 16px;
+    grid-template-columns: minmax(220px, 1fr) 128px;
+    grid-template-areas: "identity visual";
+    gap: 16px;
+  }
+
+  .bq-center-shell .bq-item-identity {
+    gap: 6px;
+  }
+
+  .bq-center-shell .bq-item-visual {
+    width: 128px;
+    height: 59px;
+    min-height: 59px;
+    padding: 5px;
+    justify-self: end;
+  }
+
+  .bq-center-shell .bq-item-visual .bq-product-icon,
+  .bq-center-shell .bq-item-visual .bq-product-icon--weapon {
+    width: 116px;
+    height: 47px;
+    max-width: 116px;
+    max-height: 47px;
+    object-fit: cover;
+  }
+
+  .bq-center-shell .bq-item-cat {
+    margin-bottom: 2px;
+    font-size: 9px;
+    line-height: 1.1;
+  }
+
+  .bq-center-shell .bq-item-name {
+    font-size: 15px;
+    line-height: 1.15;
+  }
+
+  .bq-center-shell .bq-item-mission {
+    gap: 3px;
+    margin-top: 2px;
+  }
+
+  .bq-center-shell .bq-item-blueprint {
+    max-width: 960px;
+    font-size: 10px;
+    line-height: 1.25;
+    -webkit-line-clamp: 1;
+  }
+
+  .bq-center-shell .bq-item-footer {
+    padding-top: 0;
+  }
+
+  .bq-center-shell .bq-btn {
+    min-height: 27px;
+    padding-inline: 10px;
+    border-radius: 5px;
+    font-size: 9px;
+  }
+
+  .bq-center-shell .bq-qty {
+    border-radius: 5px;
+  }
+
+  .bq-center-shell .bq-qty-btn,
+  .bq-center-shell .bq-qty-val {
+    height: 27px;
+  }
+
+  .bq-center-shell .bq-qty-val {
+    line-height: 27px;
+  }
+
+  .bq-center-shell .bq-item-body {
+    height: 290px;
+    flex: 0 0 290px;
+  }
+
+  .bq-center-shell .bq-materials-section {
+    height: 290px;
+    min-height: 290px;
+    padding: 11px 16px 10px;
+    border-top: 1px solid rgba(74, 117, 137, 0.22);
+    border-bottom: 1px solid rgba(74, 117, 137, 0.22);
+    background: rgba(4, 14, 23, 0.42);
+  }
+
+  .bq-materials-section-header {
+    min-height: 37px;
+    padding-bottom: 9px;
+  }
+
+  .bq-materials-section-heading {
+    gap: 3px;
+  }
+
+  .bq-materials-section-title {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .bq-materials-section-summary {
+    font-size: 10px;
+    line-height: 1.1;
+  }
+
+  .bq-materials-section-actions {
+    flex-wrap: nowrap;
+    gap: 7px;
+  }
+
+  .bq-inventory-toggle,
+  .bq-auto-reserve-btn {
+    min-height: 28px;
+    height: 28px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 9px;
+  }
+
+  .bq-mat-table {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+    height: 228px;
+    margin-top: 4px;
+  }
+
+  .bq-mat-group,
+  .bq-mat-group:hover,
+  .bq-item--completed-craft .bq-mat-group,
+  .bq-item--completed-craft .bq-mat-group:hover {
+    height: 228px;
+    min-height: 228px;
+    overflow: hidden;
+    border: 1px solid rgba(72, 119, 141, 0.25);
+    border-radius: 6px;
+    background:
+      radial-gradient(110% 85% at 75% 0%, rgba(25, 86, 111, 0.09), transparent 58%),
+      linear-gradient(180deg, rgba(8, 27, 40, 0.96), rgba(5, 20, 31, 0.98));
+    box-shadow:
+      inset 0 1px 0 rgba(181, 225, 241, 0.035),
+      0 7px 18px rgba(0, 5, 10, 0.2);
+  }
+
+  .bq-page .bq-mat-row--mobile-card {
+    height: 226px;
+    min-height: 226px;
+    padding: 14px;
+    gap: 8px;
+    grid-template-rows: 28px 90px 12px minmax(0, 1fr);
+  }
+
+  .bq-page .bq-mat-row > .bq-mat-card-head {
+    position: relative;
+    z-index: 4 !important;
+    overflow: visible !important;
+    min-height: 28px;
+    grid-row: 1;
+  }
+
+  .bq-mat-card-head .bq-material-icon {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .bq-mat-card-head .bq-material-name-cell {
+    gap: 9px;
+  }
+
+  .bq-mat-card-head .bq-material-name-cell strong {
+    font-size: 1.2rem;
+    line-height: 1.1;
+  }
+
+  .bq-mat-card-head .bq-target-editor {
+    position: absolute;
+    top: 32px;
+    right: 0;
+    z-index: 2;
+    flex: 0 0 67px;
+    width: 67px;
+    margin: 0;
+  }
+
+  .bq-page .bq-mat-card-head .bq-target-editor--slider > .bq-target-quality {
+    width: 67px;
+    min-height: 27px;
+    padding-inline: 5px;
+    border-radius: 5px;
+    font-size: 10px;
+  }
+
+  .bq-mat-card-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 27px 45px;
+    grid-template-areas:
+      "need need"
+      "average balance";
+    column-gap: 12px;
+    row-gap: 0;
+    min-height: 89px;
+    padding: 9px 0 8px;
+    border-bottom: 1px solid rgba(76, 119, 139, 0.18);
+    grid-row: 2;
+  }
+
+  .bq-mat-card-metrics > span,
+  .bq-mat-card-metrics .bq-mat-card-status {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 2px;
+    min-width: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .bq-mat-card-metrics .bq-mat-card-need {
+    grid-area: need;
+  }
+
+  .bq-mat-card-metrics .bq-avg-quality {
+    grid-area: average;
+  }
+
+  .bq-mat-card-metrics .bq-mat-card-status {
+    grid-area: balance;
+  }
+
+  .bq-mat-card-metrics em,
+  .bq-mat-card-status em,
+  .bq-mat-card-quality-label {
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: 0.055em;
+  }
+
+  .bq-mat-card-metrics strong,
+  .bq-mat-card-metrics .bq-avg-quality > span {
+    font-size: 12px;
+    line-height: 1.05;
+  }
+
+  .bq-mat-card-metrics small {
+    font-size: 9px;
+    line-height: 1.05;
+  }
+
+  .bq-mat-card-quality-label {
+    align-self: start;
+    grid-row: 3;
+  }
+
+  .bq-mat-card-footer {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+    height: 100%;
+    align-self: stretch;
+    grid-row: 4;
+  }
+
+  .bq-mat-card-quality {
+    min-width: 0;
+    width: auto;
+  }
+
+  .bq-mat-card-quality.bq-quality-empty {
+    width: 66px;
+    min-height: 37px;
+    border: 0;
+    background: transparent;
+  }
+
+  .bq-mat-card-quality .bq-quality-chips {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .bq-page .bq-quality-chip,
+  .bq-page .bq-quality-chip[class*="logi-rarity--"] {
+    min-width: 79px;
+    max-width: 86px;
+    min-height: 39px;
+    padding: 5px 7px;
+    gap: 3px;
+    border-radius: 5px;
+    font-size: 9px;
+  }
+
+  .bq-page .bq-quality-chip strong {
+    font-size: 11px;
+  }
+
+  .bq-mat-card-footer .bq-mat-actions {
+    display: flex;
+    gap: 5px;
+    flex: 0 0 auto;
+  }
+
+  .bq-mat-card-footer .bq-icon-action {
+    width: 27px;
+    height: 27px;
+    min-height: 27px;
+    border-radius: 5px;
+  }
+
+  .bq-item > .bq-component-statistics {
+    height: 313px;
+    min-height: 313px;
+    margin-top: 12px;
+    padding: 11px 16px 13px;
+    border-top: 1px solid rgba(74, 117, 137, 0.25);
+    background: rgba(5, 16, 25, 0.72);
+    overflow: hidden;
+  }
+
+  .bq-component-statistics-title {
+    font-size: 12px;
+  }
+
+  .bq-component-statistics-body {
+    grid-template-columns: minmax(320px, 0.66fr) minmax(520px, 1fr);
+    gap: 14px;
+  }
+
+  .bq-stat-unmodified-column {
+    gap: 8px;
+  }
+
+  .bq-stat-unmodified-group,
+  .bq-stat-modified-card {
+    padding: 9px 11px;
+    border-radius: 5px;
+  }
+
+  .bq-stat-unmodified-group {
+    gap: 2px;
+  }
+
+  .bq-stat-compact-row {
+    min-height: 19px;
+    padding: 2px 0;
+  }
+
+  .bq-stat-compact-label,
+  .bq-stat-compact-value {
+    font-size: 10px;
+  }
+
+  .bq-stat-modified-card {
+    gap: 8px;
+  }
+
+  .bq-stat-modified-group {
+    gap: 5px;
+  }
+
+  .bq-component-statistics .bq-stat-compare-row {
+    gap: 4px;
+    padding: 7px 9px 8px;
+    border-radius: 5px;
+  }
+
+  .bq-component-statistics .bq-stat-compare-label,
+  .bq-component-statistics .bq-stat-compare-base,
+  .bq-component-statistics .bq-stat-compare-base strong,
+  .bq-component-statistics .bq-stat-compare-value {
+    font-size: 11px;
+  }
+
+  .bq-component-statistics .bq-stat-compare-allocation {
+    padding-block: 2px;
+  }
+}
+
+/* Build Queue visual target refinement: restrained frames, layered depth, and
+   end-product-first scanning. This remains page-local and presentation-only. */
+.bq-page {
+  background:
+    radial-gradient(90% 120% at 20% 45%, rgba(18, 74, 99, 0.1), transparent 62%),
+    linear-gradient(90deg, #050e16 0%, #07131e 48%, #09131f 100%);
+}
+
+.bq-page .bq-queue-col,
+.bq-page .bq-center-shell.ops-primary-card {
+  border: 1px solid rgba(75, 116, 135, 0.2);
+  background:
+    radial-gradient(95% 120% at 8% 42%, rgba(19, 72, 95, 0.08), transparent 62%),
+    linear-gradient(90deg, rgba(5, 16, 25, 0.985), rgba(7, 19, 30, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(181, 225, 241, 0.025),
+    0 14px 34px rgba(0, 5, 10, 0.24);
+}
+
+.bq-page .bq-queue-col-head {
+  justify-content: flex-start;
+  border-bottom: 1px solid rgba(75, 116, 135, 0.16);
+  background: linear-gradient(90deg, rgba(10, 28, 41, 0.78), rgba(6, 18, 28, 0.4));
+}
+
+.bq-page .bq-center-shell .bq-item-header {
+  border-bottom: 1px solid rgba(75, 116, 135, 0.18);
+  background:
+    radial-gradient(70% 140% at 18% 25%, rgba(19, 81, 108, 0.09), transparent 68%),
+    linear-gradient(90deg, rgba(7, 21, 32, 0.94), rgba(5, 16, 26, 0.78));
+}
+
+.bq-page .bq-center-shell .bq-materials-section {
+  border-block: 1px solid rgba(75, 116, 135, 0.16);
+  background:
+    radial-gradient(80% 130% at 12% 22%, rgba(15, 68, 92, 0.07), transparent 64%),
+    linear-gradient(90deg, rgba(5, 17, 27, 0.88), rgba(5, 15, 25, 0.66));
+}
+
+.bq-page .bq-mat-group,
+.bq-page .bq-mat-group:hover,
+.bq-page .bq-item--completed-craft .bq-mat-group,
+.bq-page .bq-item--completed-craft .bq-mat-group:hover {
+  border-color: rgba(85, 135, 157, 0.22);
+  background:
+    radial-gradient(95% 105% at 8% 18%, rgba(31, 105, 134, 0.065), transparent 66%),
+    linear-gradient(105deg, rgba(7, 25, 38, 0.98), rgba(5, 18, 29, 0.99) 68%, rgba(7, 16, 28, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(190, 230, 244, 0.045),
+    0 8px 22px rgba(0, 5, 10, 0.2);
+}
+
+.bq-page .bq-component-statistics {
+  border-top: 1px solid rgba(75, 116, 135, 0.18);
+  background:
+    radial-gradient(85% 130% at 10% 10%, rgba(17, 70, 95, 0.07), transparent 62%),
+    linear-gradient(90deg, rgba(6, 18, 28, 0.9), rgba(5, 15, 25, 0.72));
+  box-shadow: 0 -10px 24px rgba(0, 5, 10, 0.12);
+}
+
+/* Only the selected-item header and queue craft cards retain SVG frames. */
+.bq-page .bq-decorative-frame {
+  opacity: 0.1;
+}
+
+.bq-page .bq-item-header > .bq-decorative-frame {
+  opacity: 0.12;
+}
+
+.bq-page .bq-craft-card > .bq-decorative-frame {
+  opacity: 0.11;
+}
+
+.bq-page .bq-craft-card.is-selected > .bq-decorative-frame {
+  opacity: 0.2;
+}
+
+.bq-page .bq-craft-card-drag-handle {
+  opacity: 0.72;
+}
+
+.bq-page .bq-craft-card-shell:hover .bq-craft-card-drag-handle,
+.bq-page .bq-craft-card-drag-handle:focus-visible {
+  opacity: 1;
+}
+
+.bq-page .bq-inventory-toggle {
+  display: inline-flex;
+}
+
+.bq-component-statistics .bq-stat-compact-value.craft-ok {
+  color: #6ee7a0;
+  text-shadow: 0 0 12px rgba(52, 211, 153, 0.12);
+}
+
+.bq-component-statistics .bq-stat-compact-value.craft-shortage {
+  color: #ff7185;
+  text-shadow: 0 0 12px rgba(251, 113, 133, 0.1);
+}
+
+@media (min-width: 1200px) {
+  .bq-page .bq-center-shell .bq-item {
+    min-height: 100%;
+  }
+
+  .bq-page .bq-item > .bq-component-statistics {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 313px;
+  }
+
+  .bq-page .bq-mat-row--mobile-card {
+    grid-template-rows: 28px 90px 12px minmax(0, 1fr);
+  }
+
+  .bq-page .bq-mat-row > .bq-mat-card-head {
+    align-items: center;
+  }
+
+  .bq-page .bq-mat-card-head .bq-target-editor {
+    right: -11px;
+    width: 116px;
+  }
+
+  .bq-page .bq-mat-card-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 27px 45px;
+    grid-template-areas:
+      "need need"
+      "average balance";
+    min-height: 89px;
+    padding: 9px 0 8px;
+  }
+}
+
+/* 1080p readability pass.
+   Keep the compact desktop geometry, but do not reduce operational text below
+   a comfortable scan size. The slider reserves room for its live value inside
+   the material card instead of extending through the clipped right edge. */
+@media (min-width: 1200px) {
+  .bq-page .bq-queue-col-title {
+    font-size: 0.875rem;
+  }
+
+  .bq-page .bq-queue-selector-label {
+    font-size: 0.625rem;
+  }
+
+  .bq-page .bq-queue-selector-trigger strong {
+    font-size: 0.875rem;
+  }
+
+  .bq-page .bq-queue-tab {
+    font-size: 0.75rem;
+  }
+
+  .bq-page .bq-craft-card-index,
+  .bq-page .bq-craft-card-cat {
+    font-size: 0.75rem;
+  }
+
+  .bq-page .bq-craft-card-name {
+    font-size: 1rem;
+  }
+
+  .bq-page .bq-craft-card-status {
+    font-size: 0.6875rem;
+  }
+
+  .bq-page .bq-center-shell .bq-item-cat,
+  .bq-page .bq-center-shell .bq-item-mission-label {
+    font-size: 0.6875rem;
+  }
+
+  .bq-page .bq-center-shell .bq-item-name {
+    font-size: 1.125rem;
+  }
+
+  .bq-page .bq-center-shell .bq-item-blueprint {
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .bq-page .bq-center-shell .bq-btn,
+  .bq-page .bq-inventory-toggle,
+  .bq-page .bq-auto-reserve-btn {
+    font-size: 0.6875rem;
+  }
+
+  .bq-page .bq-materials-section-title,
+  .bq-page .bq-component-statistics-title {
+    font-size: 0.875rem;
+  }
+
+  .bq-page .bq-materials-section-summary {
+    font-size: 0.75rem;
+  }
+
+  .bq-page .bq-mat-card-head .bq-target-editor {
+    position: relative;
+    top: auto;
+    right: auto;
+    z-index: 2;
+    flex: 0 0 136px;
+    width: 136px;
+    margin: 0;
+    grid-template-columns: 96px 40px;
+  }
+
+  .bq-page .bq-mat-card-head .bq-target-editor--slider > .bq-target-quality {
+    justify-self: center;
+    width: 74px;
+    min-height: 30px;
+    font-size: 0.75rem;
+  }
+
+  .bq-page .bq-mat-card-head .bq-target-slider-shell {
+    justify-self: center;
+    width: 96px;
+  }
+
+  .bq-page .bq-mat-card-metrics em,
+  .bq-page .bq-mat-card-status em,
+  .bq-page .bq-mat-card-quality-label {
+    font-size: 0.625rem;
+    line-height: 1.15;
+  }
+
+  .bq-page .bq-mat-card-metrics strong,
+  .bq-page .bq-mat-card-metrics .bq-avg-quality > span {
+    font-size: 0.875rem;
+  }
+
+  .bq-page .bq-mat-card-metrics small {
+    font-size: 0.6875rem;
+    line-height: 1.15;
+  }
+
+  .bq-page .bq-quality-chip,
+  .bq-page .bq-quality-chip[class*="logi-rarity--"] {
+    font-size: 0.6875rem;
+  }
+
+  .bq-page .bq-quality-chip strong {
+    font-size: 0.8125rem;
+  }
+
+  .bq-page .bq-stat-compact-label,
+  .bq-page .bq-stat-compact-value {
+    font-size: 0.75rem;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-compare-label,
+  .bq-page .bq-component-statistics .bq-stat-compare-base,
+  .bq-page .bq-component-statistics .bq-stat-compare-base strong,
+  .bq-page .bq-component-statistics .bq-stat-compare-value {
+    font-size: 0.8125rem;
+  }
+}

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent,
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
-import BuildQueueFrame from "../../components/logistics/BuildQueueFrame";
 import BuildQueueSelector from "../../components/logistics/BuildQueueSelector";
 import {
   readFittingIconMode,
@@ -77,7 +76,6 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [selectedItemId, setSelectedItemId] = useState<string | null>(fixture?.selectedItemId ?? null);
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
-  const [addCraftOpen, setAddCraftOpen] = useState(false);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
   const [draggingEntryId, setDraggingEntryId] = useState<string | null>(null);
@@ -522,32 +520,11 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
       ) : null}
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
-        <aside className="bq-queue-col ops-primary-card" aria-label="Build queue list">
+        <aside className="bq-queue-col" aria-label="Build queue list">
           <header className="bq-queue-col-head">
-            <BuildQueueFrame asset="queue-header-frame.svg" />
             <span className="bq-queue-col-title">
               Build Queue <em>{activeRows.length}/{MAX_QUEUE_SLOTS}</em>
             </span>
-            <div className="bq-add-craft-wrap">
-              <button
-                type="button"
-                className="bq-add-craft-btn"
-                aria-expanded={addCraftOpen}
-                onClick={() => setAddCraftOpen((open) => !open)}
-              >
-                Add Craft
-              </button>
-              {addCraftOpen ? (
-                <div className="bq-add-craft-menu" role="menu">
-                  <Link className="bq-add-craft-option" to="/industry/crafting" role="menuitem" onClick={() => setAddCraftOpen(false)}>
-                    Individual Items
-                  </Link>
-                  <Link className="bq-add-craft-option" to="/fitting" role="menuitem" onClick={() => setAddCraftOpen(false)}>
-                    Ship Fits
-                  </Link>
-                </div>
-              ) : null}
-            </div>
           </header>
 
           <BuildQueueSelector
@@ -718,7 +695,6 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
             <div className="bq-center-shell ops-primary-card">
-            <BuildQueueFrame asset="content-shell-frame.svg" />
             <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}

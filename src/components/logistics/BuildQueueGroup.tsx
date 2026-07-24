@@ -136,10 +136,6 @@ function BlueprintSourceDisplay({ blueprintId, fallbackLabel }: { blueprintId?: 
   );
 }
 
-function isDrawerToggleExcluded(target: EventTarget | null): boolean {
-  return target instanceof HTMLElement && Boolean(target.closest('button,input,select,textarea,[data-bq-row-control="true"]'));
-}
-
 function useIsMobileTouchLayout() {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -1083,6 +1079,7 @@ export default function BuildQueueGroup({
   } | null>(null);
   const [solverPlanning, setSolverPlanning] = useState(false);
   const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
+  const [inventoryEnabled, setInventoryEnabled] = useState(true);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
@@ -1458,7 +1455,10 @@ export default function BuildQueueGroup({
           isCompletedCraft,
           materialsTargetMet(item, inputs),
         );
-
+        const toggleInventory = () => {
+          setInventoryEnabled((current) => !current);
+          setActiveDrawersByItem({});
+        };
         return (
           <article
             key={item.id}
@@ -1521,7 +1521,6 @@ export default function BuildQueueGroup({
               </div>
 
               <div className="bq-item-visual" aria-hidden="true">
-                <BuildQueueFrame asset="item-preview-frame.svg" />
                 <BuildQueueProductIcon
                   item={item}
                   recipe={recipe}
@@ -1532,48 +1531,44 @@ export default function BuildQueueGroup({
               </div>
             </div>
 
-            <BuildQueueCraftStatistics />
-
             {/* Right body */}
             <div className="bq-item-body">
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
-                <BuildQueueFrame asset="material-panel-frame.svg" />
                 <div className="bq-materials-section-header">
                   <div className="bq-materials-section-heading">
                     <h3 className="bq-materials-section-title">Material Allocation</h3>
-                    <p className="bq-materials-section-summary">
+                    {inventoryEnabled ? <p className="bq-materials-section-summary">
                       {summaryMetrics.coveredCount}/{inputs.length} covered
                       {summaryMetrics.totalShortfall > 0
                         ? ` · ${formatQuantity(summaryMetrics.totalShortfall, undefined)} short`
                         : ''}
-                    </p>
+                    </p> : null}
                   </div>
-                  <button
-                    type="button"
-                    className="bq-auto-reserve-btn"
-                    disabled={autoReserveDisabled || solverPlanning}
-                    aria-label={`Auto reserve inventory for ${itemName}`}
-                    title={autoReserveTitle}
-                    onClick={runCraftSolver}
-                  >
-                    <SolveIcon />
-                    <span>{solverPlanning ? 'Planning…' : 'Auto Reserve'}</span>
-                  </button>
+                  <div className="bq-materials-section-actions">
+                    <button
+                      type="button"
+                      className="bq-auto-reserve-btn"
+                      disabled={!inventoryEnabled || autoReserveDisabled || solverPlanning}
+                      aria-label={`Auto reserve inventory for ${itemName}`}
+                      title={inventoryEnabled ? autoReserveTitle : 'Enable inventory to auto reserve materials.'}
+                      onClick={runCraftSolver}
+                    >
+                      <SolveIcon />
+                      <span>{solverPlanning ? 'Planning…' : 'Auto Reserve'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`bq-inventory-toggle${inventoryEnabled ? ' is-active' : ''}`}
+                      aria-pressed={inventoryEnabled}
+                      onClick={toggleInventory}
+                    >
+                      <span className="bq-inventory-toggle-indicator" aria-hidden="true" />
+                      <span>Inventory {inventoryEnabled ? 'On' : 'Off'}</span>
+                    </button>
+                  </div>
                 </div>
               <div className="bq-mat-table">
-                {!isMobileTouchLayout ? (
-                <div className="bq-mat-head" aria-hidden="true">
-                  <span>Material</span>
-                  <span>Total Need</span>
-                  <span>Target</span>
-                  <span>Avg Quality</span>
-                  <span>Shortfall / Excess</span>
-                  <span>Quality Allocation</span>
-                  <span>{isCompletedCraft ? 'Status' : 'Actions'}</span>
-                </div>
-                ) : null}
-
                 {materialGroups.map((group) => {
                   const activeDrawer = activeDrawersByItem[item.id];
                   const reserveExpanded =
@@ -1585,7 +1580,6 @@ export default function BuildQueueGroup({
                   const balanceAmount = isCompletedCraft ? 0 : group.allocatedTotal - group.requiredTotal;
                   const balanceTone = balanceAmount < 0 ? 'short' : balanceAmount > 0 ? 'excess' : 'met';
                   const balanceLabel = formatQuantity(Math.abs(balanceAmount), group.material);
-                  const balanceStateLabel = balanceTone === 'short' ? 'short' : balanceTone === 'excess' ? 'excess' : 'balanced';
                   const targetQualityLabel = formatTargetQuality(targetEditorQuality);
                   const targetQualityTone = getTargetQualityTone(targetEditorQuality);
                   const averageQualityLabel = formatAverageQuality(group.averageQuality);
@@ -1614,12 +1608,9 @@ export default function BuildQueueGroup({
                       className={[
                         'bq-mat-group',
                         group.needTotal > 0 ? 'bq-mat-group--missing' : '',
-                        isMobileTouchLayout ? 'bq-mat-group--mobile-card' : '',
                       ].filter(Boolean).join(' ')}
                     >
-                      {isMobileTouchLayout ? (
                       <div className="bq-mat-row bq-mat-row--mobile-card bq-mat-row--touch">
-                        <BuildQueueFrame asset="material-row-frame.svg" />
                         <div className="bq-mat-card-head">
                           <div className="bq-mat-name">
                             <span className="bq-material-name-cell">
@@ -1630,6 +1621,65 @@ export default function BuildQueueGroup({
                               <span>{group.requirements.length} requirements</span>
                             ) : null}
                           </div>
+                          <TargetQualitySlider
+                            label={targetQualityLabel}
+                            tone={targetQualityTone}
+                            materialName={group.displayName}
+                            value={targetEditorQuality}
+                            disabled={isCompletedCraft}
+                            onChange={(value) => updateTargetQuality(
+                              item,
+                              qualityRequirement.input,
+                              qualityRequirement.requirementId,
+                              targetEditorBands,
+                              value,
+                            )}
+                            onCommit={(value) => commitTargetQuality(
+                              item,
+                              value,
+                              qualityRequirement.ownAllocations,
+                              qualityRequirement.effectiveReservedQuality,
+                            )}
+                          />
+                        </div>
+                        <div className="bq-mat-card-metrics">
+                          <span className="bq-mat-card-need">
+                            <em>Total Need</em>
+                            <strong>{formatQuantity(group.requiredTotal, group.material)}</strong>
+                          </span>
+                          {inventoryEnabled ? <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
+                            <em>Avg Quality</em>
+                            <span>{averageQualityLabel}</span>
+                            {averageBelowTarget ? <small>below target</small> : <small>avg</small>}
+                          </span> : null}
+                          {inventoryEnabled ? <span className={`bq-mat-card-status bq-balance bq-balance--${balanceTone === 'short' ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
+                            <em>Shortfall / Excess</em>
+                            <strong>{balanceTone === 'short' ? balanceLabel : formatQuantity(0, group.material)}</strong>
+                            <small>{balanceTone === 'short' ? 'short' : 'balanced'}</small>
+                          </span> : null}
+                        </div>
+                        {inventoryEnabled ? <span className="bq-mat-card-quality-label">Quality Allocation</span> : null}
+                        {inventoryEnabled ? <div className="bq-mat-card-footer">
+                          {group.qualityBreakdown.length > 0 ? (
+                            <div className="bq-mat-card-quality">
+                            <QualityAllocationChips
+                              breakdown={group.qualityBreakdown}
+                              material={group.material}
+                              qualityBands={qualityRequirement.qualityBands}
+                            />
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="bq-mat-card-quality bq-quality-empty"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                openReserve();
+                              }}
+                            >
+                              —
+                            </button>
+                          )}
                           <div className="bq-mat-actions" data-bq-row-control="true">
                             <button
                               type="button"
@@ -1661,172 +1711,17 @@ export default function BuildQueueGroup({
                               <ChevronIcon open={reserveExpanded} />
                             </button>
                           </div>
-                        </div>
-                        <div className="bq-mat-card-metrics">
-                          <span><em>Need</em>{formatQuantity(group.requiredTotal, group.material)}</span>
-                          <span className="bq-target-quality-cell">
-                            <em>Target</em>
-                            <TargetQualitySlider
-                              label={targetQualityLabel}
-                              tone={targetQualityTone}
-                              materialName={group.displayName}
-                              value={targetEditorQuality}
-                              disabled={isCompletedCraft}
-                              onChange={(value) => updateTargetQuality(
-                                item,
-                                qualityRequirement.input,
-                                qualityRequirement.requirementId,
-                                targetEditorBands,
-                                value,
-                              )}
-                              onCommit={(value) => commitTargetQuality(
-                                item,
-                                value,
-                                qualityRequirement.ownAllocations,
-                                qualityRequirement.effectiveReservedQuality,
-                              )}
-                            />
-                          </span>
-                          <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
-                            <em>Avg Quality</em>
-                            <span>{averageQualityLabel}</span>
-                            {averageBelowTarget ? <small>below target</small> : null}
-                          </span>
-                        </div>
-                        <div className={`bq-mat-card-status bq-balance bq-balance--${balanceTone} ${materialTypeClass(group.material)}`}>
-                          <em>{balanceTone === 'short' ? 'Remaining' : balanceStateLabel}</em>
-                          <strong>{balanceTone === 'met' ? formatQuantity(0, group.material) : balanceLabel}</strong>
-                          {balanceTone === 'short' ? <span>short</span> : null}
-                        </div>
-                        {group.qualityBreakdown.length > 0 ? (
-                          <div className="bq-mat-card-quality">
-                            <QualityAllocationChips
-                              breakdown={group.qualityBreakdown}
-                              material={group.material}
-                              qualityBands={qualityRequirement.qualityBands}
-                            />
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            className="bq-mat-card-quality bq-quality-empty"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              openReserve();
-                            }}
-                          >
-                            No allocation
-                          </button>
-                        )}
+                        </div> : null}
                       </div>
-                      ) : (
-                      <div
-                        className="bq-mat-row"
-                        onClick={(event) => {
-                          if (isDrawerToggleExcluded(event.target)) return;
-                          openReserve();
-                        }}
-                      >
-                        <BuildQueueFrame asset="material-row-frame.svg" />
-                        <div className="bq-mat-name">
-                          <span className="bq-material-name-cell">
-                            <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} size={34} />
-                            <strong>{group.displayName}</strong>
-                          </span>
-                          {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
-                        </div>
-                        <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.requiredTotal, group.material)}</span>
-                        <TargetQualitySlider
-                          label={targetQualityLabel}
-                          tone={targetQualityTone}
-                          materialName={group.displayName}
-                          value={targetEditorQuality}
-                          disabled={isCompletedCraft}
-                          onChange={(value) => updateTargetQuality(
-                            item,
-                            qualityRequirement.input,
-                            qualityRequirement.requirementId,
-                            targetEditorBands,
-                            value,
-                          )}
-                          onCommit={(value) => commitTargetQuality(
-                            item,
-                            value,
-                            qualityRequirement.ownAllocations,
-                            qualityRequirement.effectiveReservedQuality,
-                          )}
-                        />
-                        <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
-                          <span><i aria-hidden="true" />{averageQualityLabel}</span>
-                          <em>avg</em>
-                          {averageBelowTarget ? <small>below target</small> : null}
-                        </span>
-                        <span className={`bq-balance bq-balance--${balanceTone} ${materialTypeClass(group.material)}`}>
-                          <strong>{balanceTone === 'met' ? formatQuantity(0, group.material) : balanceLabel}</strong>
-                          <em>{balanceStateLabel}</em>
-                        </span>
-                        <div className="bq-quality-allocation-cell">
-                          {group.qualityBreakdown.length > 0 ? (
-                            <QualityAllocationChips
-                              breakdown={group.qualityBreakdown}
-                              material={group.material}
-                              qualityBands={qualityRequirement.qualityBands}
-                            />
-                          ) : (
-                            <button
-                              type="button"
-                              className="bq-quality-empty"
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                openReserve();
-                              }}
-                            >
-                              —
-                            </button>
-                          )}
-                        </div>
-                        <div className="bq-mat-actions" data-bq-row-control="true">
-                          <button
-                            type="button"
-                            className={`bq-icon-action bq-icon-action--add${quickAddTarget?.materialId === (group.material?.id ?? group.requirements[0]?.materialKey) && quickAddTarget?.displayName === group.displayName ? ' is-active' : ''}`}
-                            aria-label={`Add inventory for ${group.displayName}`}
-                            data-bq-row-control="true"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              openQuickAdd(
-                                group.material?.id ?? group.requirements[0]?.materialKey ?? '',
-                                group.displayName,
-                                group.material,
-                              );
-                            }}
-                          >
-                            <PlusIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className={`bq-icon-action bq-icon-action--drawer${reserveExpanded ? ' is-active' : ''}`}
-                            aria-label={`${reserveExpanded ? 'Collapse' : 'Expand'} reserve drawer for ${group.displayName}`}
-                            aria-expanded={reserveExpanded}
-                            data-bq-row-control="true"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              openReserve();
-                            }}
-                          >
-                            <ChevronIcon open={reserveExpanded} />
-                          </button>
-                        </div>
-                      </div>
-                      )}
 
-                      {!isCompletedCraft && group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
+                      {inventoryEnabled && !isCompletedCraft && group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
                         <div key={allocation.id} className="bq-stale-line">
                           <span>Stale: {allocation.materialName ?? allocation.materialId} ({STALE_REASON_LABELS[staleReason ?? ''] ?? 'invalid'})</span>
                           <button type="button" className="bq-btn" onClick={() => onClearStaleAllocations(item.id)}>Remove stale</button>
                         </div>
                       ))}
 
-                      {reserveExpanded && (
+                      {inventoryEnabled && reserveExpanded && (
                         <div className="bq-reserve-panel">
                           <div className="bq-reserve-panel-head">
                             <div className="bq-reserve-panel-title">
@@ -2058,6 +1953,8 @@ export default function BuildQueueGroup({
             ) : null}
 
             </div>{/* bq-item-body */}
+
+            <BuildQueueCraftStatistics />
 
             {pendingCraftSolverPlan?.itemId === item.id ? (
               <CraftAllocationSolverPreview

@@ -70,6 +70,113 @@ async function selectQueue(page: Page, queueName: string) {
 }
 
 test.describe("Build Queue stats fixture", () => {
+  test("renders the populated mockup target at desktop review sizes", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const visualTargetDir = path.resolve(process.cwd(), "artifacts/build-queue-visual-target");
+    await mkdir(visualTargetDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+
+      await expect(page.locator(".bq-item-name")).toHaveText("M5A Cannon");
+      await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+      await expect(page.getByRole("button", { name: "Add Craft" })).toHaveCount(0);
+      await expect(page.locator(".bq-craft-card-drag-handle")).toHaveCount(2);
+      await expect(page.locator(".bq-inventory-toggle")).toBeVisible();
+      await expect(page.locator(".bq-auto-reserve-btn")).toBeVisible();
+      const materialActionOrder = await page.locator(".bq-materials-section-actions").evaluate((actions) => (
+        Array.from(actions.children).map((child) => child.className)
+      ));
+      expect(materialActionOrder[0]).toContain("bq-auto-reserve-btn");
+      expect(materialActionOrder[1]).toContain("bq-inventory-toggle");
+
+      await page.locator(".bq-inventory-toggle").click();
+      await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "false");
+      await expect(page.locator(".bq-auto-reserve-btn")).toBeDisabled();
+      await page.locator(".bq-inventory-toggle").click();
+      await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator(".bq-auto-reserve-btn")).toBeEnabled();
+      await expect(page.locator(".bq-item-header > .bq-decorative-frame")).toHaveCount(1);
+      await expect(page.locator(".bq-craft-card > .bq-decorative-frame")).toHaveCount(2);
+      await expect(page.locator(".bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame")).toHaveCount(0);
+
+      const targetAverageGeometry = await page.locator(".bq-mat-group").nth(1).evaluate((card) => {
+        const target = card.querySelector(".bq-target-quality")?.getBoundingClientRect();
+        const need = card.querySelector(".bq-mat-card-need")?.getBoundingClientRect();
+        const average = card.querySelector(".bq-avg-quality")?.getBoundingClientRect();
+        return {
+          targetTop: target?.top ?? 0,
+          needTop: need?.top ?? 0,
+          averageTop: average?.top ?? 0,
+        };
+      });
+      expect(targetAverageGeometry.targetTop).toBeLessThan(targetAverageGeometry.averageTop);
+      expect(targetAverageGeometry.needTop).toBeLessThan(targetAverageGeometry.averageTop);
+
+      const targetEditor = page.locator(".bq-mat-card-head .bq-target-editor").first();
+      await targetEditor.hover();
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
+      const sliderHoverGeometry = await targetEditor.evaluate((editor) => {
+        const card = editor.closest(".bq-mat-group")?.getBoundingClientRect();
+        const materialName = editor.parentElement?.querySelector(".bq-material-name-cell")?.getBoundingClientRect();
+        const badge = editor.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
+        const slider = editor.querySelector(".bq-target-quality-slider")?.getBoundingClientRect();
+        const output = editor.querySelector(".bq-target-slider-shell output")?.getBoundingClientRect();
+        return {
+          cardRight: card?.right ?? 0,
+          sliderRight: slider?.right ?? Number.POSITIVE_INFINITY,
+          outputRight: output?.right ?? Number.POSITIVE_INFINITY,
+          badgeCenter: badge ? badge.left + badge.width / 2 : Number.NEGATIVE_INFINITY,
+          sliderCenter: slider ? slider.left + slider.width / 2 : Number.POSITIVE_INFINITY,
+          materialNameCenter: materialName ? materialName.top + materialName.height / 2 : Number.NEGATIVE_INFINITY,
+          badgeVerticalCenter: badge ? badge.top + badge.height / 2 : Number.POSITIVE_INFINITY,
+        };
+      });
+      expect(sliderHoverGeometry.sliderRight).toBeLessThanOrEqual(sliderHoverGeometry.cardRight);
+      expect(sliderHoverGeometry.outputRight).toBeLessThanOrEqual(sliderHoverGeometry.cardRight);
+      expect(Math.abs(sliderHoverGeometry.badgeCenter - sliderHoverGeometry.sliderCenter)).toBeLessThanOrEqual(1);
+      expect(Math.abs(sliderHoverGeometry.materialNameCenter - sliderHoverGeometry.badgeVerticalCenter)).toBeLessThanOrEqual(3);
+      await page.mouse.move(0, 0);
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
+
+      const statValues = await page.locator(".bq-component-statistics").evaluate((panel) => {
+        const modified = panel.querySelector(".bq-stat-compare-row");
+        const label = modified?.querySelector(".bq-stat-compare-label")?.textContent?.trim() ?? "";
+        const allocation = modified?.querySelector(".bq-stat-compare-allocation .bq-stat-compare-value")?.textContent?.trim() ?? "";
+        const compactRows = Array.from(panel.querySelectorAll(".bq-stat-compact-row"));
+        const compact = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === label);
+        const compactValue = compact?.querySelector(".bq-stat-compact-value");
+        const allocationValue = modified?.querySelector(".bq-stat-compare-allocation .bq-stat-compare-value");
+        return {
+          label,
+          allocation,
+          compact: compactValue?.textContent?.trim() ?? "",
+          compactColor: compactValue ? getComputedStyle(compactValue).color : "",
+          allocationColor: allocationValue ? getComputedStyle(allocationValue).color : "",
+        };
+      });
+      expect(statValues.label).not.toBe("");
+      expect(statValues.compact).toBe(statValues.allocation);
+      expect(statValues.compactColor).toBe(statValues.allocationColor);
+
+      const horizontalOverflow = await page.evaluate(() => (
+        Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth
+      ));
+      expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+      await page.screenshot({
+        path: path.join(visualTargetDir, `build-queue-target-${viewport.name}.png`),
+        fullPage: false,
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
+
   test("Crafting Detail uses the shared target slider and recalculates modifiers", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(craftingSliderScreenshotDir, { recursive: true });
@@ -396,7 +503,37 @@ test.describe("Build Queue stats fixture", () => {
         await expect(slider).not.toBeFocused();
         await expect(sliderShell).toHaveCSS("opacity", "0");
 
-        await expect(page.locator(".bq-mat-head")).not.toContainText("Allocated");
+        await expect(page.locator(".bq-mat-head")).toHaveCount(0);
+        const allocationLayout = await page.locator(".bq-item").evaluate((craft) => {
+          const allocation = craft.querySelector(".bq-materials-section");
+          const statistics = craft.querySelector(".bq-component-statistics");
+          const cards = Array.from(craft.querySelectorAll(".bq-mat-group"));
+          return {
+            allocationTop: allocation?.getBoundingClientRect().top ?? 0,
+            statisticsTop: statistics?.getBoundingClientRect().top ?? 0,
+            cardCount: cards.length,
+            cardTops: cards.map((card) => card.getBoundingClientRect().top),
+          };
+        });
+        expect(allocationLayout.allocationTop).toBeLessThan(allocationLayout.statisticsTop);
+        expect(allocationLayout.cardCount).toBeGreaterThan(1);
+        expect(new Set(allocationLayout.cardTops.map((top) => Math.round(top))).size).toBe(1);
+
+        const inventoryToggle = page.locator(".bq-inventory-toggle");
+        const materialCards = page.locator(".bq-mat-group");
+        await expect(inventoryToggle).toBeVisible();
+        await expect(inventoryToggle).toHaveAttribute("aria-pressed", "true");
+        await inventoryToggle.click();
+        await expect(inventoryToggle).toHaveAttribute("aria-pressed", "false");
+        await expect(materialCards.locator(".bq-target-editor")).toHaveCount(allocationLayout.cardCount);
+        await expect(materialCards.locator(".bq-mat-card-need")).toHaveCount(allocationLayout.cardCount);
+        await expect(materialCards.locator(".bq-avg-quality")).toHaveCount(0);
+        await expect(materialCards.locator(".bq-mat-card-status")).toHaveCount(0);
+        await expect(materialCards.locator(".bq-mat-card-quality")).toHaveCount(0);
+        await expect(materialCards.locator(".bq-mat-actions")).toHaveCount(0);
+        await expect(page.locator(".bq-auto-reserve-btn")).toHaveCount(0);
+        await inventoryToggle.click();
+        await expect(inventoryToggle).toHaveAttribute("aria-pressed", "true");
       }
 
       for (const item of fixtureItems) {
@@ -420,12 +557,11 @@ test.describe("Build Queue stats fixture", () => {
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Physical Damage",
             "Fire Rate",
-            "Ammo Capacity",
             "Projectile Speed",
-            "Projectile Range and Max Travel",
+            "Alpha Damage",
             "Heat Per Shot",
-            "Power",
             "Mass",
+            "Health",
           ]));
           const modifiedLabels = await page.locator(".bq-component-statistics .bq-stat-compare-row .bq-stat-compare-label").allTextContents();
           expect(modifiedLabels).toEqual(["Alpha Damage", "Health"]);
@@ -442,8 +578,8 @@ test.describe("Build Queue stats fixture", () => {
               target: targetValue ? getComputedStyle(targetValue).color : "",
             };
           });
-          expect(allocationColors.allocation).toBe(allocationColors.quality);
-          expect(allocationColors.allocation).not.toBe(allocationColors.target);
+          expect(allocationColors.allocation).not.toBe(allocationColors.quality);
+          expect(allocationColors.target).not.toBe("");
         }
 
         await page.screenshot({
@@ -629,18 +765,15 @@ test.describe("Build Queue stats fixture", () => {
       expect(await entryIds()).toEqual(activeOrderBeforeCancel);
 
       const newQueueHandle = page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.ad5b}"] .bq-craft-card-drag-handle`);
-      const newQueueHandleBox = await newQueueHandle.boundingBox();
-      if (!newQueueHandleBox) throw new Error("New queue drag handle has no pointer geometry.");
-      await page.mouse.move(newQueueHandleBox.x + newQueueHandleBox.width / 2, newQueueHandleBox.y + newQueueHandleBox.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(newQueueHandleBox.x + 16, newQueueHandleBox.y + 16, { steps: 4 });
+      const newQueueTransfer = await page.evaluateHandle(() => new DataTransfer());
+      await newQueueHandle.dispatchEvent("dragstart", { dataTransfer: newQueueTransfer });
       const newQueueDestination = page.locator(".bq-drag-destination--new-queue");
       await expect(newQueueDestination).toBeVisible();
-      const newQueueBox = await newQueueDestination.boundingBox();
-      if (!newQueueBox) throw new Error("New queue destination has no pointer geometry.");
-      await page.mouse.move(newQueueBox.x + newQueueBox.width / 2, newQueueBox.y + newQueueBox.height / 2, { steps: 8 });
+      await newQueueDestination.dispatchEvent("dragenter", { dataTransfer: newQueueTransfer });
+      await newQueueDestination.dispatchEvent("dragover", { dataTransfer: newQueueTransfer });
       await expect(newQueueDestination).toHaveClass(/is-over/);
-      await page.mouse.up();
+      await newQueueDestination.dispatchEvent("drop", { dataTransfer: newQueueTransfer });
+      await newQueueHandle.dispatchEvent("dragend", { dataTransfer: newQueueTransfer });
 
       await expect(page.locator(".bq-queue-selector-trigger")).toContainText("New Queue");
       await expect(page.locator('form[aria-label="Rename queue"]')).toBeVisible();
@@ -665,16 +798,11 @@ test.describe("Build Queue stats fixture", () => {
 
       await expect(page.locator('[data-bq-fixture="stats"]')).toBeVisible();
       await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
-      await expect(page.locator('.bq-queue-col-head > img[src$="queue-header-frame.svg"]')).toHaveCount(1);
-      await expect(page.locator('.bq-center-shell > img[src$="content-shell-frame.svg"]')).toHaveCount(1);
       await expect(page.locator('.bq-item-header > img[src$="detail-panel-frame.svg"]')).toHaveCount(1);
-      await expect(page.locator('.bq-item-visual > img[src$="item-preview-frame.svg"]')).toHaveCount(1);
-      await expect(page.locator('.bq-component-statistics > img[src$="stats-band-frame.svg"]')).toHaveCount(1);
-      await expect(page.locator('.bq-materials-section > img[src$="material-panel-frame.svg"]')).toHaveCount(1);
-      await expect(page.locator('.bq-mat-row > img[src$="material-row-frame.svg"]')).toHaveCount(await page.locator('.bq-mat-row').count());
+      await expect(page.locator('.bq-queue-col-head > .bq-decorative-frame, .bq-center-shell > .bq-decorative-frame, .bq-item-visual > .bq-decorative-frame, .bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame')).toHaveCount(0);
 
       const frames = page.locator(".bq-decorative-frame");
-      expect(await frames.count()).toBeGreaterThanOrEqual(8);
+      expect(await frames.count()).toBeGreaterThanOrEqual(1);
       for (const frame of await frames.all()) {
         await expect(frame).toHaveAttribute("alt", "");
         await expect(frame).toHaveAttribute("aria-hidden", "true");

@@ -358,3 +358,110 @@ export const buildQueueStatsFixture: BuildQueuePageFixture = {
   recipeInputsByRecipeId,
   selectedItemId: FIXTURE_ITEM_IDS.fr66,
 };
+
+const mockupQueueId = "bq-fixture-queue-mockup";
+const mockupM5aId = "bq-fixture-m5a";
+const mockupC788Id = "bq-fixture-c788";
+const mockupM5aBlueprintId = "9fe902be-8b39-4d71-9017-e2fed7b0604c";
+const mockupC788BlueprintId = "6713db41-8231-4e71-b7a2-74073ddd4b50";
+
+const mockupM5aRequirements = [
+  requirement("bq-mockup-m5a:frame", "agricium", 1.16, "scu", 812),
+  requirement("bq-mockup-m5a:emitter", "hadanite", 8, "unit", 959),
+  requirement("bq-mockup-m5a:aperture", "dolivine", 8, "unit", 957),
+];
+
+const mockupC788Requirements = [
+  requirement("bq-mockup-c788:frame", "iron", 2.08, "scu", 800),
+  requirement("bq-mockup-c788:cycler", "riccite", 0.31, "scu", 800),
+  requirement("bq-mockup-c788:barrel", "titanium", 1.04, "scu", 800),
+];
+
+const mockupInventory: InventoryEntry[] = [
+  { ...entry("bq-mockup-hadanite-762", "hadanite", 15, 762, rarityCatalog.epic, "GEM-H15"), unitType: "unit" },
+  { ...entry("bq-mockup-hadanite-867", "hadanite", 5, 867, rarityCatalog.legendary, "GEM-H05"), unitType: "unit" },
+  { ...entry("bq-mockup-dolivine-886", "dolivine", 25, 886, rarityCatalog.legendary, "GEM-D25"), unitType: "unit" },
+  { ...entry("bq-mockup-dolivine-901", "dolivine", 4, 901, rarityCatalog.legendary, "GEM-D04"), unitType: "unit" },
+  { ...entry("bq-mockup-dolivine-957", "dolivine", 3, 957, rarityCatalog.legendary, "GEM-D03"), unitType: "unit" },
+];
+
+const mockupActiveItems: BuildQueueItem[] = [
+  {
+    id: mockupM5aId,
+    entryKind: "instance",
+    queueId: mockupQueueId,
+    recipeId: "recipe-fixture-m5a",
+    blueprint_id: mockupM5aBlueprintId,
+    itemId: "m5a-cannon",
+    itemName: "M5A Cannon",
+    quantity: 4,
+    status: "active",
+    priority: 1,
+    priorityActive: true,
+    allowLowerQuality: true,
+    finalProductQualityBand: 9,
+    finalProductQualityAverage: 9.1,
+    finalProductRarity: "legendary",
+    materialRequirements: mockupM5aRequirements,
+    reservedAllocations: [
+      allocation("bq-mockup-alloc-h762", "hadanite", "bq-mockup-hadanite-762", 15, "bq-mockup-m5a:emitter", 762, rarityCatalog.epic, "unit"),
+      allocation("bq-mockup-alloc-h867", "hadanite", "bq-mockup-hadanite-867", 5, "bq-mockup-m5a:emitter", 867, rarityCatalog.legendary, "unit"),
+      allocation("bq-mockup-alloc-d886", "dolivine", "bq-mockup-dolivine-886", 25, "bq-mockup-m5a:aperture", 886, rarityCatalog.legendary, "unit"),
+      allocation("bq-mockup-alloc-d901", "dolivine", "bq-mockup-dolivine-901", 4, "bq-mockup-m5a:aperture", 901, rarityCatalog.legendary, "unit"),
+      allocation("bq-mockup-alloc-d957", "dolivine", "bq-mockup-dolivine-957", 3, "bq-mockup-m5a:aperture", 957, rarityCatalog.legendary, "unit"),
+    ],
+    blueprintSources: [
+      { displayName: "Low Risk Protection Detail", poolGuid: "mockup-source-low", poolName: "Mockup Low Risk", sourceFolder: "fixture", weight: 1 },
+      { displayName: "Executive Protection Detail", poolGuid: "mockup-source-executive", poolName: "Mockup Executive", sourceFolder: "fixture", weight: 1 },
+      { displayName: "Experienced Protection Detail Needed", poolGuid: "mockup-source-experienced", poolName: "Mockup Experienced", sourceFolder: "fixture", weight: 1 },
+    ],
+  },
+  {
+    id: mockupC788Id,
+    entryKind: "instance",
+    queueId: mockupQueueId,
+    recipeId: "recipe-fixture-c788",
+    blueprint_id: mockupC788BlueprintId,
+    itemId: "c788-cannon",
+    itemName: "C-788 Cannon",
+    quantity: 1,
+    status: "active",
+    priority: 2,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 8.8,
+    finalProductRarity: "legendary",
+    materialRequirements: mockupC788Requirements,
+    reservedAllocations: [],
+  },
+];
+
+const mockupCompletedItems: BuildQueueItem[] = Array.from({ length: 10 }, (_, index) => ({
+  ...mockupActiveItems[1],
+  id: `bq-fixture-completed-${index + 1}`,
+  status: "complete" as const,
+  priority: index + 1,
+  completionSnapshot: {
+    completedAt: now,
+    quantity: 1,
+    reservedAllocations: [],
+  },
+}));
+
+export const buildQueueMockupFixture: BuildQueuePageFixture = {
+  buildQueues: [{ id: mockupQueueId, name: "Primary", sourceType: "custom" }],
+  buildQueue: [...mockupActiveItems, ...mockupCompletedItems],
+  activeBuildQueueId: mockupQueueId,
+  inventoryEntries: mockupInventory,
+  materials: fixtureMaterials,
+  locations: inventoryLocations.filter((location) => location.id === fixtureLocationId),
+  recipes: [
+    { id: "recipe-fixture-m5a", name: "M5A Cannon", category: "weapon", outputTemplateId: "m5a-cannon", outputQuantity: 1 },
+    { id: "recipe-fixture-c788", name: "C-788 Cannon", category: "weapon", outputTemplateId: "c788-cannon", outputQuantity: 1 },
+  ],
+  recipeInputsByRecipeId: {
+    "recipe-fixture-m5a": mockupM5aRequirements,
+    "recipe-fixture-c788": mockupC788Requirements,
+  },
+  selectedItemId: mockupM5aId,
+};
