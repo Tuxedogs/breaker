@@ -3241,7 +3241,7 @@
   color: var(--danger);
 }
 
-.weapon-performance-groups {
+.detail-stat-groups {
   display: grid;
   gap: 8px;
   width: 100%;
@@ -6633,11 +6633,11 @@
 }
 
 /* Component Statistics: flat hierarchy within the parent card. */
-.craft-detail-stat-panel .weapon-performance-groups {
+.craft-detail-stat-panel .detail-stat-groups {
   gap: 0;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group {
+.craft-detail-stat-panel .detail-stat-groups .stat-group {
   gap: 8px;
   padding: 14px 0;
   border: 0;
@@ -6647,16 +6647,16 @@
   box-shadow: none;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group:first-child {
+.craft-detail-stat-panel .detail-stat-groups .stat-group:first-child {
   padding-top: 0;
   border-top: 0;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group:last-child {
+.craft-detail-stat-panel .detail-stat-groups .stat-group:last-child {
   padding-bottom: 0;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group-title {
+.craft-detail-stat-panel .detail-stat-groups .stat-group-title {
   color: #dfe9f7;
   font-size: clamp(0.82rem, 0.77rem + 0.12vw, 0.94rem);
   font-weight: 760;
@@ -6665,12 +6665,12 @@
   text-transform: none;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group-grid {
+.craft-detail-stat-panel .detail-stat-groups .stat-group-grid {
   column-gap: 18px;
   row-gap: 0;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-row {
+.craft-detail-stat-panel .detail-stat-groups .stat-row {
   min-height: 36px;
   padding: 7px 2px;
   border: 0;
@@ -6679,30 +6679,30 @@
   background: transparent;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .stat-group-grid > .stat-row:nth-last-child(-n + 2) {
+.craft-detail-stat-panel .detail-stat-groups .stat-group-grid > .stat-row:nth-last-child(-n + 2) {
   border-bottom-color: transparent;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .craft-stat-label {
+.craft-detail-stat-panel .detail-stat-groups .craft-stat-label {
   color: #9cacc0;
   font-size: 0.8rem;
   font-weight: 650;
   letter-spacing: 0;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .craft-stat-value {
+.craft-detail-stat-panel .detail-stat-groups .craft-stat-value {
   display: grid;
   justify-items: end;
   gap: 2px;
   line-height: 1.12;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-value {
+.craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-value {
   color: #e7edff;
 }
 
-.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-modifier,
-.craft-detail-stat-panel .weapon-performance-groups .craft-detail-stat-modifier.craft-ok {
+.craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-modifier,
+.craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-modifier.craft-ok {
   display: block;
   color: var(--accent-cyan);
   font-size: 0.7rem;

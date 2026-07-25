@@ -88,11 +88,88 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(".bq-craft-card-drag-handle")).toHaveCount(2);
       await expect(page.locator(".bq-inventory-toggle")).toBeVisible();
       await expect(page.locator(".bq-auto-reserve-btn")).toBeVisible();
+      const craftCardControls = await page.locator(".bq-craft-card-shell").first().evaluate((card) => {
+        const progress = card.querySelector(".bq-craft-card-ring")?.getBoundingClientRect();
+        const dragHandle = card.querySelector(".bq-craft-card-drag-handle")?.getBoundingClientRect();
+        return {
+          progressRight: progress?.right ?? Number.POSITIVE_INFINITY,
+          dragHandleLeft: dragHandle?.left ?? Number.NEGATIVE_INFINITY,
+        };
+      });
+      expect(craftCardControls.progressRight).toBeLessThan(craftCardControls.dragHandleLeft);
+      const damageLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+      expect(damageLabels).toContain("Alpha Damage");
+      expect(damageLabels).not.toEqual(expect.arrayContaining([
+        "Ballistic Damage",
+        "Physical Damage",
+        "Energy Damage",
+      ]));
+      const sectionTransition = await page.locator(".bq-item").evaluate((craft) => {
+        const allocation = craft.querySelector(".bq-materials-section")?.getBoundingClientRect();
+        const statistics = craft.querySelector(".bq-component-statistics")?.getBoundingClientRect();
+        const centerShell = craft.closest(".bq-center-shell");
+        const materialCard = craft.querySelector(".bq-mat-group");
+        const statCard = craft.querySelector(".bq-stat-unmodified-group");
+        const centerHighlight = centerShell ? getComputedStyle(centerShell, "::after") : null;
+        return {
+          gap: allocation && statistics ? statistics.top - allocation.bottom : Number.POSITIVE_INFINITY,
+          centerBackgroundColor: centerShell ? getComputedStyle(centerShell).backgroundColor : "",
+          centerBackgroundImage: centerShell ? getComputedStyle(centerShell).backgroundImage : "",
+          centerHighlightImage: centerHighlight?.backgroundImage ?? "",
+          materialBackgroundColor: materialCard ? getComputedStyle(materialCard).backgroundColor : "",
+          materialBackgroundImage: materialCard ? getComputedStyle(materialCard).backgroundImage : "",
+          statBackgroundColor: statCard ? getComputedStyle(statCard).backgroundColor : "",
+          statBackgroundImage: statCard ? getComputedStyle(statCard).backgroundImage : "",
+        };
+      });
+      expect(sectionTransition.gap).toBeGreaterThanOrEqual(12);
+      expect(sectionTransition.gap).toBeLessThanOrEqual(18);
+      expect(sectionTransition.centerBackgroundColor).toBe("rgba(0, 0, 0, 0)");
+      expect(sectionTransition.centerBackgroundImage).toBe("none");
+      expect(sectionTransition.centerHighlightImage).toBe("none");
+      expect(sectionTransition.materialBackgroundColor).toBe("rgb(13, 21, 30)");
+      expect(sectionTransition.materialBackgroundImage).toContain("linear-gradient");
+      expect(sectionTransition.statBackgroundColor).toBe("rgb(13, 21, 30)");
+      expect(sectionTransition.statBackgroundImage).toBe("none");
       const materialActionOrder = await page.locator(".bq-materials-section-actions").evaluate((actions) => (
         Array.from(actions.children).map((child) => child.className)
       ));
       expect(materialActionOrder[0]).toContain("bq-auto-reserve-btn");
       expect(materialActionOrder[1]).toContain("bq-inventory-toggle");
+      await expect(page.locator(".bq-workspace-card-head.bq-selected-craft-head")).toHaveCount(0);
+      await expect(page.locator(".bq-selected-craft-metrics")).toHaveCount(0);
+      await expect(page.locator(".bq-materials-section-heading")).toHaveCount(0);
+      const collapsedMaterials = await page.locator(".bq-materials-section").evaluate((section) => {
+        const table = section.querySelector(".bq-mat-table");
+        const cards = Array.from(section.querySelectorAll(".bq-mat-group"));
+        const tableRect = table?.getBoundingClientRect();
+        const cardBottom = Math.max(...cards.map((card) => card.getBoundingClientRect().bottom));
+        const shortfall = cards.find((card) => card.textContent?.includes("Agricium"))
+          ?.querySelector(".bq-balance--short strong");
+        const balanced = cards.find((card) => card.textContent?.includes("Dolivine"))
+          ?.querySelector(".bq-balance--met strong");
+        const colorProbe = document.createElement("span");
+        section.appendChild(colorProbe);
+        colorProbe.style.color = "var(--alloc-danger)";
+        const detrimentalColor = getComputedStyle(colorProbe).color;
+        colorProbe.style.color = "var(--alloc-success)";
+        const beneficialColor = getComputedStyle(colorProbe).color;
+        colorProbe.remove();
+        return {
+          tableBottom: tableRect?.bottom ?? 0,
+          cardBottom,
+          shortfallColor: shortfall ? getComputedStyle(shortfall).color : "",
+          balancedColor: balanced ? getComputedStyle(balanced).color : "",
+          detrimentalColor,
+          beneficialColor,
+          balancedText: balanced?.textContent ?? "",
+        };
+      });
+      expect(collapsedMaterials.tableBottom).toBeGreaterThan(collapsedMaterials.cardBottom);
+      expect(collapsedMaterials.tableBottom - collapsedMaterials.cardBottom).toBeLessThanOrEqual(20);
+      expect(collapsedMaterials.shortfallColor).toBe(collapsedMaterials.detrimentalColor);
+      expect(collapsedMaterials.balancedColor).toBe(collapsedMaterials.beneficialColor);
+      expect(collapsedMaterials.balancedText).toMatch(/^x?0(?:\sSCU)?$/);
 
       await page.locator(".bq-inventory-toggle").click();
       await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "false");
@@ -100,7 +177,7 @@ test.describe("Build Queue stats fixture", () => {
       await page.locator(".bq-inventory-toggle").click();
       await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "true");
       await expect(page.locator(".bq-auto-reserve-btn")).toBeEnabled();
-      await expect(page.locator(".bq-item-header > .bq-decorative-frame")).toHaveCount(1);
+      await expect(page.locator(".bq-item-header > .bq-decorative-frame")).toHaveCount(0);
       await expect(page.locator(".bq-craft-card > .bq-decorative-frame")).toHaveCount(2);
       await expect(page.locator(".bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame")).toHaveCount(0);
 
@@ -115,7 +192,7 @@ test.describe("Build Queue stats fixture", () => {
         };
       });
       expect(targetAverageGeometry.targetTop).toBeLessThan(targetAverageGeometry.averageTop);
-      expect(targetAverageGeometry.needTop).toBeLessThan(targetAverageGeometry.averageTop);
+      expect(Math.abs(targetAverageGeometry.needTop - targetAverageGeometry.averageTop)).toBeLessThan(1);
 
       const targetEditor = page.locator(".bq-mat-card-head .bq-target-editor").first();
       await targetEditor.hover();
@@ -170,6 +247,84 @@ test.describe("Build Queue stats fixture", () => {
 
       await page.screenshot({
         path: path.join(visualTargetDir, `build-queue-target-${viewport.name}.png`),
+        fullPage: false,
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  test("overlays reservation drawers in their material column without reflowing the workspace", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const visualTargetDir = path.resolve(process.cwd(), "artifacts/build-queue-visual-target");
+    await mkdir(visualTargetDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+
+      const materialCard = page.locator(".bq-mat-group").filter({ hasText: "Hadanite" }).first();
+      const expandButton = materialCard.getByRole("button", { name: "Expand reserve drawer for Hadanite" });
+      const before = await page.locator(".bq-item").evaluate((craft) => {
+        const card = Array.from(craft.querySelectorAll(".bq-mat-group"))
+          .find((candidate) => candidate.textContent?.includes("Hadanite"));
+        const allocation = craft.querySelector(".bq-materials-card");
+        const statistics = craft.querySelector(".bq-component-statistics");
+        return {
+          cardWidth: card?.getBoundingClientRect().width ?? 0,
+          allocationHeight: allocation?.getBoundingClientRect().height ?? 0,
+          statisticsTop: statistics?.getBoundingClientRect().top ?? 0,
+        };
+      });
+
+      await expandButton.click();
+      await expect(materialCard.locator(".bq-reserve-panel")).toBeVisible();
+      await expect(materialCard.getByRole("button", { name: "Collapse reserve drawer for Hadanite" })).toBeVisible();
+
+      const after = await page.locator(".bq-item").evaluate((craft) => {
+        const card = Array.from(craft.querySelectorAll(".bq-mat-group"))
+          .find((candidate) => candidate.textContent?.includes("Hadanite"));
+        const drawer = card?.querySelector(".bq-reserve-panel");
+        const allocation = craft.querySelector(".bq-materials-card");
+        const statistics = craft.querySelector(".bq-component-statistics");
+        const cardRect = card?.getBoundingClientRect();
+        const drawerRect = drawer?.getBoundingClientRect();
+        const allocationRect = allocation?.getBoundingClientRect();
+        const statisticsRect = statistics?.getBoundingClientRect();
+        const allocationZIndex = allocation ? Number.parseInt(getComputedStyle(allocation).zIndex, 10) : 0;
+        const statisticsZIndex = statistics ? Number.parseInt(getComputedStyle(statistics).zIndex, 10) : 0;
+        return {
+          cardWidth: cardRect?.width ?? 0,
+          drawerRight: drawerRect?.right ?? 0,
+          cardRight: cardRect?.right ?? 0,
+          drawerBottom: drawerRect?.bottom ?? 0,
+          allocationBottom: allocationRect?.bottom ?? 0,
+          allocationHeight: allocationRect?.height ?? 0,
+          statisticsTop: statisticsRect?.top ?? 0,
+          allocationZIndex,
+          statisticsZIndex,
+        };
+      });
+
+      expect(Math.abs(after.cardWidth - before.cardWidth)).toBeLessThanOrEqual(1);
+      expect(after.drawerRight).toBeLessThanOrEqual(after.cardRight);
+      expect(Math.abs(after.allocationHeight - before.allocationHeight)).toBeLessThanOrEqual(1);
+      expect(Math.abs(after.statisticsTop - before.statisticsTop)).toBeLessThanOrEqual(1);
+      expect(after.drawerBottom).toBeGreaterThan(after.allocationBottom);
+      expect(after.drawerBottom).toBeGreaterThan(after.statisticsTop);
+      expect(after.allocationZIndex).toBeGreaterThan(after.statisticsZIndex);
+
+      const horizontalOverflow = await page.evaluate(() => (
+        Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth
+      ));
+      expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+      await page.screenshot({
+        path: path.join(visualTargetDir, `build-queue-drawer-expanded-${viewport.name}.png`),
         fullPage: false,
       });
     }
@@ -531,7 +686,7 @@ test.describe("Build Queue stats fixture", () => {
         await expect(materialCards.locator(".bq-mat-card-status")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-quality")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-actions")).toHaveCount(0);
-        await expect(page.locator(".bq-auto-reserve-btn")).toHaveCount(0);
+        await expect(page.locator(".bq-auto-reserve-btn")).toBeDisabled();
         await inventoryToggle.click();
         await expect(inventoryToggle).toHaveAttribute("aria-pressed", "true");
       }
@@ -555,13 +710,17 @@ test.describe("Build Queue stats fixture", () => {
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
           expect(compactLabels).toEqual(expect.arrayContaining([
-            "Physical Damage",
             "Fire Rate",
             "Projectile Speed",
             "Alpha Damage",
             "Heat Per Shot",
             "Mass",
             "Health",
+          ]));
+          expect(compactLabels).not.toEqual(expect.arrayContaining([
+            "Ballistic Damage",
+            "Physical Damage",
+            "Energy Damage",
           ]));
           const modifiedLabels = await page.locator(".bq-component-statistics .bq-stat-compare-row .bq-stat-compare-label").allTextContents();
           expect(modifiedLabels).toEqual(["Alpha Damage", "Health"]);
@@ -745,7 +904,6 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66Precision}"] .bq-craft-card-check`)).toBeVisible();
       await page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66Completed}"] .bq-craft-card`).click();
       await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66Completed}"] .bq-craft-card-check`)).toBeVisible();
-      await expect(page.locator(".bq-materials-section-summary")).toContainText("covered");
       await expect(page.locator(".bq-quality-chip")).toHaveCount(3);
       await expect(page.locator(".bq-balance--short")).toHaveCount(0);
       await expect(page.locator(".bq-stale-line")).toHaveCount(0);
@@ -782,7 +940,7 @@ test.describe("Build Queue stats fixture", () => {
     }
   });
 
-  test("integrates decorative SVG frames without intercepting the live workspace", async ({ page }) => {
+  test("keeps decorative SVG frames on queue items without intercepting the live workspace", async ({ page }) => {
     const failures = installFailureGuards(page);
     const frameScreenshotDir = path.resolve(process.cwd(), "artifacts/build-queue-frames");
     await mkdir(frameScreenshotDir, { recursive: true });
@@ -798,11 +956,15 @@ test.describe("Build Queue stats fixture", () => {
 
       await expect(page.locator('[data-bq-fixture="stats"]')).toBeVisible();
       await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
-      await expect(page.locator('.bq-item-header > img[src$="detail-panel-frame.svg"]')).toHaveCount(1);
+      await expect(page.locator('.bq-item-header > img[src$="detail-panel-frame.svg"]')).toHaveCount(0);
       await expect(page.locator('.bq-queue-col-head > .bq-decorative-frame, .bq-center-shell > .bq-decorative-frame, .bq-item-visual > .bq-decorative-frame, .bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame')).toHaveCount(0);
 
       const frames = page.locator(".bq-decorative-frame");
-      expect(await frames.count()).toBeGreaterThanOrEqual(1);
+      if (viewport.width > 768) {
+        expect(await frames.count()).toBeGreaterThanOrEqual(1);
+      } else {
+        await expect(frames).toHaveCount(0);
+      }
       for (const frame of await frames.all()) {
         await expect(frame).toHaveAttribute("alt", "");
         await expect(frame).toHaveAttribute("aria-hidden", "true");

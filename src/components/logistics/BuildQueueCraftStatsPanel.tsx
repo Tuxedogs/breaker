@@ -10,6 +10,16 @@ type ConsolidatedStat =
 
 type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
 
+const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
+  "ballisticdamage",
+  "physicaldamage",
+  "energydamage",
+  "distortiondamage",
+  "thermaldamage",
+  "biochemicaldamage",
+  "stundamage",
+]);
+
 function normalizeStatKey(value: string): string {
   const normalized = value.toLowerCase().replace(/[^a-z0-9]/g, "");
   return normalized === "componenthp" ? "health" : normalized;
@@ -36,8 +46,14 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
     const comparisonKeys = new Set(
       comparisonGroup?.rows.map((row) => normalizeStatKey(row.label)) ?? [],
     );
+    const hasAlphaDamage = comparisonKeys.has("alphadamage")
+      || overviewGroup.stats.some((stat) => normalizeStatKey(stat.label) === "alphadamage");
     const stats: ConsolidatedStat[] = overviewGroup.stats
-      .filter((stat) => !comparisonKeys.has(normalizeStatKey(stat.label)))
+      .filter((stat) => {
+        const statKey = normalizeStatKey(stat.label);
+        return !comparisonKeys.has(statKey)
+          && !(hasAlphaDamage && WEAPON_DAMAGE_CHANNEL_KEYS.has(statKey));
+      })
       .map((stat) => ({ kind: "static", label: stat.label, value: stat.value }));
 
     if (comparisonGroup) {
@@ -248,16 +264,16 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
 
 export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty bq-workspace-card" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
   }
   if (model.status !== "ready" || (model.comparisonGroups.length === 0 && model.overviewGroups.length === 0)) {
-    return <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
+    return <section className="bq-component-statistics bq-component-statistics--empty bq-workspace-card" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
   }
 
   const consolidatedGroups = buildConsolidatedGroups(model);
   const hasModifiedStats = consolidatedGroups.some((group) => getModifiedStats(group).length > 0);
   return (
-    <section className="bq-component-statistics" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
+    <section className="bq-component-statistics bq-workspace-card" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
         <StatsLegend />

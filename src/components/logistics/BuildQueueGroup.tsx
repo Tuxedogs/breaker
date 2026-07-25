@@ -51,7 +51,6 @@ import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddM
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 import { getCompletedPresentationItem } from '../../lib/logistics/buildQueueEntries';
 import TargetQualitySlider from '../shared/TargetQualitySlider';
-import BuildQueueFrame from './BuildQueueFrame';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -450,59 +449,6 @@ function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTempla
   if (covered > 0 && missing > 0) return 'partial';
   if (covered > 0) return 'complete';
   return 'missing';
-}
-
-type BuildQueueHeaderBadge = {
-  key: string;
-  label: string;
-  className: string;
-};
-
-function materialsTargetMet(item: BuildQueueItem, inputs: RecipeInputTemplate[]): boolean {
-  if (inputs.length === 0) return false;
-
-  let hasQualityTarget = false;
-  for (const [inputIndex, input] of inputs.entries()) {
-    const target = input.selectedQuality;
-    if (target === undefined || !Number.isFinite(target)) continue;
-
-    hasQualityTarget = true;
-    const requirementId = getRequirementId(item, input, inputIndex);
-    const ownAllocations = (item.reservedAllocations ?? []).filter(
-      (allocation) => allocation.requirementId === requirementId && allocation.quantityReserved > 0,
-    );
-    if (ownAllocations.length === 0) return false;
-
-    const effectiveQuality = getWeightedEffectiveQuality(ownAllocations);
-    if (effectiveQuality === undefined || effectiveQuality < target) return false;
-  }
-
-  return hasQualityTarget;
-}
-
-function getBuildQueueHeaderBadges(
-  fulfillment: 'complete' | 'partial' | 'missing',
-  isCompletedCraft: boolean,
-  targetMet: boolean,
-): BuildQueueHeaderBadge[] {
-  if (isCompletedCraft) {
-    return [{ key: 'complete', label: 'Complete', className: 'bq-badge--complete' }];
-  }
-
-  const badges: BuildQueueHeaderBadge[] = [];
-  if (fulfillment === 'missing') {
-    badges.push({ key: 'missing', label: 'Missing', className: 'bq-badge--missing' });
-  } else if (fulfillment === 'partial') {
-    badges.push({ key: 'partial', label: 'Partial', className: 'bq-badge--partial' });
-  } else {
-    badges.push({ key: 'possible', label: 'Possible', className: 'bq-badge--covered' });
-  }
-
-  if (targetMet) {
-    badges.push({ key: 'target-met', label: 'Target Met', className: 'bq-badge--target-met' });
-  }
-
-  return badges;
 }
 
 function getReserveStatusLabel(state: string, qualityState: string): string {
@@ -1032,8 +978,6 @@ const STALE_REASON_LABELS: Record<string, string> = {
   exceedsStackQuantity: 'exceeds current stack',
 };
 
-type BuildQueueSummaryMetrics = { coveredCount: number; totalShortfall: number };
-
 interface Props {
   category: string;
   itemTypeLabel?: string;
@@ -1216,26 +1160,6 @@ export default function BuildQueueGroup({
         const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
         const readableType = itemTypeLabel ?? CATEGORY_LABELS[category] ?? category;
-
-        const summaryMetrics = isCompletedCraft
-          ? { coveredCount: inputs.length, totalShortfall: 0 }
-          : inputs.reduce<BuildQueueSummaryMetrics>((metrics, input, inputIndex) => {
-          const materialKey = input.materialKey ?? input.materialId;
-          const required = input.quantity * item.quantity;
-          const requirementIdentity = {
-            requirementId: getRequirementId(item, input, inputIndex),
-            selectedQuality: input.selectedQuality,
-            unitType: input.unitType,
-            allowLowerQuality: Boolean(item.allowLowerQuality),
-          };
-          const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, requirementIdentity);
-          const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, requirementIdentity);
-          const isCovered = coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved';
-          return {
-            coveredCount: metrics.coveredCount + (isCovered ? 1 : 0),
-            totalShortfall: metrics.totalShortfall + needSummary.stillNeeded,
-          };
-          }, { coveredCount: 0, totalShortfall: 0 });
 
         const recipeDefaultInputs = recipeInputsByRecipeId[item.recipeId] ?? [];
         const materialRequirementRows = inputs.map((input, inputIndex) => {
@@ -1450,11 +1374,6 @@ export default function BuildQueueGroup({
         const blueprintLabel = blueprintSources.length === 0
           ? 'Unknown Blueprint Source'
           : blueprintSources.map((s) => s.displayName).join(', ');
-        const headerBadges = getBuildQueueHeaderBadges(
-          fulfillment,
-          isCompletedCraft,
-          materialsTargetMet(item, inputs),
-        );
         const toggleInventory = () => {
           setInventoryEnabled((current) => !current);
           setActiveDrawersByItem({});
@@ -1473,43 +1392,46 @@ export default function BuildQueueGroup({
           >
 
             <BuildQueueStatsProvider blueprintId={item.blueprint_id} item={item} inputs={inputs}>
-            {/* ── Craft header: identity | stock overview | artwork ── */}
-            <div className="bq-item-sidebar bq-item-header">
-              <BuildQueueFrame asset="detail-panel-frame.svg" />
-              <div className="bq-item-identity">
-                <div className="bq-item-name-block">
-                  <span className="bq-item-cat">{readableType}</span>
-                  <h2 className="bq-item-name">{itemName}</h2>
+            {/* ── Selected craft command card ── */}
+            <section className="bq-item-sidebar bq-item-header bq-workspace-card bq-selected-craft-card" aria-label={`Selected craft: ${itemName}`}>
+              <div className="bq-selected-craft-body">
+                <div className="bq-item-identity">
+                  <div className="bq-item-name-block">
+                    <span className="bq-item-cat">{readableType}</span>
+                    <h2 className="bq-item-name">{itemName}</h2>
+                  </div>
+
+                  <BuildQueueCraftIdentity />
+
+                  <div className="bq-item-mission">
+                    <span className="bq-item-mission-label">Blueprint Source</span>
+                    <BlueprintSourceDisplay blueprintId={item.blueprint_id} fallbackLabel={blueprintLabel} />
+                  </div>
                 </div>
 
-                <BuildQueueCraftIdentity />
-
-                <div className="bq-item-badges" aria-label="Craft status">
-                  {headerBadges.map((badge) => (
-                    <span key={badge.key} className={`bq-badge ${badge.className}`}>
-                      {badge.label}
-                    </span>
-                  ))}
+                <div className="bq-item-visual" aria-hidden="true">
+                  <BuildQueueProductIcon
+                    item={item}
+                    recipe={recipe}
+                    preferredMode={iconMode}
+                    layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
+                    alt={itemName}
+                  />
                 </div>
+              </div>
 
-                <div className="bq-item-mission">
-                  <span className="bq-item-mission-label">Blueprint Source</span>
-                  <BlueprintSourceDisplay blueprintId={item.blueprint_id} fallbackLabel={blueprintLabel} />
-                </div>
-
-                <div className="bq-item-footer">
-                  <div className="bq-item-actions">
-                    <div className="bq-btn-row">
-                      <button
-                        type="button"
-                        className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
-                        onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
-                        aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
-                      >
-                        {isCompletedCraft ? 'Reopen' : 'Complete'}
-                      </button>
-                      <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
-                    </div>
+              <footer className="bq-selected-craft-footer">
+                <div className="bq-item-actions">
+                  <div className="bq-btn-row">
+                    <button
+                      type="button"
+                      className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
+                      onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
+                      aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
+                    >
+                      {isCompletedCraft ? 'Reopen' : 'Complete'}
+                    </button>
+                    <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
                   </div>
                 </div>
 
@@ -1518,33 +1440,15 @@ export default function BuildQueueGroup({
                   <span className="bq-qty-val">{item.quantity}x</span>
                   <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} disabled={isCompletedCraft} aria-label="Increase quantity">+</button>
                 </div>
-              </div>
-
-              <div className="bq-item-visual" aria-hidden="true">
-                <BuildQueueProductIcon
-                  item={item}
-                  recipe={recipe}
-                  preferredMode={iconMode}
-                  layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
-                  alt={itemName}
-                />
-              </div>
-            </div>
+              </footer>
+            </section>
 
             {/* Right body */}
-            <div className="bq-item-body">
+            <div className="bq-item-body bq-workspace-card bq-materials-card">
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
                 <div className="bq-materials-section-header">
-                  <div className="bq-materials-section-heading">
-                    <h3 className="bq-materials-section-title">Material Allocation</h3>
-                    {inventoryEnabled ? <p className="bq-materials-section-summary">
-                      {summaryMetrics.coveredCount}/{inputs.length} covered
-                      {summaryMetrics.totalShortfall > 0
-                        ? ` · ${formatQuantity(summaryMetrics.totalShortfall, undefined)} short`
-                        : ''}
-                    </p> : null}
-                  </div>
+                  <h3 className="bq-materials-section-title">Material Allocation</h3>
                   <div className="bq-materials-section-actions">
                     <button
                       type="button"
@@ -1577,9 +1481,11 @@ export default function BuildQueueGroup({
                   const qualityRequirement = group.requirements[0];
                   const targetEditorQuality = clampTargetQuality(group.targetQuality ?? group.selectedQuality ?? 500);
                   const targetEditorBands = qualityRequirement.qualityBands ?? FALLBACK_QUALITY_BANDS;
-                  const balanceAmount = isCompletedCraft ? 0 : group.allocatedTotal - group.requiredTotal;
-                  const balanceTone = balanceAmount < 0 ? 'short' : balanceAmount > 0 ? 'excess' : 'met';
-                  const balanceLabel = formatQuantity(Math.abs(balanceAmount), group.material);
+                  const shortfallAmount = isCompletedCraft
+                    ? 0
+                    : Math.max(group.requiredTotal - group.allocatedTotal, 0);
+                  const hasShortfall = shortfallAmount > 0;
+                  const shortfallLabel = formatQuantity(shortfallAmount, group.material);
                   const targetQualityLabel = formatTargetQuality(targetEditorQuality);
                   const targetQualityTone = getTargetQualityTone(targetEditorQuality);
                   const averageQualityLabel = formatAverageQuality(group.averageQuality);
@@ -1652,10 +1558,9 @@ export default function BuildQueueGroup({
                             <span>{averageQualityLabel}</span>
                             {averageBelowTarget ? <small>below target</small> : <small>avg</small>}
                           </span> : null}
-                          {inventoryEnabled ? <span className={`bq-mat-card-status bq-balance bq-balance--${balanceTone === 'short' ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
-                            <em>Shortfall / Excess</em>
-                            <strong>{balanceTone === 'short' ? balanceLabel : formatQuantity(0, group.material)}</strong>
-                            <small>{balanceTone === 'short' ? 'short' : 'balanced'}</small>
+                          {inventoryEnabled ? <span className={`bq-mat-card-status bq-balance bq-balance--${hasShortfall ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
+                            <em>Shortfall</em>
+                            <strong>{shortfallLabel}</strong>
                           </span> : null}
                         </div>
                         {inventoryEnabled ? <span className="bq-mat-card-quality-label">Quality Allocation</span> : null}

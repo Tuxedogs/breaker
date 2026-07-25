@@ -55,7 +55,6 @@ import { resolveCraftingCardTitle } from "@/lib/crafting/resolveCraftingDisplayN
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
   buildItemSummaryDetailStatRows,
-  isFittingWeaponPerformanceType,
 } from "@/lib/fitting/fittingStatProjection";
 import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import {
@@ -78,8 +77,8 @@ import {
   type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
 import {
-  groupWeaponPerformanceStats,
-  normalizeWeaponPerformanceDisplayStats,
+  buildDetailStatGroups,
+  type DetailStatGroup,
 } from "@/lib/crafting/detailStatGroups";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
 
@@ -1517,27 +1516,39 @@ function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
   );
 }
 
-function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
-  const normalizedStats = normalizeWeaponPerformanceDisplayStats(stats);
-  const groups = groupWeaponPerformanceStats(normalizedStats);
+function GroupedDetailStatGroups({
+  detail,
+  stats,
+}: {
+  detail: FittingComponentDetail;
+  stats: DetailStatRow[];
+}) {
+  const groups = buildDetailStatGroups(detail, stats);
 
-  if (groups.length === 0 && normalizedStats.length > 0) {
+  if (groups.length === 0 && stats.length > 0) {
     return (
       <div className="craft-detail-stat-list craft-stat-grid">
-        {normalizedStats.map((stat) => (
+        {stats.map((stat) => (
           <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
         ))}
       </div>
     );
   }
 
-  const displaySections = groups.reduce<Array<{ key: string; title: string; stats: DetailStatRow[] }>>(
+  const displaySections = groups.reduce<Array<{
+    key: string;
+    title: string;
+    stats: DetailStatRow[];
+    matrix?: Extract<DetailStatGroup, { kind: "matrix" }>;
+  }>>(
     (sections, group) => {
+      if (group.kind === "matrix") {
+        sections.push({ key: group.title, title: group.title, stats: [], matrix: group });
+        return sections;
+      }
       const groupStats = group.kind === "nested"
         ? group.subclusters.flatMap((subcluster) => subcluster.stats)
-        : group.kind === "flat"
-          ? group.stats
-          : [];
+        : group.stats;
 
       if (group.title === "Thermal / Power" || group.title === "Signature / Detection") {
         const systemsSection = sections.find((section) => section.key === "systems");
@@ -1561,7 +1572,7 @@ function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
   ).filter((section) => section.stats.length > 0);
 
   return (
-    <div className="weapon-performance-groups">
+    <div className="detail-stat-groups">
       {displaySections.map((section) => (
         <section
           key={section.key}
@@ -1569,10 +1580,17 @@ function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
           aria-label={section.title}
         >
           <div className="stat-group-title">{section.title}</div>
-          <div className="stat-group-grid">
-            {section.stats.map((stat) => (
-              <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
-            ))}
+          <div className={`stat-group-grid${section.matrix ? " stat-group-grid--matrix" : ""}`}>
+            {section.matrix
+              ? section.matrix.rows.map((row) => (
+                <span className="craft-detail-stat-row craft-stat-row stat-row" key={`${section.key}:${row.label}`}>
+                  <span className="craft-stat-label">{row.label}</span>
+                  <strong className="craft-stat-value">{row.values.join(" / ")}</strong>
+                </span>
+              ))
+              : section.stats.map((stat) => (
+                <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
+              ))}
           </div>
         </section>
       ))}
@@ -2034,7 +2052,6 @@ function ItemSummaryPanel({
 }) {
   const baseStatRows = fittingDetail ? buildItemSummaryDetailStatRows(fittingDetail) : [];
   const displayStatRows = buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
-  const usesGroupedWeaponStats = Boolean(fittingDetail && isFittingWeaponPerformanceType(fittingDetail));
   const statsSectionLabel = `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? recipe.component_type} Stats`;
   const graphData =
     buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
@@ -2049,15 +2066,17 @@ function ItemSummaryPanel({
 
         {displayStatRows.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
-            {!usesGroupedWeaponStats && <div className="craft-summary-section-label">{statsSectionLabel}</div>}
-            {usesGroupedWeaponStats ? (
-              <WeaponPerformanceStatGroups stats={displayStatRows} />
+            {fittingDetail ? (
+              <GroupedDetailStatGroups detail={fittingDetail} stats={displayStatRows} />
             ) : (
+              <>
+              <div className="craft-summary-section-label">{statsSectionLabel}</div>
               <div className="craft-detail-stat-list craft-stat-grid">
                 {displayStatRows.map((stat) => (
                   <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
                 ))}
               </div>
+              </>
             )}
           </div>
         )}

@@ -1199,12 +1199,6 @@
 }
 
 .bq-mat-name { display: grid; gap: 5px; min-width: 0; }
-.bq-mat-name strong {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--alloc-text-primary);
-  line-height: 1.1;
-}
 
 .bq-mat-name > span:not(.bq-material-name-cell) {
   font-size: 12px;
@@ -1460,31 +1454,12 @@
 .bq-avg-quality--cyan i { background: var(--alloc-cyan); }
 .bq-avg-quality--low i { background: #f0b84b; }
 
-.bq-avg-quality em,
-.bq-avg-quality small,
-.bq-balance em {
-  color: var(--alloc-text-secondary);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.1;
-}
-
-.bq-avg-quality small {
-  color: #f0b84b;
-}
-
 .bq-balance {
   display: grid;
   gap: 3px;
   align-content: center;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-}
-
-.bq-balance strong {
-  font-size: 16px;
-  line-height: 1.1;
 }
 
 .bq-balance--short { color: var(--alloc-danger); }
@@ -3894,24 +3869,6 @@
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-.bq-mat-card-metrics em {
-  color: var(--bq-dim);
-  font-size: 0.56rem;
-  font-style: normal;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.bq-mat-card-metrics .bq-avg-quality em,
-.bq-mat-card-metrics .bq-balance em {
-  color: var(--alloc-text-secondary);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
 .bq-mat-card-metrics .bq-target-quality-cell {
   align-content: start;
   overflow: visible;
@@ -4434,14 +4391,6 @@
     flex: 0 0 32px;
   }
 
-  .bq-mat-name strong {
-    font-size: 16px;
-    line-height: 1.15;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   .bq-mat-name > span:not(.bq-material-name-cell) {
     font-size: 12px;
   }
@@ -4469,20 +4418,6 @@
     color: var(--alloc-text-primary);
   }
 
-  .bq-mat-card-metrics em {
-    color: var(--alloc-text-secondary);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .bq-mat-card-metrics .bq-avg-quality > span {
-    font-size: 15px;
-    gap: 0;
-  }
-
   .bq-mat-card-metrics .bq-avg-quality i {
     display: none;
   }
@@ -4499,19 +4434,6 @@
     margin-top: 0;
   }
 
-  .bq-mat-card-metrics .bq-avg-quality em {
-    color: var(--alloc-text-secondary);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .bq-balance strong {
-    font-size: 15px;
-  }
-
   .bq-mat-card-status {
     display: flex;
     align-items: baseline;
@@ -4519,22 +4441,6 @@
     gap: 5px;
     min-width: 0;
     padding-top: 2px;
-  }
-
-  .bq-mat-card-status em {
-    flex-basis: 100%;
-    color: var(--alloc-text-secondary);
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .bq-mat-card-status strong {
-    font-size: 15px;
-    line-height: 1.15;
   }
 
   .bq-mat-card-status span {
@@ -5112,15 +5018,7 @@
   font-size: 15px;
 }
 
-.bq-mat-name strong {
-  color: var(--alloc-text-primary);
-  font-size: 16px;
-}
-
-.bq-mat-name > span:not(.bq-material-name-cell),
-.bq-avg-quality em,
-.bq-avg-quality small,
-.bq-balance em {
+.bq-mat-name > span:not(.bq-material-name-cell) {
   color: var(--alloc-text-secondary);
   font-size: 12.5px;
 }
@@ -5128,10 +5026,6 @@
 .bq-avg-quality > span {
   color: var(--alloc-text-primary);
   font-size: 17px;
-}
-
-.bq-balance strong {
-  font-size: 14.5px;
 }
 
 .bq-icon-action,
@@ -5297,10 +5191,7 @@
   .bq-stat-legend-item,
   .bq-component-statistics .bq-stat-direction,
   .bq-component-statistics .bq-stat-compare-unit,
-  .bq-mat-name > span:not(.bq-material-name-cell),
-  .bq-avg-quality em,
-  .bq-avg-quality small,
-  .bq-balance em {
+  .bq-mat-name > span:not(.bq-material-name-cell) {
     font-size: 14px;
   }
 
@@ -5315,16 +5206,8 @@
     font-size: 17px;
   }
 
-  .bq-mat-name strong {
-    font-size: 17.5px;
-  }
-
   .bq-avg-quality > span {
     font-size: 19px;
-  }
-
-  .bq-balance strong {
-    font-size: 16px;
   }
 
   .bq-summary-reopen {
@@ -7087,16 +6970,6 @@
   stroke: var(--accent-cyan);
 }
 
-.bq-page .bq-center-shell.ops-primary-card {
-  border: 0;
-  background: #07121c;
-  box-shadow: none;
-}
-
-.bq-page .bq-center-shell.ops-primary-card::after {
-  content: none;
-}
-
 .bq-page .bq-center-shell.ops-primary-card .bq-item-sidebar,
 .bq-center-shell .bq-item-header {
   border: 0;
@@ -7277,13 +7150,6 @@
   overflow: hidden;
 }
 
-.bq-mat-card-head .bq-material-name-cell strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 1.2rem;
-}
-
 .bq-mat-card-head .bq-mat-actions {
   flex: 0 0 auto;
 }
@@ -7306,18 +7172,6 @@
   line-height: 1.2;
 }
 
-.bq-mat-card-metrics em,
-.bq-mat-card-status em,
-.bq-mat-card-quality-label {
-  color: var(--alloc-text-secondary);
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
 .bq-mat-card-metrics .bq-target-quality-cell {
   overflow: visible;
 }
@@ -7335,23 +7189,10 @@
   padding-top: 2px;
 }
 
-.bq-mat-card-status em {
-  flex-basis: 100%;
-}
-
-.bq-mat-card-status strong {
-  font-size: 15px;
-  line-height: 1.15;
-}
-
 .bq-mat-card-status span {
   color: currentColor;
   font-size: 12px;
   font-weight: 700;
-}
-
-.bq-mat-card-quality-label {
-  display: block;
 }
 
 .bq-mat-card-quality {
@@ -7667,11 +7508,6 @@
     gap: 9px;
   }
 
-  .bq-mat-card-head .bq-material-name-cell strong {
-    font-size: 1.2rem;
-    line-height: 1.1;
-  }
-
   .bq-mat-card-head .bq-target-editor {
     position: absolute;
     top: 32px;
@@ -7726,30 +7562,6 @@
 
   .bq-mat-card-metrics .bq-mat-card-status {
     grid-area: balance;
-  }
-
-  .bq-mat-card-metrics em,
-  .bq-mat-card-status em,
-  .bq-mat-card-quality-label {
-    font-size: 8px;
-    line-height: 1;
-    letter-spacing: 0.055em;
-  }
-
-  .bq-mat-card-metrics strong,
-  .bq-mat-card-metrics .bq-avg-quality > span {
-    font-size: 12px;
-    line-height: 1.05;
-  }
-
-  .bq-mat-card-metrics small {
-    font-size: 9px;
-    line-height: 1.05;
-  }
-
-  .bq-mat-card-quality-label {
-    align-self: start;
-    grid-row: 3;
   }
 
   .bq-mat-card-footer {
@@ -7877,64 +7689,97 @@
   }
 }
 
-/* Build Queue visual target refinement: restrained frames, layered depth, and
-   end-product-first scanning. This remains page-local and presentation-only. */
+/* Dashboard Next Fabrication Run color alignment.
+   Keep the Build Queue layout and hierarchy page-local while sharing the
+   graphite operational surfaces, borders, and status colors. */
 .bq-page {
-  background:
-    radial-gradient(90% 120% at 20% 45%, rgba(18, 74, 99, 0.1), transparent 62%),
-    linear-gradient(90deg, #050e16 0%, #07131e 48%, #09131f 100%);
+  background: var(--ops-canvas);
 }
 
-.bq-page .bq-queue-col,
+.bq-page .bq-queue-col {
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
 .bq-page .bq-center-shell.ops-primary-card {
-  border: 1px solid rgba(75, 116, 135, 0.2);
-  background:
-    radial-gradient(95% 120% at 8% 42%, rgba(19, 72, 95, 0.08), transparent 62%),
-    linear-gradient(90deg, rgba(5, 16, 25, 0.985), rgba(7, 19, 30, 0.985));
-  box-shadow:
-    inset 0 1px 0 rgba(181, 225, 241, 0.025),
-    0 14px 34px rgba(0, 5, 10, 0.24);
+  background: var(--ops-surface-primary);
 }
 
 .bq-page .bq-queue-col-head {
   justify-content: flex-start;
-  border-bottom: 1px solid rgba(75, 116, 135, 0.16);
-  background: linear-gradient(90deg, rgba(10, 28, 41, 0.78), rgba(6, 18, 28, 0.4));
+  border-bottom: 1px solid rgba(115, 143, 171, 0.18);
+  background: var(--ops-header-band);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.bq-page .bq-craft-card {
+  border: 1px solid var(--ops-border-soft);
+  background: var(--ops-surface-row);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.bq-page .bq-craft-card:hover {
+  border-color: rgba(125, 211, 252, 0.28);
+  background: var(--ops-surface-hover);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.bq-page .bq-craft-card.is-selected,
+.bq-page .bq-craft-card.is-selected.allocation-owner-highlight {
+  border-color: rgba(125, 211, 252, 0.21);
+  background: var(--ops-surface-selected);
+  box-shadow:
+    inset 3px 0 0 #7dd3fc,
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.bq-page .bq-craft-card--done:not(.is-selected) {
+  border-color: rgba(74, 222, 128, 0.2);
+  background: rgba(13, 30, 27, 0.76);
 }
 
 .bq-page .bq-center-shell .bq-item-header {
-  border-bottom: 1px solid rgba(75, 116, 135, 0.18);
-  background:
-    radial-gradient(70% 140% at 18% 25%, rgba(19, 81, 108, 0.09), transparent 68%),
-    linear-gradient(90deg, rgba(7, 21, 32, 0.94), rgba(5, 16, 26, 0.78));
+  border-bottom: 1px solid rgba(115, 143, 171, 0.18);
+  background: var(--ops-header-band);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.018);
 }
 
 .bq-page .bq-center-shell .bq-materials-section {
-  border-block: 1px solid rgba(75, 116, 135, 0.16);
-  background:
-    radial-gradient(80% 130% at 12% 22%, rgba(15, 68, 92, 0.07), transparent 64%),
-    linear-gradient(90deg, rgba(5, 17, 27, 0.88), rgba(5, 15, 25, 0.66));
+  border-top: 1px solid var(--ops-border-soft);
+  border-bottom: 0;
+  background: var(--ops-surface-deep);
 }
 
 .bq-page .bq-mat-group,
+.bq-page .bq-item--completed-craft .bq-mat-group {
+  border-color: var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
 .bq-page .bq-mat-group:hover,
-.bq-page .bq-item--completed-craft .bq-mat-group,
 .bq-page .bq-item--completed-craft .bq-mat-group:hover {
-  border-color: rgba(85, 135, 157, 0.22);
-  background:
-    radial-gradient(95% 105% at 8% 18%, rgba(31, 105, 134, 0.065), transparent 66%),
-    linear-gradient(105deg, rgba(7, 25, 38, 0.98), rgba(5, 18, 29, 0.99) 68%, rgba(7, 16, 28, 0.99));
-  box-shadow:
-    inset 0 1px 0 rgba(190, 230, 244, 0.045),
-    0 8px 22px rgba(0, 5, 10, 0.2);
+  border-color: var(--ops-border-default);
+  background: var(--ops-surface-hover);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .bq-page .bq-component-statistics {
-  border-top: 1px solid rgba(75, 116, 135, 0.18);
-  background:
-    radial-gradient(85% 130% at 10% 10%, rgba(17, 70, 95, 0.07), transparent 62%),
-    linear-gradient(90deg, rgba(6, 18, 28, 0.9), rgba(5, 15, 25, 0.72));
-  box-shadow: 0 -10px 24px rgba(0, 5, 10, 0.12);
+  margin-top: 0;
+  border-top: 1px solid var(--ops-border-soft);
+  background: var(--ops-surface-deep);
+  box-shadow: none;
+}
+
+.bq-page .bq-stat-unmodified-group,
+.bq-page .bq-stat-modified-card {
+  border-color: var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
 /* Only the selected-item header and queue craft cards retain SVG frames. */
@@ -7947,11 +7792,15 @@
 }
 
 .bq-page .bq-craft-card > .bq-decorative-frame {
+  inset: -1px;
+  width: calc(100% + 2px);
+  max-width: none;
+  height: calc(100% + 2px);
   opacity: 0.11;
 }
 
 .bq-page .bq-craft-card.is-selected > .bq-decorative-frame {
-  opacity: 0.2;
+  opacity: 0.45;
 }
 
 .bq-page .bq-craft-card-drag-handle {
@@ -7967,17 +7816,25 @@
   display: inline-flex;
 }
 
-.bq-component-statistics .bq-stat-compact-value.craft-ok {
-  color: #6ee7a0;
-  text-shadow: 0 0 12px rgba(52, 211, 153, 0.12);
+.bq-component-statistics .bq-stat-compact-value.craft-ok,
+.bq-component-statistics .bq-stat-compare-value.craft-ok,
+.bq-component-statistics .bq-stat-compare-delta.craft-ok {
+  color: rgba(158, 239, 187, 0.92);
+  text-shadow: none;
 }
 
-.bq-component-statistics .bq-stat-compact-value.craft-shortage {
-  color: #ff7185;
-  text-shadow: 0 0 12px rgba(251, 113, 133, 0.1);
+.bq-component-statistics .bq-stat-compact-value.craft-shortage,
+.bq-component-statistics .bq-stat-compare-value.craft-shortage,
+.bq-component-statistics .bq-stat-compare-delta.craft-shortage {
+  color: rgba(253, 174, 184, 0.94);
+  text-shadow: none;
 }
 
 @media (min-width: 1200px) {
+  .bq-page .bq-craft-card {
+    padding-right: 42px;
+  }
+
   .bq-page .bq-center-shell .bq-item {
     min-height: 100%;
   }
@@ -8098,23 +7955,6 @@
     width: 96px;
   }
 
-  .bq-page .bq-mat-card-metrics em,
-  .bq-page .bq-mat-card-status em,
-  .bq-page .bq-mat-card-quality-label {
-    font-size: 0.625rem;
-    line-height: 1.15;
-  }
-
-  .bq-page .bq-mat-card-metrics strong,
-  .bq-page .bq-mat-card-metrics .bq-avg-quality > span {
-    font-size: 0.875rem;
-  }
-
-  .bq-page .bq-mat-card-metrics small {
-    font-size: 0.6875rem;
-    line-height: 1.15;
-  }
-
   .bq-page .bq-quality-chip,
   .bq-page .bq-quality-chip[class*="logi-rarity--"] {
     font-size: 0.6875rem;
@@ -8134,5 +7974,744 @@
   .bq-page .bq-component-statistics .bq-stat-compare-base strong,
   .bq-page .bq-component-statistics .bq-stat-compare-value {
     font-size: 0.8125rem;
+  }
+}
+
+/* 2K legibility and queue-card control clearance.
+   This follows the 1080p pass so the larger values win at 2560×1440. */
+@media (min-width: 2200px) and (min-height: 1200px) {
+  .bq-page .bq-craft-card {
+    padding-right: 46px;
+  }
+
+  .bq-page .bq-queue-col-title {
+    font-size: 1rem;
+  }
+
+  .bq-page .bq-queue-selector-label,
+  .bq-page .bq-craft-card-index,
+  .bq-page .bq-craft-card-cat,
+  .bq-page .bq-craft-card-status,
+  .bq-page .bq-center-shell .bq-item-cat,
+  .bq-page .bq-center-shell .bq-item-mission-label {
+    font-size: 0.8125rem;
+  }
+
+  .bq-page .bq-queue-selector-trigger strong,
+  .bq-page .bq-craft-card-name {
+    font-size: 1.125rem;
+  }
+
+  .bq-page .bq-queue-tab,
+  .bq-page .bq-center-shell .bq-item-blueprint,
+  .bq-page .bq-materials-section-summary,
+  .bq-page .bq-center-shell .bq-btn,
+  .bq-page .bq-inventory-toggle,
+  .bq-page .bq-auto-reserve-btn {
+    font-size: 0.875rem;
+  }
+
+  .bq-page .bq-center-shell .bq-item-name {
+    font-size: 1.375rem;
+  }
+
+  .bq-page .bq-materials-section-title,
+  .bq-page .bq-component-statistics-title {
+    font-size: 1rem;
+  }
+
+  .bq-page .bq-quality-chip,
+  .bq-page .bq-quality-chip[class*="logi-rarity--"] {
+    font-size: 0.8125rem;
+  }
+
+  .bq-page .bq-quality-chip strong,
+  .bq-page .bq-stat-compact-label,
+  .bq-page .bq-stat-compact-value {
+    font-size: 0.9375rem;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-compare-label,
+  .bq-page .bq-component-statistics .bq-stat-compare-base,
+  .bq-page .bq-component-statistics .bq-stat-compare-base strong,
+  .bq-page .bq-component-statistics .bq-stat-compare-value {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Build Queue workspace composition.
+   Independent operational responsibilities sit on the canvas as separate
+   cards; internal rows use quiet dividers rather than one continuous shell. */
+.bq-page .bq-center-shell {
+  min-height: 100%;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-center-shell .bq-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100%;
+}
+
+.bq-page .bq-workspace-card {
+  position: relative;
+  isolation: isolate;
+  flex: 0 0 auto;
+  min-width: 0;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.bq-page .bq-workspace-card::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  top: -1px;
+  left: 50%;
+  width: min(420px, 42%, calc(100% - 20px));
+  height: 1px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, var(--ops-highlight-color), transparent);
+  box-shadow: var(--ops-highlight-glow);
+}
+
+.bq-page .bq-workspace-card-head,
+.bq-page .bq-materials-section-header,
+.bq-page .bq-component-statistics-header {
+  min-height: 46px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--ops-border-soft);
+  background: var(--ops-header-band);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.bq-page .bq-workspace-card-title-block {
+  min-width: 0;
+}
+
+.bq-page .bq-workspace-card-kicker {
+  display: block;
+  margin-bottom: 2px;
+  color: rgba(125, 211, 252, 0.78);
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-workspace-card-title-block h3 {
+  margin: 0;
+  color: rgba(232, 239, 255, 0.94);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+/* Selected craft */
+.bq-page .bq-center-shell .bq-item-header.bq-selected-craft-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.bq-page .bq-selected-craft-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bq-page .bq-selected-craft-head .bq-item-badges {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+
+.bq-page .bq-selected-craft-body {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 152px;
+  grid-template-areas: "identity visual";
+  gap: 18px;
+  align-items: center;
+  min-width: 0;
+  min-height: 78px;
+  padding: 12px 14px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-identity {
+  grid-area: identity;
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name-block {
+  min-width: 0;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name {
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  line-height: 1.12;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-selected-craft-body .bq-stats-meta--header {
+  margin: 0;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-mission {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  min-width: 0;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-blueprint,
+.bq-page .bq-selected-craft-body .bq-item-blueprint-links {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual {
+  grid-area: visual;
+  align-self: stretch;
+  justify-self: stretch;
+  width: auto;
+  max-width: none;
+  min-height: 70px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 0;
+  border-left: 1px solid var(--ops-border-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual .bq-product-icon {
+  max-width: 132px;
+  max-height: 72px;
+}
+
+.bq-page .bq-selected-craft-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 42px;
+  padding: 6px 14px;
+  border-top: 1px solid var(--ops-border-soft);
+  background: rgba(12, 20, 31, 0.42);
+}
+
+.bq-page .bq-selected-craft-footer .bq-item-actions,
+.bq-page .bq-selected-craft-footer .bq-btn-row {
+  margin: 0;
+}
+
+.bq-page .bq-selected-craft-footer .bq-qty {
+  margin: 0;
+}
+
+/* Material allocation */
+.bq-page .bq-center-shell .bq-item-body.bq-materials-card {
+  overflow: visible;
+  padding: 0;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+  z-index: 3;
+}
+
+.bq-page .bq-center-shell .bq-item-body.bq-materials-card:empty {
+  display: none;
+}
+
+.bq-page .bq-center-shell .bq-materials-section {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-materials-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-inline: 14px;
+}
+
+.bq-page .bq-materials-section-heading {
+  gap: 2px;
+}
+
+.bq-page .bq-materials-section-title,
+.bq-page .bq-component-statistics-title {
+  color: rgba(232, 239, 255, 0.94);
+  font-size: 0.9375rem;
+  letter-spacing: 0.12em;
+}
+
+.bq-page .bq-mat-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(304px, 100%), 1fr));
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  height: auto;
+  min-height: 244px;
+  margin-top: 0;
+  padding: 7px;
+  overflow: visible;
+}
+
+.bq-page .bq-mat-group,
+.bq-page .bq-item--completed-craft .bq-mat-group {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background:
+    linear-gradient(180deg, rgba(17, 27, 39, 0.94), rgba(11, 18, 27, 0.98)),
+    var(--ops-surface-row);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.bq-page .bq-mat-group:hover,
+.bq-page .bq-item--completed-craft .bq-mat-group:hover {
+  border-color: var(--ops-border-default);
+  background:
+    linear-gradient(180deg, rgba(21, 34, 48, 0.96), rgba(13, 22, 32, 0.99)),
+    var(--ops-surface-hover);
+}
+
+.bq-page .bq-mat-row--mobile-card {
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 8px;
+  height: auto;
+  min-height: 0;
+  padding: 13px;
+}
+
+.bq-page .bq-mat-card-head {
+  min-height: 30px;
+}
+
+.bq-page .bq-mat-card-head .bq-target-editor {
+  position: relative;
+  inset: auto;
+  flex: 0 0 128px;
+  width: 128px;
+  margin: 0;
+  grid-template-columns: 96px 28px;
+}
+
+.bq-page .bq-mat-card-head .bq-target-slider-shell {
+  width: 96px;
+}
+
+.bq-page .bq-mat-card-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas: none;
+  gap: 8px;
+  min-height: 0;
+  padding: 7px 0 8px;
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.bq-page .bq-mat-card-metrics .bq-mat-card-need,
+.bq-page .bq-mat-card-metrics .bq-avg-quality,
+.bq-page .bq-mat-card-metrics .bq-mat-card-status {
+  grid-area: auto;
+  gap: 3px;
+  min-width: 0;
+}
+
+.bq-page .bq-mat-card-metrics em {
+  flex-basis: 100%;
+  color: var(--alloc-text-secondary);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-mat-card-quality-label {
+  display: block;
+  color: var(--alloc-text-secondary);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  grid-row: auto;
+}
+
+.bq-page .bq-mat-name strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--alloc-text-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-mat-card-metrics strong {
+  font-size: 0.875rem;
+  line-height: 1.15;
+}
+
+.bq-page .bq-mat-card-metrics .bq-avg-quality > span {
+  gap: 0;
+  font-size: 0.875rem;
+}
+
+.bq-page .bq-mat-card-metrics small {
+  color: #f0b84b;
+  font-size: 0.6875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.bq-page .bq-balance--short strong {
+  color: var(--alloc-danger);
+}
+
+.bq-page .bq-balance--met strong {
+  color: var(--alloc-success);
+}
+
+.bq-page .bq-mat-card-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-row: auto;
+  gap: 8px;
+  min-height: 34px;
+  height: auto;
+  align-items: end;
+}
+
+.bq-page .bq-mat-card-quality .bq-quality-chips {
+  flex-wrap: wrap;
+}
+
+/* Reservation drawers stay constrained to their material card while the
+   expanded card overlays the lower workspace without reflowing its parent. */
+.bq-page .bq-mat-group .bq-reserve-panel {
+  width: auto;
+  max-width: none;
+  margin: 0 10px 12px;
+  padding: 10px;
+  overflow: visible;
+  border-radius: var(--ops-radius-nested);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.bq-page .bq-mat-group:has(.bq-reserve-panel) {
+  z-index: 12;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 26px 54px rgba(0, 0, 0, 0.78),
+    0 0 0 1px rgba(125, 211, 252, 0.08);
+}
+
+.bq-page .bq-mat-group:has(.bq-reserve-panel) .bq-reserve-panel {
+  box-shadow: none;
+}
+
+.bq-page .bq-mat-group .bq-reserve-stack-head {
+  display: none;
+}
+
+.bq-page .bq-mat-group .bq-reserve-stack-row {
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "select location quality"
+    "select available reserved"
+    "select assign assign";
+  gap: 7px 9px;
+  min-height: 0;
+  padding: 9px 0;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-select {
+  grid-area: select;
+  align-self: stretch;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-location {
+  grid-area: location;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-quality {
+  grid-area: quality;
+  align-self: start;
+  font-size: 0.8125rem;
+  text-align: right;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-available {
+  grid-area: available;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-reserved {
+  grid-area: reserved;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-assign {
+  grid-area: assign;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-available,
+.bq-page .bq-mat-group .bq-reserve-col-reserved {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  justify-content: start;
+  gap: 5px;
+  text-align: left;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-available::before,
+.bq-page .bq-mat-group .bq-reserve-col-reserved::before {
+  color: var(--text-muted);
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-available::before {
+  content: "Available";
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-reserved::before {
+  content: "Reserved";
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-reserved {
+  justify-items: start;
+}
+
+.bq-page .bq-mat-group .bq-reserve-col-reserved em {
+  grid-column: 1 / -1;
+  text-align: left;
+}
+
+/* Component statistics */
+.bq-page .bq-item > .bq-component-statistics.bq-workspace-card,
+.bq-page .bq-center-shell .bq-component-statistics.bq-workspace-card {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+  z-index: 1;
+}
+
+.bq-page .bq-component-statistics-header {
+  align-items: center;
+  margin: 0;
+  padding-inline: 14px;
+}
+
+.bq-page .bq-component-statistics-body {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+  padding: 14px;
+}
+
+.bq-page .bq-stat-unmodified-column {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.bq-page .bq-stat-unmodified-group,
+.bq-page .bq-stat-modified-card {
+  padding: 10px;
+  border-color: var(--ops-border-soft);
+  background: var(--ops-surface-row);
+}
+
+.bq-page .bq-stat-modified-card {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.bq-page .bq-stat-modified-card:has(> .bq-stat-modified-group:only-of-type) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.bq-page .bq-stat-modified-card > h4 {
+  grid-column: 1 / -1;
+}
+
+.bq-page .bq-stat-modified-group {
+  align-content: start;
+  min-width: 0;
+  width: 100%;
+}
+
+.bq-page .bq-stat-modified-group:only-of-type {
+  grid-column: 1 / -1;
+}
+
+.bq-page .bq-stat-modified-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 8px;
+}
+
+.bq-page .bq-stat-modified-list .bq-stat-compare-row + .bq-stat-compare-row {
+  margin-top: 0;
+}
+
+.bq-page .bq-component-statistics--empty.bq-workspace-card {
+  display: grid;
+  min-height: 92px;
+  padding: 16px;
+  place-items: center;
+}
+
+.bq-page .bq-component-statistics--empty.bq-workspace-card::before {
+  content: "Component Statistics";
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  color: var(--text-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1500px) {
+  .bq-page .bq-selected-craft-body {
+    grid-template-columns: minmax(220px, 1fr) 126px;
+    gap: 12px;
+  }
+
+  .bq-page .bq-mat-table {
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+
+  .bq-page .bq-stat-modified-list {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .bq-page .bq-selected-craft-body {
+    grid-template-columns: minmax(0, 1fr) 110px;
+    grid-template-areas: "identity visual";
+  }
+
+  .bq-page .bq-component-statistics-body {
+    grid-template-columns: 1fr;
+  }
+
+  .bq-page .bq-stat-modified-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-center-shell .bq-item {
+    gap: 12px;
+  }
+
+  .bq-page .bq-selected-craft-body {
+    grid-template-columns: minmax(0, 1fr) 92px;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .bq-page .bq-selected-craft-head,
+  .bq-page .bq-materials-section-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .bq-page .bq-selected-craft-footer {
+    padding-inline: 12px;
+  }
+
+  .bq-page .bq-mat-table {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 7px;
+  }
+
+  .bq-page .bq-mat-group,
+  .bq-page .bq-item--completed-craft .bq-mat-group {
+    max-width: none;
+  }
+
+  .bq-page .bq-mat-card-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-component-statistics-body {
+    padding: 10px;
+  }
+
+  .bq-page .bq-stat-unmodified-column {
+    grid-template-columns: 1fr;
   }
 }

@@ -694,7 +694,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
 
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
-            <div className="bq-center-shell ops-primary-card">
+            <div className="bq-center-shell">
             <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}
