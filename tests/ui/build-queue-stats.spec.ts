@@ -170,6 +170,17 @@ test.describe("Build Queue stats fixture", () => {
       expect(collapsedMaterials.shortfallColor).toBe(collapsedMaterials.detrimentalColor);
       expect(collapsedMaterials.balancedColor).toBe(collapsedMaterials.beneficialColor);
       expect(collapsedMaterials.balancedText).toMatch(/^x?0(?:\sSCU)?$/);
+      const collapsedQualityAllocations = await page.locator(".bq-mat-card-quality").evaluateAll((allocations) => (
+        allocations.map((allocation) => ({
+          overflowX: getComputedStyle(allocation).overflowX,
+          chipRows: new Set(
+            Array.from(allocation.querySelectorAll(".bq-quality-chip"))
+              .map((chip) => Math.round(chip.getBoundingClientRect().top)),
+          ).size,
+        }))
+      ));
+      expect(collapsedQualityAllocations.every(({ overflowX }) => overflowX === "auto")).toBe(true);
+      expect(collapsedQualityAllocations.every(({ chipRows }) => chipRows <= 1)).toBe(true);
 
       await page.locator(".bq-inventory-toggle").click();
       await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "false");
@@ -273,13 +284,23 @@ test.describe("Build Queue stats fixture", () => {
         const card = Array.from(craft.querySelectorAll(".bq-mat-group"))
           .find((candidate) => candidate.textContent?.includes("Hadanite"));
         const allocation = craft.querySelector(".bq-materials-card");
+        const section = craft.querySelector(".bq-materials-section");
+        const table = craft.querySelector(".bq-mat-table");
         const statistics = craft.querySelector(".bq-component-statistics");
         return {
           cardWidth: card?.getBoundingClientRect().width ?? 0,
           allocationHeight: allocation?.getBoundingClientRect().height ?? 0,
           statisticsTop: statistics?.getBoundingClientRect().top ?? 0,
+          allocationOverflow: allocation ? getComputedStyle(allocation).overflow : "",
+          sectionOverflow: section ? getComputedStyle(section).overflow : "",
+          tableOverflow: table ? getComputedStyle(table).overflow : "",
+          cardOverflow: card ? getComputedStyle(card).overflow : "",
         };
       });
+      expect(before.allocationOverflow).toBe("hidden");
+      expect(before.sectionOverflow).toBe("hidden");
+      expect(before.tableOverflow).toBe("hidden");
+      expect(before.cardOverflow).toBe("hidden");
 
       await expandButton.click();
       await expect(materialCard.locator(".bq-reserve-panel")).toBeVisible();
@@ -290,6 +311,8 @@ test.describe("Build Queue stats fixture", () => {
           .find((candidate) => candidate.textContent?.includes("Hadanite"));
         const drawer = card?.querySelector(".bq-reserve-panel");
         const allocation = craft.querySelector(".bq-materials-card");
+        const section = craft.querySelector(".bq-materials-section");
+        const table = craft.querySelector(".bq-mat-table");
         const statistics = craft.querySelector(".bq-component-statistics");
         const cardRect = card?.getBoundingClientRect();
         const drawerRect = drawer?.getBoundingClientRect();
@@ -307,6 +330,10 @@ test.describe("Build Queue stats fixture", () => {
           statisticsTop: statisticsRect?.top ?? 0,
           allocationZIndex,
           statisticsZIndex,
+          allocationOverflow: allocation ? getComputedStyle(allocation).overflow : "",
+          sectionOverflow: section ? getComputedStyle(section).overflow : "",
+          tableOverflow: table ? getComputedStyle(table).overflow : "",
+          cardOverflow: card ? getComputedStyle(card).overflow : "",
         };
       });
 
@@ -317,6 +344,10 @@ test.describe("Build Queue stats fixture", () => {
       expect(after.drawerBottom).toBeGreaterThan(after.allocationBottom);
       expect(after.drawerBottom).toBeGreaterThan(after.statisticsTop);
       expect(after.allocationZIndex).toBeGreaterThan(after.statisticsZIndex);
+      expect(after.allocationOverflow).toBe("visible");
+      expect(after.sectionOverflow).toBe("visible");
+      expect(after.tableOverflow).toBe("visible");
+      expect(after.cardOverflow).toBe("visible");
 
       const horizontalOverflow = await page.evaluate(() => (
         Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth

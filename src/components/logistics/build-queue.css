@@ -8243,7 +8243,7 @@
 
 /* Material allocation */
 .bq-page .bq-center-shell .bq-item-body.bq-materials-card {
-  overflow: visible;
+  overflow: hidden;
   padding: 0;
   border: 1px solid var(--ops-border-default);
   border-radius: var(--ops-radius-primary);
@@ -8259,7 +8259,7 @@
 .bq-page .bq-center-shell .bq-materials-section {
   height: auto;
   min-height: 0;
-  overflow: visible;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   border: 0;
@@ -8296,7 +8296,7 @@
   min-height: 244px;
   margin-top: 0;
   padding: 7px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .bq-page .bq-mat-group,
@@ -8305,7 +8305,7 @@
   max-width: none;
   height: auto;
   min-height: 0;
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid var(--ops-border-soft);
   border-radius: var(--ops-radius-nested);
   background:
@@ -8437,12 +8437,28 @@
   align-items: end;
 }
 
+.bq-page .bq-mat-card-quality {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
 .bq-page .bq-mat-card-quality .bq-quality-chips {
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: max-content;
+  min-width: 100%;
 }
 
 /* Reservation drawers stay constrained to their material card while the
    expanded card overlays the lower workspace without reflowing its parent. */
+.bq-page .bq-center-shell .bq-item-body.bq-materials-card:has(.bq-reserve-panel),
+.bq-page .bq-center-shell .bq-materials-section:has(.bq-reserve-panel),
+.bq-page .bq-mat-table:has(.bq-reserve-panel),
+.bq-page .bq-mat-group:has(.bq-reserve-panel) {
+  overflow: visible;
+}
+
 .bq-page .bq-mat-group .bq-reserve-panel {
   width: auto;
   max-width: none;
