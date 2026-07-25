@@ -76,7 +76,7 @@ export default function InventoryTransferDialog({
   const [targetLocationId, setTargetLocationId] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const sourceName = locations.find((location) => location.id === sourceLocationId)?.name ?? 'Unknown location';
+  const sourceName = locations.find((location) => location.id === sourceLocationId)?.name ?? 'Unknown Location';
   const selectedCount = selectedEntryIds.size;
   const materialSummary = useMemo(
     () => buildMaterialSummaryLines(selectedEntryIds, entries, materials),

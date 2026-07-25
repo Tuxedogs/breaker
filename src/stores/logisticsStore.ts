@@ -90,7 +90,8 @@ export interface InventoryUiState {
   qualityMin: number;
   sortKey: "quality" | "quantity" | "material" | "location";
   sortDir: "asc" | "desc";
-  viewMode: "cards" | "list";
+  viewMode: "location" | "item" | "list";
+  listGroupBy: "location" | "item";
   lastImportMode: "append" | "replace_matching_materials_location" | "replace_locations" | "replace_all";
   expandedCards: string[];
   expandedQualityRows: string[];
@@ -122,7 +123,8 @@ const defaultInventoryUi: InventoryUiState = {
   qualityMin: 0,
   sortKey: "quality",
   sortDir: "desc",
-  viewMode: "cards",
+  viewMode: "location",
+  listGroupBy: "location",
   lastImportMode: "append",
   expandedCards: [],
   expandedQualityRows: [],
@@ -311,8 +313,14 @@ function isInventoryUiSortDir(value: unknown): value is InventoryUiState["sortDi
   return value === "asc" || value === "desc";
 }
 
-function isInventoryUiViewMode(value: unknown): value is InventoryUiState["viewMode"] {
-  return value === "cards" || value === "list";
+function coerceInventoryUiViewMode(value: unknown): InventoryUiState["viewMode"] {
+  if (value === "cards") return "location";
+  if (value === "location" || value === "item" || value === "list") return value;
+  return defaultInventoryUi.viewMode;
+}
+
+function isInventoryUiListGroupBy(value: unknown): value is InventoryUiState["listGroupBy"] {
+  return value === "location" || value === "item";
 }
 
 function isInventoryUiImportMode(value: unknown): value is InventoryUiState["lastImportMode"] {
@@ -337,7 +345,8 @@ function coerceInventoryUi(value: unknown): InventoryUiState {
     qualityMin: isNumber(record.qualityMin) ? record.qualityMin : defaultInventoryUi.qualityMin,
     sortKey: isInventoryUiSortKey(record.sortKey) ? record.sortKey : defaultInventoryUi.sortKey,
     sortDir: isInventoryUiSortDir(record.sortDir) ? record.sortDir : defaultInventoryUi.sortDir,
-    viewMode: isInventoryUiViewMode(record.viewMode) ? record.viewMode : defaultInventoryUi.viewMode,
+    viewMode: coerceInventoryUiViewMode(record.viewMode),
+    listGroupBy: isInventoryUiListGroupBy(record.listGroupBy) ? record.listGroupBy : defaultInventoryUi.listGroupBy,
     lastImportMode: isInventoryUiImportMode(record.lastImportMode) ? record.lastImportMode : defaultInventoryUi.lastImportMode,
     expandedCards: coerceStringArray(record.expandedCards),
     expandedQualityRows: coerceStringArray(record.expandedQualityRows),

@@ -80,6 +80,441 @@
   opacity: 0.75;
 }
 
+/* Inventory hierarchy */
+
+.logi-inv-tree,
+.logi-inv-list-folders {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.logi-inv-tree-primary,
+.logi-inv-list-folder {
+  overflow: hidden;
+  border: 1px solid var(--inv-border);
+  border-radius: 10px;
+  background: rgba(8, 18, 29, 0.86);
+}
+
+.logi-inv-tree-primary-head,
+.logi-inv-tree-secondary-head,
+.logi-inv-tree-quality-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.logi-inv-tree-primary-head {
+  min-height: 52px;
+  padding: 7px 10px;
+}
+
+.logi-inv-tree-secondary-head {
+  min-height: 44px;
+  padding: 5px 8px;
+}
+
+.logi-inv-tree-quality-head {
+  min-height: 40px;
+  padding: 4px 8px;
+}
+
+.logi-inv-tree-disclosure {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.logi-inv-tree-disclosure > strong {
+  overflow: hidden;
+  flex: 0 1 auto;
+  min-width: 120px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-inv-tree-disclosure > span:not(.logi-quality-pill) {
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.logi-inv-tree-chevron {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  transition: transform 140ms ease;
+}
+
+[aria-expanded="true"] > .logi-inv-tree-chevron {
+  transform: rotate(180deg);
+}
+
+.logi-inv-tree-folder-actions,
+.logi-inv-tree-box-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+
+.logi-inv-tree-folder-actions button,
+.logi-inv-tree-primary-head > button:not(.logi-inv-tree-disclosure),
+.logi-inv-tree-add,
+.logi-inv-tree-box-actions button {
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid rgba(71, 108, 139, 0.34);
+  border-radius: 6px;
+  background: rgba(6, 17, 28, 0.72);
+  color: rgba(173, 202, 226, 0.9);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logi-inv-tree-add {
+  color: #71d8ff !important;
+}
+
+.logi-inv-tree-secondary-list,
+.logi-inv-tree-quality-list {
+  display: grid;
+  gap: 6px;
+  padding: 0 10px 10px 34px;
+}
+
+.logi-inv-tree-secondary {
+  overflow: hidden;
+  border: 1px solid rgba(67, 91, 114, 0.28);
+  border-radius: 8px;
+  background: rgba(11, 24, 37, 0.72);
+}
+
+.logi-inv-tree-quality {
+  overflow: hidden;
+  border-top: 1px solid rgba(73, 96, 116, 0.22);
+}
+
+.logi-inv-tree-quality:first-child {
+  border-top: 0;
+}
+
+.logi-inv-tree-quality .logi-quality-pill {
+  min-width: 84px;
+  padding: 4px 7px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.logi-inv-tree-boxes,
+.logi-inv-list-rows {
+  display: grid;
+  gap: 2px;
+  padding: 0 8px 8px 24px;
+}
+
+.logi-inv-tree-box {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.4fr) minmax(120px, 0.7fr) minmax(150px, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 8px;
+  border-left: 2px solid rgba(70, 183, 225, 0.32);
+  background: rgba(4, 14, 23, 0.64);
+}
+
+.logi-inv-tree-box:has(.logi-inv-tree-box-select) {
+  grid-template-columns: 24px minmax(160px, 1.4fr) minmax(120px, 0.7fr) minmax(150px, 1fr) auto;
+}
+
+.logi-inv-tree-box.is-selected {
+  border-left-color: #5ed5ff;
+  background: rgba(39, 117, 151, 0.13);
+}
+
+.logi-inv-tree-box.is-unavailable {
+  opacity: 0.72;
+}
+
+.logi-inv-tree-box-name,
+.logi-inv-tree-box-quantity,
+.logi-inv-tree-box-state {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.logi-inv-tree-box-name strong,
+.logi-inv-tree-box-quantity strong,
+.logi-inv-tree-box-state strong {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-inv-tree-box-name small,
+.logi-inv-tree-box-quantity small,
+.logi-inv-tree-box-state small {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-inv-tree-box-state.is-available strong { color: #63d7b2; }
+.logi-inv-tree-box-state.is-partial strong { color: #f2bd66; }
+.logi-inv-tree-box-state.is-reserved strong { color: #9ba9b7; }
+.logi-inv-tree-box-actions button.is-delete { color: #ff7b82; }
+
+.logi-inv-list-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 34px;
+  padding: 3px;
+  border: 1px solid rgba(69, 97, 121, 0.28);
+  border-radius: 7px;
+}
+
+.logi-inv-list-group-toggle > span {
+  padding: 0 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.logi-inv-list-group-toggle button {
+  min-height: 26px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.logi-inv-list-group-toggle button.is-active {
+  background: rgba(55, 155, 199, 0.14);
+  color: #75d9ff;
+}
+
+.logi-inv-list-rows {
+  padding: 0 10px 10px 34px;
+}
+
+/* Dashboard-style pull-plan treatment: folders remain full-width surfaces instead of
+   shrinking with every level of hierarchy. */
+.logi-inv-tree-primary {
+  border-radius: 5px;
+  background: rgba(13, 21, 33, 0.78);
+}
+
+.logi-inv-tree-primary-head {
+  min-height: 34px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  background: rgba(19, 30, 46, 0.78);
+}
+
+.logi-inv-tree-primary-head:hover {
+  background: rgba(27, 42, 61, 0.82);
+}
+
+.logi-inv-tree-secondary-list {
+  gap: 0.28rem;
+  padding: 0.25rem 0.36rem 0.35rem;
+  background: rgba(4, 9, 16, 0.36);
+}
+
+.logi-inv-tree-secondary {
+  border-color: rgba(255, 255, 255, 0.055);
+  border-radius: 4px;
+  background: rgba(13, 21, 33, 0.78);
+}
+
+.logi-inv-tree-secondary-head {
+  min-height: 30px;
+  padding: 0.26rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  background: rgba(24, 35, 51, 0.48);
+}
+
+.logi-inv-tree-secondary-head .logi-inv-tree-disclosure > strong {
+  min-width: 0;
+}
+
+.logi-inv-tree-quality-list {
+  gap: 0;
+  padding: 0;
+}
+
+.logi-inv-tree-quality {
+  border-top-color: rgba(255, 255, 255, 0.045);
+}
+
+.logi-inv-tree-quality-head {
+  min-height: 30px;
+  padding: 0.22rem 0.4rem;
+  background: rgba(15, 28, 43, 0.45);
+}
+
+.logi-inv-tree-disclosure {
+  gap: 0.45rem;
+  min-height: 28px;
+  font-size: 0.72rem;
+}
+
+.logi-inv-tree-disclosure > strong {
+  min-width: 0;
+  font-size: 0.72rem;
+}
+
+.logi-inv-tree-disclosure > span:not(.logi-quality-pill) {
+  font-size: 0.64rem;
+}
+
+.logi-inv-tree-boxes {
+  gap: 0;
+  padding: 0;
+}
+
+.logi-inv-tree-box-head,
+.logi-inv-tree-box {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.15fr) minmax(110px, 0.8fr) minmax(160px, 1fr) minmax(155px, 0.82fr);
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.logi-inv-tree-box-head:has(> span:nth-child(5)),
+.logi-inv-tree-box:has(.logi-inv-tree-box-select) {
+  grid-template-columns: 24px minmax(140px, 1.15fr) minmax(110px, 0.8fr) minmax(160px, 1fr) minmax(155px, 0.82fr);
+}
+
+.logi-inv-tree-box-head {
+  min-height: 22px;
+  padding: 0.18rem 0.38rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(180, 200, 229, 0.78);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.logi-inv-tree-box {
+  min-height: 38px;
+  padding: 0.25rem 0.38rem;
+  border-left: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+  background: transparent;
+  font-family: var(--font-primary);
+}
+
+.logi-inv-tree-box:nth-child(2n + 1) {
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.logi-inv-tree-box.is-selected {
+  border-left: 2px solid #5ed5ff;
+  background: rgba(39, 117, 151, 0.13);
+}
+
+.logi-inv-tree-box-name,
+.logi-inv-tree-box-quantity,
+.logi-inv-tree-box-state {
+  gap: 0.06rem;
+}
+
+.logi-inv-tree-box-name strong,
+.logi-inv-tree-box-quantity strong,
+.logi-inv-tree-box-state strong {
+  font-size: 0.69rem;
+}
+
+.logi-inv-tree-box-name small,
+.logi-inv-tree-box-quantity small,
+.logi-inv-tree-box-state small {
+  font-size: 0.61rem;
+}
+
+.logi-inv-tree-box-actions {
+  justify-content: flex-end;
+}
+
+.logi-inv-tree-box-actions button {
+  min-height: 24px;
+  padding: 0 7px;
+  font-size: 0.58rem;
+}
+
+@media (max-width: 900px) {
+  .logi-inv-tree-disclosure {
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .logi-inv-tree-primary-head,
+  .logi-inv-tree-secondary-head,
+  .logi-inv-tree-quality-head {
+    align-items: flex-start;
+  }
+
+  .logi-inv-tree-secondary-list,
+  .logi-inv-tree-quality-list,
+  .logi-inv-tree-boxes,
+  .logi-inv-list-rows {
+    padding-left: 8px;
+  }
+
+  .logi-inv-tree-box,
+  .logi-inv-tree-box:has(.logi-inv-tree-box-select) {
+    grid-template-columns: 1fr auto;
+  }
+
+  .logi-inv-tree-box-select {
+    grid-row: span 2;
+  }
+
+  .logi-inv-tree-box-actions {
+    grid-column: 1 / -1;
+  }
+
+  .logi-inv-tree-box-head {
+    display: none;
+  }
+}
+
 .logi-inv-sync-alert {
   margin: 0 0 10px;
   padding: 8px 10px;

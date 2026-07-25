@@ -23,6 +23,7 @@ const sampleUi = {
   sortKey: "quality" as const,
   sortDir: "desc" as const,
   viewMode: "list" as const,
+  listGroupBy: "item" as const,
   lastImportMode: "append" as const,
   expandedCards: ["card-1"],
   expandedQualityRows: ["row-1"],
@@ -65,6 +66,7 @@ describe("clearAuthenticatedLogisticsData", () => {
     assert.equal(cleared.inventoryUi.sortKey, "quality");
     assert.equal(cleared.inventoryUi.sortDir, "desc");
     assert.equal(cleared.inventoryUi.viewMode, "list");
+    assert.equal(cleared.inventoryUi.listGroupBy, "item");
     assert.equal(cleared.inventoryUi.viewDensity, "compact");
     assert.equal(cleared.inventoryUi.selectedLocationId, null);
     assert.deepEqual(cleared.inventoryUi.expandedCards, []);

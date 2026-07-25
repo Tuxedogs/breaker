@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
@@ -31,6 +31,7 @@ import {
   getWeightedEffectiveQuality,
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
+import { groupReservableStacksByLocation } from '../../lib/logistics/inventoryHierarchy';
 import {
   solveBuildQueueCraftAllocation,
   type AllocationSolverLot,
@@ -788,6 +789,63 @@ function ChevronIcon({ open }: { open: boolean }) {
     <svg className={`bq-action-icon bq-action-icon--chevron${open ? ' is-open' : ''}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="m6 9 6 6 6-6" />
     </svg>
+  );
+}
+
+function BuildQueueReserveHierarchy({
+  stacks,
+  renderStack,
+}: {
+  stacks: InventoryStack[];
+  renderStack: (stack: InventoryStack) => ReactNode;
+}) {
+  const locations = groupReservableStacksByLocation(stacks);
+  return (
+    <div className="bq-reserve-tree">
+      {locations.map((location, locationIndex) => (
+        <details key={location.key} className="bq-reserve-location-folder" open={locationIndex === 0}>
+          <summary>
+            <span className="bq-reserve-location-icon"><LocationPinIcon /></span>
+            <span className="bq-reserve-location-text">
+              <strong>{location.label}</strong>
+              {location.locationMeta ? <em>{location.locationMeta}</em> : null}
+            </span>
+            <span>{location.qualities.length} {location.qualities.length === 1 ? 'quality' : 'qualities'}</span>
+            <span>{location.stacks.length} {location.stacks.length === 1 ? 'record' : 'records'}</span>
+            <ChevronIcon open />
+          </summary>
+          <div className="bq-reserve-location-body">
+            {location.qualities.map((quality) => {
+              const first = quality.stacks[0];
+              const unitType = resolveInventoryUnitType(first, first.material);
+              const total = quality.stacks.reduce((sum, stack) => sum + stack.quantity, 0);
+              return (
+                <details key={quality.key} className="bq-reserve-quality-folder">
+                  <summary>
+                    <span className={`bq-reserve-quality-value ${qualityBadgeClass(first)}`}>
+                      {quality.quality == null ? 'Quality not recorded' : `Quality ${quality.quality}`}
+                    </span>
+                    <span>{formatInventoryQuantity(total, unitType)}</span>
+                    <span>{quality.stacks.length} {quality.stacks.length === 1 ? 'record' : 'records'}</span>
+                    <ChevronIcon open />
+                  </summary>
+                  <div className="bq-reserve-quality-body">
+                    <div className="bq-reserve-stack-head" aria-hidden="true">
+                      <span className="bq-reserve-col-select" />
+                      <span className="bq-reserve-col-location">Container</span>
+                      <span className="bq-reserve-col-available">Available</span>
+                      <span className="bq-reserve-col-reserved">Reserved</span>
+                      <span className="bq-reserve-col-assign">Assigned</span>
+                    </div>
+                    {quality.stacks.map((stack) => renderStack(stack))}
+                  </div>
+                </details>
+              );
+            })}
+          </div>
+        </details>
+      ))}
+    </div>
   );
 }
 
@@ -1684,16 +1742,9 @@ export default function BuildQueueGroup({
                                 )}
 
                                 {req.reservableStacks.length > 0 ? (
-                                  <>
-                                    <div className="bq-reserve-stack-head" aria-hidden="true">
-                                      <span className="bq-reserve-col-select" />
-                                      <span className="bq-reserve-col-location">Location</span>
-                                      <span className="bq-reserve-col-quality">Quality</span>
-                                      <span className="bq-reserve-col-available">Available</span>
-                                      <span className="bq-reserve-col-reserved">Reserved</span>
-                                      <span className="bq-reserve-col-assign">Assigned</span>
-                                    </div>
-                                    {req.reservableStacks.map((stack) => {
+                                  <BuildQueueReserveHierarchy
+                                    stacks={req.reservableStacks}
+                                    renderStack={(stack) => {
                                       const existingAllocation = req.ownAllocations.find((allocation) => allocation.inventoryEntryId === stack.id);
                                       const reservedQuantity = existingAllocation?.quantityReserved ?? 0;
                                       const availableAfterThisReservation = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
@@ -1724,6 +1775,8 @@ export default function BuildQueueGroup({
                                       const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
                                       const locationName = formatInventoryLocationLabel(stack);
                                       const locationMeta = formatInventoryLocationMetaLabel(stack);
+                                      const boxLabel = stack.container?.trim() ||
+                                        (stack.recordKind === 'box' ? 'Physical box' : 'Aggregate stock');
                                       const assignmentTitle = getAssignmentTooltip(ownerAssignment);
                                       const locationTitle = [locationName, locationMeta].filter(Boolean).join(' - ');
                                       const beginReassignment = () => {
@@ -1779,7 +1832,7 @@ export default function BuildQueueGroup({
                                                 className="bq-stack-cb"
                                                 checked={checked}
                                                 disabled={disabled}
-                                                aria-label={`Reserve ${locationName}`}
+                                                aria-label={`Reserve ${boxLabel} at ${locationName}`}
                                                 onChange={() => {
                                                   if (checked) {
                                                     applyStackQuantity(stack, 0);
@@ -1794,8 +1847,8 @@ export default function BuildQueueGroup({
                                                 <LocationPinIcon />
                                               </span>
                                               <span className="bq-reserve-location-text">
-                                                <strong>{locationName}</strong>
-                                                {locationMeta ? <em>{locationMeta}</em> : null}
+                                                <strong>{boxLabel}</strong>
+                                                <em>{stack.recordKind === 'box' ? 'Individual box' : 'Legacy aggregate record'}</em>
                                               </span>
                                             </span>
                                             <span className={`bq-reserve-col-quality ${qualityBadgeClass(stack)}`}>
@@ -1840,8 +1893,8 @@ export default function BuildQueueGroup({
                                           </div>
                                         </div>
                                       );
-                                    })}
-                                  </>
+                                    }}
+                                  />
                                 ) : (
                                   <div className="bq-empty-inline">No stored stock available for this material.</div>
                                 )}

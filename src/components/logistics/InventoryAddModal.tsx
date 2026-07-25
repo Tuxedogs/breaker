@@ -24,11 +24,15 @@ export type InventoryQuickAddTarget = {
 };
 
 type Props = {
-  target: InventoryQuickAddTarget;
+  target?: InventoryQuickAddTarget;
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
   onSave: (entries: InventoryEntry[]) => void;
   onCancel: () => void;
+  initialLocationId?: string;
+  initialQuality?: number;
+  lockMaterial?: boolean;
+  subtitle?: string;
   fixture?: {
     locationId: string;
     qualityGroups: Array<{ quality: string; quantities: string[] }>;
@@ -188,11 +192,17 @@ export default function InventoryAddModal({
   locations,
   onSave,
   onCancel,
+  initialLocationId,
+  initialQuality,
+  lockMaterial = target !== undefined,
+  subtitle = target ? 'Quick add for build queue material' : 'Add physical boxes to inventory',
   fixture,
 }: Props) {
   const materialIdentities = useMaterialIdentityIndex();
   const inventorySync = useLogisticsStore((state) => state.inventorySync);
-  const material = target.material ?? materials.find((entry) => entry.id === target.materialId);
+  const [selectedMaterialId, setSelectedMaterialId] = useState(target?.materialId ?? '');
+  const material = target?.material ?? materials.find((entry) => entry.id === selectedMaterialId);
+  const displayName = target?.displayName ?? material?.name ?? '';
   const identity = findIdentityForMaterial(material, materialIdentities);
   const showUnrefined = isRefinableScuMineable(material, identity);
   const unitType: InventoryUnitType = material
@@ -202,12 +212,15 @@ export default function InventoryAddModal({
 
   const nextDraftId = useRef(1);
   const createDraftId = (kind: 'quality' | 'box') => `${kind}-${nextDraftId.current++}`;
-  const [locationId, setLocationId] = useState(fixture?.locationId ?? '');
+  const [locationId, setLocationId] = useState(fixture?.locationId ?? initialLocationId ?? '');
   const [locationSearch, setLocationSearch] = useState(
-    () => locations.find((entry) => entry.id === fixture?.locationId)?.name ?? '',
+    () => locations.find((entry) => entry.id === (fixture?.locationId ?? initialLocationId))?.name ?? '',
   );
   const [qualityGroups, setQualityGroups] = useState<QualityGroupDraft[]>(() => {
-    const initial = fixture?.qualityGroups ?? [{ quality: '', quantities: [''] }];
+    const initial = fixture?.qualityGroups ?? [{
+      quality: initialQuality === undefined ? '' : String(initialQuality),
+      quantities: [''],
+    }];
     return initial.map((group, groupIndex) => ({
       id: `quality-initial-${groupIndex + 1}`,
       quality: group.quality,
@@ -311,7 +324,7 @@ export default function InventoryAddModal({
             recordKind: 'box',
             materialId: material.id,
             materialType: unrefined ? 'ore' : 'refined',
-            itemName: target.displayName,
+            itemName: displayName,
             itemKind,
             unitType: 'scu',
             catalogSource: 'api' as InventoryCatalogSource,
@@ -331,7 +344,7 @@ export default function InventoryAddModal({
           recordKind: 'box',
           materialId: material.id,
           materialType: material.materialType,
-          itemName: target.displayName,
+          itemName: displayName,
           itemKind,
           unitType: unitType,
           catalogSource: 'api' as InventoryCatalogSource,
@@ -374,6 +387,10 @@ export default function InventoryAddModal({
         setErrorMessage('Choose a known inventory location.');
         return;
       }
+      if (!material) {
+        setErrorMessage('Choose a known inventory item.');
+        return;
+      }
       setErrorMessage('Enter a valid quality and a quantity greater than zero for every box.');
       return;
     }
@@ -399,7 +416,7 @@ export default function InventoryAddModal({
         <div className="bq-inv-quick-head">
           <div>
             <h3 id="bq-inv-quick-title">Add Inventory</h3>
-            <p className="bq-inv-quick-subtitle">Quick add for build queue material</p>
+            <p className="bq-inv-quick-subtitle">{subtitle}</p>
           </div>
         </div>
 
@@ -418,17 +435,37 @@ export default function InventoryAddModal({
 
           <div className="logi-form-field">
             <span className="logi-form-label">Material</span>
-            <div className="bq-inv-quick-material-value" aria-label={`Material ${target.displayName}`}>
-              <span>{target.displayName}</span>
-              <span className="bq-inv-quick-material-lock" aria-hidden="true">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
-                  <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-                </svg>
-                Locked
-              </span>
-            </div>
-            <span className="bq-inv-quick-material-helper">Add other materials from the Inventory page.</span>
+            {lockMaterial && material ? (
+              <>
+                <div className="bq-inv-quick-material-value" aria-label={`Material ${displayName}`}>
+                  <span>{displayName}</span>
+                  <span className="bq-inv-quick-material-lock" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
+                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                    </svg>
+                    Locked
+                  </span>
+                </div>
+                {target ? <span className="bq-inv-quick-material-helper">Add other materials from the Inventory page.</span> : null}
+              </>
+            ) : (
+              <select
+                className={`logi-form-select${hasTriedSave && !material ? ' logi-form-input--error' : ''}`}
+                value={selectedMaterialId}
+                onChange={(event) => {
+                  setSelectedMaterialId(event.target.value);
+                  setUnrefined(false);
+                }}
+                aria-label="Item"
+              >
+                <option value="">Choose an item</option>
+                {materials.slice().sort((left, right) => left.name.localeCompare(right.name)).map((entry) => (
+                  <option key={entry.id} value={entry.id}>{entry.name}</option>
+                ))}
+              </select>
+            )}
+            {hasTriedSave && !material ? <span className="logi-form-error">Choose a known inventory item.</span> : null}
           </div>
 
           <div className="bq-inv-quick-quality-groups">

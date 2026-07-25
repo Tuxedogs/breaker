@@ -305,6 +305,13 @@ test.describe("Build Queue stats fixture", () => {
       await expandButton.click();
       await expect(materialCard.locator(".bq-reserve-panel")).toBeVisible();
       await expect(materialCard.getByRole("button", { name: "Collapse reserve drawer for Hadanite" })).toBeVisible();
+      const locationFolder = materialCard.locator(".bq-reserve-location-folder").first();
+      await expect(locationFolder).toHaveAttribute("open", "");
+      await expect(locationFolder.locator(".bq-reserve-quality-folder")).toHaveCount(2);
+      await expect(locationFolder.locator(".bq-reserve-stack-row")).toHaveCount(2);
+      await expect(locationFolder.locator(".bq-reserve-stack-row").first()).not.toBeVisible();
+      await locationFolder.locator(".bq-reserve-quality-folder > summary").first().click();
+      await expect(locationFolder.locator(".bq-reserve-stack-row").first()).toBeVisible();
 
       const after = await page.locator(".bq-item").evaluate((craft) => {
         const card = Array.from(craft.querySelectorAll(".bq-mat-group"))

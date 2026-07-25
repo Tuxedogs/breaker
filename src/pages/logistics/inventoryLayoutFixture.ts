@@ -27,6 +27,7 @@ function entry(
 ): InventoryEntry {
   return {
     id,
+    recordKind: "box",
     materialId,
     materialType: materialTypeFor(materialId),
     quantity,
@@ -55,7 +56,9 @@ export const inventoryLayoutFixture: InventoryPageFixture = {
     qualityMin: 0,
     sortKey: "quality",
     sortDir: "desc",
-    viewMode: "cards",
+    viewMode: "location",
+    listGroupBy: "location",
+    expandedCards: ["location:levski"],
   },
   entries: [
     entry("fixture-levski-savrilium-a", "savrilium", 32, 942, rarityCatalog.legendary, "SV-01", 32),

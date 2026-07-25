@@ -62,8 +62,8 @@ export function formatInventoryLocationLabel(input: InventoryLocationDisplayInpu
   const location = getDisplayLocation(input);
   const locationName = getLocationDisplayValue(location?.name);
   if (locationName) return locationName;
-  if (getDisplayLocationId(input)) return 'Unknown location';
-  return 'Unassigned stock';
+  if (getDisplayLocationId(input)) return 'Unknown Location';
+  return 'Unassigned Stock';
 }
 
 export function formatInventoryLocationMetaLabel(input: InventoryLocationDisplayInput): string | undefined {
