@@ -7064,6 +7064,49 @@
 /* The enclosing quality folder is the single source of quality context. */
 .bq-reserve-quality-body .bq-reserve-col-quality { display: none; }
 
+.bq-reserve-quality-body.is-aggregate-only .bq-reserve-stack-head,
+.bq-reserve-quality-body.is-aggregate-only .bq-reserve-stack-row {
+  grid-template-columns: 24px repeat(3, minmax(0, 1fr));
+}
+
+.bq-reserve-quality-body.is-aggregate-only .bq-reserve-col-location {
+  display: none;
+}
+
+.bq-reserve-quality-body .bq-reserve-col-available,
+.bq-reserve-quality-body .bq-reserve-col-reserved,
+.bq-reserve-quality-body .bq-reserve-col-assign {
+  display: grid;
+  gap: 2px;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.bq-reserve-quality-body .bq-reserve-assigned-display {
+  justify-items: center;
+  text-align: center;
+}
+
+.bq-reserve-quality-body .bq-reserve-col-available small,
+.bq-reserve-quality-body .bq-reserve-col-reserved small,
+.bq-reserve-quality-body .bq-reserve-col-assign > small {
+  color: var(--alloc-text-secondary);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bq-reserve-quality-body .bq-reserve-col-available strong,
+.bq-reserve-quality-body .bq-reserve-col-reserved strong {
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+}
+
 .bq-reserve-tree {
   display: grid;
   gap: 0;
@@ -8609,19 +8652,21 @@
 }
 
 .bq-page .bq-mat-group .bq-reserve-stack-row {
-  grid-template-columns: 24px minmax(0, 1fr) auto;
-  grid-template-areas:
-    "select location quality"
-    "select available reserved"
-    "select assign assign";
+  grid-template-columns: 24px minmax(0, 1.35fr) repeat(3, minmax(0, 0.72fr));
+  grid-template-areas: "select location available reserved assign";
   gap: 7px 9px;
   min-height: 0;
   padding: 9px 0;
 }
 
+.bq-page .bq-mat-group .bq-reserve-quality-body.is-aggregate-only .bq-reserve-stack-row {
+  grid-template-columns: 24px repeat(3, minmax(0, 1fr));
+  grid-template-areas: "select available reserved assign";
+}
+
 .bq-page .bq-mat-group .bq-reserve-col-select {
   grid-area: select;
-  align-self: stretch;
+  align-self: center;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-location {
@@ -8645,18 +8690,20 @@
 
 .bq-page .bq-mat-group .bq-reserve-col-assign {
   grid-area: assign;
-  justify-content: flex-start;
-  text-align: left;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-available,
 .bq-page .bq-mat-group .bq-reserve-col-reserved {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: baseline;
-  justify-content: start;
-  gap: 5px;
-  text-align: left;
+  grid-template-columns: none;
+  align-items: end;
+  justify-content: center;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-available::before,
@@ -8669,15 +8716,15 @@
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-available::before {
-  content: "Available";
+  content: none;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-reserved::before {
-  content: "Reserved";
+  content: none;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-reserved {
-  justify-items: start;
+  justify-items: center;
 }
 
 .bq-page .bq-mat-group .bq-reserve-col-reserved em {

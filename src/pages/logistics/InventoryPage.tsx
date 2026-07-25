@@ -1110,20 +1110,6 @@ function QualityPill({ quality, qualityBand }: { quality?: number | null; qualit
   return <QualityTierBadge quality={quality} qualityBand={qualityBand} />;
 }
 
-export function useIsMobileInventoryViewport() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia('(max-width: 760px)');
-    const update = () => setIsMobile(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
-
-  return isMobile;
-}
-
 function ManageSelectIcon() {
   return (
     <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
@@ -1781,14 +1767,14 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const storeLocations = useLogisticsStore((state) => state.locations);
   const locations = fixture?.locations ?? storeLocations;
   const storeInventoryUi = useLogisticsStore((state) => state.inventoryUi);
-  const inventoryUi = fixture
+  const inventoryUi = useMemo<InventoryUiState>(() => fixture
     ? {
         ...storeInventoryUi,
-        viewMode: 'location' as const,
+        viewMode: 'location',
         ...fixture.inventoryUi,
         selectedLocationId: fixture.selectedLocationId,
       }
-    : storeInventoryUi;
+    : storeInventoryUi, [fixture, storeInventoryUi]);
   const storeInventorySync = useLogisticsStore((state) => state.inventorySync);
   const inventorySync: InventorySyncState = fixture
     ? {

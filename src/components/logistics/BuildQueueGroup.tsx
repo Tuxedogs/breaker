@@ -819,6 +819,7 @@ function BuildQueueReserveHierarchy({
               const first = quality.stacks[0];
               const unitType = resolveInventoryUnitType(first, first.material);
               const total = quality.stacks.reduce((sum, stack) => sum + stack.quantity, 0);
+              const aggregateOnly = quality.stacks.every((stack) => stack.recordKind !== 'box');
               return (
                 <details key={quality.key} className="bq-reserve-quality-folder">
                   <summary>
@@ -829,14 +830,7 @@ function BuildQueueReserveHierarchy({
                     <span>{quality.stacks.length} {quality.stacks.length === 1 ? 'record' : 'records'}</span>
                     <ChevronIcon open />
                   </summary>
-                  <div className="bq-reserve-quality-body">
-                    <div className="bq-reserve-stack-head" aria-hidden="true">
-                      <span className="bq-reserve-col-select" />
-                      <span className="bq-reserve-col-location">Container</span>
-                      <span className="bq-reserve-col-available">Available</span>
-                      <span className="bq-reserve-col-reserved">Reserved</span>
-                      <span className="bq-reserve-col-assign">Assigned</span>
-                    </div>
+                  <div className={`bq-reserve-quality-body${aggregateOnly ? ' is-aggregate-only' : ''}`}>
                     {quality.stacks.map((stack) => renderStack(stack))}
                   </div>
                 </details>
@@ -1756,7 +1750,6 @@ export default function BuildQueueGroup({
                                         : undefined;
                                       const otherAssignment = assignments.find((assignment) => !assignment.isCurrentRequirement);
                                       const ownerAssignment = currentAssignment ?? otherAssignment;
-                                      const assignmentLabel = ownerAssignment ? getAssignmentLabel(ownerAssignment) : undefined;
                                       const reassignSourceLabel = getAssignmentLabel(otherAssignment);
                                       const isAssignedHere = Boolean(currentAssignment);
                                       const isPartialAssignment = isAssignedHere && isPartialLotAllocation(reservedQuantity, stack.quantity);
@@ -1765,9 +1758,6 @@ export default function BuildQueueGroup({
                                         : 0;
                                       const isReservedElsewhere = Boolean(otherAssignment);
                                       const isZeroAvailable = availableAfterThisReservation <= 0 && !isAssignedHere;
-                                      const reservedDisplayQuantity = isAssignedHere
-                                        ? reservedQuantity
-                                        : assignments.reduce((sum, assignment) => sum + assignment.allocation.quantityReserved, 0);
                                       const reassignQuantity = otherAssignment
                                         ? Math.min(otherAssignment.allocation.quantityReserved, Math.max(0, req.required - req.allocatedAmount))
                                         : 0;
@@ -1848,20 +1838,22 @@ export default function BuildQueueGroup({
                                               </span>
                                               <span className="bq-reserve-location-text">
                                                 <strong>{boxLabel}</strong>
-                                                <em>{stack.recordKind === 'box' ? 'Individual box' : 'Legacy aggregate record'}</em>
+                                                {stack.recordKind === 'box' ? <em>Individual box</em> : null}
                                               </span>
                                             </span>
                                             <span className={`bq-reserve-col-quality ${qualityBadgeClass(stack)}`}>
                                               {stack.quality ?? '—'}
                                             </span>
                                             <span className={`bq-reserve-col-available ${materialTypeClass(req.material)}`}>
-                                              {formatQuantity(availableAfterThisReservation, req.material)}
+                                              <small>Available</small>
+                                              <strong>{formatQuantity(availableAfterThisReservation, req.material)}</strong>
                                             </span>
                                             <span className={`bq-reserve-col-reserved ${materialTypeClass(req.material)}`}>
-                                              <strong>{formatQuantity(reservedDisplayQuantity, req.material)}</strong>
-                                              {assignmentLabel ? <em>{assignmentLabel}</em> : null}
+                                              <small>Amount</small>
+                                              <strong>{formatQuantity(stack.quantity, req.material)}</strong>
                                             </span>
                                             <span className="bq-reserve-col-assign">
+                                              <small>Reserved here</small>
                                               {isReservedElsewhere && !isAssignedHere ? (
                                                 <button
                                                   type="button"
