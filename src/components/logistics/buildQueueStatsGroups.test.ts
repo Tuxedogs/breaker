@@ -65,6 +65,7 @@ test("buildBuildQueueFittingStatGroups structures shield resistance and absorpti
       maxShieldHealth: 105600,
       maxShieldRegen: 23232,
       damagedRegenDelay: 5.8,
+      downedRegenDelay: null,
       shieldFaceCount: null,
       resistanceByDamageType: {
         physical: { min: 0, max: 0.25 },

@@ -3,6 +3,7 @@ import type {
   DamageTypeMap,
   FittingComponentDetail,
   FittingComponentMitigation,
+  FittingPowerPipPoint,
   FittingComponentStats,
 } from "./fittingApi";
 import { getFpsArmorCardExtras } from "../crafting/fpsComponentCardDetail";
@@ -44,6 +45,20 @@ function pushNonZeroMetric(
   const number = readFinite(value ?? undefined);
   if (number === undefined || number === 0) return;
   pushMetric(metrics, label, formatCompactNumber(number, suffix));
+}
+
+function formatPowerCurve(
+  points: FittingPowerPipPoint[] | null | undefined,
+  suffix = "",
+): string | null {
+  if (!points) return null;
+  const values = points.flatMap((point) => {
+    const pips = readFinite(point.pips ?? undefined);
+    const value = readFinite(point.value ?? undefined);
+    if (pips === undefined || value === undefined) return [];
+    return [`${formatNumber(pips)} ${pips === 1 ? "pip" : "pips"}: ${formatNumber(value)}${suffix}`];
+  });
+  return values.length > 0 ? values.join("; ") : null;
 }
 
 function readWeaponPenetration(
@@ -123,8 +138,7 @@ export function getFittingModifierBaseValue(
     case "GPP_Quantum_Speed":
       return readFinite(stats.quantumSpeed);
     case "GPP_Quantum_FuelRequirement": {
-      const fuelRate = readFinite(stats.fuelRate);
-      return fuelRate;
+      return readFinite(stats.quantumFuelRequirement ?? stats.fuelRate);
     }
     default:
       return undefined;
@@ -146,16 +160,33 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushNonZeroMetric(rows, "Biochemical Damage", stats.damageBiochemical);
   pushNonZeroMetric(rows, "Stun Damage", stats.damageStun);
   pushMetric(rows, "Fire Rate", formatCompactNumber(stats.fireRateRpm, " rpm"));
-  const ballisticReserve = stats.maxAmmoCount && stats.maxAmmoCount > 0 ? stats.maxAmmoCount : stats.ammoCapacity;
+  pushMetric(rows, "Burst Size", formatCompactNumber(stats.burstShotCount));
+  const hasEnergyAmmo = stats.maxAmmoLoad != null || stats.maxRegenPerSec != null;
+  const ballisticReserve = !hasEnergyAmmo
+    ? (stats.maxAmmoCount != null && stats.maxAmmoCount > 0
+      ? stats.maxAmmoCount
+      : stats.ammoCapacity != null && stats.ammoCapacity > 0
+        ? stats.ammoCapacity
+        : null)
+    : null;
   pushMetric(rows, "Ballistic Reserve", formatCompactNumber(ballisticReserve));
   pushMetric(rows, "Energy Maximum Load", formatCompactNumber(stats.maxAmmoLoad));
   pushMetric(rows, "Energy Cost Per Shot", formatCompactNumber(stats.ammoCostPerShot));
-  pushMetric(rows, "Energy Regen", formatCompactNumber(stats.maxRegenPerSec, "/s"));
-  pushMetric(rows, "Energy Regen Delay", formatCompactNumber(stats.regenerationCooldown, "s"));
+  pushMetric(rows, "Energy Recharge Rate", formatCompactNumber(stats.maxRegenPerSec, "/s"));
+  pushMetric(rows, "Recharge Cooldown", formatCompactNumber(stats.regenerationCooldown, "s"));
   pushMetric(rows, "Projectile Speed", formatCompactNumber(stats.projectileSpeed, " m/s"));
+  pushMetric(rows, "Projectile Lifetime", formatCompactNumber(stats.projectileLifetime, "s"));
   pushMetric(rows, "Projectile Max Travel", formatCompactNumber(stats.projectileMaxTravel ?? stats.calculatedRange, "m"));
+  pushMetric(rows, "Damage Falloff Start", formatCompactNumber(stats.falloffStart, "m"));
+  pushMetric(rows, "Damage Drop Per Meter", formatCompactNumber(stats.damageDropPerMeter));
+  pushMetric(rows, "Minimum Damage After Falloff", formatCompactNumber(stats.damageDropMinDamage));
   pushMetric(rows, "Penetration", formatCompactNumber(readWeaponPenetration(stats, mitigation)));
   pushMetric(rows, "Penetration Distance", formatCompactNumber(readWeaponPenetrationDistance(mitigation), "m"));
+  pushMetric(rows, "Penetration Near Radius", formatCompactNumber(stats.penetrationNearRadius, "m"));
+  pushMetric(rows, "Penetration Far Radius", formatCompactNumber(stats.penetrationFarRadius, "m"));
+  pushMetric(rows, "Impulse Falloff Start", formatCompactNumber(stats.bulletImpulseFalloffMinDistance, "m"));
+  pushMetric(rows, "Impulse Drop Falloff", formatCompactNumber(stats.bulletImpulseDropFalloff));
+  pushMetric(rows, "Impulse Maximum Falloff", formatCompactNumber(stats.bulletImpulseMaxFalloff));
   pushMetric(rows, "Heat Per Shot", formatCompactNumber(stats.heatPerShot));
   pushMetric(rows, "Minimum Temperature", formatCompactNumber(stats.minimumTemperature));
   pushMetric(rows, "Overheat Temperature", formatCompactNumber(stats.overheatTemperature));
@@ -178,18 +209,29 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
   pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Repair Restore Ratio", stats.repairRestoreRatio != null ? `${formatNumber(stats.repairRestoreRatio * 100)}%` : null);
-  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionResistance));
+  pushMetric(rows, "Distortion Resistance", formatCompactNumber(stats.distortionResistance));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
 
   for (const action of weapon?.actions ?? []) {
     const prefix = titleCase(action.kind);
+    if (action.pelletCount != null && action.pelletCount !== 1) {
+      pushMetric(rows, `${prefix} Pellet Count`, formatCompactNumber(action.pelletCount));
+    }
+    if (action.damageMultiplier != null && action.damageMultiplier !== 1) {
+      pushMetric(rows, `${prefix} Damage Multiplier`, formatCompactNumber(action.damageMultiplier));
+    }
+    pushMetric(rows, `${prefix} Heat Per Second`, formatCompactNumber(action.heatPerSecond, "/s"));
+    pushMetric(rows, `${prefix} Action DPS`, formatCompactNumber(action.damagePerSecondTotal));
     pushMetric(rows, `${prefix} Charge Time`, formatCompactNumber(action.chargeTime, "s"));
     pushMetric(rows, `${prefix} Charge-Up`, formatCompactNumber(action.chargeUpTime, "s"));
     pushMetric(rows, `${prefix} Charge-Down`, formatCompactNumber(action.chargeDownTime, "s"));
     pushMetric(rows, `${prefix} Cooldown`, formatCompactNumber(action.cooldownTime, "s"));
     pushMetric(rows, `${prefix} Spin-Up`, formatCompactNumber(action.spinUpTime, "s"));
     pushMetric(rows, `${prefix} Spin-Down`, formatCompactNumber(action.spinDownTime, "s"));
+    if (action.fireDuringSpinUp != null) {
+      pushMetric(rows, `${prefix} Fires During Spin-Up`, action.fireDuringSpinUp ? "Yes" : "No");
+    }
     pushMetric(rows, `${prefix} Full-Damage Range`, formatCompactNumber(action.fullDamageRange, "m"));
     pushMetric(rows, `${prefix} Zero-Damage Range`, formatCompactNumber(action.zeroDamageRange, "m"));
   }
@@ -205,6 +247,8 @@ function buildShieldStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "Shield HP", formatCompactNumber(stats.shieldHp ?? shieldMitigation?.shieldHp ?? shieldMitigation?.maxShieldHealth));
   pushMetric(rows, "Regen Rate", formatCompactNumber(stats.regenRate ?? shieldMitigation?.maxShieldRegen, "/s"));
   pushMetric(rows, "Regen Delay", formatCompactNumber(shieldMitigation?.damagedRegenDelay, "s"));
+  pushMetric(rows, "Downed Regen Delay", formatCompactNumber(shieldMitigation?.downedRegenDelay, "s"));
+  pushMetric(rows, "Regen by Power", formatPowerCurve(shieldMitigation?.regenByPowerPip, "/s"));
   pushMetric(
     rows,
     "Physical Resistance",
@@ -218,6 +262,7 @@ function buildShieldStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "Power Maximum", formatCompactNumber(stats.powerInputMaximum ?? stats.powerDraw));
   pushMetric(rows, "Power Minimum (derived)", formatCompactNumber(stats.powerInputMinimum));
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
+  pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw ?? stats.coolingRequired));
   pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
   if (stats.emSignatureNominal != null) {
     pushMetric(rows, "EM Maximum", formatCompactNumber(stats.emSignatureNominal));
@@ -228,7 +273,10 @@ function buildShieldStatRows(detail: FittingComponentDetail): ComponentCardMetri
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
   pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
   pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
   pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
+  pushMetric(rows, "Repair Restore Ratio", stats.repairRestoreRatio != null ? `${formatNumber(stats.repairRestoreRatio * 100)}%` : null);
+  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionMaximum));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
   if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);
@@ -246,6 +294,10 @@ function buildResourceStatRows(
   const rows: ComponentCardMetric[] = [];
 
   pushMetric(rows, primary.label, formatCompactNumber(primary.value));
+  if (detail.type === "cooler") {
+    pushMetric(rows, "Thermal Equalization Rate", formatCompactNumber(stats.thermalEqualizationRate));
+    pushMetric(rows, "Cooling by Power", formatPowerCurve(detail.cooler?.coolingGeneratedByPowerPip));
+  }
   pushMetric(rows, "Power Maximum", formatCompactNumber(stats.powerInputMaximum ?? stats.powerDraw));
   pushMetric(rows, "Power Minimum (derived)", formatCompactNumber(stats.powerInputMinimum));
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
@@ -260,7 +312,10 @@ function buildResourceStatRows(
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
   pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
   pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
   pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
+  pushMetric(rows, "Repair Restore Ratio", stats.repairRestoreRatio != null ? `${formatNumber(stats.repairRestoreRatio * 100)}%` : null);
+  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionMaximum));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
   if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);
@@ -275,7 +330,14 @@ function buildQuantumStatRows(detail: FittingComponentDetail): ComponentCardMetr
   const rows = buildResourceStatRows(detail, { label: "Quantum Speed", value: stats.quantumSpeed });
   pushMetric(rows, "Spool Time", formatCompactNumber(stats.spoolTime, "s"));
   pushMetric(rows, "Cooldown", formatCompactNumber(stats.quantumCooldown, "s"));
-  pushMetric(rows, "Fuel Rate", formatCompactNumber(stats.fuelRate));
+  pushMetric(rows, "Fuel Requirement", formatCompactNumber(stats.quantumFuelRequirement ?? stats.fuelRate));
+  pushMetric(rows, "Calibration Delay", formatCompactNumber(stats.calibrationDelayInSeconds, "s"));
+  pushMetric(rows, "Calibration Rate", formatCompactNumber(stats.calibrationRate, "/s"));
+  pushMetric(rows, "Calibration Minimum", formatCompactNumber(stats.minCalibrationRequirement));
+  pushMetric(rows, "Calibration Maximum", formatCompactNumber(stats.maxCalibrationRequirement));
+  pushMetric(rows, "Calibration Time (derived)", formatCompactNumber(stats.calibrationTime, "s"));
+  pushMetric(rows, "Stage One Acceleration", formatCompactNumber(stats.quantumStageOneAccelRate));
+  pushMetric(rows, "Stage Two Acceleration", formatCompactNumber(stats.quantumStageTwoAccelRate));
   return rows;
 }
 
@@ -310,6 +372,10 @@ function buildUtilityStatTail(stats: FittingComponentStats): ComponentCardMetric
   pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
   pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
   pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionMaximum));
+  pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
+  pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
+  pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
   return rows;
@@ -377,6 +443,14 @@ function buildFpsWeaponStatRows(detail: FittingComponentDetail): ComponentCardMe
   return rows;
 }
 
+function buildFpsAmmoStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const rows = buildWeaponStatRows(detail);
+  pushMetric(rows, "Loaded Rounds", formatCompactNumber(detail.stats.initialAmmoCount));
+  if (detail.class) pushMetric(rows, "Ammo Class", titleCase(detail.class));
+  if (detail.subtype) pushMetric(rows, "Compatible Weapon Class", titleCase(detail.subtype));
+  return rows;
+}
+
 function buildFpsArmorStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
   const rows: ComponentCardMetric[] = [];
   const mitigation = detail.mitigation?.kind === "armor" ? detail.mitigation : null;
@@ -421,6 +495,12 @@ function buildGenericStatRows(detail: FittingComponentDetail): ComponentCardMetr
   pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
   pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw));
   pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
+  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionMaximum));
+  pushMetric(rows, "Distortion Resistance", formatCompactNumber(stats.distortionResistance));
+  pushMetric(rows, "Self-Repair Uses", formatCompactNumber(stats.selfRepairMaxCount));
+  pushMetric(rows, "Self-Repair Cycle", formatCompactNumber(stats.selfRepairTime, "s"));
+  pushMetric(rows, "Self-Repair Health Ratio", stats.selfRepairHealthRatio != null ? `${formatNumber(stats.selfRepairHealthRatio * 100)}%` : null);
+  pushMetric(rows, "Baseline HP Restored (derived)", formatCompactNumber(stats.selfRepairBaselineHp));
   pushMetric(rows, "Minimum Lock Angle", formatCompactNumber(stats.lockAngleAtMin));
   pushMetric(rows, "Maximum Lock Angle", formatCompactNumber(stats.lockAngleAtMax));
   pushMetric(rows, "Maximum Armed Missiles", formatCompactNumber(stats.maxArmedMissiles));
@@ -445,6 +525,8 @@ export function buildDetailStatRowsFromFitting(detail: FittingComponentDetail): 
       return buildWeaponStatRows(detail);
     case "fps_weapon":
       return buildFpsWeaponStatRows(detail);
+    case "fps_ammo":
+      return buildFpsAmmoStatRows(detail);
     case "fps_armor":
       return buildFpsArmorStatRows(detail);
     case "shield":

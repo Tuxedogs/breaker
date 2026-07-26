@@ -26,7 +26,18 @@ export type DetailStatGroup =
   | { title: string; kind: "matrix"; columns: string[]; rows: DetailStatMatrixRow[] };
 
 export const DETAIL_META_LABELS = new Set(
-  ["Size", "Grade", "Class", "Craft Time", "Weapon Type", "Damage Type"].map(normalizeDetailStatLabel),
+  [
+    "Size",
+    "Grade",
+    "Class",
+    "Craft Time",
+    "Weapon Type",
+    "Weapon Class",
+    "Fire Mode",
+    "Ammo Class",
+    "Compatible Weapon Class",
+    "Damage Type",
+  ].map(normalizeDetailStatLabel),
 );
 
 const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
@@ -38,6 +49,10 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
         title: "Damage Output",
         labels: [
           "Alpha Damage",
+          "Theoretical DPS",
+          "60s Sustained DPS",
+          "Damage Over 60s",
+          "DPS",
           "Physical Damage",
           "Energy Damage",
           "Distortion Damage",
@@ -45,8 +60,15 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
           "Biochemical Damage",
           "Stun Damage",
           "Fire Rate",
+          "Burst Size",
           "Ammo Capacity",
+          "Loaded Rounds",
+          "Ballistic Reserve",
+          "Energy Maximum Load",
           "Ammo Cost Per Shot",
+          "Energy Cost Per Shot",
+          "Energy Recharge Rate",
+          "Recharge Cooldown",
           "Charge Time",
         ],
       },
@@ -54,17 +76,49 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
         title: "Projectile",
         labels: [
           "Projectile Speed",
+          "Projectile Lifetime",
           "Projectile Range / Max Travel",
+          "Projectile Max Travel",
           "Stated Range",
           "Hard Range",
           "Damage Falloff Start",
+          "Damage Drop Per Meter",
+          "Minimum Damage After Falloff",
           "Damage Falloff Range",
           "Damage Falloff Max",
         ],
       },
       {
         title: "Penetration",
-        labels: ["Penetration", "Penetration Distance"],
+        labels: [
+          "Penetration",
+          "Penetration Distance",
+          "Penetration Near Radius",
+          "Penetration Far Radius",
+          "Impulse Falloff Start",
+          "Impulse Drop Falloff",
+          "Impulse Maximum Falloff",
+        ],
+      },
+      {
+        title: "Spread",
+        labels: [
+          "Spread Min–Max",
+          "Spread First Attack",
+          "Spread Per Attack",
+          "Spread Decay",
+        ],
+      },
+      {
+        title: "Handling",
+        labels: [
+          "Recoil Smoothness",
+          "Recoil Handling",
+          "Recoil Kick",
+          "Weapon Recoil Smoothness",
+          "Weapon Recoil Handling",
+          "Weapon Recoil Kick",
+        ],
       },
     ],
   },
@@ -76,8 +130,17 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
       "Heat Generation",
       "Heat Capacity",
       "Cooling Rate",
+      "Cooling Delay",
+      "Overheat Recovery",
+      "Minimum Temperature",
+      "Overheat Temperature",
+      "Post-Overheat Temperature",
       "Wear Per Shot",
       "Power",
+      "Power Maximum",
+      "Power Minimum (derived)",
+      "Power Draw",
+      "Cooling Draw",
       "Coolant",
     ],
   },
@@ -91,7 +154,21 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
       "Firing IR",
       "EM Signature",
       "IR Signature",
+      "EM Maximum",
+      "EM Decay Rate",
       "Distortion Maximum",
+      "Distortion Resistance",
+    ],
+  },
+  {
+    title: "Repair",
+    kind: "flat",
+    labels: [
+      "Self-Repair Uses",
+      "Self-Repair Cycle",
+      "Self-Repair Health Ratio",
+      "Baseline HP Restored (derived)",
+      "Repair Restore Ratio",
     ],
   },
   {
@@ -102,9 +179,14 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
 ];
 
 const SHIELD_STAT_GROUPS: DetailStatGroupDefinition[] = [
-  { title: "Shield Performance", kind: "flat", labels: ["Shield HP", "Regen Rate", "Regen Delay"] },
-  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Draw", "Cooling Draw", "Heat Generation"] },
-  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "Distortion Maximum"] },
+  {
+    title: "Shield Performance",
+    kind: "flat",
+    labels: ["Shield HP", "Regen Rate", "Regen Delay", "Downed Regen Delay", "Regen by Power"],
+  },
+  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Maximum", "Power Minimum (derived)", "Power Draw", "Cooling Draw", "Heat Generation"] },
+  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "EM Maximum", "EM Decay Rate", "Distortion Maximum"] },
+  { title: "Repair", kind: "flat", labels: ["Self-Repair Uses", "Self-Repair Cycle", "Self-Repair Health Ratio", "Baseline HP Restored (derived)", "Repair Restore Ratio"] },
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
@@ -112,24 +194,48 @@ const RESOURCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
   {
     title: "Output",
     kind: "flat",
-    labels: ["Power Generation", "Coolant Generation"],
+    labels: [
+      "Power Generation",
+      "Coolant Generation",
+      "Thermal Equalization Rate",
+      "Cooling by Power",
+    ],
   },
-  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Draw", "Cooling Draw", "Heat Generation"] },
-  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "Distortion Maximum"] },
+  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Maximum", "Power Minimum (derived)", "Power Draw", "Cooling Draw", "Heat Generation"] },
+  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "EM Maximum", "EM Decay Rate", "Distortion Maximum"] },
+  { title: "Repair", kind: "flat", labels: ["Self-Repair Uses", "Self-Repair Cycle", "Self-Repair Health Ratio", "Baseline HP Restored (derived)", "Repair Restore Ratio"] },
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
 const QUANTUM_STAT_GROUPS: DetailStatGroupDefinition[] = [
-  { title: "Quantum Travel", kind: "flat", labels: ["Quantum Speed", "Spool Time", "Cooldown", "Fuel Rate"] },
-  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Draw", "Cooling Draw", "Heat Generation"] },
-  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "Distortion Maximum"] },
+  {
+    title: "Quantum Travel",
+    kind: "flat",
+    labels: [
+      "Quantum Speed",
+      "Spool Time",
+      "Cooldown",
+      "Fuel Requirement",
+      "Calibration Delay",
+      "Calibration Rate",
+      "Calibration Minimum",
+      "Calibration Maximum",
+      "Calibration Time (derived)",
+      "Stage One Acceleration",
+      "Stage Two Acceleration",
+    ],
+  },
+  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Maximum", "Power Minimum (derived)", "Power Draw", "Cooling Draw", "Heat Generation"] },
+  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "EM Maximum", "EM Decay Rate", "Distortion Maximum"] },
+  { title: "Repair", kind: "flat", labels: ["Self-Repair Uses", "Self-Repair Cycle", "Self-Repair Health Ratio", "Baseline HP Restored (derived)", "Repair Restore Ratio"] },
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
 const RADAR_STAT_GROUPS: DetailStatGroupDefinition[] = [
   { title: "Radar Performance", kind: "flat", labels: ["Detection Range", "Scan Range", "Scan Rate", "Scan Cooldown", "Signature Sensitivity"] },
-  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Draw", "Cooling Draw", "Heat Generation"] },
-  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "Distortion Maximum"] },
+  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Maximum", "Power Minimum (derived)", "Power Draw", "Cooling Draw", "Heat Generation"] },
+  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "EM Maximum", "EM Decay Rate", "Distortion Maximum"] },
+  { title: "Repair", kind: "flat", labels: ["Self-Repair Uses", "Self-Repair Cycle", "Self-Repair Health Ratio", "Baseline HP Restored (derived)", "Repair Restore Ratio"] },
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
@@ -167,8 +273,9 @@ const TOOL_STAT_GROUPS: DetailStatGroupDefinition[] = [
       "Wear Rate",
     ],
   },
-  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Draw", "Cooling Draw", "Heat Generation"] },
-  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "Distortion Maximum"] },
+  { title: "Power & Thermal", kind: "flat", labels: ["Power", "Power Maximum", "Power Minimum (derived)", "Power Draw", "Cooling Draw", "Heat Generation"] },
+  { title: "Signatures", kind: "flat", labels: ["Online EM", "Online IR", "EM Signature", "IR Signature", "EM Maximum", "EM Decay Rate", "Distortion Maximum"] },
+  { title: "Repair", kind: "flat", labels: ["Self-Repair Uses", "Self-Repair Cycle", "Self-Repair Health Ratio", "Baseline HP Restored (derived)", "Repair Restore Ratio"] },
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
@@ -338,7 +445,7 @@ function groupsFromDefinitions(
 }
 
 const COMPARISON_LABEL_ALIASES: Record<string, string> = {
-  quantumfuelreq: "fuelrate",
+  quantumfuelreq: "fuelrequirement",
   health: "componenthp",
   powergeneration: "powergeneration",
   coolantgeneration: "coolantgeneration",
@@ -362,7 +469,7 @@ export function findDetailStatGroupTitle(
       if (definition.kind === "nested") {
         for (const subcluster of definition.subclusters) {
           if (subcluster.labels.some((entry) => normalizeDetailStatLabel(entry) === candidate)) {
-            return definition.title;
+            return subcluster.title;
           }
         }
         continue;
@@ -381,6 +488,7 @@ function definitionsForDetail(detail: FittingComponentDetail): DetailStatGroupDe
   switch (detail.type) {
     case "ship_weapon":
     case "fps_weapon":
+    case "fps_ammo":
       return WEAPON_PERFORMANCE_STAT_GROUPS;
     case "fps_armor":
       return FPS_ARMOR_STAT_GROUPS;
@@ -409,6 +517,32 @@ export function groupWeaponPerformanceStats(stats: DetailStatRow[]): DetailStatG
   const used = new Set<string>();
   const groups = groupsFromDefinitions(WEAPON_PERFORMANCE_STAT_GROUPS, rowByLabel, used);
 
+  const actionSuffixes = [
+    "pelletcount",
+    "damagemultiplier",
+    "heatpersecond",
+    "actiondps",
+    "chargetime",
+    "chargeup",
+    "chargedown",
+    "cooldown",
+    "spinup",
+    "spindown",
+    "firesduringspinup",
+    "fulldamagerange",
+    "zerodamagerange",
+  ];
+  const actionStats = displayStats.filter((row) => {
+    const key = normalizeDetailStatLabel(row.label);
+    if (used.has(key)) return false;
+    if (!actionSuffixes.some((suffix) => key.endsWith(suffix))) return false;
+    used.add(key);
+    return true;
+  });
+  if (actionStats.length > 0) {
+    groups.push({ title: "Fire Actions", kind: "flat", stats: actionStats });
+  }
+
   const remaining = displayStats.filter((row) => {
     const key = normalizeDetailStatLabel(row.label);
     if (used.has(key) || DETAIL_META_LABELS.has(key)) return false;
@@ -424,7 +558,7 @@ export function buildDetailStatGroups(
   detail: FittingComponentDetail,
   stats: DetailStatRow[],
 ): DetailStatGroup[] {
-  if (detail.type === "ship_weapon" || detail.type === "fps_weapon") {
+  if (detail.type === "ship_weapon" || detail.type === "fps_weapon" || detail.type === "fps_ammo") {
     return groupWeaponPerformanceStats(stats);
   }
 

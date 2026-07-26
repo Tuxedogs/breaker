@@ -24,7 +24,12 @@ export const FIXTURE_BLUEPRINT_IDS = {
   fr66: "db3f4c97-8d40-4b36-b397-452dea1594fc",
   ad5b: "ba842720-ad32-4d53-8f56-992bacb1fc45",
   fpsWeapon: "bd636d35-43fd-4782-a223-40ce0a727f39",
+  cq7: "1a85280e-7b8f-4486-a563-17cd2549d268",
   fpsArmor: "005d95db-96ca-45b7-9647-7e7537b8fac8",
+  atlas: "17b29a33-88fe-484f-bb9b-fbf780273ff5",
+  snowBlind: "9b4499d4-b54c-4eb9-b661-e65f3d0f501d",
+  js300: "9585b0dc-b660-4e2a-9136-0092af1e72c1",
+  m5a: "9fe902be-8b39-4d71-9017-e2fed7b0604c",
 } as const;
 
 export const FIXTURE_ITEM_IDS = {
@@ -34,7 +39,12 @@ export const FIXTURE_ITEM_IDS = {
   fr66Completed: "bq-fixture-fr66-completed",
   ad5b: "bq-fixture-ad5b",
   fpsWeapon: "bq-fixture-fps-weapon",
+  cq7: "bq-fixture-cq7",
   fpsArmor: "bq-fixture-fps-armor",
+  atlas: "bq-fixture-atlas",
+  snowBlind: "bq-fixture-snowblind",
+  js300: "bq-fixture-js300",
+  m5a: "bq-fixture-m5a-energy",
 } as const;
 
 const fixtureMaterials = [...materialTemplates];
@@ -128,7 +138,12 @@ const recipes: RecipeTemplate[] = [
   { id: "recipe-fixture-fr66", name: "FR-66", category: "ship_part", outputTemplateId: "fr66", outputQuantity: 1 },
   { id: "recipe-fixture-ad5b", name: "AD5B Ballistic Gatling", category: "weapon", outputTemplateId: "ad5b", outputQuantity: 1 },
   { id: "recipe-fixture-fps-weapon", name: "P6-LR \"Archangel\" Sniper Rifle", category: "weapon", outputTemplateId: "p6-lr", outputQuantity: 1 },
+  { id: "recipe-fixture-cq7", name: "CQ7 Rifle", category: "weapon", outputTemplateId: "cq7", outputQuantity: 1 },
   { id: "recipe-fixture-fps-armor", name: "ADP-mk4 Arms Woodland", category: "armor", outputTemplateId: "adp-mk4-arms", outputQuantity: 1 },
+  { id: "recipe-fixture-atlas", name: "Atlas", category: "ship_part", outputTemplateId: "atlas", outputQuantity: 1 },
+  { id: "recipe-fixture-snowblind", name: "SnowBlind", category: "ship_part", outputTemplateId: "snowblind", outputQuantity: 1 },
+  { id: "recipe-fixture-js300", name: "JS-300", category: "ship_part", outputTemplateId: "js300", outputQuantity: 1 },
+  { id: "recipe-fixture-m5a-energy", name: "M5A Cannon", category: "weapon", outputTemplateId: "m5a-cannon", outputQuantity: 1 },
 ];
 
 const fr66Requirements = [
@@ -154,11 +169,46 @@ const fpsArmorRequirements = [
   requirement("bq-fix-fps-armor:carapace", "ouratite", 0.06, "scu", 780),
 ];
 
+const cq7Requirements = [
+  requirement("bq-fix-cq7:frame", "aluminum", 0.06, "scu", 820),
+  requirement("bq-fix-cq7:stock", "hephaestanite", 0.02, "scu", 760),
+  requirement("bq-fix-cq7:barrel", "iron", 0.01, "scu", 640),
+];
+
+const atlasRequirements = [
+  requirement("bq-fix-atlas:case", "torite", 0.35, "scu", 760),
+  requirement("bq-fix-atlas:injector", "tungsten", 0.14, "scu", 760),
+  requirement("bq-fix-atlas:matrix", "bexalite", 0.14, "scu", 760),
+];
+
+const snowBlindRequirements = [
+  requirement("bq-fix-snowblind:shell", "savrilium", 0.16, "scu", 760),
+  requirement("bq-fix-snowblind:coolant", "rawice", 0.16, "scu", 760),
+  requirement("bq-fix-snowblind:impeller", "borase", 0.1, "scu", 760),
+];
+
+const js300Requirements = [
+  requirement("bq-fix-js300:shell", "stileron", 0.35, "scu", 760),
+  requirement("bq-fix-js300:regulator", "beryl", 0.14, "scu", 760),
+  requirement("bq-fix-js300:stator", "savrilium", 0.24, "scu", 760),
+];
+
+const m5aRequirements = [
+  requirement("bq-fix-m5a:frame", "agricium", 1.16, "scu", 760),
+  requirement("bq-fix-m5a:emitter", "hadanite", 23, "unit", 760),
+  requirement("bq-fix-m5a:aperture", "dolivine", 23, "unit", 760),
+];
+
 const recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]> = {
   "recipe-fixture-fr66": fr66Requirements,
   "recipe-fixture-ad5b": ad5bRequirements,
   "recipe-fixture-fps-weapon": fpsWeaponRequirements,
+  "recipe-fixture-cq7": cq7Requirements,
   "recipe-fixture-fps-armor": fpsArmorRequirements,
+  "recipe-fixture-atlas": atlasRequirements,
+  "recipe-fixture-snowblind": snowBlindRequirements,
+  "recipe-fixture-js300": js300Requirements,
+  "recipe-fixture-m5a-energy": m5aRequirements,
 };
 
 const buildQueue: BuildQueueItem[] = [
@@ -287,6 +337,79 @@ const buildQueue: BuildQueueItem[] = [
     },
   },
   {
+    id: FIXTURE_ITEM_IDS.atlas,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-systems",
+    recipeId: "recipe-fixture-atlas",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.atlas,
+    itemId: "atlas",
+    itemName: "Atlas",
+    quantity: 1,
+    status: "active",
+    priority: 1,
+    priorityActive: true,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 7.6,
+    finalProductRarity: "epic",
+    materialRequirements: atlasRequirements,
+    reservedAllocations: [],
+  },
+  {
+    id: FIXTURE_ITEM_IDS.snowBlind,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-systems",
+    recipeId: "recipe-fixture-snowblind",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.snowBlind,
+    itemId: "snowblind",
+    itemName: "SnowBlind",
+    quantity: 1,
+    status: "active",
+    priority: 2,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 7.6,
+    finalProductRarity: "epic",
+    materialRequirements: snowBlindRequirements,
+    reservedAllocations: [],
+  },
+  {
+    id: FIXTURE_ITEM_IDS.js300,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-systems",
+    recipeId: "recipe-fixture-js300",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.js300,
+    itemId: "js300",
+    itemName: "JS-300",
+    quantity: 1,
+    status: "active",
+    priority: 3,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 7.6,
+    finalProductRarity: "epic",
+    materialRequirements: js300Requirements,
+    reservedAllocations: [],
+  },
+  {
+    id: FIXTURE_ITEM_IDS.m5a,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-systems",
+    recipeId: "recipe-fixture-m5a-energy",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.m5a,
+    itemId: "m5a-cannon",
+    itemName: "M5A Cannon",
+    quantity: 1,
+    status: "active",
+    priority: 4,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 7.6,
+    finalProductRarity: "epic",
+    materialRequirements: m5aRequirements,
+    reservedAllocations: [],
+  },
+  {
     id: FIXTURE_ITEM_IDS.fpsWeapon,
     entryKind: "instance",
     queueId: "bq-fixture-queue-ground",
@@ -329,6 +452,27 @@ const buildQueue: BuildQueueItem[] = [
       allocation("bq-fix-alloc-fps-arm-carapace", "ouratite", "bq-fix-inv-ouratite", 0.06, "bq-fix-fps-armor:carapace", 780, rarityCatalog.uncommon),
     ],
   },
+  {
+    id: FIXTURE_ITEM_IDS.cq7,
+    entryKind: "instance",
+    queueId: "bq-fixture-queue-ground",
+    recipeId: "recipe-fixture-cq7",
+    blueprint_id: FIXTURE_BLUEPRINT_IDS.cq7,
+    itemId: "cq7",
+    itemName: "CQ7 Rifle",
+    quantity: 1,
+    status: "active",
+    priority: 4,
+    allowLowerQuality: false,
+    finalProductQualityBand: 8,
+    finalProductQualityAverage: 7.4,
+    finalProductRarity: "rare",
+    materialRequirements: cq7Requirements,
+    reservedAllocations: [
+      allocation("bq-fix-alloc-cq7-stock", "hephaestanite", "bq-fix-inv-hephaestanite", 0.02, "bq-fix-cq7:stock", 760, rarityCatalog.uncommon),
+      allocation("bq-fix-alloc-cq7-barrel", "iron", "bq-fix-inv-iron", 0.01, "bq-fix-cq7:barrel", 640, rarityCatalog.common),
+    ],
+  },
 ];
 
 export type BuildQueuePageFixture = {
@@ -347,6 +491,7 @@ export const buildQueueStatsFixture: BuildQueuePageFixture = {
   buildQueues: [
     { id: "bq-fixture-queue-defense", name: "Pyro Defense Refit", sourceType: "custom" },
     { id: "bq-fixture-queue-ground", name: "Ground Team Loadout", sourceType: "custom" },
+    { id: "bq-fixture-queue-systems", name: "Ship Systems", sourceType: "custom" },
     { id: "bq-fixture-queue-expedition", name: "Expedition Spares", sourceType: "fitting", sourceReference: "fixture-fit-600i-expedition" },
   ],
   buildQueue,

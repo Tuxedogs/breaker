@@ -49,6 +49,22 @@ function arrayValue(value: unknown): unknown[] | null {
   return Array.isArray(value) ? value : null;
 }
 
+function powerCurvePoints(value: unknown): Array<Record<string, number | string | null>> | null {
+  const points = arrayValue(value);
+  if (points === null) return null;
+  return points.flatMap((raw) => {
+    const point = objectValue(raw);
+    if (!point) return [];
+    return [{
+      pips: numberValue(point.pips),
+      percentAssigned: numberValue(point.percentAssigned),
+      modifier: numberValue(point.modifier),
+      range: text(point.range),
+      value: numberValue(point.value),
+    }];
+  });
+}
+
 function isDatasetUnavailable(error: unknown): boolean {
   return typeof error === "object" && error !== null && "code" in error && error.code === "DATASET_UNAVAILABLE";
 }
@@ -194,7 +210,9 @@ export function componentStats(row: Row): Record<string, number | null> {
     volume: "volume",
     health: "health",
     powerDraw: "powerDraw",
+    coolantUsage: "coolantUsage",
     coolingDraw: "coolingDraw",
+    coolingRequired: "coolingRequired",
     heatGenerated: "heatGenerated",
     infraredEmission: "infraredEmission",
     electromagneticEmission: "electromagneticEmission",
@@ -253,7 +271,6 @@ export function componentStats(row: Row): Record<string, number | null> {
     quantumSpeed: "quantumSpeed",
     spoolTime: "spoolTime",
     quantumCooldown: "quantumCooldown",
-    fuelRate: "fuelRate",
     detectionRange: "detectionRange",
     scanRange: "scanRange",
     scanRate: "scanRate",
@@ -267,6 +284,7 @@ export function componentStats(row: Row): Record<string, number | null> {
     damageBiochemical: "damageBiochemical",
     damageStun: "damageStun",
     fireRateRpm: "fireRateRpm",
+    burstShotCount: "burstCount",
     heatPerShot: "heatPerShot",
     heatCapacity: "heatCapacity",
     minimumTemperature: "minimumTemperature",
@@ -281,6 +299,8 @@ export function componentStats(row: Row): Record<string, number | null> {
     spreadFirstAttack: "spreadFirstAttack",
     spreadPerAttack: "spreadPerAttack",
     spreadDecay: "spreadDecay",
+    penetrationNearRadius: "nearRadius",
+    penetrationFarRadius: "farRadius",
     powerUsage: "powerUsage",
     powerConsumptionNominal: "powerConsumptionNominal",
     minimumConsumptionFraction: "minimumConsumptionFraction",
@@ -334,10 +354,23 @@ export function componentStats(row: Row): Record<string, number | null> {
     distortionMaximum: "distortionMaximum",
     onlineEmSignature: "onlineEmSignature",
     onlineIrSignature: "onlineIrSignature",
+    calibrationDelayInSeconds: "calibrationDelayInSeconds",
+    calibrationRate: "calibrationRate",
+    calibrationTime: "calibrationTime",
+    minCalibrationRequirement: "minCalibrationRequirement",
+    maxCalibrationRequirement: "maxCalibrationRequirement",
+    quantumStageOneAccelRate: "quantumStageOneAccelRate",
+    quantumStageTwoAccelRate: "quantumStageTwoAccelRate",
+    thermalEqualizationRate: "thermalEqualizationRate",
   };
   const stats: Record<string, number | null> = {};
   for (const [publicName, sourceName] of Object.entries(mapping)) {
     if (sourceName in row) stats[publicName] = numberValue(row[sourceName]);
+  }
+  if ("quantumFuelRequirement" in row || "fuelRate" in row) {
+    const quantumFuelRequirement = numberValue(row.quantumFuelRequirement) ?? numberValue(row.fuelRate);
+    stats.quantumFuelRequirement = quantumFuelRequirement;
+    stats.fuelRate = quantumFuelRequirement;
   }
   return stats;
 }
@@ -431,12 +464,22 @@ function shieldMitigation(row: Row): Record<string, unknown> {
     maxShieldHealth: numberValue(row.maxShieldHealth),
     maxShieldRegen: numberValue(row.maxShieldRegen),
     damagedRegenDelay: numberValue(row.damagedRegenDelay),
+    downedRegenDelay: numberValue(row.downedRegenDelay),
     shieldFaceCount: numberValue(row.shieldFaceCount),
     resistanceByDamageType: objectValue(row.shieldResistanceByDamageType),
     absorptionByDamageType: objectValue(row.shieldAbsorptionByDamageType),
-    regenByPowerPip: arrayValue(row.shieldRegenByPowerPip),
+    regenByPowerPip: powerCurvePoints(row.shieldRegenByPowerPip),
     regenPowerFormula: text(row.shieldRegenPowerFormula),
     regenPowerFormulaConfidence: text(row.shieldRegenPowerFormulaConfidence),
+  };
+}
+
+function componentCooler(row: Row, fallbackType: string): Record<string, unknown> | null {
+  if (componentType(row, fallbackType) !== "cooler") return null;
+  return {
+    coolingGeneratedByPowerPip: powerCurvePoints(row.coolingGeneratedByPowerPip),
+    coolingGeneratedPowerFormula: text(row.coolingGeneratedPowerFormula),
+    coolingGeneratedPowerFormulaConfidence: text(row.coolingGeneratedPowerFormulaConfidence),
   };
 }
 
@@ -785,6 +828,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   const data: Record<string, unknown> = { ...componentSummary(found.row, found.fallbackType), stats: componentStats(found.row), mitigation };
   const weapon = componentWeapon(found.row, found.fallbackType);
   if (weapon) data.weapon = weapon;
+  const cooler = componentCooler(found.row, found.fallbackType);
+  if (cooler) data.cooler = cooler;
   const ordnance = componentOrdnance(found.row, found.fallbackType);
   if (ordnance) data.ordnance = ordnance;
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);

@@ -34,7 +34,7 @@ function readString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function getStatsObject(record: ComponentCardIndexRecord, key: "fpsWeapon" | "fpsArmor"): Record<string, unknown> | null {
+function getStatsObject(record: ComponentCardIndexRecord, key: "fpsWeapon" | "fpsArmor" | "fpsAmmo"): Record<string, unknown> | null {
   const stats = record.stats as unknown;
   if (!isRecord(stats)) return null;
   const value = stats[key];
@@ -86,6 +86,7 @@ function buildFpsWeaponDetail(
     alphaDamage: readFinite(weapon.alphaDamageTotal),
     dps: readFinite(weapon.dps),
     fireRateRpm: readFinite(weapon.fireRateRpm),
+    burstShotCount: readFinite(weapon.burstShotCount),
     ammoCapacity: readFinite(weapon.ammoCapacity),
     projectileSpeed: readFinite(weapon.projectileSpeed),
     projectileLifetime: readFinite(weapon.projectileLifetime),
@@ -98,6 +99,19 @@ function buildFpsWeaponDetail(
     damageStun: readFinite(weapon.damageStun),
     heatPerShot: readFinite(weapon.heatPerShot),
     wearPerSecond: readFinite(weapon.wearPerShot),
+    spreadMin: readFinite(weapon.hipFireSpreadMin),
+    spreadMax: readFinite(weapon.hipFireSpreadMax),
+    spreadFirstAttack: readFinite(weapon.hipFireSpreadFirstAttack),
+    spreadPerAttack: readFinite(weapon.hipFireSpreadPerAttack),
+    spreadDecay: readFinite(weapon.hipFireSpreadDecay),
+    falloffStart: readFinite(weapon.falloffStart),
+    damageDropPerMeter: readFinite(weapon.damageDropPerMeter),
+    damageDropMinDamage: readFinite(weapon.damageDropMinDamage),
+    penetrationNearRadius: readFinite(weapon.penetrationNearRadius),
+    penetrationFarRadius: readFinite(weapon.penetrationFarRadius),
+    bulletImpulseFalloffMinDistance: readFinite(weapon.bulletImpulseFalloffMinDistance),
+    bulletImpulseDropFalloff: readFinite(weapon.bulletImpulseDropFalloff),
+    bulletImpulseMaxFalloff: readFinite(weapon.bulletImpulseMaxFalloff),
     mass: readFinite(weapon.mass),
     maxPenetrationThickness: readFinite(weapon.penetrationNearRadius),
   };
@@ -131,6 +145,64 @@ function buildFpsWeaponDetail(
     confidence: "medium",
     stats,
     mitigation,
+  };
+}
+
+function buildFpsAmmoDetail(
+  record: ComponentCardIndexRecord,
+  ammo: Record<string, unknown>,
+): FittingComponentDetail {
+  const stats: FittingComponentStats = {
+    alphaDamage: readFinite(ammo.alphaDamageTotal),
+    ammoCapacity: readFinite(ammo.magazineCapacity),
+    initialAmmoCount: readFinite(ammo.ammoCount),
+    projectileSpeed: readFinite(ammo.projectileSpeed),
+    projectileLifetime: readFinite(ammo.projectileLifetime),
+    calculatedRange: readFinite(ammo.projectileLifetimeTravel) ?? readFinite(ammo.calculatedRange),
+    damagePhysical: readFinite(ammo.damagePhysical),
+    damageEnergy: readFinite(ammo.damageEnergy),
+    damageDistortion: readFinite(ammo.damageDistortion),
+    damageThermal: readFinite(ammo.damageThermal),
+    damageBiochemical: readFinite(ammo.damageBiochemical),
+    damageStun: readFinite(ammo.damageStun),
+    falloffStart: readFinite(ammo.falloffStart),
+    damageDropPerMeter: readFinite(ammo.damageDropPerMeter),
+    damageDropMinDamage: readFinite(ammo.damageDropMinDamage),
+    penetrationNearRadius: readFinite(ammo.penetrationNearRadius),
+    penetrationFarRadius: readFinite(ammo.penetrationFarRadius),
+    bulletImpulseFalloffMinDistance: readFinite(ammo.bulletImpulseFalloffMinDistance),
+    bulletImpulseDropFalloff: readFinite(ammo.bulletImpulseDropFalloff),
+    bulletImpulseMaxFalloff: readFinite(ammo.bulletImpulseMaxFalloff),
+    maxPenetrationThickness: readFinite(ammo.penetrationNearRadius),
+  };
+
+  return {
+    id: record.entityClass?.trim() || record.id,
+    name: record.name,
+    displayName: record.name,
+    manufacturer: record.manufacturer ?? null,
+    type: "fps_ammo",
+    subtype: readString(ammo.compatibleWeaponClass),
+    size: record.size,
+    grade: record.grade,
+    class: readString(ammo.ammoClass),
+    confidence: "medium",
+    stats,
+    mitigation: {
+      kind: "weapon_projectile",
+      damage: {
+        physical: readFinite(ammo.damagePhysical),
+        energy: readFinite(ammo.damageEnergy),
+        distortion: readFinite(ammo.damageDistortion),
+        thermal: readFinite(ammo.damageThermal),
+        biochemical: readFinite(ammo.damageBiochemical),
+        stun: readFinite(ammo.damageStun),
+      },
+      ammoPenetration: null,
+      basePenetrationDistance: readFinite(ammo.penetrationBaseDistance),
+      maxPenetrationThickness: readFinite(ammo.penetrationNearRadius),
+      penetrationParams: null,
+    },
   };
 }
 
@@ -215,6 +287,18 @@ export function buildFittingDetailFromFpsComponentCard(
       storageCapacity: readFinite(armor.storageCapacity),
     });
     return detail;
+  }
+
+  if (record.type === "ammo") {
+    const ammo = getStatsObject(record, "fpsAmmo");
+    if (!ammo) return null;
+    const detail = buildFpsAmmoDetail(record, ammo);
+    const hasProjectileStat = [
+      detail.stats.alphaDamage,
+      detail.stats.ammoCapacity,
+      detail.stats.projectileSpeed,
+    ].some((value) => typeof value === "number" && Number.isFinite(value));
+    return hasProjectileStat ? detail : null;
   }
 
   return null;

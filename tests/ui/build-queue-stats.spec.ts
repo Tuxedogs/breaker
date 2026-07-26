@@ -8,7 +8,8 @@ import {
   INVENTORY_ADD_MODAL_FIXTURE_PATH,
 } from "../../src/pages/logistics/buildQueueStatsFixture";
 
-const screenshotDir = path.resolve(process.cwd(), "artifacts/bq-craft-header/gate6");
+const cq7ScreenshotDir = path.resolve(process.cwd(), "artifacts/bq-component-stats-cq7");
+const sharedStatsScreenshotDir = path.resolve(process.cwd(), "artifacts/bq-component-stats-shared");
 const craftingSliderScreenshotDir = path.resolve(process.cwd(), "artifacts/crafting-target-slider");
 const CRAFTING_TARGET_SLIDER_FIXTURE_PATH = "/industry/crafting/__fixture/target-slider";
 
@@ -16,7 +17,12 @@ const fixtureItems = [
   { id: FIXTURE_ITEM_IDS.fr66, name: "FR-66", queue: "Pyro Defense Refit", expectGroupedStats: true },
   { id: FIXTURE_ITEM_IDS.ad5b, name: "AD5B Ballistic Gatling", queue: "Pyro Defense Refit", expectGroupedStats: true },
   { id: FIXTURE_ITEM_IDS.fpsWeapon, name: 'P6-LR "Archangel" Sniper Rifle', queue: "Ground Team Loadout", expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.cq7, name: "CQ7 Rifle", queue: "Ground Team Loadout", expectGroupedStats: true },
   { id: FIXTURE_ITEM_IDS.fpsArmor, name: "ADP-mk4 Arms Woodland", queue: "Expedition Spares", expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.atlas, name: "Atlas", queue: "Ship Systems", expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.snowBlind, name: "SnowBlind", queue: "Ship Systems", expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.js300, name: "JS-300", queue: "Ship Systems", expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.m5a, name: "M5A Cannon", queue: "Ship Systems", expectGroupedStats: true },
 ] as const;
 
 function isIgnorableUrl(url: string): boolean {
@@ -70,6 +76,111 @@ async function selectQueue(page: Page, queueName: string) {
 }
 
 test.describe("Build Queue stats fixture", () => {
+  test("renders CQ7 extracted statistics without clipping at desktop review sizes", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await mkdir(cq7ScreenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
+      await selectQueue(page, "Ground Team Loadout");
+      await selectFixtureItem(page, FIXTURE_ITEM_IDS.cq7, "CQ7 Rifle");
+
+      const labels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+      expect(labels).toEqual(expect.arrayContaining([
+        "Alpha Damage",
+        "DPS",
+        "Fire Rate",
+        "Burst Size",
+        "Ballistic Reserve",
+        "Projectile Speed",
+        "Projectile Lifetime",
+        "Damage Falloff Start",
+        "Damage Drop Per Meter",
+        "Minimum Damage After Falloff",
+        "Spread Min–Max",
+        "Spread First Attack",
+        "Spread Per Attack",
+        "Spread Decay",
+      ]));
+
+      const traitLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
+        const statColumn = panel.querySelector(".bq-stat-unmodified-column");
+        const firstRow = panel.querySelector(".bq-stat-compact-row");
+        const firstGroup = panel.querySelector(".bq-stat-unmodified-group");
+        const firstGroupHeading = firstGroup?.querySelector(":scope > .bq-stat-compare-group-title");
+        const firstGroupCard = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
+        const label = firstRow?.querySelector(".bq-stat-compact-label");
+        const value = firstRow?.querySelector(".bq-stat-compact-value");
+        const headingRect = firstGroupHeading?.getBoundingClientRect();
+        const cardRect = firstGroupCard?.getBoundingClientRect();
+        const labelRect = label?.getBoundingClientRect();
+        const valueRect = value?.getBoundingClientRect();
+        return {
+          groupTitles: Array.from(panel.querySelectorAll(".bq-stat-unmodified-group > .bq-stat-compare-group-title"))
+            .map((heading) => heading.textContent?.trim() ?? ""),
+          columnCount: statColumn
+            ? getComputedStyle(statColumn).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
+            : 0,
+          labelValueGap: labelRect && valueRect ? valueRect.left - labelRect.right : Number.POSITIVE_INFINITY,
+          labelWeight: label ? Number.parseInt(getComputedStyle(label).fontWeight, 10) : Number.POSITIVE_INFINITY,
+          valueWeight: value ? Number.parseInt(getComputedStyle(value).fontWeight, 10) : Number.POSITIVE_INFINITY,
+          headingOutsideCard: Boolean(
+            firstGroupHeading
+            && firstGroupCard
+            && !firstGroupCard.contains(firstGroupHeading)
+            && headingRect
+            && cardRect
+            && headingRect.bottom <= cardRect.top,
+          ),
+        };
+      });
+      expect(traitLayout.groupTitles).toEqual(expect.arrayContaining([
+        "Damage Output",
+        "Projectile",
+        "Penetration",
+        "Spread",
+        "Thermal and Power",
+      ]));
+      expect(traitLayout.columnCount).toBe(2);
+      expect(traitLayout.labelValueGap).toBeGreaterThanOrEqual(0);
+      expect(traitLayout.labelValueGap).toBeLessThanOrEqual(8);
+      expect(traitLayout.labelWeight).toBeLessThanOrEqual(500);
+      expect(traitLayout.valueWeight).toBeLessThanOrEqual(600);
+      expect(traitLayout.headingOutsideCard).toBe(true);
+
+      const geometry = await page.locator(".bq-component-statistics").evaluate((panel) => {
+        const panelRect = panel.getBoundingClientRect();
+        const rows = Array.from(panel.querySelectorAll(".bq-stat-compact-row, .bq-stat-compare-row"));
+        return {
+          viewportWidth: document.documentElement.clientWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          panelOverflow: panel.scrollWidth - panel.clientWidth,
+          clippedRows: rows.filter((row) => {
+            const rect = row.getBoundingClientRect();
+            return rect.left < panelRect.left - 1 || rect.right > panelRect.right + 1;
+          }).length,
+        };
+      });
+      expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth);
+      expect(geometry.panelOverflow).toBeLessThanOrEqual(1);
+      expect(geometry.clippedRows).toBe(0);
+
+      await page.screenshot({
+        path: path.join(cq7ScreenshotDir, `cq7-component-statistics-${viewport.name}.png`),
+        fullPage: true,
+      });
+      await page.locator(".bq-component-statistics").screenshot({
+        path: path.join(cq7ScreenshotDir, `cq7-component-statistics-panel-${viewport.name}.png`),
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
+
   test("renders the populated mockup target at desktop review sizes", async ({ page }) => {
     const failures = installFailureGuards(page);
     const visualTargetDir = path.resolve(process.cwd(), "artifacts/build-queue-visual-target");
@@ -108,8 +219,9 @@ test.describe("Build Queue stats fixture", () => {
         const allocation = craft.querySelector(".bq-materials-section")?.getBoundingClientRect();
         const statistics = craft.querySelector(".bq-component-statistics")?.getBoundingClientRect();
         const centerShell = craft.closest(".bq-center-shell");
+        const pageRoot = craft.closest(".bq-page");
         const materialCard = craft.querySelector(".bq-mat-group");
-        const statCard = craft.querySelector(".bq-stat-unmodified-group");
+        const statCard = craft.querySelector(".bq-stat-unmodified-card");
         const centerHighlight = centerShell ? getComputedStyle(centerShell, "::after") : null;
         return {
           gap: allocation && statistics ? statistics.top - allocation.bottom : Number.POSITIVE_INFINITY,
@@ -120,6 +232,7 @@ test.describe("Build Queue stats fixture", () => {
           materialBackgroundImage: materialCard ? getComputedStyle(materialCard).backgroundImage : "",
           statBackgroundColor: statCard ? getComputedStyle(statCard).backgroundColor : "",
           statBackgroundImage: statCard ? getComputedStyle(statCard).backgroundImage : "",
+          rowSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--ops-surface-row").trim() : "",
         };
       });
       expect(sectionTransition.gap).toBeGreaterThanOrEqual(12);
@@ -127,9 +240,9 @@ test.describe("Build Queue stats fixture", () => {
       expect(sectionTransition.centerBackgroundColor).toBe("rgba(0, 0, 0, 0)");
       expect(sectionTransition.centerBackgroundImage).toBe("none");
       expect(sectionTransition.centerHighlightImage).toBe("none");
-      expect(sectionTransition.materialBackgroundColor).toBe("rgb(13, 21, 30)");
-      expect(sectionTransition.materialBackgroundImage).toContain("linear-gradient");
-      expect(sectionTransition.statBackgroundColor).toBe("rgb(13, 21, 30)");
+      expect(sectionTransition.materialBackgroundColor).toBe(sectionTransition.rowSurfaceToken);
+      expect(sectionTransition.materialBackgroundImage).toBe("none");
+      expect(sectionTransition.statBackgroundColor).toBe(sectionTransition.rowSurfaceToken);
       expect(sectionTransition.statBackgroundImage).toBe("none");
       const materialActionOrder = await page.locator(".bq-materials-section-actions").evaluate((actions) => (
         Array.from(actions.children).map((child) => child.className)
@@ -546,7 +659,7 @@ test.describe("Build Queue stats fixture", () => {
     expect(failures).toEqual([]);
   });
 
-  test("renders identity-only headers + consolidated component statistics for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
+  test("renders identity-only headers + consolidated component statistics for ship and FPS components", async ({ page }) => {
     const failures = installFailureGuards(page);
     const externalApiRequests: string[] = [];
     page.on("request", (request) => {
@@ -555,7 +668,7 @@ test.describe("Build Queue stats fixture", () => {
         externalApiRequests.push(request.url());
       }
     });
-    await mkdir(screenshotDir, { recursive: true });
+    await mkdir(sharedStatsScreenshotDir, { recursive: true });
 
     for (const viewport of [
       { name: "1920x1080", width: 1920, height: 1080 },
@@ -634,7 +747,7 @@ test.describe("Build Queue stats fixture", () => {
         await sliderEditor.hover();
         await expect(sliderShell).toHaveCSS("opacity", "1");
         await page.screenshot({
-          path: path.join(screenshotDir, `bq-target-slider-hover-${viewport.name}.png`),
+          path: path.join(sharedStatsScreenshotDir, `bq-target-slider-hover-${viewport.name}.png`),
           fullPage: true,
         });
         await slider.focus();
@@ -741,6 +854,35 @@ test.describe("Build Queue stats fixture", () => {
           await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
           await expect(page.locator(".bq-component-statistics .bq-stat-unmodified-group").first()).toBeVisible();
           await expect(page.locator(".bq-component-statistics .bq-stat-compare").first()).toBeVisible();
+          const sharedStatLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
+            const groups = Array.from(panel.querySelectorAll(".bq-stat-unmodified-group"));
+            const traitColumns = panel.querySelectorAll(".bq-stat-unmodified-column > .bq-stat-trait-column");
+            const firstGroup = groups[0];
+            const heading = firstGroup?.querySelector(":scope > .bq-stat-compare-group-title");
+            const card = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
+            const headingRect = heading?.getBoundingClientRect();
+            const cardRect = card?.getBoundingClientRect();
+            return {
+              groupCount: groups.length,
+              traitColumnCount: traitColumns.length,
+              headingOutsideCard: Boolean(
+                heading
+                && card
+                && !card.contains(heading)
+                && headingRect
+                && cardRect
+                && headingRect.bottom <= cardRect.top,
+              ),
+              clippedGroups: groups.filter((group) => {
+                const groupRect = group.getBoundingClientRect();
+                const panelRect = panel.getBoundingClientRect();
+                return groupRect.left < panelRect.left - 1 || groupRect.right > panelRect.right + 1;
+              }).length,
+            };
+          });
+          expect(sharedStatLayout.traitColumnCount).toBe(Math.min(2, sharedStatLayout.groupCount));
+          expect(sharedStatLayout.headingOutsideCard).toBe(true);
+          expect(sharedStatLayout.clippedGroups).toBe(0);
         } else {
           await expect(page.locator(".bq-component-statistics")).toBeVisible();
         }
@@ -752,6 +894,10 @@ test.describe("Build Queue stats fixture", () => {
             "Projectile Speed",
             "Alpha Damage",
             "Heat Per Shot",
+            "Spread Min–Max",
+            "Penetration Near Radius",
+            "Penetration Far Radius",
+            "Overheat Recovery",
             "Mass",
             "Health",
           ]));
@@ -762,8 +908,8 @@ test.describe("Build Queue stats fixture", () => {
           ]));
           const modifiedLabels = await page.locator(".bq-component-statistics .bq-stat-compare-row .bq-stat-compare-label").allTextContents();
           expect(modifiedLabels).toEqual(["Alpha Damage", "Health"]);
-          const compactText = (await page.locator(".bq-stat-compact-list").allTextContents()).join("|");
-          expect(compactText).not.toContain("0%");
+          const compactValues = await page.locator(".bq-stat-compact-value").allTextContents();
+          expect(compactValues).not.toContain("0%");
 
           const allocationColors = await page.evaluate(() => {
             const allocationValue = document.querySelector(".bq-stat-compare-allocation .bq-stat-compare-value");
@@ -779,15 +925,98 @@ test.describe("Build Queue stats fixture", () => {
           expect(allocationColors.target).not.toBe("");
         }
 
+        if (item.id === FIXTURE_ITEM_IDS.cq7) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Alpha Damage",
+            "DPS",
+            "Fire Rate",
+            "Burst Size",
+            "Ballistic Reserve",
+            "Projectile Speed",
+            "Projectile Lifetime",
+            "Damage Falloff Start",
+            "Spread Min–Max",
+            "Spread First Attack",
+            "Spread Per Attack",
+            "Spread Decay",
+          ]));
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.fpsArmor) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          const groupTitles = await page.locator(".bq-component-statistics .bq-stat-unmodified-group > .bq-stat-compare-group-title").allTextContents();
+          expect(compactLabels).toContain("Armor Damage Mitigation");
+          expect(compactLabels).not.toEqual(expect.arrayContaining([
+            "Armor Temperature Min",
+            "Armor Temperature Max",
+          ]));
+          expect(groupTitles).not.toContain("Additional");
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.fr66) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Downed Regen Delay",
+            "Regen by Power",
+            "Repair Restore Ratio",
+          ]));
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.atlas) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Fuel Requirement",
+            "Calibration Delay",
+            "Calibration Time (derived)",
+            "Stage One Acceleration",
+            "Stage Two Acceleration",
+          ]));
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.snowBlind) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Coolant Generation",
+            "Thermal Equalization Rate",
+            "Cooling by Power",
+            "Distortion Maximum",
+            "Repair Restore Ratio",
+          ]));
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.js300) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Power Generation",
+            "Distortion Maximum",
+            "Repair Restore Ratio",
+          ]));
+        }
+
+        if (item.id === FIXTURE_ITEM_IDS.m5a) {
+          const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels).toEqual(expect.arrayContaining([
+            "Energy Maximum Load",
+            "Energy Recharge Rate",
+            "Recharge Cooldown",
+            "Energy Cost Per Shot",
+            "Spread Min–Max",
+            "Penetration Near Radius",
+            "Penetration Far Radius",
+          ]));
+          expect(compactLabels).not.toContain("Ballistic Reserve");
+        }
+
         await page.screenshot({
-          path: path.join(screenshotDir, `bq-stats-${item.id}-${viewport.name}.png`),
+          path: path.join(sharedStatsScreenshotDir, `bq-stats-${item.id}-${viewport.name}.png`),
           fullPage: true,
         });
       }
 
       await selectQueue(page, "Pyro Defense Refit");
       await page.locator(".bq-queue-selector-trigger").click();
-      await expect(page.getByRole("option")).toHaveCount(3);
+      await expect(page.getByRole("option")).toHaveCount(4);
       const selectorPosition = await page.locator(".bq-queue-selector-popover").evaluate((popover) => {
         const trigger = popover.parentElement?.querySelector(".bq-queue-selector-trigger")?.getBoundingClientRect();
         const menu = popover.getBoundingClientRect();
@@ -795,12 +1024,12 @@ test.describe("Build Queue stats fixture", () => {
       });
       expect(selectorPosition.menuTop).toBeGreaterThanOrEqual(selectorPosition.triggerBottom);
       expect(selectorPosition.menuBottom).toBeLessThanOrEqual(selectorPosition.viewportHeight);
-      await page.screenshot({ path: path.join(screenshotDir, `bq-queue-selector-${viewport.name}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(sharedStatsScreenshotDir, `bq-queue-selector-${viewport.name}.png`), fullPage: true });
 
       await page.getByRole("button", { name: "+ New" }).click();
       await expect(page.getByRole("form", { name: "Create queue" })).toBeVisible();
       await page.getByLabel("New queue name").fill("Carrier Refit Batch");
-      await page.screenshot({ path: path.join(screenshotDir, `bq-queue-create-${viewport.name}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(sharedStatsScreenshotDir, `bq-queue-create-${viewport.name}.png`), fullPage: true });
       await page.getByRole("button", { name: "Create", exact: true }).click();
       await expect(page.locator(".bq-queue-selector-trigger")).toContainText("Carrier Refit Batch");
       await expect(page.locator(".bq-craft-card")).toHaveCount(0);
@@ -808,16 +1037,16 @@ test.describe("Build Queue stats fixture", () => {
       await page.locator(".bq-queue-selector-trigger").click();
       await page.getByRole("button", { name: "Rename" }).click();
       await page.getByLabel("Queue name").fill("Carrier Refit Priority");
-      await page.screenshot({ path: path.join(screenshotDir, `bq-queue-rename-${viewport.name}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(sharedStatsScreenshotDir, `bq-queue-rename-${viewport.name}.png`), fullPage: true });
       await page.getByRole("button", { name: "Save" }).click();
       await expect(page.locator(".bq-queue-selector-trigger")).toContainText("Carrier Refit Priority");
 
       await selectQueue(page, "Ground Team Loadout");
-      await expect(page.locator(".bq-craft-card")).toHaveCount(1);
-      await expect(page.locator(".bq-craft-card")).toContainText('P6-LR "Archangel" Sniper Rifle');
+      await expect(page.locator(".bq-craft-card")).toHaveCount(2);
+      await expect(page.locator(".bq-craft-card").first()).toContainText('P6-LR "Archangel" Sniper Rifle');
       await expect(page.getByRole("slider", { name: "Target quality for Taranite" })).toHaveValue("820");
       await expect(page.locator(".bq-quality-chip").first()).toContainText("820");
-      await page.screenshot({ path: path.join(screenshotDir, `bq-distinct-queues-${viewport.name}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(sharedStatsScreenshotDir, `bq-distinct-queues-${viewport.name}.png`), fullPage: true });
 
       await selectQueue(page, "Pyro Defense Refit");
       await expect(page.locator(".bq-craft-card").nth(0)).toContainText("FR-66");
@@ -920,7 +1149,7 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66High}"]`)).toHaveCount(0);
       await selectQueue(page, "Ground Team Loadout");
       await expect(page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66High}"]`)).toBeVisible();
-      await expect(page.locator(".bq-craft-card")).toHaveCount(2);
+      await expect(page.locator(".bq-craft-card")).toHaveCount(3);
 
       await selectQueue(page, "Pyro Defense Refit");
       const completeHandle = page.locator(`[data-bq-entry-id="${FIXTURE_ITEM_IDS.fr66Precision}"] .bq-craft-card-drag-handle`);

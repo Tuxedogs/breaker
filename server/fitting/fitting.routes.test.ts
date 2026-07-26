@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import fittingVercelHandler from "../../api/v1/fitting/[...path].ts";
-import { canonicalId } from "./fitting.service.ts";
+import { canonicalId, componentStats } from "./fitting.service.ts";
 import { PUBLIC_REGISTRIES } from "./registryStore.ts";
 import { handleFittingRoute } from "../routes/fitting.routes.ts";
 import { runFittingApiHandler } from "../routes/fittingApi.ts";
@@ -14,6 +14,7 @@ const shipId = "0079c5d5-1678-4f8c-85ba-18ca8f642af6";
 const componentId = "1f5be5de-b5ea-42c7-879f-289c4bf64f19";
 const weaponId = "44444444-4444-4444-8444-444444444444";
 const powerPlantId = "55555555-5555-4555-8555-555555555555";
+const quantumDriveId = "12121212-1212-4212-8212-121212121212";
 const shieldId = "22222222-2222-4222-8222-222222222222";
 const ammoId = "031a120e-db07-4100-8071-50346731964b";
 const missileId = "66666666-6666-4666-8666-666666666666";
@@ -107,9 +108,36 @@ async function fixtureRoot(): Promise<string> {
     selfRepairHealthRatio: 0.2,
     selfRepairBaselineHp: 28,
     repairRestoreRatio: 0.1,
+    thermalEqualizationRate: 3.75,
+    coolingGeneratedByPowerPip: [
+      { pips: 1, percentAssigned: 0.5, modifier: 0.7, range: "low", value: 10, privateSourcePath: "do/not/expose" },
+      { pips: 2, percentAssigned: 1, modifier: 1, range: "high", value: 10 },
+    ],
+    coolingGeneratedPowerFormula: "maximumOutput * allocation",
+    coolingGeneratedPowerFormulaConfidence: "source_backed_for_coolers",
     confidence: "high",
   }];
   records["power_plants.json"] = [{ entityClass: powerPlantId, componentKey: powerPlantId.replaceAll("-", "_"), name: "Test Plant", displayName: "Test Plant", componentType: "power_plant", size: 1, powerGenerated: 10, confidence: "high" }];
+  records["quantum_drives.json"] = [{
+    entityClass: quantumDriveId,
+    componentKey: quantumDriveId.replaceAll("-", "_"),
+    name: "Test Quantum Drive",
+    displayName: "Test Quantum Drive",
+    componentType: "quantum_drive",
+    quantumSpeed: 200000000,
+    spoolTime: 4,
+    quantumCooldown: 10,
+    quantumFuelRequirement: 0,
+    fuelRate: null,
+    calibrationDelayInSeconds: 1.5,
+    calibrationRate: 1000,
+    calibrationTime: 11.5,
+    minCalibrationRequirement: 5000,
+    maxCalibrationRequirement: 10000,
+    quantumStageOneAccelRate: 376000,
+    quantumStageTwoAccelRate: 11200000,
+    confidence: "high",
+  }];
   records["ship_weapons.json"] = [{
     entityClass: weaponId,
     componentKey: weaponId.replaceAll("-", "_"),
@@ -127,6 +155,9 @@ async function fixtureRoot(): Promise<string> {
     dpsConfidence: "medium",
     powerConsumptionNominal: 1,
     fireRateRpm: 120,
+    burstCount: 4,
+    nearRadius: 0,
+    farRadius: 5,
     ammoCostPerShot: 1,
     maxAmmoLoad: 10,
     maxRegenPerSec: 2,
@@ -257,6 +288,8 @@ async function fixtureRoot(): Promise<string> {
     shieldHP: 100,
     regenRate: 12,
     maxShieldRegen: 12,
+    damagedRegenDelay: 4,
+    downedRegenDelay: 8,
     shieldRegenByPowerPip: [
       { pips: 1, value: 5 },
       { pips: 2, value: 12 },
@@ -290,6 +323,13 @@ async function fixtureRoot(): Promise<string> {
 
 test("normalizes underscore UUID compatibility aliases", () => {
   assert.equal(canonicalId(componentId.replaceAll("-", "_")), componentId);
+});
+
+test("preserves zero when resolving legacy quantum fuel aliases", () => {
+  assert.deepEqual(componentStats({ fuelRate: 0 }), {
+    quantumFuelRequirement: 0,
+    fuelRate: 0,
+  });
 });
 
 test("older datasets remain readable when additive ordnance registries are absent", async () => {
@@ -338,6 +378,20 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
     assert.equal(coolerStats.emSignatureDecayRate, 0.15);
     assert.equal(coolerStats.selfRepairTime, 25.5);
     assert.equal(coolerStats.selfRepairBaselineHp, 28);
+    assert.equal(coolerStats.thermalEqualizationRate, 3.75);
+    const coolerData = (cooler?.body as {
+      data: {
+        cooler: {
+          coolingGeneratedByPowerPip: Array<Record<string, unknown>>;
+          coolingGeneratedPowerFormula: string;
+          coolingGeneratedPowerFormulaConfidence: string;
+        };
+      };
+    }).data.cooler;
+    assert.equal(coolerData.coolingGeneratedByPowerPip[0]?.value, 10);
+    assert.equal("privateSourcePath" in (coolerData.coolingGeneratedByPowerPip[0] ?? {}), false);
+    assert.equal(coolerData.coolingGeneratedPowerFormula, "maximumOutput * allocation");
+    assert.equal(coolerData.coolingGeneratedPowerFormulaConfidence, "source_backed_for_coolers");
 
     const armor = await handleFittingRoute("GET", `/api/v1/fitting/components/33333333-3333-4333-8333-333333333333?${query}`, "test-request", root);
     assert.equal((armor?.body as { data: { type: string; mitigation: { kind: string; deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.type, "armor");
@@ -388,6 +442,34 @@ test("exposes shaped mitigation data without raw registry dumps", async () => {
       maxArmedMissiles: 4,
       launchCooldownTime: 4,
     });
+
+    const quantum = await handleFittingRoute("GET", `/api/v1/fitting/components/${quantumDriveId}?${query}`, "test-request", root);
+    const quantumStats = (quantum?.body as { data: { stats: Record<string, number | null> } }).data.stats;
+    assert.equal(quantumStats.quantumFuelRequirement, 0);
+    assert.equal(quantumStats.fuelRate, 0);
+    assert.equal(quantumStats.calibrationDelayInSeconds, 1.5);
+    assert.equal(quantumStats.calibrationRate, 1000);
+    assert.equal(quantumStats.calibrationTime, 11.5);
+    assert.equal(quantumStats.minCalibrationRequirement, 5000);
+    assert.equal(quantumStats.maxCalibrationRequirement, 10000);
+    assert.equal(quantumStats.quantumStageOneAccelRate, 376000);
+    assert.equal(quantumStats.quantumStageTwoAccelRate, 11200000);
+
+    const shieldData = (shield?.body as {
+      data: {
+        mitigation: {
+          damagedRegenDelay: number;
+          downedRegenDelay: number;
+          regenByPowerPip: Array<{ pips: number; value: number }>;
+        };
+      };
+    }).data.mitigation;
+    assert.equal(shieldData.damagedRegenDelay, 4);
+    assert.equal(shieldData.downedRegenDelay, 8);
+    assert.deepEqual(shieldData.regenByPowerPip.map(({ pips, value }) => ({ pips, value })), [
+      { pips: 1, value: 5 },
+      { pips: 2, value: 12 },
+    ]);
 
     const compatibleMissiles = await handleFittingRoute(
       "GET",
@@ -760,6 +842,12 @@ test("projects versioned weapon stats, actions, and DPS metadata", async () => {
     assert.equal(data.stats.theoreticalDps, 200);
     assert.equal(data.stats.sustainedDps60, 150);
     assert.equal(data.stats.maxAmmoCount, 90);
+    assert.equal(data.stats.maxAmmoLoad, 10);
+    assert.equal(data.stats.maxRegenPerSec, 2);
+    assert.equal(data.stats.regenerationCooldown, 1);
+    assert.equal(data.stats.burstShotCount, 4);
+    assert.equal(data.stats.penetrationNearRadius, 0);
+    assert.equal(data.stats.penetrationFarRadius, 5);
     assert.equal(data.weapon.recordSchemaVersion, 2);
     assert.equal(data.weapon.dpsModelVersion, "foundry-weapon-dps-v1");
     assert.deepEqual(data.weapon.dpsAssumptions, ["single_selected_fire_action"]);

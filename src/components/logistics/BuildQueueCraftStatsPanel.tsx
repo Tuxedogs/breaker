@@ -22,7 +22,9 @@ const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
 
 function normalizeStatKey(value: string): string {
   const normalized = value.toLowerCase().replace(/[^a-z0-9]/g, "");
-  return normalized === "componenthp" ? "health" : normalized;
+  if (normalized === "componenthp") return "health";
+  if (normalized.startsWith("weaponrecoil")) return normalized.slice("weapon".length);
+  return normalized;
 }
 
 function normalizeGroupKey(value: string): string {
@@ -30,12 +32,17 @@ function normalizeGroupKey(value: string): string {
 }
 
 function formatStatLabel(value: string): string {
-  return value.replace(/\s*\/\s*/g, " and ");
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\s*\/\s*/g, " and ");
 }
 
 function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGroup[] {
   const comparisonByGroup = new Map(
     model.comparisonGroups.map((group) => [normalizeGroupKey(group.title), group] as const),
+  );
+  const allComparisonKeys = new Set(
+    model.comparisonGroups.flatMap((group) => group.rows.map((row) => normalizeStatKey(row.label))),
   );
   const usedComparisonGroups = new Set<string>();
   const groups: ConsolidatedStatGroup[] = [];
@@ -51,7 +58,7 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
     const stats: ConsolidatedStat[] = overviewGroup.stats
       .filter((stat) => {
         const statKey = normalizeStatKey(stat.label);
-        return !comparisonKeys.has(statKey)
+        return !allComparisonKeys.has(statKey)
           && !(hasAlphaDamage && WEAPON_DAMAGE_CHANNEL_KEYS.has(statKey));
       })
       .map((stat) => ({ kind: "static", label: stat.label, value: stat.value }));
@@ -74,6 +81,21 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
   }
 
   return groups;
+}
+
+function splitStatGroupsAcrossColumns(groups: ConsolidatedStatGroup[]): ConsolidatedStatGroup[][] {
+  const columns = [
+    { groups: [] as ConsolidatedStatGroup[], weight: 0 },
+    { groups: [] as ConsolidatedStatGroup[], weight: 0 },
+  ];
+
+  for (const group of groups) {
+    const target = columns[0].weight <= columns[1].weight ? columns[0] : columns[1];
+    target.groups.push(group);
+    target.weight += group.stats.length + 1;
+  }
+
+  return columns.map((column) => column.groups);
 }
 
 function ComparisonDelta({ column }: { column: CraftStatComparisonColumnView }) {
@@ -192,26 +214,33 @@ function getModifiedStats(group: ConsolidatedStatGroup) {
 }
 
 function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
-  if (group.stats.length === 0) return null;
+  const visibleStats = group.stats.filter((stat) => (
+    stat.kind === "static"
+    || stat.row.baseValue !== "-"
+    || comparisonIsModified(stat.row)
+  ));
+  if (visibleStats.length === 0) return null;
   return (
     <section className="bq-stat-unmodified-group" aria-label={`${formatStatLabel(group.title)} end product statistics`}>
       <h4 className="bq-stat-compare-group-title">{formatStatLabel(group.title)}</h4>
-      <div className="bq-stat-compact-list" role="list">
-        {group.stats.map((stat) => {
-          if (stat.kind === "static") {
-            return <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />;
-          }
-          const endProduct = getEndProductColumn(stat.row);
-          return (
-            <CompactStat
-              key={stat.row.statId}
-              label={stat.row.label}
-              value={endProduct?.value ?? stat.row.baseValue}
-              unit={stat.row.unit}
-              impactClass={endProduct?.impactClass}
-            />
-          );
-        })}
+      <div className="bq-stat-unmodified-card">
+        <div className="bq-stat-compact-list" role="list">
+          {visibleStats.map((stat) => {
+            if (stat.kind === "static") {
+              return <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />;
+            }
+            const endProduct = getEndProductColumn(stat.row);
+            return (
+              <CompactStat
+                key={stat.row.statId}
+                label={stat.row.label}
+                value={endProduct?.value ?? stat.row.baseValue}
+                unit={stat.row.unit}
+                impactClass={endProduct?.impactClass}
+              />
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -272,6 +301,8 @@ export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatView
 
   const consolidatedGroups = buildConsolidatedGroups(model);
   const hasModifiedStats = consolidatedGroups.some((group) => getModifiedStats(group).length > 0);
+  const traitColumns = splitStatGroupsAcrossColumns(consolidatedGroups)
+    .filter((column) => column.length > 0);
   return (
     <section className="bq-component-statistics bq-workspace-card" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
       <header className="bq-component-statistics-header">
@@ -279,12 +310,19 @@ export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatView
         <StatsLegend />
       </header>
       <div className="bq-component-statistics-body">
-        <div className="bq-stat-unmodified-column" aria-label="End product statistics">
-          {consolidatedGroups.map((group) => <EndProductStatGroup key={group.title} group={group} />)}
+        <div
+          className={`bq-stat-unmodified-column${traitColumns.length === 1 ? " bq-stat-unmodified-column--single" : ""}`}
+          aria-label="End product statistics"
+        >
+          {traitColumns.map((column, index) => (
+            <div key={`trait-column-${index}`} className="bq-stat-trait-column">
+              {column.map((group) => <EndProductStatGroup key={group.title} group={group} />)}
+            </div>
+          ))}
         </div>
         {hasModifiedStats ? (
           <aside className="bq-stat-modified-card" aria-label="Modified statistics">
-            <h4>Modified</h4>
+            <h4>Modified Statistics</h4>
             {consolidatedGroups.map((group) => <ModifiedStatGroup key={group.title} group={group} />)}
           </aside>
         ) : null}

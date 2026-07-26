@@ -170,8 +170,14 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
       ammoCostPerShot: 1,
       maxRegenPerSec: 3,
       regenerationCooldown: 0.75,
+      burstShotCount: 4,
       spreadMin: 0.1,
       spreadMax: 0.2,
+      spreadFirstAttack: 0.01,
+      spreadPerAttack: 0.02,
+      spreadDecay: 0.03,
+      penetrationNearRadius: 0,
+      penetrationFarRadius: 5,
       coolingPerSecond: 12,
       timeTillCoolingStarts: 0.5,
       minimumTemperature: -10,
@@ -198,7 +204,7 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
       actions: [{
         kind: "rapid", name: "Rapid", actionIndex: 0, sourcePath: "weapon/action",
         fireRateRpm: 120, heatPerShot: 1, heatPerSecond: null, ammoCost: 1,
-        pelletCount: 1, damageMultiplier: 1, spreadMin: 0.1, spreadMax: 0.2,
+        pelletCount: 8, damageMultiplier: 1.5, spreadMin: 0.1, spreadMax: 0.2,
         spreadFirstAttack: 0.01, spreadPerAttack: 0.02, spreadDecay: 0.03,
         chargeTime: null, chargeUpTime: null, chargeDownTime: null, cooldownTime: null,
         spinUpTime: 0.4, spinDownTime: 0.8, fireDuringSpinUp: true,
@@ -207,7 +213,18 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
     },
   });
   const labels = rows.map((row) => row.label);
-  for (const label of ["Theoretical DPS", "60s Sustained DPS", "Damage Over 60s", "Energy Maximum Load", "Spread Min–Max", "Cooling Rate", "Rapid Spin-Up", "Rapid Spin-Down"]) {
+  for (const label of [
+    "Theoretical DPS",
+    "60s Sustained DPS",
+    "Damage Over 60s",
+    "Energy Maximum Load",
+    "Energy Recharge Rate",
+    "Recharge Cooldown",
+    "Spread Min–Max",
+    "Cooling Rate",
+    "Rapid Spin-Up",
+    "Rapid Spin-Down",
+  ]) {
     assert.ok(labels.includes(label), `missing ${label}`);
   }
   for (const label of [
@@ -221,6 +238,113 @@ test("buildDetailStatRowsFromFitting renders modeled DPS and action-aware timing
   ]) {
     assert.ok(labels.includes(label), `missing ${label}`);
   }
+  for (const label of [
+    "Burst Size",
+    "Penetration Near Radius",
+    "Penetration Far Radius",
+    "Spread First Attack",
+    "Spread Per Attack",
+    "Spread Decay",
+    "Rapid Pellet Count",
+    "Rapid Damage Multiplier",
+    "Rapid Fires During Spin-Up",
+  ]) {
+    assert.ok(labels.includes(label), `missing ${label}`);
+  }
+});
+
+test("buildDetailStatRowsFromFitting projects quantum calibration and canonical fuel", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "quantum_drive",
+    stats: {
+      quantumSpeed: 200000000,
+      spoolTime: 4,
+      quantumCooldown: 10,
+      quantumFuelRequirement: 0,
+      fuelRate: null,
+      calibrationDelayInSeconds: 1.5,
+      calibrationRate: 1000,
+      minCalibrationRequirement: 5000,
+      maxCalibrationRequirement: 10000,
+      calibrationTime: 11.5,
+      quantumStageOneAccelRate: 376000,
+      quantumStageTwoAccelRate: 11200000,
+    },
+  });
+
+  const byLabel = new Map(rows.map((row) => [row.label, row.value]));
+  assert.equal(byLabel.get("Fuel Requirement"), "0");
+  assert.equal(byLabel.get("Calibration Delay"), "1.5s");
+  assert.equal(byLabel.get("Calibration Time (derived)"), "11.5s");
+  assert.equal(byLabel.get("Stage One Acceleration"), "376,000");
+  assert.equal(byLabel.get("Stage Two Acceleration"), "11,200,000");
+});
+
+test("buildDetailStatRowsFromFitting projects cooler allocation and complete resource durability", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    stats: {
+      coolingGenerated: 10,
+      thermalEqualizationRate: 3.75,
+      distortionMaximum: 25,
+      selfRepairMaxCount: 1,
+      selfRepairTime: 25.5,
+      selfRepairHealthRatio: 0.2,
+      selfRepairBaselineHp: 28,
+      repairRestoreRatio: 0.1,
+    },
+    cooler: {
+      coolingGeneratedByPowerPip: [
+        { pips: 1, percentAssigned: 0.5, modifier: 0.7, range: "low", value: 3.5 },
+        { pips: 2, percentAssigned: 1, modifier: 1, range: "high", value: 10 },
+      ],
+      coolingGeneratedPowerFormula: "maximumOutput * allocation",
+      coolingGeneratedPowerFormulaConfidence: "source_backed_for_coolers",
+    },
+  });
+
+  const byLabel = new Map(rows.map((row) => [row.label, row.value]));
+  assert.equal(byLabel.get("Thermal Equalization Rate"), "3.75");
+  assert.equal(byLabel.get("Cooling by Power"), "1 pip: 3.5; 2 pips: 10");
+  assert.equal(byLabel.get("Distortion Maximum"), "25");
+  assert.equal(byLabel.get("Self-Repair Health Ratio"), "20%");
+  assert.equal(byLabel.get("Repair Restore Ratio"), "10%");
+});
+
+test("buildDetailStatRowsFromFitting separates damaged and downed shield recovery", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "shield",
+    stats: {
+      shieldHp: 100,
+      regenRate: 12,
+      coolingDraw: 2,
+    },
+    mitigation: {
+      kind: "shield",
+      shieldHp: 100,
+      maxShieldHealth: 100,
+      maxShieldRegen: 12,
+      damagedRegenDelay: 4,
+      downedRegenDelay: 8,
+      shieldFaceCount: null,
+      resistanceByDamageType: null,
+      absorptionByDamageType: null,
+      regenByPowerPip: [
+        { pips: 1, percentAssigned: 0.5, modifier: 0.7, range: "low", value: 5 },
+        { pips: 2, percentAssigned: 1, modifier: 1, range: "high", value: 12 },
+      ],
+      regenPowerFormula: "maximumOutput * allocation",
+      regenPowerFormulaConfidence: "source_backed_for_resource_generation",
+    },
+  });
+
+  const byLabel = new Map(rows.map((row) => [row.label, row.value]));
+  assert.equal(byLabel.get("Regen Delay"), "4s");
+  assert.equal(byLabel.get("Downed Regen Delay"), "8s");
+  assert.equal(byLabel.get("Regen by Power"), "1 pip: 5/s; 2 pips: 12/s");
+  assert.equal(byLabel.get("Cooling Draw"), "2");
 });
 
 test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identical damage channel", () => {
@@ -276,6 +400,7 @@ test("getFittingModifierBaseValue maps shield hp from mitigation", () => {
       maxShieldHealth: 100000,
       maxShieldRegen: null,
       damagedRegenDelay: 6,
+      downedRegenDelay: null,
       shieldFaceCount: null,
       resistanceByDamageType: null,
       absorptionByDamageType: null,

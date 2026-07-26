@@ -8474,9 +8474,7 @@
   overflow: hidden;
   border: 1px solid var(--ops-border-soft);
   border-radius: var(--ops-radius-nested);
-  background:
-    linear-gradient(180deg, rgba(17, 27, 39, 0.94), rgba(11, 18, 27, 0.98)),
-    var(--ops-surface-row);
+  background: var(--ops-surface-row);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
     0 6px 14px rgba(0, 0, 0, 0.18);
@@ -8485,9 +8483,7 @@
 .bq-page .bq-mat-group:hover,
 .bq-page .bq-item--completed-craft .bq-mat-group:hover {
   border-color: var(--ops-border-default);
-  background:
-    linear-gradient(180deg, rgba(21, 34, 48, 0.96), rgba(13, 22, 32, 0.99)),
-    var(--ops-surface-hover);
+  background: var(--ops-surface-hover);
 }
 
 .bq-page .bq-mat-row--mobile-card {
@@ -8765,6 +8761,7 @@
 
 .bq-page .bq-stat-unmodified-column {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  align-items: start;
   gap: 8px;
 }
 
@@ -8900,4 +8897,125 @@
   .bq-page .bq-stat-unmodified-column {
     grid-template-columns: 1fr;
   }
+}
+
+/* Production component statistics: external trait labels and compact data surfaces. */
+.bq-page .bq-component-statistics .bq-stat-unmodified-column {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-unmodified-column--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.bq-page .bq-component-statistics .bq-stat-trait-column {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bq-page .bq-component-statistics .bq-stat-unmodified-group {
+  align-content: start;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-group-title,
+.bq-page .bq-component-statistics .bq-stat-modified-card > h4,
+.bq-page .bq-component-statistics .bq-stat-modified-group > h5 {
+  padding-inline: 2px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-component-statistics .bq-stat-unmodified-card,
+.bq-page .bq-component-statistics .bq-stat-modified-list {
+  min-width: 0;
+  padding: 7px 12px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.bq-page .bq-component-statistics .bq-stat-compact-row {
+  grid-template-columns: minmax(180px, 240px) max-content max-content;
+  justify-content: start;
+  gap: 6px;
+  min-height: 25px;
+  padding-block: 4px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compact-label {
+  font-weight: 450;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compact-value {
+  font-weight: 600;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compact-unit {
+  font-weight: 500;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-label,
+.bq-page .bq-component-statistics .bq-stat-compare-base,
+.bq-page .bq-component-statistics .bq-stat-compare-base strong,
+.bq-page .bq-component-statistics .bq-stat-compare-value {
+  font-weight: 600;
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-card {
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-group {
+  gap: 6px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-list {
+  padding: 8px;
+  border-left: 1px solid var(--ops-border-soft);
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-trait-column {
+    display: contents;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-compact-row {
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+  }
+}
+
+/* Build Queue hangar backdrop.
+   Keep the artwork subordinate to operational data by tinting the canvas and
+   allowing only a trace of it through page-local navy surfaces. */
+.bq-page {
+  --ops-surface-primary: rgba(11, 22, 32, 0.54);
+  --ops-surface-deep: rgba(9, 19, 30, 0.52);
+  --ops-surface-row: rgba(14, 23, 35, 0.6);
+  --ops-surface-hover: rgba(18, 31, 44, 0.68);
+  --ops-surface-selected: rgba(13, 36, 53, 0.65);
+  --ops-header-band: rgba(14, 23, 34, 0.55);
+  background:
+    linear-gradient(180deg, rgba(1, 7, 14, 0.82), rgba(1, 7, 14, 0.88)),
+    url("../../assets/backgrounds/build-queue-hangar.webp") center / cover no-repeat;
 }

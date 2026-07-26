@@ -50,6 +50,7 @@ function shieldDetail(): FittingComponentDetail {
       maxShieldHealth: 3168,
       maxShieldRegen: 697,
       damagedRegenDelay: 5,
+      downedRegenDelay: null,
       shieldFaceCount: null,
       resistanceByDamageType: null,
       absorptionByDamageType: null,
@@ -243,6 +244,53 @@ test("buildCraftStatViewModel groups FPS armor resistance as a matrix", () => {
   const model = buildCraftStatViewModel({ detail });
   assert.equal(model.status, "ready");
   assert.ok(model.groups.some((group) => group.kind === "matrix"));
+});
+
+test("buildCraftStatViewModel exposes matrix and additional statistics in its overview", () => {
+  const shield = shieldDetail();
+  shield.mitigation = {
+    ...shield.mitigation!,
+    kind: "shield",
+    resistanceByDamageType: {
+      physical: { min: 0.1, max: 0.2 },
+      distortion: { value: 0.35 },
+    },
+    absorptionByDamageType: {
+      physical: { min: 0.4, max: 0.5 },
+    },
+  };
+  const shieldModel = buildCraftStatViewModel({ detail: shield });
+  const resistanceStats = shieldModel.overviewGroups
+    .find((group) => group.title === "Resistance / Absorption")
+    ?.stats ?? [];
+  assert.ok(resistanceStats.some((stat) => stat.label === "Physical Resistance" && stat.value === "10%-20%"));
+  assert.ok(resistanceStats.some((stat) => stat.label === "Distortion Resistance" && stat.value === "35%"));
+  assert.ok(resistanceStats.some((stat) => stat.label === "Physical Absorption" && stat.value === "40%-50%"));
+
+  const generic: FittingComponentDetail = {
+    ...shieldDetail(),
+    type: "missile_launcher",
+    stats: { health: 450, powerDraw: 5 },
+    mitigation: null,
+  };
+  const genericModel = buildCraftStatViewModel({ detail: generic });
+  const additional = genericModel.overviewGroups.find((group) => group.title === "Additional");
+  assert.ok(additional?.stats.some((stat) => stat.label === "Component HP" && stat.value === "450"));
+  assert.ok(additional?.stats.some((stat) => stat.label === "Power Draw" && stat.value === "5"));
+});
+
+test("buildCraftStatViewModel preserves FPS weapon trait groups in its overview", () => {
+  const detail = buildFittingDetailFromFpsComponentCard(loadCard("1a85280e-7b8f-4486-a563-17cd2549d268"));
+  assert.ok(detail);
+  const model = buildCraftStatViewModel({ detail });
+
+  assert.deepEqual(
+    model.overviewGroups.slice(0, 5).map((group) => group.title),
+    ["Damage Output", "Projectile", "Penetration", "Spread", "Thermal / Power"],
+  );
+  assert.ok(model.overviewGroups
+    .find((group) => group.title === "Spread")
+    ?.stats.some((stat) => stat.label === "Spread Min–Max"));
 });
 
 test("buildCraftStatViewModel prefers loading over stale detail", () => {

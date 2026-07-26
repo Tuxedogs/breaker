@@ -112,8 +112,6 @@ const STAT_UNIT_BY_LABEL: Record<string, string> = {
   quantumspeed: "km/s",
   spooltime: "s",
   cooldown: "s",
-  fuelrate: "L/s",
-  quantumfuelreq: "L/s",
   powerdraw: "MW",
   coolingdraw: "MW",
   heatgeneration: "HP/s",
@@ -158,6 +156,12 @@ function buildIdentityBadges(detail: FittingComponentDetail): CraftStatIdentityB
     detail.grade ? { label: "Grade", value: detail.grade } : null,
     detail.type === "fps_weapon" && detail.subtype
       ? { label: "Weapon Class", value: titleCase(detail.subtype) }
+      : null,
+    detail.type === "fps_ammo" && detail.class
+      ? { label: "Ammo Class", value: titleCase(detail.class) }
+      : null,
+    detail.type === "fps_ammo" && detail.subtype
+      ? { label: "Compatible With", value: titleCase(detail.subtype) }
       : null,
     detail.type === "fps_armor" && detail.subtype
       ? { label: "Armor Slot", value: titleCase(detail.subtype) }
@@ -296,7 +300,7 @@ function resolveComparisonGroupTitle(
   }
 
   if (detail.type === "fps_armor") return "Durability / Physical";
-  if (detail.type === "fps_weapon" || detail.type === "ship_weapon") return "Ballistics / Damage";
+  if (detail.type === "fps_weapon" || detail.type === "fps_ammo" || detail.type === "ship_weapon") return "Ballistics / Damage";
   if (detail.type === "cooler" || detail.type === "power_plant") return "Output";
   if (detail.type === "quantum_drive") return "Quantum Travel";
   if (detail.type === "shield") return "Shield Performance";
@@ -370,17 +374,29 @@ function buildOverviewGroups(
   const overviewGroups: CraftStatOverviewGroupView[] = [];
 
   for (const group of detailGroups) {
-    if (group.kind === "matrix") continue;
-    if (group.title === "Additional") continue;
-
-    if (group.kind === "nested") {
-      const stats = group.subclusters.flatMap((subcluster) =>
-        subcluster.stats.map((stat) => ({
-          label: stat.label,
-          value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
-        })),
+    if (group.kind === "matrix") {
+      const stats = group.rows.flatMap((row) =>
+        group.columns.flatMap((column, index) => {
+          const value = row.values[index];
+          if (!value || value === "-") return [];
+          return [{
+            label: group.columns.length > 1 ? `${row.label} ${column}` : row.label,
+            value,
+          }];
+        }),
       );
       if (stats.length > 0) overviewGroups.push({ title: group.title, stats });
+      continue;
+    }
+
+    if (group.kind === "nested") {
+      for (const subcluster of group.subclusters) {
+        const stats = subcluster.stats.map((stat) => ({
+          label: stat.label,
+          value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
+        }));
+        if (stats.length > 0) overviewGroups.push({ title: subcluster.title, stats });
+      }
       continue;
     }
 
@@ -489,6 +505,7 @@ function attachComparisonRows(
 
 function statsSectionTitle(detail: FittingComponentDetail): string {
   if (detail.type === "ship_weapon" || detail.type === "fps_weapon") return "Weapon Performance";
+  if (detail.type === "fps_ammo") return "Ammunition Performance";
   if (detail.type === "fps_armor") return "FPS Armor Stats";
   return `${titleCase(detail.type)} Stats`;
 }

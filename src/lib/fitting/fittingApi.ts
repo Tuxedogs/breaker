@@ -124,10 +124,11 @@ export type FittingComponentMitigation =
     maxShieldHealth: number | null;
     maxShieldRegen: number | null;
     damagedRegenDelay: number | null;
+    downedRegenDelay?: number | null;
     shieldFaceCount: number | null;
     resistanceByDamageType: DamageTypeMap | null;
     absorptionByDamageType: DamageTypeMap | null;
-    regenByPowerPip: unknown[] | null;
+    regenByPowerPip: FittingPowerPipPoint[] | null;
     regenPowerFormula: string | null;
     regenPowerFormulaConfidence: string | null;
   }
@@ -519,7 +520,9 @@ export type FittingComponentStats = {
   volume?: number | null;
   health?: number | null;
   powerDraw?: number | null;
+  coolantUsage?: number | null;
   coolingDraw?: number | null;
+  coolingRequired?: number | null;
   heatGenerated?: number | null;
   infraredEmission?: number | null;
   electromagneticEmission?: number | null;
@@ -578,7 +581,16 @@ export type FittingComponentStats = {
   quantumSpeed?: number | null;
   spoolTime?: number | null;
   quantumCooldown?: number | null;
+  quantumFuelRequirement?: number | null;
+  /** Compatibility alias for quantumFuelRequirement. */
   fuelRate?: number | null;
+  calibrationDelayInSeconds?: number | null;
+  calibrationRate?: number | null;
+  calibrationTime?: number | null;
+  minCalibrationRequirement?: number | null;
+  maxCalibrationRequirement?: number | null;
+  quantumStageOneAccelRate?: number | null;
+  quantumStageTwoAccelRate?: number | null;
   detectionRange?: number | null;
   scanRange?: number | null;
   scanRate?: number | null;
@@ -592,6 +604,7 @@ export type FittingComponentStats = {
   damageBiochemical?: number | null;
   damageStun?: number | null;
   fireRateRpm?: number | null;
+  burstShotCount?: number | null;
   heatPerShot?: number | null;
   heatCapacity?: number | null;
   minimumTemperature?: number | null;
@@ -606,6 +619,14 @@ export type FittingComponentStats = {
   spreadFirstAttack?: number | null;
   spreadPerAttack?: number | null;
   spreadDecay?: number | null;
+  falloffStart?: number | null;
+  damageDropPerMeter?: number | null;
+  damageDropMinDamage?: number | null;
+  penetrationNearRadius?: number | null;
+  penetrationFarRadius?: number | null;
+  bulletImpulseFalloffMinDistance?: number | null;
+  bulletImpulseDropFalloff?: number | null;
+  bulletImpulseMaxFalloff?: number | null;
   powerUsage?: number | null;
   powerConsumptionNominal?: number | null;
   minimumConsumptionFraction?: number | null;
@@ -659,6 +680,21 @@ export type FittingComponentStats = {
   distortionMaximum?: number | null;
   onlineEmSignature?: number | null;
   onlineIrSignature?: number | null;
+  thermalEqualizationRate?: number | null;
+};
+
+export type FittingPowerPipPoint = {
+  pips: number | null;
+  percentAssigned: number | null;
+  modifier: number | null;
+  range: string | null;
+  value: number | null;
+};
+
+export type FittingCoolerDetail = {
+  coolingGeneratedByPowerPip: FittingPowerPipPoint[] | null;
+  coolingGeneratedPowerFormula: string | null;
+  coolingGeneratedPowerFormulaConfidence: string | null;
 };
 
 export type FittingWeaponAction = {
@@ -717,6 +753,7 @@ export type FittingComponentDetail = FittingComponentSummary & {
   stats: FittingComponentStats;
   mitigation: FittingComponentMitigation | null;
   weapon?: FittingWeaponDetail;
+  cooler?: FittingCoolerDetail;
   ordnance?: FittingOrdnanceDetail;
 };
 

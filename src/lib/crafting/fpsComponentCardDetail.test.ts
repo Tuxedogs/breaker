@@ -55,6 +55,40 @@ test("FPS weapon card fallback produces at least one valid Build Queue stat grou
   assert.ok(groups.some((group) => group.title === "Ballistics / Damage"));
 });
 
+test("CQ7 card fallback exposes its extracted combat and spread statistics", () => {
+  const card = loadCard("1a85280e-7b8f-4486-a563-17cd2549d268");
+  const detail = buildFittingDetailFromFpsComponentCard(card);
+  assert.ok(detail, "expected CQ7 fitting detail from component card");
+  assert.equal(detail.type, "fps_weapon");
+  assert.equal(detail.stats.alphaDamage, 18);
+  assert.equal(detail.stats.dps, 195);
+  assert.equal(detail.stats.fireRateRpm, 650);
+  assert.equal(detail.stats.ammoCapacity, 40);
+  assert.equal(detail.stats.spreadMin, 0.18);
+  assert.equal(detail.stats.spreadMax, 3);
+  assert.equal(detail.stats.falloffStart, 65);
+
+  const labels = buildItemSummaryDetailStatRows(detail).map((row) => row.label);
+  for (const label of ["Alpha Damage", "DPS", "Fire Rate", "Burst Size", "Spread Min–Max", "Damage Falloff Start"]) {
+    assert.ok(labels.includes(label), `CQ7 missing ${label}`);
+  }
+});
+
+test("FPS ammunition cards expose their extracted projectile statistics", () => {
+  const card = loadCard("e5dbfcd7-031c-4483-82f5-37a616d327d1");
+  const detail = buildFittingDetailFromFpsComponentCard(card);
+  assert.ok(detail, "expected FPS ammunition detail from component card");
+  assert.equal(detail.type, "fps_ammo");
+  assert.equal(detail.stats.alphaDamage, 42.5);
+  assert.equal(detail.stats.ammoCapacity, 15);
+  assert.equal(detail.stats.projectileSpeed, 800);
+
+  const labels = buildItemSummaryDetailStatRows(detail).map((row) => row.label);
+  for (const label of ["Alpha Damage", "Loaded Rounds", "Projectile Speed", "Damage Falloff Start"]) {
+    assert.ok(labels.includes(label), `FPS ammunition missing ${label}`);
+  }
+});
+
 test("FPS armor card fallback produces at least one valid Build Queue stat group", () => {
   const card = loadCard("005d95db-96ca-45b7-9647-7e7537b8fac8");
   const detail = buildFittingDetailFromFpsComponentCard(card);
@@ -113,6 +147,7 @@ test("ship weapon and established component projections expose their current lab
         maxShieldHealth: 10000,
         maxShieldRegen: 200,
         damagedRegenDelay: 3,
+        downedRegenDelay: null,
         shieldFaceCount: null,
         resistanceByDamageType: { physical: { min: 0, max: 0.2 } },
         absorptionByDamageType: { physical: { min: 0, max: 0.4 } },
@@ -132,7 +167,7 @@ test("ship weapon and established component projections expose their current lab
         health: 150,
         mass: 90,
       }),
-      expectedLabels: ["Quantum Speed", "Spool Time", "Fuel Rate"],
+      expectedLabels: ["Quantum Speed", "Spool Time", "Fuel Requirement"],
     },
     {
       detail: shipDetail("cooler", {
