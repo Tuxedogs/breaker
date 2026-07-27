@@ -8,7 +8,10 @@ import {
   setFittingBuildContextBootstrapperForTests,
   type FittingComponentDetail,
 } from "./fittingApi.ts";
-import { createMemoryFittingComponentPersistentStorage } from "./fittingComponentPersistentStorage.ts";
+import {
+  createMemoryFittingComponentPersistentStorage,
+  FITTING_COMPONENT_IDB_SCHEMA_VERSION,
+} from "./fittingComponentPersistentStorage.ts";
 import {
   cacheFpsComponentFromCard,
   clearFittingComponentMemoryForTests,
@@ -236,6 +239,56 @@ test("persisted resolved and missing vehicle entries hydrate after memory clear"
   assert.equal(hydrated.id, SAMPLE_DETAIL.id);
   await assert.rejects(() => loadVehicleFittingComponent("missing-comp"), /404/);
   assert.equal(fetchCount, 2);
+});
+
+test("legacy persisted component detail is rejected after the response contract expands", async () => {
+  const cacheKey = "LIVE::live-build::vehicle_fitting_detail::energy-weapon";
+  const legacyDetail: FittingComponentDetail = {
+    ...SAMPLE_DETAIL,
+    id: "energy-weapon",
+    type: "ship_weapon",
+    stats: { alphaDamage: 410.18 },
+  };
+  const expandedDetail: FittingComponentDetail = {
+    ...legacyDetail,
+    stats: {
+      ...legacyDetail.stats,
+      theoreticalDps: 683.64,
+      sustainedDps60: 403.3476,
+      damageOver60Seconds: 24200.856,
+      maxAmmoLoad: 25,
+      spreadMin: 0.4,
+      spreadMax: 0.4,
+      spreadFirstAttack: 0.025,
+      spreadPerAttack: 0.025,
+      spreadDecay: 0.05,
+    },
+  };
+  const persistence = createMemoryFittingComponentPersistentStorage([{
+    key: cacheKey,
+    schemaVersion: FITTING_COMPONENT_IDB_SCHEMA_VERSION - 1,
+    entry: { status: "resolved", detail: legacyDetail },
+    storedAt: Date.now(),
+  }]);
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "live-build" });
+
+  let fetchCount = 0;
+  setVehicleFittingComponentLoaderForTests(async () => {
+    fetchCount += 1;
+    return expandedDetail;
+  });
+
+  const loaded = await loadVehicleFittingComponent("energy-weapon");
+  assert.equal(fetchCount, 1);
+  assert.equal(loaded.stats.theoreticalDps, 683.64);
+  assert.equal(loaded.stats.sustainedDps60, 403.3476);
+  assert.equal(loaded.stats.maxAmmoLoad, 25);
+  assert.equal(loaded.stats.spreadMin, 0.4);
+  assert.equal(
+    (await persistence.get(cacheKey))?.status,
+    "resolved",
+  );
 });
 
 test("failed vehicle loads are not persisted and remain retryable across memory clear", async () => {

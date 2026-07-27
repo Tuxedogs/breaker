@@ -1,6 +1,6 @@
 import type { FittingComponentCacheEntry } from "./fittingComponentStore";
 
-export const FITTING_COMPONENT_IDB_SCHEMA_VERSION = 1;
+export const FITTING_COMPONENT_IDB_SCHEMA_VERSION = 2;
 export const FITTING_COMPONENT_IDB_NAME = "scintel-fitting-component-cache";
 export const FITTING_COMPONENT_IDB_STORE = "entries";
 
@@ -22,8 +22,12 @@ function isPersistableEntry(entry: FittingComponentCacheEntry): boolean {
   return entry.status === "resolved" || entry.status === "missing";
 }
 
-export function createMemoryFittingComponentPersistentStorage(): FittingComponentPersistentStorage {
-  const records = new Map<string, FittingComponentPersistentRecord>();
+export function createMemoryFittingComponentPersistentStorage(
+  initialRecords: FittingComponentPersistentRecord[] = [],
+): FittingComponentPersistentStorage {
+  const records = new Map(
+    initialRecords.map((record) => [record.key, record] as const),
+  );
 
   return {
     async get(key) {
