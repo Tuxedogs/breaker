@@ -747,14 +747,6 @@ function PlusIcon() {
   );
 }
 
-function TrashIcon() {
-  return (
-    <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M3 6h18M8 6V4h8v2M10 11v6M14 11v6M6 6l1 15h10l1-15" />
-    </svg>
-  );
-}
-
 function WarningIcon() {
   return (
     <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -811,7 +803,6 @@ function BuildQueueReserveHierarchy({
               {location.locationMeta ? <em>{location.locationMeta}</em> : null}
             </span>
             <span>{location.qualities.length} {location.qualities.length === 1 ? 'quality' : 'qualities'}</span>
-            <span>{location.stacks.length} {location.stacks.length === 1 ? 'record' : 'records'}</span>
             <ChevronIcon open />
           </summary>
           <div className="bq-reserve-location-body">
@@ -827,7 +818,6 @@ function BuildQueueReserveHierarchy({
                       {quality.quality == null ? 'Quality not recorded' : `Quality ${quality.quality}`}
                     </span>
                     <span>{formatInventoryQuantity(total, unitType)}</span>
-                    <span>{quality.stacks.length} {quality.stacks.length === 1 ? 'record' : 'records'}</span>
                     <ChevronIcon open />
                   </summary>
                   <div className={`bq-reserve-quality-body${aggregateOnly ? ' is-aggregate-only' : ''}`}>
@@ -1537,6 +1527,7 @@ export default function BuildQueueGroup({
                     ? 0
                     : Math.max(group.requiredTotal - group.allocatedTotal, 0);
                   const hasShortfall = shortfallAmount > 0;
+                  const totalNeedLabel = formatQuantity(group.requiredTotal, group.material);
                   const shortfallLabel = formatQuantity(shortfallAmount, group.material);
                   const targetQualityLabel = formatTargetQuality(targetEditorQuality);
                   const targetQualityTone = getTargetQualityTone(targetEditorQuality);
@@ -1547,16 +1538,6 @@ export default function BuildQueueGroup({
                     group.averageQuality !== undefined &&
                     Number.isFinite(group.averageQuality) &&
                     group.averageQuality < targetEditorQuality;
-                  const hasBelowTargetStock = group.requirements.some((req) =>
-                    req.requirementSelectedQuality !== undefined &&
-                    req.reservableStacks.some((stack) => (stack.quality ?? 0) < (req.requirementSelectedQuality as number)),
-                  );
-                  const hasReserveAllocations = group.requirements.some((req) => req.ownAllocations.length > 0);
-                  const clearGroupReserve = () => {
-                    group.requirements.forEach((req) => {
-                      req.ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
-                    });
-                  };
                   const openReserve = () => {
                     if (!isCompletedCraft) toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
                   };
@@ -1574,6 +1555,9 @@ export default function BuildQueueGroup({
                             <span className="bq-material-name-cell">
                               <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} size={34} />
                               <strong>{group.displayName}</strong>
+                              <span className="bq-mat-card-total-need" aria-label={`Total Need ${totalNeedLabel}`}>
+                                {totalNeedLabel}
+                              </span>
                             </span>
                             {group.requirements.length > 1 ? (
                               <span>{group.requirements.length} requirements</span>
@@ -1584,6 +1568,7 @@ export default function BuildQueueGroup({
                             tone={targetQualityTone}
                             materialName={group.displayName}
                             value={targetEditorQuality}
+                            layout="stacked"
                             disabled={isCompletedCraft}
                             onChange={(value) => updateTargetQuality(
                               item,
@@ -1600,21 +1585,17 @@ export default function BuildQueueGroup({
                             )}
                           />
                         </div>
-                        <div className="bq-mat-card-metrics">
-                          <span className="bq-mat-card-need">
-                            <em>Total Need</em>
-                            <strong>{formatQuantity(group.requiredTotal, group.material)}</strong>
+                        {inventoryEnabled ? <div className="bq-mat-card-metrics">
+                          <span className={`bq-mat-card-status bq-balance bq-balance--${hasShortfall ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
+                            <em>Shortfall</em>
+                            <strong>{shortfallLabel}</strong>
                           </span>
-                          {inventoryEnabled ? <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
+                          <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
                             <em>Avg Quality</em>
                             <span>{averageQualityLabel}</span>
                             {averageBelowTarget ? <small>below target</small> : <small>avg</small>}
-                          </span> : null}
-                          {inventoryEnabled ? <span className={`bq-mat-card-status bq-balance bq-balance--${hasShortfall ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
-                            <em>Shortfall</em>
-                            <strong>{shortfallLabel}</strong>
-                          </span> : null}
-                        </div>
+                          </span>
+                        </div> : null}
                         {inventoryEnabled ? <span className="bq-mat-card-quality-label">Quality Allocation</span> : null}
                         {inventoryEnabled ? <div className="bq-mat-card-footer">
                           {group.qualityBreakdown.length > 0 ? (
@@ -1680,28 +1661,6 @@ export default function BuildQueueGroup({
 
                       {inventoryEnabled && reserveExpanded && (
                         <div className="bq-reserve-panel">
-                          <div className="bq-reserve-panel-head">
-                            <div className="bq-reserve-panel-title">
-                              {hasBelowTargetStock ? (
-                                <span className="bq-reserve-warning">
-                                  <WarningIcon />
-                                  Below Target Quality
-                                </span>
-                              ) : null}
-                              <span className="bq-reserve-panel-label">Reserve from inventory</span>
-                            </div>
-                            {hasReserveAllocations ? (
-                              <button
-                                type="button"
-                                className="bq-reserve-clear-icon"
-                                aria-label={`Clear reservations for ${group.displayName}`}
-                                title="Clear reservations"
-                                onClick={clearGroupReserve}
-                              >
-                                <TrashIcon />
-                              </button>
-                            ) : null}
-                          </div>
                           {group.requirements.map((req) => {
                             const reserveContext: RequirementReserveContext = {
                               requirementId: req.requirementId,

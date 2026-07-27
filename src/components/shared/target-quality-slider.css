@@ -94,6 +94,45 @@
   pointer-events: auto;
 }
 
+.bq-target-editor--stacked {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 0.375rem;
+  min-height: 0;
+}
+
+.bq-target-editor--stacked > .bq-target-quality,
+.bq-target-editor--stacked > .bq-target-quality-input,
+.bq-target-editor--stacked > .bq-target-slider-shell {
+  grid-area: auto;
+  width: 100%;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bq-target-editor--stacked:hover > .bq-target-quality,
+.bq-target-editor--stacked:focus-within > .bq-target-quality,
+.bq-target-editor--stacked:hover > .bq-target-slider-shell,
+.bq-target-editor--stacked:focus-within > .bq-target-slider-shell {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bq-target-editor--stacked > .bq-target-quality,
+.bq-target-editor--stacked > .bq-target-slider-shell {
+  justify-self: stretch;
+}
+
+.bq-target-quality-input {
+  appearance: textfield;
+  text-align: center;
+}
+
+.bq-target-quality-input::-webkit-inner-spin-button,
+.bq-target-quality-input::-webkit-outer-spin-button {
+  margin: 0;
+}
+
 .bq-target-quality-slider {
   width: 100%;
   height: 18px;

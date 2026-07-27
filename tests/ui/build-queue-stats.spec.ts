@@ -307,7 +307,7 @@ test.describe("Build Queue stats fixture", () => {
 
       const targetAverageGeometry = await page.locator(".bq-mat-group").nth(1).evaluate((card) => {
         const target = card.querySelector(".bq-target-quality")?.getBoundingClientRect();
-        const need = card.querySelector(".bq-mat-card-need")?.getBoundingClientRect();
+        const need = card.querySelector(".bq-mat-card-total-need")?.getBoundingClientRect();
         const average = card.querySelector(".bq-avg-quality")?.getBoundingClientRect();
         return {
           targetTop: target?.top ?? 0,
@@ -316,33 +316,25 @@ test.describe("Build Queue stats fixture", () => {
         };
       });
       expect(targetAverageGeometry.targetTop).toBeLessThan(targetAverageGeometry.averageTop);
-      expect(Math.abs(targetAverageGeometry.needTop - targetAverageGeometry.averageTop)).toBeLessThan(1);
+      expect(targetAverageGeometry.needTop).toBeLessThan(targetAverageGeometry.averageTop);
 
       const targetEditor = page.locator(".bq-mat-card-head .bq-target-editor").first();
-      await targetEditor.hover();
       await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
-      const sliderHoverGeometry = await targetEditor.evaluate((editor) => {
+      const sliderGeometry = await targetEditor.evaluate((editor) => {
         const card = editor.closest(".bq-mat-group")?.getBoundingClientRect();
-        const materialName = editor.parentElement?.querySelector(".bq-material-name-cell")?.getBoundingClientRect();
         const badge = editor.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
         const slider = editor.querySelector(".bq-target-quality-slider")?.getBoundingClientRect();
-        const output = editor.querySelector(".bq-target-slider-shell output")?.getBoundingClientRect();
         return {
           cardRight: card?.right ?? 0,
           sliderRight: slider?.right ?? Number.POSITIVE_INFINITY,
-          outputRight: output?.right ?? Number.POSITIVE_INFINITY,
           badgeCenter: badge ? badge.left + badge.width / 2 : Number.NEGATIVE_INFINITY,
           sliderCenter: slider ? slider.left + slider.width / 2 : Number.POSITIVE_INFINITY,
-          materialNameCenter: materialName ? materialName.top + materialName.height / 2 : Number.NEGATIVE_INFINITY,
-          badgeVerticalCenter: badge ? badge.top + badge.height / 2 : Number.POSITIVE_INFINITY,
         };
       });
-      expect(sliderHoverGeometry.sliderRight).toBeLessThanOrEqual(sliderHoverGeometry.cardRight);
-      expect(sliderHoverGeometry.outputRight).toBeLessThanOrEqual(sliderHoverGeometry.cardRight);
-      expect(Math.abs(sliderHoverGeometry.badgeCenter - sliderHoverGeometry.sliderCenter)).toBeLessThanOrEqual(1);
-      expect(Math.abs(sliderHoverGeometry.materialNameCenter - sliderHoverGeometry.badgeVerticalCenter)).toBeLessThanOrEqual(3);
+      expect(sliderGeometry.sliderRight).toBeLessThanOrEqual(sliderGeometry.cardRight);
+      expect(Math.abs(sliderGeometry.badgeCenter - sliderGeometry.sliderCenter)).toBeLessThanOrEqual(1);
       await page.mouse.move(0, 0);
-      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
 
       const statValues = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const modified = panel.querySelector(".bq-stat-compare-row");
@@ -724,6 +716,8 @@ test.describe("Build Queue stats fixture", () => {
           const shell = editor.querySelector(".bq-target-slider-shell")?.getBoundingClientRect();
           const input = editor.querySelector(".bq-target-quality-slider")?.getBoundingClientRect();
           const card = editor.closest(".bq-center-shell")?.getBoundingClientRect();
+          const header = editor.closest(".bq-mat-card-head")?.getBoundingClientRect();
+          const identity = editor.closest(".bq-mat-card-head")?.querySelector(".bq-mat-name")?.getBoundingClientRect();
           return {
             badgeWidth: badge?.width ?? 0,
             badgeCenter: badge ? badge.left + badge.width / 2 : 0,
@@ -732,18 +726,19 @@ test.describe("Build Queue stats fixture", () => {
             inputWidth: input?.width ?? 0,
             inputCenter: input ? input.left + input.width / 2 : 0,
             cardWidth: card?.width ?? 1,
+            headerTop: header?.top ?? 0,
+            identityTop: identity?.top ?? 0,
           };
         });
-        expect(sliderGeometry.badgeWidth).toBeLessThanOrEqual(80);
-        expect(sliderGeometry.shellWidth).toBeGreaterThan(sliderGeometry.badgeWidth);
-        expect(sliderGeometry.shellWidth).toBeLessThanOrEqual(100);
-        expect((sliderGeometry.shellWidth - sliderGeometry.badgeWidth) / 2).toBeGreaterThanOrEqual(8);
+        expect(sliderGeometry.badgeWidth).toBeGreaterThanOrEqual(140);
+        expect(Math.abs(sliderGeometry.shellWidth - sliderGeometry.badgeWidth)).toBeLessThan(1);
         expect(Math.abs(sliderGeometry.shellCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
         expect(Math.abs(sliderGeometry.inputCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
         expect(sliderGeometry.inputWidth).toBe(sliderGeometry.shellWidth);
-        expect(sliderGeometry.shellWidth / sliderGeometry.cardWidth).toBeLessThan(0.2);
+        expect(sliderGeometry.shellWidth / sliderGeometry.cardWidth).toBeLessThan(0.3);
+        expect(Math.abs(sliderGeometry.identityTop - sliderGeometry.headerTop)).toBeLessThan(1);
 
-        await expect(sliderShell).toHaveCSS("opacity", "0");
+        await expect(sliderShell).toHaveCSS("opacity", "1");
         await sliderEditor.hover();
         await expect(sliderShell).toHaveCSS("opacity", "1");
         await page.screenshot({
@@ -753,9 +748,15 @@ test.describe("Build Queue stats fixture", () => {
         await slider.focus();
         await expect(slider).toBeFocused();
         await expect(sliderShell).toHaveCSS("opacity", "1");
-        await expect(targetBadge).toHaveCSS("opacity", "0");
-        await expect(targetBadge).toHaveCSS("pointer-events", "none");
+        await expect(targetBadge).toHaveCSS("opacity", "1");
+        await expect(targetBadge).toHaveCSS("pointer-events", "auto");
         await expect(slider).toHaveCSS("pointer-events", "auto");
+        await targetBadge.click();
+        const targetInput = sliderEditor.getByRole("spinbutton", { name: "Edit target quality for Stileron" });
+        await expect(targetInput).toBeVisible();
+        await targetInput.fill(await slider.inputValue());
+        await targetInput.press("Enter");
+        await expect(targetInput).toHaveCount(0);
         const targetValues = page.locator(".bq-component-statistics .bq-stat-compare-target");
         const before = (await targetValues.allTextContents()).join("|");
         const previousQuality = Number(await slider.inputValue());
@@ -807,7 +808,7 @@ test.describe("Build Queue stats fixture", () => {
         await page.locator(".bq-component-statistics-title").click();
         await page.mouse.move(10, 10);
         await expect(slider).not.toBeFocused();
-        await expect(sliderShell).toHaveCSS("opacity", "0");
+        await expect(sliderShell).toHaveCSS("opacity", "1");
 
         await expect(page.locator(".bq-mat-head")).toHaveCount(0);
         const allocationLayout = await page.locator(".bq-item").evaluate((craft) => {
@@ -832,7 +833,7 @@ test.describe("Build Queue stats fixture", () => {
         await inventoryToggle.click();
         await expect(inventoryToggle).toHaveAttribute("aria-pressed", "false");
         await expect(materialCards.locator(".bq-target-editor")).toHaveCount(allocationLayout.cardCount);
-        await expect(materialCards.locator(".bq-mat-card-need")).toHaveCount(allocationLayout.cardCount);
+        await expect(materialCards.locator(".bq-mat-card-total-need")).toHaveCount(allocationLayout.cardCount);
         await expect(materialCards.locator(".bq-avg-quality")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-status")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-quality")).toHaveCount(0);
