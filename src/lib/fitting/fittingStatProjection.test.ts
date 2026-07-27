@@ -274,11 +274,12 @@ test("buildDetailStatRowsFromFitting projects quantum calibration and canonical 
   });
 
   const byLabel = new Map(rows.map((row) => [row.label, row.value]));
+  assert.equal(byLabel.get("Quantum Speed"), "200,000");
   assert.equal(byLabel.get("Fuel Requirement"), "0");
   assert.equal(byLabel.get("Calibration Delay"), "1.5s");
   assert.equal(byLabel.get("Calibration Time (derived)"), "11.5s");
-  assert.equal(byLabel.get("Stage One Acceleration"), "376,000");
-  assert.equal(byLabel.get("Stage Two Acceleration"), "11,200,000");
+  assert.equal(byLabel.get("Stage One Acceleration"), "376");
+  assert.equal(byLabel.get("Stage Two Acceleration"), "11,200");
 });
 
 test("buildDetailStatRowsFromFitting projects cooler allocation and complete resource durability", () => {

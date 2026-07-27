@@ -30,6 +30,7 @@ const typedCases = [
   ["radar", "68e93890-885c-41ab-850a-73047781c37b", "Ping Cooldown"],
   ["power plant", "093d67a2-c4d2-4141-9b9e-8dd9978e96b2", "Power Generation"],
   ["cooler", "93d6786c-83fa-4d42-8c7b-87c87adb2b13", "Coolant Generation"],
+  ["quantum drive", "17b29a33-88fe-484f-bb9b-fbf780273ff5", "Normal Speed"],
   ["shield", "6f72bc54-ddc6-4a08-b68e-0b8506cd43a8", "Shield HP"],
   ["FPS ammo", "e5dbfcd7-031c-4483-82f5-37a616d327d1", "Magazine Capacity"],
   ["FPS armor", "172f6f26-9a96-450e-b379-9ccb734ed744", "Physical Res"],
@@ -42,6 +43,14 @@ for (const [label, id, expectedMetric] of typedCases) {
     assert.ok(metrics.some((metric) => metric.label === expectedMetric), JSON.stringify(metrics));
   });
 }
+
+test("quantum drive catalog speed converts extracted m/s to km/s", () => {
+  const metrics = buildComponentCatalogStatMetrics(loadCard("17b29a33-88fe-484f-bb9b-fbf780273ff5"));
+  assert.deepEqual(
+    metrics.find((metric) => metric.label === "Normal Speed"),
+    { label: "Normal Speed", value: "231,000 km/s" },
+  );
+});
 
 test("tractor and utility records retain common catalog stats without Fitting", () => {
   for (const id of [

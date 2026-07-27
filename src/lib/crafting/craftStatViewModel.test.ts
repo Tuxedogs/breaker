@@ -12,6 +12,7 @@ import type { ComponentCardIndexRecord } from "../componentCardIndex.ts";
 import type { ComponentRecipe } from "../../components/industry/crafting/utils/craftingTypes.ts";
 import type { FittingComponentDetail } from "../fitting/fittingApi.ts";
 import type { TotalModifierRow } from "../../components/industry/crafting/utils/recipeQuality.ts";
+import { formatMaterialModifierDisplay } from "./craftingDetailStats.ts";
 
 function loadCard(blueprintId: string): ComponentCardIndexRecord {
   const filePath = path.join(
@@ -200,6 +201,20 @@ test("buildCraftStatViewModel colors lower-is-better improvements as beneficial"
   assert.equal(row.benefitDirection, "lower-is-better");
   assert.equal(row.target.impactClass, "craft-ok");
   assert.equal(row.allocation.impactClass, "craft-shortage");
+});
+
+test("quantum speed modifiers calculate in raw meters and display in kilometers", () => {
+  assert.deepEqual(
+    formatMaterialModifierDisplay("GPP_Quantum_Speed", 200_000_000, 5),
+    {
+      base: "200,000",
+      basePercent: "+5.0%",
+      modifier: "+10,000",
+      modifierPercent: "+5%",
+      total: "210,000",
+      totalPercent: "+5%",
+    },
+  );
 });
 
 test("buildCraftStatViewModel shows zero deltas and empty target/allocation states", () => {

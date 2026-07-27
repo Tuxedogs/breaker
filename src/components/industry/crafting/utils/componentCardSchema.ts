@@ -8,6 +8,7 @@ import {
   formatShipWeaponDamageTypeBadge,
   type ShipWeaponBrowseBadge,
 } from "./shipWeaponCardDisplay";
+import { quantumMetersToKilometers } from "../../../../lib/fitting/quantumDriveUnits";
 
 export type ComponentCardMetric = {
   label: string;
@@ -351,7 +352,15 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
   if (type === "quantumdrive") {
     const drive = getStatsObject(record, "quantumDrive");
     if (!drive) return stats;
-    pushMetric(stats, "Normal Speed", formatCompactNumber(drive.normalJumpSpeed, " m/s"));
+    const normalJumpSpeed = asNumber(drive.normalJumpSpeed);
+    pushMetric(
+      stats,
+      "Normal Speed",
+      formatCompactNumber(
+        normalJumpSpeed === null ? null : quantumMetersToKilometers(normalJumpSpeed),
+        " km/s",
+      ),
+    );
     pushMetric(stats, "Spool", formatCompactNumber(drive.spoolTime, "s"));
     pushMetric(stats, "Cooldown", formatCompactNumber(drive.cooldown, "s"));
     pushMetric(stats, "Fuel Requirement", formatCompactNumber(drive.quantumFuelRequirement));

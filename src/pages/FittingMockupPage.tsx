@@ -11,6 +11,7 @@ import {
 } from "../lib/fitting/fittingApi";
 import { loadVehicleFittingComponent } from "../lib/fitting/fittingComponentStore";
 import { getFittingSlotIcon } from "../lib/fitting/getFittingSlotIcon";
+import { quantumMetersToKilometers } from "../lib/fitting/quantumDriveUnits";
 import {
   buildFittingCompatDebugSnapshot,
   isFittingCompatDebugEnabled,
@@ -124,7 +125,12 @@ function itemPrimaryStats(component: FittingComponentSummary, detail: FittingCom
     addStat(parts, "HP", stats?.shieldHp);
     addStat(parts, "Regen", stats?.regenRate, "/s");
   } else if (typeText.includes("quantum")) {
-    addStat(parts, "Speed", stats?.quantumSpeed);
+    addStat(
+      parts,
+      "Speed",
+      stats?.quantumSpeed == null ? stats?.quantumSpeed : quantumMetersToKilometers(stats.quantumSpeed),
+      " km/s",
+    );
     addStat(parts, "Fuel", stats?.fuelRate);
   } else if (typeText.includes("radar") || typeText.includes("scanner")) {
     addStat(parts, "Detect", stats?.detectionRange);

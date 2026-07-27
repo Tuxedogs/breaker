@@ -7,6 +7,7 @@ import type {
   FittingComponentStats,
 } from "./fittingApi";
 import { getFpsArmorCardExtras } from "../crafting/fpsComponentCardDetail";
+import { quantumMetersToKilometers } from "./quantumDriveUnits";
 
 function readFinite(value: number | null | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
@@ -327,7 +328,10 @@ function buildResourceStatRows(
 
 function buildQuantumStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
   const { stats } = detail;
-  const rows = buildResourceStatRows(detail, { label: "Quantum Speed", value: stats.quantumSpeed });
+  const rows = buildResourceStatRows(detail, {
+    label: "Quantum Speed",
+    value: stats.quantumSpeed == null ? stats.quantumSpeed : quantumMetersToKilometers(stats.quantumSpeed),
+  });
   pushMetric(rows, "Spool Time", formatCompactNumber(stats.spoolTime, "s"));
   pushMetric(rows, "Cooldown", formatCompactNumber(stats.quantumCooldown, "s"));
   pushMetric(rows, "Fuel Requirement", formatCompactNumber(stats.quantumFuelRequirement ?? stats.fuelRate));
@@ -336,8 +340,24 @@ function buildQuantumStatRows(detail: FittingComponentDetail): ComponentCardMetr
   pushMetric(rows, "Calibration Minimum", formatCompactNumber(stats.minCalibrationRequirement));
   pushMetric(rows, "Calibration Maximum", formatCompactNumber(stats.maxCalibrationRequirement));
   pushMetric(rows, "Calibration Time (derived)", formatCompactNumber(stats.calibrationTime, "s"));
-  pushMetric(rows, "Stage One Acceleration", formatCompactNumber(stats.quantumStageOneAccelRate));
-  pushMetric(rows, "Stage Two Acceleration", formatCompactNumber(stats.quantumStageTwoAccelRate));
+  pushMetric(
+    rows,
+    "Stage One Acceleration",
+    formatCompactNumber(
+      stats.quantumStageOneAccelRate == null
+        ? stats.quantumStageOneAccelRate
+        : quantumMetersToKilometers(stats.quantumStageOneAccelRate),
+    ),
+  );
+  pushMetric(
+    rows,
+    "Stage Two Acceleration",
+    formatCompactNumber(
+      stats.quantumStageTwoAccelRate == null
+        ? stats.quantumStageTwoAccelRate
+        : quantumMetersToKilometers(stats.quantumStageTwoAccelRate),
+    ),
+  );
   return rows;
 }
 

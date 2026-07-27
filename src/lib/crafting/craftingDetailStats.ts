@@ -4,6 +4,7 @@ import {
   getFittingModifierBaseValue,
   modifierDetailStatLabelKeys,
 } from "../fitting/fittingStatProjection";
+import { quantumMetersToKilometers } from "../fitting/quantumDriveUnits";
 import { getModifierImpact } from "../gameplay/propertyUtils";
 import { formatProperty } from "../../components/industry/crafting/utils/qualityModifiers";
 import type { TotalModifierRow } from "../../components/industry/crafting/utils/recipeQuality";
@@ -123,10 +124,14 @@ export function applyModifierToBase(baseValue: number, modifierValue: number, mo
 export function formatModifiedNumber(value: number, property: string): string {
   if (!Number.isFinite(value)) return "-";
 
+  const displayValue =
+    property === "GPP_Quantum_Speed"
+      ? quantumMetersToKilometers(value)
+      : value;
   const rounded =
     property === "GPP_ItemResource_PowerGeneration"
-      ? Math.round(value)
-      : Math.round(value * 100) / 100;
+      ? Math.round(displayValue)
+      : Math.round(displayValue * 100) / 100;
   const normalized = Object.is(rounded, -0) ? 0 : rounded;
   const formatted = normalized.toLocaleString("en-US", {
     maximumFractionDigits: Number.isInteger(normalized) ? 0 : 2,
