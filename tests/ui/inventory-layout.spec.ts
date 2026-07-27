@@ -3,7 +3,7 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 
 const fixturePath = "/logistics/inventory/__fixture/layout";
-const screenshotDir = path.resolve(process.cwd(), "test-results", "inventory-layout");
+const screenshotDir = path.resolve(process.cwd(), "artifacts", "inventory-redesign");
 
 function installFailureGuards(page: Page) {
   const failures: string[] = [];
@@ -24,11 +24,11 @@ async function openSavriliumBoxes(page: Page) {
   const location = page.getByRole("button", { name: /Levski.*197 SCU.*6 items/i });
   await expect(location).toHaveAttribute("aria-expanded", "true");
 
-  const item = page.getByRole("button", { name: /Savrilium.*92 SCU.*5 records/i });
+  const item = page.getByRole("button", { name: /Savrilium.*92 SCU.*5 boxes/i });
   if (await item.getAttribute("aria-expanded") !== "true") await item.click();
   await expect(item).toHaveAttribute("aria-expanded", "true");
 
-  const quality = page.getByRole("button", { name: /Quality 942.*5 records.*92 SCU/i });
+  const quality = page.getByRole("button", { name: /Quality 942.*92 SCU.*5 boxes/i });
   if (await quality.getAttribute("aria-expanded") !== "true") await quality.click();
   await expect(quality).toHaveAttribute("aria-expanded", "true");
   await expect(page.locator(".logi-inv-tree-box")).toHaveCount(5);
@@ -79,6 +79,22 @@ test.describe("Inventory hierarchy layout", () => {
         fullPage: true,
       });
     }
+
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(fixturePath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('[data-inventory-fixture="layout"]')).toBeVisible();
+    await page.getByRole("searchbox", { name: "Search inventory" }).fill("no-matching-inventory-record");
+    await expect(page.locator(".logi-empty")).toContainText("No inventory records match");
+    await expect(page.locator(".logi-empty")).toBeVisible();
+    const emptyLayout = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(emptyLayout.scrollWidth - emptyLayout.clientWidth).toBeLessThanOrEqual(1);
+    await page.screenshot({
+      path: path.join(screenshotDir, "inventory-empty-1920x1080.png"),
+      fullPage: true,
+    });
 
     await writeFile(
       path.join(screenshotDir, "inventory-hierarchy-measurements.json"),

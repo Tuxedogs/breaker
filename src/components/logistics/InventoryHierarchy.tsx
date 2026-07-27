@@ -47,11 +47,27 @@ function Chevron() {
   );
 }
 
+function LocationIcon() {
+  return (
+    <svg className="logi-inv-tree-location-icon" aria-hidden viewBox="0 0 20 20">
+      <path d="M10 18s5.5-5.2 5.5-10A5.5 5.5 0 0 0 4.5 8c0 4.8 5.5 10 5.5 10Z" />
+      <circle cx="10" cy="8" r="2" />
+    </svg>
+  );
+}
+
 function folderQuantityLabel(folder: Pick<InventoryPrimaryFolder, "totalScu" | "totalUnits">): string {
   return [
     folder.totalScu > 0 ? formatInventoryQuantity(folder.totalScu, "scu") : "",
     folder.totalUnits > 0 ? formatInventoryQuantity(folder.totalUnits, "unit") : "",
   ].filter(Boolean).join(" · ") || "Empty";
+}
+
+function entryCountLabel(rows: InventoryHierarchyRow[]): string {
+  const noun = rows.every((row) => row.entry.recordKind === "box")
+    ? rows.length === 1 ? "box" : "boxes"
+    : rows.length === 1 ? "record" : "records";
+  return `${rows.length} ${noun}`;
 }
 
 function rowAddContext(row: InventoryHierarchyRow, quality?: number | null): InventoryAddContext {
@@ -110,21 +126,24 @@ function InventoryBoxRow({
           />
         </span>
       ) : null}
-      <span className="logi-inv-tree-box-name">
+      <span className="logi-inv-tree-box-name" data-label="Box">
         <strong>{label}</strong>
         <small>{contextLabel ?? (row.entry.recordKind === "box" ? "Physical box" : "Legacy aggregate record")}</small>
       </span>
-      <span className="logi-inv-tree-box-quantity">
+      <span className="logi-inv-tree-box-quantity" data-label="Quantity">
         <strong>{formatInventoryQuantity(row.entry.quantity, row.unitType)}</strong>
         {reservedQuantity > 0 ? (
           <small>{formatInventoryQuantity(availableQuantity, row.unitType)} available</small>
         ) : null}
       </span>
-      <span className={`logi-inv-tree-box-state is-${fullyReserved ? "reserved" : partiallyReserved ? "partial" : "available"}`}>
-        <strong>{stateLabel}</strong>
+      <span
+        className={`logi-inv-tree-box-state is-${fullyReserved ? "reserved" : partiallyReserved ? "partial" : "available"}`}
+        data-label="Reservation"
+      >
+        <strong><i aria-hidden />{stateLabel}</strong>
         {ownerLabel ? <small title={ownerLabel}>{ownerLabel}</small> : null}
       </span>
-      <span className="logi-inv-tree-box-actions">
+      <span className="logi-inv-tree-box-actions" data-label="Actions">
         <button type="button" onClick={() => onEdit(row.entry)} aria-label={`Edit ${label}`}>Edit</button>
         <button type="button" onClick={() => onTransfer(row.entry)} aria-label={`Transfer ${label}`}>Transfer</button>
         <button type="button" className="is-delete" onClick={() => onDelete(row.entry)} aria-label={`Delete ${label}`}>Delete</button>
@@ -178,9 +197,11 @@ function QualityFolder({
           <span className={`logi-quality-pill ${qualityBadgeClass(first.entry)}`}>
             {folder.quality == null ? "Quality not recorded" : `Quality ${folder.quality}`}
           </span>
-          <strong>{folder.rows.length} {folder.rows.length === 1 ? "record" : "records"}</strong>
-          <span>{formatInventoryQuantity(folder.totalQuantity, folder.unitType)}</span>
-          {reservedCount > 0 ? <span>{reservedCount} reserved</span> : null}
+          <span className="logi-inv-tree-quality-summary">
+            <strong>{formatInventoryQuantity(folder.totalQuantity, folder.unitType)}</strong>
+            <span>{entryCountLabel(folder.rows)}</span>
+            {reservedCount > 0 ? <span className="is-reserved">{reservedCount} reserved</span> : null}
+          </span>
         </button>
         {first.entry.recordKind === "box" && first.entry.materialId ? (
           <button type="button" className="logi-inv-tree-add" onClick={() => onAdd(rowAddContext(first, folder.quality))}>
@@ -245,10 +266,15 @@ function SecondaryFolder({
       <div className="logi-inv-tree-secondary-head">
         <button type="button" className="logi-inv-tree-disclosure" onClick={() => onToggleExpanded(key)} aria-expanded={open}>
           <Chevron />
-          {!isLocation ? <MaterialIcon materialName={folder.label} size={17} /> : null}
-          <strong>{folder.label}</strong>
-          <span>{formatInventoryQuantity(folder.totalQuantity, folder.unitType)}</span>
-          <span>{folder.rows.length} {folder.rows.length === 1 ? "record" : "records"}</span>
+          {!isLocation ? <MaterialIcon materialName={folder.label} size={20} /> : <LocationIcon />}
+          <span className="logi-inv-tree-folder-copy">
+            <strong>{folder.label}</strong>
+            <small>{isLocation ? "Storage location" : "Inventory material"}</small>
+          </span>
+          <span className="logi-inv-tree-folder-metrics">
+            <strong>{formatInventoryQuantity(folder.totalQuantity, folder.unitType)}</strong>
+            <span>{entryCountLabel(folder.rows)}</span>
+          </span>
         </button>
         <div className="logi-inv-tree-folder-actions">
           {isLocation ? (
@@ -300,10 +326,15 @@ function ListFolder({
       <div className="logi-inv-tree-primary-head">
         <button type="button" className="logi-inv-tree-disclosure" onClick={() => props.onToggleExpanded(key)} aria-expanded={open}>
           <Chevron />
-          {folder.axis === "item" ? <MaterialIcon materialName={folder.label} size={18} /> : null}
-          <strong>{folder.label}</strong>
-          <span>{folderQuantityLabel(folder)}</span>
-          <span>{folder.rows.length} {folder.rows.length === 1 ? "record" : "records"}</span>
+          {folder.axis === "item" ? <MaterialIcon materialName={folder.label} size={20} /> : <LocationIcon />}
+          <span className="logi-inv-tree-folder-copy">
+            <strong>{folder.label}</strong>
+            <small>{folder.axis === "location" ? "Storage location" : "Inventory material"}</small>
+          </span>
+          <span className="logi-inv-tree-folder-metrics">
+            <strong>{folderQuantityLabel(folder)}</strong>
+            <span>{entryCountLabel(folder.rows)}</span>
+          </span>
         </button>
         {folder.axis === "location" ? (
           <button type="button" onClick={() => props.onStartManage(folder.rows[0].locationKey)}>Select records</button>
@@ -341,60 +372,64 @@ export default function InventoryHierarchy({
     return <div className="logi-empty">No inventory records match the current filters.</div>;
   }
 
-  if (presentation === "list") {
-    return (
-      <div className="logi-inv-list-folders">
-        {folders.map((folder) => <ListFolder key={folder.key} folder={folder} {...props} />)}
-      </div>
-    );
-  }
-
   return (
-    <div className="logi-inv-tree">
-      {folders.map((folder) => {
-        const key = `${folder.axis}:${folder.key}`;
-        const open = props.expandedKeys.has(key);
-        const first = folder.rows[0];
-        const isLocation = folder.axis === "location";
-        return (
-          <section key={folder.key} className="logi-inv-tree-primary">
-            <div className="logi-inv-tree-primary-head">
-              <button type="button" className="logi-inv-tree-disclosure" onClick={() => props.onToggleExpanded(key)} aria-expanded={open}>
-                <Chevron />
-                {!isLocation ? <MaterialIcon materialName={folder.label} size={20} /> : null}
-                <strong>{folder.label}</strong>
-                <span>{folderQuantityLabel(folder)}</span>
-                <span>{folder.secondaryFolders.length} {isLocation ? "items" : "locations"}</span>
-                <span>{folder.rows.length} {folder.rows.length === 1 ? "record" : "records"}</span>
-              </button>
-              <div className="logi-inv-tree-folder-actions">
-                {isLocation ? (
-                  <button type="button" onClick={() => props.onStartManage(first.locationKey)}>Select records</button>
+    <section className={`logi-inv-browser logi-inv-browser--${presentation}`}>
+      {presentation === "list" ? (
+        <div className="logi-inv-list-folders">
+          {folders.map((folder) => <ListFolder key={folder.key} folder={folder} {...props} />)}
+        </div>
+      ) : (
+        <div className="logi-inv-tree">
+          {folders.map((folder) => {
+            const key = `${folder.axis}:${folder.key}`;
+            const open = props.expandedKeys.has(key);
+            const first = folder.rows[0];
+            const isLocation = folder.axis === "location";
+            return (
+              <section key={folder.key} className="logi-inv-tree-primary">
+                <div className="logi-inv-tree-primary-head">
+                  <button type="button" className="logi-inv-tree-disclosure" onClick={() => props.onToggleExpanded(key)} aria-expanded={open}>
+                    <Chevron />
+                    {!isLocation ? <MaterialIcon materialName={folder.label} size={22} /> : <LocationIcon />}
+                    <span className="logi-inv-tree-folder-copy">
+                      <strong>{folder.label}</strong>
+                      <small>{isLocation ? "Storage location" : "Inventory material"}</small>
+                    </span>
+                    <span className="logi-inv-tree-folder-metrics">
+                      <strong>{folderQuantityLabel(folder)}</strong>
+                      <span>{folder.secondaryFolders.length} {isLocation ? "items" : "locations"}</span>
+                    </span>
+                  </button>
+                  <div className="logi-inv-tree-folder-actions">
+                    {isLocation ? (
+                      <button type="button" onClick={() => props.onStartManage(first.locationKey)}>Select records</button>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="logi-inv-tree-add"
+                      onClick={() => props.onAdd(isLocation
+                        ? { locationId: folder.locationId }
+                        : {
+                            materialId: first.entry.materialId,
+                            displayName: first.itemName,
+                          })}
+                    >
+                      + Add
+                    </button>
+                  </div>
+                </div>
+                {open ? (
+                  <div className="logi-inv-tree-secondary-list">
+                    {folder.secondaryFolders.map((secondary) => (
+                      <SecondaryFolder key={secondary.key} folder={secondary} parentKey={key} {...props} />
+                    ))}
+                  </div>
                 ) : null}
-                <button
-                  type="button"
-                  className="logi-inv-tree-add"
-                  onClick={() => props.onAdd(isLocation
-                    ? { locationId: folder.locationId }
-                    : {
-                        materialId: first.entry.materialId,
-                        displayName: first.itemName,
-                      })}
-                >
-                  + Add
-                </button>
-              </div>
-            </div>
-            {open ? (
-              <div className="logi-inv-tree-secondary-list">
-                {folder.secondaryFolders.map((secondary) => (
-                  <SecondaryFolder key={secondary.key} folder={secondary} parentKey={key} {...props} />
-                ))}
-              </div>
-            ) : null}
-          </section>
-        );
-      })}
-    </div>
+              </section>
+            );
+          })}
+        </div>
+      )}
+    </section>
   );
 }

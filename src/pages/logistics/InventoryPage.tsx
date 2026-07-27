@@ -1836,8 +1836,8 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const freshnessBlockReason = isFixture
     ? 'Inventory fixture is read-only.'
     : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
-  const syncLabel = formatInventorySyncLabel(inventorySync);
-  const syncTone = getInventorySyncTone(inventorySync);
+  const syncLabel = isFixture ? 'Preview data' : formatInventorySyncLabel(inventorySync);
+  const syncTone = isFixture ? 'synced' : getInventorySyncTone(inventorySync);
 
   const refreshInventoryFromServer = useCallback(async () => {
     if (authLoading) {
@@ -2464,7 +2464,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
             <span className="logi-breadcrumb-active">Inventory</span>
           </div>
           <h1 className="logi-page-title">Inventory</h1>
-          <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
+          <p className="logi-page-subtitle">Track physical boxes, quality, availability, and storage location.</p>
         </div>
         <div className="logi-inv-header-actions">
           {successNotice ? (
@@ -2527,77 +2527,95 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
       )}
 
       <div className="logi-filter-bar logi-inv-filter-bar">
-        <div className="logi-search-wrap">
-          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="logi-search-icon">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <input
-            type="search"
-            className="logi-search-input"
-            placeholder="Search material, location, container…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            aria-label="Search inventory"
-          />
-        </div>
+        <label className="logi-inv-filter-field logi-inv-filter-field--search">
+          <span className="logi-inv-filter-label">Search inventory</span>
+          <span className="logi-search-wrap">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="logi-search-icon">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input
+              type="search"
+              className="logi-search-input"
+              placeholder="Material, location, or box name…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search inventory"
+            />
+          </span>
+        </label>
 
-        <select
-          className="logi-select"
-          value={materialFilter}
-          onChange={(e) => setMaterialFilter(e.target.value)}
-          aria-label="Filter by item"
-        >
-          <option value="">All Items</option>
-          {materials.map((m) => (
-            <option key={m.id} value={m.id}>{m.name}</option>
-          ))}
-        </select>
+        <label className="logi-inv-filter-field">
+          <span className="logi-inv-filter-label">Material</span>
+          <select
+            className="logi-select"
+            value={materialFilter}
+            onChange={(e) => setMaterialFilter(e.target.value)}
+            aria-label="Filter by item"
+          >
+            <option value="">All Items</option>
+            {materials.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        </label>
 
-        <select
-          className="logi-select"
-          value={effectiveLocationFilter}
-          onChange={(e) => setLocationFilter(e.target.value)}
-          aria-label="Filter by location"
-        >
-          <option value="">All Locations</option>
-          {locations.map((l) => (
-            <option key={l.id} value={l.id}>{l.name}</option>
-          ))}
-          {unassignedCount > 0 && <option value="__unassigned__">Unassigned Stock</option>}
-        </select>
+        <label className="logi-inv-filter-field">
+          <span className="logi-inv-filter-label">Location</span>
+          <select
+            className="logi-select"
+            value={effectiveLocationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            aria-label="Filter by location"
+          >
+            <option value="">All Locations</option>
+            {locations.map((l) => (
+              <option key={l.id} value={l.id}>{l.name}</option>
+            ))}
+            {unassignedCount > 0 && <option value="__unassigned__">Unassigned Stock</option>}
+          </select>
+        </label>
 
-        <div className="logi-search-wrap logi-inv-quality-filter">
-          <span>Min</span>
-          <input
-            type="number"
-            className="logi-search-input"
-            placeholder="0"
-            min={0}
-            max={1000}
-            step={50}
-            value={qualityMin || ''}
-            onChange={(e) => setQualityMin(parseInt(e.target.value) || 0)}
-            aria-label="Minimum quality"
-          />
-        </div>
+        <label className="logi-inv-filter-field logi-inv-filter-field--quality">
+          <span className="logi-inv-filter-label">Minimum quality</span>
+          <span className="logi-search-wrap logi-inv-quality-filter">
+            <input
+              type="number"
+              className="logi-search-input"
+              placeholder="Any"
+              min={0}
+              max={1000}
+              step={50}
+              value={qualityMin || ''}
+              onChange={(e) => setQualityMin(parseInt(e.target.value) || 0)}
+              aria-label="Minimum quality"
+            />
+          </span>
+        </label>
 
-        <div className="logi-inv-view-toggle" role="group" aria-label="Inventory view mode">
-          <button type="button" className={viewMode === 'location' ? 'is-active' : ''} onClick={() => setViewMode('location')}>Location</button>
-          <button type="button" className={viewMode === 'item' ? 'is-active' : ''} onClick={() => setViewMode('item')}>Item</button>
-          <button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')}>List</button>
+        <div className="logi-inv-filter-field logi-inv-filter-field--view">
+          <span className="logi-inv-filter-label">View</span>
+          <div className="logi-inv-view-toggle" role="group" aria-label="Inventory view mode">
+            <button type="button" className={viewMode === 'location' ? 'is-active' : ''} onClick={() => setViewMode('location')}>Location</button>
+            <button type="button" className={viewMode === 'item' ? 'is-active' : ''} onClick={() => setViewMode('item')}>Item</button>
+            <button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')}>List</button>
+          </div>
         </div>
 
         {viewMode === 'list' && (
-          <div className="logi-inv-list-group-toggle" role="group" aria-label="Group list by">
-            <span>Group by</span>
-            <button type="button" className={listGroupBy === 'location' ? 'is-active' : ''} onClick={() => setListGroupBy('location')}>Location</button>
-            <button type="button" className={listGroupBy === 'item' ? 'is-active' : ''} onClick={() => setListGroupBy('item')}>Item</button>
+          <div className="logi-inv-filter-field logi-inv-filter-field--group">
+            <span className="logi-inv-filter-label">Group list by</span>
+            <div className="logi-inv-list-group-toggle" role="group" aria-label="Group list by">
+              <button type="button" className={listGroupBy === 'location' ? 'is-active' : ''} onClick={() => setListGroupBy('location')}>Location</button>
+              <button type="button" className={listGroupBy === 'item' ? 'is-active' : ''} onClick={() => setListGroupBy('item')}>Item</button>
+            </div>
           </div>
         )}
 
-        <span className="logi-filter-count">{filtered.length} of {activeEntries.length}</span>
-
+        <span className="logi-filter-count">
+          <strong>{filtered.length}</strong>
+          <span>shown / {activeEntries.length}</span>
+        </span>
       </div>
 
       {manageLocationId !== null && (
