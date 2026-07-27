@@ -37,6 +37,18 @@ function formatStatLabel(value: string): string {
     .replace(/\s*\/\s*/g, " and ");
 }
 
+function prioritizeAlphaDamage(stats: ConsolidatedStat[]): ConsolidatedStat[] {
+  const alphaIndex = stats.findIndex((stat) => (
+    normalizeStatKey(stat.kind === "comparison" ? stat.row.label : stat.label) === "alphadamage"
+  ));
+  if (alphaIndex <= 0) return stats;
+  return [
+    stats[alphaIndex],
+    ...stats.slice(0, alphaIndex),
+    ...stats.slice(alphaIndex + 1),
+  ];
+}
+
 function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGroup[] {
   const comparisonByGroup = new Map(
     model.comparisonGroups.map((group) => [normalizeGroupKey(group.title), group] as const),
@@ -68,7 +80,9 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
       stats.push(...comparisonGroup.rows.map((row) => ({ kind: "comparison" as const, row })));
     }
 
-    if (stats.length > 0) groups.push({ title: overviewGroup.title, stats });
+    if (stats.length > 0) {
+      groups.push({ title: overviewGroup.title, stats: prioritizeAlphaDamage(stats) });
+    }
   }
 
   for (const comparisonGroup of model.comparisonGroups) {
@@ -76,7 +90,9 @@ function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGro
     if (usedComparisonGroups.has(groupKey)) continue;
     groups.push({
       title: comparisonGroup.title,
-      stats: comparisonGroup.rows.map((row) => ({ kind: "comparison", row })),
+      stats: prioritizeAlphaDamage(
+        comparisonGroup.rows.map((row) => ({ kind: "comparison", row })),
+      ),
     });
   }
 

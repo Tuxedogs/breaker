@@ -890,6 +890,7 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+          expect(compactLabels[0]).toBe("Alpha Damage");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Fire Rate",
             "Projectile Speed",
