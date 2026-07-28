@@ -1,11 +1,15 @@
 # Gate 6 — Corrective layout: overview + full-width Component Statistics
 
+Updated: 2026-07-28
+
+**Status:** Historical handoff, integrated and subsequently evolved. The current Build Queue uses peer Selected Craft, Component Statistics, and Material Allocation workspace cards. Use `moonbreaker_design_canon.md` and the current source for new work; do not reapply this handoff’s header geometry.
+
 **Branch:** `bq-stats-layout-correction`  
 **Worktree:** `D:/Moonbreaker-bq-stats-layout`  
 **Base:** `origin/main` @ `e32b4f983`  
 **Approved mockup:** `artifacts/bq-craft-header/mockup/approved-component-statistics.png`
 
-Architecture HOLD. Do not touch fitting API/cache/batch/IndexedDB.
+The architecture hold below was part of the original gate scope and is no longer active.
 
 ## Verdict on current main
 

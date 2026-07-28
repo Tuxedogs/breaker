@@ -1,148 +1,60 @@
-Rules: Read files first. Write complete solution. Test once. No over-engineering.
+# Scintel / Moonbreaker — Claude Context
 
-# scintel / breaker — Claude Context (Optimized)
+Updated: 2026-07-28
+
+Read `AGENTS.md` before making changes. It is the repository-wide working and safety authority.
+
+For visual work, use `moonbreaker_design_canon.md` as the detailed design authority. Do not recreate or override its palette, hierarchy, terminology, quality-formatting, or validation rules here.
 
 ## Project Overview
-**Scintel** (repo: breaker) is a **Star Citizen org dashboard** and companion tool suite. It includes:
-- **Dashboard** hub
-- Doctrine / knowledge base (library + modular articles)
-- **Logistics**: Inventory, locations, build queue, refinery import
-- **Industry**: Crafting system
-- **Combat tools**: Alpha Threshold (armor/shield analysis), Component Mapping
-- **Ships**: Maps and visualization
 
-It evolved from a focused alpha-threshold analyzer into a full-featured org operations + combat analysis platform.
+Scintel is a Star Citizen organization dashboard and companion tool suite. It includes:
+
+- Dashboard and operational handoffs
+- Doctrine and knowledge-base content
+- Logistics: Inventory, locations, Build Queue, and refinery import
+- Industry crafting
+- Fitting and component-performance views
+- Combat tools, including Alpha Threshold and Component Mapping
+- Ship maps and visualization
 
 ## Stack
-- React 19 + Vite 7 + TypeScript (strict mode)
-- Tailwind CSS + custom CSS (preserve custom CSS)
-- Framer Motion, Zustand, React Router 7
-- React Three Fiber + Three.js (ship viewport where used)
-- MDX for doctrine/content pages
-- Lazy-loaded routes for tools (performance)
 
-## Architecture Highlights
-- **DashboardShell** wraps most routes (sidebar + topbar persistent)
-- Lazy loading for heavy sections (`Suspense` + `RouteFallback`)
-- Pure calculation logic preferred (especially in combat tools)
-- Content in `content/` (MDX) + doctrine modules
-- Data pipelines/scripts in `/scripts` (imports for ships, refinery, etc.)
-- Stores in `src/stores/`
-- Main entry: `src/App.tsx` (heavy use of redirects for legacy paths)
+- React 19, Vite 7, and strict TypeScript
+- React Router 7
+- Zustand stores
+- Tailwind CSS plus substantial page-scoped custom CSS
+- Framer Motion
+- React Three Fiber and Three.js where ship visualization requires them
+- MDX content under `content/`
 
-## Key Sections & Files
-- **Core Dashboard**: `src/pages/DashboardPage.tsx`, `src/components/dashboard/`
-- **Doctrine**: `DoctrineLibraryPage`, `DoctrineModulePage`, MDX content
-- **Logistics**: `pages/logistics/*` (Inventory, Locations, BuildQueue, RefineryImport)
-- **Alpha Threshold**: `src/tools/alpha-threshold/` (still critical)
-  - Pure calcs: `lib/calculations.ts`
-  - Matrix: `ThresholdComparisonMatrix` (large — edit carefully)
-- **Industry Crafting**: `pages/industry/CraftingPage`
-- **Ship Maps**: `pages/ships/maps/ShipMapsPage`
-- **Component Mapping**: `tools/gunnery/ComponentMappingPage`
+Preserve the existing custom CSS and lazy route boundaries. Do not add dependencies or migrate page styling systems without explicit approval.
 
-## Important Rules
-- **Surgical, small diffs** — avoid big rewrites.
-- Strict TS, no `any` without justification.
-- Keep custom CSS; do not blindly convert to Tailwind.
-- No new deps without discussion.
-- Mobile-first responsive (no horizontal scroll, good touch targets).
-- Performance: lazy load tools, optimize 3D where present.
-- Naming: `acm-*` for matrix, scoped short classes.
+## Key Areas
 
-## SciIntel Visual Theme
+- Dashboard: `src/pages/DashboardPage.tsx`, `src/components/dashboard/`
+- Logistics: `src/pages/logistics/`, `src/components/logistics/`
+- Crafting: `src/pages/industry/`, `src/components/industry/crafting/`
+- Shared crafting and fitting projection: `src/lib/crafting/`, `src/lib/fitting/`
+- Alpha Threshold: `src/tools/alpha-threshold/`
+- Application routes: `src/App.tsx`
+- Data import and generation: `scripts/`
+- Client stores: `src/stores/`
 
-Use the current SciIntel dark command-interface palette across Mining, Build Queue, Crafting, and dashboard pages.
+## Current Architecture Snapshot
 
-Core palette direction:
-- Base backgrounds: near-black / dark charcoal
-- Primary accent: orange/gold
-- Positive/available/strong: green or teal
-- Negative/missing/weak: red
-- Internal borders: soft neutral charcoal/white transparency
-- Gold/orange borders are reserved for primary shells, selected states, titles, count pills, and key accents
+- Build Queue uses a compact queue rail and three peer workspace regions: selected craft, Component Statistics, and Material Allocation.
+- Component statistics flow through shared fitting or component-card delivery, then shared projection/view-model code. Presentation components must not recreate calculations, aliases, or unit conversions.
+- Fitting-detail consumers use the shared component store. Cache identity preserves channel, build ID, source type, and normalized identity; the persistent cache schema must advance when the response contract changes incompatibly.
+- Inventory defaults to Location → Material → Quality → Individual Boxes, with item-first and grouped-list alternatives.
+- Discrete inventory records are physical boxes in user-facing language. Legacy aggregate records must be labeled as aggregates.
 
-Do not:
-- Use blue panel backgrounds
-- Use olive/green wash as the main page color
-- Apply gold borders to every card/container
-- Create heavy nested card stacks
-- Use generic admin-table styling
-- Couple page-specific layouts across Mining, Build Queue, and Crafting
+## Working Rules
 
-Page styling rules:
-- Keep Rajdhani as the primary UI font
-- Use compact 1080p-friendly spacing
-- Prefer thin borders, subtle elevation, small uppercase labels, compact chips
-- Use page-specific classes for layout
-- Shared tokens are allowed, but do not share fragile page layout selectors
-
-Theme hierarchy:
-- Outer/page shells may use orange/gold accent borders
-- Inner cards should mostly use neutral borders
-- Active/selected states may use orange/gold glow
-- Success values use teal/green
-- Danger/missing values use reds.
-
-### Elevation / Layering Rules
-
-Use consistent depth across pages. The UI should feel like a dark command console with layered panels, not flat admin cards.
-
-Layer hierarchy:
-
-1. Page base
-- Near-black background
-- No border
-- Minimal or no shadow
-- Example role: `.bq-main`
-
-2. Primary page shell
-- Main page container/frame
-- May use orange/gold accent border
-- Strongest shadow on the page
-- Subtle radial accent glow is allowed
-- Example role: Build Queue shell, Mining recommendation console shell, Crafting planner shell
-- background: var(--bq-large)
-- box-shadow: 0 24px 56px rgba(0,0,0,0.58), 0 0 42px rgba(255,153,0,0.08), inset 0 1px 0 rgba(255,255,255,0.045);
-
-3. Major panels
-- Selected detail panel, shortage panel, recommendation list, ledger/sidebar panel
-- Dark charcoal gradient
-- Neutral soft border, not gold by default
-- Medium shadow
-- May use a small orange title/accent line
-- background: linear-gradient(180deg, #181d21 0%, #101417 100%);
--  box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
-
-4. Inner cards
-- Metric cards, material cards, route factor cards, summary tiles
-- Slightly raised from major panels
-- Neutral border
-- Smaller shadow
-- No gold border unless selected/active/critical
-
-5. Rows / chips / controls
-- Lowest elevation
-- Thin dividers or subtle fills
-- No heavy shadows
-- Active chips may use orange/gold accent
-- Success chips use teal/green
-- Danger chips use red
-
-Elevation rules:
-- Do not give every card the same border/shadow.
-- Do not use gold borders on every nested container.
-- Do not stack more than 2-3 visible card layers in one area.
-- Outer shells can feel framed; inner content should feel embedded.
-- Use shadows to separate major regions, not every row.
-- Use neutral borders for most internal separation.
-- Use orange/gold as hierarchy and selection, not decoration everywhere.
-
-Recommended shadows:
-
-Primary shell:
-```css
-box-shadow:
-  0 28px 70px rgba(0, 0, 0, 0.58),
-  0 0 42px rgba(255, 153, 0, 0.08),
-  inset 0 1px 0 rgba(255, 255, 255, 0.04);
+- Prefer small, isolated diffs and preserve behavior outside the requested scope.
+- Keep APIs, persistence, routing, calculations, solvers, and production data contracts unchanged during visual tasks.
+- Use shared tokens and components when they already fit; keep workflow-specific layout page-scoped.
+- Distinguish zero, missing, loading, and unavailable states.
+- Never invent source data or production calculations to complete a visual.
+- Validate visual work with deterministic populated and empty states, screenshots, and the relevant automated checks.
+- Run `npm run build` at minimum and targeted tests for the changed area.

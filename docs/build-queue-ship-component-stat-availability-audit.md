@@ -31,6 +31,12 @@ Implemented on 2026-07-26:
 - Rendered subtype-applicable weapon action fields, energy maximum load, recharge rate, recharge cooldown, spread, penetration, and thermal recovery.
 - Added deterministic Build Queue coverage for AD5B, M5A, FR-66, Atlas, SnowBlind, and JS-300 at both required desktop resolutions.
 
+Follow-up on 2026-07-27:
+
+- Normalized quantum-drive display units through shared helpers used by component cards, Crafting, Fitting, and Build Queue.
+- Invalidated legacy persisted fitting-component records after the response contract expanded and added cache regression coverage.
+- Prioritized Alpha Damage in weapon summaries while removing redundant unmodified damage-channel rows when the total is present.
+
 The public fitting response remains additive API v1; existing consumers can continue reading the legacy quantum fuel alias.
 
 Still unavailable:
@@ -246,26 +252,16 @@ The current local by-id card for `CQ7 Rifle` is now populated from the Foundry w
 
 The CQ7 Build Queue path fetches the by-id card, so that enriched record is the relevant detail source. The compact `browse.json` record still contains only FPS weapon identity and must not be used as the detail-stat contract.
 
-## Production implementation order
+## Remaining roadmap
 
-1. Fix field aliases at the shared fitting boundary:
-   - `quantumFuelRequirement -> fuelRate` or rename the public field to match the source.
-   - `burstCount -> burstShotCount`.
-   - `nearRadius/farRadius -> penetrationNearRadius/penetrationFarRadius`.
-2. Expose direct, populated core-component fields:
-   - quantum calibration values and stage acceleration;
-   - cooler thermal equalization and power-pip curve;
-   - shield downed regen delay;
-   - component distortion maximum and complete repair fields.
-3. Complete the authoritative weapon-ammo join for damage falloff and impulse falloff. Do not infer those values in React.
-4. Render subtype-applicable action fields without filling irrelevant rows for weapons that do not charge, spin, burst, beam, or regenerate ammunition.
-5. Add endpoint/projection tests using:
-   - AD5B for ballistic spread, penetration, and overheat recovery;
-   - one energy weapon for ammo load/regeneration;
-   - one charged or beam weapon for action timing/range;
-   - one power plant, quantum drive, cooler, and shield;
-   - CQ7 through the FPS by-id card path.
-6. Re-run deterministic Build Queue screenshots at 1920x1080 and 2560x1440 after implementation.
+The shared aliases, core-component fields, subtype-applicable rows, endpoint/projection coverage, and deterministic Build Queue evidence above are implemented.
+
+Remaining production work:
+
+1. Complete the authoritative weapon-ammunition join for damage falloff and impulse falloff. Do not infer those values in React.
+2. Add regression coverage for the joined ammunition source before rendering the fields.
+3. Keep CQ7 and other FPS weapons on the component-card path; do not route them through vehicle fitting detail.
+4. Re-run deterministic Build Queue screenshots at 1920×1080 and 2560×1440 when the remaining source contract changes.
 
 ## Data and semantic cautions
 

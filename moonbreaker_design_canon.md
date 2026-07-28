@@ -1,6 +1,6 @@
 # Moonbreaker Design Canon
 
-Updated: 2026-07-16
+Updated: 2026-07-28
 
 This canon describes the visual system currently implemented across Moonbreaker / Scintel. It is the default reference for new UI work and for page-by-page visual refinement.
 
@@ -42,6 +42,19 @@ Rules:
 - `ops-primary-card` controls the perimeter treatment only. It does not own page layout, spacing, typography, overflow, or interaction behavior.
 - Page-local overrides must not silently cancel the shared 1440p density layer.
 - When a page needs a special wide-screen rule, place it late enough in the cascade and use sufficient specificity for it to win.
+
+## Recent Implementation Audit
+
+The July 24–27 Build Queue and Inventory work established several implemented patterns:
+
+- Build Queue now uses a compact selected-craft command card followed by peer Component Statistics and Material Allocation workspace cards. Statistics and allocation are not header content.
+- Component Statistics consolidates source-backed end-product traits and isolates genuinely modified rows for Base, Target, and Allocation comparison.
+- Weapon summaries lead with Alpha Damage and avoid redundant unmodified damage-channel rows when the total is present.
+- Repeated material requirements keep the target-quality control in the compact summary and use progressive disclosure for reserve detail.
+- Inventory defaults to a responsive Location → Material → Quality → Individual Boxes tree while retaining item-first and grouped-list alternatives.
+- Inventory hierarchy evidence now includes populated desktop, populated compact, and empty states.
+
+These are page-level precedents, not approval for a new global card primitive or a global palette change.
 
 ## Base Visual System
 
@@ -308,17 +321,29 @@ Craft → Material Requirement → Eligible Boxes
 
 Preserve the current operational structure:
 
-- Compact queue rail
-- Selected-craft dossier
-- Base, target, and allocation statistics
-- Material allocation table
-- Auto Reserve
-- Reserve drawer and ownership state
-- Collapsible queue summary
+1. Compact queue rail
+2. Selected-craft command card for identity, blueprint source, artwork, quantity, and craft actions
+3. Full-width Component Statistics workspace card
+4. Material Allocation workspace card
+5. Auto Reserve, reserve detail, ownership state, and queue summary
 
-The center workspace may use `ops-primary-card`, but its internal statistics and allocation rows should remain flat and dense.
+The selected-craft, statistics, and allocation cards are peer workflow regions. Do not place the full statistics comparison or allocation workspace inside the identity header.
+
+Component Statistics should:
+
+- Consolidate authoritative stock and projected traits without duplicating the same stat across groups.
+- Present end-product traits as the primary scan surface.
+- Show a separate modified-stat region only when Target or Allocation actually differs from Base.
+- Keep Base, Target, Allocation, units, and benefit direction together for modified rows.
+- Preserve explicit loading, unavailable, not-set, no-allocation, and valid-zero states.
+- Lead weapon summaries with Alpha Damage and suppress redundant unmodified channel rows when the total already provides the useful scan target.
+- Render curves or allocation arrays as purpose-built visualizations; never relabel them as scalar values.
+
+Gameplay units and aliases must be normalized in shared schema or projection helpers so Crafting, Fitting, and Build Queue agree.
 
 Use stable comparison columns and semantic deltas. A numerically positive change is not automatically beneficial; direction styling must follow the stat’s gameplay meaning.
+
+Material Allocation should keep the collapsed card focused on material identity, required and allocated amount, the target-quality control, average quality, and shortfall. Put reserve mechanics behind deliberate disclosure. Do not spend equal visual weight on a redundant zero-excess metric.
 
 ## Inventory Canon
 
@@ -327,6 +352,12 @@ Inventory defaults to:
 Location → Material → Individual Boxes
 
 Treat each inventory record as a physical box unless the UI explicitly represents an aggregate.
+
+Quality may form an intermediate folder between material and boxes:
+
+Location → Material → Quality → Individual Boxes
+
+This is a comparison aid, not a replacement for the canonical location/material/box model. The Inventory page may also provide item-first and grouped-list views; location-first remains the default operational view.
 
 Location containers should communicate:
 
@@ -526,6 +557,8 @@ Inspect at minimum:
 - 2560×1440
 
 Also inspect mobile when the affected component already supports mobile or the task requests it.
+
+For responsive logistics hierarchies, the standard compact evidence size is 768×900 unless the task specifies another viewport.
 
 For each affected page, check:
 

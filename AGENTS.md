@@ -53,6 +53,25 @@ Modifier, component, crafting, and fitting truth must come from the extracted or
 
 Do not duplicate calculations in presentation components when a shared calculation or solver already exists.
 
+Normalize gameplay units and source aliases at the shared schema, service, or projection boundary. Do not apply page-local unit conversions or rename a source field only in JSX.
+
+Treat zero, missing, loading, and unavailable as distinct data states. A valid numeric zero must not be filtered out as absent.
+
+Build Queue component statistics must reuse the shared fitting/component-card delivery paths. Scalar rows, subtype-specific rows, and allocation curves must retain their source semantics; do not flatten an array or curve into an invented scalar.
+
+## Shared Fitting Data
+
+Fitting-detail consumers must route through the shared fitting component store rather than calling the low-level component endpoint directly.
+
+Cache identity must preserve:
+
+* Channel
+* Build ID
+* Source type
+* Normalized component identity
+
+When the persisted response contract expands or changes incompatibly, advance or migrate the persistent cache schema so legacy entries cannot mask newly delivered fields. FPS component cards and vehicle fitting detail remain separate source types.
+
 ## Quality Formatting
 
 Never place the letter `Q` before or after a quality value.
@@ -92,6 +111,10 @@ Do not expose backend terminology such as `stack` unless the UI is intentionally
 For location-based inventory, the default organizational model is:
 
 `Location → Material → Individual Boxes`
+
+Quality may be used as an intermediate disclosure level inside a material group when it improves comparison. It does not replace the material or individual-box levels.
+
+The Inventory page may offer item-first and grouped-list alternatives, but location-first remains the default operational view.
 
 Other workflows may use a different order when the user’s task requires it:
 
@@ -165,6 +188,7 @@ For visual work:
 * Check both populated and empty states.
 * Check long names, many rows, and overflow behavior.
 * Avoid hiding important data merely to simplify layout.
+* Keep peer workflow regions as peer surfaces; do not nest a full statistics or allocation workspace inside an identity header.
 
 For responsive work, inspect at minimum:
 
@@ -172,6 +196,8 @@ For responsive work, inspect at minimum:
 * `2560×1440`
 
 Check mobile when the affected component already supports mobile or when the task explicitly requests it.
+
+For an existing responsive logistics hierarchy, use `768×900` as the standard compact review viewport unless the task specifies another size.
 
 ## Visual Validation
 

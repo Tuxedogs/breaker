@@ -1,18 +1,41 @@
 # Build Queue Stats / Fitting Performance — Project Ledger
 
-**Program owner:** TPM / integration (this chat)  
-**Baseline:** Corrected architecture audit (do not re-audit). No fitting API migration authorized until UI Gate 3 passes + explicit plan approval.
+Updated: 2026-07-28
 
-## Gate status
+**Current baseline:** `main` at `a6044757a`
+**Scope:** High-level delivery and remaining-risk ledger. Historical gate records are retained below for provenance.
 
-| Gate | Status | Notes |
-|------|--------|-------|
-| Gate 1 — branch review + merge | In progress | Core 3 commits review PASS; validation pending `ui:build-queue` browser install |
-| Gate 2 — BQ UI hotfix | **PASS** | Three-region header + compact stat groups; see commit below |
-| Gate 3 — independent UI verify | Not started | Fresh agent, clean checkout |
-| Gate 4 — Base / Target / Allocation | **PASS** | Dense comparison table per stat group; see commit below |
-| Gate 6 — Corrective layout | **PASS** | Overview header + full-width Component Statistics card; see commit below |
-| Architecture phases | HOLD | Awaiting post-UI plan approval |
+## Current status
+
+| Workstream | Status | High-level outcome |
+|---|---|---|
+| Original Build Queue UI gates | Complete and integrated | The historical dossier/table experiments evolved into peer Selected Craft, Component Statistics, and Material Allocation workspace cards. |
+| Base / Target / Allocation projection | Complete | Comparison remains view-model driven with benefit-direction semantics and explicit empty states. |
+| Fitting cache stages 1–4C | Complete and integrated | Reads are build-aware, consumers share the store, and equipped-detail coordination removed the main duplicate/full-catalog waterfalls. |
+| Persisted cache and readiness | Complete and integrated | Patch-static persistence and identity/build readiness gates are on `main`. |
+| Component-stat coverage | Complete for the audited additive fields | Shared delivery now covers expanded weapon and core-component traits; authoritative ammo falloff remains the known data gap. |
+| Inventory hierarchy | Complete for the current visual target | Location/item/list views use physical-box language, quality disclosure, responsive layouts, and deterministic evidence. |
+
+## Recent work audit — July 24–27
+
+- Build Queue was simplified into a compact craft command area, a consolidated end-product statistics surface, and a separate modified-stat comparison region.
+- Material requirements became denser summaries with the target-quality control kept visible and reserve detail behind disclosure.
+- Shared component delivery gained additional weapon, power plant, quantum drive, cooler, and shield fields without moving calculations into React.
+- Quantum-drive units were normalized through shared helpers, legacy persisted component records were invalidated after the response contract expanded, and Alpha Damage became the first weapon scan value.
+- Inventory was rebuilt around Location → Material → Quality → Individual Boxes, with item-first and grouped-list alternatives plus 1920×1080, 2560×1440, and 768×900 evidence.
+- The 2026-07-28 working tree contains local component-card data and screenshot evidence changes. They are in flight and are not counted as shipped in this ledger.
+
+## Current roadmap
+
+1. Complete and review the in-flight component-card/chart evidence as a focused change; keep exploratory output out of the production change and do not mix it into global theme work.
+2. Complete the authoritative ship-weapon ammunition join before exposing damage or impulse falloff. No frontend inference.
+3. Keep Build Queue statistics, Crafting, and Fitting aligned through the shared schema/projection/unit path.
+4. Preserve Inventory’s responsive populated and empty-state coverage as inventory actions evolve.
+5. Treat any global palette, card, border, or highlight change as a separate approval track.
+
+## Historical gate record
+
+The remaining sections document the original branch and gate sequence. Their branch plans and hold notices are no longer current instructions.
 
 ## Repository snapshot (Gate 1 start)
 
@@ -69,7 +92,7 @@
 ## Integration branch plan
 
 - Create: `integration/bq-stats-ui-hotfix` from `bq-stats-local-fixture` tip (`5c2707454`) so screenshots + mainline baseline are present.
-- Merge status: pending after `ui:build-queue` green (or documented env exception + merge with residual risk).
+- Historical merge status: pending at the time of this gate record; the work is now integrated.
 
 ## File ownership (upcoming)
 
@@ -78,18 +101,20 @@
 | Gate 2 | UI 5.5 Medium | `BuildQueueCraftStatsPanel`, selected-craft header, `build-queue.css`, tightly related BQ layout | fitting API/hooks/cache, projections, modifiers, reservations, solver, unrelated pages |
 | Gate 3 | Fresh verifier | Read-only verify + tests | Authoring UI |
 
-## Architecture sequence (PROPOSAL ONLY — not authorized)
+## Architecture sequence — integration result
 
-1. Pin static fitting reads to channel + buildId  
-2. Unify resolved + in-flight caching  
-3. Route all fitting consumers through shared store  
-4. Eliminate Fitting terminal duplicate/remount waterfalls  
-5. Bounded batch / chunk loading  
-6. Persisted patch-static caching  
-7. Route-level readiness boundaries  
-8. Remove unnecessary full-catalog loading  
+| Stage | Status | Mainline evidence |
+|---|---|---|
+| 1. Pin static reads to channel + build ID | Complete | `652bc1004` |
+| 2. Shared resolved + in-flight cache | Complete | `fd1f4617a` |
+| 3. Route fitting consumers through shared store | Complete | `180cf0ed1` |
+| 4. Remove terminal duplicate/remount waterfalls | Complete | `4d2dbbbdc`, `f98fc8eec`, `14d5f05d5` |
+| 5. Bounded batch/chunk loading | Not implemented as a separate stage | Full-catalog loading was removed; schedule batching only from measured need. |
+| 6. Persist patch-static cache | Complete | `0d6caca76` |
+| 7. Add readiness boundaries | Complete | `2f13b8c4c`, `8610cfaa8` |
+| 8. Remove unnecessary full-catalog loading | Complete | `f98fc8eec` |
 
-**Do not start until UI Gate 3 passes and user explicitly approves this plan.**
+The earlier architecture hold is closed. Further cache or batching work requires a new measured problem and a separately scoped plan.
 
 ## Gate 2 — UI hotfix (integration/bq-stats-ui-hotfix)
 
@@ -188,4 +213,4 @@ REJECT prior header-embedded comparison on visual grounds. Restructured selected
 - Stat unit column uses label-based lookup; unknown stats show `-`.
 - FPS armor may have empty comparison groups when recipe has no quality modifiers.
 - Overview still omits matrix groups (resistance tables) by design — those remain statistics-only when modifiable.
-- Architecture phases remain HOLD.
+- Historical note: architecture phases were held at this gate. See the current architecture status above.

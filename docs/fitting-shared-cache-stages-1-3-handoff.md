@@ -1,11 +1,18 @@
 # Fitting shared cache — Stages 1–3 handoff
 
-**Branch:** `fitting/shared-cache-stages-1-3`  
-**Worktree:** `D:/Moonbreaker-fitting-cache`  
-**Base:** `origin/main` @ `73512b069`  
-**Do not use:** `D:/Moonbreaker` (dirty / other branch)
+Updated: 2026-07-28
 
-Architecture Stages 4+ HOLD (batch, IndexedDB, readiness, full waterfall, full-catalog removal).
+**Status:** Integrated into `main`. The branch, worktree, and original SHAs below are historical handoff metadata, not current workspace instructions.
+
+Mainline equivalents:
+
+| Stage | Mainline commit |
+|---|---|
+| Stage 1 | `652bc1004` |
+| Stage 2 | `fd1f4617a` |
+| Stage 3 | `180cf0ed1` |
+
+Stages 4, 4B, and 4C, patch-static persistence, readiness gating, and removal of the unnecessary full-catalog load also landed on `main`. Bounded batch/chunk loading was not implemented as a separate stage and should only be scheduled from measured need.
 
 ## Stage 1 — Pin static fitting reads to channel + buildId
 

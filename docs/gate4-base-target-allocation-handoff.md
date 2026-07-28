@@ -1,11 +1,15 @@
 # Gate 4 Handoff — Base / Target / Allocation comparison
 
+Updated: 2026-07-28
+
+**Status:** Historical handoff, integrated and subsequently evolved. Use `docs/bq-stats-program-ledger.md`, `moonbreaker_design_canon.md`, and current source for new work.
+
 **Branch:** `bq-stats-base-target-allocation`  
 **Worktree:** `D:/Moonbreaker-bq-stats-gate4`  
 **Base commit:** `1d6790574`  
-**Do not touch:** `D:/Moonbreaker` dirty Inventory/vercel files. Work only in this worktree.
+**Historical worktree instruction:** The gate was isolated from a dirty `D:/Moonbreaker` workspace.
 
-Architecture HOLD — no fitting API/cache/batch/IndexedDB/readiness/terminal work.
+The worktree restriction and architecture hold were part of the original gate scope and are no longer active.
 
 ## Data flow (reuse — do not reinvent)
 
