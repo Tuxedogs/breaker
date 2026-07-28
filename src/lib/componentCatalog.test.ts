@@ -123,6 +123,42 @@ test("current recipes missing from the upstream snapshot receive catalog cards",
   assert.ok(buildComponentCatalogStatMetrics(fpsWeapon).some((metric) => metric.label === "Weapon Class"));
 });
 
+test("component card browse identities exactly match the current recipe catalogs", () => {
+  const vehicleRecipes = loadJson(
+    "public",
+    "api",
+    "crafting",
+    "blueprints.json",
+  ) as Array<{ blueprintGuid?: string }>;
+  const fpsRecipes = loadJson(
+    "public",
+    "api",
+    "crafting",
+    "fps",
+    "fps_blueprints.json",
+  ) as Array<{ blueprintGuid?: string }>;
+  const browse = loadJson(
+    "server-data",
+    "crafting",
+    "component-cards",
+    "browse.json",
+  ) as { records?: Array<{ id?: string }> };
+
+  const recipeIds = new Set(
+    [...vehicleRecipes, ...fpsRecipes]
+      .map((recipe) => recipe.blueprintGuid?.trim().toLowerCase())
+      .filter((id): id is string => Boolean(id)),
+  );
+  const browseIds = new Set(
+    (browse.records ?? [])
+      .map((record) => record.id?.trim().toLowerCase())
+      .filter((id): id is string => Boolean(id)),
+  );
+
+  assert.equal(browseIds.size, 1_580);
+  assert.deepEqual(browseIds, recipeIds);
+});
+
 test("mixed component catalog generations are rejected", () => {
   assert.doesNotThrow(() => validateComponentCatalogGeneration(
     "2026-07-16T00:00:00.000Z",

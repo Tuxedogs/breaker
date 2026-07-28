@@ -286,6 +286,11 @@ const FPS_ARMOR_STAT_GROUPS: DetailStatGroupDefinition[] = [
     labels: ["Armor Slot", "Armor Weight"],
   },
   {
+    title: "Protection",
+    kind: "flat",
+    labels: ["Armor Damage Mitigation", "Armor DamageMitigation", "Damage Mitigation"],
+  },
+  {
     title: "Environment",
     kind: "flat",
     labels: ["Temp Range", "Temp Min", "Temp Max", "Radiation Dissipation", "Storage"],

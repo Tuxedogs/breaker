@@ -6,9 +6,9 @@
   --bq-edge: var(--border-soft-color);
   --bq-edge-soft: var(--border-divider-color);
   --bq-cyan: #4db8b0;
-  --bq-green: #4db8b0;
+  --bq-green: var(--stat-beneficial);
   --bq-amber: #ff9d00;
-  --bq-red: #ff3e48;
+  --bq-red: var(--stat-detrimental);
   --bq-violet: #a78bfa;
   --bq-panel: linear-gradient(180deg, #181d21 0%, #101417 100%);
   --mb-bg-gutter: #010A12;
@@ -4639,9 +4639,9 @@
   --bq-edge: var(--ops-border-default);
   --bq-edge-soft: var(--ops-border-soft);
   --bq-cyan: #7dd3fc;
-  --bq-green: #4ade80;
+  --bq-green: var(--stat-beneficial);
   --bq-amber: #fbbf24;
-  --bq-red: #fb7185;
+  --bq-red: var(--stat-detrimental);
   --bq-panel: var(--ops-surface-primary);
   --mb-bg-gutter: var(--ops-canvas);
   --mb-bg-card: var(--ops-surface-primary);
@@ -4655,8 +4655,8 @@
   --alloc-border-soft: var(--ops-border-soft);
   --alloc-cyan: #7dd3fc;
   --alloc-blue: #60a5fa;
-  --alloc-danger: #fb7185;
-  --alloc-success: #4ade80;
+  --alloc-danger: var(--stat-detrimental);
+  --alloc-success: var(--stat-beneficial);
   --alloc-text-primary: #e7edff;
   --alloc-text-secondary: #b9c9dd;
   --alloc-text-muted: #8fa1b6;
@@ -4668,9 +4668,9 @@
   --panel-border-soft: var(--ops-border-soft);
   --accent-cyan: #7dd3fc;
   --accent-blue: #60a5fa;
-  --danger: #fb7185;
+  --danger: var(--stat-detrimental);
   --warning: #fbbf24;
-  --success: #4ade80;
+  --success: var(--stat-beneficial);
   --text-primary: #e7edff;
   --text-secondary: #b9c9dd;
   --text-muted: #8fa1b6;
@@ -5505,12 +5505,12 @@
 
 /* Focused Build Queue interaction and readability pass. */
 .bq-page {
-  --bq-green: #6ee7a0;
-  --bq-red: #ff7185;
+  --bq-green: var(--stat-beneficial);
+  --bq-red: var(--stat-detrimental);
   --bq-target-accent: #9bb5c6;
   --bq-allocation-accent: #8fa8ff;
-  --alloc-success: #6ee7a0;
-  --alloc-danger: #ff7185;
+  --alloc-success: var(--stat-beneficial);
+  --alloc-danger: var(--stat-detrimental);
 }
 
 .bq-page .bq-materials-section-title,
@@ -5575,7 +5575,7 @@
 .bq-detail-stat-delta.craft-ok,
 .bq-detail-stat-value .craft-ok,
 .bq-stat-legend-item--benefit {
-  color: #6ee7a0;
+  color: var(--stat-beneficial);
 }
 
 .bq-component-statistics .bq-stat-compare-delta.craft-shortage,
@@ -5584,7 +5584,7 @@
 .bq-detail-stat-delta.craft-shortage,
 .bq-detail-stat-value .craft-shortage,
 .bq-stat-legend-item--harm {
-  color: #ff7185;
+  color: var(--stat-detrimental);
 }
 
 .bq-page .bq-mat-head,
@@ -6108,7 +6108,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #fb7185;
+  color: var(--stat-detrimental);
   font: inherit;
   font-size: 15px;
   font-weight: 800;

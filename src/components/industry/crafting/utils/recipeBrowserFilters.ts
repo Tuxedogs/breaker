@@ -2,12 +2,26 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
 export const DEFAULT_VEHICLE_TYPE = "weaponGun";
 
-const UTILITY_TYPES = new Set([
+const LEGACY_UTILITY_TYPES = new Set([
   "dockingCollar",
   "salvageHead",
   "salvageModifier",
   "weaponMining",
 ]);
+
+const KNOWN_VEHICLE_TYPES = new Set([
+  "weaponGun",
+  "powerplant",
+  "shield",
+  "cooler",
+  "radar",
+  "quantumdrive",
+  "weaponMining",
+  "salvageHead",
+  "salvageModifier",
+]);
+
+const KNOWN_FPS_TYPES = new Set(["weapons", "armor"]);
 
 export function getRecipeBrowserSearchParam(searchParams: URLSearchParams): string {
   return (searchParams.get("search") ?? searchParams.get("q") ?? "").trim();
@@ -58,6 +72,29 @@ function recordUsesMaterialFilter(
     || materialNames.some((name) => materialFilters.has(name));
 }
 
+export function matchesRecipeBrowserCategory(
+  record: ComponentCardIndexRecord,
+  vehicleFilters: Set<string>,
+  fpsFilters: Set<string>,
+): boolean {
+  const hasCategoryFilters = vehicleFilters.size > 0 || fpsFilters.size > 0;
+  if (!hasCategoryFilters) return false;
+
+  if (record.kind === "fps") {
+    const type = record.type ?? "";
+    return fpsFilters.has(type)
+      || (fpsFilters.has("__utility__") && type === "utility")
+      || (fpsFilters.has("__other__") && !KNOWN_FPS_TYPES.has(type) && type !== "utility");
+  }
+
+  const type = record.type ?? "";
+  return vehicleFilters.has(type)
+    || (vehicleFilters.has("__mining__") && type === "weaponMining")
+    || (vehicleFilters.has("__salvage__") && (type === "salvageHead" || type === "salvageModifier"))
+    || (vehicleFilters.has("__other__") && !KNOWN_VEHICLE_TYPES.has(type))
+    || (vehicleFilters.has("__utility__") && LEGACY_UTILITY_TYPES.has(type));
+}
+
 export function compareRecipeBrowserRecords(
   a: ComponentCardIndexRecord,
   b: ComponentCardIndexRecord,
@@ -76,6 +113,70 @@ export type RecipeBrowserFilterOptions = {
   savedBlueprintIds?: Set<string>;
 };
 
+export function matchesRecipeBrowserAppliedFilters(
+  record: ComponentCardIndexRecord,
+  searchParams: URLSearchParams,
+  options: RecipeBrowserFilterOptions = {},
+): boolean {
+  const vehicleFilters = parseRecipeBrowserFilterSet(searchParams, "v");
+  const fpsFilters = parseRecipeBrowserFilterSet(searchParams, "f");
+  const sizeFilters = parseRecipeBrowserFilterSet(searchParams, "sz");
+  const gradeFilters = parseRecipeBrowserFilterSet(searchParams, "gr");
+  const classFilters = parseRecipeBrowserFilterSet(searchParams, "cl");
+  const materialFilters = parseRecipeBrowserFilterSet(searchParams, "mt");
+  const savedOnly = options.savedOnly ?? searchParams.get("bk") === "1";
+
+  if (
+    (vehicleFilters.size > 0 || fpsFilters.size > 0)
+    && !matchesRecipeBrowserCategory(record, vehicleFilters, fpsFilters)
+  ) {
+    return false;
+  }
+  if (sizeFilters.size > 0) {
+    const sizeKey = record.size !== null && record.size !== undefined ? String(record.size) : "";
+    if (!sizeFilters.has(sizeKey)) return false;
+  }
+  if (gradeFilters.size > 0 && !gradeFilters.has(record.grade ?? "")) return false;
+  if (classFilters.size > 0 && !classFilters.has((record.class ?? "").toLowerCase())) return false;
+  if (materialFilters.size > 0 && !recordUsesMaterialFilter(record, materialFilters)) return false;
+  if (savedOnly && options.savedBlueprintIds && !options.savedBlueprintIds.has(record.id)) return false;
+  return true;
+}
+
+function searchNameRank(record: ComponentCardIndexRecord, query: string): number {
+  const normalizedName = record.name.trim().toLowerCase();
+  const normalizedQuery = query.trim().toLowerCase();
+  if (normalizedName === normalizedQuery) return 0;
+  if (normalizedName.startsWith(normalizedQuery)) return 1;
+  if (normalizedName.includes(normalizedQuery)) return 2;
+  return 3;
+}
+
+export function compareRecipeBrowserSearchRecords(
+  a: ComponentCardIndexRecord,
+  b: ComponentCardIndexRecord,
+  query: string,
+): number {
+  const nameRank = searchNameRank(a, query) - searchNameRank(b, query);
+  if (nameRank !== 0) return nameRank;
+
+  // When a weapon and its compatible magazine both satisfy the same weapon
+  // search, the weapon is the useful default detail target.
+  const weaponRankA = a.kind === "fps" && a.type === "weapons" ? 0 : a.type === "ammo" ? 1 : 0;
+  const weaponRankB = b.kind === "fps" && b.type === "weapons" ? 0 : b.type === "ammo" ? 1 : 0;
+  if (weaponRankA !== weaponRankB) return weaponRankA - weaponRankB;
+  return compareRecipeBrowserRecords(a, b);
+}
+
+export function pickPreferredRecipeBrowserSearchRecord(
+  records: ComponentCardIndexRecord[],
+  query: string,
+): ComponentCardIndexRecord | undefined {
+  if (records.length === 0) return undefined;
+  if (!query.trim()) return records[0];
+  return [...records].sort((a, b) => compareRecipeBrowserSearchRecords(a, b, query))[0];
+}
+
 export function filterRecipeBrowserRecords(
   records: ComponentCardIndexRecord[],
   searchParams: URLSearchParams,
@@ -86,49 +187,36 @@ export function filterRecipeBrowserRecords(
   const isDefaultState = isRecipeBrowserDefaultState(searchParams);
   const vehicleFilters = parseRecipeBrowserFilterSet(searchParams, "v");
   const fpsFilters = parseRecipeBrowserFilterSet(searchParams, "f");
-  const sizeFilters = parseRecipeBrowserFilterSet(searchParams, "sz");
-  const gradeFilters = parseRecipeBrowserFilterSet(searchParams, "gr");
-  const classFilters = parseRecipeBrowserFilterSet(searchParams, "cl");
-  const materialFilters = parseRecipeBrowserFilterSet(searchParams, "mt");
   const searchTokens = buildRecipeBrowserSearchTokens(getRecipeBrowserSearchParam(searchParams));
   const hasTextSearch = searchTokens.length > 0;
   const savedOnly = options.savedOnly ?? searchParams.get("bk") === "1";
   const savedBlueprintIds = options.savedBlueprintIds;
+
+  if (hasTextSearch) {
+    return records
+      .filter((record) => Boolean(record?.id) && matchesRecipeBrowserSearch(record, searchTokens))
+      .sort(compareRecipeBrowserRecords);
+  }
 
   return records
     .filter((record) => {
       if (!record?.id) return false;
       if (savedOnly && savedBlueprintIds && !savedBlueprintIds.has(record.id)) return false;
 
-      if (record.kind === "fps") {
-        if (fpsFilters.size > 0) {
-          if (!fpsFilters.has(record.type ?? "")) return false;
-        } else if (!hasTextSearch) {
-          // Hide FPS in default/vehicle browse; text search includes FPS matches.
-          return false;
-        }
-      } else {
-        // Text search may return both vehicle and FPS hits; only mutually exclude
-        // vehicle rows when an FPS filter is set and there is no search query.
-        if (fpsFilters.size > 0 && !hasTextSearch) return false;
-        if (vehicleFilters.size > 0) {
-          const type = record.type ?? "";
-          const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);
-          if (!vehicleFilters.has(type) && !utilityMatch) return false;
-        } else if (isDefaultState) {
-          if (record.type !== DEFAULT_VEHICLE_TYPE) return false;
-        }
+      if (vehicleFilters.size > 0 || fpsFilters.size > 0) {
+        if (!matchesRecipeBrowserCategory(record, vehicleFilters, fpsFilters)) return false;
+      } else if (isDefaultState && record.type !== DEFAULT_VEHICLE_TYPE) {
+        return false;
+      } else if (record.kind === "fps" && !hasTextSearch) {
+        // Preserve the current vehicle-first default while allowing search to span
+        // both inventories when no category filter is selected.
+        return false;
       }
 
-      if (sizeFilters.size > 0) {
-        const sizeKey = record.size !== null && record.size !== undefined ? String(record.size) : "";
-        if (!sizeFilters.has(sizeKey)) return false;
-      }
-      if (gradeFilters.size > 0 && !gradeFilters.has(record.grade ?? "")) return false;
-      if (classFilters.size > 0 && !classFilters.has((record.class ?? "").toLowerCase())) return false;
-      if (materialFilters.size > 0 && !recordUsesMaterialFilter(record, materialFilters)) return false;
-      if (!matchesRecipeBrowserSearch(record, searchTokens)) return false;
-      return true;
+      return matchesRecipeBrowserAppliedFilters(record, searchParams, {
+        savedOnly,
+        savedBlueprintIds,
+      });
     })
     .sort(compareRecipeBrowserRecords);
 }

@@ -1,0 +1,698 @@
+.craft-detail-page {
+  max-width: none;
+}
+
+.craft-detail-stage.craft-detail-shell {
+  --panel-bg: var(--ops-surface-primary);
+  --panel-bg-deep: var(--ops-surface-deep);
+  --panel-row-bg: var(--ops-surface-row);
+  --panel-row-hover: var(--ops-surface-hover);
+  --panel-border: var(--ops-border-default);
+  --panel-border-soft: var(--ops-border-soft);
+  --text-primary: var(--void-text-main);
+  --text-secondary: var(--void-text-muted);
+  --text-muted: var(--void-text-dim);
+  width: 100%;
+  max-width: none;
+  gap: var(--app-panel-gap);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.craft-detail-shell .craft-detail-hero,
+.craft-detail-shell .craft-detail-summary-section,
+.craft-detail-shell .craft-detail-crafting,
+.craft-detail-shell .craft-detail-sources-section {
+  background: var(--ops-surface-primary);
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.craft-detail-shell .craft-detail-hero {
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: var(--app-card-padding);
+  padding: var(--app-card-padding);
+}
+
+.craft-detail-shell .craft-detail-hero-card {
+  display: block;
+  max-width: none;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.craft-detail-shell .craft-detail-hero-icon {
+  background: var(--ops-surface-deep);
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+}
+
+.craft-detail-shell .craft-detail-title {
+  font-size: var(--recipe-text-page-title);
+  line-height: 1.08;
+}
+
+.craft-detail-shell .craft-detail-meta,
+.craft-detail-shell .craft-detail-material-slot,
+.craft-detail-shell .craft-detail-material-table-head,
+.craft-detail-shell .craft-detail-graph-readouts span span {
+  font-size: var(--recipe-text-kicker) !important;
+}
+
+.craft-detail-shell .craft-item-description {
+  color: var(--void-text-muted);
+  font-size: var(--recipe-text-body);
+  line-height: 1.4;
+}
+
+.craft-detail-shell .craft-detail-band-pill {
+  font-size: var(--recipe-text-label) !important;
+  box-shadow: none;
+}
+
+.craft-detail-shell .craft-detail-header-facts > span > span,
+.craft-detail-shell .craft-summary-section-label,
+.craft-detail-shell .stat-group-title,
+.craft-detail-shell .stat-subcluster-title {
+  color: var(--void-text-muted);
+  font-size: var(--recipe-text-label);
+}
+
+.craft-detail-shell .craft-detail-header-facts strong,
+.craft-detail-shell .craft-detail-stat-value,
+.craft-detail-shell .craft-detail-material-required,
+.craft-detail-shell .craft-detail-quality-value {
+  font-size: var(--recipe-text-stat);
+  font-variant-numeric: tabular-nums;
+}
+
+.craft-detail-shell .craft-detail-workspace,
+.craft-detail-shell .craft-detail-grid {
+  grid-template-columns: minmax(420px, 0.9fr) minmax(720px, 1.45fr);
+  gap: var(--app-panel-gap);
+}
+
+.craft-detail-shell .craft-detail-summary-section,
+.craft-detail-shell .craft-detail-crafting {
+  padding: var(--app-card-padding);
+}
+
+.craft-detail-shell .craft-detail-material-table,
+.craft-detail-shell .craft-detail-effects-list,
+.craft-detail-shell .craft-detail-graph-plot {
+  background: var(--ops-surface-deep);
+  border-color: var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+}
+
+.craft-detail-shell .craft-detail-material-table-head {
+  background: var(--ops-header-band);
+  border-color: var(--ops-border-soft);
+}
+
+.craft-detail-shell .craft-detail-material-row,
+.craft-detail-shell .craft-detail-effect-row,
+.craft-detail-shell .craft-detail-graph-readouts > span {
+  background: var(--ops-surface-row);
+  border-color: var(--ops-border-soft);
+  border-radius: 0;
+}
+
+.craft-detail-shell .craft-detail-material-row:nth-child(even),
+.craft-detail-shell .craft-detail-effect-row:nth-child(even) {
+  background: var(--ops-surface-row);
+}
+
+.craft-detail-shell .craft-detail-material-row:hover,
+.craft-detail-shell .craft-detail-material-row:nth-child(even):hover {
+  background: var(--ops-surface-hover);
+}
+
+.craft-detail-shell .craft-detail-material-id strong,
+.craft-detail-shell .craft-detail-effect-stat,
+.craft-detail-shell .craft-detail-effect-sources,
+.craft-detail-shell .craft-detail-effect-chip span,
+.craft-detail-shell .craft-detail-effect-chip strong,
+.craft-detail-shell .craft-detail-stat-row {
+  font-size: var(--recipe-text-meta);
+}
+
+.craft-detail-shell .craft-detail-effect-total {
+  font-size: var(--recipe-text-stat);
+}
+
+.craft-detail-shell .craft-detail-effect-delta,
+.craft-detail-shell .craft-detail-graph-metrics strong,
+.craft-detail-shell .craft-detail-graph-readouts strong {
+  font-size: var(--recipe-text-meta);
+}
+
+.craft-detail-shell .craft-detail-effect-chip {
+  background: var(--ops-surface-deep);
+  border-color: var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+}
+
+.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.craft-detail-shell .detail-stat-scan-column {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group--scan {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-deep);
+  box-shadow: none;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-scan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 32px;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--ops-border-soft);
+  background: var(--ops-header-band);
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-scan-header .stat-group-title {
+  overflow: hidden;
+  color: var(--void-text-main);
+  font-size: var(--recipe-text-label);
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-scan-header > span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 18px;
+  padding-inline: 5px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: 9px;
+  background: var(--ops-surface-row);
+  color: var(--void-text-dim);
+  font-size: var(--recipe-text-kicker);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row {
+  min-height: var(--app-row-height);
+  padding: 7px 9px;
+  border: 0;
+  border-bottom: 1px solid var(--ops-border-soft);
+  border-radius: 0;
+  background: var(--ops-surface-row);
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row:last-child {
+  border-bottom: 0;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row:hover {
+  background: var(--ops-surface-hover);
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .craft-stat-label {
+  color: var(--void-text-muted);
+  font-size: var(--recipe-text-meta);
+  font-weight: 650;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .craft-stat-value {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.craft-detail-shell .stat-scan-matrix {
+  display: grid;
+  min-width: 0;
+}
+
+.craft-detail-shell .stat-scan-matrix-head,
+.craft-detail-shell .stat-scan-matrix-row {
+  display: grid;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: var(--app-row-height);
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.craft-detail-shell .stat-scan-matrix--1-value .stat-scan-matrix-head,
+.craft-detail-shell .stat-scan-matrix--1-value .stat-scan-matrix-row {
+  grid-template-columns: minmax(0, 1fr) minmax(78px, auto);
+}
+
+.craft-detail-shell .stat-scan-matrix--2-value .stat-scan-matrix-head,
+.craft-detail-shell .stat-scan-matrix--2-value .stat-scan-matrix-row {
+  grid-template-columns: minmax(0, 1fr) repeat(2, minmax(78px, auto));
+}
+
+.craft-detail-shell .stat-scan-matrix-head {
+  background: var(--ops-surface-primary);
+  color: var(--void-text-dim);
+  font-size: var(--recipe-text-kicker);
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.craft-detail-shell .stat-scan-matrix-head span:not(:first-child),
+.craft-detail-shell .stat-scan-matrix-row strong {
+  text-align: right;
+}
+
+.craft-detail-shell .stat-scan-matrix-row {
+  background: var(--ops-surface-row);
+}
+
+.craft-detail-shell .stat-scan-matrix-row:last-child {
+  border-bottom: 0;
+}
+
+.craft-detail-shell .stat-scan-matrix-row > span {
+  overflow: hidden;
+  color: var(--void-text-muted);
+  font-size: var(--recipe-text-meta);
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.craft-detail-shell .stat-scan-matrix-row strong {
+  color: var(--void-text-main);
+  font-size: var(--recipe-text-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.craft-detail-shell .craft-detail-graph-plot {
+  background: var(--ops-surface-deep);
+}
+
+.craft-detail-shell .craft-detail-graph-marker-labels span {
+  background: var(--ops-surface-deep);
+  border-radius: var(--ops-radius-nested);
+}
+
+.craft-detail-material-target-input,
+.craft-detail-material-target-input .bq-target-editor--slider {
+  display: contents;
+}
+
+.craft-detail-material-target-input .bq-target-editor--slider {
+  width: 100%;
+  min-height: 48px;
+  gap: 3px;
+}
+
+.craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
+  justify-self: start;
+  width: auto;
+  min-height: 22px;
+  padding-inline: 7px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.craft-detail-material-target-input .bq-target-slider-shell {
+  width: 100%;
+  min-height: 25px;
+  padding-bottom: 28px;
+}
+
+.craft-detail-material-target-input .bq-target-slider-markers {
+  inset: 0 7px 28px;
+}
+
+.craft-detail-material-target-input .bq-target-slider-marker {
+  height: 9px;
+}
+
+.craft-detail-material-target-input .bq-target-slider-marker span {
+  top: 10px;
+  font-size: 9px;
+  transform: translateX(-50%) rotate(-42deg);
+  transform-origin: top center;
+}
+
+.craft-detail-material-target-input .bq-target-slider-marker span {
+  display: none;
+}
+
+.craft-detail-material-target-input .bq-target-slider-marker:first-child span,
+.craft-detail-material-target-input .bq-target-slider-marker:nth-child(4) span,
+.craft-detail-material-target-input .bq-target-slider-marker:last-child span {
+  display: block;
+}
+
+.craft-detail-material-row {
+  min-height: 70px;
+}
+
+.craft-detail-material-target,
+.craft-detail-material-input {
+  color: var(--void-text-muted);
+  font-size: var(--recipe-text-meta);
+  font-weight: 700;
+}
+
+.craft-detail-chart-section {
+  margin-top: var(--app-panel-gap);
+  min-width: 0;
+}
+
+.craft-detail-chart-section .craft-detail-graph-panel {
+  margin: 0;
+}
+
+/* Build Queue-aligned component statistics: external group labels and compact rows. */
+.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable,
+.craft-detail-shell .detail-stat-scan-column {
+  gap: 10px;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group--scan {
+  gap: 6px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-scan-title {
+  margin: 0;
+  padding-inline: 2px;
+  color: var(--void-text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan,
+.craft-detail-shell .craft-detail-stat-panel .stat-scan-matrix {
+  min-width: 0;
+  overflow: hidden;
+  padding: 7px 12px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  min-height: 25px;
+  padding: 4px 0;
+  background: transparent;
+}
+
+.craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row:hover {
+  background: transparent;
+}
+
+.craft-detail-shell .stat-scan-matrix-head,
+.craft-detail-shell .stat-scan-matrix-row {
+  min-height: 25px;
+  padding: 4px 0;
+  background: transparent;
+}
+
+.craft-detail-stage .craft-detail-effect-row > strong.craft-ok,
+.craft-detail-stage .craft-detail-effect-delta.craft-ok,
+.craft-detail-stage .craft-detail-stat-modifier.craft-ok,
+.craft-detail-stage .craft-detail-stat-value.craft-ok,
+.craft-detail-stage .craft-stat-modifier:not(.craft-shortage),
+.craft-detail-stage .stat-modifier:not(.craft-shortage) {
+  color: var(--stat-beneficial);
+}
+
+.craft-detail-stage .craft-detail-effect-row > strong.craft-shortage,
+.craft-detail-stage .craft-detail-effect-delta.craft-shortage,
+.craft-detail-stage .craft-detail-stat-modifier.craft-shortage,
+.craft-detail-stage .craft-detail-stat-value.craft-shortage {
+  color: var(--stat-detrimental);
+}
+
+.craft-detail-stage.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-modifier.craft-ok,
+.craft-detail-stage.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-value.craft-ok,
+.craft-detail-stage.craft-detail-shell .craft-detail-effect-chip strong.craft-ok {
+  color: var(--stat-beneficial);
+}
+
+.craft-detail-stage.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-modifier.craft-shortage,
+.craft-detail-stage.craft-detail-shell .craft-detail-stat-panel .detail-stat-groups .craft-detail-stat-value.craft-shortage,
+.craft-detail-stage.craft-detail-shell .craft-detail-effect-chip strong.craft-shortage {
+  color: var(--stat-detrimental);
+}
+
+.craft-detail-graph-panel {
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 0.34fr);
+  grid-template-rows: auto clamp(190px, 18vh, 300px) auto;
+  max-height: 420px;
+}
+
+.craft-detail-graph-plot {
+  min-height: 176px;
+  padding: 12px 14px 22px 36px;
+}
+
+.craft-detail-graph-plot svg {
+  overflow: hidden;
+}
+
+.craft-detail-graph-x-axis,
+.craft-detail-graph-y-axis {
+  inset: 12px 14px 22px 36px;
+}
+
+.craft-detail-graph-x-axis span,
+.craft-detail-graph-y-axis span {
+  font-size: var(--recipe-text-kicker) !important;
+}
+
+.craft-detail-graph-marker-labels {
+  position: absolute;
+  inset: 12px 14px 22px 36px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.craft-detail-graph-marker-labels span {
+  position: absolute;
+  top: 5px;
+  max-width: 150px;
+  padding: 3px 5px;
+  transform: translateX(-50%);
+  overflow: hidden;
+  border: 1px solid rgba(255, 181, 35, 0.22);
+  border-radius: 4px;
+  background: rgba(3, 12, 18, 0.88);
+  color: rgba(255, 205, 107, 0.9);
+  font-size: var(--recipe-text-kicker);
+  font-weight: 800;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.craft-detail-graph-marker-labels span:first-child {
+  transform: translateX(0);
+}
+
+.craft-detail-graph-line--base {
+  stroke-width: 1.6;
+}
+
+.craft-detail-graph-line--modified {
+  stroke-width: 2;
+}
+
+@media (max-width: 1180px) {
+  .craft-detail-shell .craft-detail-hero {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .craft-detail-shell .craft-detail-hero-right {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    justify-items: stretch;
+  }
+
+  .craft-detail-shell .craft-detail-header-facts {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .craft-detail-material-row {
+    min-height: 0;
+  }
+
+  .craft-detail-graph-panel {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(176px, 1fr) auto auto;
+  }
+
+  .craft-detail-graph-metrics,
+  .craft-detail-graph-readouts {
+    grid-column: 1;
+  }
+
+  .craft-detail-shell .craft-detail-workspace,
+  .craft-detail-shell .craft-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-detail-shell .craft-detail-material-table-head {
+    display: none;
+  }
+
+  .craft-detail-shell .craft-detail-material-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "material required"
+      "target target"
+      "input input"
+      "effects effects";
+    gap: 9px 12px;
+    padding: 11px;
+  }
+
+  .craft-detail-shell .craft-detail-material-id {
+    grid-area: material;
+  }
+
+  .craft-detail-shell .craft-detail-material-required {
+    grid-area: required;
+  }
+
+  .craft-detail-shell .craft-detail-material-target,
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality {
+    grid-area: target;
+  }
+
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .craft-detail-shell .craft-detail-material-input,
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
+    grid-area: input;
+  }
+
+  .craft-detail-shell .craft-detail-material-effects {
+    grid-area: effects;
+    overflow: visible;
+    flex-wrap: wrap;
+  }
+
+  .craft-detail-shell .craft-detail-effect-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .craft-detail-shell .craft-detail-effect-sources {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 3200px) and (min-height: 1800px) {
+  .craft-detail-stage.craft-detail-shell {
+    width: min(3440px, calc(100vw - 160px));
+    margin-inline: auto;
+    gap: 18px;
+  }
+
+  .craft-detail-shell .craft-detail-hero {
+    grid-template-columns: 86px minmax(0, 1fr) auto;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .craft-detail-shell .craft-detail-hero-icon {
+    width: 76px;
+    height: 76px;
+  }
+
+  .craft-detail-shell .craft-detail-workspace,
+  .craft-detail-shell .craft-detail-grid {
+    grid-template-columns: minmax(680px, 0.92fr) minmax(1180px, 1.45fr);
+    gap: 18px;
+  }
+
+  .craft-detail-shell .craft-detail-summary-section,
+  .craft-detail-shell .craft-detail-crafting,
+  .craft-detail-shell .craft-detail-sources-section {
+    padding: 18px;
+  }
+
+  .craft-detail-shell .craft-detail-material-row {
+    min-height: 96px;
+    padding: 12px 14px;
+  }
+
+  .craft-detail-shell .craft-detail-material-table-head {
+    min-height: 42px;
+    padding: 10px 14px;
+  }
+
+  .craft-detail-shell .craft-detail-graph-panel {
+    grid-template-rows: auto minmax(260px, 1fr) auto;
+    max-height: 460px;
+  }
+
+  .craft-detail-shell .craft-detail-graph-plot {
+    min-height: 260px;
+  }
+
+  .craft-detail-material-target-input .bq-target-slider-marker span {
+    display: block;
+  }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCardIndex } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
@@ -10,6 +10,7 @@ import {
 } from "./utils/componentCardVariants";
 import { filterRecipeBrowserRecords } from "./utils/recipeBrowserFilters";
 import "./recipe-browser.css";
+import "./recipe-browser-redesign.css";
 
 export default function CraftingLayout() {
   const [componentCards, setComponentCards] = useState<ComponentCardIndexRecord[]>([]);
@@ -17,6 +18,8 @@ export default function CraftingLayout() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const isBrowserRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting";
 
   useEffect(() => {
     let cancelled = false;
@@ -70,7 +73,9 @@ export default function CraftingLayout() {
   return (
     <CraftingContext.Provider value={contextValue}>
       <div className="craft-page craft-planner-shell component-results-browser">
-        <CraftingFilterBar records={componentCards} resultCount={resultCount} />
+        {isBrowserRoute ? (
+          <CraftingFilterBar records={componentCards} resultCount={resultCount} />
+        ) : null}
         <div className="component-browser-body">
           <Outlet />
         </div>

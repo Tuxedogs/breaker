@@ -7,7 +7,10 @@ import { apiUrl } from "./apiUrl";
 import { parseJsonResponse } from "./safeJson";
 import {
   getBlueprintRecordsFromApi,
+  getCraftingRecipeShardFromApi,
+  getCraftingRecipeShardsBatchFromApi,
   getFPSBlueprintRecordsFromApi,
+  type RecipeShard,
 } from "./craftingRecipesApi";
 import {
   getCraftedPropertiesFromApi,
@@ -159,6 +162,7 @@ let fpsBlueprintsPromise: Promise<FpsBlueprintRecord[]> | null = null;
 let craftedPropertiesPromise: Promise<CraftedPropertyRecord[]> | null = null;
 let qualityQuantizationPromise: Promise<QualityQuantizationRecord[]> | null = null;
 let craftingItemsPromise: Promise<ComponentRecipe[]> | null = null;
+const craftingItemPromisesByGuid = new Map<string, Promise<ComponentRecipe | null>>();
 
 async function fetchJsonArray<T>(url: string): Promise<T[]> {
   const requestUrl = apiUrl(url);
@@ -451,6 +455,13 @@ function normalizeFpsBlueprint(item: FpsBlueprintRecord): ComponentRecipe {
   };
 }
 
+function normalizeRecipeShard(shard: RecipeShard): ComponentRecipe | null {
+  if (!shard.record) return null;
+  return shard.kind === "fps"
+    ? normalizeFpsBlueprint(shard.record as FpsBlueprintRecord)
+    : normalizeBlueprint(shard.record as BlueprintRecord);
+}
+
 export function getVehicleComponents(): Promise<BlueprintRecord[]> {
   return getBlueprintRecords();
 }
@@ -487,8 +498,75 @@ export async function getCraftingItems(): Promise<ComponentRecipe[]> {
 export async function getCraftingItemByBlueprintGuid(
   guid: string
 ): Promise<ComponentRecipe | null> {
-  const items = await getCraftingItems();
-  return items.find((item) => item.blueprint_id === guid) ?? null;
+  const normalizedGuid = guid.trim().toLowerCase();
+  if (!normalizedGuid) return null;
+
+  const cached = craftingItemPromisesByGuid.get(normalizedGuid);
+  if (cached) return cached;
+
+  const request = (async () => {
+    try {
+      const shard = await getCraftingRecipeShardFromApi(normalizedGuid);
+      return normalizeRecipeShard(shard);
+    } catch (error) {
+      if (error instanceof Error && /:\s*404$/.test(error.message)) {
+        return null;
+      }
+      if (import.meta.env.DEV) {
+        console.warn(
+          "[crafting-data] recipe shard API failed; falling back to recipe catalogs.",
+          error,
+        );
+      }
+      const items = await getCraftingItems();
+      return items.find((item) => item.blueprint_id.toLowerCase() === normalizedGuid) ?? null;
+    }
+  })();
+
+  craftingItemPromisesByGuid.set(normalizedGuid, request);
+  request.catch(() => craftingItemPromisesByGuid.delete(normalizedGuid));
+  return request;
+}
+
+export async function getCraftingItemsByBlueprintGuids(
+  guids: string[],
+): Promise<ComponentRecipe[]> {
+  const normalizedGuids = [...new Set(
+    guids.map((guid) => guid.trim().toLowerCase()).filter(Boolean),
+  )];
+  if (normalizedGuids.length === 0) return [];
+  if (normalizedGuids.length === 1) {
+    const recipe = await getCraftingItemByBlueprintGuid(normalizedGuids[0]!);
+    return recipe ? [recipe] : [];
+  }
+
+  try {
+    const payload = await getCraftingRecipeShardsBatchFromApi(normalizedGuids);
+    const recipes = payload.records
+      .map(normalizeRecipeShard)
+      .filter((recipe): recipe is ComponentRecipe => recipe !== null);
+    const recipesById = new Map(
+      recipes.map((recipe) => [recipe.blueprint_id.toLowerCase(), recipe]),
+    );
+    for (const guid of normalizedGuids) {
+      craftingItemPromisesByGuid.set(guid, Promise.resolve(recipesById.get(guid) ?? null));
+    }
+    return normalizedGuids.flatMap((guid) => {
+      const recipe = recipesById.get(guid);
+      return recipe ? [recipe] : [];
+    });
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn(
+        "[crafting-data] recipe batch API failed; falling back to recipe shards.",
+        error,
+      );
+    }
+    const recipes = await Promise.all(
+      normalizedGuids.map((guid) => getCraftingItemByBlueprintGuid(guid)),
+    );
+    return recipes.filter((recipe): recipe is ComponentRecipe => recipe !== null);
+  }
 }
 
 export async function getCraftingItemsByMaterial(
@@ -521,4 +599,5 @@ export function clearCraftingDataCache(): void {
   craftedPropertiesPromise = null;
   qualityQuantizationPromise = null;
   craftingItemsPromise = null;
+  craftingItemPromisesByGuid.clear();
 }

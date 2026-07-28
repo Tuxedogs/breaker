@@ -19,8 +19,8 @@ import {
 } from "../utils/qualityModifiers";
 import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
-  buildSelectedQualitySnapshot,
   computeTotalModifiers,
+  computeTotalModifiersFromQualities,
   deriveFinalProductQuality,
   getQualityBandsForMaterial,
   getTotalModifierKey,
@@ -74,13 +74,25 @@ import {
   formatModifierDifference,
   formatModifierStatName,
   getCraftingModifierBaseValue,
+  getModifierStatBindingLabel,
   type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
 import {
   buildDetailStatGroups,
-  type DetailStatGroup,
 } from "@/lib/crafting/detailStatGroups";
+import {
+  buildDetailStatScanSections,
+  formatDetailStatSectionTitle,
+  splitDetailStatScanColumns,
+  type DetailStatScanSection,
+} from "@/lib/crafting/detailStatPresentation";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
+import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
+import {
+  getProjectileTravelDistance,
+  resolveFpsChartRange,
+} from "@/lib/crafting/fpsChartRange";
+import "./crafting-detail-refactor.css";
 
 export type { FinalProductQuality } from "../utils/recipeQuality";
 
@@ -805,7 +817,7 @@ function getQuantizationLookupKeys(item: MaterialQuantization): string[] {
 }
 
 function getMaterialName(mat: ComponentRecipe["materials"][number]): string {
-  return String(mat.material_name ?? "");
+  return formatMaterialDisplayName(mat.material_name);
 }
 
 function useQualityQuantization() {
@@ -1397,32 +1409,36 @@ export function MaterialQualityRow({
 
 export function DetailMaterialQualityRow({
   mat,
+  quality,
+  onQualityChange,
   bandIndex,
   onBandChange,
   getBandsForMaterial,
   fittingDetail,
 }: {
   mat: ComponentRecipe["materials"][number];
-  bandIndex: number;
-  onBandChange: (bandIndex: number) => void;
+  quality?: number;
+  onQualityChange?: (quality: number) => void;
+  bandIndex?: number;
+  onBandChange?: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   fittingDetail?: FittingComponentDetail | null;
 }) {
-  const {
-    materialName,
-    bands,
-    safeBandIndex,
-    quality,
-    selectedQualityTierClass,
-    atQuality,
-    findNearestBandForMappedValue,
-    minQuality,
-    maxQuality,
-  } = useMaterialQualityModel({
-    mat,
-    bandIndex,
-    getBandsForMaterial,
-  });
+  const materialName = getMaterialName(mat);
+  const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
+  const selectedQuality = clampQuality(
+    quality ?? getEffectiveQualityFromBands(bands, bandIndex ?? DEFAULT_BAND_INDEX),
+  );
+  const safeBandIndex = findNearestBandForQuality(bands, selectedQuality);
+  const selectedQualityTierClass = rarityClassFromBandIndex(safeBandIndex + 1);
+  const bandMarkers = bands.map((band) => clampQuality(Number(band.mappedValue ?? 0)));
+  const atQuality = useMemo(
+    () =>
+      filterEffectiveModifiersAtQuality(
+        getModifiersAtQuality(mat.qualityModifiers ?? [], selectedQuality),
+      ),
+    [mat.qualityModifiers, selectedQuality],
+  );
   const requiredAmount = Number.isFinite(mat.quantity) ? formatCompactNumber(mat.quantity) : null;
 
   if (bands.length === 0) {
@@ -1433,7 +1449,8 @@ export function DetailMaterialQualityRow({
           <strong>{materialName}</strong>
         </div>
         <div className="craft-detail-material-required">{requiredAmount}</div>
-        <div className="craft-detail-material-quality">Quality data unavailable</div>
+        <div className="craft-detail-material-target">Unavailable</div>
+        <div className="craft-detail-material-input">—</div>
       </div>
     );
   }
@@ -1445,25 +1462,31 @@ export function DetailMaterialQualityRow({
         <strong>{materialName}</strong>
       </div>
       <div className="craft-detail-material-required">{requiredAmount}</div>
-      <div className="craft-detail-material-quality">
-        <span className={`craft-detail-band-pill ${selectedQualityTierClass}`}>
-          {safeBandIndex + 1}
-        </span>
-        <span className="craft-detail-quality-value">{quality}</span>
-      </div>
-      <div className="craft-detail-material-slider">
+      <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
         <TargetQualitySlider
-          label={`${quality}`}
+          label={`Target ${selectedQuality}`}
           tone="cyan"
           materialName={materialName}
-          min={minQuality}
-          max={maxQuality}
+          min={1}
+          max={1000}
           step={1}
-          value={quality}
-          onChange={(rawValue) => {
-            onBandChange(findNearestBandForMappedValue(rawValue));
+          value={selectedQuality}
+          markers={bandMarkers}
+          layout="stacked"
+          onChange={(rawQuality) => {
+            if (onQualityChange) {
+              onQualityChange(rawQuality);
+            } else {
+              onBandChange?.(findNearestBandForQuality(bands, rawQuality));
+            }
           }}
-          onCommit={(rawValue) => onBandChange(findNearestBandForMappedValue(rawValue))}
+          onCommit={(rawQuality) => {
+            if (onQualityChange) {
+              onQualityChange(rawQuality);
+            } else {
+              onBandChange?.(findNearestBandForQuality(bands, rawQuality));
+            }
+          }}
         />
       </div>
       <div className="craft-detail-material-effects">
@@ -1524,75 +1547,49 @@ function GroupedDetailStatGroups({
   stats: DetailStatRow[];
 }) {
   const groups = buildDetailStatGroups(detail, stats);
+  const displaySections = buildDetailStatScanSections(groups, stats);
+  const columns = splitDetailStatScanColumns(displaySections, 2);
 
-  if (groups.length === 0 && stats.length > 0) {
-    return (
-      <div className="craft-detail-stat-list craft-stat-grid">
-        {stats.map((stat) => (
-          <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
-        ))}
-      </div>
-    );
-  }
-
-  const displaySections = groups.reduce<Array<{
-    key: string;
-    title: string;
-    stats: DetailStatRow[];
-    matrix?: Extract<DetailStatGroup, { kind: "matrix" }>;
-  }>>(
-    (sections, group) => {
-      if (group.kind === "matrix") {
-        sections.push({ key: group.title, title: group.title, stats: [], matrix: group });
-        return sections;
-      }
-      const groupStats = group.kind === "nested"
-        ? group.subclusters.flatMap((subcluster) => subcluster.stats)
-        : group.stats;
-
-      if (group.title === "Thermal / Power" || group.title === "Signature / Detection") {
-        const systemsSection = sections.find((section) => section.key === "systems");
-        if (systemsSection) {
-          systemsSection.stats.push(...groupStats);
-        } else {
-          sections.push({ key: "systems", title: "Systems", stats: [...groupStats] });
-        }
-        return sections;
-      }
-
-      const title = group.title === "Ballistics / Damage"
-        ? "Damage"
-        : group.title === "Durability / Physical"
-          ? "Durability"
-          : group.title;
-      sections.push({ key: group.title, title, stats: groupStats });
-      return sections;
-    },
-    [],
-  ).filter((section) => section.stats.length > 0);
+  const renderSection = (section: DetailStatScanSection) => (
+    <section
+      key={section.key}
+      className={`stat-group stat-group--scan stat-group--scan-${section.kind}`}
+      aria-label={formatDetailStatSectionTitle(section.title)}
+    >
+      <h4 className="stat-group-title stat-group-scan-title">
+        {formatDetailStatSectionTitle(section.title)}
+      </h4>
+      {section.kind === "matrix" ? (
+        <div className={`stat-scan-matrix stat-scan-matrix--${Math.min(2, section.columns.length)}-value`}>
+          <div className="stat-scan-matrix-head" aria-hidden="true">
+            <span>Type</span>
+            {section.columns.map((column) => <span key={column}>{column}</span>)}
+          </div>
+          {section.rows.map((row) => (
+            <div className="stat-scan-matrix-row" key={`${section.key}:${row.label}`}>
+              <span>{row.label}</span>
+              {row.values.map((value, index) => (
+                <strong key={`${row.label}:${section.columns[index] ?? index}`}>{value}</strong>
+              ))}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="stat-group-grid stat-group-grid--scan">
+          {section.stats.map((stat) => (
+            <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
 
   return (
-    <div className="detail-stat-groups">
-      {displaySections.map((section) => (
-        <section
-          key={section.key}
-          className="stat-group"
-          aria-label={section.title}
-        >
-          <div className="stat-group-title">{section.title}</div>
-          <div className={`stat-group-grid${section.matrix ? " stat-group-grid--matrix" : ""}`}>
-            {section.matrix
-              ? section.matrix.rows.map((row) => (
-                <span className="craft-detail-stat-row craft-stat-row stat-row" key={`${section.key}:${row.label}`}>
-                  <span className="craft-stat-label">{row.label}</span>
-                  <strong className="craft-stat-value">{row.values.join(" / ")}</strong>
-                </span>
-              ))
-              : section.stats.map((stat) => (
-                <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
-              ))}
-          </div>
-        </section>
+    <div className="detail-stat-groups detail-stat-groups--scannable">
+      {columns.map((column, index) => (
+        <div className="detail-stat-scan-column" key={`stat-column-${index}`}>
+          {column.map(renderSection)}
+        </div>
       ))}
     </div>
   );
@@ -1640,16 +1637,6 @@ function readIndexNumber(source: Record<string, unknown>, key: string): number |
   return Number.isFinite(number) ? number : undefined;
 }
 
-function getRangeBoundary(stats: Record<string, unknown>): { value: number | undefined; label: string } {
-  const hardRange = readIndexNumber(stats, "hardRange");
-  if (hardRange !== undefined) return { value: hardRange, label: "Hard Range" };
-
-  const projectileLifetimeTravel =
-    readIndexNumber(stats, "projectileLifetimeTravel") ??
-    readIndexNumber(stats, "calculatedRange");
-  return { value: projectileLifetimeTravel, label: "Projectile Travel" };
-}
-
 function getTotalModifierForProperty(
   totalModifiers: TotalModifierRow[],
   property: string,
@@ -1663,6 +1650,16 @@ function getAmmoPerformanceStats(componentCardRecord: ComponentCardIndexRecord |
     getIndexStatsObject(componentCardRecord, "fpsWeapon") ??
     null
   );
+}
+
+function buildDistanceSamples(range: number, landmarks: number[] = []): number[] {
+  const samples = Array.from({ length: 17 }, (_, index) => (range * index) / 16);
+  for (const landmark of landmarks) {
+    if (Number.isFinite(landmark) && landmark > 0 && landmark < range) {
+      samples.push(landmark);
+    }
+  }
+  return [...new Set(samples)].sort((a, b) => a - b);
 }
 
 function findBrowseComponentCard(
@@ -1718,8 +1715,8 @@ function buildArmorDamageTakenGraph(
   if (!armor || !p6Stats) return null;
 
   const alphaDamage = readIndexNumber(p6Stats, "alphaDamageTotal");
-  const rangeBoundary = getRangeBoundary(p6Stats);
-  const range = rangeBoundary.value;
+  const rangeBoundary = resolveFpsChartRange(p6Stats);
+  const range = rangeBoundary?.value;
   if (!alphaDamage || !range || alphaDamage <= 0 || range <= 0) return null;
 
   const resistance = getArmorResistanceForDamageType(
@@ -1737,7 +1734,7 @@ function buildArmorDamageTakenGraph(
       ? applyModifierToBase(alphaDamage, damageModifier.totalValue, damageModifier.modifierMode)
       : alphaDamage;
   const damageScale = maxQualityAlpha / alphaDamage;
-  const sampleDistances = [0, range * 0.25, range * 0.5, range * 0.75, range];
+  const sampleDistances = buildDistanceSamples(range, [dropStart]);
   const p6DamageAt = (distance: number) => {
     if (dropPerMeter <= 0 || distance <= dropStart) return alphaDamage;
     const dropped = alphaDamage - (distance - dropStart) * dropPerMeter;
@@ -1776,7 +1773,7 @@ function buildArmorDamageTakenGraph(
 
   return {
     title: "Armor Damage Taken",
-    subtitle: `${p6Label} at max quality through ${formatCompactNumber(resistance * 100)}% ${String(p6Stats.damageType ?? "physical")} taken`,
+    subtitle: `${p6Label} through ${formatCompactNumber(resistance * 100)}% ${String(p6Stats.damageType ?? "physical")} taken · ${rangeBoundary.label.toLowerCase()}`,
     points,
     markers,
     xTicks,
@@ -1788,6 +1785,12 @@ function buildArmorDamageTakenGraph(
     bars: [
       { label: "Resistance Multiplier", value: formatCompactNumber(resistance) },
       { label: rangeBoundary.label, value: `${formatCompactNumber(range)}m` },
+      ...(getProjectileTravelDistance(p6Stats) !== undefined
+        ? [{
+            label: "Projectile Travel (context)",
+            value: `${formatCompactNumber(getProjectileTravelDistance(p6Stats) as number)}m`,
+          }]
+        : []),
     ],
     hasModifiedCurve: false,
   };
@@ -1801,8 +1804,8 @@ function buildAmmoPerformanceGraph(
   if (!ammo) return null;
 
   const alphaDamage = readIndexNumber(ammo, "alphaDamageTotal");
-  const rangeBoundary = getRangeBoundary(ammo);
-  const range = rangeBoundary.value;
+  const rangeBoundary = resolveFpsChartRange(ammo);
+  const range = rangeBoundary?.value;
   if (!alphaDamage || !range || alphaDamage <= 0 || range <= 0) return null;
 
   const dropStart = readIndexNumber(ammo, "damageDropMinDistance") ?? 0;
@@ -1814,7 +1817,7 @@ function buildAmmoPerformanceGraph(
       ? applyModifierToBase(alphaDamage, damageModifier.totalValue, damageModifier.modifierMode)
       : undefined;
   const damageScale = modifiedAlpha !== undefined ? modifiedAlpha / alphaDamage : 1;
-  const sampleDistances = [0, range * 0.25, range * 0.5, range * 0.75, range];
+  const sampleDistances = buildDistanceSamples(range, [dropStart]);
   const damageAt = (distance: number) => {
     if (dropPerMeter <= 0 || distance <= dropStart) return alphaDamage;
     const dropped = alphaDamage - (distance - dropStart) * dropPerMeter;
@@ -1852,6 +1855,7 @@ function buildAmmoPerformanceGraph(
 
   const projectileSpeed = readIndexNumber(ammo, "projectileSpeed");
   const projectileLifetime = readIndexNumber(ammo, "projectileLifetime");
+  const projectileTravel = getProjectileTravelDistance(ammo);
   const impulseStart = readIndexNumber(ammo, "bulletImpulseFalloffMinDistance");
   const impulseDrop = readIndexNumber(ammo, "bulletImpulseDropFalloff");
   const impulseMax = readIndexNumber(ammo, "bulletImpulseMaxFalloff");
@@ -1865,6 +1869,12 @@ function buildAmmoPerformanceGraph(
   }
   if (projectileLifetime !== undefined) {
     bars.push({ label: "Travel Time", value: `${formatCompactNumber(projectileLifetime)}s` });
+  }
+  if (projectileTravel !== undefined) {
+    bars.push({
+      label: "Projectile Travel (context)",
+      value: `${formatCompactNumber(projectileTravel)}m`,
+    });
   }
   if (impulseStart !== undefined) {
     bars.push({ label: "Impact Falloff Starts", value: `${formatCompactNumber(impulseStart)}m` });
@@ -1901,7 +1911,8 @@ function buildAmmoPerformanceGraph(
 
   return {
     title: "Ammo Performance",
-    subtitle: modifiedAlpha !== undefined ? "Damage falloff with selected materials" : "Damage falloff, travel, impulse, penetration",
+    subtitle:
+      `${modifiedAlpha !== undefined ? "Damage falloff with selected materials" : "Damage falloff, impulse, and penetration"} · ${rangeBoundary.label.toLowerCase()}`,
     points,
     markers,
     xTicks,
@@ -1961,9 +1972,9 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
         </div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
           <path className="craft-detail-graph-grid" d="M0 25H100M0 50H100M0 75H100M25 0V100M50 0V100M75 0V100" />
-          {data.xTicks.map((tick) => (
+          {data.xTicks.map((tick, index) => (
             <line
-              key={`x:${tick.label}`}
+              key={`x:${index}:${tick.label}`}
               className="craft-detail-graph-notch"
               x1={tick.position}
               y1="92"
@@ -1971,9 +1982,9 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
               y2="100"
             />
           ))}
-          {data.yTicks.map((tick) => (
+          {data.yTicks.map((tick, index) => (
             <line
-              key={`y:${tick.label}`}
+              key={`y:${index}:${tick.label}`}
               className="craft-detail-graph-notch"
               x1="0"
               y1={tick.position}
@@ -1994,16 +2005,29 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
             <polyline className="craft-detail-graph-line craft-detail-graph-line--modified" points={modifiedLine} />
           )}
         </svg>
+        <div className="craft-detail-graph-marker-labels">
+          {data.markers.map((marker) => {
+            const left = data.range > 0 ? Math.max(0, Math.min(100, (marker.x / data.range) * 100)) : 0;
+            return (
+              <span
+                key={`${marker.label}:${marker.x}`}
+                style={{ left: `${left}%` }}
+              >
+                {marker.label} · {formatCompactNumber(marker.x)}m
+              </span>
+            );
+          })}
+        </div>
         <div className="craft-detail-graph-x-axis">
-          {data.xTicks.map((tick) => (
-            <span key={tick.label} style={{ left: `${tick.position}%` }}>
+          {data.xTicks.map((tick, index) => (
+            <span key={`${index}:${tick.label}`} style={{ left: `${tick.position}%` }}>
               {tick.label}
             </span>
           ))}
         </div>
         <div className="craft-detail-graph-y-axis">
-          {data.yTicks.map((tick) => (
-            <span key={tick.label} style={{ top: `${tick.position}%` }}>
+          {data.yTicks.map((tick, index) => (
+            <span key={`${index}:${tick.label}`} style={{ top: `${tick.position}%` }}>
               {tick.label}
             </span>
           ))}
@@ -2039,7 +2063,6 @@ function ItemSummaryPanel({
   fittingStatsMissing,
   fittingStatsError,
   totalModifiers,
-  p6lrReference,
 }: {
   recipe: ComponentRecipe;
   componentCardRecord?: ComponentCardIndexRecord;
@@ -2048,14 +2071,10 @@ function ItemSummaryPanel({
   fittingStatsMissing?: boolean;
   fittingStatsError?: string | null;
   totalModifiers: TotalModifierRow[];
-  p6lrReference?: P6LRReference;
 }) {
   const baseStatRows = fittingDetail ? buildItemSummaryDetailStatRows(fittingDetail) : [];
   const displayStatRows = buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
   const statsSectionLabel = `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? recipe.component_type} Stats`;
-  const graphData =
-    buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
-    buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
   const showFittingUnavailable = Boolean(
     fittingStatsMissing || fittingStatsError || (fittingStatsLoading && !fittingDetail),
   );
@@ -2066,6 +2085,7 @@ function ItemSummaryPanel({
 
         {displayStatRows.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
+            <div className="craft-summary-section-label">Component Statistics</div>
             {fittingDetail ? (
               <GroupedDetailStatGroups detail={fittingDetail} stats={displayStatRows} />
             ) : (
@@ -2089,7 +2109,6 @@ function ItemSummaryPanel({
           </p>
         )}
 
-        {graphData && <DetailGraphPanel data={graphData} />}
       </div>
     </section>
   );
@@ -2236,7 +2255,7 @@ function MaterialRequirementsTable({ children }: { children: ReactNode }) {
       <div className="craft-detail-material-table-head" aria-hidden="true">
         <span>Material</span>
         <span>Required</span>
-        <span>Quality</span>
+        <span>Target</span>
         <span>Input</span>
         <span>Effect</span>
       </div>
@@ -2299,7 +2318,7 @@ function EstimatedEffectsPanel({
             const impactClass = getImpactClass(getModifierImpact(row.property, row.totalValue));
             return (
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
-                <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
+                <span className="craft-detail-effect-stat">{getModifierStatBindingLabel(row.property)}</span>
                 <div className="craft-detail-effect-values">
                   {display.total ? (
                     <strong className="craft-detail-effect-total">{display.total}</strong>
@@ -2319,7 +2338,7 @@ function EstimatedEffectsPanel({
                     {row.contributions.map((c, index) => (
                       <span key={`${c.materialName}:${index}`} className="craft-detail-effect-source">
                         {index > 0 && <span className="craft-detail-effect-source-sep" aria-hidden="true">·</span>}
-                        <span>{c.materialName}</span>
+                        <span>{formatMaterialDisplayName(c.materialName)}</span>
                         <strong>{formatContributionValue(c.value, row.modifierMode)}</strong>
                       </span>
                     ))}
@@ -2435,34 +2454,65 @@ function RecipeDrawer({
     setSelectedRecipeId(initialSelectedRecipeId);
   }, [initialSelectedRecipeId]);
 
+  const buildDefaultMaterialQualities = useCallback(
+    (targetRecipe: ComponentRecipe) =>
+      Object.fromEntries(
+        targetRecipe.materials.map((mat, inputIndex) => {
+          const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
+          return [
+            getMaterialQualityKey(targetRecipe, mat, inputIndex),
+            getEffectiveQualityFromBands(bands, DEFAULT_BAND_INDEX),
+          ];
+        }),
+      ),
+    [getBandsForMaterial],
+  );
   const [materialQualities, setMaterialQualities] = useState<
     Record<string, number>
-  >(() =>
-    Object.fromEntries(
-      recipe.materials.map((mat, inputIndex) => [
-        getMaterialQualityKey(recipe, mat, inputIndex),
-        DEFAULT_BAND_INDEX,
-      ]),
-    ),
-  );
+  >(() => buildDefaultMaterialQualities(recipe));
 
   useEffect(() => {
-    setMaterialQualities(
-      Object.fromEntries(
+    setMaterialQualities(buildDefaultMaterialQualities(selectedRecipe));
+  }, [buildDefaultMaterialQualities, selectedRecipe]);
+
+  const selectedMaterialQualities = useMemo(
+    () => ({
+      ...buildDefaultMaterialQualities(selectedRecipe),
+      ...materialQualities,
+    }),
+    [buildDefaultMaterialQualities, materialQualities, selectedRecipe],
+  );
+  const materialBandsByKey = useMemo(
+    () =>
+      new Map(
         selectedRecipe.materials.map((mat, inputIndex) => [
           getMaterialQualityKey(selectedRecipe, mat, inputIndex),
-          DEFAULT_BAND_INDEX,
+          getQualityBandsForMaterial(mat, getBandsForMaterial),
         ]),
       ),
-    );
-  }, [selectedRecipe]);
+    [getBandsForMaterial, selectedRecipe],
+  );
 
   function getBandIndex(key: string): number {
-    return materialQualities[key] ?? DEFAULT_BAND_INDEX;
+    const bands = materialBandsByKey.get(key) ?? [];
+    const selectedQuality = selectedMaterialQualities[key];
+    return selectedQuality === undefined
+      ? DEFAULT_BAND_INDEX
+      : findNearestBandForQuality(bands, selectedQuality);
   }
 
   const overallModifiers = selectedRecipe.overallQualityModifiers ?? [];
   const finalProductQuality = deriveFinalProductQuality(selectedRecipe, getBandIndex);
+  const selectedQualitySnapshot = Object.fromEntries(
+    selectedRecipe.materials.map((mat, inputIndex) => {
+      const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
+      return [key, {
+        quality: selectedMaterialQualities[key],
+        bandNumber: getBandIndex(key) + 1,
+        bands: materialBandsByKey.get(key) ?? [],
+      }];
+    }),
+  );
   const overallQualitySource = getEffectiveQualityFromBands(FALLBACK_QUALITY_BANDS, finalProductQuality.band - 1);
 
   const rewardPools = (selectedRecipe.rewardPools ?? [])
@@ -2539,9 +2589,8 @@ function RecipeDrawer({
   );
 
   const totalModifiers = useMemo(
-    () => computeTotalModifiers(selectedRecipe, getBandsForMaterial, getBandIndex),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedRecipe, getBandsForMaterial, materialQualities],
+    () => computeTotalModifiersFromQualities(selectedRecipe, selectedMaterialQualities),
+    [selectedMaterialQualities, selectedRecipe],
   );
   const p6lrReference = useMemo<P6LRReference | undefined>(() => {
     const p6lrRecord = findP6LRWeaponRecord(componentCards);
@@ -2567,6 +2616,12 @@ function RecipeDrawer({
       ),
     };
   }, [allRecipes, componentCards, getBandsForMaterial]);
+  const detailGraphData = useMemo(
+    () =>
+      buildAmmoPerformanceGraph(selectedComponentCard, totalModifiers)
+      ?? buildArmorDamageTakenGraph(selectedComponentCard, p6lrReference),
+    [p6lrReference, selectedComponentCard, totalModifiers],
+  );
 
   const showVariantSelector = groupRecipes.length > 1;
   const selectedIsQueued = isRecipeQueued(selectedRecipe);
@@ -2679,11 +2734,7 @@ function RecipeDrawer({
               aria-label={selectedIsQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
               onClick={() => onAddToQueue(
                 selectedRecipe,
-                buildSelectedQualitySnapshot(
-                  selectedRecipe,
-                  materialQualities,
-                  getBandsForMaterial,
-                ),
+                selectedQualitySnapshot,
                 finalProductQuality,
               )}
             >
@@ -2702,7 +2753,6 @@ function RecipeDrawer({
           fittingStatsMissing={fittingStatsMissing}
           fittingStatsError={fittingStatsError}
           totalModifiers={totalModifiers}
-          p6lrReference={p6lrReference}
         />
 
         <aside className="craft-detail-crafting" aria-label="Crafting materials">
@@ -2755,12 +2805,12 @@ function RecipeDrawer({
               <DetailMaterialQualityRow
                 key={`${mat.slot}:${key}`}
                 mat={mat}
-                bandIndex={getBandIndex(key)}
+                quality={selectedMaterialQualities[key]}
                 fittingDetail={fittingDetail}
-                onBandChange={(bandIndex) =>
+                onQualityChange={(quality) =>
                   setMaterialQualities((prev) => ({
                     ...prev,
-                    [key]: bandIndex,
+                    [key]: clampQuality(quality),
                   }))
                 }
                 getBandsForMaterial={getBandsForMaterial}
@@ -2768,6 +2818,11 @@ function RecipeDrawer({
             );
           })}
         </RightCraftingPanel>
+        {detailGraphData ? (
+          <section className="craft-detail-chart-section" aria-label="Component performance chart">
+            <DetailGraphPanel data={detailGraphData} />
+          </section>
+        ) : null}
         </aside>
       </div>
 

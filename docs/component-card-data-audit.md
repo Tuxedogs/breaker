@@ -2,6 +2,8 @@
 
 Date audited: 2026-05-24
 
+> Historical source inventory. The current browser is backed by the generated/shaped component-card index and the current detail flow also uses shared fitting/component-card delivery. See `docs/crafting-browser-detail-handoff.md` for the active implementation map.
+
 Scope: craftable component/item data currently available in repo data sources used by the Crafting Recipe / Recipe Browser flow. No UI implementation was done.
 
 ## 1. Data source inventory

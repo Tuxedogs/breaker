@@ -28,6 +28,7 @@ type ModifierStatBinding = {
 };
 
 const MODIFIER_STAT_BINDINGS: Record<string, ModifierStatBinding> = {
+  GPP_Armor_DamageMitigation: { label: "Damage Mitigation", statKeys: [], statGroups: ["fpsArmor"] },
   GPP_Weapon_Damage: { label: "Alpha Damage", statKeys: ["alphaDamageTotal"], statGroups: ["fpsWeapon", "shipWeapon"] },
   GPP_Weapon_FireRate: { label: "Fire Rate", statKeys: ["fireRateRpm"], statGroups: ["fpsWeapon", "shipWeapon"] },
   GPP_Weapon_Spread: { label: "Spread", statKeys: ["adsSpread", "hipFireSpreadMin"], statGroups: ["fpsWeapon"] },
@@ -89,6 +90,7 @@ export function getModifierStatBindingLabel(property: string): string {
 
 export function formatModifierStatName(property: string): string {
   const labels: Record<string, string> = {
+    GPP_Armor_DamageMitigation: "Damage Mitigation",
     GPP_Health_MaxHealth: "HP",
     GPP_Shield_MaxHealth: "Shield HP",
     GPP_ItemResource_PowerGeneration: "Power",

@@ -6,8 +6,9 @@ const RECIPES_INDEX_URL = "/api/crafting/recipes/index";
 const RECIPES_VEHICLE_CATALOG_URL = "/api/crafting/recipes/catalog/vehicle";
 const RECIPES_FPS_CATALOG_URL = "/api/crafting/recipes/catalog/fps";
 const RECIPE_BY_ID_URL = "/api/crafting/recipes";
+const RECIPES_BATCH_URL = "/api/crafting/recipes/batch";
 
-type RecipeShard = {
+export type RecipeShard = {
   schemaVersion?: number;
   kind?: "vehicle" | "fps";
   record?: BlueprintRecord | FpsBlueprintRecord;
@@ -46,6 +47,30 @@ export async function getCraftingRecipeShardFromApi(
     `${RECIPE_BY_ID_URL}/${encodeURIComponent(normalizedId)}`,
     "crafting recipe by id",
   );
+}
+
+export async function getCraftingRecipeShardsBatchFromApi(
+  blueprintGuids: string[],
+): Promise<{ records: RecipeShard[]; missing: string[] }> {
+  const normalizedGuids = [...new Set(
+    blueprintGuids.map((guid) => guid.trim().toLowerCase()).filter(Boolean),
+  )];
+  const payload = await fetchJson<{
+    records?: RecipeShard[];
+    missing?: string[];
+  }>(
+    RECIPES_BATCH_URL,
+    "crafting recipe batch",
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ blueprintGuids: normalizedGuids }),
+    },
+  );
+  return {
+    records: Array.isArray(payload.records) ? payload.records : [],
+    missing: Array.isArray(payload.missing) ? payload.missing : [],
+  };
 }
 
 export async function getCraftingRecipesIndexFromApi(): Promise<{

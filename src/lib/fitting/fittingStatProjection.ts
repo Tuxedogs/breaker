@@ -663,6 +663,9 @@ export function modifierDetailStatLabelKeys(label: string): string[] {
   const normalized = normalizeModifierDetailStatLabel(label);
   const keys = [normalized];
   if (normalized === "health") keys.push("componenthp");
+  if (normalized === "quantumfuelreq" || normalized === "quantumfuelrequirement") {
+    keys.push("fuelrequirement");
+  }
   return keys;
 }
 

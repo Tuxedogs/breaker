@@ -2,6 +2,8 @@
 
 Date audited: 2026-05-25
 
+> Historical architecture audit. The compact component-card index and category-specific browser statistics are now implemented. For the current Recipe Browser, Crafting Detail, search precedence, table schemas, and validation contract, use `docs/crafting-browser-detail-handoff.md` and `moonbreaker_design_canon.md`. Do not treat the historical “current browser” descriptions below as implementation authority.
+
 Scope: data and indexing architecture for the Component Results Browser at `/industry/crafting` and detail route `/industry/crafting/:blueprintId`. This audit uses only current local/generated project data as source of truth. No UI, CSS, route, or filtering behavior was changed.
 
 ## Summary
@@ -644,4 +646,3 @@ Choose **C. Build shared index now and add category-specific stats incrementally
    - Other vehicle categories: identity/crafting/materials/generic metadata, modifier labels only if clearly marked.
 4. Add extraction work category by category for true performance stat blocks. Start with one high-value category, validate semantics, then attach the extracted fields into the nullable `stats.<category>` object.
 5. After the index exists and is validated, update browser loading/search to consume it in a separate approved implementation task.
-

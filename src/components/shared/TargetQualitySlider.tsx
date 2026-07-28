@@ -13,6 +13,7 @@ type TargetQualitySliderProps = {
   onCommit?: (value: number) => void;
   disabled?: boolean;
   layout?: "overlay" | "stacked";
+  markers?: number[];
 };
 
 function clampToRange(value: number, min: number, max: number): number {
@@ -33,6 +34,7 @@ export default function TargetQualitySlider({
   onCommit,
   disabled = false,
   layout = "overlay",
+  markers = [],
 }: TargetQualitySliderProps) {
   const lowerBound = Math.min(min, max);
   const upperBound = Math.max(min, max);
@@ -99,6 +101,27 @@ export default function TargetQualitySlider({
         </span>
       )}
       <span className="bq-target-slider-shell">
+        {markers.length > 0 ? (
+          <span className="bq-target-slider-markers" aria-hidden="true">
+            {markers.map((marker, index) => {
+              const normalizedMarker = clampToRange(marker, lowerBound, upperBound);
+              const position =
+                upperBound === lowerBound
+                  ? 0
+                  : ((normalizedMarker - lowerBound) / (upperBound - lowerBound)) * 100;
+
+              return (
+                <span
+                  key={`${normalizedMarker}:${index}`}
+                  className="bq-target-slider-marker"
+                  style={{ left: `${position}%` }}
+                >
+                  <span>{normalizedMarker}</span>
+                </span>
+              );
+            })}
+          </span>
+        ) : null}
         <input
           type="range"
           min={lowerBound}

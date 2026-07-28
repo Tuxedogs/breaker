@@ -828,7 +828,26 @@ if (sourceRecords.length === 0) {
   throw new Error(`No records found in ${sourcePath}`);
 }
 
-const sourceIds = new Set(sourceRecords.map((record) => normalizeId(record.id)).filter(Boolean));
+const catalogRecords = [...blueprints, ...fpsBlueprints];
+const catalogIds = catalogRecords
+  .map((blueprint) => normalizeId(blueprint.blueprintGuid))
+  .filter((id): id is string => Boolean(id));
+const authoritativeCatalogIds = new Set(catalogIds);
+if (authoritativeCatalogIds.size !== catalogIds.length) {
+  throw new Error("Current crafting catalogs contain missing or duplicate blueprint identities.");
+}
+
+// The accepted current recipe catalogs are the identity authority. Older
+// component-card snapshots may still contain removed development templates;
+// their statistics must not make those templates browseable craftables.
+const retainedSourceRecords = sourceRecords.filter((record) => {
+  const id = normalizeId(record.id);
+  return Boolean(id && authoritativeCatalogIds.has(id));
+});
+const excludedSourceRecordCount = sourceRecords.length - retainedSourceRecords.length;
+const sourceIds = new Set(
+  retainedSourceRecords.map((record) => normalizeId(record.id)).filter(Boolean),
+);
 const supplementalRecords = [...blueprints, ...fpsBlueprints]
   .filter((blueprint) => {
     const id = normalizeId(blueprint.blueprintGuid);
@@ -836,8 +855,11 @@ const supplementalRecords = [...blueprints, ...fpsBlueprints]
   })
   .map((blueprint) => supplementalRecord(blueprint, fittingShipWeapons))
   .filter((record): record is JsonRecord => record !== null);
-const allRecords = [...sourceRecords, ...supplementalRecords];
+const allRecords = [...retainedSourceRecords, ...supplementalRecords];
 const materialKeyByFacetValue = getMaterialKeyByFacetValue(allRecords);
+warnings.push(
+  `Excluded ${excludedSourceRecordCount} upstream records absent from the current crafting catalogs.`,
+);
 warnings.push(`Supplemented ${supplementalRecords.length} current recipes absent from the upstream component-card snapshot.`);
 
 const seenIds = new Map<string, number>();
@@ -897,10 +919,10 @@ for (const [index, rawRecord] of allRecords.entries()) {
 }
 
 const shapedRecordCount = browseRecords.length;
-const expectedTotal = sourceRecords.length + supplementalRecords.length;
+const expectedTotal = authoritativeCatalogIds.size;
 
 if (shapedRecordCount !== expectedTotal) {
-  warnings.push(
+  throw new Error(
     `Shaped record count (${shapedRecordCount}) does not match expected current catalog total (${expectedTotal}).`,
   );
 }
@@ -932,6 +954,7 @@ await writeJson(path.join(outputRoot, "index.json"), {
     total: shapedRecordCount,
   },
   upstreamSourceRecordCount: source.sourceRecordCount ?? null,
+  excludedUpstreamRecordCount: excludedSourceRecordCount,
   supplementalRecordCount: supplementalRecords.length,
   shapedRecordCount,
   missingIdCount,

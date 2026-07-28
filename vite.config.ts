@@ -137,6 +137,10 @@ function installScintelApiMiddleware(
       next();
       return;
     }
+    if (isCraftingShapedApiPath(url)) {
+      await runCraftingBlueprintSourcesApiHandler(request, response);
+      return;
+    }
     let body: unknown;
     try {
       body = await readRequestBody(request);
@@ -144,10 +148,6 @@ function installScintelApiMiddleware(
       response.statusCode = 400;
       response.setHeader("content-type", "application/json");
       response.end(JSON.stringify({ error: "Invalid request body." }));
-      return;
-    }
-    if (isCraftingShapedApiPath(url)) {
-      await runCraftingBlueprintSourcesApiHandler(request, response);
       return;
     }
 

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
-import { getCraftingItems } from "../../../lib/craftingData";
+import { getCraftingItemsByBlueprintGuids } from "../../../lib/craftingData";
 import { useCraftingContext } from "./CraftingContext";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
@@ -66,7 +66,8 @@ export default function CraftingModule() {
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 
-  // Only load full recipe data when viewing a detail page
+  // Detail pages load a single shaped recipe shard. The full vehicle and FPS
+  // catalogs remain reserved for workflows that genuinely need every recipe.
   useEffect(() => {
     if (!blueprintId) {
       queueMicrotask(() => setRecipes([]));
@@ -78,10 +79,29 @@ export default function CraftingModule() {
       setDetailLoading(true);
       setDetailError(null);
     });
-    getCraftingItems()
+    const selectedCard = componentCards.find((card) => card.id === blueprintId);
+    const familyRecipeIds = selectedCard?.familyKey
+      ? componentCards
+        .filter((card) => (
+          card.kind === selectedCard.kind
+          && card.type === selectedCard.type
+          && card.familyKey === selectedCard.familyKey
+        ))
+        .map((card) => card.id)
+      : [blueprintId];
+    const recipeIds = familyRecipeIds.includes(blueprintId)
+      ? familyRecipeIds
+      : [blueprintId, ...familyRecipeIds];
+
+    getCraftingItemsByBlueprintGuids(recipeIds)
       .then((items) => {
         if (!cancelled) {
           setRecipes(items);
+          setDetailError(
+            items.some((recipe) => recipe.blueprint_id === blueprintId)
+              ? null
+              : "Crafting recipe not found",
+          );
           setDetailLoading(false);
         }
       })
@@ -92,7 +112,7 @@ export default function CraftingModule() {
         }
       });
     return () => { cancelled = true; };
-  }, [blueprintId]);
+  }, [blueprintId, componentCards]);
 
   const handleAddToQueue = useCallback((
     recipe: ComponentRecipe,

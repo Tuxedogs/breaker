@@ -88,11 +88,10 @@ const upstreamIds = new Set(
     .map((record) => record.id?.trim().toLowerCase())
     .filter((id): id is string => Boolean(id)),
 );
-const expectedCatalogIds = new Set([...upstreamIds, ...currentRecipeIds]);
 const expectedSupplementalCount = [...currentRecipeIds].filter((id) => !upstreamIds.has(id)).length;
 
-if (shapedCount !== expectedCatalogIds.size) {
-  throw new Error(`Expected ${expectedCatalogIds.size} shaped records, found ${shapedCount}.`);
+if (shapedCount !== currentRecipeIds.size) {
+  throw new Error(`Expected ${currentRecipeIds.size} current recipe records, found ${shapedCount}.`);
 }
 if ((index.supplementalRecordCount ?? 0) !== expectedSupplementalCount) {
   throw new Error(
@@ -223,6 +222,18 @@ const missingCurrentRecipeIds = currentRecipeRecords
   .filter((id): id is string => Boolean(id) && !browseIds.has(id));
 if (missingCurrentRecipeIds.length > 0) {
   throw new Error(`Current recipes missing component cards: ${missingCurrentRecipeIds.join(", ")}`);
+}
+
+const staleBrowseIds = [...browseIds].filter((id) => !currentRecipeIds.has(id));
+if (staleBrowseIds.length > 0) {
+  throw new Error(
+    `Component cards include records absent from current recipe catalogs: ${staleBrowseIds.join(", ")}`,
+  );
+}
+if (browseIds.size !== currentRecipeIds.size) {
+  throw new Error(
+    `Component card count ${browseIds.size} does not match current recipe identity count ${currentRecipeIds.size}.`,
+  );
 }
 
 const sampleId = browseRecords[0]?.id?.trim().toLowerCase();

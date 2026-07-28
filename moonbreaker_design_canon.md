@@ -53,6 +53,9 @@ The July 24–27 Build Queue and Inventory work established several implemented 
 - Repeated material requirements keep the target-quality control in the compact summary and use progressive disclosure for reserve detail.
 - Inventory defaults to a responsive Location → Material → Quality → Individual Boxes tree while retaining item-first and grouped-list alternatives.
 - Inventory hierarchy evidence now includes populated desktop, populated compact, and empty states.
+- Recipe Browser now uses a permanent operational filter rail, a selected-item hero, sortable family tables, and a material-first lookup path.
+- Crafting Detail now uses Build Queue-style compact statistic groups, a distinct Material Requirements workspace, and performance charts below the material workspace.
+- Build Queue and Crafting Detail share explicit beneficial and detrimental color tokens rather than using structural blue for modifier meaning.
 
 These are page-level precedents, not approval for a new global card primitive or a global palette change.
 
@@ -201,6 +204,10 @@ Current shared values include:
 - `--ui-accent-cyan: #4db8b0`
 - `--accent-violet: #a78bfa`
 - `--ops-focus-ring: rgba(125, 211, 252, 0.94)`
+- `--stat-beneficial: #6ee7a0`
+- `--stat-detrimental: #ff7185`
+
+Structural cyan or blue must not communicate beneficial or detrimental modifier meaning. Use `--stat-beneficial` and `--stat-detrimental` for those semantics in Build Queue and Crafting Detail.
 
 Do not use cyan and purple together as generic visual decoration. They may coexist when each visibly represents a different named category or state.
 
@@ -390,6 +397,51 @@ Individual boxes should communicate, where relevant:
 
 Use `Unknown Location` when an assigned location cannot be resolved and `Unassigned Stock` when no location is assigned. Never show raw location identifiers in normal UI.
 
+## Recipe Browser Canon
+
+Recipe Browser is a discovery and comparison workspace, not a grid of unrelated feature cards.
+
+Preserve this composition:
+
+1. Search bar
+2. Permanent filter rail
+3. Selected-item hero
+4. Family-specific comparison tables
+5. Pagination
+
+The permanent filter rail includes:
+
+- Materials
+- Vehicle Weapons
+- Size 1–6
+- Grade A–D
+- Military, Stealth, Civilian, Industrial, and Competition classes
+- Power Plant, Shield, Cooler, Radar, QT, Mining, Salvage, and Other vehicle categories
+- FPS Weapons, Armor, Utility, and Other FPS categories
+
+The material picker is a primary discovery control. It must remain searchable and support finding every item that uses the selected crafting material.
+
+Manual text search intentionally overrides applied filters. Do not hide a valid text-search result because it falls outside a selected chip. Instead:
+
+- Keep the filters selected so they resume when search is cleared.
+- Show a red, informational `Non-Filter Match` badge on results outside those filters.
+- Do not change queue, bookmark, pagination, or route behavior.
+- When an FPS weapon and its magazine both match a weapon search, select the weapon as the hero.
+
+The selected hero should provide identity, concise description, compact category/state badges, four important family statistics, primary materials, and one clear `View Recipe` action. Keep Physical and Energy as explicit damage-channel badges for applicable weapons. Do not repeat a variant, size, or other value as both identity copy and a badge.
+
+Tables should:
+
+- Use family-specific columns and source-backed values.
+- Sort when any header is activated. Numeric columns begin high-to-low and toggle low-to-high; the Component column begins A-to-Z and toggles Z-to-A.
+- Keep headers visible while vertically reviewing a long table.
+- Preserve horizontal table access at compact widths rather than removing comparison columns.
+- Keep valid zero distinct from missing or unavailable.
+
+Ship-weapon comparison includes DPS and Penetration. Ship DPS must use the shared weapon-stat resolver rather than a page-local formula. Radar comparison includes independent minimum and maximum power-pip columns and independent minimum and maximum aim-assist range columns.
+
+At desktop widths, table headers remain sticky within the results viewport below the permanent filter rail. At compact width, the Component column remains the scanning anchor while the remaining statistics stay horizontally accessible.
+
 ## Crafting Detail Canon
 
 Crafting Detail is the primary decision page between discovering an item and committing it to Build Queue.
@@ -420,14 +472,17 @@ Preserve all existing statistics and values.
 
 Use:
 
-- Clear stat groups
+- Build Queue-style compact stat groups with external section labels
+- One restrained row surface per group rather than a feature card per statistic
 - Muted labels and strong values
 - Consistent numeric alignment
 - Tabular numerals
-- Compact rows
+- Approximately 25-pixel compact rows at the base density where content permits
 - Semantic delta treatment
 
 Estimated Effects should expose the final value, percentage change, absolute delta, and contributing materials when those values exist.
+
+Beneficial and detrimental modifiers use the shared `--stat-beneficial` and `--stat-detrimental` tokens. Structural blue/cyan is not a modifier direction color.
 
 Do not remove important statistics merely to simplify the page.
 
@@ -435,9 +490,22 @@ Do not remove important statistics merely to simplify the page.
 
 Material Requirements is the primary interactive section.
 
-Each material row should make its role, name, required amount, selected quality, input control, resulting effect, and target relationship easy to scan.
+The desktop column order is:
+
+Material | Required | Target | Input | Effect
+
+Each material row should make its role, canonical display name, required amount, editable target, full-range input control, and resulting effect easy to scan.
+
+- `Target` owns the editable `Target N` badge.
+- `Input` owns the 1–1000 range control.
+- Extracted quality-band boundaries appear as useful tick marks on the range.
+- Do not add a separate Quality column.
+- Do not repeat `Band N`, `Quality N`, and `Target N` for the same selected value.
+- Material display casing is presentation normalization; calculation and identity keys remain unchanged.
 
 Do not duplicate crafting, solver, allocation, or quality calculations inside presentation components.
+
+When an item has a performance chart, render it below Material Requirements rather than inside Component Statistics. FPS chart domains must follow the shared class-aware range resolver. Projectile lifetime travel may be shown as context, but it must not expand an SMG or other short-range chart to an unrealistic distance.
 
 ### Blueprint Sources
 
@@ -555,6 +623,8 @@ Inspect at minimum:
 
 - 1920×1080
 - 2560×1440
+
+Recipe Browser and Crafting Detail changes also require a 3840×2160 pass.
 
 Also inspect mobile when the affected component already supports mobile or the task requests it.
 

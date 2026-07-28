@@ -194,6 +194,7 @@ For responsive work, inspect at minimum:
 
 * `1920×1080`
 * `2560×1440`
+* `3840×2160` for Recipe Browser or Crafting Detail changes
 
 Check mobile when the affected component already supports mobile or when the task explicitly requests it.
 
@@ -211,13 +212,29 @@ Visual changes require:
 
 Do not claim a visual task is complete solely because the build passes.
 
+## Recipe Browser Behavior
+
+Recipe Browser search and filters have a deliberate precedence:
+
+* Manual text search spans the full component inventory and overrides selected filters.
+* Results outside the selected filters remain visible with an informational `Non-Filter Match` badge.
+* Clearing search restores the selected filters.
+* When an FPS weapon and its magazine both match a weapon search, the weapon is the preferred selected result.
+
+Do not change this precedence while adjusting presentation. Material lookup, bookmarks, pagination, queue state, selection, and detail routing must remain functional.
+
+Family tables use source-backed sortable columns. Ship DPS routes through the shared weapon-stat resolver. Radar power-pip and aim-assist range columns use delivered component-card fields; do not recreate them in JSX.
+
+Crafting Detail material rows use `Material | Required | Target | Input | Effect`. The editable `Target N` badge belongs in Target and the 1–1000 control belongs in Input. Do not restore a redundant Quality column or `Band N` cell.
+
 ## Validation
 
 Run the checks relevant to the changed area.
 
-At minimum:
+At minimum for TypeScript, React, or stylesheet changes:
 
 ```bash
+npm run lint
 npm run build
 ```
 

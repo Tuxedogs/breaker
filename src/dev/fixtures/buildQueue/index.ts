@@ -25,6 +25,8 @@ import js300Recipe from "../../../../server-data/crafting/recipes/by-blueprint/9
 import materialQualityQuantization from "../../../../server-data/crafting/reference/material-quality-quantization.json";
 import materialIdentityIndex from "../../../../server-data/crafting/reference/material-identity-index.json";
 import componentCardFacetsSource from "../../../../server-data/crafting/component-cards/facets.json";
+import componentCardBrowseSource from "../../../../server-data/crafting/component-cards/browse.json";
+import componentCardIndexSource from "../../../../server-data/crafting/component-cards/index.json";
 
 export const fixtureMetadata = {
   channel: "LIVE",
@@ -73,20 +75,11 @@ export const componentCardRecordFiles = Object.fromEntries(
   componentCardRecords.map((record) => [record.id, `by-id/${record.id}.json`]),
 );
 
-const componentCardGeneratedAt = "2026-07-16T00:00:00.000Z";
-const componentCardSourceGeneratedAt = componentCardGeneratedAt;
+const componentCardSourceGeneratedAt = componentCardIndexSource.sourceGeneratedAt;
 
 export const componentCardIndexResponse = {
-  schemaVersion: 1,
-  generatedAt: componentCardGeneratedAt,
-  sourceGeneratedAt: componentCardSourceGeneratedAt,
-  sourceRecordCount: { vehicle: 7, fps: 5, total: 12 },
-  shapedRecordCount: 12,
-  missingIdCount: 0,
-  duplicateIdCount: 0,
-  skippedCount: 0,
-  warnings: [],
-  recordIds: Object.keys(componentCardRecordFiles),
+  ...componentCardIndexSource,
+  recordIds: Object.keys(componentCardIndexSource.recordFiles),
 };
 
 export const componentCardFacetsResponse = {
@@ -95,10 +88,8 @@ export const componentCardFacetsResponse = {
 };
 
 export const componentCardBrowseResponse = {
-  schemaVersion: 1,
+  ...componentCardBrowseSource,
   generatedAt: componentCardSourceGeneratedAt,
-  recordCount: componentCardRecords.length,
-  records: componentCardRecords,
 };
 
 export const componentCardMonolithResponse = {

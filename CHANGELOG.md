@@ -64,6 +64,10 @@
 
 ### UI / Polish
 
+- redesign recipe browser comparison tables and crafting detail statistics
+
+- add search-over-filter disclosure, sortable crafting tables, and 4K validation
+
 - viewport render rules
 
 - refactor viewport from CTM to GLB

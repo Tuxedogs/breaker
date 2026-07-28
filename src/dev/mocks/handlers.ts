@@ -25,6 +25,9 @@ export const handlers = [
   http.get("*/api/crafting/reference/material-quality-quantization", () => HttpResponse.json(materialQualityQuantization)),
   http.get("*/api/crafting/reference/material-identity", () => HttpResponse.json(materialIdentityIndex)),
   http.get("*/api/crafting/material_identity_index.json", () => HttpResponse.json(materialIdentityIndex)),
+  http.get("*/api/crafting/blueprint-rewards/release-state", () => HttpResponse.json({ states: {} })),
+  http.get("*/api/crafting/blueprint-rewards/missions", () => HttpResponse.json({ missions: [] })),
+  http.get("*/api/missions/mission_blueprint_rewards.json", () => HttpResponse.json([])),
   http.get("*/api/crafting/blueprint-sources", ({ request }) => {
     const blueprintGuid = new URL(request.url).searchParams.get("blueprintGuid")?.trim().toLowerCase() ?? "";
     return HttpResponse.json({ blueprintGuid, missions: blueprintSourceMissions.get(blueprintGuid) ?? [] });
@@ -37,6 +40,21 @@ export const handlers = [
   http.get("*/api/crafting/recipes/:id", ({ params }) => {
     const shard = recipeShards.get(String(params.id).toLowerCase());
     return shard ? HttpResponse.json(shard) : HttpResponse.json({ error: "Unknown fixture recipe" }, { status: 404 });
+  }),
+  http.post("*/api/crafting/recipes/batch", async ({ request }) => {
+    const payload = await request.json() as { blueprintGuids?: unknown };
+    const blueprintGuids = Array.isArray(payload.blueprintGuids)
+      ? payload.blueprintGuids.filter((value): value is string => typeof value === "string")
+      : [];
+    const records: unknown[] = [];
+    const missing: string[] = [];
+    for (const id of blueprintGuids) {
+      const normalizedId = id.trim().toLowerCase();
+      const shard = recipeShards.get(normalizedId);
+      if (shard) records.push(shard);
+      else missing.push(normalizedId);
+    }
+    return HttpResponse.json({ records, missing });
   }),
   http.get("*/api/v1/fitting/components/:id", ({ params }) => {
     const payload = fittingDetails.get(String(params.id).toLowerCase());
