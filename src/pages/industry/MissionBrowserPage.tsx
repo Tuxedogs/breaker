@@ -822,7 +822,7 @@ const MissionConceptCard = memo(function MissionConceptCard({
   familiesByKey: Map<string, MissionFamilyView>;
   filters: { query: string; reward: string; confidence: string; repReward: string; status: string; missionType: string; provider: string };
   isSelected: boolean;
-  onSelect: (conceptKey: string, trigger: HTMLButtonElement) => void;
+  onSelect: (conceptKey: string) => void;
 }) {
   const families = conceptFamilies(concept, familiesByKey);
   const pickupBadges = conceptPickupBadges(concept, familiesByKey);
@@ -845,8 +845,7 @@ const MissionConceptCard = memo(function MissionConceptCard({
         type="button"
         className="mb-family-row mission-group-card"
         aria-expanded={isSelected}
-        aria-haspopup="dialog"
-        onClick={(event) => onSelect(concept.conceptKey, event.currentTarget)}
+        onClick={() => onSelect(concept.conceptKey)}
       >
         <span className="mission-group-card__rail" aria-hidden="true" />
         <span className="mission-group-card__body">
@@ -1805,6 +1804,189 @@ function ConceptDetail({
   );
 }
 
+type MissionComparisonSort = "mission" | "system" | "tier" | "payout" | "standing";
+
+function exactVariantIsActive(variant: MissionVariantView): boolean {
+  return !variant.releaseFlags.includes("Not for release") && !variant.releaseFlags.includes("Work in progress");
+}
+
+function exactVariantPayout(variant: MissionVariantView): number | undefined {
+  const calculated = variant.rewards.creditsDetail?.payout;
+  if (
+    calculated?.calculationStatus === "resolved"
+    && typeof calculated.baseSoloAmount === "number"
+    && Number.isFinite(calculated.baseSoloAmount)
+  ) return calculated.baseSoloAmount;
+  const fixed = variant.rewards.creditsDetail?.amount;
+  return typeof fixed === "number" && Number.isFinite(fixed) ? fixed : undefined;
+}
+
+function exactVariantSystem(variant: MissionVariantView): string {
+  const systems = variant.locationRoles?.pickup?.systems ?? [];
+  return systems.length ? systems.join(", ") : variant.pickupLocation.system ?? "Unknown";
+}
+
+function compareOptionalNumbers(left: number | undefined, right: number | undefined): number {
+  if (left === undefined && right === undefined) return 0;
+  if (left === undefined) return 1;
+  if (right === undefined) return -1;
+  return left - right;
+}
+
+function MissionSelectedWorkspace({
+  concept,
+  variants,
+  loading,
+  error,
+  isBookmarked,
+  onToggleBookmark,
+  onOpenDossier,
+  onClose,
+}: {
+  concept: MissionConceptView;
+  variants?: MissionVariantView[];
+  loading: boolean;
+  error?: string;
+  isBookmarked: boolean;
+  onToggleBookmark: (conceptKey: string) => void;
+  onOpenDossier: (trigger: HTMLButtonElement) => void;
+  onClose: () => void;
+}) {
+  const [availability, setAvailability] = useState<"active" | "all">("active");
+  const [sort, setSort] = useState<MissionComparisonSort>("mission");
+  const [descending, setDescending] = useState(false);
+  const activeVariants = useMemo(() => (variants ?? []).filter(exactVariantIsActive), [variants]);
+  const visibleVariants = useMemo(() => {
+    const rows = availability === "active" ? activeVariants : (variants ?? []);
+    return [...rows].sort((left, right) => {
+      const direction = descending ? -1 : 1;
+      const compared = sort === "payout"
+        ? compareOptionalNumbers(exactVariantPayout(left), exactVariantPayout(right))
+        : sort === "system"
+          ? exactVariantSystem(left).localeCompare(exactVariantSystem(right))
+          : sort === "tier"
+            ? (left.tierLabel ?? "Unknown").localeCompare(right.tierLabel ?? "Unknown")
+            : sort === "standing"
+              ? left.standingRequirement.localeCompare(right.standingRequirement)
+              : left.displayName.localeCompare(right.displayName);
+      return direction * (compared || left.variantKey.localeCompare(right.variantKey));
+    });
+  }, [activeVariants, availability, descending, sort, variants]);
+  const systems = useMemo(
+    () => Array.from(new Set((variants ?? []).map(exactVariantSystem))).sort(),
+    [variants],
+  );
+  const payouts = useMemo(
+    () => (variants ?? []).map(exactVariantPayout).filter((value): value is number => value !== undefined),
+    [variants],
+  );
+  const payoutSummary = payouts.length
+    ? `${Math.min(...payouts).toLocaleString()}-${Math.max(...payouts).toLocaleString()} aUEC`
+    : "Payout unresolved";
+
+  function selectSort(nextSort: MissionComparisonSort) {
+    if (sort === nextSort) setDescending((current) => !current);
+    else {
+      setSort(nextSort);
+      setDescending(false);
+    }
+  }
+
+  return (
+    <section className="mission-selected-workspace ops-primary-card" aria-label={`${concept.displayName} selected mission workspace`}>
+      <header className="mission-selected-hero">
+        <div className="mission-selected-hero__identity">
+          <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
+          <div>
+            <span className="mb-kicker">Selected mission concept</span>
+            <h2>{concept.displayName}</h2>
+            <p>{concept.factionDisplayName} / {concept.displayCategory.label} / {shortRepScope(concept.reputationScope.displayName)}</p>
+          </div>
+        </div>
+        <div className="mission-selected-hero__actions">
+          <button
+            type="button"
+            className={isBookmarked ? "is-active" : ""}
+            aria-pressed={isBookmarked}
+            onClick={() => onToggleBookmark(concept.conceptKey)}
+          >
+            {isBookmarked ? "Bookmarked" : "Bookmark"}
+          </button>
+          <button type="button" className="is-primary" onClick={(event) => onOpenDossier(event.currentTarget)}>Open dossier</button>
+          <button type="button" aria-label="Close selected mission workspace" onClick={onClose}>Close</button>
+        </div>
+      </header>
+      <div className="mission-selected-hero__facts">
+        <span><strong>{activeVariants.length}</strong>Active variants</span>
+        <span><strong>{variants?.length ?? concept.variantCount}</strong>Exact variants</span>
+        <span><strong>{systems.length || "—"}</strong>{systems.length === 1 ? systems[0] : "Pickup scopes"}</span>
+        <span><strong>{payoutSummary}</strong>Base / solo range</span>
+        <span><strong>{(variants ?? []).filter((variant) => variant.requiredItemSummary?.status === "present").length}</strong>Require mission items</span>
+      </div>
+      {loading && <div className="mission-selected-state">Loading exact variants...</div>}
+      {error && <div className="mission-selected-state is-error">{error}</div>}
+      {variants && (
+        <div className="mission-comparison">
+          <div className="mission-comparison__toolbar">
+            <div>
+              <strong>Exact mission comparison</strong>
+              <span>{visibleVariants.length} {availability === "active" ? "active" : "total"} variants</span>
+            </div>
+            <div className="mission-comparison__availability" role="group" aria-label="Mission availability">
+              <button type="button" className={availability === "active" ? "is-active" : ""} aria-pressed={availability === "active"} onClick={() => setAvailability("active")}>Active</button>
+              <button type="button" className={availability === "all" ? "is-active" : ""} aria-pressed={availability === "all"} onClick={() => setAvailability("all")}>All variants</button>
+            </div>
+          </div>
+          <div className="mission-comparison__scroll">
+            <table>
+              <thead>
+                <tr>
+                  {([
+                    ["mission", "Mission"],
+                    ["system", "Pickup"],
+                    ["tier", "Tier"],
+                    ["standing", "Standing"],
+                    ["payout", "Base / solo"],
+                  ] as Array<[MissionComparisonSort, string]>).map(([key, label]) => (
+                    <th key={key}>
+                      <button type="button" onClick={() => selectSort(key)} aria-label={`Sort by ${label}`}>
+                        {label}{sort === key ? (descending ? " ↓" : " ↑") : ""}
+                      </button>
+                    </th>
+                  ))}
+                  <th>Reputation</th>
+                  <th>Items</th>
+                  <th>Availability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleVariants.map((variant) => {
+                  const payout = exactVariantPayout(variant);
+                  const requiredItems = variant.requiredItemSummary?.status === "present";
+                  const rep = repPathSummary(variant.rewardedReputationPaths);
+                  return (
+                    <tr key={variant.variantKey}>
+                      <td><strong>{variant.displayName}</strong><small>{variant.missionArchetype}</small></td>
+                      <td>{exactVariantSystem(variant)}<small>{variant.pickupLocation.status.replaceAll("_", " ")}</small></td>
+                      <td>{variant.tierLabel ?? "Unknown"}</td>
+                      <td>{variant.standingRequirement || "Unknown"}</td>
+                      <td className="is-numeric">{payout === undefined ? "Unresolved" : `${payout.toLocaleString()} aUEC`}</td>
+                      <td>{rep}</td>
+                      <td>{requiredItems ? "Required" : variant.requiredItemSummary?.status === "proven_absent" ? "None" : "Unresolved"}</td>
+                      <td><Badge tone={exactVariantIsActive(variant) ? "is-green" : "is-muted"}>{exactVariantIsActive(variant) ? "Active" : variant.releaseFlags.join(" / ") || "Unavailable"}</Badge></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {!visibleVariants.length && <p className="mb-empty-note">No active variants are available for this concept. Choose All variants to inspect authored records.</p>}
+        </div>
+      )}
+    </section>
+  );
+}
+
 void FamilyDetail;
 void VariantTabs;
 
@@ -1835,8 +2017,10 @@ export default function MissionBrowserPage() {
   const activeView: BrowserView = requestedView === "faction" || requestedView === "reputation" || requestedView === "full"
     ? requestedView
     : provider || exactSearchedFaction ? "faction" : "full";
-  const selectedConceptKey = searchParams.get("concept") ?? "";
+  const dossierConceptKey = searchParams.get("concept") ?? "";
+  const selectedConceptKey = searchParams.get("selected") ?? dossierConceptKey;
   const selectedConcept = conceptsByKey.get(selectedConceptKey);
+  const dossierConcept = conceptsByKey.get(dossierConceptKey);
   const selectedConceptVariants = conceptVariantsByKey[selectedConceptKey];
   const selectedConceptTriggerRef = useRef<HTMLButtonElement | null>(null);
   const modalShellRef = useRef<HTMLDivElement | null>(null);
@@ -1939,7 +2123,7 @@ export default function MissionBrowserPage() {
   }, [conceptVariantsByKey, conceptsByKey, selectedConceptKey]);
 
   useEffect(() => {
-    if (!selectedConceptKey) return;
+    if (!dossierConceptKey) return;
     const previousOverflow = document.body.style.overflow;
     const previousPaddingRight = document.body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -1957,7 +2141,7 @@ export default function MissionBrowserPage() {
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPaddingRight;
     };
-  }, [closeConceptDossier, selectedConceptKey]);
+  }, [closeConceptDossier, dossierConceptKey]);
 
   const providers = useMemo(
     () => catalog?.filtersMeta?.factions ?? Array.from(new Set(families.map((family) => family.provider))).sort().map((value) => ({ key: value, label: value, count: 0 })),
@@ -2078,7 +2262,22 @@ export default function MissionBrowserPage() {
   const openConceptDossier = useCallback((conceptKey: string, trigger: HTMLButtonElement) => {
     selectedConceptTriggerRef.current = trigger;
     const next = new URLSearchParams(searchParams);
+    next.set("selected", conceptKey);
     next.set("concept", conceptKey);
+    setSearchParams(next);
+  }, [searchParams, setSearchParams]);
+
+  const selectConceptWorkspace = useCallback((conceptKey: string) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("selected", conceptKey);
+    next.delete("concept");
+    setSearchParams(next);
+  }, [searchParams, setSearchParams]);
+
+  const closeConceptWorkspace = useCallback(() => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("selected");
+    next.delete("concept");
     setSearchParams(next);
   }, [searchParams, setSearchParams]);
 
@@ -2088,6 +2287,7 @@ export default function MissionBrowserPage() {
     else next.delete(key);
     if (key !== "concept") {
       next.delete("concept");
+      next.delete("selected");
     }
     if (key !== "page" && key !== "concept") next.delete("page");
     setSearchParams(next);
@@ -2102,6 +2302,7 @@ export default function MissionBrowserPage() {
       next.delete("provider");
     }
     next.delete("concept");
+    next.delete("selected");
     next.delete("page");
     setSearchParams(next);
   }
@@ -2113,6 +2314,7 @@ export default function MissionBrowserPage() {
     const matchesFaction = providers.some((item) => item.label.toLowerCase() === value.trim().toLowerCase());
     if (matchesFaction) next.set("view", "faction");
     next.delete("concept");
+    next.delete("selected");
     next.delete("page");
     setSearchParams(next);
   }
@@ -2122,6 +2324,7 @@ export default function MissionBrowserPage() {
     if (page > 1) next.set("page", String(page));
     else next.delete("page");
     next.delete("concept");
+    next.delete("selected");
     setSearchParams(next);
   }
 
@@ -2193,6 +2396,19 @@ export default function MissionBrowserPage() {
         {error && <div className="mb-state is-error">{error}</div>}
         {!loading && !error && catalog && (
           <div className="mb-results-shell">
+            {selectedConcept && (
+              <MissionSelectedWorkspace
+                key={selectedConcept.conceptKey}
+                concept={selectedConcept}
+                variants={selectedConceptVariants}
+                loading={conceptLoadingKey === selectedConcept.conceptKey && !selectedConceptVariants}
+                error={conceptErrors[selectedConcept.conceptKey]}
+                isBookmarked={bookmarkedMissionIds.has(selectedConcept.conceptKey)}
+                onToggleBookmark={toggleMissionBookmark}
+                onOpenDossier={(trigger) => openConceptDossier(selectedConcept.conceptKey, trigger)}
+                onClose={closeConceptWorkspace}
+              />
+            )}
             <main className="mb-family-list">
             {visibleConceptCount === 0 && (
               <section className="mb-zero-results ops-primary-card" aria-live="polite">
@@ -2221,7 +2437,7 @@ export default function MissionBrowserPage() {
                   </header>
                   <div className="mission-group-grid">
                     {categoryConcepts.map((concept) => (
-                      <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={openConceptDossier} />
+                      <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
                     ))}
                   </div>
                 </section>
@@ -2249,7 +2465,7 @@ export default function MissionBrowserPage() {
                         </header>
                         <div className="mission-group-grid">
                           {categoryConcepts.map((concept) => (
-                            <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={openConceptDossier} />
+                            <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
                           ))}
                         </div>
                       </section>
@@ -2298,7 +2514,7 @@ export default function MissionBrowserPage() {
                     <div className="mission-path-lane__body">
                       <div className="mission-group-grid">
                         {scopeConcepts.map((concept) => (
-                          <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={openConceptDossier} />
+                          <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
                         ))}
                       </div>
                     </div>
@@ -2324,7 +2540,7 @@ export default function MissionBrowserPage() {
           </div>
         )}
       </div>
-      {selectedConcept && createPortal(
+      {dossierConcept && createPortal(
         <div
           className="mission-dossier-modal-backdrop"
           onMouseDown={(event) => {
@@ -2336,17 +2552,17 @@ export default function MissionBrowserPage() {
             className="mission-dossier-modal-shell ops-primary-card"
             role="dialog"
             aria-modal="true"
-            aria-label={`${selectedConcept.displayName} mission dossier`}
+            aria-label={`${dossierConcept.displayName} mission dossier`}
             tabIndex={-1}
           >
-            {conceptLoadingKey === selectedConcept.conceptKey && !selectedConceptVariants && <div className="mb-state">Loading referenced family variants...</div>}
-            {conceptErrors[selectedConcept.conceptKey] && <div className="mb-state is-error">{conceptErrors[selectedConcept.conceptKey]}</div>}
-            {selectedConceptVariants && (
+            {conceptLoadingKey === dossierConcept.conceptKey && !conceptVariantsByKey[dossierConcept.conceptKey] && <div className="mb-state">Loading referenced family variants...</div>}
+            {conceptErrors[dossierConcept.conceptKey] && <div className="mb-state is-error">{conceptErrors[dossierConcept.conceptKey]}</div>}
+            {conceptVariantsByKey[dossierConcept.conceptKey] && (
               <ConceptDetail
-                key={selectedConcept.conceptKey}
-                concept={selectedConcept}
-                variants={selectedConceptVariants}
-                isBookmarked={bookmarkedMissionIds.has(selectedConcept.conceptKey)}
+                key={dossierConcept.conceptKey}
+                concept={dossierConcept}
+                variants={conceptVariantsByKey[dossierConcept.conceptKey]!}
+                isBookmarked={bookmarkedMissionIds.has(dossierConcept.conceptKey)}
                 onToggleBookmark={toggleMissionBookmark}
                 onClose={closeConceptDossier}
               />

@@ -23,6 +23,26 @@ accepted exact-variant detail shards.
 The existing URL state, concept grouping, lazy family shards, modal focus
 behavior, bookmarks, Blueprint Tracker joins, and solver behavior are unchanged.
 
+## Exact-variant browser slice
+
+Mission concept cards now select a persistent workspace before opening the
+dossier.
+
+- Selection is URL-addressable through `selected=<conceptKey>`.
+- Existing `concept=<conceptKey>` dossier deep links remain valid.
+- Exact variant shards still load lazily only for the selected concept.
+- The selected hero reports active and total exact variants, pickup-scope count,
+  source-backed base/solo range, and required-item coverage.
+- The dense comparison table preserves exact variants as rows.
+- Mission, pickup, tier, standing, and payout columns are sortable.
+- Missing payouts sort separately from valid numeric zero.
+- The default view includes active variants only.
+- Authored not-for-release and work-in-progress records remain inspectable
+  through the explicit **All variants** control.
+- The 207-variant hauling stress concept remains bounded inside its own scrolling
+  table rather than expanding the page.
+- The dossier remains a separate action and peer surface.
+
 ## Measured Stage 4 decisions
 
 The current generation contains 2,501 exact variants, of which 1,758 are active
@@ -45,7 +65,6 @@ labels or coverage improve.
 
 ## Remaining Stage 4 work
 
-- Add the active exact-variant comparison workspace and selected hero.
 - Expose Stage 3 eligibility through a server route and typed browser adapter.
 - Add the player-state editor and one-variant eligibility evaluation.
 - Resolve concept bookmark compatibility with exact mission and blueprint-pool
@@ -57,15 +76,17 @@ labels or coverage improve.
 ## Validation for this slice
 
 - `npm run missions:test` — 29 passed
-- `npm run ui:missions` — 4 passed
+- `npm run ui:missions` — 6 passed
 - `npm run lint` — passed
 - `npm run build` — passed
 - Required-item dossier reviewed at 768×900, 1920×1080, 2560×1440, and 3840×2160
 - Certification buy-in dossier reviewed at 1920×1080
 - Zero-results state reviewed at 1920×1080
+- Exact-variant workspace reviewed at 768×900, 1920×1080, and 2560×1440
 
 Local visual routes:
 
 - `/industry/missions?concept=70d0a94a8a837e887b3c`
 - `/industry/missions?concept=1cf7b7218006719074f0`
 - `/industry/missions?search=__no_mission_matches__`
+- `/industry/missions?selected=9cab64c0aa3664d21d3c`

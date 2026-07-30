@@ -312,6 +312,253 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
+  gap: 10px;
+}
+
+.mission-selected-workspace {
+  display: grid;
+  flex: 0 0 auto;
+  max-height: min(48vh, 470px);
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+}
+
+.mission-selected-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.mission-selected-hero__identity,
+.mission-selected-hero__actions,
+.mission-selected-hero__facts {
+  display: flex;
+  align-items: center;
+}
+
+.mission-selected-hero__identity {
+  gap: 10px;
+  min-width: 0;
+}
+
+.mission-selected-hero__identity > div {
+  min-width: 0;
+}
+
+.mission-selected-hero__identity h2 {
+  margin: 2px 0;
+  color: var(--mb-text);
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.mission-selected-hero__identity p {
+  margin: 0;
+  color: var(--mb-muted);
+  font-size: 12px;
+}
+
+.mission-selected-hero__actions {
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.mission-selected-hero__actions button,
+.mission-comparison__availability button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--mb-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mission-selected-hero__actions button:hover,
+.mission-selected-hero__actions button.is-active,
+.mission-comparison__availability button.is-active {
+  border-color: rgba(125, 211, 252, 0.42);
+  color: var(--mb-text);
+}
+
+.mission-selected-hero__actions button.is-primary {
+  border-color: rgba(125, 211, 252, 0.56);
+  background: rgba(14, 116, 144, 0.18);
+  color: var(--mb-text);
+}
+
+.mission-selected-hero__facts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.mission-selected-hero__facts > span {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  padding: 8px 12px;
+  border-right: 1px solid var(--ops-border-soft);
+  color: var(--mb-subtle);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mission-selected-hero__facts > span:last-child {
+  border-right: 0;
+}
+
+.mission-selected-hero__facts strong {
+  overflow: hidden;
+  color: var(--mb-text);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.mission-selected-state {
+  padding: 14px;
+  color: var(--mb-muted);
+  font-size: 12px;
+}
+
+.mission-selected-state.is-error {
+  color: var(--mb-red);
+}
+
+.mission-comparison {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mission-comparison__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 12px;
+}
+
+.mission-comparison__toolbar > div:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mission-comparison__toolbar strong {
+  color: var(--mb-text);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.mission-comparison__toolbar span {
+  color: var(--mb-subtle);
+  font-size: 11px;
+}
+
+.mission-comparison__availability {
+  display: flex;
+  gap: 4px;
+}
+
+.mission-comparison__availability button {
+  min-height: 25px;
+  padding-inline: 8px;
+  font-size: 10px;
+}
+
+.mission-comparison__scroll {
+  min-height: 0;
+  overflow: auto;
+  border-top: 1px solid var(--ops-border-soft);
+}
+
+.mission-comparison table {
+  width: 100%;
+  min-width: 1220px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.mission-comparison th,
+.mission-comparison td {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--ops-border-soft);
+  color: var(--mb-muted);
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mission-comparison th {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  background: #08141e;
+}
+
+.mission-comparison th button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mb-subtle);
+  font: inherit;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mission-comparison th:first-child,
+.mission-comparison td:first-child {
+  width: 22%;
+}
+
+.mission-comparison th:nth-child(4),
+.mission-comparison td:nth-child(4) {
+  width: 18%;
+}
+
+.mission-comparison td strong,
+.mission-comparison td small {
+  display: block;
+}
+
+.mission-comparison td strong {
+  overflow: hidden;
+  color: var(--mb-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-comparison td small {
+  margin-top: 2px;
+  color: var(--mb-subtle);
+  text-transform: capitalize;
+}
+
+.mission-comparison td.is-numeric {
+  color: var(--mb-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.mission-comparison tbody tr:hover {
+  background: var(--ops-surface-hover);
 }
 
 .mb-family-list {
@@ -2706,6 +2953,10 @@
   .mb-family-technical dl {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
   }
+
+  .mission-selected-hero__facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1080px) {
@@ -2831,10 +3082,49 @@
   .mission-required-item-row small {
     grid-column: 1;
   }
+
+  .mission-selected-workspace {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .mission-selected-hero {
+    flex-direction: column;
+  }
+
+  .mission-selected-hero__actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .mission-selected-hero__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mission-selected-hero__facts > span {
+    border-bottom: 1px solid var(--ops-border-soft);
+  }
+
+  .mission-comparison {
+    max-height: 420px;
+  }
 }
 
 @media (min-width: 3000px) {
   .mission-dossier-modal-shell {
     width: min(calc(100vw - 64px), 2320px);
+  }
+}
+
+@media (min-width: 721px) and (max-width: 820px) {
+  .mb-filter-row select {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+    max-width: none;
+  }
+
+  .mb-filter-meta {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
