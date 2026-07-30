@@ -1,0 +1,3365 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0",
+  "variant": {
+    "variantKey": "61201483-e22b-4170-ba24-705efb270635",
+    "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0",
+    "conceptKey": "33df6d3c6482adf11250",
+    "objectiveSignature": {
+      "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+      "activityKey": "resource-gathering+salvage-ship",
+      "titleStem": "adagio-industrial-component-salvage-levski",
+      "descriptionStem": "adagio-industrial-component-salvage-levski",
+      "handlerStem": "adagio-rg-fpssalvage",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:0d013fcd5880",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering+salvage-ship",
+        "activity-source:structural",
+        "title:adagio-industrial-component-salvage-levski",
+        "description:adagio-industrial-component-salvage-levski",
+        "handler:adagio-rg-fpssalvage",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:standard",
+        "chain:unlock:0d013fcd5880",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Salvage",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Salvager Needed (Small Special Order of RMC / Components)",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "rawName": "@Adagio_Industrial_Component_Salvage_Levski_E_Title_001",
+    "internalName": "Adagio_RG_FPSSalvage_Nyx_Canisters_Components_Unique",
+    "missionType": "Salvage",
+    "provider": "Adagio Holdings",
+    "faction": "Adagio Holdings",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+      "factionDisplayName": "Adagio Holdings",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+    "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Neutral / 0 rep to Neutral / 0 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "DropoffLocation_BP",
+          "propertyExtendedTextToken": "Destination",
+          "locationLevelType": "LocalSystem"
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "48408311-629d-40ba-a2d6-40773d56b9b0"
+          ]
+        }
+      },
+      {
+        "type": "location",
+        "label": "Nyx Solar System",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Nyx Solar System",
+      "system": "Nyx",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+      ],
+      "possibleLocations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "DropoffLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        },
+        {
+          "role": "availability / accepted-at",
+          "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "displayName": "Nyx Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+          "system": "Nyx"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Nyx"
+        ],
+        "localityNames": [
+          "Nyx Solar System"
+        ],
+        "displayLabel": "Nyx",
+        "detailLabel": "Nyx Solar System",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx Solar System",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "DropoffLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+        "resolvedName": "Nyx Solar System",
+        "system": "Nyx",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Nyx Solar System"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Standing +100",
+        "39,750 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +100"
+      ],
+      "credits": "39,750 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "39,750 aUEC",
+        "amount": 39750,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 39750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 39750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "61201483-e22b-4170-ba24-705efb270635",
+        "familyId": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_45b40aa31aee1df3634d501e",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_FPSSalvage_Rank0"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_f5de85862db5e259b0f46382",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_FPSSalvage_Rank0"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_c760ab80a86c2ab507b27ec1",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "48408311-629d-40ba-a2d6-40773d56b9b0"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "61201483-e22b-4170-ba24-705efb270635"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_27930c77a26e7b6bb29a9237",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "61201483-e22b-4170-ba24-705efb270635"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_504ce12c59fca80bd3ea9d0f",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_bc1b421b5377503a7be60987",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 39750,
+              "amount": 39750,
+              "rawAmount": 39707.35486406997,
+              "integerRoundedAmount": 39707,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.5469999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.918
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.224
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.946
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 39750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 39750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_504ce12c59fca80bd3ea9d0f",
+            "variantId": "61201483-e22b-4170-ba24-705efb270635",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 39750,
+              "amount": 39750,
+              "rawAmount": 39707.35486406997,
+              "integerRoundedAmount": 39707,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.5469999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.918
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.224
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.946
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 39750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 39750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_763916bfc5b2cef4587849dc",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "sourceScope": "contract",
+          "sourceOwnerId": "61201483-e22b-4170-ba24-705efb270635",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S01_S02",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S1_S2_Name",
+                  "displayName": "Ship Weapon (S1 or S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipgun_s01_s02.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "26838ca7-418a-47d2-8429-7339ebbb8993",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S1",
+                      "displayName": "Omnisky III Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e0c51f49-8910-4c99-92e5-ba7eca915bbb",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S1",
+                      "displayName": "Singe Cannon (S1)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "42e2ddb1-7397-4299-88ee-2ddfaa0efc67",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S1",
+                      "displayName": "M3A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0cced6b1-acfd-4c55-96cc-d0503638b9ad",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S1",
+                      "displayName": "Lightstrike I Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d195eb47-24b8-45c0-a4d0-1771d60dc1a8",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S1",
+                      "displayName": "Suckerpunch Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "43269af0-736e-4232-8cfe-271367b28ee1",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S1",
+                      "displayName": "Sledge I Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S1",
+                      "displayName": "FL-11 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3fc83638-fbe5-4d75-8e18-678736fefbc4",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S1",
+                      "displayName": "NN-13 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "00ab31a0-7de2-44f7-a567-7ff88fdbad49",
+                      "recordName": "EntityClassDefinition.VNCL_LaserCannon_S1",
+                      "displayName": "'WEAK' Repeater",
+                      "path": "entities/scitem/ships/weapons/vncl_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "34bc9924-3f20-4bc9-a6cf-81335a0608fe",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S1",
+                      "displayName": "DR Model-XJ1 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S1",
+                      "displayName": "Attrition-1 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c9c2bb19-3298-448e-a117-043e082a1c74",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S1",
+                      "displayName": "CF-117 Bulldog Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "fecbf518-e3e5-4e58-905a-729a02e86265",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S1",
+                      "displayName": "NDB-26 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ebf157d4-5b04-4f0c-95a4-ad22b34b0cce",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S1",
+                      "displayName": "Ardor-1 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "beabe016-3fb4-4e3f-b464-374076d91f04",
+                      "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S1",
+                      "displayName": "Dominance-1 Scattergun",
+                      "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+                      "recordName": "EntityClassDefinition.BEHR_LaserRepeater_PDC_S1",
+                      "displayName": "M2C \"Swarm\"",
+                      "path": "entities/scitem/ships/weapons/behr_laserrepeater_pdc_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1893e596-acaf-49bc-b367-e43e99c2925f",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S2",
+                      "displayName": "Omnisky VI Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
+                      "recordName": "EntityClassDefinition.APAR_MassDriver_S2",
+                      "displayName": "Strife Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/apar_massdriver_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "40b94722-48be-406a-9843-5c77772e4ab4",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S2",
+                      "displayName": "Singe Cannon (S2)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f8c20ae0-b9c7-4c1b-9488-27d1639fb06f",
+                      "recordName": "EntityClassDefinition.BEHR_DistortionCannon_VNG_S2",
+                      "displayName": "EVSD Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_distortioncannon_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2756f5f1-ef1e-454a-a171-9a5bd40e3a9d",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S2",
+                      "displayName": "M4A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "febc4b3a-09d7-446e-99a4-0f6be2387346",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_VNG_S2",
+                      "displayName": "MVSA Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1ee01303-ce47-447b-a2b6-ba0d0787be79",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S2",
+                      "displayName": "Lightstrike II Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "70a98c94-9252-4fd3-a673-5a584339e273",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S2",
+                      "displayName": "Suckerpunch-L Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c657c03c-6ac6-4da6-ab70-bfab52804444",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S2",
+                      "displayName": "Sledge II Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ee3e42f7-56ea-46b8-bac2-d27187005a70",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S2",
+                      "displayName": "FL-22 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "596ced46-195e-4f60-826a-7cc5bb2e2f02",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S2",
+                      "displayName": "NN-14 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5c85d440-66fc-403f-8e66-2a92fe6678ae",
+                      "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S2",
+                      "displayName": "VNCL Gen 2 Plasma Cannon S2",
+                      "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "80ab18bb-9bc2-4e4f-a407-06c28e69bea7",
+                      "recordName": "EntityClassDefinition.VNCL_LaserCannon_S2",
+                      "displayName": "'WASP' Repeater",
+                      "path": "entities/scitem/ships/weapons/vncl_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e350773c-9131-4974-b624-e6b9e7c7200d",
+                      "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S2",
+                      "displayName": "'WHIP' Cannon",
+                      "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6e3a862f-d13e-4873-ba34-24f3e554984d",
+                      "recordName": "EntityClassDefinition.TOAG_LaserGatling_S2",
+                      "displayName": "Thlilye Laser Gatling",
+                      "path": "entities/scitem/ships/weapons/toag_lasergatling_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a5ade53b-9c40-477a-aaf8-78b6ef485283",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S2",
+                      "displayName": "DR Model-XJ2 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s2.xml"
+                    },
+                    {
+                      "status": "unresolved_entity_class",
+                      "guid": "dfe5aeb2-3b56-422b-ba88-f165e827facd"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d60d2103-fdc4-446e-8a3b-0af114f2e23e",
+                      "recordName": "EntityClassDefinition.BEHR_DistortionRepeater_VNG_S2",
+                      "displayName": "ATVS Repeater",
+                      "path": "entities/scitem/ships/weapons/behr_distortionrepeater_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
+                      "recordName": "EntityClassDefinition.BEHR_LaserRepeater_VNG_S2",
+                      "displayName": "GVSR Repeater",
+                      "path": "entities/scitem/ships/weapons/behr_laserrepeater_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ea6b4297-83a4-476f-aee0-9d4f87168cf7",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S2",
+                      "displayName": "Attrition-2 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5453a817-dfd4-4143-aa11-840ca428540c",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S2",
+                      "displayName": "CF-227 Badger Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0e3f4b37-8085-4641-a360-40e4e372cd15",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_PDC_S2",
+                      "displayName": "CF-227 Badger Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_pdc_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2365f40c-fbd3-4859-ad80-f5cfbc305c83",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S2",
+                      "displayName": "NDB-28 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S2",
+                      "displayName": "Ardor-2 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ac55431a-d662-4d92-bda7-ea44f27ca597",
+                      "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S2",
+                      "displayName": "Dominance-2 Scattergun",
+                      "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s2.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_MiningLaser",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Mining_Laser_Name",
+                  "displayName": "Ship Mining Laser",
+                  "path": "entities/haulingentityclass/haulingentityclass_mininglaser.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "0982203d-579f-4c3c-8b7a-c5f1c4a7ddd6",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S0",
+                      "displayName": "Arbor MHV Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1c2bab01-941b-4515-a6a4-5845aaa95696",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S0",
+                      "displayName": "Mining Laser SHIN Hofstede S0",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "40bd6a85-5695-409c-9d6c-ae1babde416a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S0",
+                      "displayName": "Lawson Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8c95c978-9e47-46ec-88e3-a0662c13d76a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S0",
+                      "displayName": "Mining Laser THCN Helix S0",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8bfc261a-6c67-4bec-b5b5-71407e086ec9",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S1",
+                      "displayName": "Arbor MH1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ba94a262-bc0a-4484-9bbd-a4be7a2ec3e7",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S1",
+                      "displayName": "Lancet MH1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "077a4a94-6296-4a83-a6c4-f215f7efd1df",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S1",
+                      "displayName": "Hofstede-S1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e6b284b9-456a-4444-b5fc-7c33bf5a6945",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S1",
+                      "displayName": "Klein-S1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "81e1a10a-c7bd-401f-92e1-284115dcd6e1",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S1",
+                      "displayName": "Helix I Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6429e3d3-c813-4dfc-bc68-c95b54123722",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S1",
+                      "displayName": "Impact I Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5a704f96-c339-43e7-b918-7fc9957673ed",
+                      "recordName": "EntityClassDefinition.Mining_Laser_DRAK_Golem_S1",
+                      "displayName": "Pitman Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_drak_golem_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4435898e-a6cc-4f51-ab2a-805d0cf1a44a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S2",
+                      "displayName": "Arbor MH2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c2006c91-f8f7-4bda-ae38-e0ca5af5c737",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S2",
+                      "displayName": "Lancet MH2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b422bcf8-b553-4b09-b2be-e92ab2f80e9a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S2",
+                      "displayName": "Hofstede-S2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "41850766-d4a8-4255-be75-0d24af7280b0",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S2",
+                      "displayName": "Klein-S2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3bcde69d-3e3a-4f78-b2cb-8189b349e4d2",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S2",
+                      "displayName": "Helix II Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "30545178-b09e-495d-a8b8-c6267ce2b495",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S2",
+                      "displayName": "Impact II Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s2.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "549466c6-139d-4c8e-9d1b-140765372b17",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "549466c6-139d-4c8e-9d1b-140765372b17",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageHead",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Salvage_Head_Name",
+                  "displayName": "Ship Salvage Head",
+                  "path": "entities/haulingentityclass/haulingentityclass_salvagehead.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "f8aabcb1-83b9-4b08-8846-acc77082cd4d",
+                      "recordName": "EntityClassDefinition.Salvage_Head_standard",
+                      "displayName": "Baler Salvage Head",
+                      "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_standard.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f11efdf3-d564-4122-be35-6d00be27ac9a",
+                      "recordName": "EntityClassDefinition.Salvage_Head_Salvation",
+                      "displayName": "Salvation Salvage Head",
+                      "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_salvation.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "81d7c828-42b2-46e8-b2e3-6798bdc32c23",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Small",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_small.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1743f1e2-0558-45f6-bc80-d604daf97123",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Small",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_small.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "98e0e5ac-3a76-4f3f-be2f-7fabf65a8826",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Medium",
+                      "displayName": "Abrade Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_medium.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "089f7dc6-8ff1-415b-832d-7a96b92afdfc",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Medium",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9dd4d8a5-49ab-493f-93cb-0536050cd9b4",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Large",
+                      "displayName": "Trawler Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_large.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0']/contracts/CareerContract[@id='61201483-e22b-4170-ba24-705efb270635']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "61201483-e22b-4170-ba24-705efb270635",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S01_S02",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S1_S2_Name",
+                    "displayName": "Ship Weapon (S1 or S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipgun_s01_s02.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "26838ca7-418a-47d2-8429-7339ebbb8993",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S1",
+                        "displayName": "Omnisky III Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e0c51f49-8910-4c99-92e5-ba7eca915bbb",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S1",
+                        "displayName": "Singe Cannon (S1)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "42e2ddb1-7397-4299-88ee-2ddfaa0efc67",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S1",
+                        "displayName": "M3A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0cced6b1-acfd-4c55-96cc-d0503638b9ad",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S1",
+                        "displayName": "Lightstrike I Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d195eb47-24b8-45c0-a4d0-1771d60dc1a8",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S1",
+                        "displayName": "Suckerpunch Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "43269af0-736e-4232-8cfe-271367b28ee1",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S1",
+                        "displayName": "Sledge I Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S1",
+                        "displayName": "FL-11 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3fc83638-fbe5-4d75-8e18-678736fefbc4",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S1",
+                        "displayName": "NN-13 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "00ab31a0-7de2-44f7-a567-7ff88fdbad49",
+                        "recordName": "EntityClassDefinition.VNCL_LaserCannon_S1",
+                        "displayName": "'WEAK' Repeater",
+                        "path": "entities/scitem/ships/weapons/vncl_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "34bc9924-3f20-4bc9-a6cf-81335a0608fe",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S1",
+                        "displayName": "DR Model-XJ1 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S1",
+                        "displayName": "Attrition-1 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c9c2bb19-3298-448e-a117-043e082a1c74",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S1",
+                        "displayName": "CF-117 Bulldog Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "fecbf518-e3e5-4e58-905a-729a02e86265",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S1",
+                        "displayName": "NDB-26 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ebf157d4-5b04-4f0c-95a4-ad22b34b0cce",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S1",
+                        "displayName": "Ardor-1 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "beabe016-3fb4-4e3f-b464-374076d91f04",
+                        "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S1",
+                        "displayName": "Dominance-1 Scattergun",
+                        "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+                        "recordName": "EntityClassDefinition.BEHR_LaserRepeater_PDC_S1",
+                        "displayName": "M2C \"Swarm\"",
+                        "path": "entities/scitem/ships/weapons/behr_laserrepeater_pdc_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1893e596-acaf-49bc-b367-e43e99c2925f",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S2",
+                        "displayName": "Omnisky VI Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
+                        "recordName": "EntityClassDefinition.APAR_MassDriver_S2",
+                        "displayName": "Strife Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/apar_massdriver_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "40b94722-48be-406a-9843-5c77772e4ab4",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S2",
+                        "displayName": "Singe Cannon (S2)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f8c20ae0-b9c7-4c1b-9488-27d1639fb06f",
+                        "recordName": "EntityClassDefinition.BEHR_DistortionCannon_VNG_S2",
+                        "displayName": "EVSD Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_distortioncannon_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2756f5f1-ef1e-454a-a171-9a5bd40e3a9d",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S2",
+                        "displayName": "M4A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "febc4b3a-09d7-446e-99a4-0f6be2387346",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_VNG_S2",
+                        "displayName": "MVSA Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1ee01303-ce47-447b-a2b6-ba0d0787be79",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S2",
+                        "displayName": "Lightstrike II Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "70a98c94-9252-4fd3-a673-5a584339e273",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S2",
+                        "displayName": "Suckerpunch-L Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c657c03c-6ac6-4da6-ab70-bfab52804444",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S2",
+                        "displayName": "Sledge II Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ee3e42f7-56ea-46b8-bac2-d27187005a70",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S2",
+                        "displayName": "FL-22 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "596ced46-195e-4f60-826a-7cc5bb2e2f02",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S2",
+                        "displayName": "NN-14 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5c85d440-66fc-403f-8e66-2a92fe6678ae",
+                        "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S2",
+                        "displayName": "VNCL Gen 2 Plasma Cannon S2",
+                        "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "80ab18bb-9bc2-4e4f-a407-06c28e69bea7",
+                        "recordName": "EntityClassDefinition.VNCL_LaserCannon_S2",
+                        "displayName": "'WASP' Repeater",
+                        "path": "entities/scitem/ships/weapons/vncl_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e350773c-9131-4974-b624-e6b9e7c7200d",
+                        "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S2",
+                        "displayName": "'WHIP' Cannon",
+                        "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6e3a862f-d13e-4873-ba34-24f3e554984d",
+                        "recordName": "EntityClassDefinition.TOAG_LaserGatling_S2",
+                        "displayName": "Thlilye Laser Gatling",
+                        "path": "entities/scitem/ships/weapons/toag_lasergatling_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a5ade53b-9c40-477a-aaf8-78b6ef485283",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S2",
+                        "displayName": "DR Model-XJ2 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s2.xml"
+                      },
+                      {
+                        "status": "unresolved_entity_class",
+                        "guid": "dfe5aeb2-3b56-422b-ba88-f165e827facd"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d60d2103-fdc4-446e-8a3b-0af114f2e23e",
+                        "recordName": "EntityClassDefinition.BEHR_DistortionRepeater_VNG_S2",
+                        "displayName": "ATVS Repeater",
+                        "path": "entities/scitem/ships/weapons/behr_distortionrepeater_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
+                        "recordName": "EntityClassDefinition.BEHR_LaserRepeater_VNG_S2",
+                        "displayName": "GVSR Repeater",
+                        "path": "entities/scitem/ships/weapons/behr_laserrepeater_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ea6b4297-83a4-476f-aee0-9d4f87168cf7",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S2",
+                        "displayName": "Attrition-2 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5453a817-dfd4-4143-aa11-840ca428540c",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S2",
+                        "displayName": "CF-227 Badger Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0e3f4b37-8085-4641-a360-40e4e372cd15",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_PDC_S2",
+                        "displayName": "CF-227 Badger Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_pdc_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2365f40c-fbd3-4859-ad80-f5cfbc305c83",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S2",
+                        "displayName": "NDB-28 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S2",
+                        "displayName": "Ardor-2 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ac55431a-d662-4d92-bda7-ea44f27ca597",
+                        "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S2",
+                        "displayName": "Dominance-2 Scattergun",
+                        "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s2.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_MiningLaser",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Mining_Laser_Name",
+                    "displayName": "Ship Mining Laser",
+                    "path": "entities/haulingentityclass/haulingentityclass_mininglaser.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "0982203d-579f-4c3c-8b7a-c5f1c4a7ddd6",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S0",
+                        "displayName": "Arbor MHV Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1c2bab01-941b-4515-a6a4-5845aaa95696",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S0",
+                        "displayName": "Mining Laser SHIN Hofstede S0",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "40bd6a85-5695-409c-9d6c-ae1babde416a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S0",
+                        "displayName": "Lawson Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8c95c978-9e47-46ec-88e3-a0662c13d76a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S0",
+                        "displayName": "Mining Laser THCN Helix S0",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8bfc261a-6c67-4bec-b5b5-71407e086ec9",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S1",
+                        "displayName": "Arbor MH1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ba94a262-bc0a-4484-9bbd-a4be7a2ec3e7",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S1",
+                        "displayName": "Lancet MH1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "077a4a94-6296-4a83-a6c4-f215f7efd1df",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S1",
+                        "displayName": "Hofstede-S1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e6b284b9-456a-4444-b5fc-7c33bf5a6945",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S1",
+                        "displayName": "Klein-S1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "81e1a10a-c7bd-401f-92e1-284115dcd6e1",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S1",
+                        "displayName": "Helix I Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6429e3d3-c813-4dfc-bc68-c95b54123722",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S1",
+                        "displayName": "Impact I Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5a704f96-c339-43e7-b918-7fc9957673ed",
+                        "recordName": "EntityClassDefinition.Mining_Laser_DRAK_Golem_S1",
+                        "displayName": "Pitman Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_drak_golem_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4435898e-a6cc-4f51-ab2a-805d0cf1a44a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S2",
+                        "displayName": "Arbor MH2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c2006c91-f8f7-4bda-ae38-e0ca5af5c737",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S2",
+                        "displayName": "Lancet MH2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b422bcf8-b553-4b09-b2be-e92ab2f80e9a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S2",
+                        "displayName": "Hofstede-S2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "41850766-d4a8-4255-be75-0d24af7280b0",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S2",
+                        "displayName": "Klein-S2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3bcde69d-3e3a-4f78-b2cb-8189b349e4d2",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S2",
+                        "displayName": "Helix II Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "30545178-b09e-495d-a8b8-c6267ce2b495",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S2",
+                        "displayName": "Impact II Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s2.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "549466c6-139d-4c8e-9d1b-140765372b17",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "549466c6-139d-4c8e-9d1b-140765372b17",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageHead",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Salvage_Head_Name",
+                    "displayName": "Ship Salvage Head",
+                    "path": "entities/haulingentityclass/haulingentityclass_salvagehead.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "f8aabcb1-83b9-4b08-8846-acc77082cd4d",
+                        "recordName": "EntityClassDefinition.Salvage_Head_standard",
+                        "displayName": "Baler Salvage Head",
+                        "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_standard.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f11efdf3-d564-4122-be35-6d00be27ac9a",
+                        "recordName": "EntityClassDefinition.Salvage_Head_Salvation",
+                        "displayName": "Salvation Salvage Head",
+                        "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_salvation.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "81d7c828-42b2-46e8-b2e3-6798bdc32c23",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Small",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_small.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1743f1e2-0558-45f6-bc80-d604daf97123",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Small",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_small.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "98e0e5ac-3a76-4f3f-be2f-7fabf65a8826",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Medium",
+                        "displayName": "Abrade Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_medium.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "089f7dc6-8ff1-415b-832d-7a96b92afdfc",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Medium",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9dd4d8a5-49ab-493f-93cb-0536050cd9b4",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Large",
+                        "displayName": "Trawler Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_large.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0']/contracts/CareerContract[@id='61201483-e22b-4170-ba24-705efb270635']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_763916bfc5b2cef4587849dc",
+          "variantId": "61201483-e22b-4170-ba24-705efb270635",
+          "sourceScope": "contract",
+          "sourceOwnerId": "61201483-e22b-4170-ba24-705efb270635",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S01_S02",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S1_S2_Name",
+                  "displayName": "Ship Weapon (S1 or S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipgun_s01_s02.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "26838ca7-418a-47d2-8429-7339ebbb8993",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S1",
+                      "displayName": "Omnisky III Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e0c51f49-8910-4c99-92e5-ba7eca915bbb",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S1",
+                      "displayName": "Singe Cannon (S1)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "42e2ddb1-7397-4299-88ee-2ddfaa0efc67",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S1",
+                      "displayName": "M3A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0cced6b1-acfd-4c55-96cc-d0503638b9ad",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S1",
+                      "displayName": "Lightstrike I Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d195eb47-24b8-45c0-a4d0-1771d60dc1a8",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S1",
+                      "displayName": "Suckerpunch Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "43269af0-736e-4232-8cfe-271367b28ee1",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S1",
+                      "displayName": "Sledge I Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S1",
+                      "displayName": "FL-11 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3fc83638-fbe5-4d75-8e18-678736fefbc4",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S1",
+                      "displayName": "NN-13 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "00ab31a0-7de2-44f7-a567-7ff88fdbad49",
+                      "recordName": "EntityClassDefinition.VNCL_LaserCannon_S1",
+                      "displayName": "'WEAK' Repeater",
+                      "path": "entities/scitem/ships/weapons/vncl_lasercannon_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "34bc9924-3f20-4bc9-a6cf-81335a0608fe",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S1",
+                      "displayName": "DR Model-XJ1 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S1",
+                      "displayName": "Attrition-1 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c9c2bb19-3298-448e-a117-043e082a1c74",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S1",
+                      "displayName": "CF-117 Bulldog Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "fecbf518-e3e5-4e58-905a-729a02e86265",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S1",
+                      "displayName": "NDB-26 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ebf157d4-5b04-4f0c-95a4-ad22b34b0cce",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S1",
+                      "displayName": "Ardor-1 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "beabe016-3fb4-4e3f-b464-374076d91f04",
+                      "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S1",
+                      "displayName": "Dominance-1 Scattergun",
+                      "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+                      "recordName": "EntityClassDefinition.BEHR_LaserRepeater_PDC_S1",
+                      "displayName": "M2C \"Swarm\"",
+                      "path": "entities/scitem/ships/weapons/behr_laserrepeater_pdc_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1893e596-acaf-49bc-b367-e43e99c2925f",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S2",
+                      "displayName": "Omnisky VI Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
+                      "recordName": "EntityClassDefinition.APAR_MassDriver_S2",
+                      "displayName": "Strife Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/apar_massdriver_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "40b94722-48be-406a-9843-5c77772e4ab4",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S2",
+                      "displayName": "Singe Cannon (S2)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f8c20ae0-b9c7-4c1b-9488-27d1639fb06f",
+                      "recordName": "EntityClassDefinition.BEHR_DistortionCannon_VNG_S2",
+                      "displayName": "EVSD Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_distortioncannon_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2756f5f1-ef1e-454a-a171-9a5bd40e3a9d",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S2",
+                      "displayName": "M4A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "febc4b3a-09d7-446e-99a4-0f6be2387346",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_VNG_S2",
+                      "displayName": "MVSA Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1ee01303-ce47-447b-a2b6-ba0d0787be79",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S2",
+                      "displayName": "Lightstrike II Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "70a98c94-9252-4fd3-a673-5a584339e273",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S2",
+                      "displayName": "Suckerpunch-L Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c657c03c-6ac6-4da6-ab70-bfab52804444",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S2",
+                      "displayName": "Sledge II Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ee3e42f7-56ea-46b8-bac2-d27187005a70",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S2",
+                      "displayName": "FL-22 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "596ced46-195e-4f60-826a-7cc5bb2e2f02",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S2",
+                      "displayName": "NN-14 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5c85d440-66fc-403f-8e66-2a92fe6678ae",
+                      "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S2",
+                      "displayName": "VNCL Gen 2 Plasma Cannon S2",
+                      "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "80ab18bb-9bc2-4e4f-a407-06c28e69bea7",
+                      "recordName": "EntityClassDefinition.VNCL_LaserCannon_S2",
+                      "displayName": "'WASP' Repeater",
+                      "path": "entities/scitem/ships/weapons/vncl_lasercannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e350773c-9131-4974-b624-e6b9e7c7200d",
+                      "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S2",
+                      "displayName": "'WHIP' Cannon",
+                      "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6e3a862f-d13e-4873-ba34-24f3e554984d",
+                      "recordName": "EntityClassDefinition.TOAG_LaserGatling_S2",
+                      "displayName": "Thlilye Laser Gatling",
+                      "path": "entities/scitem/ships/weapons/toag_lasergatling_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a5ade53b-9c40-477a-aaf8-78b6ef485283",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S2",
+                      "displayName": "DR Model-XJ2 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s2.xml"
+                    },
+                    {
+                      "status": "unresolved_entity_class",
+                      "guid": "dfe5aeb2-3b56-422b-ba88-f165e827facd"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d60d2103-fdc4-446e-8a3b-0af114f2e23e",
+                      "recordName": "EntityClassDefinition.BEHR_DistortionRepeater_VNG_S2",
+                      "displayName": "ATVS Repeater",
+                      "path": "entities/scitem/ships/weapons/behr_distortionrepeater_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
+                      "recordName": "EntityClassDefinition.BEHR_LaserRepeater_VNG_S2",
+                      "displayName": "GVSR Repeater",
+                      "path": "entities/scitem/ships/weapons/behr_laserrepeater_vng_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ea6b4297-83a4-476f-aee0-9d4f87168cf7",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S2",
+                      "displayName": "Attrition-2 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5453a817-dfd4-4143-aa11-840ca428540c",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S2",
+                      "displayName": "CF-227 Badger Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0e3f4b37-8085-4641-a360-40e4e372cd15",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_PDC_S2",
+                      "displayName": "CF-227 Badger Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_pdc_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2365f40c-fbd3-4859-ad80-f5cfbc305c83",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S2",
+                      "displayName": "NDB-28 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S2",
+                      "displayName": "Ardor-2 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ac55431a-d662-4d92-bda7-ea44f27ca597",
+                      "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S2",
+                      "displayName": "Dominance-2 Scattergun",
+                      "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s2.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_MiningLaser",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Mining_Laser_Name",
+                  "displayName": "Ship Mining Laser",
+                  "path": "entities/haulingentityclass/haulingentityclass_mininglaser.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "0982203d-579f-4c3c-8b7a-c5f1c4a7ddd6",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S0",
+                      "displayName": "Arbor MHV Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1c2bab01-941b-4515-a6a4-5845aaa95696",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S0",
+                      "displayName": "Mining Laser SHIN Hofstede S0",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "40bd6a85-5695-409c-9d6c-ae1babde416a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S0",
+                      "displayName": "Lawson Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8c95c978-9e47-46ec-88e3-a0662c13d76a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S0",
+                      "displayName": "Mining Laser THCN Helix S0",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s0.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8bfc261a-6c67-4bec-b5b5-71407e086ec9",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S1",
+                      "displayName": "Arbor MH1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ba94a262-bc0a-4484-9bbd-a4be7a2ec3e7",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S1",
+                      "displayName": "Lancet MH1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "077a4a94-6296-4a83-a6c4-f215f7efd1df",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S1",
+                      "displayName": "Hofstede-S1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e6b284b9-456a-4444-b5fc-7c33bf5a6945",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S1",
+                      "displayName": "Klein-S1 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "81e1a10a-c7bd-401f-92e1-284115dcd6e1",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S1",
+                      "displayName": "Helix I Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6429e3d3-c813-4dfc-bc68-c95b54123722",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S1",
+                      "displayName": "Impact I Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5a704f96-c339-43e7-b918-7fc9957673ed",
+                      "recordName": "EntityClassDefinition.Mining_Laser_DRAK_Golem_S1",
+                      "displayName": "Pitman Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_drak_golem_s1.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4435898e-a6cc-4f51-ab2a-805d0cf1a44a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S2",
+                      "displayName": "Arbor MH2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c2006c91-f8f7-4bda-ae38-e0ca5af5c737",
+                      "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S2",
+                      "displayName": "Lancet MH2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b422bcf8-b553-4b09-b2be-e92ab2f80e9a",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S2",
+                      "displayName": "Hofstede-S2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "41850766-d4a8-4255-be75-0d24af7280b0",
+                      "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S2",
+                      "displayName": "Klein-S2 Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3bcde69d-3e3a-4f78-b2cb-8189b349e4d2",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S2",
+                      "displayName": "Helix II Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "30545178-b09e-495d-a8b8-c6267ce2b495",
+                      "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S2",
+                      "displayName": "Impact II Mining Laser",
+                      "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s2.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "549466c6-139d-4c8e-9d1b-140765372b17",
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "549466c6-139d-4c8e-9d1b-140765372b17",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageHead",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Salvage_Head_Name",
+                  "displayName": "Ship Salvage Head",
+                  "path": "entities/haulingentityclass/haulingentityclass_salvagehead.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "f8aabcb1-83b9-4b08-8846-acc77082cd4d",
+                      "recordName": "EntityClassDefinition.Salvage_Head_standard",
+                      "displayName": "Baler Salvage Head",
+                      "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_standard.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f11efdf3-d564-4122-be35-6d00be27ac9a",
+                      "recordName": "EntityClassDefinition.Salvage_Head_Salvation",
+                      "displayName": "Salvation Salvage Head",
+                      "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_salvation.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "81d7c828-42b2-46e8-b2e3-6798bdc32c23",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Small",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_small.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1743f1e2-0558-45f6-bc80-d604daf97123",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Small",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_small.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "98e0e5ac-3a76-4f3f-be2f-7fabf65a8826",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Medium",
+                      "displayName": "Abrade Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_medium.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "089f7dc6-8ff1-415b-832d-7a96b92afdfc",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Medium",
+                      "displayName": "Cinch Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9dd4d8a5-49ab-493f-93cb-0536050cd9b4",
+                      "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Large",
+                      "displayName": "Trawler Scraper Module",
+                      "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_large.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0']/contracts/CareerContract[@id='61201483-e22b-4170-ba24-705efb270635']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "61201483-e22b-4170-ba24-705efb270635",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "ad45ea6c-4ba6-487b-9a31-cc3a0d574b6c",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S01_S02",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S1_S2_Name",
+                    "displayName": "Ship Weapon (S1 or S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipgun_s01_s02.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "26838ca7-418a-47d2-8429-7339ebbb8993",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S1",
+                        "displayName": "Omnisky III Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e0c51f49-8910-4c99-92e5-ba7eca915bbb",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S1",
+                        "displayName": "Singe Cannon (S1)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "42e2ddb1-7397-4299-88ee-2ddfaa0efc67",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S1",
+                        "displayName": "M3A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0cced6b1-acfd-4c55-96cc-d0503638b9ad",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S1",
+                        "displayName": "Lightstrike I Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d195eb47-24b8-45c0-a4d0-1771d60dc1a8",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S1",
+                        "displayName": "Suckerpunch Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "43269af0-736e-4232-8cfe-271367b28ee1",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S1",
+                        "displayName": "Sledge I Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S1",
+                        "displayName": "FL-11 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3fc83638-fbe5-4d75-8e18-678736fefbc4",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S1",
+                        "displayName": "NN-13 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "00ab31a0-7de2-44f7-a567-7ff88fdbad49",
+                        "recordName": "EntityClassDefinition.VNCL_LaserCannon_S1",
+                        "displayName": "'WEAK' Repeater",
+                        "path": "entities/scitem/ships/weapons/vncl_lasercannon_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "34bc9924-3f20-4bc9-a6cf-81335a0608fe",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S1",
+                        "displayName": "DR Model-XJ1 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S1",
+                        "displayName": "Attrition-1 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c9c2bb19-3298-448e-a117-043e082a1c74",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S1",
+                        "displayName": "CF-117 Bulldog Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "fecbf518-e3e5-4e58-905a-729a02e86265",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S1",
+                        "displayName": "NDB-26 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ebf157d4-5b04-4f0c-95a4-ad22b34b0cce",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S1",
+                        "displayName": "Ardor-1 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "beabe016-3fb4-4e3f-b464-374076d91f04",
+                        "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S1",
+                        "displayName": "Dominance-1 Scattergun",
+                        "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+                        "recordName": "EntityClassDefinition.BEHR_LaserRepeater_PDC_S1",
+                        "displayName": "M2C \"Swarm\"",
+                        "path": "entities/scitem/ships/weapons/behr_laserrepeater_pdc_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1893e596-acaf-49bc-b367-e43e99c2925f",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S2",
+                        "displayName": "Omnisky VI Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
+                        "recordName": "EntityClassDefinition.APAR_MassDriver_S2",
+                        "displayName": "Strife Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/apar_massdriver_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "40b94722-48be-406a-9843-5c77772e4ab4",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S2",
+                        "displayName": "Singe Cannon (S2)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f8c20ae0-b9c7-4c1b-9488-27d1639fb06f",
+                        "recordName": "EntityClassDefinition.BEHR_DistortionCannon_VNG_S2",
+                        "displayName": "EVSD Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_distortioncannon_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2756f5f1-ef1e-454a-a171-9a5bd40e3a9d",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S2",
+                        "displayName": "M4A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "febc4b3a-09d7-446e-99a4-0f6be2387346",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_VNG_S2",
+                        "displayName": "MVSA Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1ee01303-ce47-447b-a2b6-ba0d0787be79",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S2",
+                        "displayName": "Lightstrike II Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "70a98c94-9252-4fd3-a673-5a584339e273",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S2",
+                        "displayName": "Suckerpunch-L Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c657c03c-6ac6-4da6-ab70-bfab52804444",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S2",
+                        "displayName": "Sledge II Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ee3e42f7-56ea-46b8-bac2-d27187005a70",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S2",
+                        "displayName": "FL-22 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "596ced46-195e-4f60-826a-7cc5bb2e2f02",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S2",
+                        "displayName": "NN-14 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5c85d440-66fc-403f-8e66-2a92fe6678ae",
+                        "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S2",
+                        "displayName": "VNCL Gen 2 Plasma Cannon S2",
+                        "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "80ab18bb-9bc2-4e4f-a407-06c28e69bea7",
+                        "recordName": "EntityClassDefinition.VNCL_LaserCannon_S2",
+                        "displayName": "'WASP' Repeater",
+                        "path": "entities/scitem/ships/weapons/vncl_lasercannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e350773c-9131-4974-b624-e6b9e7c7200d",
+                        "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S2",
+                        "displayName": "'WHIP' Cannon",
+                        "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6e3a862f-d13e-4873-ba34-24f3e554984d",
+                        "recordName": "EntityClassDefinition.TOAG_LaserGatling_S2",
+                        "displayName": "Thlilye Laser Gatling",
+                        "path": "entities/scitem/ships/weapons/toag_lasergatling_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a5ade53b-9c40-477a-aaf8-78b6ef485283",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S2",
+                        "displayName": "DR Model-XJ2 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s2.xml"
+                      },
+                      {
+                        "status": "unresolved_entity_class",
+                        "guid": "dfe5aeb2-3b56-422b-ba88-f165e827facd"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d60d2103-fdc4-446e-8a3b-0af114f2e23e",
+                        "recordName": "EntityClassDefinition.BEHR_DistortionRepeater_VNG_S2",
+                        "displayName": "ATVS Repeater",
+                        "path": "entities/scitem/ships/weapons/behr_distortionrepeater_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
+                        "recordName": "EntityClassDefinition.BEHR_LaserRepeater_VNG_S2",
+                        "displayName": "GVSR Repeater",
+                        "path": "entities/scitem/ships/weapons/behr_laserrepeater_vng_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ea6b4297-83a4-476f-aee0-9d4f87168cf7",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S2",
+                        "displayName": "Attrition-2 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5453a817-dfd4-4143-aa11-840ca428540c",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S2",
+                        "displayName": "CF-227 Badger Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0e3f4b37-8085-4641-a360-40e4e372cd15",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_PDC_S2",
+                        "displayName": "CF-227 Badger Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_pdc_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2365f40c-fbd3-4859-ad80-f5cfbc305c83",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S2",
+                        "displayName": "NDB-28 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S2",
+                        "displayName": "Ardor-2 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ac55431a-d662-4d92-bda7-ea44f27ca597",
+                        "recordName": "EntityClassDefinition.HRST_LaserScatterGun_S2",
+                        "displayName": "Dominance-2 Scattergun",
+                        "path": "entities/scitem/ships/weapons/hrst_laserscattergun_s2.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "8d766c7e-5e4b-46c2-a885-2683f56dd396",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_MiningLaser",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Mining_Laser_Name",
+                    "displayName": "Ship Mining Laser",
+                    "path": "entities/haulingentityclass/haulingentityclass_mininglaser.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "0982203d-579f-4c3c-8b7a-c5f1c4a7ddd6",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S0",
+                        "displayName": "Arbor MHV Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1c2bab01-941b-4515-a6a4-5845aaa95696",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S0",
+                        "displayName": "Mining Laser SHIN Hofstede S0",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "40bd6a85-5695-409c-9d6c-ae1babde416a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S0",
+                        "displayName": "Lawson Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8c95c978-9e47-46ec-88e3-a0662c13d76a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S0",
+                        "displayName": "Mining Laser THCN Helix S0",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s0.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8bfc261a-6c67-4bec-b5b5-71407e086ec9",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S1",
+                        "displayName": "Arbor MH1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ba94a262-bc0a-4484-9bbd-a4be7a2ec3e7",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S1",
+                        "displayName": "Lancet MH1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "077a4a94-6296-4a83-a6c4-f215f7efd1df",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S1",
+                        "displayName": "Hofstede-S1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e6b284b9-456a-4444-b5fc-7c33bf5a6945",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S1",
+                        "displayName": "Klein-S1 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "81e1a10a-c7bd-401f-92e1-284115dcd6e1",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S1",
+                        "displayName": "Helix I Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6429e3d3-c813-4dfc-bc68-c95b54123722",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S1",
+                        "displayName": "Impact I Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5a704f96-c339-43e7-b918-7fc9957673ed",
+                        "recordName": "EntityClassDefinition.Mining_Laser_DRAK_Golem_S1",
+                        "displayName": "Pitman Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_drak_golem_s1.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4435898e-a6cc-4f51-ab2a-805d0cf1a44a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Arbor_S2",
+                        "displayName": "Arbor MH2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_arbor_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c2006c91-f8f7-4bda-ae38-e0ca5af5c737",
+                        "recordName": "EntityClassDefinition.Mining_Laser_GRIN_Lancet_S2",
+                        "displayName": "Lancet MH2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_grin_lancet_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b422bcf8-b553-4b09-b2be-e92ab2f80e9a",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Hofstede_S2",
+                        "displayName": "Hofstede-S2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_hofstede_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "41850766-d4a8-4255-be75-0d24af7280b0",
+                        "recordName": "EntityClassDefinition.Mining_Laser_SHIN_Klein_S2",
+                        "displayName": "Klein-S2 Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_shin_klein_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3bcde69d-3e3a-4f78-b2cb-8189b349e4d2",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Helix_S2",
+                        "displayName": "Helix II Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_helix_s2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "30545178-b09e-495d-a8b8-c6267ce2b495",
+                        "recordName": "EntityClassDefinition.Mining_Laser_THCN_Impact_S2",
+                        "displayName": "Impact II Mining Laser",
+                        "path": "entities/scitem/ships/weapons/mining_laser_thcn_impact_s2.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "549466c6-139d-4c8e-9d1b-140765372b17",
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "549466c6-139d-4c8e-9d1b-140765372b17",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageHead",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Salvage_Head_Name",
+                    "displayName": "Ship Salvage Head",
+                    "path": "entities/haulingentityclass/haulingentityclass_salvagehead.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "f8aabcb1-83b9-4b08-8846-acc77082cd4d",
+                        "recordName": "EntityClassDefinition.Salvage_Head_standard",
+                        "displayName": "Baler Salvage Head",
+                        "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_standard.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f11efdf3-d564-4122-be35-6d00be27ac9a",
+                        "recordName": "EntityClassDefinition.Salvage_Head_Salvation",
+                        "displayName": "Salvation Salvage Head",
+                        "path": "entities/scitem/ships/utility/salvage/salvagehead/salvage_head_salvation.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "81d7c828-42b2-46e8-b2e3-6798bdc32c23",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Small",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_small.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1743f1e2-0558-45f6-bc80-d604daf97123",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Small",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_small.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "98e0e5ac-3a76-4f3f-be2f-7fabf65a8826",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Medium",
+                        "displayName": "Abrade Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_medium.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "089f7dc6-8ff1-415b-832d-7a96b92afdfc",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Salvation_Medium",
+                        "displayName": "Cinch Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9dd4d8a5-49ab-493f-93cb-0536050cd9b4",
+                        "recordName": "EntityClassDefinition.Salvage_Modifier_Scraper_Large",
+                        "displayName": "Trawler Scraper Module",
+                        "path": "entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_large.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0']/contracts/CareerContract[@id='61201483-e22b-4170-ba24-705efb270635']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "61201483-e22b-4170-ba24-705efb270635",
+      "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+      "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Adagio_Industrial_Component_Salvage_Levski_E_Title_001",
+      "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Levski_E_Desc_001"
+    }
+  }
+}

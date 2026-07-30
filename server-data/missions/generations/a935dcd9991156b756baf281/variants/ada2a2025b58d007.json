@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+  "variant": {
+    "variantKey": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+    "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+    "conceptKey": "72d02cdb2d2d2b9c4f47",
+    "objectiveSignature": {
+      "key": "5ebbd81d-82cb-4534-81fc-db7a2c386f70|e2d3fa61-2727-4f45-91c1-b345976fa22d|unknown|mercenary|standard|open|unknown:bounded||||variant:4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+      "activityKey": "unknown",
+      "titleStem": "tarpits-eliminateboss-dc",
+      "descriptionStem": "tarpits-eliminateboss-dc",
+      "handlerStem": "tar-pits-misc",
+      "archetype": "Mercenary",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:tarpits-eliminateboss-dc",
+        "description:tarpits-eliminateboss-dc",
+        "handler:tar-pits-misc",
+        "contract:careercontract",
+        "archetype:mercenary",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Mercenary",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+      ]
+    },
+    "displayName": "’s Time Has Come",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "We’ve had our sights set on taking out [TargetName] for a while now, but we’ve never been able to find the right moment. Enough waiting. You’re going to create the right moment for us.\n\nHead to [Location] and take out a bunch of lowlifes running around the [Location]. Kill enough of those losers, and [TargetName] will have no choice but to come face you themselves. That’s when you take ‘em out and earn yourself a nice fat payday.",
+    "rawName": "@Tarpits_eliminateboss_dc_title_001",
+    "internalName": "TarPits_Stanton1_Dupree_Lobby_EliminateBoss",
+    "missionType": "CareerContract",
+    "provider": "Tar Pits",
+    "faction": "Tar Pits",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+      "displayName": "Hired Muscle",
+      "rawName": "SReputationScopeParams.ReputationScope_HiredMuscle",
+      "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+      "factionDisplayName": "Tar Pits",
+      "trackType": "Hired Muscle",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+      ]
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "Applicant / 0 rep to Rank I / 1 rep",
+    "prerequisiteSummary": "Applicant / 0 rep to Rank I / 1 rep; CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Applicant / 0 rep to Rank I / 1 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star, Stanton 1",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star, Stanton 1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address",
+          "Location"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address",
+          "Location"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Hired Muscle +500",
+        "Credits formula unresolved"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hired Muscle +500"
+      ],
+      "credits": "Credits formula unresolved",
+      "creditStatus": "formula_unresolved",
+      "creditsDetail": {
+        "status": "formula_unresolved",
+        "displayText": "Credits formula unresolved",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "missing_profile_guid; unresolved_profile_weight:mechanicalSkillWeight; unresolved_profile_weight:mentalLoadWeight; unresolved_profile_weight:riskOfLossWeight; unresolved_profile_weight:gameKnowledgeWeight",
+        "sourceRefs": [
+          "contracts/contractgenerator/tarpits_generator.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "unresolved",
+          "formulaStatus": "unresolved",
+          "currency": "aUEC",
+          "baseSoloAmount": null,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "unresolved",
+              "currency": "aUEC",
+              "baseSoloAmount": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [
+            "missing_profile_guid",
+            "unresolved_profile_weight:mechanicalSkillWeight",
+            "unresolved_profile_weight:mentalLoadWeight",
+            "unresolved_profile_weight:riskOfLossWeight",
+            "unresolved_profile_weight:gameKnowledgeWeight"
+          ],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": [
+        "ContractResult_CalculatedReward:formula"
+      ]
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+        "factionDisplayName": "Tar Pits",
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "scopeDisplayName": "Hired Muscle",
+        "amount": 500,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+          "36d5786c-5258-48ca-a3b8-fefb5838e143"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": true,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+        "familyId": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+        "templateGuid": "bdbda794-2484-4727-af09-0cfa6b24e79d"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_83269a92f155f43d7aa5b1e1",
+          "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "TarPits_Misc_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_459127578c9b32271db176ac",
+          "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "TarPits_Misc_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_5bacadd48a4a9702e8ee796c",
+          "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_367d891ad935357d3efd651e",
+          "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+            "reputationScope": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_7aa62df65ba6ae8ce6fcf5a9",
+          "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "unresolved",
+              "formulaStatus": "unresolved",
+              "currency": "aUEC",
+              "baseSoloAmount": null,
+              "amount": null,
+              "rawAmount": null,
+              "integerRoundedAmount": null,
+              "unresolvedReasons": [
+                "missing_profile_guid",
+                "unresolved_profile_weight:mechanicalSkillWeight",
+                "unresolved_profile_weight:mentalLoadWeight",
+                "unresolved_profile_weight:riskOfLossWeight",
+                "unresolved_profile_weight:gameKnowledgeWeight"
+              ],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "unresolved",
+                "value": null,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": null,
+                  "status": "unresolved",
+                  "name": null,
+                  "recordName": null,
+                  "weightsRaw": null,
+                  "weights": null,
+                  "sourceRef": null,
+                  "sourceElement": null
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  }
+                ],
+                "unresolvedReasons": [
+                  "missing_profile_guid",
+                  "unresolved_profile_weight:mechanicalSkillWeight",
+                  "unresolved_profile_weight:mentalLoadWeight",
+                  "unresolved_profile_weight:riskOfLossWeight",
+                  "unresolved_profile_weight:gameKnowledgeWeight"
+                ],
+                "rawAttributes": {
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "10",
+                "value": 10,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": null,
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "bdbda794-2484-4727-af09-0cfa6b24e79d",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/eliminateboss.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": true,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='TarPits_Misc_Career']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": {
+            "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='TarPits_Misc_Career']/contracts/CareerContract[@id='4bd71b0a-2ea0-a8e1-1d11-03edb7057780']/paramOverrides/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/eliminateboss.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "unresolved",
+          "formulaStatus": "unresolved",
+          "currency": "aUEC",
+          "baseSoloAmount": null,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "unresolved",
+              "currency": "aUEC",
+              "baseSoloAmount": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [
+            "missing_profile_guid",
+            "unresolved_profile_weight:mechanicalSkillWeight",
+            "unresolved_profile_weight:mentalLoadWeight",
+            "unresolved_profile_weight:riskOfLossWeight",
+            "unresolved_profile_weight:gameKnowledgeWeight"
+          ],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_367d891ad935357d3efd651e",
+            "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+              "reputationScope": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+              "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "reputationAmount": 500,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/tarpits_generator.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "unresolved",
+              "formulaStatus": "unresolved",
+              "currency": "aUEC",
+              "baseSoloAmount": null,
+              "amount": null,
+              "rawAmount": null,
+              "integerRoundedAmount": null,
+              "unresolvedReasons": [
+                "missing_profile_guid",
+                "unresolved_profile_weight:mechanicalSkillWeight",
+                "unresolved_profile_weight:mentalLoadWeight",
+                "unresolved_profile_weight:riskOfLossWeight",
+                "unresolved_profile_weight:gameKnowledgeWeight"
+              ],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "unresolved",
+                "value": null,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": null,
+                  "status": "unresolved",
+                  "name": null,
+                  "recordName": null,
+                  "weightsRaw": null,
+                  "weights": null,
+                  "sourceRef": null,
+                  "sourceElement": null
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": null,
+                    "weight": null,
+                    "contribution": null
+                  }
+                ],
+                "unresolvedReasons": [
+                  "missing_profile_guid",
+                  "unresolved_profile_weight:mechanicalSkillWeight",
+                  "unresolved_profile_weight:mentalLoadWeight",
+                  "unresolved_profile_weight:riskOfLossWeight",
+                  "unresolved_profile_weight:gameKnowledgeWeight"
+                ],
+                "rawAttributes": {
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "10",
+                "value": 10,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": null,
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "unresolved",
+          "formulaStatus": "unresolved",
+          "currency": "aUEC",
+          "baseSoloAmount": null,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "unresolved",
+              "currency": "aUEC",
+              "baseSoloAmount": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [
+            "missing_profile_guid",
+            "unresolved_profile_weight:mechanicalSkillWeight",
+            "unresolved_profile_weight:mentalLoadWeight",
+            "unresolved_profile_weight:riskOfLossWeight",
+            "unresolved_profile_weight:gameKnowledgeWeight"
+          ],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/tarpits_generator.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": null,
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+            "reputationScope": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "reward": {
+              "guid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XS",
+              "editorName": "+T_04",
+              "reputationAmount": 500,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xs.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+      "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+      "generatorName": "ContractGenerator.TarPits_Generator",
+      "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Tarpits_eliminateboss_dc_title_001",
+      "descriptionRaw": "@Tarpits_eliminateboss_dc_desc_001"
+    }
+  }
+}

@@ -1,0 +1,1319 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "4443feaa-e5b0-4e1f-8dad-3fe77e81e901|InterSec_StationAssault",
+  "variant": {
+    "variantKey": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+    "familyKey": "4443feaa-e5b0-4e1f-8dad-3fe77e81e901|InterSec_StationAssault",
+    "conceptKey": "6929ed89ca12d32457a7",
+    "objectiveSignature": {
+      "key": "unknown-faction|unknown-faction:unknown-scope|unknown|contract|standard|unlock:3d819bf4d49f|unknown:unknown||||variant:24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+      "activityKey": "unknown",
+      "titleStem": "intersec-tsg-group",
+      "descriptionStem": "intersec-tsg-group",
+      "handlerStem": "inter-sec-station-assault",
+      "archetype": "Contract",
+      "contractType": "Contract",
+      "introState": "standard",
+      "chainState": "unlock:3d819bf4d49f",
+      "legalState": "unknown:unknown",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:intersec-tsg-group",
+        "description:intersec-tsg-group",
+        "handler:inter-sec-station-assault",
+        "contract:contract",
+        "archetype:contract",
+        "intro:standard",
+        "chain:unlock:3d819bf4d49f",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Contract"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4443feaa-e5b0-4e1f-8dad-3fe77e81e901|InterSec_StationAssault",
+        "InterSec_Nyx_TSG_FullStrikeOnStation"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Tactical Strike Group Needed",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Shattered Blade\nEquipment Specs: Strike Group\nBriefing: \nWe've received word that a People's Alliance security ship called Tranquility stumbled across  Shattered Blade hiding out in an old QV Extraction station. Details are sketchy but will connect you with local assets once on site. \n\nIntersec is looking for a team to intervene and protect the Tranquility and their personnel. Based on discussions with the Tranquility's captain, you will need  ballistic and ordnance to break down the defenses of the station and ultimately get boots on the ground to save their pilot.\n\nRecruiting additional ships to support you in this mission is absolutely critical. You will need a variety of ship types to balance multiple combat zones in space and on the ground.\n\nRespectfully,   \n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+    "rawName": "@Intersec_TSG_Group_Title_001",
+    "internalName": "InterSec_Nyx_TSG_FullStrikeOnStation",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4443feaa-e5b0-4e1f-8dad-3fe77e81e901|InterSec_StationAssault",
+        "InterSec_Nyx_TSG_FullStrikeOnStation"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "reputationRequirement": "InterSec Defense Solutions: Sr. Contractor Elite Contractor",
+    "prerequisiteSummary": "Nyx Solar System; Prerequisite mission or completion tag; InterSec Defense Solutions: Sr. Contractor Elite Contractor",
+    "prerequisites": [
+      {
+        "type": "location",
+        "label": "Nyx Solar System",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+          ]
+        }
+      },
+      {
+        "type": "reputation",
+        "label": "InterSec Defense Solutions: Sr. Contractor Elite Contractor",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Nyx Solar System",
+      "system": "Nyx",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+      ],
+      "possibleLocations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "displayName": "Nyx Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+          "system": "Nyx"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Nyx"
+        ],
+        "localityNames": [
+          "Nyx Solar System"
+        ],
+        "displayLabel": "Nyx",
+        "detailLabel": "Nyx Solar System",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx Solar System",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+        "resolvedName": "Nyx Solar System",
+        "system": "Nyx",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Nyx Solar System"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Full Strike On Station A: ef2fe5ec-e7c3-4c44-b589-b3cdf2f83db5, a94dcfee-51b0-439a-bbc7-62086dbd2395, fdb77585-2af6-4ee7-b603-e5116618b966, 7aa43fa1-11d7-4ad2-a1b7-9b11a92b4d5c +10",
+        "Blueprint: Full Strike On Station B: 280f47b7-8434-410c-b854-380768fdccec, 3e1831e2-fe5d-4383-9709-d1125cb2f174, d1172623-c96d-4d3a-9aef-a9fc75192183, 8af10b9c-dbe4-41b6-9e1b-5ff99a3360f4 +6",
+        "Standing +300",
+        "2,878,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "Full Strike On Station A: ef2fe5ec-e7c3-4c44-b589-b3cdf2f83db5, a94dcfee-51b0-439a-bbc7-62086dbd2395, fdb77585-2af6-4ee7-b603-e5116618b966, 7aa43fa1-11d7-4ad2-a1b7-9b11a92b4d5c +10",
+        "Full Strike On Station B: 280f47b7-8434-410c-b854-380768fdccec, 3e1831e2-fe5d-4383-9709-d1125cb2f174, d1172623-c96d-4d3a-9aef-a9fc75192183, 8af10b9c-dbe4-41b6-9e1b-5ff99a3360f4 +6"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "dbaf603a-534f-4bbf-9dfd-e64e4aaec62e",
+          "poolName": "Full Strike On Station A",
+          "rewardCount": 14,
+          "chanceLabel": "7.14% chance - 1 of 14",
+          "rewards": [
+            {
+              "blueprintGuid": "ef2fe5ec-e7c3-4c44-b589-b3cdf2f83db5",
+              "displayName": "ef2fe5ec-e7c3-4c44-b589-b3cdf2f83db5",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "a94dcfee-51b0-439a-bbc7-62086dbd2395",
+              "displayName": "a94dcfee-51b0-439a-bbc7-62086dbd2395",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "fdb77585-2af6-4ee7-b603-e5116618b966",
+              "displayName": "fdb77585-2af6-4ee7-b603-e5116618b966",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "7aa43fa1-11d7-4ad2-a1b7-9b11a92b4d5c",
+              "displayName": "7aa43fa1-11d7-4ad2-a1b7-9b11a92b4d5c",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "6ef10d50-8fde-4d6e-9fdd-71486a57cba8",
+              "displayName": "6ef10d50-8fde-4d6e-9fdd-71486a57cba8",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "996b49dc-96ec-431d-8638-be232ef89596",
+              "displayName": "996b49dc-96ec-431d-8638-be232ef89596",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "e03e2902-6fbc-49b5-8d97-08aa6cc8d043",
+              "displayName": "e03e2902-6fbc-49b5-8d97-08aa6cc8d043",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "91e2ba6e-8cf3-48c6-aceb-0523e9b85a83",
+              "displayName": "91e2ba6e-8cf3-48c6-aceb-0523e9b85a83",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "d990dcb6-490d-4e3b-9627-8a1950fa25bc",
+              "displayName": "d990dcb6-490d-4e3b-9627-8a1950fa25bc",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "152d4fe6-b50a-4a46-82e4-69b52606f9b5",
+              "displayName": "152d4fe6-b50a-4a46-82e4-69b52606f9b5",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "d564c96b-1b6a-443d-b31a-57df452ad4d0",
+              "displayName": "d564c96b-1b6a-443d-b31a-57df452ad4d0",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "662028d6-b908-4058-bb46-a00ea072645a",
+              "displayName": "662028d6-b908-4058-bb46-a00ea072645a",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "a8200d22-2c1d-47a7-9106-032eb8994916",
+              "displayName": "a8200d22-2c1d-47a7-9106-032eb8994916",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            },
+            {
+              "blueprintGuid": "73ea6995-568d-4bbe-82ce-a981cb20798b",
+              "displayName": "73ea6995-568d-4bbe-82ce-a981cb20798b",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "7.14% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "fb2a7d3e-8e67-4567-a08f-409d88cccc8a",
+          "poolName": "Full Strike On Station B",
+          "rewardCount": 10,
+          "chanceLabel": "10% chance - 1 of 10",
+          "rewards": [
+            {
+              "blueprintGuid": "280f47b7-8434-410c-b854-380768fdccec",
+              "displayName": "280f47b7-8434-410c-b854-380768fdccec",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "3e1831e2-fe5d-4383-9709-d1125cb2f174",
+              "displayName": "3e1831e2-fe5d-4383-9709-d1125cb2f174",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "d1172623-c96d-4d3a-9aef-a9fc75192183",
+              "displayName": "d1172623-c96d-4d3a-9aef-a9fc75192183",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "8af10b9c-dbe4-41b6-9e1b-5ff99a3360f4",
+              "displayName": "8af10b9c-dbe4-41b6-9e1b-5ff99a3360f4",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "2dd642a7-7204-42c3-b45d-1d017bed5420",
+              "displayName": "2dd642a7-7204-42c3-b45d-1d017bed5420",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "0b456971-e99b-4950-a435-464b231640b8",
+              "displayName": "0b456971-e99b-4950-a435-464b231640b8",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "9585b0dc-b660-4e2a-9136-0092af1e72c1",
+              "displayName": "9585b0dc-b660-4e2a-9136-0092af1e72c1",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "1535c647-30e7-493e-9494-132c511b2c3a",
+              "displayName": "1535c647-30e7-493e-9494-132c511b2c3a",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "799e4d02-1b04-45cb-ac67-2453588a8c99",
+              "displayName": "799e4d02-1b04-45cb-ac67-2453588a8c99",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            },
+            {
+              "blueprintGuid": "99f5c8a9-2721-439e-9f18-b2ad7d9fc0ed",
+              "displayName": "99f5c8a9-2721-439e-9f18-b2ad7d9fc0ed",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "10% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +300"
+      ],
+      "credits": "2,878,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "2,878,250 aUEC",
+        "amount": 2878250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2878250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2878250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 300,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+        "familyId": "4443feaa-e5b0-4e1f-8dad-3fe77e81e901|InterSec_StationAssault",
+        "templateGuid": "daf9ccd0-5b45-422a-bbb9-85cf2d2b7001"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_693ba26cecfde9bd03b39a67",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_79f42e07617969d28c0044a6",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_041851ef5646c4f0f7b1f6c1",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "reputation",
+          "polarity": "required",
+          "identifiers": {
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "scope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "minStanding": "a1a5c737-52f1-4ee5-88e4-28b47b84938f",
+            "maxStanding": "426da095-27b1-4ac3-8722-af57a973c79c"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "scope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "exclude": "0",
+            "minStanding": "a1a5c737-52f1-4ee5-88e4-28b47b84938f",
+            "maxStanding": "426da095-27b1-4ac3-8722-af57a973c79c"
+          },
+          "sourceElement": "ContractPrerequisite_Reputation",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "ContractPrerequisite_Reputation",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_48ad8fea694ec653d6701bc4",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "dbaf603a-534f-4bbf-9dfd-e64e4aaec62e",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_5a49e0c40cde5479fbcc8529",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "blueprint_reward",
+          "index": 1,
+          "payload": {
+            "blueprintPoolGuid": "fb2a7d3e-8e67-4567-a08f-409d88cccc8a",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_f070209a4c7e0237adc2313f",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+            "reputationAmount": 300,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_4493d39edbe5d5dcea103e97",
+          "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 2878250,
+              "amount": 2878250,
+              "rawAmount": 2878144.672471417,
+              "integerRoundedAmount": 2878145,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.5600000000000005,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "PvE_PvP_large_group_action_eg_warzone_7",
+                    "level": 7,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.3800000000000003
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Without_help_Player_and_Ship_die_7",
+                    "level": 7,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.54
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "PvE_PvP_large_group_action_eg_warzone_7",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Without_help_Player_and_Ship_die_7",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "320",
+                "value": 320,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "daf9ccd0-5b45-422a-bbb9-85cf2d2b7001",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/tacticalstrikegroup/tsg_fullstrikeonstation.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/tacticalstrikegroup/tsg_fullstrikeonstation.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2878250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2878250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_48ad8fea694ec653d6701bc4",
+            "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "dbaf603a-534f-4bbf-9dfd-e64e4aaec62e",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_5a49e0c40cde5479fbcc8529",
+            "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+            "type": "blueprint_reward",
+            "index": 1,
+            "payload": {
+              "blueprintPoolGuid": "fb2a7d3e-8e67-4567-a08f-409d88cccc8a",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_f070209a4c7e0237adc2313f",
+            "variantId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+              "reputationAmount": 300,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 2878250,
+              "amount": 2878250,
+              "rawAmount": 2878144.672471417,
+              "integerRoundedAmount": 2878145,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.5600000000000005,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "PvE_PvP_large_group_action_eg_warzone_7",
+                    "level": 7,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.3800000000000003
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Without_help_Player_and_Ship_die_7",
+                    "level": 7,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.54
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "PvE_PvP_large_group_action_eg_warzone_7",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Without_help_Player_and_Ship_die_7",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "320",
+                "value": 320,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2878250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2878250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+            "reputationAmount": 300,
+            "reward": {
+              "guid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_300",
+              "editorName": "Undefined Name",
+              "reputationAmount": 300,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_300.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "24ac3c24-ed16-43f5-bb1c-626f0261fcb5",
+      "generatorGuid": "4443feaa-e5b0-4e1f-8dad-3fe77e81e901",
+      "generatorName": "ContractGenerator.InterSec_StationAssault",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_stationassault.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@Intersec_TSG_Group_Title_001",
+      "descriptionRaw": "@Intersec_TSG_Group_Desc_001"
+    }
+  }
+}

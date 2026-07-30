@@ -64,7 +64,9 @@ type MissionBrowseViews = {
 };
 
 type MissionBrowserIndex = {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   sourceFiles: string[];
@@ -101,6 +103,9 @@ type MissionBrowserFilterOption = {
 };
 
 type MissionShardManifest = {
+  schemaVersion?: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   familyFilesByFamilyId?: Record<string, {
     familyKey: string;
     detailFile: string;
@@ -126,17 +131,18 @@ type MissionShardManifest = {
   }>;
 };
 
-const missionRoot = getMissionDataRoot();
 let browserIndexCache: Promise<MissionBrowserIndex> | null = null;
 let browserIndexModifiedAt = 0;
+let browserIndexRoot = "";
 let shardManifestCache: Promise<MissionShardManifest> | null = null;
 let shardManifestModifiedAt = 0;
+let shardManifestRoot = "";
 
 function parseRouteUrl(rawUrl: string): URL {
   return new URL(rawUrl, "http://localhost");
 }
 
-async function readJson<T>(relativePath: string): Promise<T> {
+async function readJson<T>(missionRoot: string, relativePath: string): Promise<T> {
   const filePath = path.resolve(missionRoot, relativePath);
   const relativeToRoot = path.relative(missionRoot, filePath);
   if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
@@ -145,24 +151,69 @@ async function readJson<T>(relativePath: string): Promise<T> {
   return JSON.parse(await readFile(filePath, "utf8")) as T;
 }
 
-async function loadBrowserIndex(): Promise<MissionBrowserIndex> {
+async function loadBrowserIndex(missionRoot: string): Promise<MissionBrowserIndex> {
   const indexPath = path.join(missionRoot, "mission_browser_index.json");
   const modifiedAt = (await stat(indexPath)).mtimeMs;
-  if (!browserIndexCache || modifiedAt !== browserIndexModifiedAt) {
+  if (
+    !browserIndexCache
+    || missionRoot !== browserIndexRoot
+    || modifiedAt !== browserIndexModifiedAt
+  ) {
+    browserIndexRoot = missionRoot;
     browserIndexModifiedAt = modifiedAt;
-    browserIndexCache = readJson<MissionBrowserIndex>("mission_browser_index.json");
+    browserIndexCache = readJson<MissionBrowserIndex>(missionRoot, "mission_browser_index.json");
   }
   return browserIndexCache;
 }
 
-async function loadShardManifest(): Promise<MissionShardManifest> {
+async function loadShardManifest(missionRoot: string): Promise<MissionShardManifest> {
   const manifestPath = path.join(missionRoot, "mission_shard_manifest.json");
   const modifiedAt = (await stat(manifestPath)).mtimeMs;
-  if (!shardManifestCache || modifiedAt !== shardManifestModifiedAt) {
+  if (
+    !shardManifestCache
+    || missionRoot !== shardManifestRoot
+    || modifiedAt !== shardManifestModifiedAt
+  ) {
+    shardManifestRoot = missionRoot;
     shardManifestModifiedAt = modifiedAt;
-    shardManifestCache = readJson<MissionShardManifest>("mission_shard_manifest.json");
+    shardManifestCache = readJson<MissionShardManifest>(missionRoot, "mission_shard_manifest.json");
   }
   return shardManifestCache;
+}
+
+function assertSupportedMissionGeneration(
+  index: MissionBrowserIndex,
+  manifest: MissionShardManifest,
+): void {
+  if (index.schemaVersion !== 1 && index.schemaVersion !== 2) {
+    throw new Error(`Unsupported mission shaped schema ${String(index.schemaVersion)}.`);
+  }
+  if (index.schemaVersion !== 2) return;
+  if (index.sourceContractVersion !== 3 || manifest.sourceContractVersion !== 3) {
+    throw new Error("Mission schema version 2 requires source contract version 3.");
+  }
+  if (
+    !index.generationId
+    || !manifest.generationId
+    || index.generationId !== manifest.generationId
+    || manifest.schemaVersion !== index.schemaVersion
+  ) {
+    throw new Error("Mission browser index and shard manifest belong to different generations.");
+  }
+}
+
+async function loadMissionGeneration(): Promise<{
+  missionRoot: string;
+  index: MissionBrowserIndex;
+  manifest: MissionShardManifest;
+}> {
+  const missionRoot = getMissionDataRoot();
+  const [index, manifest] = await Promise.all([
+    loadBrowserIndex(missionRoot),
+    loadShardManifest(missionRoot),
+  ]);
+  assertSupportedMissionGeneration(index, manifest);
+  return { missionRoot, index, manifest };
 }
 
 function rewardMatches(family: MissionFamilyView, reward: string): boolean {
@@ -280,36 +331,37 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
   if (method !== "GET") return methodNotAllowed();
 
   if (pathName === "/api/missions/browser") {
-    return { status: 200, body: filterBrowserIndex(await loadBrowserIndex(), url) };
+    const { index } = await loadMissionGeneration();
+    return { status: 200, body: filterBrowserIndex(index, url) };
   }
 
   const familyVariantsMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)\/variants$/);
   if (familyVariantsMatch) {
     const familyKey = decodeURIComponent(familyVariantsMatch[1] ?? "");
-    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const { missionRoot, index, manifest } = await loadMissionGeneration();
     const file = index.familyVariantFiles?.[familyKey] ?? manifest.familyFilesByFamilyId?.[familyKey]?.variantsFile;
     if (!file) return { status: 404, body: { error: "Mission family variants not found." } };
-    return { status: 200, body: await readJson(file) };
+    return { status: 200, body: await readJson(missionRoot, file) };
   }
 
   const familyMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)$/);
   if (familyMatch) {
     const familyKey = decodeURIComponent(familyMatch[1] ?? "");
-    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const { missionRoot, index, manifest } = await loadMissionGeneration();
     const file = index.familyDetailFiles?.[familyKey] ?? manifest.familyFilesByFamilyId?.[familyKey]?.detailFile;
     if (!file) return { status: 404, body: { error: "Mission family not found." } };
-    return { status: 200, body: await readJson(file) };
+    return { status: 200, body: await readJson(missionRoot, file) };
   }
 
   const variantMatch = pathName.match(/^\/api\/missions\/variant\/([^/]+)$/)
     ?? pathName.match(/^\/api\/missions\/variants\/([^/]+)$/);
   if (variantMatch) {
     const variantKey = decodeURIComponent(variantMatch[1] ?? "");
-    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const { missionRoot, index, manifest } = await loadMissionGeneration();
     const manifestEntry = manifest.variantFilesByVariantId?.[variantKey] ?? manifest.variantFilesByMissionId?.[variantKey];
     const file = index.variantDetailFiles?.[variantKey] ?? manifestEntry?.detailFile;
     if (!file) return { status: 404, body: { error: "Mission variant not found." } };
-    return { status: 200, body: await readJson(file) };
+    return { status: 200, body: await readJson(missionRoot, file) };
   }
 
   return null;

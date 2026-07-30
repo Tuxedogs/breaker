@@ -1,0 +1,1653 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "b42621a47bf58653e0ec17c3",
+  "generatedAt": "2026-07-30T15:13:56.707205+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+  "variant": {
+    "variantKey": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+    "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+    "conceptKey": "16370b92553a4f42bf58",
+    "objectiveSignature": {
+      "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "resource-gathering",
+      "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+      "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+      "handlerStem": "shubin-rg-ground-mining",
+      "archetype": "Ground Vehicle Mining",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering",
+        "activity-source:structural",
+        "title:shubin-industrial-ground-vehicle-planetary-system",
+        "description:shubin-industrial-ground-vehicle-planetary-system",
+        "handler:shubin-rg-ground-mining",
+        "contract:careercontract",
+        "archetype:ground-vehicle-mining",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "rank-2",
+    "tierLabel": "Rank 2",
+    "isIntro": false,
+    "specificityBadges": [
+      "Ground Vehicle Mining",
+      "CrimeStat limited",
+      "Generated pickup pool"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Med. Purchase Order: Vehicle Mined Ore",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of materials. We appreciate your help in this matter.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+    "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+    "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank2_SmallQuantity_Beradom",
+    "missionType": "Ground Vehicle Mining",
+    "provider": "Shubin Interstellar",
+    "faction": "Shubin Interstellar",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+      "factionDisplayName": "Shubin Interstellar",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Ground Vehicle Mining",
+    "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Pyro 1",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Pyro 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Pyro 1",
+      "system": "Pyro",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "de936c42-60ae-4dd7-9324-081a533139a6"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+          "resolvedName": "Pyro 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+          "displayName": "Pyro 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro 1"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Generated pickup pool (Pyro)",
+        "confidence": "generated_from_pool"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Pyro 1",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Generated pickup pool (Pyro)",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "displayName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 1"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Generated pickup pool (Pyro)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Hint_Location"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Hint_Location"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "de936c42-60ae-4dd7-9324-081a533139a6",
+        "resolvedName": "Pyro 1",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Hint_Location",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Standing +150",
+        "94,500 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +150"
+      ],
+      "credits": "94,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "94,500 aUEC",
+        "amount": 94500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 94500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 94500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 150,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+        "familyId": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_afc1c8fff09d7c288789176a",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Shubin_RG_GroundMining_Rank2"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_91d1301528332c846972e5ea",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "de936c42-60ae-4dd7-9324-081a533139a6"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "de936c42-60ae-4dd7-9324-081a533139a6"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "a84607d6-002d-457b-af9c-93548720abac": [
+          {
+            "edgeId": "pre_15941bad3b59899a5c65d6ee",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "a84607d6-002d-457b-af9c-93548720abac",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "7a2e709c-042a-4c46-b776-0c66a587af4f"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "7a2e709c-042a-4c46-b776-0c66a587af4f"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "a84607d6-002d-457b-af9c-93548720abac"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_6be65eb66107a7650d904445",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "a84607d6-002d-457b-af9c-93548720abac",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_2634d81e36e7b225b834a297",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "a84607d6-002d-457b-af9c-93548720abac"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "9642ec62-4eed-44da-aefc-ed62c30770b5": [
+          {
+            "edgeId": "pre_5414e9d0014cf2adbf745eda",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "9642ec62-4eed-44da-aefc-ed62c30770b5",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "fcfb7582-5fbe-480a-98af-de0e926d21a6"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "fcfb7582-5fbe-480a-98af-de0e926d21a6"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9642ec62-4eed-44da-aefc-ed62c30770b5"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_c7304af6f08169431258dbb1",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "9642ec62-4eed-44da-aefc-ed62c30770b5",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_715a6952491044fd619b1422",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9642ec62-4eed-44da-aefc-ed62c30770b5"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "ba4b393b-860d-40fe-8abe-de5141a304f4": [
+          {
+            "edgeId": "pre_40bdceea7a92e61af481434b",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "ba4b393b-860d-40fe-8abe-de5141a304f4",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "9a5db783-28de-42fc-97b8-4e9adb34d561"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "9a5db783-28de-42fc-97b8-4e9adb34d561"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ba4b393b-860d-40fe-8abe-de5141a304f4"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_697a83e53506fcad2b2d96be",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "ba4b393b-860d-40fe-8abe-de5141a304f4",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_d5e3ec4b0e9883f31f6b52c1",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ba4b393b-860d-40fe-8abe-de5141a304f4"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "2479e0e3-97f7-4fc5-89e4-84cba839b164": [
+          {
+            "edgeId": "pre_b0e9e0c086e4a0adef0f524a",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "2479e0e3-97f7-4fc5-89e4-84cba839b164",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "9a5db783-28de-42fc-97b8-4e9adb34d561"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "9a5db783-28de-42fc-97b8-4e9adb34d561"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "2479e0e3-97f7-4fc5-89e4-84cba839b164"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_3381e2bd9534ebe35e9af822",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "2479e0e3-97f7-4fc5-89e4-84cba839b164",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_e0c9752b61ebdd6480ca8a54",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "2479e0e3-97f7-4fc5-89e4-84cba839b164"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "8aa43e08-484a-483f-9592-662518e82bc1": [
+          {
+            "edgeId": "pre_0e8c88f018b0a4a3f2b7e73d",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "8aa43e08-484a-483f-9592-662518e82bc1",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "bf833f5a-6cea-4446-817f-d02f61ae3a15"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "bf833f5a-6cea-4446-817f-d02f61ae3a15"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "8aa43e08-484a-483f-9592-662518e82bc1"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_af8beb3c9e261a968646c058",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "ownerScope": "subcontract",
+            "ownerId": "8aa43e08-484a-483f-9592-662518e82bc1",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_9dc68345ee57e4cb6f824253",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "8aa43e08-484a-483f-9592-662518e82bc1"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_58a8895dcb3dd866a5614c43",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_ee94ea0bfdc4485a876e857c",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 94500,
+              "amount": 94500,
+              "rawAmount": 94549.82239626099,
+              "integerRoundedAmount": 94550,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.785,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.377
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.53
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.419
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "18",
+                "value": 18,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 94500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 94500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_58a8895dcb3dd866a5614c43",
+            "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 94500,
+              "amount": 94500,
+              "rawAmount": 94549.82239626099,
+              "integerRoundedAmount": 94550,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.785,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.377
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.53
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.419
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "18",
+                "value": 18,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 94500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 94500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_79b94c749acb6e55d75b6b62",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "sourceScope": "contract",
+          "sourceOwnerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                  "minAmount": "156",
+                  "maxAmount": "156"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                  "recordName": "EntityClassDefinition.Harvestable_Mineral_1H_Beradom",
+                  "displayName": "Beradom",
+                  "path": "entities/scitem/carryables/1h/harvestable_mineral_1h_beradom.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "156",
+                    "value": 156
+                  },
+                  "maxAmount": {
+                    "raw": "156",
+                    "value": 156
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_GroundMining_Rank2']/contracts/CareerContract[@id='4e940e8d-10d8-47a7-a9d4-0d29a91157eb']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                    "minAmount": "156",
+                    "maxAmount": "156"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                    "recordName": "EntityClassDefinition.Harvestable_Mineral_1H_Beradom",
+                    "displayName": "Beradom",
+                    "path": "entities/scitem/carryables/1h/harvestable_mineral_1h_beradom.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "156",
+                      "value": 156
+                    },
+                    "maxAmount": {
+                      "raw": "156",
+                      "value": 156
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_GroundMining_Rank2']/contracts/CareerContract[@id='4e940e8d-10d8-47a7-a9d4-0d29a91157eb']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_79b94c749acb6e55d75b6b62",
+          "variantId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "sourceScope": "contract",
+          "sourceOwnerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                  "minAmount": "156",
+                  "maxAmount": "156"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                  "recordName": "EntityClassDefinition.Harvestable_Mineral_1H_Beradom",
+                  "displayName": "Beradom",
+                  "path": "entities/scitem/carryables/1h/harvestable_mineral_1h_beradom.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "156",
+                    "value": 156
+                  },
+                  "maxAmount": {
+                    "raw": "156",
+                    "value": 156
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_GroundMining_Rank2']/contracts/CareerContract[@id='4e940e8d-10d8-47a7-a9d4-0d29a91157eb']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                    "minAmount": "156",
+                    "maxAmount": "156"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "38d7d7e9-819b-4351-a40e-7b764cb304e6",
+                    "recordName": "EntityClassDefinition.Harvestable_Mineral_1H_Beradom",
+                    "displayName": "Beradom",
+                    "path": "entities/scitem/carryables/1h/harvestable_mineral_1h_beradom.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "156",
+                      "value": 156
+                    },
+                    "maxAmount": {
+                      "raw": "156",
+                      "value": 156
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_GroundMining_Rank2']/contracts/CareerContract[@id='4e940e8d-10d8-47a7-a9d4-0d29a91157eb']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+      "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+      "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+      "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Desc_001"
+    }
+  }
+}

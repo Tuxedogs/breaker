@@ -455,7 +455,40 @@ for (const [key, rawType] of Object.entries(prerequisiteTypeMap)) {
   equal(count, prerequisiteExpected[key], `${key} parent prerequisite rows`);
 }
 
+const completionTagEdges = Array.from(records.values()).flatMap((record) => [
+  ...edgeRows(record, "prerequisiteEdges"),
+  ...Object.values(object(record.subContractPrerequisiteEdges ?? {}, "subcontract edge groups"))
+    .flatMap((value) => array(value, "subcontract edge group"))
+    .map((value) => object(value, "subcontract edge")),
+]).filter((edge) => edge.type === "completion_tag");
+for (const edge of completionTagEdges) {
+  const constraint = object(
+    object(edge.payload, "completion-tag edge payload").completionTagConstraint,
+    "completionTagConstraint",
+  );
+  equal(constraint.schemaVersion, 1, "completion-tag constraint schema");
+  assert(text(constraint.groupId), "Completion-tag constraint groupId is missing.");
+  equal(constraint.polarity, edge.polarity, "completion-tag constraint polarity");
+  const memberTags = array(
+    constraint.memberCompletionTags,
+    "completionTagConstraint.memberCompletionTags",
+  ).map(String);
+  const memberTag = prerequisiteTag(edge);
+  if (memberTag) {
+    assert(
+      memberTags.includes(memberTag),
+      `Completion-tag group ${String(constraint.groupId)} does not contain edge member ${memberTag}.`,
+    );
+  }
+  const threshold = object(constraint.threshold, "completionTagConstraint.threshold");
+  assert(
+    threshold.value === null || number(threshold.value) !== undefined,
+    `Completion-tag group ${String(constraint.groupId)} has an invalid threshold.`,
+  );
+}
+
 console.log(
   `Mission source contract v3 verified: ${records.size} variants, ${templates.size} templates, `
-  + `${String(graph.producedTagCount)} produced completion tags.`,
+  + `${String(graph.producedTagCount)} produced completion tags, `
+  + `${completionTagEdges.length} grouped prerequisite edges.`,
 );

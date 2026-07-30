@@ -14,13 +14,32 @@ type BlueprintSourcesIndex = {
 };
 
 const root = getCraftingBlueprintSourcesRoot();
-const index = JSON.parse(await readFile(path.join(root, "index.json"), "utf8")) as BlueprintSourcesIndex;
+const missionSourceRoot = path.resolve("server-data", "missions", "source");
+const [index, sourceBlueprints, sourceMissions] = await Promise.all([
+  readFile(path.join(root, "index.json"), "utf8").then((value) => JSON.parse(value) as BlueprintSourcesIndex),
+  readFile(path.join(missionSourceRoot, "blueprint_reward_sources.json"), "utf8")
+    .then((value) => JSON.parse(value) as Array<{ blueprintGuid?: string }>),
+  readFile(path.join(missionSourceRoot, "mission_blueprint_rewards.json"), "utf8")
+    .then((value) => JSON.parse(value) as Array<{ contractId?: string }>),
+]);
+const expectedBlueprintCount = sourceBlueprints.filter(
+  (record) => typeof record.blueprintGuid === "string" && record.blueprintGuid,
+).length;
+const expectedMissionCount = sourceMissions.filter(
+  (record) => typeof record.contractId === "string" && record.contractId,
+).length;
 
-if (index.summary?.blueprintSourceCount !== 654) {
-  throw new Error(`Expected 654 blueprint sources, found ${index.summary?.blueprintSourceCount ?? 0}.`);
+if (index.summary?.blueprintSourceCount !== expectedBlueprintCount) {
+  throw new Error(`Expected ${expectedBlueprintCount} blueprint sources, found ${index.summary?.blueprintSourceCount ?? 0}.`);
 }
-if (index.summary?.missionRewardCount !== 685) {
-  throw new Error(`Expected 685 mission rewards, found ${index.summary?.missionRewardCount ?? 0}.`);
+if (index.summary?.missionRewardCount !== expectedMissionCount) {
+  throw new Error(`Expected ${expectedMissionCount} mission rewards, found ${index.summary?.missionRewardCount ?? 0}.`);
+}
+if (Object.keys(index.blueprintFiles ?? {}).length !== expectedBlueprintCount) {
+  throw new Error("Blueprint source index file map does not match the source artifact.");
+}
+if (Object.keys(index.missionFiles ?? {}).length !== expectedMissionCount) {
+  throw new Error("Mission reward index file map does not match the source artifact.");
 }
 
 const sampleBlueprintGuid = Object.keys(index.blueprintFiles ?? {})[0];
@@ -40,8 +59,8 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
       );
       if (!result || result.status !== 200) throw new Error(`Unexpected status: ${result?.status ?? "null"}`);
       const body = result.body as { blueprintGuids?: string[] };
-      if (!Array.isArray(body.blueprintGuids) || body.blueprintGuids.length !== 654) {
-        throw new Error(`Expected 654 blueprint guids, found ${body.blueprintGuids?.length ?? 0}.`);
+      if (!Array.isArray(body.blueprintGuids) || body.blueprintGuids.length !== expectedBlueprintCount) {
+        throw new Error(`Expected ${expectedBlueprintCount} blueprint guids, found ${body.blueprintGuids?.length ?? 0}.`);
       }
     },
   },
@@ -95,8 +114,8 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
       );
       if (!result || result.status !== 200) throw new Error(`Unexpected status: ${result?.status ?? "null"}`);
       const body = result.body as { missions?: unknown[] };
-      if (!Array.isArray(body.missions) || body.missions.length !== 685) {
-        throw new Error(`Expected 685 normalized missions, found ${body.missions?.length ?? 0}.`);
+      if (!Array.isArray(body.missions) || body.missions.length !== expectedMissionCount) {
+        throw new Error(`Expected ${expectedMissionCount} normalized missions, found ${body.missions?.length ?? 0}.`);
       }
     },
   },

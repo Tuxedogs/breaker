@@ -1,7 +1,7 @@
 # Mission Browser, Extraction, and Solver Overhaul - Agent Handoff
 
 Updated: 2026-07-30  
-Status: Stage 1 source contract version 3 implemented and validated in isolation; not published to Moonbreaker runtime
+Status: Stages 1 through 3 implemented. Source contract version 3 is published through Moonbreaker shaped schema version 2, and the deterministic server-side eligibility/path service is ready for Stage 4 integration.
 
 ## Start here
 
@@ -17,6 +17,8 @@ Read these files before changing behavior:
 - `D:/Moonbreaker/AGENTS.md`
 - `D:/Moonbreaker/moonbreaker_design_canon.md`
 - `D:/Moonbreaker/docs/generated-data-manifest.md`
+- `D:/Moonbreaker/docs/mission-stage2-shaping-contract-2026-07-30.md`
+- `D:/Moonbreaker/docs/mission-stage3-solver-contract-2026-07-30.md`
 - `D:/Moonbreaker/src/lib/missionData.ts`
 - `D:/Moonbreaker/server/routes/missions.routes.ts`
 - `D:/Moonbreaker/scripts/shape-mission-browser-data.mts`
@@ -429,11 +431,11 @@ Search precedence, filter persistence, non-filter-match behavior, and bookmark-o
 
 ### Stage 3 - Solver
 
-- Define `PlayerMissionState`, goal inputs, eligibility results, and explanation contracts.
-- Implement deterministic eligibility before path optimization.
-- Add graph traversal only for proven edges.
-- Add focused unit tests for every status and failure mode.
-- Expose solver results through a server/shared service rather than JSX.
+- Implemented `PlayerMissionState`, goal inputs, eligibility results, and explanation contracts.
+- Implemented deterministic eligibility before path optimization.
+- Added count-aware state traversal only for proven completion-tag edges.
+- Added focused unit and accepted-generation tests for statuses, groups, alternates, dangling edges, cycles, and the Rayari golden chain.
+- Exposed solver results through `server/missions/missionSolverData.ts`; no JSX calculation or HTTP endpoint was added.
 
 ### Stage 4 - Browser and dossier redesign
 

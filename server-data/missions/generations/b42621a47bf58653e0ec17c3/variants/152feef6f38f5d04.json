@@ -1,0 +1,2580 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "b42621a47bf58653e0ec17c3",
+  "generatedAt": "2026-07-30T15:13:56.707205+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank4_Org",
+  "variant": {
+    "variantKey": "b613986b-7f74-4d9d-9ab7-62984187d246",
+    "familyKey": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank4_Org",
+    "conceptKey": "16370b92553a4f42bf58",
+    "objectiveSignature": {
+      "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "resource-gathering",
+      "titleStem": "shubin-industrial-ship-mining-org",
+      "descriptionStem": "shubin-industrial-ship-mining-org",
+      "handlerStem": "shubin-rg-ship-mining-org",
+      "archetype": "Ship Mining",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering",
+        "activity-source:structural",
+        "title:shubin-industrial-ship-mining-org",
+        "description:shubin-industrial-ship-mining-org",
+        "handler:shubin-rg-ship-mining-org",
+        "contract:careercontract",
+        "archetype:ship-mining",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Ship Mining",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Special Purchase Order: Mined Materials",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of refined materials. This purchase order is more complex than typical, requiring multiple mining methods, but since you've proven your skill thus far, we think you and your team are up for the challenge.\n\nReminder, materials must be refined before delivery, and since this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+    "rawName": "@Shubin_Industrial_ShipMining_VH_Org_Title_001",
+    "internalName": "Shubin_RG_Discovery_ShipMining_Org_Outlaw",
+    "missionType": "Ship Mining",
+    "provider": "Shubin Interstellar",
+    "faction": "Shubin Interstellar",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+      "factionDisplayName": "Shubin Interstellar",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Ship Mining",
+    "standingRequirement": "Veteran Contractor / 15,000 rep to Veteran Contractor / 15,000 rep",
+    "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Veteran Contractor / 15,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Veteran Contractor / 15,000 rep to Veteran Contractor / 15,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "DropoffLocation_BP",
+          "propertyExtendedTextToken": "Destination",
+          "locationLevelType": "LocalSystem"
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "DropoffLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Unknown pickup",
+        "detailLabel": "Unknown pickup",
+        "confidence": "unknown"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "displayLabel": "Unknown pickup",
+        "detailDisplay": "Unknown pickup",
+        "systems": [],
+        "confidence": "low",
+        "sourceRole": "unknown",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "DropoffLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Shubin Resource Gathering Ship Mining Pyro Nyx: 4597b977-ae88-49c4-9667-5681d3c67319, 84c3ded1-19f0-43bb-bd49-ceb517e7264b, dabddb4f-e559-4991-ba80-95a3a70a1fef, 1b1c4e5e-2a8b-4180-9857-1fe1b3322093 +3",
+        "Blueprint: Shubin Rank 4: e8e41bb2-0fd2-47a3-99ea-5dbe2abe4b92, 959c2d65-301a-4b8c-88f1-d72c617cd405, 0b6cf9a1-ef55-47ee-ab8d-c734d4f3b073, 6da71823-7178-4110-b8ff-79e9b22e11fa +5",
+        "Blueprint: Shubin Rank 0to 1: 93dbf337-be86-4c3b-80ba-015955b8b9b8, 35f1121b-c021-4230-b68d-93e2cd578320, 1cc19fca-84a3-4e7f-8084-350e7bb31d42, 7a37ef95-bc0f-4a3b-93a2-05b9f160ee31 +4",
+        "Blueprint: Shubin Rank 2to 3: bfb86b0e-d262-450f-a6ad-396ead48c40a, ccbb801a-ad5e-4e15-a842-ad315f43dd4e, 04f1af4c-e8ed-4b99-8413-61622bdfcb30, 7ba597a6-b5c2-4513-b38c-62acd4cb138e +7",
+        "Standing +200",
+        "Standing +50",
+        "747,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "Shubin Resource Gathering Ship Mining Pyro Nyx: 4597b977-ae88-49c4-9667-5681d3c67319, 84c3ded1-19f0-43bb-bd49-ceb517e7264b, dabddb4f-e559-4991-ba80-95a3a70a1fef, 1b1c4e5e-2a8b-4180-9857-1fe1b3322093 +3",
+        "Shubin Rank 4: e8e41bb2-0fd2-47a3-99ea-5dbe2abe4b92, 959c2d65-301a-4b8c-88f1-d72c617cd405, 0b6cf9a1-ef55-47ee-ab8d-c734d4f3b073, 6da71823-7178-4110-b8ff-79e9b22e11fa +5",
+        "Shubin Rank 0to 1: 93dbf337-be86-4c3b-80ba-015955b8b9b8, 35f1121b-c021-4230-b68d-93e2cd578320, 1cc19fca-84a3-4e7f-8084-350e7bb31d42, 7a37ef95-bc0f-4a3b-93a2-05b9f160ee31 +4",
+        "Shubin Rank 2to 3: bfb86b0e-d262-450f-a6ad-396ead48c40a, ccbb801a-ad5e-4e15-a842-ad315f43dd4e, 04f1af4c-e8ed-4b99-8413-61622bdfcb30, 7ba597a6-b5c2-4513-b38c-62acd4cb138e +7"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "c2bd6ae6-c4a1-4fb1-8421-bd2979f39f77",
+          "poolName": "Shubin Resource Gathering Ship Mining Pyro Nyx",
+          "rewardCount": 7,
+          "chanceLabel": "14.29% chance - 1 of 7",
+          "rewards": [
+            {
+              "blueprintGuid": "4597b977-ae88-49c4-9667-5681d3c67319",
+              "displayName": "4597b977-ae88-49c4-9667-5681d3c67319",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "84c3ded1-19f0-43bb-bd49-ceb517e7264b",
+              "displayName": "84c3ded1-19f0-43bb-bd49-ceb517e7264b",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "dabddb4f-e559-4991-ba80-95a3a70a1fef",
+              "displayName": "dabddb4f-e559-4991-ba80-95a3a70a1fef",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "1b1c4e5e-2a8b-4180-9857-1fe1b3322093",
+              "displayName": "1b1c4e5e-2a8b-4180-9857-1fe1b3322093",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "f1b95cd0-5dde-4b32-9efb-dd87f2aa5567",
+              "displayName": "f1b95cd0-5dde-4b32-9efb-dd87f2aa5567",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "23451667-daed-476c-9eb8-b25e174929d6",
+              "displayName": "23451667-daed-476c-9eb8-b25e174929d6",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "743efa96-8a73-40a7-ae6a-0890f34a3731",
+              "displayName": "743efa96-8a73-40a7-ae6a-0890f34a3731",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "e3254ad6-ef4d-4719-871f-f13a832038f5",
+          "poolName": "Shubin Rank 4",
+          "rewardCount": 9,
+          "chanceLabel": "11.11% chance - 1 of 9",
+          "rewards": [
+            {
+              "blueprintGuid": "e8e41bb2-0fd2-47a3-99ea-5dbe2abe4b92",
+              "displayName": "e8e41bb2-0fd2-47a3-99ea-5dbe2abe4b92",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "959c2d65-301a-4b8c-88f1-d72c617cd405",
+              "displayName": "959c2d65-301a-4b8c-88f1-d72c617cd405",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "0b6cf9a1-ef55-47ee-ab8d-c734d4f3b073",
+              "displayName": "0b6cf9a1-ef55-47ee-ab8d-c734d4f3b073",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "6da71823-7178-4110-b8ff-79e9b22e11fa",
+              "displayName": "6da71823-7178-4110-b8ff-79e9b22e11fa",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "18f54363-88cd-420a-9ab3-979256db55a2",
+              "displayName": "18f54363-88cd-420a-9ab3-979256db55a2",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "46c4b9c1-b7a8-423d-af4a-2e32b199bc02",
+              "displayName": "46c4b9c1-b7a8-423d-af4a-2e32b199bc02",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "2bd502c9-cb83-4505-855e-0788b38325c9",
+              "displayName": "2bd502c9-cb83-4505-855e-0788b38325c9",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "ba0b2f00-7790-4bbf-ae83-2fafceb32d4b",
+              "displayName": "ba0b2f00-7790-4bbf-ae83-2fafceb32d4b",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            },
+            {
+              "blueprintGuid": "e239f19b-e846-411d-ac57-b877a7d30d76",
+              "displayName": "e239f19b-e846-411d-ac57-b877a7d30d76",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "11.11% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "253e9697-5605-4732-b4fa-56af7a3dc140",
+          "poolName": "Shubin Rank 0to 1",
+          "rewardCount": 8,
+          "chanceLabel": "12.5% chance - 1 of 8",
+          "rewards": [
+            {
+              "blueprintGuid": "93dbf337-be86-4c3b-80ba-015955b8b9b8",
+              "displayName": "93dbf337-be86-4c3b-80ba-015955b8b9b8",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "35f1121b-c021-4230-b68d-93e2cd578320",
+              "displayName": "35f1121b-c021-4230-b68d-93e2cd578320",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "1cc19fca-84a3-4e7f-8084-350e7bb31d42",
+              "displayName": "1cc19fca-84a3-4e7f-8084-350e7bb31d42",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "7a37ef95-bc0f-4a3b-93a2-05b9f160ee31",
+              "displayName": "7a37ef95-bc0f-4a3b-93a2-05b9f160ee31",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "b2bb2f91-d5de-4ea0-882d-013032f8a655",
+              "displayName": "b2bb2f91-d5de-4ea0-882d-013032f8a655",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "86654362-5907-4139-a706-8ba6dcfd207f",
+              "displayName": "86654362-5907-4139-a706-8ba6dcfd207f",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "47f1994d-373b-4ade-b03e-c62f1eaa3538",
+              "displayName": "47f1994d-373b-4ade-b03e-c62f1eaa3538",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "81f42807-1595-4dde-b88c-dc2578e8bf99",
+              "displayName": "81f42807-1595-4dde-b88c-dc2578e8bf99",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "32463294-45d5-4e92-a773-dce1f28a2a2b",
+          "poolName": "Shubin Rank 2to 3",
+          "rewardCount": 11,
+          "chanceLabel": "9.09% chance - 1 of 11",
+          "rewards": [
+            {
+              "blueprintGuid": "bfb86b0e-d262-450f-a6ad-396ead48c40a",
+              "displayName": "bfb86b0e-d262-450f-a6ad-396ead48c40a",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "ccbb801a-ad5e-4e15-a842-ad315f43dd4e",
+              "displayName": "ccbb801a-ad5e-4e15-a842-ad315f43dd4e",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "04f1af4c-e8ed-4b99-8413-61622bdfcb30",
+              "displayName": "04f1af4c-e8ed-4b99-8413-61622bdfcb30",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "7ba597a6-b5c2-4513-b38c-62acd4cb138e",
+              "displayName": "7ba597a6-b5c2-4513-b38c-62acd4cb138e",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "20789dfa-a83c-4e00-8c43-e5828d65dfdd",
+              "displayName": "20789dfa-a83c-4e00-8c43-e5828d65dfdd",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "3a4ba1b4-a688-4c5a-ba88-e82929d384b0",
+              "displayName": "3a4ba1b4-a688-4c5a-ba88-e82929d384b0",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "9105536e-507d-49c8-8d90-b6d778d95ce0",
+              "displayName": "9105536e-507d-49c8-8d90-b6d778d95ce0",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "b9380740-dc8d-41f5-b402-819d40230fba",
+              "displayName": "b9380740-dc8d-41f5-b402-819d40230fba",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "42097046-f08d-4202-aee0-5b5921ccacb9",
+              "displayName": "42097046-f08d-4202-aee0-5b5921ccacb9",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "394c971b-2056-4c5b-9503-0c6efbe595ff",
+              "displayName": "394c971b-2056-4c5b-9503-0c6efbe595ff",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            },
+            {
+              "blueprintGuid": "2c09e00e-2250-479d-bbcd-713b1a411ce1",
+              "displayName": "2c09e00e-2250-479d-bbcd-713b1a411ce1",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "9.09% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +200",
+        "Standing +50"
+      ],
+      "credits": "747,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "747,250 aUEC",
+        "amount": 747250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 747250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 747250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      },
+      {
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+        "familyId": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank4_Org",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_667c8dbbf341789ed2a073b2",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Shubin_RG_ShipMining_Rank4_Org"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_93f24a4a02db758ba2597114",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Shubin_RG_ShipMining_Rank4_Org"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_2183483ee21782bfd3113c38",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "c2bd6ae6-c4a1-4fb1-8421-bd2979f39f77",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_518cd1331c53fd2a40fbf25f",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "blueprint_reward",
+          "index": 1,
+          "payload": {
+            "blueprintPoolGuid": "e3254ad6-ef4d-4719-871f-f13a832038f5",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_53b1c54b8e8d8d420c732649",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "blueprint_reward",
+          "index": 2,
+          "payload": {
+            "blueprintPoolGuid": "253e9697-5605-4732-b4fa-56af7a3dc140",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_1417f1d7b9f399e08df3e1fd",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "blueprint_reward",
+          "index": 3,
+          "payload": {
+            "blueprintPoolGuid": "32463294-45d5-4e92-a773-dce1f28a2a2b",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_ebb43e022b3de1c95f10f5e0",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f3ad3cec3b241a56d60c2aac",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_fec00298b9a12f35c9db59bb",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 747250,
+              "amount": 747250,
+              "rawAmount": 747247.810737896,
+              "integerRoundedAmount": 747248,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.869999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.612
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.53
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "102.4",
+                "value": 102.4,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 747250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 747250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_2183483ee21782bfd3113c38",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "c2bd6ae6-c4a1-4fb1-8421-bd2979f39f77",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_518cd1331c53fd2a40fbf25f",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "blueprint_reward",
+            "index": 1,
+            "payload": {
+              "blueprintPoolGuid": "e3254ad6-ef4d-4719-871f-f13a832038f5",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_53b1c54b8e8d8d420c732649",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "blueprint_reward",
+            "index": 2,
+            "payload": {
+              "blueprintPoolGuid": "253e9697-5605-4732-b4fa-56af7a3dc140",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_1417f1d7b9f399e08df3e1fd",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "blueprint_reward",
+            "index": 3,
+            "payload": {
+              "blueprintPoolGuid": "32463294-45d5-4e92-a773-dce1f28a2a2b",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_ebb43e022b3de1c95f10f5e0",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_f3ad3cec3b241a56d60c2aac",
+            "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "reputationAmount": 50,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 747250,
+              "amount": 747250,
+              "rawAmount": 747247.810737896,
+              "integerRoundedAmount": 747248,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.869999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.612
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.53
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "102.4",
+                "value": 102.4,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 747250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 747250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "reward": {
+              "guid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_50",
+              "editorName": "Undefined Name",
+              "reputationAmount": 50,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_50.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_2ff8b912ebab1707f5fb6e25",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "sourceScope": "contract",
+          "sourceOwnerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "-1",
+                  "minSCU": "21",
+                  "maxSCU": "21"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "21",
+                    "value": 21
+                  },
+                  "maxSCU": {
+                    "raw": "21",
+                    "value": 21
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                  "maxContainerSize": "-1",
+                  "minSCU": "18",
+                  "maxSCU": "18"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "18",
+                    "value": 18
+                  },
+                  "maxSCU": {
+                    "raw": "18",
+                    "value": 18
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                  "maxContainerSize": "-1",
+                  "minSCU": "16",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "16",
+                    "value": 16
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "60f116f4-c02a-45b2-9ded-333747795124",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "60f116f4-c02a-45b2-9ded-333747795124"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "9"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "9",
+                    "value": 9
+                  }
+                }
+              },
+              {
+                "ordinal": 5,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 6,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "9"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "9",
+                    "value": 9
+                  }
+                }
+              },
+              {
+                "ordinal": 7,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                  "maxContainerSize": "-1",
+                  "minSCU": "5",
+                  "maxSCU": "5"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "5",
+                    "value": 5
+                  },
+                  "maxSCU": {
+                    "raw": "5",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank4_Org']/contracts/CareerContract[@id='b613986b-7f74-4d9d-9ab7-62984187d246']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                    "maxContainerSize": "-1",
+                    "minSCU": "21",
+                    "maxSCU": "21"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "21",
+                      "value": 21
+                    },
+                    "maxSCU": {
+                      "raw": "21",
+                      "value": 21
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                    "maxContainerSize": "-1",
+                    "minSCU": "18",
+                    "maxSCU": "18"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "18",
+                      "value": 18
+                    },
+                    "maxSCU": {
+                      "raw": "18",
+                      "value": 18
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                    "maxContainerSize": "-1",
+                    "minSCU": "16",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "16",
+                      "value": 16
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "60f116f4-c02a-45b2-9ded-333747795124",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "60f116f4-c02a-45b2-9ded-333747795124"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "9"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "9",
+                      "value": 9
+                    }
+                  }
+                },
+                {
+                  "ordinal": 5,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 6,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "9"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "9",
+                      "value": 9
+                    }
+                  }
+                },
+                {
+                  "ordinal": 7,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                    "maxContainerSize": "-1",
+                    "minSCU": "5",
+                    "maxSCU": "5"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "5",
+                      "value": 5
+                    },
+                    "maxSCU": {
+                      "raw": "5",
+                      "value": 5
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank4_Org']/contracts/CareerContract[@id='b613986b-7f74-4d9d-9ab7-62984187d246']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_2ff8b912ebab1707f5fb6e25",
+          "variantId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "sourceScope": "contract",
+          "sourceOwnerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "-1",
+                  "minSCU": "21",
+                  "maxSCU": "21"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "21",
+                    "value": 21
+                  },
+                  "maxSCU": {
+                    "raw": "21",
+                    "value": 21
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                  "maxContainerSize": "-1",
+                  "minSCU": "18",
+                  "maxSCU": "18"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "18",
+                    "value": 18
+                  },
+                  "maxSCU": {
+                    "raw": "18",
+                    "value": 18
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                  "maxContainerSize": "-1",
+                  "minSCU": "16",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "16",
+                    "value": 16
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "60f116f4-c02a-45b2-9ded-333747795124",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "60f116f4-c02a-45b2-9ded-333747795124"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "9"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "9",
+                    "value": 9
+                  }
+                }
+              },
+              {
+                "ordinal": 5,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 6,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "9"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "9",
+                    "value": 9
+                  }
+                }
+              },
+              {
+                "ordinal": 7,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                  "maxContainerSize": "-1",
+                  "minSCU": "5",
+                  "maxSCU": "5"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "5",
+                    "value": 5
+                  },
+                  "maxSCU": {
+                    "raw": "5",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank4_Org']/contracts/CareerContract[@id='b613986b-7f74-4d9d-9ab7-62984187d246']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                    "maxContainerSize": "-1",
+                    "minSCU": "21",
+                    "maxSCU": "21"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "21",
+                      "value": 21
+                    },
+                    "maxSCU": {
+                      "raw": "21",
+                      "value": 21
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                    "maxContainerSize": "-1",
+                    "minSCU": "18",
+                    "maxSCU": "18"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "18",
+                      "value": 18
+                    },
+                    "maxSCU": {
+                      "raw": "18",
+                      "value": 18
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                    "maxContainerSize": "-1",
+                    "minSCU": "16",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "16",
+                      "value": 16
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "60f116f4-c02a-45b2-9ded-333747795124",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "60f116f4-c02a-45b2-9ded-333747795124"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "9"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "9",
+                      "value": 9
+                    }
+                  }
+                },
+                {
+                  "ordinal": 5,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 6,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "9"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "9",
+                      "value": 9
+                    }
+                  }
+                },
+                {
+                  "ordinal": 7,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                    "maxContainerSize": "-1",
+                    "minSCU": "5",
+                    "maxSCU": "5"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "5",
+                      "value": 5
+                    },
+                    "maxSCU": {
+                      "raw": "5",
+                      "value": 5
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank4_Org']/contracts/CareerContract[@id='b613986b-7f74-4d9d-9ab7-62984187d246']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "b613986b-7f74-4d9d-9ab7-62984187d246",
+      "generatorGuid": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72",
+      "generatorName": "ContractGenerator.Shubin_ResourceGathering_ShipMining",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Shubin_Industrial_ShipMining_VH_Org_Title_001",
+      "descriptionRaw": "@Shubin_Industrial_ShipMining_VH_Org_Desc_001"
+    }
+  }
+}

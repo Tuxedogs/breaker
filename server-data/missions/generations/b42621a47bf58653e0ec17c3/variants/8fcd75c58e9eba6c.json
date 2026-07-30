@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "b42621a47bf58653e0ec17c3",
+  "generatedAt": "2026-07-30T15:13:56.707205+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "0073dfd3-f3a0-411f-a9b8-c52eef65b098|SiegeOfOrison",
+  "variant": {
+    "variantKey": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+    "familyKey": "0073dfd3-f3a0-411f-a9b8-c52eef65b098|SiegeOfOrison",
+    "conceptKey": "6bc7782f66b80bfa33c4",
+    "objectiveSignature": {
+      "key": "unknown-faction|unknown-faction:unknown-scope|unknown|contract|standard|open|unknown:bounded||||variant:b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+      "activityKey": "unknown",
+      "titleStem": "northrock-soo-repeat",
+      "descriptionStem": "northrock-soo-repeat",
+      "handlerStem": "siege-of-orison",
+      "archetype": "Contract",
+      "contractType": "Contract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:northrock-soo-repeat",
+        "description:northrock-soo-repeat",
+        "handler:siege-of-orison",
+        "contract:contract",
+        "archetype:contract",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Contract",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "0073dfd3-f3a0-411f-a9b8-c52eef65b098|SiegeOfOrison",
+        "SOO2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Retake Platforms From Nine Tails",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Glad to have you undertaking this operation for Northrock. Here is the full brief:\n\nYour priority is to disable all three Identify Friend or Foe Inverters that are blocking Crusader Security from accessing the airspace around these platforms. Once the inverters are offline, Crusader Security will be able to fly their ships in and resecure the platforms. In the meanwhile, the platforms are connected by a series of shuttles unaffected by the inverters and will serve as your main form of transport between them.\n\nBe aware that you will meet heavy resistance as you progress. Crusader has tried multiple times to deal with this incursion themselves but have thus far been unsuccessful. However, we believe a small strike team will prove more effective in dealing with the Nine Tails forces. \n\nAdditionally, in the spirit of full cooperation, Crusader has given you carte blanche to utilize any of the resources you discover that may prove helpful to the mission. \n\nBest of luck,\nAdrienne Du-Buisson\nLogistics Officer - Stanton Branch\nNorthrock Service Group",
+    "rawName": "@northrock_SOO_repeat_title_001",
+    "internalName": "SOO2",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "0073dfd3-f3a0-411f-a9b8-c52eef65b098|SiegeOfOrison",
+        "SOO2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Super Heavy: 2c622127-8999-4818-8540-1959c26aa96d, 1917de77-e1ae-46ac-ac77-d43b9bc1454e, 305aeac5-543f-463e-b2ae-f04a9cdbef8c",
+        "No credit reward extracted"
+      ],
+      "blueprintRewards": [
+        "Super Heavy: 2c622127-8999-4818-8540-1959c26aa96d, 1917de77-e1ae-46ac-ac77-d43b9bc1454e, 305aeac5-543f-463e-b2ae-f04a9cdbef8c"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "51ab27d7-f123-4bc2-b833-0d81a93cfbf4",
+          "poolName": "Super Heavy",
+          "rewardCount": 3,
+          "chanceLabel": "33.33% chance - 1 of 3",
+          "rewards": [
+            {
+              "blueprintGuid": "2c622127-8999-4818-8540-1959c26aa96d",
+              "displayName": "2c622127-8999-4818-8540-1959c26aa96d",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "33.33% chance"
+            },
+            {
+              "blueprintGuid": "1917de77-e1ae-46ac-ac77-d43b9bc1454e",
+              "displayName": "1917de77-e1ae-46ac-ac77-d43b9bc1454e",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "33.33% chance"
+            },
+            {
+              "blueprintGuid": "305aeac5-543f-463e-b2ae-f04a9cdbef8c",
+              "displayName": "305aeac5-543f-463e-b2ae-f04a9cdbef8c",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "33.33% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+        "familyId": "0073dfd3-f3a0-411f-a9b8-c52eef65b098|SiegeOfOrison",
+        "templateGuid": "5b6d631a-c028-4aed-b0e7-86e94cfd8525"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_9c43eb317c3732c6c2ef0bef",
+          "variantId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "SiegeOfOrison"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_3a0ef252e027ac7aba016ee7",
+          "variantId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "SiegeOfOrison"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_969e6f13999ebd2e912834e5",
+          "variantId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "51ab27d7-f123-4bc2-b833-0d81a93cfbf4",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "5b6d631a-c028-4aed-b0e7-86e94cfd8525",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/soo2.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/soo2.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": null,
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_969e6f13999ebd2e912834e5",
+            "variantId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "51ab27d7-f123-4bc2-b833-0d81a93cfbf4",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [],
+        "calculatedPayout": null,
+        "buyIns": []
+      },
+      "reputationOutcomes": {
+        "fixed": [],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "b6aa9e70-a7cd-45b6-be8a-2e8bee8e0ecf",
+      "generatorGuid": "0073dfd3-f3a0-411f-a9b8-c52eef65b098",
+      "generatorName": "ContractGenerator.NorthRock_SOO2",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_soo2.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@northrock_SOO_repeat_title_001",
+      "descriptionRaw": "@northrock_SOO_repeat_desc_001"
+    }
+  }
+}

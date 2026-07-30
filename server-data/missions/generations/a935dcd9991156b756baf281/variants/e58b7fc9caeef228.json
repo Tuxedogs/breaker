@@ -1,0 +1,1453 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "23257f42-2028-46e0-8a5e-9cc5abbbdb49|Rayari_ResourceGathering",
+  "variant": {
+    "variantKey": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+    "familyKey": "23257f42-2028-46e0-8a5e-9cc5abbbdb49|Rayari_ResourceGathering",
+    "conceptKey": "0c5a45e58399ed06bd30",
+    "objectiveSignature": {
+      "key": "afc25254-554d-4409-8893-383a58eb7e8a|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|unlock:cae76fa570bf|unknown:bounded||||",
+      "activityKey": "resource-gathering",
+      "titleStem": "rain-collectresources-multiple-gen-name",
+      "descriptionStem": "rain-collectresources-multiple-gen",
+      "handlerStem": "rayari-resource-gathering",
+      "archetype": "Recovery",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:cae76fa570bf",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering",
+        "activity-source:structural",
+        "title:rain-collectresources-multiple-gen-name",
+        "description:rain-collectresources-multiple-gen",
+        "handler:rayari-resource-gathering",
+        "contract:careercontract",
+        "archetype:recovery",
+        "intro:standard",
+        "chain:unlock:cae76fa570bf",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "rank-3",
+    "tierLabel": "Rank 3",
+    "isIntro": false,
+    "specificityBadges": [
+      "Recovery",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Additional Resources For Research",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "To all available contractors,\n\nRayari scientists are hard at work trying to solve the issues with failing regen tech. Currently, their efforts are hindered by a lack of materials which they believe could be essential for their experiments.  \n\nIn particular, our scientists at [Destination] have had to put their work on hold after running out of those resources. With a restock from our normal provider not possible for months owing to short supply, we’ll pay a premium to anyone who can assist with restocking the materials.\n\nFor more information on the animals in question, refer to \"Explorer's Guide to Harvestables\" in your Journal.\n\nTogether we can make the universe better for all.\n\nNarina Lerrem\nSenior Manager\nClinical Research Outsourcing",
+    "rawName": "@RAIN_collectresources_multiple_GEN_name_01",
+    "internalName": "Rayari_Rank3_IrradiatedPearls",
+    "missionType": "CareerContract",
+    "provider": "Rayari Incorporated",
+    "faction": "Rayari Incorporated",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "afc25254-554d-4409-8893-383a58eb7e8a",
+      "factionDisplayName": "Rayari Incorporated",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Recovery",
+    "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "ab960018-6478-4e5d-9c74-175662c57129"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Unknown pickup",
+        "detailLabel": "Unknown pickup",
+        "confidence": "unknown"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "displayLabel": "Unknown pickup",
+        "detailDisplay": "Unknown pickup",
+        "systems": [],
+        "confidence": "low",
+        "sourceRole": "unknown",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Rayari Recover Item Irradiated: d0d3aa5c-0db2-4f62-af6a-b6976e202b87, 82f6965b-39ec-42fb-8286-ac543c4fa904, 0f23d221-eae2-462a-87cf-560942e515ef, fc036002-09f5-4bb8-8f3d-8bddc54272e4 +3",
+        "Standing +200",
+        "927,000 aUEC"
+      ],
+      "blueprintRewards": [
+        "Rayari Recover Item Irradiated: d0d3aa5c-0db2-4f62-af6a-b6976e202b87, 82f6965b-39ec-42fb-8286-ac543c4fa904, 0f23d221-eae2-462a-87cf-560942e515ef, fc036002-09f5-4bb8-8f3d-8bddc54272e4 +3"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "5abbcbe8-8af1-4b76-8a85-631eeff5903d",
+          "poolName": "Rayari Recover Item Irradiated",
+          "rewardCount": 7,
+          "chanceLabel": "14.29% chance - 1 of 7",
+          "rewards": [
+            {
+              "blueprintGuid": "d0d3aa5c-0db2-4f62-af6a-b6976e202b87",
+              "displayName": "d0d3aa5c-0db2-4f62-af6a-b6976e202b87",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "82f6965b-39ec-42fb-8286-ac543c4fa904",
+              "displayName": "82f6965b-39ec-42fb-8286-ac543c4fa904",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "0f23d221-eae2-462a-87cf-560942e515ef",
+              "displayName": "0f23d221-eae2-462a-87cf-560942e515ef",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "fc036002-09f5-4bb8-8f3d-8bddc54272e4",
+              "displayName": "fc036002-09f5-4bb8-8f3d-8bddc54272e4",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "12f9225e-98ec-4546-ba0a-4386c86100a9",
+              "displayName": "12f9225e-98ec-4546-ba0a-4386c86100a9",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "f74b672f-684a-4735-be47-71d8f1d24c32",
+              "displayName": "f74b672f-684a-4735-be47-71d8f1d24c32",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "910b675f-2030-42e6-a301-de9c09894460",
+              "displayName": "910b675f-2030-42e6-a301-de9c09894460",
+              "componentType": null,
+              "size": null,
+              "grade": null,
+              "chanceLabel": "14.29% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +200"
+      ],
+      "credits": "927,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "927,000 aUEC",
+        "amount": 927000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 927000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 927000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "afc25254-554d-4409-8893-383a58eb7e8a",
+        "factionDisplayName": "Rayari Incorporated",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "afc25254-554d-4409-8893-383a58eb7e8a",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+        "familyId": "23257f42-2028-46e0-8a5e-9cc5abbbdb49|Rayari_ResourceGathering",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_e9968c30741e8dc4ef0ff77c",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Rayari_ResourceGathering"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_f664a1ed5783b7194695af6e",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "ab960018-6478-4e5d-9c74-175662c57129"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "9bd0c215-ece8-42b6-9145-f50664b252d1"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_a34779d23dc5b557abeab227",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "5abbcbe8-8af1-4b76-8a85-631eeff5903d",
+            "chance": 0.25,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_68aad38b4a359fa4b2cf4400",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "afc25254-554d-4409-8893-383a58eb7e8a",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f55ce80f2d01f85662179654",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 927000,
+              "amount": 927000,
+              "rawAmount": 927119.7348360488,
+              "integerRoundedAmount": 927120,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 8.346,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 2.754
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.8359999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 2.838
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "60",
+                "value": 60,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 927000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 927000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_a34779d23dc5b557abeab227",
+            "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "5abbcbe8-8af1-4b76-8a85-631eeff5903d",
+              "chance": 0.25,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_68aad38b4a359fa4b2cf4400",
+            "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "afc25254-554d-4409-8893-383a58eb7e8a",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 927000,
+              "amount": 927000,
+              "rawAmount": 927119.7348360488,
+              "integerRoundedAmount": 927120,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 8.346,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 2.754
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 1.8359999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 2.838
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "60",
+                "value": 60,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 927000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 927000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "afc25254-554d-4409-8893-383a58eb7e8a",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_2f9eed486b8a373616976362",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Or",
+                "rawAttributes": {},
+                "type": "any_of",
+                "options": [
+                  {
+                    "ordinal": 0,
+                    "type": "all_of",
+                    "entries": [
+                      {
+                        "ordinal": 0,
+                        "sourceElement": "HaulingOrderContent_EntityClass",
+                        "rawAttributes": {
+                          "entityClass": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                          "minAmount": "1",
+                          "maxAmount": "0"
+                        },
+                        "type": "entity_class",
+                        "identity": {
+                          "status": "resolved",
+                          "guid": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                          "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_Super_01",
+                          "displayName": "Irradiated Valakkar Pearl (Grade AAA)",
+                          "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_super_01.xml"
+                        },
+                        "quantity": {
+                          "minAmount": {
+                            "raw": "1",
+                            "value": 1
+                          },
+                          "maxAmount": {
+                            "raw": "0",
+                            "value": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "ordinal": 1,
+                    "type": "all_of",
+                    "entries": [
+                      {
+                        "ordinal": 0,
+                        "sourceElement": "HaulingOrderContent_EntityClass",
+                        "rawAttributes": {
+                          "entityClass": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                          "minAmount": "10",
+                          "maxAmount": "0"
+                        },
+                        "type": "entity_class",
+                        "identity": {
+                          "status": "resolved",
+                          "guid": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                          "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_High_02",
+                          "displayName": "Irradiated Valakkar Pearl (Grade AA)",
+                          "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_high_02.xml"
+                        },
+                        "quantity": {
+                          "minAmount": {
+                            "raw": "10",
+                            "value": 10
+                          },
+                          "maxAmount": {
+                            "raw": "0",
+                            "value": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Rayari_ResourceGathering']/contracts/CareerContract[@id='9bd0c215-ece8-42b6-9145-f50664b252d1']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Or",
+                  "rawAttributes": {},
+                  "type": "any_of",
+                  "options": [
+                    {
+                      "ordinal": 0,
+                      "type": "all_of",
+                      "entries": [
+                        {
+                          "ordinal": 0,
+                          "sourceElement": "HaulingOrderContent_EntityClass",
+                          "rawAttributes": {
+                            "entityClass": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                            "minAmount": "1",
+                            "maxAmount": "0"
+                          },
+                          "type": "entity_class",
+                          "identity": {
+                            "status": "resolved",
+                            "guid": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                            "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_Super_01",
+                            "displayName": "Irradiated Valakkar Pearl (Grade AAA)",
+                            "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_super_01.xml"
+                          },
+                          "quantity": {
+                            "minAmount": {
+                              "raw": "1",
+                              "value": 1
+                            },
+                            "maxAmount": {
+                              "raw": "0",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "ordinal": 1,
+                      "type": "all_of",
+                      "entries": [
+                        {
+                          "ordinal": 0,
+                          "sourceElement": "HaulingOrderContent_EntityClass",
+                          "rawAttributes": {
+                            "entityClass": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                            "minAmount": "10",
+                            "maxAmount": "0"
+                          },
+                          "type": "entity_class",
+                          "identity": {
+                            "status": "resolved",
+                            "guid": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                            "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_High_02",
+                            "displayName": "Irradiated Valakkar Pearl (Grade AA)",
+                            "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_high_02.xml"
+                          },
+                          "quantity": {
+                            "minAmount": {
+                              "raw": "10",
+                              "value": 10
+                            },
+                            "maxAmount": {
+                              "raw": "0",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Rayari_ResourceGathering']/contracts/CareerContract[@id='9bd0c215-ece8-42b6-9145-f50664b252d1']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_2f9eed486b8a373616976362",
+          "variantId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Or",
+                "rawAttributes": {},
+                "type": "any_of",
+                "options": [
+                  {
+                    "ordinal": 0,
+                    "type": "all_of",
+                    "entries": [
+                      {
+                        "ordinal": 0,
+                        "sourceElement": "HaulingOrderContent_EntityClass",
+                        "rawAttributes": {
+                          "entityClass": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                          "minAmount": "1",
+                          "maxAmount": "0"
+                        },
+                        "type": "entity_class",
+                        "identity": {
+                          "status": "resolved",
+                          "guid": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                          "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_Super_01",
+                          "displayName": "Irradiated Valakkar Pearl (Grade AAA)",
+                          "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_super_01.xml"
+                        },
+                        "quantity": {
+                          "minAmount": {
+                            "raw": "1",
+                            "value": 1
+                          },
+                          "maxAmount": {
+                            "raw": "0",
+                            "value": 0
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "ordinal": 1,
+                    "type": "all_of",
+                    "entries": [
+                      {
+                        "ordinal": 0,
+                        "sourceElement": "HaulingOrderContent_EntityClass",
+                        "rawAttributes": {
+                          "entityClass": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                          "minAmount": "10",
+                          "maxAmount": "0"
+                        },
+                        "type": "entity_class",
+                        "identity": {
+                          "status": "resolved",
+                          "guid": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                          "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_High_02",
+                          "displayName": "Irradiated Valakkar Pearl (Grade AA)",
+                          "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_high_02.xml"
+                        },
+                        "quantity": {
+                          "minAmount": {
+                            "raw": "10",
+                            "value": 10
+                          },
+                          "maxAmount": {
+                            "raw": "0",
+                            "value": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Rayari_ResourceGathering']/contracts/CareerContract[@id='9bd0c215-ece8-42b6-9145-f50664b252d1']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Or",
+                  "rawAttributes": {},
+                  "type": "any_of",
+                  "options": [
+                    {
+                      "ordinal": 0,
+                      "type": "all_of",
+                      "entries": [
+                        {
+                          "ordinal": 0,
+                          "sourceElement": "HaulingOrderContent_EntityClass",
+                          "rawAttributes": {
+                            "entityClass": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                            "minAmount": "1",
+                            "maxAmount": "0"
+                          },
+                          "type": "entity_class",
+                          "identity": {
+                            "status": "resolved",
+                            "guid": "e738c105-8ef7-4238-8170-5db0c4f9c15d",
+                            "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_Super_01",
+                            "displayName": "Irradiated Valakkar Pearl (Grade AAA)",
+                            "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_super_01.xml"
+                          },
+                          "quantity": {
+                            "minAmount": {
+                              "raw": "1",
+                              "value": 1
+                            },
+                            "maxAmount": {
+                              "raw": "0",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "ordinal": 1,
+                      "type": "all_of",
+                      "entries": [
+                        {
+                          "ordinal": 0,
+                          "sourceElement": "HaulingOrderContent_EntityClass",
+                          "rawAttributes": {
+                            "entityClass": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                            "minAmount": "10",
+                            "maxAmount": "0"
+                          },
+                          "type": "entity_class",
+                          "identity": {
+                            "status": "resolved",
+                            "guid": "e738c605-8ef7-4238-8170-5db0c4c9c15d",
+                            "recordName": "EntityClassDefinition.Carryable_2H_FL_Vlk_Pearl_Irradiated_High_02",
+                            "displayName": "Irradiated Valakkar Pearl (Grade AA)",
+                            "path": "entities/scitem/carryables/2h/carryable_2h_fl_vlk_pearl_irradiated_high_02.xml"
+                          },
+                          "quantity": {
+                            "minAmount": {
+                              "raw": "10",
+                              "value": 10
+                            },
+                            "maxAmount": {
+                              "raw": "0",
+                              "value": 0
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Rayari_ResourceGathering']/contracts/CareerContract[@id='9bd0c215-ece8-42b6-9145-f50664b252d1']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "9bd0c215-ece8-42b6-9145-f50664b252d1",
+      "generatorGuid": "23257f42-2028-46e0-8a5e-9cc5abbbdb49",
+      "generatorName": "ContractGenerator.Rayari_RecoverItem",
+      "generatorPath": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@RAIN_collectresources_multiple_GEN_name_01",
+      "descriptionRaw": "@RAIN_collectresources_multiple_GEN_desc_01"
+    }
+  }
+}

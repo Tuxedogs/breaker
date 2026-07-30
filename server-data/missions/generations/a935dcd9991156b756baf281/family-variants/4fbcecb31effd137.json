@@ -1,0 +1,2059 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+  "variants": [
+    {
+      "variantKey": "29b71c1b-4776-4914-b46b-76f09483e9d6",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo-very",
+        "descriptionStem": "covalex-recover-cargo-very",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo-very",
+          "description:covalex-recover-cargo-very",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Bulk Covalex Shipment Needs Recovering",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hi,\n\nHere's the situation. After spending an hour on comms talking to the hauler, trying to help them diagnose what's wrong with their ship, it's been decided that we now need to get someone to head over to [Location] and complete the delivery.\n\nThis is a pretty big one. You'll need a ship that can store [MissionMaxSCUSize] cargo containers and unless you're super strong a heavy-duty tractor beam to shift it all.\n\nI would really appreciate if we could just get this one done. Take the cargo to the freight elevator at [Destination] and we can put this all behind us.\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_VeryHard_Title",
+      "internalName": "Covalex_Nyx_VeryHard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Experienced / 27,750 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Experienced / 27,750 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Experienced / 27,750 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "Standing +50",
+          "81,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200",
+          "Standing +50"
+        ],
+        "credits": "81,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "81,750 aUEC",
+          "amount": 81750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 81750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 81750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        },
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "29b71c1b-4776-4914-b46b-76f09483e9d6",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_VeryHard_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_VeryHard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "2fca4562-bab2-484c-92e5-60ac7d21dced",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo-very",
+        "descriptionStem": "covalex-recover-cargo-very",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo-very",
+          "description:covalex-recover-cargo-very",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Extra Small Covalex Shipment Needs Recovering",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hi,\n\nSo I had a contractor who was supposed to deliver some stuff for us but has completely gone off the radar. I've pinged their ship and I've got no idea what's happened but they're floating around somewhere over at [Location]. If you could head over there recover the cargo and take it to the freight elevator at [Destination] you'd be doing me a huge favor.\n\nDon't forget to bring a heavy-duty tractor beam to move all the cargo. Oh and a ship that can transport [MissionMaxSCUSize] cargo containers.\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_VeryEasy_Title",
+      "internalName": "Covalex_Nyx_VeryEasy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Trainee / 0 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Trainee / 0 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Trainee / 0 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "23,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "23,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "23,250 aUEC",
+          "amount": 23250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 23250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 23250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "2fca4562-bab2-484c-92e5-60ac7d21dced",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_VeryEasy_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_VeryEasy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "12a94de8-d1a1-489b-a866-2bc745b02413",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo",
+        "descriptionStem": "covalex-recover-cargo",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo",
+          "description:covalex-recover-cargo",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Large Covalex Shipment Needs Recovering",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hi, it's El.\n\nNeed a hauler for a job ASAP. One of our contractors had a \"personal emergency\" and had to ditch their ship and it seems like they're not coming back. Not ideal, really.\n\nGood news is the cargo is still intact, at least according to the tracker. It'd be a huge win for me if you could finish the job by grabbing the cargo at [Location] and bringing it to the freight elevator at [Destination].\n\nSeems like this was a pretty big one, you'll need a ship that can transport [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam to move it all. Really appreciate your help.\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_Hard_Title",
+      "internalName": "Covalex_Nyx_Hard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Member / 5,250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Member / 5,250 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Member / 5,250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "67,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "67,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "67,750 aUEC",
+          "amount": 67750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 67750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 67750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "12a94de8-d1a1-489b-a866-2bc745b02413",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_Hard_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_Hard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "5b62809f-4fa7-4250-8980-1a4576d4f795",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo",
+        "descriptionStem": "covalex-recover-cargo",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo",
+          "description:covalex-recover-cargo",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Med. Covalex Shipment Needs Recovering",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey El here,\n\nGot a weird one for you. I was checking the delivery stats for the past week and noticed some discrepancies. Seems we have a couple of deliveries marked as fulfilled but the cargo trackers are still showing as active.\n\nOne of these is located at [Location] so I was hoping you could fly over and get to the bottom of this. The order says the hauler was using a ship that could carry [MissionMaxSCUSize] cargo containers so make sure you have the same. A heavy-duty tractor beam is a must for this one too.\n\nThat cargo needs to be delivered yesterday, so as soon as you've got it take it to a freight elevator at [Destination] and I'll get your payment sorted for you.\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_Medium_Title",
+      "internalName": "Covalex_Nyx_Medium_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Junior / 250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Junior / 250 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Junior / 250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "53,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "53,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "53,750 aUEC",
+          "amount": 53750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 53750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 53750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5b62809f-4fa7-4250-8980-1a4576d4f795",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_Medium_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_Medium_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "6fc1b754-5f7e-4da6-8499-81e1b0dee659",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo",
+        "descriptionStem": "covalex-recover-cargo",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo",
+          "description:covalex-recover-cargo",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Recover VIP Covalex Shipment",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nOnly looking for contractors who are the best of the best for this one. One of our most valued clients is expecting an incredibly important shipment which is now seriously overdue.\n\nHere at Covalex, we pride ourselves on treating all of our clients equally, offering outstanding levels of service regardless of what we're delivering. That being said, if we lose this contract someone's gonna be in hot water and I really can't afford for that person to be me.\n\nThe tracker is reporting that the last contractor's ship is over at [Location]. Don't take any chances with this one, you'll need a ship that can hold [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam to collect it all.\n\nDeliver the shipment to the freight elevator at [Destination] and we can put this whole mess behind us. And you'll make a sizeable heap of credits in the process. Not bad, right?\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_Super_Title",
+      "internalName": "Covalex_Nyx_Super_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Senior / 77,750 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Senior / 77,750 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Senior / 77,750 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +300",
+          "93,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "93,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "93,500 aUEC",
+          "amount": 93500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 93500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 93500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6fc1b754-5f7e-4da6-8499-81e1b0dee659",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_Super_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_Super_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "091c4628-7eb7-454c-b73e-09b1145949aa",
+      "familyKey": "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+      "conceptKey": "1b4c57df3423a10fa58a",
+      "objectiveSignature": {
+        "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:d1ef8a7ab7f8|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "covalex-recover-cargo",
+        "descriptionStem": "covalex-recover-cargo",
+        "handlerStem": "covalex-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d1ef8a7ab7f8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:covalex-recover-cargo",
+          "description:covalex-recover-cargo",
+          "handler:covalex-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d1ef8a7ab7f8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Small Covalex Shipment Needs Recovering",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hiya,\n\nI've got a client who's been messaging me all morning about a shipment they were supposed to receive and when I checked up on the cargo it turns out that it's sitting completely still in the middle of space.\n\nThis is obviously bad for a number of reasons, and not just because I had to spend 20 minutes getting yelled at. Can you head over to [Location] and see what happened? The original contract called for a ship that could carry [MissionMaxSCUSize] cargo containers so make sure you've got that and a heavy-duty tractor beam.\n\nOnce you've got the cargo, can you make sure it's delivered to the freight elevator at [Destination]? Thanks a bunch.\n\n[Contractor]\n\nElla Tieno \nJr. Logistics Coordinator \nCovalex Shipping   \n'Anything you need, anywhere you need it.' \n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+      "rawName": "@Covalex_RecoverCargo_Easy_Title",
+      "internalName": "Covalex_Nyx_Easy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Covalex",
+      "faction": "Covalex",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; Prerequisite mission or completion tag; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980f153f-be88-4ac0-a229-02fe1ac592b6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "35,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "35,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "35,000 aUEC",
+          "amount": 35000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 35000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 35000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "factionDisplayName": "Covalex",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "091c4628-7eb7-454c-b73e-09b1145949aa",
+        "generatorGuid": "70a423da-c0c8-4fc1-b17c-e2f619927fa1",
+        "generatorName": "ContractGenerator.Covalex_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Covalex_RecoverCargo_Easy_Title",
+        "descriptionRaw": "@Covalex_RecoverCargo_Easy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,1475 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+  "variants": [
+    {
+      "variantKey": "5673cea0-752a-4c64-bbab-f313a5274cd9",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "conceptKey": "06002f4ef16ca1b76503",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|patrol|activity-defined|standard|unlock:3d819bf4d49f|unknown:bounded||||",
+        "activityKey": "patrol",
+        "titleStem": "inter-sec-security-patrol",
+        "descriptionStem": "inter-sec-security-patrol",
+        "handlerStem": "inter-sec-patrol",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d819bf4d49f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:patrol",
+          "activity-source:structural",
+          "title:inter-sec-security-patrol",
+          "description:inter-sec-security-patrol",
+          "handler:inter-sec-patrol",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:3d819bf4d49f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Patrol Dangerous Sector",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: InterSec has received intelligence that outlaws are planning to launch an attack on a target within the UEE. In an effort to prevent this from happening, we need a contractor to patrol a sector we believe these outlaws are using to prepare for their attack.\n\nOutlaw activity in this sector is higher than normal, so InterSec recommends that you bring backup. When ready, dispatch to the location marker on your HUD and scan the waypoints along the route. Once you've confirmed that the entire sector is clear, the main contractor will receive a bonus of [ScripAmount] MG Scrip. \n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_H_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_Hard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "InvisibleTimer_MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "LocalSystem",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9",
+          "Standing +200",
+          "158,750 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "158,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "158,750 aUEC",
+          "amount": 158750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 158750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 158750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "14",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5673cea0-752a-4c64-bbab-f313a5274cd9",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_H_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_H_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "c3fa11ea-d56f-4b04-a967-d90b65762f93",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "conceptKey": "ec93d27f1dfce3c4a72d",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|patrol|activity-defined|standard|unlock:6e628955d32f|unknown:bounded||||",
+        "activityKey": "patrol",
+        "titleStem": "inter-sec-security-patrol",
+        "descriptionStem": "inter-sec-security-patrol",
+        "handlerStem": "inter-sec-patrol",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:6e628955d32f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:patrol",
+          "activity-source:structural",
+          "title:inter-sec-security-patrol",
+          "description:inter-sec-security-patrol",
+          "handler:inter-sec-patrol",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:6e628955d32f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Patrol Vanduul Hunting Ground",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Vanduul\nEquipment Specs: Combat-rated Ships\nBriefing: There's a growing concern that Vanduul hunting parties are pushing further into Nyx. The first line of defense against this encroachment is increased patrols. InterSec has identified a sector that has seen an uptick in Vanduul activity and are looking for someone to patrol the region and provide an update on it.\n\nYou'll begin your patrol at a location marker sent to your HUD and then scan a series of waypoints along a designated route. The Vanduul ships in this sector are highly skilled and aggressive, so InterSec highly recommends that you bring several combat-ready ships along as backup.\n\nInterSec understands the immense danger you'll be under on this patrol, so we'll send a special bonus of [ScripAmount] MG Scrip to the main contractor once the sector is clear.      \n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_S_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_Super",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab",
+              "96d993ac-26d9-4763-af2d-ffbd5bc03ed4"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "InvisibleTimer_MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "LocalSystem",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9",
+          "Standing +300",
+          "409,500 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "409,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "409,500 aUEC",
+          "amount": 409500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 409500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 409500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "24",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "c3fa11ea-d56f-4b04-a967-d90b65762f93",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_S_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_S_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "afbd5caf-585e-4f1e-b357-afea66248852",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "conceptKey": "79aeb7013030a981b89e",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|patrol|activity-defined|standard|unlock:e532702ee188|unknown:bounded||||",
+        "activityKey": "patrol",
+        "titleStem": "inter-sec-security-patrol",
+        "descriptionStem": "inter-sec-security-patrol",
+        "handlerStem": "inter-sec-patrol",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e532702ee188",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:patrol",
+          "activity-source:structural",
+          "title:inter-sec-security-patrol",
+          "description:inter-sec-security-patrol",
+          "handler:inter-sec-patrol",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:e532702ee188",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Patrol to Prevent Possible Attack",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: InterSec has been tracking increased outlaw activity in certain sectors of the system. This activity in conjunction with other intelligence leads us to believe that outlaws are planning an attack on elements traveling from the UEE. We're aiming to patrol these sectors and disrupt any plans before they can be put into action.\n\nCurrently, we need someone who can help patrol a highly dangerous sector. Once you've accepted the mission, you can proceed to the location marker on your HUD. From there, we'll send you along a specific route with additional waypoints to scan. Complete the patrol and we'll send the main contractor a bonus of [ScripAmount] MG Scrip.\n\nDue to the high probability of attack and general threat level of local outlaws, we recommend recruiting trusted wingmen to provide combat support.\n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_VH_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "InvisibleTimer_MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "LocalSystem",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9",
+          "Standing +250",
+          "235,000 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: 4acc160d-9b38-40df-8b03-24074b9e2aaf, afd1907d-fdaa-454e-85b0-2d240df18e98, 1c9bbc0c-843f-47c9-8f11-73ac3ad8db62, 2864d252-0e9f-461f-b81e-9c9eadb6a5a2 +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "componentType": null,
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +250"
+        ],
+        "credits": "235,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "235,000 aUEC",
+          "amount": 235000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 235000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 235000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "18",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 250,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "afbd5caf-585e-4f1e-b357-afea66248852",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_VH_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_VH_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

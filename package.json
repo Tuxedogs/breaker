@@ -17,6 +17,8 @@
     "crafting:test": "node --import tsx --test src/lib/componentCatalog.test.ts src/lib/crafting/fpsChartRange.test.ts src/lib/crafting/craftingDetailQuality.test.ts src/lib/crafting/detailStatPresentation.test.ts src/lib/crafting/materialDisplayName.test.ts src/components/industry/crafting/utils/recipeBrowserFilters.test.ts src/components/industry/crafting/utils/recipeBrowserPresentation.test.ts",
         "missions:shape": "node --import tsx scripts/shape-mission-browser-data.mts",
         "missions:source:verify": "node --import tsx scripts/verify-mission-source-contract.mts",
+        "missions:shaped:verify": "node --import tsx scripts/verify-mission-shaped-contract.mts",
+        "missions:test": "node --import tsx --test scripts/missions/**/*.test.ts server/missions/**/*.test.ts server/routes/missions.routes.test.ts",
         "crafting:shape-blueprint-sources": "node --import tsx scripts/shape-blueprint-sources-data.mts",
         "crafting:shape-component-cards": "node --import tsx scripts/shape-component-card-data.mts",
         "crafting:shape-recipes": "node --import tsx scripts/shape-recipe-data.mts",

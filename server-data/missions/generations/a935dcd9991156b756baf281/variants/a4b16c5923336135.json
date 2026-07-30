@@ -1,0 +1,4053 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)",
+  "variant": {
+    "variantKey": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+    "familyKey": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)",
+    "conceptKey": "16370b92553a4f42bf58",
+    "objectiveSignature": {
+      "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "resource-gathering",
+      "titleStem": "shubin-industrial-ship-mining-org",
+      "descriptionStem": "shubin-industrial-ship-mining-org",
+      "handlerStem": "shubin-rg-ship-mining-big-org-disabled",
+      "archetype": "Ship Mining",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering",
+        "activity-source:structural",
+        "title:shubin-industrial-ship-mining-org",
+        "description:shubin-industrial-ship-mining-org",
+        "handler:shubin-rg-ship-mining-big-org-disabled",
+        "contract:careercontract",
+        "archetype:ship-mining",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Ship Mining",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Special Purchase Order: Mined Materials",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of refined materials. This purchase order is more complex than typical, requiring multiple mining methods, but since you've proven your skill thus far, we think you and your team are up for the challenge.\n\nReminder, materials must be refined before delivery, and since this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+    "rawName": "@Shubin_Industrial_ShipMining_S_Org_Title_001",
+    "internalName": "Shubin_RG_Discovery_ShipMining_VehicleEngineer",
+    "missionType": "Ship Mining",
+    "provider": "Shubin Interstellar",
+    "faction": "Shubin Interstellar",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+      "factionDisplayName": "Shubin Interstellar",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Ship Mining",
+    "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "DropoffLocation_BP",
+          "propertyExtendedTextToken": "Destination",
+          "locationLevelType": "LocalSystem"
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "DropoffLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Unknown pickup",
+        "detailLabel": "Unknown pickup",
+        "confidence": "unknown"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "displayLabel": "Unknown pickup",
+        "detailDisplay": "Unknown pickup",
+        "systems": [],
+        "confidence": "low",
+        "sourceRole": "unknown",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "DropoffLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Standing +200",
+        "Standing +50",
+        "2,000 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +200",
+        "Standing +50"
+      ],
+      "credits": "2,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "2,000 aUEC",
+        "amount": 2000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      },
+      {
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+        "familyId": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72|Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_ff82e742ff8b28a5d121a25a",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_214662cbaab63bd141f455db",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_8c6ba42af6d0f88f17b5ce17",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_0656fcf4daf4a030fe1ecfb1",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_09d64758a04e3f47db95425d",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 2000,
+              "amount": 2000,
+              "rawAmount": 1878.3113569095497,
+              "integerRoundedAmount": 1878,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 1.391,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hands_free_gaming_1",
+                    "level": 1,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.153
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "AFK_gaming_1",
+                    "level": 1,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.459
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Safe_and_sound_zzzz_1",
+                    "level": 1,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.306
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Noob_gaming_or_tutorial_1",
+                    "level": 1,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.473
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Hands_free_gaming_1",
+                  "mentalLoad": "AFK_gaming_1",
+                  "riskOfLoss": "Safe_and_sound_zzzz_1",
+                  "gameKnowledge": "Noob_gaming_or_tutorial_1"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "1",
+                "value": 1,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_8c6ba42af6d0f88f17b5ce17",
+            "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_0656fcf4daf4a030fe1ecfb1",
+            "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "reputationAmount": 50,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 2000,
+              "amount": 2000,
+              "rawAmount": 1878.3113569095497,
+              "integerRoundedAmount": 1878,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 1.391,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hands_free_gaming_1",
+                    "level": 1,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.153
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "AFK_gaming_1",
+                    "level": 1,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.459
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Safe_and_sound_zzzz_1",
+                    "level": 1,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.306
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Noob_gaming_or_tutorial_1",
+                    "level": 1,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.473
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Hands_free_gaming_1",
+                  "mentalLoad": "AFK_gaming_1",
+                  "riskOfLoss": "Safe_and_sound_zzzz_1",
+                  "gameKnowledge": "Noob_gaming_or_tutorial_1"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "1",
+                "value": 1,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 2000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 2000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "reward": {
+              "guid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_50",
+              "editorName": "Undefined Name",
+              "reputationAmount": 50,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_50.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_ca0b1b9ff5aa47e2598159a7",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "sourceScope": "contract",
+          "sourceOwnerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "9b47bacf-8efa-42e2-8d84-dee64983a00a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "9b47bacf-8efa-42e2-8d84-dee64983a00a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7e86e2f4-6c31-41f8-9438-0fd8ad037426",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7e86e2f4-6c31-41f8-9438-0fd8ad037426"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f3379bda-0520-4c75-920a-c29a50eb6b50",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f3379bda-0520-4c75-920a-c29a50eb6b50"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "c339897c-d682-48ad-a16f-daf145bc0f4d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "c339897c-d682-48ad-a16f-daf145bc0f4d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 5,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "960eda23-d77c-425e-8cbd-89d94ca6e2aa",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "960eda23-d77c-425e-8cbd-89d94ca6e2aa"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 6,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7310c15d-359c-42b4-b61e-7da3d0da3384",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7310c15d-359c-42b4-b61e-7da3d0da3384"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 7,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 8,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 9,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 10,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a789f57a-e12b-4bcd-8132-e0c03d84fc89"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 11,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "4236c16b-c47f-4083-9e26-4313733f2326",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "4236c16b-c47f-4083-9e26-4313733f2326"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 12,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 13,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 14,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 15,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 16,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "61189578-ed7a-4491-9774-37ae2f82b8b0",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "61189578-ed7a-4491-9774-37ae2f82b8b0"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 17,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "dc6fbcbb-5990-4ed5-82ee-93152dab7845"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 18,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7f4599b0-a2b2-4178-8c7e-13292054ab20"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 19,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "33bff393-42f1-4f70-85a1-71e695ed2a5a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 20,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "21825507-7923-4683-9bf3-9cfe316940e3",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "21825507-7923-4683-9bf3-9cfe316940e3"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 21,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "06cafea0-49fe-4dce-b0f0-dc583316c66d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "06cafea0-49fe-4dce-b0f0-dc583316c66d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 22,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "999e3149-fd10-49ac-914f-8911e61c6122",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "999e3149-fd10-49ac-914f-8911e61c6122"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 23,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 24,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "86d00bd8-08f7-4231-b375-a609803fc46d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "86d00bd8-08f7-4231-b375-a609803fc46d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)']/contracts/CareerContract[@id='6ec60763-f178-4ae4-943e-f9c16d03420c']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "9b47bacf-8efa-42e2-8d84-dee64983a00a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "9b47bacf-8efa-42e2-8d84-dee64983a00a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7e86e2f4-6c31-41f8-9438-0fd8ad037426",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7e86e2f4-6c31-41f8-9438-0fd8ad037426"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f3379bda-0520-4c75-920a-c29a50eb6b50",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f3379bda-0520-4c75-920a-c29a50eb6b50"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "c339897c-d682-48ad-a16f-daf145bc0f4d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "c339897c-d682-48ad-a16f-daf145bc0f4d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 5,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "960eda23-d77c-425e-8cbd-89d94ca6e2aa",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "960eda23-d77c-425e-8cbd-89d94ca6e2aa"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 6,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7310c15d-359c-42b4-b61e-7da3d0da3384",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7310c15d-359c-42b4-b61e-7da3d0da3384"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 7,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 8,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 9,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 10,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a789f57a-e12b-4bcd-8132-e0c03d84fc89"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 11,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "4236c16b-c47f-4083-9e26-4313733f2326",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "4236c16b-c47f-4083-9e26-4313733f2326"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 12,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 13,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 14,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 15,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 16,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "61189578-ed7a-4491-9774-37ae2f82b8b0",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "61189578-ed7a-4491-9774-37ae2f82b8b0"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 17,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "dc6fbcbb-5990-4ed5-82ee-93152dab7845"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 18,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7f4599b0-a2b2-4178-8c7e-13292054ab20"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 19,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "33bff393-42f1-4f70-85a1-71e695ed2a5a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 20,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "21825507-7923-4683-9bf3-9cfe316940e3",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "21825507-7923-4683-9bf3-9cfe316940e3"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 21,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "06cafea0-49fe-4dce-b0f0-dc583316c66d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "06cafea0-49fe-4dce-b0f0-dc583316c66d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 22,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "999e3149-fd10-49ac-914f-8911e61c6122",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "999e3149-fd10-49ac-914f-8911e61c6122"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 23,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 24,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "86d00bd8-08f7-4231-b375-a609803fc46d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "86d00bd8-08f7-4231-b375-a609803fc46d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)']/contracts/CareerContract[@id='6ec60763-f178-4ae4-943e-f9c16d03420c']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_ca0b1b9ff5aa47e2598159a7",
+          "variantId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "sourceScope": "contract",
+          "sourceOwnerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "9b47bacf-8efa-42e2-8d84-dee64983a00a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "9b47bacf-8efa-42e2-8d84-dee64983a00a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7e86e2f4-6c31-41f8-9438-0fd8ad037426",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7e86e2f4-6c31-41f8-9438-0fd8ad037426"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f3379bda-0520-4c75-920a-c29a50eb6b50",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f3379bda-0520-4c75-920a-c29a50eb6b50"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "c339897c-d682-48ad-a16f-daf145bc0f4d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "c339897c-d682-48ad-a16f-daf145bc0f4d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 5,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "960eda23-d77c-425e-8cbd-89d94ca6e2aa",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "960eda23-d77c-425e-8cbd-89d94ca6e2aa"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 6,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7310c15d-359c-42b4-b61e-7da3d0da3384",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7310c15d-359c-42b4-b61e-7da3d0da3384"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 7,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 8,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 9,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 10,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a789f57a-e12b-4bcd-8132-e0c03d84fc89"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 11,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "4236c16b-c47f-4083-9e26-4313733f2326",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "4236c16b-c47f-4083-9e26-4313733f2326"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 12,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 13,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 14,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 15,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 16,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "61189578-ed7a-4491-9774-37ae2f82b8b0",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "61189578-ed7a-4491-9774-37ae2f82b8b0"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 17,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "dc6fbcbb-5990-4ed5-82ee-93152dab7845"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 18,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "7f4599b0-a2b2-4178-8c7e-13292054ab20"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 19,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "33bff393-42f1-4f70-85a1-71e695ed2a5a"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 20,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "21825507-7923-4683-9bf3-9cfe316940e3",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "21825507-7923-4683-9bf3-9cfe316940e3"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 21,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "06cafea0-49fe-4dce-b0f0-dc583316c66d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "06cafea0-49fe-4dce-b0f0-dc583316c66d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 22,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "999e3149-fd10-49ac-914f-8911e61c6122",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "999e3149-fd10-49ac-914f-8911e61c6122"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 23,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 24,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "86d00bd8-08f7-4231-b375-a609803fc46d",
+                  "maxContainerSize": "-1",
+                  "minSCU": "9",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "86d00bd8-08f7-4231-b375-a609803fc46d"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "9",
+                    "value": 9
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)']/contracts/CareerContract[@id='6ec60763-f178-4ae4-943e-f9c16d03420c']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "9b47bacf-8efa-42e2-8d84-dee64983a00a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "9b47bacf-8efa-42e2-8d84-dee64983a00a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7e86e2f4-6c31-41f8-9438-0fd8ad037426",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7e86e2f4-6c31-41f8-9438-0fd8ad037426"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "3e5fdc37-cb59-4fd3-8168-e3c538ab9722"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f3379bda-0520-4c75-920a-c29a50eb6b50",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f3379bda-0520-4c75-920a-c29a50eb6b50"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "c339897c-d682-48ad-a16f-daf145bc0f4d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "c339897c-d682-48ad-a16f-daf145bc0f4d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 5,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "960eda23-d77c-425e-8cbd-89d94ca6e2aa",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "960eda23-d77c-425e-8cbd-89d94ca6e2aa"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 6,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7310c15d-359c-42b4-b61e-7da3d0da3384",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7310c15d-359c-42b4-b61e-7da3d0da3384"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 7,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 8,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "35121003-f1af-481a-b16f-7f48d8af0efb",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "35121003-f1af-481a-b16f-7f48d8af0efb"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 9,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 10,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a789f57a-e12b-4bcd-8132-e0c03d84fc89"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 11,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "4236c16b-c47f-4083-9e26-4313733f2326",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "4236c16b-c47f-4083-9e26-4313733f2326"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 12,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "07570c9f-fdf6-4bca-a56b-c42809ec0e01"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 13,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7bbd3197-a6e1-49b3-a495-0b7ef4f8ce40"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 14,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "1b4c4042-5fdc-4b52-bec4-07085cb3520a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "1b4c4042-5fdc-4b52-bec4-07085cb3520a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 15,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 16,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "61189578-ed7a-4491-9774-37ae2f82b8b0",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "61189578-ed7a-4491-9774-37ae2f82b8b0"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 17,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "dc6fbcbb-5990-4ed5-82ee-93152dab7845"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 18,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "7f4599b0-a2b2-4178-8c7e-13292054ab20"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 19,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "33bff393-42f1-4f70-85a1-71e695ed2a5a"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 20,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "21825507-7923-4683-9bf3-9cfe316940e3",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "21825507-7923-4683-9bf3-9cfe316940e3"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 21,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "06cafea0-49fe-4dce-b0f0-dc583316c66d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "06cafea0-49fe-4dce-b0f0-dc583316c66d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 22,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "999e3149-fd10-49ac-914f-8911e61c6122",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "999e3149-fd10-49ac-914f-8911e61c6122"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 23,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                },
+                {
+                  "ordinal": 24,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "86d00bd8-08f7-4231-b375-a609803fc46d",
+                    "maxContainerSize": "-1",
+                    "minSCU": "9",
+                    "maxSCU": "16"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "86d00bd8-08f7-4231-b375-a609803fc46d"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "9",
+                      "value": 9
+                    },
+                    "maxSCU": {
+                      "raw": "16",
+                      "value": 16
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Shubin_RG_ShipMining_Rank5_BigOrg (DISABLED)']/contracts/CareerContract[@id='6ec60763-f178-4ae4-943e-f9c16d03420c']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "6ec60763-f178-4ae4-943e-f9c16d03420c",
+      "generatorGuid": "50d0a27b-c3c8-4ebd-8c59-83a436db4e72",
+      "generatorName": "ContractGenerator.Shubin_ResourceGathering_ShipMining",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_shipmining.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Shubin_Industrial_ShipMining_S_Org_Title_001",
+      "descriptionRaw": "@Shubin_Industrial_ShipMining_S_Org_Desc_001"
+    }
+  }
+}

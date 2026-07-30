@@ -286,7 +286,9 @@ export type MissionTitleSource =
 export type MissionTitleConfidence = "high" | "medium" | "low";
 
 export type MissionBrowserCatalog = {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   sourceFiles: string[];
@@ -442,7 +444,9 @@ export type MissionBrowseViews = {
 };
 
 export type MissionFamilyDetailPayload = {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   family: MissionFamilyView;
@@ -488,7 +492,9 @@ export type MissionFamilyDetailPayload = {
 };
 
 export type MissionFamilyVariantsPayload = {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   familyKey: string;
@@ -496,7 +502,9 @@ export type MissionFamilyVariantsPayload = {
 };
 
 export type MissionVariantDetailPayload = {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
+  sourceContractVersion?: 3;
+  generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   familyKey: string;

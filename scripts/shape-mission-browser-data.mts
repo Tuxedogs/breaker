@@ -2,6 +2,28 @@ import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { createHash } from "node:crypto";
 import path from "node:path";
 
+import { buildMissionGraphValidationV2 } from "./missions/graph/mission-graph.mts";
+import { normalizeRequiredItemsV2, type CanonicalRequiredItemsV2 } from "./missions/normalize/required-items.mts";
+import { projectBrowserCreditV2 } from "./missions/normalize/rewards.mts";
+import {
+  buildMissionShardPathsV2,
+  missionPayloadFileName,
+  projectCompactMissionVariantV2,
+  type CompactMissionVariant,
+} from "./missions/project/browser-projection.mts";
+import { publishImmutableMissionGeneration } from "./missions/publication/write-artifacts.mts";
+import { buildMissionGraphArtifactsV2 } from "./missions/report/graph-report.mts";
+import {
+  MISSION_SHAPED_SCHEMA_VERSION,
+  normalizeCanonicalMissionVariantV2,
+  type CanonicalMissionVariantV2,
+} from "./missions/schema/canonical-v2.mts";
+import {
+  parseMissionSourceCatalogV3,
+  type MissionSourceCatalogV3,
+  type MissionSourceRecordV3,
+} from "./missions/schema/source-v3.mts";
+
 type RawStanding = {
   displayName?: string;
   minReputation?: number;
@@ -57,7 +79,7 @@ type RawReward = {
   sourceRefs?: string[];
 };
 
-type RawMission = {
+type RawMission = MissionSourceRecordV3 & {
   contractId: string;
   familyId?: string;
   template?: string;
@@ -95,11 +117,11 @@ type RawMission = {
 };
 
 type RawCatalog = {
-  schemaVersion: number;
+  schemaVersion: 3;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   records: RawMission[];
-};
+} & MissionSourceCatalogV3;
 
 type BlueprintPoolLookup = {
   poolGuid?: string;
@@ -119,6 +141,13 @@ type BlueprintPoolLookup = {
 
 type Lookups = {
   blueprintPools?: BlueprintPoolLookup[];
+  standings?: Array<{
+    guid?: string;
+    recordName?: string;
+    displayName?: string;
+    minReputation?: number;
+    path?: string;
+  }>;
 };
 
 type ShapedPrerequisite = {
@@ -246,11 +275,14 @@ type CreditRewardDetail =
   | {
     status: "calculated" | "formula_unresolved" | "variable";
     displayText: string;
-    confidence: "calculated_unresolved";
+    amount?: number;
+    currency?: string;
+    confidence: "source_calculated" | "calculated_unresolved";
     sourceResultType: "ContractResult_CalculatedReward";
-    unresolvedReason: string;
+    unresolvedReason?: string;
     attributes?: Record<string, unknown>;
     sourceRefs: string[];
+    payout?: MissionSourceRecordV3["calculatedPayout"];
   }
   | {
     status: "provenAbsent";
@@ -361,6 +393,8 @@ type ShapedVariant = {
     hasUnresolvedRewards: boolean;
     hasUnresolvedPrerequisites: boolean;
   };
+  canonical: CanonicalMissionVariantV2;
+  requiredItems: CanonicalRequiredItemsV2;
   technical: {
     contractId: string;
     generatorGuid?: string;
@@ -526,10 +560,19 @@ type BlueprintRewardGroup = {
 };
 
 type ShapedCatalog = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   sourceFiles: string[];
+  sourceInputs: {
+    refIndex: {
+      status: "explicit" | "not_configured";
+      path?: string;
+      sha256?: string;
+    };
+  };
   summary: {
     familyCount: number;
     variantCount: number;
@@ -558,10 +601,13 @@ type ShapedCatalog = {
 };
 
 type MissionBrowserIndex = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   sourceFiles: string[];
+  sourceInputs: ShapedCatalog["sourceInputs"];
   summary: ShapedCatalog["summary"];
   unresolvedSummary: {
     unresolvedLocationCount: number;
@@ -576,6 +622,7 @@ type MissionBrowserIndex = {
     conceptReport: string;
     conceptCatalog: string;
     categoryReport: string;
+    graphReport: string;
   };
   filtersMeta: MissionBrowserFiltersMeta;
   familiesByKey: Record<string, ShapedFamily>;
@@ -609,7 +656,9 @@ type MissionBrowserFiltersMeta = {
 };
 
 type MissionFamilyDetailPayload = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   family: ShapedFamily;
@@ -655,15 +704,19 @@ type MissionFamilyDetailPayload = {
 };
 
 type MissionFamilyVariantsPayload = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   familyKey: string;
-  variants: ShapedVariant[];
+  variants: Array<CompactMissionVariant<ShapedVariant>>;
 };
 
 type MissionVariantDetailPayload = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   familyKey: string;
@@ -671,7 +724,9 @@ type MissionVariantDetailPayload = {
 };
 
 type MissionShardManifest = {
-  schemaVersion: 1;
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 3;
+  generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   familyFilesByFamilyId: Record<string, {
@@ -699,20 +754,36 @@ type MissionShardManifest = {
   }>;
 };
 
-const serverMissionSourceRoot = path.resolve("server-data", "missions", "source");
-const missionRoot = path.resolve("server-data", "missions");
-const familyRoot = path.join(missionRoot, "families");
-const familyVariantsRoot = path.join(missionRoot, "family-variants");
-const variantRoot = path.join(missionRoot, "variants");
+const serverMissionSourceRoot = path.resolve(
+  process.env.MISSION_SOURCE_ROOT ?? path.join("server-data", "missions", "source"),
+);
+const missionRoot = path.resolve(process.env.MISSION_DATA_ROOT ?? path.join("server-data", "missions"));
 const maxMissionOutputBytes = 50 * 1024 * 1024;
 const legacyMissionOutputFiles = ["mission_locations.json", "mission_variants.json"] as const;
+const legacyShapedRootFiles = [
+  "mission_browser_extraction_report.json",
+  "mission_browser_index.json",
+  "mission_browse_groups.json",
+  "mission_category_projection_report.json",
+  "mission_concepts.json",
+  "mission_concept_shaping_report.json",
+  "mission_families.json",
+  "mission_prerequisites.json",
+  "mission_reputation.json",
+  "mission_rewards.json",
+  "mission_shard_manifest.json",
+  "mission_unresolved_refs.json",
+  ...legacyMissionOutputFiles,
+] as const;
+const legacyShardDirectories = ["families", "family-variants", "variants"] as const;
+const missionShaperVersion = "moonbreaker_mission_shaper_v2_4";
 async function resolveMissionSourceRoot(): Promise<string> {
   try {
     await readFile(path.join(serverMissionSourceRoot, "mission_contracts.json"), "utf8");
     return serverMissionSourceRoot;
   } catch {
     throw new Error(
-      "Mission source inputs are missing. Expected mission_contracts.json in server-data/missions/source.",
+      `Mission source inputs are missing. Expected mission_contracts.json in ${serverMissionSourceRoot}.`,
     );
   }
 }
@@ -720,7 +791,9 @@ async function resolveMissionSourceRoot(): Promise<string> {
 const sourceMissionRoot = await resolveMissionSourceRoot();
 const contractsPath = path.join(sourceMissionRoot, "mission_contracts.json");
 const lookupsPath = path.join(sourceMissionRoot, "mission_reward_lookups.json");
-const refIndexPath = path.resolve("tmp", "scintel-api-candidate", "ref_index.json");
+const refIndexPath = process.env.MISSION_REF_INDEX
+  ? path.resolve(process.env.MISSION_REF_INDEX)
+  : undefined;
 
 function truthy(value: unknown): boolean {
   return value === true || value === 1 || value === "1" || value === "true";
@@ -1833,106 +1906,91 @@ function reputationRewardLabel(path: RewardedReputationPath): string {
   return `${shortScopeLabel(path.scopeDisplayName)} ${formatSignedAmount(path.amount)}`;
 }
 
-function asFiniteNumber(value: unknown): number | undefined {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string" && value.trim()) {
-    const numeric = Number(value);
-    if (Number.isFinite(numeric)) return numeric;
-  }
-  return undefined;
-}
-
-function formatCreditAmount(amount: number, currency: string): string {
-  const suffix = currency || "UEC";
-  return `${amount.toLocaleString()} ${suffix}`;
-}
-
 function shapeCreditReward(mission: RawMission): { credits: string; creditStatus: ShapedVariant["rewards"]["creditStatus"]; creditsDetail: CreditRewardDetail; unresolvedTokens: string[] } {
-  const creditRewards = mission.creditRewardTypes ?? [];
-  if (!creditRewards.length) {
+  const projected = projectBrowserCreditV2(mission);
+  if (projected.status === "provenAbsent") {
     return {
-      credits: "No credit reward extracted",
+      credits: projected.displayText,
       creditStatus: "provenAbsent",
       creditsDetail: {
         status: "provenAbsent",
-        displayText: "No credit reward extracted",
+        displayText: projected.displayText,
         confidence: "proven_absent",
-        sourceRefs: [],
+        sourceRefs: projected.sourceRefs,
       },
       unresolvedTokens: [],
     };
   }
 
-  const fixedReward = creditRewards.find((reward) => reward.type === "ContractResult_Reward" && asFiniteNumber(reward.fixedReward?.reward) !== undefined);
-  if (fixedReward) {
-    const amount = asFiniteNumber(fixedReward.fixedReward?.reward)!;
-    const currency = clean(fixedReward.fixedReward?.currencyType) ?? "UEC";
+  if (projected.status === "fixed") {
     return {
-      credits: formatCreditAmount(amount, currency),
+      credits: projected.displayText,
       creditStatus: "fixed",
       creditsDetail: {
         status: "fixed",
-        amount,
-        currency,
-        max: fixedReward.fixedReward?.max,
-        plusBonuses: fixedReward.fixedReward?.plusBonuses,
+        amount: projected.amount,
+        currency: projected.currency,
+        max: projected.max,
+        plusBonuses: projected.plusBonuses,
         confidence: "extracted_fixed",
         sourceResultType: "ContractResult_Reward",
-        sourceRefs: fixedReward.sourceRefs ?? [],
+        sourceRefs: projected.sourceRefs,
       },
       unresolvedTokens: [],
     };
   }
 
-  const calculatedReward = creditRewards.find((reward) => reward.type === "ContractResult_CalculatedReward");
-  if (calculatedReward) {
-    const hasFormulaAttributes = Object.keys(calculatedReward.attributes ?? {}).length > 0;
-    if (!hasFormulaAttributes) {
-      return {
-        credits: "Credits formula unresolved",
-        creditStatus: "formula_unresolved",
-        creditsDetail: {
-          status: "formula_unresolved",
-          displayText: "Credits formula unresolved",
-          confidence: "calculated_unresolved",
-          sourceResultType: "ContractResult_CalculatedReward",
-          unresolvedReason: "Calculated reward result has no extracted formula or fixed child payout.",
-          attributes: calculatedReward.attributes,
-          sourceRefs: calculatedReward.sourceRefs ?? [],
-        },
-        unresolvedTokens: ["ContractResult_CalculatedReward:formula"],
-      };
-    }
+  if (projected.status === "calculated") {
     return {
-      credits: "Calculated payout",
+      credits: projected.displayText,
       creditStatus: "calculated",
       creditsDetail: {
         status: "calculated",
-        displayText: "Calculated payout",
-        confidence: "calculated_unresolved",
+        displayText: projected.displayText,
+        amount: projected.amount,
+        currency: projected.currency,
+        confidence: "source_calculated",
         sourceResultType: "ContractResult_CalculatedReward",
-        unresolvedReason: "Calculated reward formula not resolved",
-        attributes: calculatedReward.attributes,
-        sourceRefs: calculatedReward.sourceRefs ?? [],
+        sourceRefs: projected.sourceRefs,
+        payout: projected.payout,
       },
       unresolvedTokens: [],
     };
   }
 
-  const unresolvedReward = creditRewards[0];
+  if (projected.status === "variable" || projected.status === "formula_unresolved") {
+    return {
+      credits: projected.displayText,
+      creditStatus: projected.status,
+      creditsDetail: {
+        status: projected.status,
+        displayText: projected.displayText,
+        confidence: "calculated_unresolved",
+        sourceResultType: "ContractResult_CalculatedReward",
+        unresolvedReason: projected.unresolvedReason,
+        sourceRefs: projected.sourceRefs,
+        payout: projected.payout,
+      },
+      unresolvedTokens: [
+        projected.status === "variable"
+          ? "ContractResult_CalculatedReward:result_loop_verification_required"
+          : "ContractResult_CalculatedReward:formula",
+      ],
+    };
+  }
+
   return {
-    credits: "Credits unresolved",
+    credits: projected.displayText,
     creditStatus: "unresolved",
     creditsDetail: {
       status: "unresolved",
-      displayText: "Credits unresolved",
+      displayText: projected.displayText,
       confidence: "unresolved",
-      sourceResultType: unresolvedReward?.type,
-      unresolvedReason: "Credit reward result type was not resolved.",
-      attributes: unresolvedReward?.attributes,
-      sourceRefs: unresolvedReward?.sourceRefs ?? [],
+      sourceResultType: projected.sourceResultType,
+      unresolvedReason: projected.unresolvedReason,
+      sourceRefs: projected.sourceRefs,
     },
-    unresolvedTokens: unique(creditRewards.map((reward) => reward.type)),
+    unresolvedTokens: [projected.sourceResultType ?? "unknown_credit_reward"],
   };
 }
 
@@ -2047,7 +2105,12 @@ function shapeRewards(mission: RawMission, pools: Map<string, BlueprintPoolLooku
   };
 }
 
-function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, refMap: Map<string, RefIndexEntry>): ShapedVariant {
+function shapeVariant(
+  catalog: RawCatalog,
+  mission: RawMission,
+  pools: Map<string, BlueprintPoolLookup>,
+  refMap: Map<string, RefIndexEntry>,
+): ShapedVariant {
   const prerequisites = dedupePrerequisites([
     ...(mission.minStanding || mission.maxStanding
       ? [{
@@ -2175,6 +2238,8 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
       hasUnresolvedRewards: rewards.creditStatus === "formula_unresolved" || rewards.creditStatus === "unresolved" || rewards.unresolvedRewardTokens.length > 0,
       hasUnresolvedPrerequisites: prerequisites.some((item) => item.confidence === "unresolved"),
     },
+    canonical: normalizeCanonicalMissionVariantV2(catalog, mission),
+    requiredItems: normalizeRequiredItemsV2(mission),
     technical: {
       contractId: mission.contractId,
       generatorGuid: mission.generatorGuid,
@@ -2888,7 +2953,7 @@ function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[], c
 }
 
 async function writeJson(fileName: string, value: unknown): Promise<void> {
-  await writeFile(path.join(missionRoot, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  await writeFile(path.join(stagingRoot, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
 async function writeJsonAt(root: string, fileName: string, value: unknown): Promise<void> {
@@ -2897,7 +2962,7 @@ async function writeJsonAt(root: string, fileName: string, value: unknown): Prom
 
 async function removeLegacyMissionOutputs(): Promise<void> {
   await Promise.all(
-    legacyMissionOutputFiles.map((fileName) => rm(path.join(missionRoot, fileName), { force: true }))
+    legacyMissionOutputFiles.map((fileName) => rm(path.join(stagingRoot, fileName), { force: true }))
   );
 }
 
@@ -2921,7 +2986,7 @@ async function collectMissionOutputJsonFiles(root: string): Promise<string[]> {
 }
 
 async function assertMissionOutputSizes(): Promise<void> {
-  const files = await collectMissionOutputJsonFiles(missionRoot);
+  const files = await collectMissionOutputJsonFiles(stagingRoot);
   const oversized: Array<{ filePath: string; size: number }> = [];
 
   for (const filePath of files) {
@@ -2939,19 +3004,79 @@ async function assertMissionOutputSizes(): Promise<void> {
   throw new Error(`Mission shaped output exceeds ${maxMissionOutputBytes / (1024 * 1024)} MB:\n${details}`);
 }
 
-function payloadFileName(key: string): string {
-  return `${createHash("sha256").update(key).digest("hex").slice(0, 16)}.json`;
-}
-
-const [catalog, lookups, refIndex] = await Promise.all([
-  readFile(contractsPath, "utf8").then((content) => JSON.parse(content) as RawCatalog),
+const [catalogInput, lookups, refIndexInput] = await Promise.all([
+  readFile(contractsPath, "utf8")
+    .then((content) => ({
+      catalog: parseMissionSourceCatalogV3(JSON.parse(content)) as RawCatalog,
+      sha256: createHash("sha256").update(content).digest("hex"),
+    })),
   readFile(lookupsPath, "utf8").then((content) => JSON.parse(content) as Lookups),
-  readFile(refIndexPath, "utf8").then((content) => JSON.parse(content) as RefIndexEntry[]).catch(() => []),
+  refIndexPath
+    ? readFile(refIndexPath, "utf8").then((content) => ({
+      records: JSON.parse(content) as RefIndexEntry[],
+      status: "explicit" as const,
+      path: refIndexPath,
+      sha256: createHash("sha256").update(content).digest("hex"),
+    }))
+    : Promise.resolve({
+      records: [] as RefIndexEntry[],
+      status: "not_configured" as const,
+    }),
 ]);
+const catalog = catalogInput.catalog;
 
 const poolMap = new Map((lookups.blueprintPools ?? []).map((pool) => [String(pool.poolGuid ?? "").toLowerCase(), pool]));
-const refMap = new Map(refIndex.map((entry) => [String(entry.guid ?? "").toLowerCase(), entry]));
-const variants = catalog.records.map((mission) => shapeVariant(mission, poolMap, refMap));
+const refMap = new Map(refIndexInput.records.map((entry) => [String(entry.guid ?? "").toLowerCase(), entry]));
+const generationId = createHash("sha256").update(JSON.stringify({
+  shaperVersion: missionShaperVersion,
+  shapedSchemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceSchemaVersion: catalog.schemaVersion,
+  channel: catalog.source.channel,
+  buildId: catalog.source.buildId,
+  sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
+  sourceCatalogSha256: catalogInput.sha256,
+  calculationInputsDigestSha256: catalog.source.calculationInputsDigestSha256,
+  refIndexStatus: refIndexInput.status,
+  refIndexSha256: "sha256" in refIndexInput ? refIndexInput.sha256 : null,
+})).digest("hex").slice(0, 24);
+const generatedAt = catalog.generatedAt;
+const solverReference = {
+  schemaVersion: 1,
+  missionSchemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  generationId,
+  generatedAt,
+  standingThresholdsById: Object.fromEntries(
+    (lookups.standings ?? [])
+      .filter((standing) =>
+        typeof standing.guid === "string"
+        && Boolean(standing.guid)
+        && typeof standing.minReputation === "number"
+        && Number.isFinite(standing.minReputation)
+      )
+      .map((standing) => [String(standing.guid).toLowerCase(), standing.minReputation as number])
+  ),
+  standings: (lookups.standings ?? []).flatMap((standing) =>
+    typeof standing.guid === "string"
+    && Boolean(standing.guid)
+    && typeof standing.minReputation === "number"
+    && Number.isFinite(standing.minReputation)
+      ? [{
+        standingId: standing.guid.toLowerCase(),
+        minimumReputation: standing.minReputation,
+        recordName: standing.recordName ?? null,
+        displayName: standing.displayName ?? null,
+        sourcePath: standing.path ?? null,
+      }]
+      : []
+  ),
+};
+const stagingRoot = path.join(missionRoot, `.staging-${process.pid}-${generationId}`);
+const familyRoot = path.join(stagingRoot, "families");
+const familyVariantsRoot = path.join(stagingRoot, "family-variants");
+const variantRoot = path.join(stagingRoot, "variants");
+const variants = catalog.records.map((mission) => shapeVariant(catalog, mission, poolMap, refMap));
+const graphValidation = buildMissionGraphValidationV2(catalog.records);
 const rawByFamily = new Map<string, RawMission[]>();
 const variantsByFamily = new Map<string, ShapedVariant[]>();
 
@@ -2967,14 +3092,13 @@ for (const variant of variants) {
 const families = Array.from(variantsByFamily.entries())
   .map(([familyKey, familyVariants]) => shapeFamily(familyKey, familyVariants, rawByFamily.get(familyKey) ?? []))
   .sort((a, b) => a.displayName.localeCompare(b.displayName));
-const familyVariantFiles = Object.fromEntries(
-  families.map((family) => [family.familyKey, `family-variants/${payloadFileName(family.familyKey)}`])
-);
-const familyDetailFiles = Object.fromEntries(
-  families.map((family) => [family.familyKey, `families/${payloadFileName(family.familyKey)}`])
-);
-const variantDetailFiles = Object.fromEntries(
-  variants.map((variant) => [variant.variantKey, `variants/${payloadFileName(variant.variantKey)}`])
+const {
+  familyVariantFiles,
+  familyDetailFiles,
+  variantDetailFiles,
+} = buildMissionShardPathsV2(
+  families.map((family) => family.familyKey),
+  variants.map((variant) => variant.variantKey),
 );
 const concepts = shapeConcepts(variants).map((concept) => ({
   ...concept,
@@ -2984,14 +3108,23 @@ const missionBrowseGroups = buildBrowseGroups(families, concepts);
 const browseViews = buildBrowseViews(concepts, missionBrowseGroups);
 
 const shaped: ShapedCatalog = {
-  schemaVersion: 1,
-  generatedAt: new Date().toISOString(),
+  schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  generationId,
+  generatedAt,
   sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
   sourceFiles: [
     "server-data/missions/source/mission_contracts.json",
     "server-data/missions/source/mission_reward_lookups.json",
-    "tmp/scintel-api-candidate/ref_index.json",
+    ...(refIndexPath ? [refIndexPath] : []),
   ],
+  sourceInputs: {
+    refIndex: {
+      status: refIndexInput.status,
+      path: "path" in refIndexInput ? refIndexInput.path : undefined,
+      sha256: "sha256" in refIndexInput ? refIndexInput.sha256 : undefined,
+    },
+  },
   summary: {
     familyCount: families.length,
     variantCount: variants.length,
@@ -3023,7 +3156,9 @@ const familiesByKey = Object.fromEntries(families.map((family) => [family.family
 const conceptsByKey = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept]));
 const conceptFamilyVariantFiles = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept.familyVariantFiles]));
 const shardManifest: MissionShardManifest = {
-  schemaVersion: 1,
+  schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  generationId,
   generatedAt: shaped.generatedAt,
   sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
   familyFilesByFamilyId: Object.fromEntries(
@@ -3060,10 +3195,13 @@ const shardManifest: MissionShardManifest = {
   ),
 };
 const browserIndex: MissionBrowserIndex = {
-  schemaVersion: 1,
+  schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  generationId,
   generatedAt: shaped.generatedAt,
   sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
   sourceFiles: shaped.sourceFiles,
+  sourceInputs: shaped.sourceInputs,
   summary: shaped.summary,
   unresolvedSummary: {
     unresolvedLocationCount: shaped.summary.unresolvedLocationCount,
@@ -3078,6 +3216,7 @@ const browserIndex: MissionBrowserIndex = {
     conceptReport: "mission_concept_shaping_report.json",
     conceptCatalog: "mission_concepts.json",
     categoryReport: "mission_category_projection_report.json",
+    graphReport: "mission_graph_validation_report.json",
   },
   filtersMeta: buildFiltersMeta(families, variants, concepts),
   familiesByKey,
@@ -3089,6 +3228,13 @@ const browserIndex: MissionBrowserIndex = {
   missionBrowseGroups,
   browseViews,
 };
+const graphArtifacts = buildMissionGraphArtifactsV2({
+  schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  generationId,
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+}, graphValidation);
 
 const rewards = variants.map((variant) => ({
   variantKey: variant.variantKey,
@@ -3621,6 +3767,7 @@ const categoryReport = {
 
 await Promise.all([
   mkdir(missionRoot, { recursive: true }),
+  mkdir(stagingRoot, { recursive: true }),
   mkdir(familyRoot, { recursive: true }),
   mkdir(familyVariantsRoot, { recursive: true }),
   mkdir(variantRoot, { recursive: true }),
@@ -3629,20 +3776,25 @@ await removeLegacyMissionOutputs();
 await Promise.all([
   writeJson("mission_browser_index.json", browserIndex),
   writeJson("mission_shard_manifest.json", shardManifest),
-  writeJson("mission_families.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
-  writeJson("mission_browse_groups.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
-  writeJson("mission_rewards.json", { generatedAt: shaped.generatedAt, records: rewards }),
-  writeJson("mission_prerequisites.json", { generatedAt: shaped.generatedAt, records: prerequisites }),
-  writeJson("mission_reputation.json", { generatedAt: shaped.generatedAt, records: reputation }),
-  writeJson("mission_unresolved_refs.json", { generatedAt: shaped.generatedAt, records: unresolvedRefs }),
-  writeJson("mission_browser_extraction_report.json", report),
-  writeJson("mission_concepts.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: concepts }),
-  writeJson("mission_concept_shaping_report.json", conceptReport),
-  writeJson("mission_category_projection_report.json", categoryReport),
+  writeJson("mission_families.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
+  writeJson("mission_browse_groups.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
+  writeJson("mission_rewards.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, records: rewards }),
+  writeJson("mission_prerequisites.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, records: prerequisites }),
+  writeJson("mission_reputation.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, records: reputation }),
+  writeJson("mission_unresolved_refs.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, records: unresolvedRefs }),
+  writeJson("mission_browser_extraction_report.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, ...report }),
+  writeJson("mission_concepts.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: concepts }),
+  writeJson("mission_concept_shaping_report.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, ...conceptReport }),
+  writeJson("mission_category_projection_report.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, ...categoryReport }),
+  writeJson("mission_graph.json", graphArtifacts.graph),
+  writeJson("mission_graph_validation_report.json", graphArtifacts.report),
+  writeJson("mission_solver_reference.json", solverReference),
   ...families.map((family) => {
     const familyVariants = variantsByFamily.get(family.familyKey) ?? [];
     const detail: MissionFamilyDetailPayload = {
-      schemaVersion: 1,
+      schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+      sourceContractVersion: catalog.schemaVersion,
+      generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
       family,
@@ -3690,29 +3842,43 @@ await Promise.all([
       })),
       variantsFile: familyVariantFiles[family.familyKey]!,
     };
-    return writeJsonAt(familyRoot, payloadFileName(family.familyKey), detail);
+    return writeJsonAt(familyRoot, missionPayloadFileName(family.familyKey), detail);
   }),
   ...families.map((family) => {
     const payload: MissionFamilyVariantsPayload = {
-      schemaVersion: 1,
+      schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+      sourceContractVersion: catalog.schemaVersion,
+      generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
       familyKey: family.familyKey,
-      variants: variantsByFamily.get(family.familyKey) ?? [],
+      variants: (variantsByFamily.get(family.familyKey) ?? []).map(projectCompactMissionVariantV2),
     };
-    return writeJsonAt(familyVariantsRoot, payloadFileName(family.familyKey), payload);
+    return writeJsonAt(familyVariantsRoot, missionPayloadFileName(family.familyKey), payload);
   }),
   ...variants.map((variant) => {
     const payload: MissionVariantDetailPayload = {
-      schemaVersion: 1,
+      schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+      sourceContractVersion: catalog.schemaVersion,
+      generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
       familyKey: variant.familyKey,
       variant,
     };
-    return writeJsonAt(variantRoot, payloadFileName(variant.variantKey), payload);
+    return writeJsonAt(variantRoot, missionPayloadFileName(variant.variantKey), payload);
   }),
 ]);
 await assertMissionOutputSizes();
+await publishImmutableMissionGeneration({
+  missionRoot,
+  stagingRoot,
+  generationId,
+  shaperVersion: missionShaperVersion,
+  legacyRootFiles: legacyShapedRootFiles,
+  legacyShardDirectories,
+});
 
-console.log(`Shaped ${families.length} mission families and ${variants.length} variants into server-data/missions.`);
+console.log(
+  `Shaped ${families.length} mission families and ${variants.length} variants into generation ${generationId} at ${missionRoot}.`,
+);

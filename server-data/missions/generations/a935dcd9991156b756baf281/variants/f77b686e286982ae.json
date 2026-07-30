@@ -1,0 +1,2665 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "a935dcd9991156b756baf281",
+  "generatedAt": "2026-07-30T10:30:26.188966+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+  "variant": {
+    "variantKey": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+    "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+    "conceptKey": "e467a87b43d90389ae0e",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "courier-delivery",
+      "titleStem": "headhunters-delivery-outpost-multi-to-single",
+      "descriptionStem": "headhunters-delivery-outpost-multi-to-single",
+      "handlerStem": "hh-courier",
+      "archetype": "Courier",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:courier-delivery",
+        "activity-source:structural",
+        "title:headhunters-delivery-outpost-multi-to-single",
+        "description:headhunters-delivery-outpost-multi-to-single",
+        "handler:hh-courier",
+        "contract:careercontract",
+        "archetype:courier",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Courier"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+        "HH_Pyro_GoldenRiviera_Local_5boxes_MultiToSingle_Courier"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "displayName": "Consolidate Supplies at",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Seems like they can’t tell their ass from their elbow over at [Location] and the place is a mess. I need help collecting supplies spread across the outpost and putting them where they’re supposed to go. Here are the specifics:\n\nPick up package #[Item1] at [Location].\nPick up package #[Item4] at [Location].\nPick up package #[Item5] at [Location1].\nPick up package #[Item2] at [Location1].\nPick up package #[Item3] at [Location2].\n  \nAll of the above need to end up at [Destination]. Easy and low-risk work, if you’re interested.\n\nA handheld tractor beam would also be smart to bring along. \n \nStows out.",
+    "rawName": "@Headhunters_Delivery_Outpost_MultiToSingle_title_001",
+    "internalName": "HH_Pyro_GoldenRiviera_Local_5boxes_MultiToSingle_Courier",
+    "missionType": "CareerContract",
+    "provider": "Headhunters",
+    "faction": "Headhunters",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
+      "trackType": "Hauling",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+        "HH_Pyro_GoldenRiviera_Local_5boxes_MultiToSingle_Courier"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "missionArchetype": "Courier",
+    "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 3 Outpost col m trdpst otlw 006",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Pyro 3 Outpost col m trdpst otlw 006",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Pyro 3 Outpost col m trdpst otlw 006",
+      "system": "Pyro",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "0d636f4c-c113-4622-9848-b824f5270eb7"
+      ],
+      "possibleLocations": [
+        "Pyro 3 Outpost col m trdpst otlw 006"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "0d636f4c-c113-4622-9848-b824f5270eb7",
+          "resolvedName": "Pyro 3 Outpost col m trdpst otlw 006",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_m_trdpst_otlw_006.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "0d636f4c-c113-4622-9848-b824f5270eb7",
+          "displayName": "Pyro 3 Outpost col m trdpst otlw 006",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_m_trdpst_otlw_006.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro 3 Outpost col m trdpst otlw 006"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro 3 Outpost col m trdpst otlw 006",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Pyro 3 Outpost col m trdpst otlw 006",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro 3 Outpost col m trdpst otlw 006",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "0d636f4c-c113-4622-9848-b824f5270eb7"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "0d636f4c-c113-4622-9848-b824f5270eb7",
+            "displayName": "Pyro 3 Outpost col m trdpst otlw 006",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_m_trdpst_otlw_006.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 3 Outpost col m trdpst otlw 006"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 3 Outpost col m trdpst otlw 006",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination",
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination",
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location",
+          "Location|Address",
+          "Location1|Address",
+          "Location2|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location",
+          "Location|Address",
+          "Location1|Address",
+          "Location2|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "0d636f4c-c113-4622-9848-b824f5270eb7",
+        "resolvedName": "Pyro 3 Outpost col m trdpst otlw 006",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "token_only"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location1|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location2|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro 3 Outpost col m trdpst otlw 006"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination",
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Hauling +800",
+        "117,250 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hauling +800"
+      ],
+      "credits": "117,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "117,250 aUEC",
+        "amount": 117250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "scopeDisplayName": "Hauling",
+        "amount": 800,
+        "confidence": "partial",
+        "sourceRefs": [
+          "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+        ],
+        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+        "familyId": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+        "templateGuid": "693113dc-4162-415d-95c3-0e5129d94534"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_e5448914aec51c6cdba0cf2c",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "0d636f4c-c113-4622-9848-b824f5270eb7"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "0d636f4c-c113-4622-9848-b824f5270eb7"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_ccae6c6cb81bca7e75d680b5",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+            "reputationAmount": 800,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_456661726e4843e227a766c3",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "amount": 117250,
+              "rawAmount": 117240.16702200798,
+              "integerRoundedAmount": 117240,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.8089999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 1.404
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "693113dc-4162-415d-95c3-0e5129d94534",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/courier_multitosingle.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/courier_multitosingle.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_ccae6c6cb81bca7e75d680b5",
+            "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+              "reputationAmount": 800,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "amount": 117250,
+              "rawAmount": 117240.16702200798,
+              "integerRoundedAmount": 117240,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.8089999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 1.404
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+            "reputationAmount": 800,
+            "reward": {
+              "guid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_800",
+              "editorName": "Undefined Name",
+              "reputationAmount": 800,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_800.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_514347e99c3f0fd057becd68",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 4,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[5]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_574d9d86e828edfede7c06c7",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 5,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f8f8c22dda806fbed1642d51",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f1dbf2ecdf3c4cb88e32dcd9",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_c605b938d2d231045fedc2fa",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 8,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 4,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[5]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 5,
+            "missionVariableName": "Item2",
+            "extendedTextToken": "Item2",
+            "rawAttributes": {
+              "missionVariableName": "Item2",
+              "extendedTextToken": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item3",
+            "extendedTextToken": "Item3",
+            "rawAttributes": {
+              "missionVariableName": "Item3",
+              "extendedTextToken": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item4",
+            "extendedTextToken": "Item4",
+            "rawAttributes": {
+              "missionVariableName": "Item4",
+              "extendedTextToken": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 8,
+            "missionVariableName": "Item5",
+            "extendedTextToken": "Item5",
+            "rawAttributes": {
+              "missionVariableName": "Item5",
+              "extendedTextToken": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_514347e99c3f0fd057becd68",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 4,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[5]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_574d9d86e828edfede7c06c7",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 5,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f8f8c22dda806fbed1642d51",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f1dbf2ecdf3c4cb88e32dcd9",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_c605b938d2d231045fedc2fa",
+          "variantId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+          "sourceOrdinal": 8,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[36C0]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 4,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[5]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 5,
+            "missionVariableName": "Item2",
+            "extendedTextToken": "Item2",
+            "rawAttributes": {
+              "missionVariableName": "Item2",
+              "extendedTextToken": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item3",
+            "extendedTextToken": "Item3",
+            "rawAttributes": {
+              "missionVariableName": "Item3",
+              "extendedTextToken": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item4",
+            "extendedTextToken": "Item4",
+            "rawAttributes": {
+              "missionVariableName": "Item4",
+              "extendedTextToken": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+            "sourceOrdinal": 8,
+            "missionVariableName": "Item5",
+            "extendedTextToken": "Item5",
+            "rawAttributes": {
+              "missionVariableName": "Item5",
+              "extendedTextToken": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[36C0]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Courier']/contracts/CareerContract[@id='2796f25d-2454-4be4-9c7d-a9086ea2d4c1']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 5
+    },
+    "technical": {
+      "contractId": "2796f25d-2454-4be4-9c7d-a9086ea2d4c1",
+      "generatorGuid": "c99e07ca-d1ba-4a90-a199-c66d69f22352",
+      "generatorName": "ContractGenerator.HH_Courier",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Headhunters_Delivery_Outpost_MultiToSingle_title_001",
+      "descriptionRaw": "@Headhunters_Delivery_Outpost_MultiToSingle_desc_001"
+    }
+  }
+}
