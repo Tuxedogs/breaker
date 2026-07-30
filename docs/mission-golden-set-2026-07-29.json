@@ -1,0 +1,562 @@
+{
+  "schemaVersion": 1,
+  "snapshot": {
+    "channel": "LIVE",
+    "build": "4.9.0-live.12232306",
+    "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+    "variantCount": 2501
+  },
+  "sourceContractV3": {
+    "schemaVersion": 3,
+    "objectiveTemplateSchemaVersion": 2,
+    "familyCount": 259,
+    "parentPrerequisiteRows": {
+      "location": 664,
+      "locality": 1970,
+      "locationProperty": 157,
+      "crimeStat": 1012,
+      "reputation": 327,
+      "completedContractTags": 1106
+    },
+    "objectiveTemplates": {
+      "referenced": 335,
+      "resolved": 333,
+      "objectiveTokens": 462,
+      "withMissionFlow": 253
+    },
+    "legalityComparisons": {
+      "agree": 878,
+      "templateOnly": 1119,
+      "conflict": 502,
+      "overrideOnly": 0,
+      "missing": 2
+    },
+    "creditResults": {
+      "fixedRows": 8,
+      "calculatedRows": 2325,
+      "variantsWithCalculatedRows": 2321,
+      "resolvedVariants": 2320,
+      "unresolvedVariants": 1,
+      "releasedVariants": 1623,
+      "releasedRows": 1627,
+      "releasedResolvedVariants": 1623,
+      "releasedUnresolvedVariants": 0,
+      "resolvedZeroVariants": 9,
+      "multiResultVariants": 4,
+      "activeNonzeroBuyIns": 6,
+      "calculatedReputationVariants": 4,
+      "releasedCalculatedReputationVariants": 3,
+      "releasedPayout": {
+        "min": 8000,
+        "median": 93500,
+        "max": 4708750,
+        "currency": "aUEC"
+      }
+    },
+    "requiredItemEvidence": {
+      "variants": 718,
+      "propertyRows": 1555,
+      "haulingOrders": 580,
+      "haulingOrderVariants": 492,
+      "missionItemSelectors": 975,
+      "missionItemSelectorVariants": 384,
+      "entityClassOrders": 234,
+      "entityClassSetOrders": 73,
+      "resourceOrders": 641,
+      "missionItemReferences": 290,
+      "anyOfNodes": 11,
+      "allOfOptions": 33,
+      "unresolvedMissionItemHandles": 289,
+      "missingMissionItemReferences": 1
+    },
+    "completionTagGraph": {
+      "producerContracts": 456,
+      "producedTags": 122,
+      "parentRequiredTags": 80,
+      "parentRequiredDanglingTags": 6,
+      "parentExcludedTags": 35,
+      "parentExcludedDanglingTags": 0
+    }
+  },
+  "purpose": "Deterministic Stage 0 evidence set for extraction, grouping, graph, route, and solver tests. Assertions describe source truth or an explicitly unresolved state; they are not UI fixtures.",
+  "variants": [
+    {
+      "id": "00913455-4019-4b7e-a5eb-347ad3d49740",
+      "label": "Deal with and Support Forces",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+      "template": "24278b6e-2ed2-4b23-8933-a0012856e76c",
+      "covers": [
+        "fixed credit reward: 134500 UEC",
+        "blueprint pool reward",
+        "generated locality availability",
+        "CrimeStat maximum",
+        "lawful signals agree"
+      ]
+    },
+    {
+      "id": "1464ed09-2099-4102-8672-25f764e278d2",
+      "label": "Inmate Maintenance Opportunity",
+      "sourceRecord": "contracts/contractgenerator/klescher_generator.xml",
+      "template": "a0a59f63-2c43-422e-a598-ec8be8ace918",
+      "covers": [
+        "fixed credit reward: 3000 MER with maximum 5000",
+        "exact location availability",
+        "faction, scope, minimum standing, and maximum standing prerequisite"
+      ]
+    },
+    {
+      "id": "9405ec3a-6996-453e-91b1-7558d5263e4e",
+      "label": "Ambush Op",
+      "sourceRecord": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+      "template": "f729324e-895b-410e-9257-1e4146d35823",
+      "covers": [
+        "source-backed calculated base/solo payout: 49500 aUEC",
+        "fixed item reward: 5 Council Scrip",
+        "generated locality availability",
+        "required completion tag",
+        "conflicting legality signals"
+      ]
+    },
+    {
+      "id": "bccc63cb-aea3-4831-8805-401a3d75c926",
+      "label": "Ambush Op, Stanton",
+      "sourceRecord": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+      "template": "f729324e-895b-410e-9257-1e4146d35823",
+      "covers": [
+        "parent locality and reputation eligibility",
+        "three subcontract locality and reputation branch conditions",
+        "subcontract conditions must not be flattened into parent eligibility"
+      ]
+    },
+    {
+      "id": "372b0eff-0e55-4654-a3ca-542058cb84cf",
+      "label": "Armor with Vanduul",
+      "sourceRecord": "contracts/contractgenerator/thecollector.xml",
+      "template": "40890a8a-f62e-bf2f-41f9-582262c9a4b9",
+      "covers": [
+        "weighted item reward",
+        "no credit result",
+        "CrimeStat maximum",
+        "required completion tag"
+      ]
+    },
+    {
+      "id": "084f9392-7872-44f1-a13e-9b5ba79673ff",
+      "label": "Minor Repairs Needed",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_investigation.xml",
+      "template": "5b7c752e-7d87-423f-9f07-8c2023d174a1",
+      "covers": [
+        "exact pickup or offer location",
+        "destination not proven by the current output"
+      ]
+    },
+    {
+      "id": "2b99839e-f2a3-4cb3-935e-532c0198b294",
+      "label": "Hauler Needed for Direct Shipment",
+      "sourceRecord": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+      "template": "0ac9ce6e-bc7c-48a0-92f7-879e9c31d814",
+      "covers": [
+        "system-scope availability",
+        "distinct pickup and drop-off property roles",
+        "generated pickup and drop-off selectors",
+        "destination token unresolved by the current output"
+      ]
+    },
+    {
+      "id": "1035d0f0-82e7-4cee-8d10-789925b3d138",
+      "label": "Interested in Building a Better Future?",
+      "sourceRecord": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+      "template": "43756d77-6898-945d-52a2-0a1406f7e490",
+      "covers": [
+        "completion-tag producer",
+        "same-tag exclusion prevents repeat intro availability",
+        "CrimeStat maximum"
+      ]
+    },
+    {
+      "id": "1136e707-15cb-49b9-9943-c3a2de91d3f2",
+      "label": "Additional Resources For Research",
+      "sourceRecord": "contracts/contractgenerator/academyofsciences_guild/rayari inc/rayari_recoveritem.xml",
+      "template": "43756d77-6898-945d-52a2-0a1406f7e490",
+      "covers": [
+        "required completion-tag consumer",
+        "same family and template as the intro with different prerequisites"
+      ]
+    },
+    {
+      "id": "12e92b29-e5a8-4ba7-95a4-122d6c992684",
+      "label": "A little retaliation",
+      "sourceRecord": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+      "template": "a94144c4-23a7-41fa-bbe2-8b9e6c9b04b6",
+      "covers": [
+        "three parallel starts-active objectives",
+        "must not collapse with the four-objective variant"
+      ]
+    },
+    {
+      "id": "982d51e3-4ffc-4f4a-b32f-0ab8749515d8",
+      "label": "Hit a CFP Complex",
+      "sourceRecord": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+      "template": "f6a7c3b9-9592-4791-80b0-59c2eddd251e",
+      "covers": [
+        "three starts-active objectives plus a fourth gated objective",
+        "must not collapse with the three-objective variant"
+      ]
+    },
+    {
+      "id": "407c3214-9c4c-4d9c-9463-401ce64fa94a",
+      "label": "Reclusive Bounty, Nyx, Very-High Risk",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_shipwaveattack.xml",
+      "template": "eadcbab3-2039-429c-b1d9-3cee2655d478",
+      "covers": [
+        "cross-system equivalence candidate"
+      ]
+    },
+    {
+      "id": "3f54cb59-5360-499f-951a-6b9a52993157",
+      "label": "Reclusive Bounty, Pyro, Very-High Risk",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_shipwaveattack.xml",
+      "template": "eadcbab3-2039-429c-b1d9-3cee2655d478",
+      "covers": [
+        "cross-system equivalence candidate"
+      ]
+    },
+    {
+      "id": "9ad7b732-cdde-4fc2-8cd0-ee097c027669",
+      "label": "Reclusive Bounty, Stanton, Very-High Risk",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_shipwaveattack.xml",
+      "template": "eadcbab3-2039-429c-b1d9-3cee2655d478",
+      "covers": [
+        "cross-system equivalence candidate"
+      ]
+    },
+    {
+      "id": "2781f353-feb8-46e9-a067-15453cbc6f04",
+      "label": "Blow Up Citizens for Prosperity Fuel Reserves",
+      "sourceRecord": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_destroyitems.xml",
+      "template": "f59ba5ce-6374-464e-8b7d-bd3781c7c837",
+      "covers": [
+        "unlawful signals agree",
+        "current projection fails to surface the source-backed legality"
+      ]
+    },
+    {
+      "id": "452db3ef-9b8c-4f34-9ae8-df9e1bd681c1",
+      "label": "MW CH3",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+      "template": "0a90dd8e-3bee-4f8b-bc63-1fb5427c3d65",
+      "covers": [
+        "unresolved template reference",
+        "no extracted legality signal",
+        "must remain unknown despite name-based projection"
+      ]
+    },
+    {
+      "id": "67cf0b4c-c894-4bb1-8409-4a14334abcd4",
+      "label": "Battaglia Story 3",
+      "sourceRecord": "contracts/contractgenerator/missionproviders/battaglia_generator.xml",
+      "template": "33b89d7f-ea47-4672-83bf-11bdb862ab18",
+      "covers": [
+        "not for release",
+        "six objective tokens",
+        "branching and sequential mission-flow evidence"
+      ]
+    },
+    {
+      "id": "110e6697-33fc-421c-80d4-3428b23658b5",
+      "label": "CFP Pyro Eliminate All Frontier Fighters",
+      "sourceRecord": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_mercenary_fps.xml",
+      "template": "f4ef82e1-cec3-43fc-a969-335b6e45e003",
+      "covers": [
+        "work in progress without not-for-release",
+        "release flags must remain independent"
+      ]
+    }
+  ],
+  "completionTagAssertions": [
+    {
+      "tag": "ab960018-6478-4e5d-9c74-175662c57129",
+      "producer": "1035d0f0-82e7-4cee-8d10-789925b3d138",
+      "excludedBy": [
+        "1035d0f0-82e7-4cee-8d10-789925b3d138"
+      ],
+      "requiredByIncludes": [
+        "1136e707-15cb-49b9-9943-c3a2de91d3f2"
+      ]
+    }
+  ],
+  "subcontractScopeAssertions": [
+    {
+      "variantId": "bccc63cb-aea3-4831-8805-401a3d75c926",
+      "parentLocality": "939dad8b-a944-4baa-a6b7-163ec203adad",
+      "subcontracts": [
+        {
+          "id": "206a8f41-3276-4668-b5dc-37f403cbb766",
+          "locality": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+        },
+        {
+          "id": "2f2e23f0-2fd5-47e7-8867-0bd7ff7edeca",
+          "locality": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+        },
+        {
+          "id": "f90c0bce-8dba-44fb-927c-bf362935a4f3",
+          "locality": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+        }
+      ]
+    }
+  ],
+  "objectiveTemplateAssertions": [
+    {
+      "template": "a94144c4-23a7-41fa-bbe2-8b9e6c9b04b6",
+      "path": "contracts/contracttemplates/chaineliminateall_3locations.xml",
+      "objectiveCount": 3,
+      "startsActiveCount": 3,
+      "objectiveIds": [
+        "b65fe220-c1e8-467c-9473-5e05382874ab",
+        "e6795f74-0290-44b9-901b-cf5d79e56b56",
+        "8a4cace8-3777-4e1b-ba5e-038ada243bd6"
+      ],
+      "debugNames": [
+        "EliminateAll-Location1",
+        "EliminateAll-Location2",
+        "EliminateAll-Location3"
+      ]
+    },
+    {
+      "template": "f6a7c3b9-9592-4791-80b0-59c2eddd251e",
+      "path": "contracts/contracttemplates/chaineliminateall_3locations_eliminatespecific.xml",
+      "objectiveCount": 4,
+      "startsActiveCount": 3,
+      "objectiveIds": [
+        "380c0aac-c141-4bc9-85dc-50c7a8f2debd",
+        "918e4655-659c-4c8a-a676-4b86fdf88296",
+        "c7bfcbbc-523c-4161-863d-383e85510f2b",
+        "54e7ace9-3e83-494b-977b-333e4323da7e"
+      ],
+      "debugNames": [
+        "EliminateAll-Location1",
+        "EliminateAll-Location2",
+        "EliminateAll-Location3",
+        "EliminateSpecific"
+      ]
+    },
+    {
+      "template": "33b89d7f-ea47-4672-83bf-11bdb862ab18",
+      "path": "contracts/contracttemplates/battaglia_story3.xml",
+      "objectiveCount": 6,
+      "startsActiveCount": 1,
+      "objectiveIds": [
+        "6f40e0c2-6c54-4ca9-b568-d5f682eec121",
+        "bbef3deb-08a0-4e7f-a86b-55e7a3768d85",
+        "d855d88d-726b-459c-9ab6-ddec0b5b5b1e",
+        "1dd8d8df-cc35-4295-9e11-e4c951d43b12",
+        "d55e5a9f-26d6-455e-8096-d8e6f7140dac",
+        "948515d2-aa92-44c5-bf50-65c4d92609a6"
+      ],
+      "debugNames": [
+        "Meet And Talk Briefing",
+        "Create Uplink",
+        "Create Uplink Beacon",
+        "Conversation",
+        "Ambuscade",
+        "Meet And Talk Debrief"
+      ],
+      "flowReferenceStatus": "raw_internal_handles_require_resolution"
+    },
+    {
+      "template": "0ac9ce6e-bc7c-48a0-92f7-879e9c31d814",
+      "path": "contracts/contracttemplates/haulcargo_atob_bulk_potasium.xml",
+      "objectiveCount": 1,
+      "startsActiveCount": 1,
+      "objectiveIds": [
+        "6cf8ec87-3684-4d38-a2d9-7adcfdcabee1"
+      ],
+      "debugNames": [
+        "Hauling"
+      ],
+      "roleBindings": {
+        "pickup": "PickupLocation_BP",
+        "destination": "DropoffLocation_BP"
+      },
+      "roleHandles": {
+        "pickupDeclaration": "MissionProperty[7742]",
+        "destinationDeclaration": "MissionProperty[7743]",
+        "pickupHandler": "ObjectiveProperty_Referenced[11CC]",
+        "destinationHandler": "ObjectiveProperty_Referenced[11CD]"
+      },
+      "roleHandleResolution": "unresolved_internal_handles",
+      "locationResolution": "generated_selectors_are_explicit_but_runtime_locations_are_not"
+    }
+  ],
+  "legalityAssertions": [
+    {
+      "variantId": "00913455-4019-4b7e-a5eb-347ad3d49740",
+      "handlerOverride": false,
+      "contractOverride": null,
+      "templateValue": false,
+      "comparison": "agree",
+      "effectiveStatus": "unresolved_precedence"
+    },
+    {
+      "variantId": "9405ec3a-6996-453e-91b1-7558d5263e4e",
+      "handlerOverride": true,
+      "contractOverride": null,
+      "templateValue": false,
+      "comparison": "conflict",
+      "effectiveStatus": "unresolved_precedence"
+    },
+    {
+      "variantId": "2781f353-feb8-46e9-a067-15453cbc6f04",
+      "handlerOverride": true,
+      "contractOverride": null,
+      "templateValue": true,
+      "comparison": "agree",
+      "effectiveStatus": "unresolved_precedence"
+    },
+    {
+      "variantId": "452db3ef-9b8c-4f34-9ae8-df9e1bd681c1",
+      "handlerOverride": null,
+      "contractOverride": null,
+      "templateValue": null,
+      "comparison": "missing",
+      "effectiveStatus": "unresolved_precedence"
+    }
+  ],
+  "requiredItemAssertions": [
+    {
+      "variantId": "e7352f49-da6c-45c3-a7f7-6e897d788913",
+      "contractPropertyCount": 1,
+      "requiredItemEvidenceCount": 1,
+      "roleStatuses": [
+        "explicit_order"
+      ],
+      "hasMissingSourceReference": false
+    },
+    {
+      "variantId": "9d219d18-aeda-494c-bad6-30fb8d092949",
+      "contractPropertyCount": 4,
+      "requiredItemEvidenceCount": 4,
+      "roleStatuses": [
+        "explicit_order",
+        "explicit_order",
+        "explicit_order",
+        "explicit_order"
+      ],
+      "hasMissingSourceReference": false
+    },
+    {
+      "variantId": "df80b67b-0fb9-4902-83a5-6913378c6c1b",
+      "contractPropertyCount": 1,
+      "requiredItemEvidenceCount": 1,
+      "roleStatuses": [
+        "explicit_order"
+      ],
+      "hasMissingSourceReference": true
+    }
+  ],
+  "calculatedCreditAssertions": [
+    {
+      "variantId": "9405ec3a-6996-453e-91b1-7558d5263e4e",
+      "resultCount": 1,
+      "formulaStatus": "resolved_source_backed",
+      "amount": 49500,
+      "currency": "aUEC",
+      "modelVersion": "sc_mission_calculated_payout_v1",
+      "profile": "General",
+      "difficulty": 4.220000000000001,
+      "contractBuyInAmountRaw": "0",
+      "timeToCompleteRaw": "11.2",
+      "timeToCompleteUnitStatus": "normalized_by_source_formula_divisor_60",
+      "resultLoopVerificationRequired": false,
+      "unresolvedReasons": [],
+      "validationWarnings": []
+    },
+    {
+      "variantId": "4bd71b0a-2ea0-a8e1-1d11-03edb7057780",
+      "resultCount": 1,
+      "formulaStatus": "unresolved",
+      "amount": null,
+      "currency": "aUEC",
+      "modelVersion": "sc_mission_calculated_payout_v1",
+      "profile": null,
+      "difficulty": null,
+      "contractBuyInAmountRaw": "0",
+      "timeToCompleteRaw": "10",
+      "timeToCompleteUnitStatus": "normalized_by_source_formula_divisor_60",
+      "resultLoopVerificationRequired": false,
+      "unresolvedReasons": [
+        "missing_profile_guid",
+        "unresolved_profile_weight:mechanicalSkillWeight",
+        "unresolved_profile_weight:mentalLoadWeight",
+        "unresolved_profile_weight:riskOfLossWeight",
+        "unresolved_profile_weight:gameKnowledgeWeight"
+      ],
+      "validationWarnings": []
+    },
+    {
+      "variantId": "51739c24-0d4d-401d-8888-54c42fda79c9",
+      "resultCount": 1,
+      "formulaStatus": "resolved_source_backed",
+      "amount": 0,
+      "currency": "aUEC",
+      "modelVersion": "sc_mission_calculated_payout_v1",
+      "profile": "General",
+      "difficulty": 2.5500000000000003,
+      "contractBuyInAmountRaw": "0",
+      "timeToCompleteRaw": "0",
+      "timeToCompleteUnitStatus": "normalized_by_source_formula_divisor_60",
+      "resultLoopVerificationRequired": false,
+      "unresolvedReasons": [],
+      "validationWarnings": [
+        "non_positive_time_to_complete"
+      ]
+    },
+    {
+      "variantId": "cd51a295-54b1-4a2e-9371-c4c9b1d0598c",
+      "resultCount": 2,
+      "formulaStatus": "resolved_source_backed",
+      "amount": 15250,
+      "currency": "aUEC",
+      "modelVersion": "sc_mission_calculated_payout_v1",
+      "profile": "General",
+      "difficulty": 3,
+      "contractBuyInAmountRaw": "0",
+      "timeToCompleteRaw": "5",
+      "timeToCompleteUnitStatus": "normalized_by_source_formula_divisor_60",
+      "resultLoopVerificationRequired": true,
+      "unresolvedReasons": [],
+      "validationWarnings": []
+    }
+  ],
+  "releaseFlagAssertions": [
+    {
+      "variantId": "67cf0b4c-c894-4bb1-8409-4a14334abcd4",
+      "notForRelease": true,
+      "workInProgress": false
+    },
+    {
+      "variantId": "110e6697-33fc-421c-80d4-3428b23658b5",
+      "notForRelease": false,
+      "workInProgress": true
+    }
+  ],
+  "equivalenceAssertions": [
+    {
+      "expectation": "collapse",
+      "variantIds": [
+        "407c3214-9c4c-4d9c-9463-401ce64fa94a",
+        "3f54cb59-5360-499f-951a-6b9a52993157",
+        "9ad7b732-cdde-4fc2-8cd0-ee097c027669"
+      ],
+      "basis": "same template and structural objective definition at the same risk tier; system availability remains a variant dimension"
+    },
+    {
+      "expectation": "do_not_collapse",
+      "variantIds": [
+        "12e92b29-e5a8-4ba7-95a4-122d6c992684",
+        "982d51e3-4ffc-4f4a-b32f-0ab8749515d8"
+      ],
+      "basis": "different templates and objective topology despite sharing a source family and the current concept key"
+    }
+  ]
+}
