@@ -326,6 +326,43 @@
   scrollbar-color: rgba(255, 153, 0, 0.18) transparent;
 }
 
+.mb-zero-results {
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  align-self: start;
+  gap: 8px;
+  width: 100%;
+  min-height: 180px;
+  padding: 24px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+}
+
+.mb-zero-results strong {
+  color: var(--mb-text);
+  font-size: 18px;
+}
+
+.mb-zero-results span {
+  color: var(--mb-muted);
+  font-size: 13px;
+}
+
+.mb-zero-results button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgba(125, 211, 252, 0.38);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(14, 116, 144, 0.14);
+  color: var(--mb-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .mb-results-footer {
   flex: 0 0 auto;
   margin-top: 0;
@@ -1442,10 +1479,76 @@
 .mission-dossier-body-grid {
   display: grid;
   grid-template-columns: minmax(460px, 0.95fr) minmax(420px, 0.85fr) minmax(360px, 0.7fr);
-  grid-template-areas: "briefing blueprint rail";
+  grid-template-areas:
+    "briefing blueprint rail"
+    "items items rail";
   align-items: start;
   gap: 16px;
   min-height: 0;
+}
+
+.mission-dossier-required-items {
+  grid-area: items;
+}
+
+.mission-required-item-list {
+  display: grid;
+  gap: 8px;
+}
+
+.mission-required-item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 10px;
+  border: 1px solid var(--panel-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.mission-required-item-row > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mission-required-item-row strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.mission-required-item-row span,
+.mission-required-item-row small {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.mission-required-item-row small {
+  grid-column: 1 / -1;
+  line-height: 1.35;
+}
+
+.mission-dossier-reward-status.is-buy-in {
+  border-top-color: rgba(255, 184, 77, 0.28);
+}
+
+.mission-dossier-source-warning,
+.mission-dossier-detail-state {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 184, 77, 0.24);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(255, 184, 77, 0.06);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mission-dossier-detail-state.is-error {
+  border-color: rgba(255, 92, 92, 0.28);
+  background: rgba(255, 92, 92, 0.06);
+  color: var(--mb-red);
 }
 
 .mission-dossier-briefing-card {
@@ -2543,6 +2646,7 @@
     grid-template-columns: minmax(440px, 1fr) minmax(320px, 0.82fr);
     grid-template-areas:
       "briefing blueprint"
+      "items items"
       "rail rail";
   }
 }
@@ -2594,6 +2698,7 @@
     grid-template-columns: minmax(440px, 1fr) minmax(320px, 0.82fr);
     grid-template-areas:
       "briefing blueprint"
+      "items items"
       "rail rail";
   }
 
@@ -2609,6 +2714,7 @@
     grid-template-areas:
       "briefing"
       "blueprint"
+      "items"
       "rail";
   }
 
@@ -2716,5 +2822,19 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 4px;
+  }
+
+  .mission-required-item-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-required-item-row small {
+    grid-column: 1;
+  }
+}
+
+@media (min-width: 3000px) {
+  .mission-dossier-modal-shell {
+    width: min(calc(100vw - 64px), 2320px);
   }
 }

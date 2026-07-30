@@ -26,6 +26,19 @@ export type MissionRewardView = {
     unresolvedReason?: string;
     attributes?: Record<string, unknown>;
     sourceRefs?: string[];
+    payout?: {
+      schemaVersion: number;
+      modelVersion: string;
+      calculationStatus: "resolved" | "unresolved";
+      formulaStatus: string;
+      currency: string;
+      baseSoloAmount?: number;
+      resultCount: number;
+      aggregationStatus: string;
+      resultLoopVerificationRequired: boolean;
+      unresolvedReasons: string[];
+      validationWarnings: string[];
+    };
   };
   itemRewards?: Array<{
     status: "resolved" | "unresolved_entityClass" | "weighted_unresolved";
@@ -41,6 +54,78 @@ export type MissionRewardView = {
   }>;
   itemRewardStatus?: "resolved" | "unresolved_entityClass" | "weighted_unresolved" | "none";
   unresolvedRewardTokens: string[];
+};
+
+export type MissionRequiredItemEvidenceView = {
+  evidenceId: string;
+  missionVariableName?: string | null;
+  requirementRole: "hauling_order" | "mission_item_selector" | string;
+  roleStatus: string;
+  requirementStatus: string;
+  content: {
+    type: "hauling_orders" | "mission_item_selector" | string;
+    logic?: "all_of" | string;
+    selectionBounds?: {
+      minItemsToFind?: { raw: string; value?: number | null };
+      maxItemsToFind?: { raw: string; value?: number | null };
+    };
+    entries?: Array<{
+      ordinal: number;
+      type: string;
+      itemReference?: {
+        status: string;
+        reference?: { raw?: string; kind?: string; resolution?: string };
+      };
+      quantity?: {
+        minAmount?: { raw: string; value?: number | null };
+        maxAmount?: { raw: string; value?: number | null };
+      };
+    }>;
+    conditions?: Array<{
+      ordinal: number;
+      type: string;
+      items?: Array<{ guid: string; resolution: string }>;
+    }>;
+  };
+  provenance?: {
+    sourceRef?: string;
+    xmlPath?: string;
+    sourceElement?: string;
+  };
+};
+
+export type MissionRequiredItemsView = {
+  status: "present" | "proven_absent" | "unresolved";
+  evidence?: MissionRequiredItemEvidenceView[];
+  haulingOrderCount: number;
+  selectorCount: number;
+};
+
+export type MissionCanonicalView = {
+  schemaVersion: 2;
+  sourceSchemaVersion: 3;
+  availability: {
+    notForRelease: boolean;
+    workInProgress: boolean;
+  };
+  financials: {
+    buyIns: Array<{
+      resultIndex: number;
+      contractBuyInAmount: {
+        raw: string;
+        value?: number | null;
+        applicationStatus: string;
+        currency?: string | null;
+        currencyStatus?: string;
+      };
+    }>;
+  };
+  provenance: {
+    channel: string;
+    buildId: string;
+    sourceLatestModifiedAt: string;
+    calculationInputsDigestSha256?: string;
+  };
 };
 
 export type MissionRewardedReputationPathView = {
@@ -227,6 +312,9 @@ export type MissionVariantView = {
     titleRaw?: string;
     descriptionRaw?: string;
   };
+  canonical?: MissionCanonicalView;
+  requiredItems?: MissionRequiredItemsView;
+  requiredItemSummary?: Pick<MissionRequiredItemsView, "status" | "haulingOrderCount" | "selectorCount">;
 };
 
 export type MissionFamilyView = {

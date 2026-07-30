@@ -10,11 +10,13 @@ import {
 import {
   loadMissionConceptVariants,
   loadMissionData,
+  loadMissionVariantDetail,
   type BlueprintRewardGroupView,
   type MissionBrowserCatalog,
   type MissionFamilyView,
   type MissionConceptView,
   type MissionPrerequisiteView,
+  type MissionRequiredItemEvidenceView,
   type MissionRewardView,
   type MissionRewardedReputationPathView,
   type MissionVariantView,
@@ -200,10 +202,21 @@ function variantDifficulty(variant: MissionVariantView): string {
 const AUEC_REWARD_NOT_REPORTED = "aUEC reward not reported";
 
 function playerFacingCreditReward(reward: MissionRewardView): string {
-  const currency = reward.creditsDetail?.currency?.toUpperCase();
-  const approvedUserSubmittedAuec = reward.creditsDetail?.confidence === "user_submitted_approved";
+  const detail = reward.creditsDetail;
+  const currency = detail?.currency?.toUpperCase();
+  const payout = detail?.payout;
+  if (
+    reward.creditStatus === "calculated"
+    && payout?.calculationStatus === "resolved"
+    && typeof payout.baseSoloAmount === "number"
+    && Number.isFinite(payout.baseSoloAmount)
+  ) {
+    return `${payout.baseSoloAmount.toLocaleString()} ${payout.currency || "aUEC"} base / solo`;
+  }
+  if (reward.creditStatus === "fixed" && typeof detail?.amount === "number" && Number.isFinite(detail.amount)) {
+    return `${detail.amount.toLocaleString()} ${detail.currency || "aUEC"}`;
+  }
   if (reward.creditStatus === "fixed" && currency && currency !== "UEC" && currency !== "AUEC") return reward.credits;
-  if (reward.creditStatus === "fixed" && approvedUserSubmittedAuec) return reward.credits;
   return AUEC_REWARD_NOT_REPORTED;
 }
 
@@ -1105,6 +1118,11 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
   const itemRewards = variant.rewards.itemRewards ?? [];
   const creditReward = playerFacingCreditReward(variant.rewards);
   const creditUnresolved = creditReward === AUEC_REWARD_NOT_REPORTED;
+  const buyInAmounts = (variant.canonical?.financials.buyIns ?? [])
+    .map((entry) => entry.contractBuyInAmount.value)
+    .filter((value): value is number => typeof value === "number" && Number.isFinite(value) && value > 0);
+  const buyIn = buyInAmounts.length ? Math.max(...buyInAmounts) : undefined;
+  const payout = variant.rewards.creditsDetail?.payout;
   return (
     <section className="mission-dossier-card mission-dossier-rewards-card is-compact">
       <div className="mission-dossier-card__heading">
@@ -1122,11 +1140,75 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
           <strong>{creditReward}</strong>
         )}
       </div>
+      {buyIn !== undefined && (
+        <div className="mission-dossier-reward-status is-buy-in">
+          <span>Certification buy-in</span>
+          <strong>{buyIn.toLocaleString()} aUEC</strong>
+          <p className="mission-dossier-reward-muted">Separate from the base/solo payout.</p>
+        </div>
+      )}
+      {payout?.resultLoopVerificationRequired && (
+        <p className="mission-dossier-source-warning">
+          Multiple calculated reward branches require result-loop verification. No branches were summed.
+        </p>
+      )}
       {itemRewards.length > 0 && (
         <div className="mission-dossier-section mission-dossier-item-rewards">
           <h4 className="mb-inline-heading">Item Rewards</h4>
           <BadgeList values={itemRewards.map((reward) => [reward.amount, reward.displayName ?? reward.entityClass ?? "Item reward"].filter(Boolean).join(" x "))} fallback="No item rewards reported" max={6} />
         </div>
+      )}
+    </section>
+  );
+}
+
+function requirementQuantityLabel(variant: MissionRequiredItemEvidenceView): string | undefined {
+  const entry = variant.content.entries?.[0];
+  const min = entry?.quantity?.minAmount?.value;
+  const max = entry?.quantity?.maxAmount?.value;
+  if (typeof min === "number" && typeof max === "number") return min === max ? `${min}` : `${min}-${max}`;
+  const selectorMin = variant.content.selectionBounds?.minItemsToFind?.value;
+  const selectorMax = variant.content.selectionBounds?.maxItemsToFind?.value;
+  if (typeof selectorMin === "number" && typeof selectorMax === "number") {
+    return selectorMin === selectorMax ? `${selectorMin}` : `${selectorMin}-${selectorMax}`;
+  }
+  return undefined;
+}
+
+function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) {
+  const requiredItems = variant.requiredItems;
+  if (!requiredItems || requiredItems.status === "proven_absent") return null;
+  const evidence = requiredItems.evidence ?? [];
+  return (
+    <section className="mission-dossier-card mission-dossier-required-items">
+      <div className="mission-dossier-card__heading">
+        <h3>Required Mission Items</h3>
+        <span>{requiredItems.haulingOrderCount} order / {requiredItems.selectorCount} selector</span>
+      </div>
+      {evidence.length ? (
+        <div className="mission-required-item-list">
+          {evidence.map((item) => {
+            const quantity = requirementQuantityLabel(item);
+            const isProvenOrder = item.requirementRole === "hauling_order" && item.requirementStatus === "source_backed_order";
+            const itemDefinition = item.content.conditions?.flatMap((condition) => condition.items ?? [])[0];
+            return (
+              <div className="mission-required-item-row" key={item.evidenceId}>
+                <div>
+                  <strong>{isProvenOrder ? "Required mission cargo" : "Mission item selector"}</strong>
+                  <span>{quantity ? `${quantity} item${quantity === "1" ? "" : "s"}` : "Quantity unresolved"}</span>
+                </div>
+                <Badge tone={isProvenOrder ? "is-amber" : "is-muted"}>
+                  {isProvenOrder ? "Source-backed order" : "Turn-in role not proven"}
+                </Badge>
+                {itemDefinition?.resolution === "unresolved_item_definition" && (
+                  <small>Item identity is present in source but its display name is unresolved.</small>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className="mb-empty-note">Required-item evidence is unresolved.</p>
       )}
     </section>
   );
@@ -1227,20 +1309,49 @@ function DossierBody({
   selectedVariant: MissionVariantView;
   onSelectVariant: (variantKey: string) => void;
 }) {
+  const [exactVariants, setExactVariants] = useState<Record<string, MissionVariantView>>({});
+  const [exactLoadingKey, setExactLoadingKey] = useState("");
+  const [exactError, setExactError] = useState("");
+  const detailedVariant = exactVariants[selectedVariant.variantKey] ?? selectedVariant;
   const blueprintGroups = useMemo(
-    () => Array.from(new Map(selectedVariant.rewards.blueprintRewardGroups.map((group) => [group.poolGuid ?? group.poolName, group])).values()),
-    [selectedVariant],
+    () => Array.from(new Map(detailedVariant.rewards.blueprintRewardGroups.map((group) => [group.poolGuid ?? group.poolName, group])).values()),
+    [detailedVariant],
   );
+
+  useEffect(() => {
+    if (exactVariants[selectedVariant.variantKey]) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setExactLoadingKey(selectedVariant.variantKey);
+      setExactError("");
+    });
+    loadMissionVariantDetail(selectedVariant.variantKey)
+      .then((variant) => {
+        if (!cancelled) setExactVariants((current) => ({ ...current, [variant.variantKey]: variant }));
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) setExactError(reason instanceof Error ? reason.message : "Exact mission details unavailable");
+      })
+      .finally(() => {
+        if (!cancelled) setExactLoadingKey((current) => current === selectedVariant.variantKey ? "" : current);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [exactVariants, selectedVariant.variantKey]);
 
   return (
     <>
+      {exactLoadingKey === selectedVariant.variantKey && <div className="mission-dossier-detail-state">Loading exact payout and item evidence...</div>}
+      {exactError && <div className="mission-dossier-detail-state is-error">{exactError}</div>}
       <div className="mission-dossier-body-grid">
         <section className="mission-dossier-card mission-dossier-briefing-card">
           <div className="mission-dossier-card__heading">
             <h3>Mission Briefing</h3>
           </div>
-          {selectedVariant.briefing ? (
-            <p>{playerFacingBriefing(selectedVariant.briefing)}</p>
+          {detailedVariant.briefing ? (
+            <p>{playerFacingBriefing(detailedVariant.briefing)}</p>
           ) : (
             <p className="mb-empty-note">Mission briefing not reported.</p>
           )}
@@ -1248,10 +1359,11 @@ function DossierBody({
         <DossierBlueprintCard groups={blueprintGroups} />
         <div className="mission-dossier-right-rail">
           <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
-          <DossierRewardsCard variant={selectedVariant} />
+          <DossierRewardsCard variant={detailedVariant} />
         </div>
+        <DossierRequiredItemsCard variant={detailedVariant} />
       </div>
-      <DossierFooter variant={selectedVariant} blueprintGroups={blueprintGroups} />
+      <DossierFooter variant={detailedVariant} blueprintGroups={blueprintGroups} />
     </>
   );
 }
@@ -2082,6 +2194,18 @@ export default function MissionBrowserPage() {
         {!loading && !error && catalog && (
           <div className="mb-results-shell">
             <main className="mb-family-list">
+            {visibleConceptCount === 0 && (
+              <section className="mb-zero-results ops-primary-card" aria-live="polite">
+                <strong>No missions match these filters</strong>
+                <span>Clear the search or filters to restore the mission registry.</span>
+                <button
+                  type="button"
+                  onClick={() => setSearchParams(new URLSearchParams())}
+                >
+                  Clear filters
+                </button>
+              </section>
+            )}
 
             {activeView === "full" && pagedFullCategories.map((category) => {
               const categoryConcepts = category.conceptKeys.map((conceptKey) => conceptsByKey.get(conceptKey)).filter((concept): concept is MissionConceptView => Boolean(concept));

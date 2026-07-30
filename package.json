@@ -11,6 +11,7 @@
         "ui:inventory": "playwright test --config=playwright.inventory.config.ts",
         "ui:build-queue": "playwright test --config=playwright.build-queue.config.ts",
         "ui:crafting": "playwright test --config=playwright.crafting.config.ts",
+        "ui:missions": "playwright test --config=playwright.missions.config.ts",
         "content:check": "node --import tsx scripts/validate-content.mts",
         "api:check": "node --import tsx scripts/validate-public-api.mts",
     "fitting:test": "node --import tsx --test server/fitting/fitting.routes.test.ts server/fitting/fittingSimulation.test.ts src/lib/fitting/mockup/buildPowerCardViews.test.ts src/lib/fitting/fittingMockupSelectors.test.ts src/lib/fitting/fittingPipPower.test.ts src/lib/fitting/fittingBuildContext.test.ts src/lib/fitting/fittingComponentStore.test.ts src/lib/crafting/resolveEntityClass.test.ts src/lib/crafting/resolveCraftingDisplayName.test.ts src/lib/fitting/fittingStatProjection.test.ts src/lib/crafting/fpsComponentCardDetail.test.ts src/lib/crafting/craftStatViewModel.test.ts src/lib/logistics/buildQueueCraftStats.test.ts src/components/logistics/buildQueueStatsGroups.test.ts",
