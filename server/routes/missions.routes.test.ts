@@ -78,7 +78,64 @@ await writeFile(path.join(generationRoot, "mission_shard_manifest.json"), JSON.s
 }));
 await writeFile(path.join(generationRoot, "families", "family.json"), JSON.stringify({ schemaVersion: 2, generationId, family: { familyKey: "family" } }));
 await writeFile(path.join(generationRoot, "family-variants", "family.json"), JSON.stringify({ schemaVersion: 2, generationId, familyKey: "family", variants: [] }));
-await writeFile(path.join(generationRoot, "variants", "variant.json"), JSON.stringify({ schemaVersion: 2, generationId, familyKey: "family", variant: { variantKey: "variant" } }));
+await writeFile(path.join(generationRoot, "variants", "variant.json"), JSON.stringify({
+  schemaVersion: 2,
+  sourceContractVersion: 3,
+  generationId,
+  familyKey: "family",
+  variant: {
+    variantKey: "variant",
+    canonical: {
+      identity: { variantId: "variant", familyId: "family", templateGuid: null },
+      availability: { notForRelease: false, workInProgress: false },
+      prerequisites: [{
+        edgeId: "crime",
+        variantId: "variant",
+        type: "crime_stat",
+        polarity: "required",
+        identifiers: {},
+        bounds: {
+          minCrimeStat: { raw: "0", value: 0 },
+          maxCrimeStat: { raw: "2", value: 2 },
+        },
+        resolution: "source_backed",
+        provenance: { sourceRef: "fixture.xml", sourceElement: "ContractPrerequisite_CrimeStat" },
+      }],
+      outcomes: [],
+    },
+  },
+}));
+await writeFile(path.join(generationRoot, "mission_graph.json"), JSON.stringify({
+  schemaVersion: 2,
+  sourceContractVersion: 3,
+  generationId,
+  nodeCount: 1,
+  dependencies: [],
+  arcs: [],
+}));
+await writeFile(path.join(generationRoot, "mission_graph_validation_report.json"), JSON.stringify({
+  schemaVersion: 2,
+  sourceContractVersion: 3,
+  generationId,
+  summary: {
+    requiredTagCount: 0,
+    danglingRequiredTagCount: 0,
+    excludedTagCount: 0,
+    danglingExcludedTagCount: 0,
+    alternateProducerTagCount: 0,
+    branchRequiredTagCount: 0,
+    danglingBranchTagCount: 0,
+    cycleComponentCount: 0,
+  },
+  cycles: [],
+}));
+await writeFile(path.join(generationRoot, "mission_solver_reference.json"), JSON.stringify({
+  schemaVersion: 1,
+  missionSchemaVersion: 2,
+  sourceContractVersion: 3,
+  generationId,
+  standingThresholdsById: {},
+}));
 
 process.env.MISSION_DATA_ROOT = root;
 const { handleMissionsRoute } = await import("./missions.routes.js");
@@ -101,6 +158,49 @@ test("mission routes resolve a coherent immutable generation", async () => {
 
   const variant = await handleMissionsRoute("GET", "/api/missions/variant/variant");
   assert.equal(variant?.status, 200);
+});
+
+test("mission eligibility route validates player state and evaluates exact variants", async () => {
+  const playerState = {
+    completedContracts: { knowledge: "complete", countsByContract: {} },
+    completionTags: { knowledge: "complete", countsByTag: {} },
+    reputation: [],
+    crimeStat: { status: "known", value: 1 },
+    location: { status: "unknown" },
+  };
+  const eligible = await handleMissionsRoute(
+    "POST",
+    "/api/missions/variant/variant/eligibility",
+    { playerState },
+  );
+  assert.equal(eligible?.status, 200);
+  assert.equal((eligible?.body as {
+    generationId: string;
+    result: { status: string };
+  }).generationId, generationId);
+  assert.equal((eligible?.body as { result: { status: string } }).result.status, "eligible");
+
+  const blocked = await handleMissionsRoute(
+    "POST",
+    "/api/missions/variant/variant/eligibility",
+    { playerState: { ...playerState, crimeStat: { status: "known", value: 3 } } },
+  );
+  assert.equal((blocked?.body as { result: { status: string } }).result.status, "blocked");
+
+  assert.equal((await handleMissionsRoute(
+    "POST",
+    "/api/missions/variant/variant/eligibility",
+    { playerState: { crimeStat: { status: "unknown" } } },
+  ))?.status, 400);
+  assert.equal((await handleMissionsRoute(
+    "POST",
+    "/api/missions/variant/missing/eligibility",
+    { playerState },
+  ))?.status, 404);
+  assert.equal((await handleMissionsRoute(
+    "GET",
+    "/api/missions/variant/variant/eligibility",
+  ))?.status, 405);
 });
 
 test("mission routes pick up an atomic current-generation switch", async () => {

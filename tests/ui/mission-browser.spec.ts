@@ -31,6 +31,20 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(workspace.getByRole("button", { name: "Sort by Base / solo" })).toContainText("↓");
   });
 
+  test("evaluates explicit player knowledge on the server", async ({ page }) => {
+    await page.goto("/industry/missions?selected=70d0a94a8a837e887b3c");
+
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    await workspace.getByRole("button", { name: "Check" }).click();
+    const eligibility = page.getByRole("region", { name: /eligibility/i });
+    await eligibility.getByLabel("CrimeStat").selectOption("0");
+    await eligibility.getByRole("button", { name: "Evaluate eligibility" }).click();
+
+    await expect(eligibility.locator(".mission-eligibility-status strong")).toHaveText("unresolved");
+    await expect(eligibility.getByText(/Evaluated against mission generation/)).toBeVisible();
+    await expect(eligibility.locator(".mission-eligibility-result li").first()).toBeVisible();
+  });
+
   test("shows persisted base payout and distinguishes required-item evidence", async ({ page }) => {
     await page.goto("/industry/missions?concept=70d0a94a8a837e887b3c");
 

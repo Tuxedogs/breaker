@@ -2,6 +2,8 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { getMissionDataRoot } from "../config/missionDataRoot.js";
+import { evaluateCurrentMissionEligibilityEnvelope } from "../missions/missionSolverData.js";
+import type { PlayerMissionState } from "../missions/missionSolverTypes.js";
 
 type RouteResult = { status: number; body: unknown };
 
@@ -324,10 +326,105 @@ function methodNotAllowed(): RouteResult {
   return { status: 405, body: { error: "Method not allowed" } };
 }
 
-export async function handleMissionsRoute(method: string, rawUrl: string): Promise<RouteResult | null> {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function isCountRecord(value: unknown): value is Record<string, number> {
+  return isRecord(value) && Object.values(value).every(
+    (count) => typeof count === "number" && Number.isInteger(count) && count >= 0,
+  );
+}
+
+function parsePlayerMissionState(value: unknown): PlayerMissionState | null {
+  if (!isRecord(value)) return null;
+  const completedContracts = value.completedContracts;
+  const completionTags = value.completionTags;
+  const reputation = value.reputation;
+  const crimeStat = value.crimeStat;
+  const location = value.location;
+  if (
+    !isRecord(completedContracts)
+    || (completedContracts.knowledge !== "complete" && completedContracts.knowledge !== "partial")
+    || !isCountRecord(completedContracts.countsByContract)
+    || !isRecord(completionTags)
+    || (completionTags.knowledge !== "complete" && completionTags.knowledge !== "partial")
+    || !isCountRecord(completionTags.countsByTag)
+    || !Array.isArray(reputation)
+    || !isRecord(crimeStat)
+    || !isRecord(location)
+  ) return null;
+
+  const validReputation = reputation.every((entry) => {
+    if (!isRecord(entry) || typeof entry.factionId !== "string" || typeof entry.scopeId !== "string") return false;
+    if (entry.status !== "known" && entry.status !== "unknown") return false;
+    return (entry.standingId === undefined || entry.standingId === null || typeof entry.standingId === "string")
+      && (entry.reputationValue === undefined || entry.reputationValue === null || (
+        typeof entry.reputationValue === "number" && Number.isFinite(entry.reputationValue)
+      ));
+  });
+  if (!validReputation) return null;
+
+  if (crimeStat.status === "known") {
+    if (typeof crimeStat.value !== "number" || !Number.isFinite(crimeStat.value) || crimeStat.value < 0) return null;
+  } else if (crimeStat.status !== "unknown") return null;
+
+  if (location.status === "known") {
+    if (
+      (location.locationId !== undefined && location.locationId !== null && typeof location.locationId !== "string")
+      || (location.systemId !== undefined && location.systemId !== null && typeof location.systemId !== "string")
+      || !Array.isArray(location.localityIds)
+      || !location.localityIds.every((item) => typeof item === "string")
+      || (location.membershipKnowledge !== "complete" && location.membershipKnowledge !== "partial")
+    ) return null;
+  } else if (location.status !== "unknown") return null;
+
+  return value as PlayerMissionState;
+}
+
+function parseLocationPropertyBindings(value: unknown): Record<string, boolean> | undefined | null {
+  if (value === undefined) return undefined;
+  if (!isRecord(value) || !Object.values(value).every((item) => typeof item === "boolean")) return null;
+  return value as Record<string, boolean>;
+}
+
+export async function handleMissionsRoute(method: string, rawUrl: string, body?: unknown): Promise<RouteResult | null> {
   const url = parseRouteUrl(rawUrl);
   const pathName = url.pathname;
   if (!pathName.startsWith("/api/missions/")) return null;
+
+  const eligibilityMatch = pathName.match(/^\/api\/missions\/(?:variant|variants)\/([^/]+)\/eligibility$/);
+  if (eligibilityMatch) {
+    if (method !== "POST") return methodNotAllowed();
+    const request = isRecord(body) ? body : null;
+    const playerState = parsePlayerMissionState(request?.playerState);
+    const locationPropertyBindings = parseLocationPropertyBindings(request?.locationPropertyBindings);
+    if (!request || !playerState || locationPropertyBindings === null) {
+      return { status: 400, body: { error: "Invalid mission eligibility request." } };
+    }
+    const variantId = decodeURIComponent(eligibilityMatch[1] ?? "");
+    try {
+      const evaluation = await evaluateCurrentMissionEligibilityEnvelope(
+        variantId,
+        playerState,
+        { locationPropertyBindings },
+      );
+      return {
+        status: 200,
+        body: {
+          schemaVersion: 1,
+          generationId: evaluation.generationId,
+          result: evaluation.result,
+        },
+      };
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("is not published")) {
+        return { status: 404, body: { error: "Mission variant not found." } };
+      }
+      throw error;
+    }
+  }
+
   if (method !== "GET") return methodNotAllowed();
 
   if (pathName === "/api/missions/browser") {

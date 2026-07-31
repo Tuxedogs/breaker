@@ -8,18 +8,21 @@ import {
   writeStoredStringSet,
 } from "@/components/industry/crafting/utils/blueprintTrackerStore";
 import {
+  evaluateMissionVariantEligibility,
   loadMissionConceptVariants,
   loadMissionData,
   loadMissionVariantDetail,
   type BlueprintRewardGroupView,
   type MissionBrowserCatalog,
   type MissionFamilyView,
+  type MissionEligibilityPayload,
   type MissionConceptView,
   type MissionPrerequisiteView,
   type MissionRequiredItemEvidenceView,
   type MissionRewardView,
   type MissionRewardedReputationPathView,
   type MissionVariantView,
+  type PlayerMissionStateView,
 } from "@/lib/missionData";
 import "./mission-browser.css";
 import "@/components/industry/crafting/recipe-browser.css";
@@ -1806,6 +1809,101 @@ function ConceptDetail({
 
 type MissionComparisonSort = "mission" | "system" | "tier" | "payout" | "standing";
 
+function MissionEligibilityWorkspace({
+  variant,
+  onBack,
+}: {
+  variant: MissionVariantView;
+  onBack: () => void;
+}) {
+  const [crimeStat, setCrimeStat] = useState<"unknown" | "0" | "1" | "2" | "3" | "4" | "5">("unknown");
+  const [contractKnowledge, setContractKnowledge] = useState<"complete" | "partial">("partial");
+  const [tagKnowledge, setTagKnowledge] = useState<"complete" | "partial">("partial");
+  const [evaluation, setEvaluation] = useState<MissionEligibilityPayload | null>(null);
+  const [evaluating, setEvaluating] = useState(false);
+  const [evaluationError, setEvaluationError] = useState("");
+
+  async function evaluate() {
+    const playerState: PlayerMissionStateView = {
+      completedContracts: { knowledge: contractKnowledge, countsByContract: {} },
+      completionTags: { knowledge: tagKnowledge, countsByTag: {} },
+      reputation: [],
+      crimeStat: crimeStat === "unknown" ? { status: "unknown" } : { status: "known", value: Number(crimeStat) },
+      location: { status: "unknown" },
+    };
+    setEvaluating(true);
+    setEvaluationError("");
+    try {
+      setEvaluation(await evaluateMissionVariantEligibility(variant.variantKey, playerState));
+    } catch (reason) {
+      setEvaluationError(reason instanceof Error ? reason.message : "Eligibility evaluation unavailable");
+    } finally {
+      setEvaluating(false);
+    }
+  }
+
+  const resultExplanations = evaluation?.result.explanations ?? [];
+  return (
+    <section className="mission-eligibility-workspace" aria-label={`${variant.displayName} eligibility`}>
+      <header>
+        <div>
+          <span className="mb-kicker">Exact variant eligibility</span>
+          <h3>{variant.displayName}</h3>
+          <p>Only facts entered here are treated as known.</p>
+        </div>
+        <button type="button" onClick={onBack}>Back to comparison</button>
+      </header>
+      <div className="mission-eligibility-layout">
+        <form onSubmit={(event) => { event.preventDefault(); void evaluate(); }}>
+          <label>
+            <span>CrimeStat</span>
+            <select value={crimeStat} onChange={(event) => setCrimeStat(event.target.value as typeof crimeStat)}>
+              <option value="unknown">Unknown</option>
+              {[0, 1, 2, 3, 4, 5].map((value) => <option value={value} key={value}>{value}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>Contract history</span>
+            <select value={contractKnowledge} onChange={(event) => setContractKnowledge(event.target.value as "complete" | "partial")}>
+              <option value="partial">Partial / not connected</option>
+              <option value="complete">Complete, no prior contracts</option>
+            </select>
+          </label>
+          <label>
+            <span>Mission-tag history</span>
+            <select value={tagKnowledge} onChange={(event) => setTagKnowledge(event.target.value as "complete" | "partial")}>
+              <option value="partial">Partial / not connected</option>
+              <option value="complete">Complete, no earned tags</option>
+            </select>
+          </label>
+          <button type="submit" className="is-primary" disabled={evaluating}>{evaluating ? "Evaluating..." : "Evaluate eligibility"}</button>
+        </form>
+        <div className="mission-eligibility-result" aria-live="polite">
+          {!evaluation && !evaluationError && <p>Reputation and location remain unknown. The result will preserve those uncertainties.</p>}
+          {evaluationError && <p className="is-error">{evaluationError}</p>}
+          {evaluation && (
+            <>
+              <div className={`mission-eligibility-status is-${evaluation.result.status}`}>
+                <span>Eligibility</span>
+                <strong>{evaluation.result.status}</strong>
+              </div>
+              <ul>
+                {resultExplanations.map((explanation, index) => (
+                  <li className={`is-${explanation.status}`} key={`${explanation.code}-${index}`}>
+                    <strong>{explanation.status}</strong>
+                    <span>{explanation.message}</span>
+                  </li>
+                ))}
+              </ul>
+              <small>Evaluated against mission generation {evaluation.generationId}.</small>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function exactVariantIsActive(variant: MissionVariantView): boolean {
   return !variant.releaseFlags.includes("Not for release") && !variant.releaseFlags.includes("Work in progress");
 }
@@ -1855,6 +1953,7 @@ function MissionSelectedWorkspace({
   const [availability, setAvailability] = useState<"active" | "all">("active");
   const [sort, setSort] = useState<MissionComparisonSort>("mission");
   const [descending, setDescending] = useState(false);
+  const [eligibilityVariant, setEligibilityVariant] = useState<MissionVariantView | null>(null);
   const activeVariants = useMemo(() => (variants ?? []).filter(exactVariantIsActive), [variants]);
   const visibleVariants = useMemo(() => {
     const rows = availability === "active" ? activeVariants : (variants ?? []);
@@ -1926,7 +2025,9 @@ function MissionSelectedWorkspace({
       {loading && <div className="mission-selected-state">Loading exact variants...</div>}
       {error && <div className="mission-selected-state is-error">{error}</div>}
       {variants && (
-        <div className="mission-comparison">
+        eligibilityVariant ? (
+          <MissionEligibilityWorkspace variant={eligibilityVariant} onBack={() => setEligibilityVariant(null)} />
+        ) : <div className="mission-comparison">
           <div className="mission-comparison__toolbar">
             <div>
               <strong>Exact mission comparison</strong>
@@ -1957,6 +2058,7 @@ function MissionSelectedWorkspace({
                   <th>Reputation</th>
                   <th>Items</th>
                   <th>Availability</th>
+                  <th>Eligibility</th>
                 </tr>
               </thead>
               <tbody>
@@ -1974,6 +2076,7 @@ function MissionSelectedWorkspace({
                       <td>{rep}</td>
                       <td>{requiredItems ? "Required" : variant.requiredItemSummary?.status === "proven_absent" ? "None" : "Unresolved"}</td>
                       <td><Badge tone={exactVariantIsActive(variant) ? "is-green" : "is-muted"}>{exactVariantIsActive(variant) ? "Active" : variant.releaseFlags.join(" / ") || "Unavailable"}</Badge></td>
+                      <td><button type="button" className="mission-eligibility-open" onClick={() => setEligibilityVariant(variant)}>Check</button></td>
                     </tr>
                   );
                 })}

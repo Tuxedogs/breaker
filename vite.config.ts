@@ -175,7 +175,7 @@ function installScintelApiMiddleware(
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
       : url === "/api/user/build-queue"
         ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleMissionsRoute(request.method ?? "GET", request.url ?? url) ??
+        : await handleMissionsRoute(request.method ?? "GET", request.url ?? url, body) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
     if (!route) {

@@ -200,6 +200,20 @@ export async function evaluateCurrentMissionEligibility(
   });
 }
 
+export async function evaluateCurrentMissionEligibilityEnvelope(
+  variantId: string,
+  playerState: PlayerMissionState,
+  context: Pick<MissionEligibilityContext, "locationPropertyBindings"> = {},
+): Promise<{ generationId: string; result: MissionEligibilityResult }> {
+  const generation = await loadGeneration();
+  const variant = await loadVariant(generation, variantId);
+  const result = evaluateMissionEligibility(variant, playerState, {
+    standingThresholdsById: generation.reference.standingThresholdsById,
+    locationPropertyBindings: context.locationPropertyBindings,
+  });
+  return { generationId: generation.graph.generationId, result };
+}
+
 export async function solveCurrentMissionPath(
   goal: MissionPathGoal,
   playerState: PlayerMissionState,

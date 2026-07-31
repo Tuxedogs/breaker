@@ -43,7 +43,7 @@ export function createServer() {
           ? await handleBlueprintTrackerRoute(request.method ?? "GET", request.headers, body)
         : url === "/api/user/build-queue"
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleMissionsRoute(request.method ?? "GET", rawUrl) ??
+        : await handleMissionsRoute(request.method ?? "GET", rawUrl, body) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {

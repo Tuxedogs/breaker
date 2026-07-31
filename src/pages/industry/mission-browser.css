@@ -561,6 +561,163 @@
   background: var(--ops-surface-hover);
 }
 
+.mission-eligibility-open,
+.mission-eligibility-workspace button {
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--mb-muted);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mission-eligibility-open:hover,
+.mission-eligibility-workspace button:hover {
+  border-color: rgba(125, 211, 252, 0.48);
+  color: var(--mb-text);
+}
+
+.mission-eligibility-workspace {
+  display: grid;
+  min-height: 0;
+  overflow: auto;
+  border-top: 1px solid var(--ops-border-soft);
+}
+
+.mission-eligibility-workspace > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+}
+
+.mission-eligibility-workspace h3 {
+  margin: 2px 0;
+  color: var(--mb-text);
+  font-size: 15px;
+}
+
+.mission-eligibility-workspace p {
+  margin: 0;
+  color: var(--mb-muted);
+  font-size: 11px;
+}
+
+.mission-eligibility-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.7fr) minmax(0, 1.3fr);
+  gap: 12px;
+  padding: 0 12px 12px;
+}
+
+.mission-eligibility-layout form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: start;
+  gap: 8px;
+}
+
+.mission-eligibility-layout label {
+  display: grid;
+  gap: 4px;
+  color: var(--mb-subtle);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mission-eligibility-layout select {
+  min-width: 0;
+  height: 30px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--mb-text);
+  font: inherit;
+  font-size: 11px;
+}
+
+.mission-eligibility-layout form > button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.mission-eligibility-layout form > button.is-primary {
+  border-color: rgba(125, 211, 252, 0.56);
+  background: rgba(14, 116, 144, 0.18);
+  color: var(--mb-text);
+}
+
+.mission-eligibility-result {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.mission-eligibility-status {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mission-eligibility-status span,
+.mission-eligibility-result small {
+  color: var(--mb-subtle);
+  font-size: 10px;
+}
+
+.mission-eligibility-status strong {
+  color: var(--mb-amber);
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.mission-eligibility-status.is-eligible strong {
+  color: var(--mb-green);
+}
+
+.mission-eligibility-status.is-blocked strong,
+.mission-eligibility-status.is-excluded strong {
+  color: var(--mb-red);
+}
+
+.mission-eligibility-result ul {
+  display: grid;
+  gap: 4px;
+  max-height: 120px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.mission-eligibility-result li {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 8px;
+  color: var(--mb-muted);
+  font-size: 11px;
+}
+
+.mission-eligibility-result li strong {
+  color: var(--mb-subtle);
+  text-transform: uppercase;
+}
+
+.mission-eligibility-result .is-error {
+  color: var(--mb-red);
+}
+
 .mb-family-list {
   display: grid;
   gap: 18px;
@@ -2988,6 +3145,10 @@
     grid-column: 1;
     grid-row: auto;
   }
+
+  .mission-eligibility-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -3107,6 +3268,14 @@
 
   .mission-comparison {
     max-height: 420px;
+  }
+
+  .mission-eligibility-layout form {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-eligibility-workspace > header {
+    flex-direction: column;
   }
 }
 

@@ -65,8 +65,11 @@ labels or coverage improve.
 
 ## Remaining Stage 4 work
 
-- Expose Stage 3 eligibility through a server route and typed browser adapter.
-- Add the player-state editor and one-variant eligibility evaluation.
+- Add source-backed reputation and location identity inputs when runtime player
+  state can provide them without raw-ID entry.
+- Add completion-history import rather than relying on manual empty-history
+  declarations.
+- Add path-solving visualization after exact eligibility is accepted.
 - Resolve concept bookmark compatibility with exact mission and blueprint-pool
   identities without silently changing the shared storage key.
 - Add targeted Mission Browser interaction tests and deterministic loading/error
@@ -75,8 +78,8 @@ labels or coverage improve.
 
 ## Validation for this slice
 
-- `npm run missions:test` — 29 passed
-- `npm run ui:missions` — 6 passed
+- `npm run missions:test` — 30 passed
+- `npm run ui:missions` — 7 passed
 - `npm run lint` — passed
 - `npm run build` — passed
 - Required-item dossier reviewed at 768×900, 1920×1080, 2560×1440, and 3840×2160
@@ -90,3 +93,25 @@ Local visual routes:
 - `/industry/missions?concept=1cf7b7218006719074f0`
 - `/industry/missions?search=__no_mission_matches__`
 - `/industry/missions?selected=9cab64c0aa3664d21d3c`
+
+## Eligibility integration slice
+
+Exact eligibility is now evaluated on the server through:
+
+`POST /api/missions/variant/:variantId/eligibility`
+
+The route validates the player-state payload, loads the accepted canonical
+variant, applies published standing thresholds, and returns the mission
+generation ID with every result. Client requests cannot replace the published
+standing-threshold map.
+
+The first player-facing workspace supports:
+
+- Known or unknown CrimeStat
+- Complete or partial contract-history knowledge
+- Complete or partial completion-tag knowledge
+- Full eligibility explanations from the Stage 3 service
+
+Reputation and location are deliberately sent as unknown in this first slice.
+The UI does not ask users to enter raw faction, standing, scope, or location IDs,
+and unknown state is never treated as satisfied.

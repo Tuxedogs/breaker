@@ -599,6 +599,47 @@ export type MissionVariantDetailPayload = {
   variant: MissionVariantView;
 };
 
+export type PlayerMissionStateView = {
+  completedContracts: {
+    knowledge: "complete" | "partial";
+    countsByContract: Record<string, number>;
+  };
+  completionTags: {
+    knowledge: "complete" | "partial";
+    countsByTag: Record<string, number>;
+  };
+  reputation: Array<{
+    factionId: string;
+    scopeId: string;
+    status: "known" | "unknown";
+    standingId?: string | null;
+    reputationValue?: number | null;
+  }>;
+  crimeStat: { status: "known"; value: number } | { status: "unknown" };
+  location: { status: "unknown" };
+};
+
+export type MissionEligibilityResultView = {
+  variantId: string;
+  status: "eligible" | "blocked" | "unavailable" | "unresolved" | "excluded";
+  explanations: Array<{
+    code: string;
+    status: "satisfied" | "blocked" | "unresolved" | "excluded" | "unavailable" | "informational";
+    prerequisiteType: string;
+    message: string;
+  }>;
+  blockers: MissionEligibilityResultView["explanations"];
+  unavailable: MissionEligibilityResultView["explanations"];
+  unresolved: MissionEligibilityResultView["explanations"];
+  exclusions: MissionEligibilityResultView["explanations"];
+};
+
+export type MissionEligibilityPayload = {
+  schemaVersion: 1;
+  generationId: string;
+  result: MissionEligibilityResultView;
+};
+
 const missionDataPromises = new Map<string, Promise<MissionBrowserCatalog>>();
 const familyDetailPromises = new Map<string, Promise<MissionFamilyDetailPayload>>();
 const familyVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
@@ -844,4 +885,25 @@ export async function loadMissionVariantDetail(variantKey: string): Promise<Miss
     );
   }
   return variantDetailPromises.get(variantKey)!;
+}
+
+export async function evaluateMissionVariantEligibility(
+  variantKey: string,
+  playerState: PlayerMissionStateView,
+): Promise<MissionEligibilityPayload> {
+  const url = apiUrl(`/api/missions/variant/${encodeURIComponent(variantKey)}/eligibility`);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ playerState }),
+  });
+  const data = await parseJsonResponse<MissionEligibilityPayload | { error?: string }>(response, {
+    label: "mission eligibility",
+    url: response.url,
+  });
+  if (!response.ok) {
+    const message = "error" in data && data.error ? data.error : `mission eligibility unavailable: ${response.status}`;
+    throw new Error(message);
+  }
+  return data as MissionEligibilityPayload;
 }
