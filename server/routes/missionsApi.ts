@@ -33,7 +33,9 @@ export async function runMissionsApiHandler(request: IncomingMessage, response: 
       response,
       result.status,
       result.body,
-      result.status === 405 ? { allow: rawUrl.endsWith("/eligibility") ? "POST" : "GET" } : undefined,
+      result.status === 405
+        ? { allow: /\/(?:eligibility|prerequisite-path)(?:\?|$)/.test(rawUrl) ? "POST" : "GET" }
+        : undefined,
     );
   } catch (error) {
     if (error instanceof SyntaxError) {

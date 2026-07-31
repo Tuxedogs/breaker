@@ -12,10 +12,12 @@ import {
   loadMissionConceptVariants,
   loadMissionData,
   loadMissionVariantDetail,
+  solveMissionVariantPrerequisitePath,
   type BlueprintRewardGroupView,
   type MissionBrowserCatalog,
   type MissionFamilyView,
   type MissionEligibilityPayload,
+  type MissionPathPayload,
   type MissionConceptView,
   type MissionPrerequisiteView,
   type MissionRequiredItemEvidenceView,
@@ -1819,22 +1821,32 @@ function MissionEligibilityWorkspace({
   const [crimeStat, setCrimeStat] = useState<"unknown" | "0" | "1" | "2" | "3" | "4" | "5">("unknown");
   const [contractKnowledge, setContractKnowledge] = useState<"complete" | "partial">("partial");
   const [tagKnowledge, setTagKnowledge] = useState<"complete" | "partial">("partial");
+  const [activeSurface, setActiveSurface] = useState<"eligibility" | "path">("eligibility");
   const [evaluation, setEvaluation] = useState<MissionEligibilityPayload | null>(null);
   const [evaluating, setEvaluating] = useState(false);
   const [evaluationError, setEvaluationError] = useState("");
+  const [pathEvaluation, setPathEvaluation] = useState<MissionPathPayload | null>(null);
+  const [solvingPath, setSolvingPath] = useState(false);
+  const [pathError, setPathError] = useState("");
+  const [pathVariantNames, setPathVariantNames] = useState<Record<string, string>>({});
+  const [selectedPathIndex, setSelectedPathIndex] = useState(0);
 
-  async function evaluate() {
-    const playerState: PlayerMissionStateView = {
+  function playerState(): PlayerMissionStateView {
+    return {
       completedContracts: { knowledge: contractKnowledge, countsByContract: {} },
       completionTags: { knowledge: tagKnowledge, countsByTag: {} },
       reputation: [],
       crimeStat: crimeStat === "unknown" ? { status: "unknown" } : { status: "known", value: Number(crimeStat) },
       location: { status: "unknown" },
     };
+  }
+
+  async function evaluate() {
+    setActiveSurface("eligibility");
     setEvaluating(true);
     setEvaluationError("");
     try {
-      setEvaluation(await evaluateMissionVariantEligibility(variant.variantKey, playerState));
+      setEvaluation(await evaluateMissionVariantEligibility(variant.variantKey, playerState()));
     } catch (reason) {
       setEvaluationError(reason instanceof Error ? reason.message : "Eligibility evaluation unavailable");
     } finally {
@@ -1842,7 +1854,51 @@ function MissionEligibilityWorkspace({
     }
   }
 
+  async function findPath() {
+    setActiveSurface("path");
+    setSelectedPathIndex(0);
+    setSolvingPath(true);
+    setPathError("");
+    try {
+      setPathEvaluation(await solveMissionVariantPrerequisitePath(variant.variantKey, playerState()));
+    } catch (reason) {
+      setPathError(reason instanceof Error ? reason.message : "Prerequisite path unavailable");
+    } finally {
+      setSolvingPath(false);
+    }
+  }
+
   const resultExplanations = evaluation?.result.explanations ?? [];
+  const pathResult = pathEvaluation?.result;
+  const pathPlans = useMemo(
+    () => pathResult?.primaryPlan ? [pathResult.primaryPlan, ...pathResult.alternatePlans] : [],
+    [pathResult],
+  );
+  const selectedPathPlan = pathPlans[selectedPathIndex] ?? pathPlans[0] ?? null;
+  const pathSteps = useMemo(() => selectedPathPlan?.steps ?? [], [selectedPathPlan]);
+
+  useEffect(() => {
+    const variantIds = Array.from(new Set(
+      pathSteps.map((step) => step.variantId),
+    ));
+    if (!variantIds.length) {
+      setPathVariantNames({});
+      return;
+    }
+    let cancelled = false;
+    Promise.all(variantIds.map(async (variantId) => {
+      try {
+        return [variantId, (await loadMissionVariantDetail(variantId)).displayName] as const;
+      } catch {
+        return [variantId, "Exact prerequisite mission"] as const;
+      }
+    })).then((entries) => {
+      if (!cancelled) setPathVariantNames(Object.fromEntries(entries));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [pathSteps]);
   return (
     <section className="mission-eligibility-workspace" aria-label={`${variant.displayName} eligibility`}>
       <header>
@@ -1853,6 +1909,10 @@ function MissionEligibilityWorkspace({
         </div>
         <button type="button" onClick={onBack}>Back to comparison</button>
       </header>
+      <div className="mission-solver-tabs" role="tablist" aria-label="Mission solver workspace">
+        <button type="button" role="tab" aria-selected={activeSurface === "eligibility"} className={activeSurface === "eligibility" ? "is-active" : ""} onClick={() => setActiveSurface("eligibility")}>Eligibility</button>
+        <button type="button" role="tab" aria-selected={activeSurface === "path"} className={activeSurface === "path" ? "is-active" : ""} onClick={() => setActiveSurface("path")}>Unlock path</button>
+      </div>
       <div className="mission-eligibility-layout">
         <form onSubmit={(event) => { event.preventDefault(); void evaluate(); }}>
           <label>
@@ -1876,28 +1936,92 @@ function MissionEligibilityWorkspace({
               <option value="complete">Complete, no earned tags</option>
             </select>
           </label>
-          <button type="submit" className="is-primary" disabled={evaluating}>{evaluating ? "Evaluating..." : "Evaluate eligibility"}</button>
+          <div className="mission-eligibility-actions">
+            <button type="submit" className="is-primary" disabled={evaluating}>{evaluating ? "Evaluating..." : "Evaluate eligibility"}</button>
+            <button type="button" disabled={solvingPath} onClick={() => void findPath()}>{solvingPath ? "Solving..." : "Find prerequisite path"}</button>
+          </div>
         </form>
-        <div className="mission-eligibility-result" aria-live="polite">
-          {!evaluation && !evaluationError && <p>Reputation and location remain unknown. The result will preserve those uncertainties.</p>}
-          {evaluationError && <p className="is-error">{evaluationError}</p>}
-          {evaluation && (
-            <>
-              <div className={`mission-eligibility-status is-${evaluation.result.status}`}>
-                <span>Eligibility</span>
-                <strong>{evaluation.result.status}</strong>
-              </div>
-              <ul>
-                {resultExplanations.map((explanation, index) => (
-                  <li className={`is-${explanation.status}`} key={`${explanation.code}-${index}`}>
-                    <strong>{explanation.status}</strong>
-                    <span>{explanation.message}</span>
-                  </li>
-                ))}
-              </ul>
-              <small>Evaluated against mission generation {evaluation.generationId}.</small>
-            </>
-          )}
+        <div className="mission-solver-results" aria-live="polite">
+          {activeSurface === "eligibility" ? <div className="mission-eligibility-result" role="tabpanel">
+            {!evaluation && !evaluationError && <p>Reputation and location remain unknown. The result will preserve those uncertainties.</p>}
+            {evaluationError && <p className="is-error">{evaluationError}</p>}
+            {evaluation && (
+              <>
+                <div className={`mission-eligibility-status is-${evaluation.result.status}`}>
+                  <span>Eligibility</span>
+                  <strong>{evaluation.result.status}</strong>
+                </div>
+                <ul>
+                  {resultExplanations.map((explanation, index) => (
+                    <li className={`is-${explanation.status}`} key={`${explanation.code}-${index}`}>
+                      <strong>{explanation.status}</strong>
+                      <span>{explanation.message}</span>
+                    </li>
+                  ))}
+                </ul>
+                <small>Evaluated against mission generation {evaluation.generationId}.</small>
+              </>
+            )}
+          </div> : <section className="mission-path-result" aria-label="Prerequisite path" role="tabpanel">
+            {!pathResult && !pathError && (
+              <p>Find a mission-count path through proven completion-tag dependencies. Travel and time are not estimated.</p>
+            )}
+            {pathError && <p className="is-error">{pathError}</p>}
+            {pathResult && (
+              <>
+                <div className={`mission-eligibility-status is-${pathResult.status}`}>
+                  <span>Prerequisite path</span>
+                  <strong>{pathResult.status.replace("_", " ")}</strong>
+                </div>
+                {pathResult.status === "satisfied" && (
+                  <p>No prerequisite mission completions are required for the supplied state.</p>
+                )}
+                {pathResult.minimumMissionCount !== null && (
+                  <p className="mission-path-summary">
+                    <strong>{pathResult.minimumMissionCount}</strong> prerequisite mission{pathResult.minimumMissionCount === 1 ? "" : "s"}. Target mission is not included.
+                  </p>
+                )}
+                {pathPlans.length > 1 && (
+                  <div className="mission-path-alternates" role="group" aria-label="Equal mission-count paths">
+                    {pathPlans.map((_, index) => (
+                      <button type="button" className={selectedPathIndex === index ? "is-active" : ""} aria-pressed={selectedPathIndex === index} onClick={() => setSelectedPathIndex(index)} key={index}>
+                        {index === 0 ? "Primary path" : `Alternate ${index}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {pathSteps.length > 0 && (
+                  <ol>
+                    {pathSteps.map((step) => (
+                      <li key={step.variantId}>
+                        <span>Step {step.ordinal}</span>
+                        <strong>{pathVariantNames[step.variantId] ?? "Loading prerequisite mission..."}</strong>
+                        <small>{Object.keys(step.grantedCompletionTags).length} source-backed completion outcome{Object.keys(step.grantedCompletionTags).length === 1 ? "" : "s"}</small>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+                {pathResult.failures.length > 0 && (
+                  <ul className="mission-path-failures">
+                    {pathResult.failures.map((failure, index) => <li key={`${failure.code}-${index}`}>{failure.message}</li>)}
+                  </ul>
+                )}
+                {pathResult.relevantCycles.length > 0 && <p className="mission-path-warning">A source-backed dependency cycle affects this result.</p>}
+                {pathResult.alternatePlansTruncated && <p className="mission-path-warning">Additional equal mission-count paths exist but are not included in this response.</p>}
+                {pathSteps[0]?.assumptions.length ? (
+                  <details>
+                    <summary>Path assumptions</summary>
+                    {pathSteps[0].assumptions.map((assumption) => <p key={assumption}>{assumption}</p>)}
+                  </details>
+                ) : null}
+                <small>
+                  Cost: {pathResult.minimumMissionCount ?? "unresolved"} mission completion{pathResult.minimumMissionCount === 1 ? "" : "s"}.
+                  {pathResult.alternatePlans.length > 0 ? ` ${pathResult.alternatePlans.length} equal-minimum alternate${pathResult.alternatePlans.length === 1 ? "" : "s"} retained.` : ""}
+                  {" "}Generation {pathEvaluation.generationId}.
+                </small>
+              </>
+            )}
+          </section>}
         </div>
       </div>
     </section>
@@ -1992,7 +2116,7 @@ function MissionSelectedWorkspace({
   }
 
   return (
-    <section className="mission-selected-workspace ops-primary-card" aria-label={`${concept.displayName} selected mission workspace`}>
+    <section className={`mission-selected-workspace ops-primary-card${eligibilityVariant ? " is-solver-open" : ""}`} aria-label={`${concept.displayName} selected mission workspace`}>
       <header className="mission-selected-hero">
         <div className="mission-selected-hero__identity">
           <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
@@ -2067,7 +2191,7 @@ function MissionSelectedWorkspace({
                   const requiredItems = variant.requiredItemSummary?.status === "present";
                   const rep = repPathSummary(variant.rewardedReputationPaths);
                   return (
-                    <tr key={variant.variantKey}>
+                    <tr data-variant-key={variant.variantKey} key={variant.variantKey}>
                       <td><strong>{variant.displayName}</strong><small>{variant.missionArchetype}</small></td>
                       <td>{exactVariantSystem(variant)}<small>{variant.pickupLocation.status.replaceAll("_", " ")}</small></td>
                       <td>{variant.tierLabel ?? "Unknown"}</td>

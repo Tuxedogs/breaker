@@ -326,6 +326,10 @@
   background: var(--ops-surface-primary);
 }
 
+.mission-selected-workspace.is-solver-open {
+  max-height: min(70vh, 660px);
+}
+
 .mission-selected-hero {
   display: flex;
   align-items: flex-start;
@@ -608,11 +612,29 @@
   font-size: 11px;
 }
 
+.mission-solver-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px 8px;
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.mission-solver-tabs button {
+  min-height: 27px;
+}
+
+.mission-solver-tabs button.is-active,
+.mission-path-alternates button.is-active {
+  border-color: rgba(125, 211, 252, 0.56);
+  background: rgba(14, 116, 144, 0.18);
+  color: var(--mb-text);
+}
+
 .mission-eligibility-layout {
   display: grid;
   grid-template-columns: minmax(320px, 0.7fr) minmax(0, 1.3fr);
   gap: 12px;
-  padding: 0 12px 12px;
+  padding: 10px 12px 12px;
 }
 
 .mission-eligibility-layout form {
@@ -642,15 +664,20 @@
   font-size: 11px;
 }
 
-.mission-eligibility-layout form > button {
+.mission-eligibility-actions {
+  display: flex;
   grid-column: 1 / -1;
-  justify-self: start;
+  gap: 6px;
 }
 
-.mission-eligibility-layout form > button.is-primary {
+.mission-eligibility-actions button.is-primary {
   border-color: rgba(125, 211, 252, 0.56);
   background: rgba(14, 116, 144, 0.18);
   color: var(--mb-text);
+}
+
+.mission-solver-results {
+  min-width: 0;
 }
 
 .mission-eligibility-result {
@@ -686,8 +713,13 @@
   color: var(--mb-green);
 }
 
+.mission-eligibility-status.is-satisfied strong {
+  color: var(--mb-green);
+}
+
 .mission-eligibility-status.is-blocked strong,
-.mission-eligibility-status.is-excluded strong {
+.mission-eligibility-status.is-excluded strong,
+.mission-eligibility-status.is-unavailable strong {
   color: var(--mb-red);
 }
 
@@ -716,6 +748,104 @@
 
 .mission-eligibility-result .is-error {
   color: var(--mb-red);
+}
+
+.mission-path-result {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 100%;
+  padding: 10px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.mission-path-result > small,
+.mission-path-result summary,
+.mission-path-result details p {
+  color: var(--mb-subtle);
+  font-size: 10px;
+}
+
+.mission-path-result .is-error,
+.mission-path-warning {
+  color: var(--mb-red);
+}
+
+.mission-path-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.mission-path-summary strong {
+  color: var(--mb-text);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mission-path-alternates {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.mission-path-result ol {
+  display: grid;
+  gap: 5px;
+  max-height: 124px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.mission-path-result ol li {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+}
+
+.mission-path-result ol li > span,
+.mission-path-result ol li > small {
+  color: var(--mb-subtle);
+  font-size: 10px;
+}
+
+.mission-path-result ol li > strong {
+  overflow: hidden;
+  color: var(--mb-text);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-path-failures {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 16px;
+  color: var(--mb-amber);
+  font-size: 11px;
+}
+
+.mission-path-result details {
+  padding-top: 4px;
+  border-top: 1px solid var(--ops-border-soft);
+}
+
+.mission-path-result summary {
+  cursor: pointer;
+}
+
+.mission-path-result details p {
+  margin-top: 4px;
 }
 
 .mb-family-list {
@@ -3274,8 +3404,24 @@
     grid-template-columns: 1fr;
   }
 
+  .mission-eligibility-actions {
+    flex-wrap: wrap;
+  }
+
   .mission-eligibility-workspace > header {
     flex-direction: column;
+  }
+
+  .mission-solver-tabs {
+    overflow-x: auto;
+  }
+
+  .mission-path-result ol li {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .mission-path-result ol li > small {
+    grid-column: 2;
   }
 }
 

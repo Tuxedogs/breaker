@@ -45,6 +45,26 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(eligibility.locator(".mission-eligibility-result li").first()).toBeVisible();
   });
 
+  test("shows a proven mission-count unlock path for an exact variant", async ({ page }) => {
+    await page.goto("/industry/missions?selected=0c5a45e58399ed06bd30");
+
+    const workspace = page.getByRole("region", { name: /Additional Resources For Research selected mission workspace/i });
+    await workspace.locator('tr[data-variant-key="1136e707-15cb-49b9-9943-c3a2de91d3f2"]').getByRole("button", { name: "Check" }).click();
+
+    const solver = page.getByRole("region", { name: /Additional Resources For Research eligibility/i });
+    await solver.getByLabel("CrimeStat").selectOption("0");
+    await solver.getByLabel("Contract history").selectOption("complete");
+    await solver.getByLabel("Mission-tag history").selectOption("complete");
+    await solver.getByRole("button", { name: "Find prerequisite path" }).click();
+
+    const path = solver.locator(".mission-path-result");
+    await expect(path.locator(".mission-eligibility-status strong")).toHaveText("path found");
+    await expect(path.getByText(/1 prerequisite mission/)).toBeVisible();
+    await expect(path.getByText("Target mission is not included.", { exact: false })).toBeVisible();
+    await expect(path.getByText("Interested in Building a Better Future?", { exact: true })).toBeVisible();
+    await expect(path.getByText(/Generation b42621a47bf58653e0ec17c3/)).toBeVisible();
+  });
+
   test("shows persisted base payout and distinguishes required-item evidence", async ({ page }) => {
     await page.goto("/industry/missions?concept=70d0a94a8a837e887b3c");
 

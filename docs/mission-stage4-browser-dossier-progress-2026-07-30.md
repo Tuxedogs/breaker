@@ -69,7 +69,6 @@ labels or coverage improve.
   state can provide them without raw-ID entry.
 - Add completion-history import rather than relying on manual empty-history
   declarations.
-- Add path-solving visualization after exact eligibility is accepted.
 - Resolve concept bookmark compatibility with exact mission and blueprint-pool
   identities without silently changing the shared storage key.
 - Add targeted Mission Browser interaction tests and deterministic loading/error
@@ -115,3 +114,47 @@ The first player-facing workspace supports:
 Reputation and location are deliberately sent as unknown in this first slice.
 The UI does not ask users to enter raw faction, standing, scope, or location IDs,
 and unknown state is never treated as satisfied.
+
+## Proven prerequisite-path slice
+
+The accepted Stage 3 path solver is now exposed through:
+
+`POST /api/missions/variant/:variantId/prerequisite-path`
+
+The endpoint fixes the goal to the selected exact variant, reuses the validated
+player-state contract, injects the published standing thresholds on the server,
+and returns the existing solver result without reconstructing a path in React.
+Clients cannot choose an unbounded search size or substitute their own cost
+model.
+
+The exact-variant workspace now provides peer **Eligibility** and **Unlock path**
+surfaces using the same explicit player state.
+
+- The only path cost is exact mission completions.
+- The target mission is explicitly excluded from the prerequisite count.
+- Ordered steps come only from proven completion-tag dependencies.
+- Exact step names load lazily from existing variant shards.
+- Equal-minimum alternatives, truncated alternatives, failures, and relevant
+  cycles retain their typed solver states.
+- Authored result-branch and non-repeatability assumptions remain available
+  through progressive disclosure.
+- Travel, expected time, risk, legality, credits, and title similarity are never
+  used as hidden path costs.
+- Raw completion-tag and edge identifiers are not shown in the normal path view.
+
+The accepted Rayari golden chain resolves as one prerequisite mission:
+**Interested in Building a Better Future?** before the selected
+**Additional Resources For Research** exact variant.
+
+Validation after this slice:
+
+- `npm run missions:test` — 31 passed
+- `npm run ui:missions` — 8 passed
+- `npm run lint` — passed
+- `npm run build` — passed
+- Rayari unlock path visually reviewed at 768×900, 1920×1080, 2560×1440,
+  and 3840×2160
+
+Local visual route:
+
+- `/industry/missions?selected=0c5a45e58399ed06bd30`

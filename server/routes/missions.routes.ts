@@ -2,7 +2,10 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { getMissionDataRoot } from "../config/missionDataRoot.js";
-import { evaluateCurrentMissionEligibilityEnvelope } from "../missions/missionSolverData.js";
+import {
+  evaluateCurrentMissionEligibilityEnvelope,
+  solveCurrentMissionPath,
+} from "../missions/missionSolverData.js";
 import type { PlayerMissionState } from "../missions/missionSolverTypes.js";
 
 type RouteResult = { status: number; body: unknown };
@@ -392,6 +395,38 @@ export async function handleMissionsRoute(method: string, rawUrl: string, body?:
   const url = parseRouteUrl(rawUrl);
   const pathName = url.pathname;
   if (!pathName.startsWith("/api/missions/")) return null;
+
+  const prerequisitePathMatch = pathName.match(/^\/api\/missions\/(?:variant|variants)\/([^/]+)\/prerequisite-path$/);
+  if (prerequisitePathMatch) {
+    if (method !== "POST") return methodNotAllowed();
+    const request = isRecord(body) ? body : null;
+    const playerState = parsePlayerMissionState(request?.playerState);
+    const locationPropertyBindings = parseLocationPropertyBindings(request?.locationPropertyBindings);
+    if (!request || !playerState || locationPropertyBindings === null) {
+      return { status: 400, body: { error: "Invalid mission prerequisite path request." } };
+    }
+    const variantId = decodeURIComponent(prerequisitePathMatch[1] ?? "");
+    try {
+      const result = await solveCurrentMissionPath(
+        { type: "variant_eligibility", variantId },
+        playerState,
+        { locationPropertyBindings },
+      );
+      return {
+        status: 200,
+        body: {
+          schemaVersion: 1,
+          generationId: result.generationId,
+          result,
+        },
+      };
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("is not published")) {
+        return { status: 404, body: { error: "Mission variant not found." } };
+      }
+      throw error;
+    }
+  }
 
   const eligibilityMatch = pathName.match(/^\/api\/missions\/(?:variant|variants)\/([^/]+)\/eligibility$/);
   if (eligibilityMatch) {

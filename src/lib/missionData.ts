@@ -640,6 +640,43 @@ export type MissionEligibilityPayload = {
   result: MissionEligibilityResultView;
 };
 
+export type MissionPathStepView = {
+  ordinal: number;
+  variantId: string;
+  eligibility: MissionEligibilityResultView;
+  grantedCompletionTags: Record<string, number>;
+  prerequisiteEdgeIds: string[];
+  outcomeEdgeIds: string[];
+  assumptions: string[];
+};
+
+export type MissionPathResultView = {
+  generationId: string;
+  goal: { type: "variant_eligibility"; variantId: string };
+  costModel: {
+    type: "mission_count";
+    unit: "mission_completion";
+  };
+  status: "satisfied" | "path_found" | "blocked" | "unavailable" | "excluded" | "unresolved";
+  minimumMissionCount: number | null;
+  primaryPlan: { missionCount: number; steps: MissionPathStepView[] } | null;
+  alternatePlans: Array<{ missionCount: number; steps: MissionPathStepView[] }>;
+  alternatePlansTruncated: boolean;
+  exploredStateCount: number;
+  failures: Array<{
+    code: string;
+    message: string;
+    eligibility?: MissionEligibilityResultView;
+  }>;
+  relevantCycles: Array<{ variantIds: string[] }>;
+};
+
+export type MissionPathPayload = {
+  schemaVersion: 1;
+  generationId: string;
+  result: MissionPathResultView;
+};
+
 const missionDataPromises = new Map<string, Promise<MissionBrowserCatalog>>();
 const familyDetailPromises = new Map<string, Promise<MissionFamilyDetailPayload>>();
 const familyVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
@@ -906,4 +943,25 @@ export async function evaluateMissionVariantEligibility(
     throw new Error(message);
   }
   return data as MissionEligibilityPayload;
+}
+
+export async function solveMissionVariantPrerequisitePath(
+  variantKey: string,
+  playerState: PlayerMissionStateView,
+): Promise<MissionPathPayload> {
+  const url = apiUrl(`/api/missions/variant/${encodeURIComponent(variantKey)}/prerequisite-path`);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ playerState }),
+  });
+  const data = await parseJsonResponse<MissionPathPayload | { error?: string }>(response, {
+    label: "mission prerequisite path",
+    url: response.url,
+  });
+  if (!response.ok) {
+    const message = "error" in data && data.error ? data.error : `mission prerequisite path unavailable: ${response.status}`;
+    throw new Error(message);
+  }
+  return data as MissionPathPayload;
 }
