@@ -1045,7 +1045,12 @@ function BlueprintRewardGroups({
           <section className="mb-blueprint-group" key={poolKey}>
             <header>
               <strong>{group.poolName}</strong>
-              <span>{playerFacingChance(group.chanceLabel) ?? "Chance not reported"}</span>
+              <span>
+                {[
+                  group.missionChanceLabel ? `${group.missionChanceLabel} to award pool` : undefined,
+                  playerFacingChance(group.chanceLabel),
+                ].filter(Boolean).join(" / ") || "Chance not reported"}
+              </span>
             </header>
             <div className="mb-blueprint-list">
               {group.rewards.length > 0 ? (
@@ -1110,10 +1115,10 @@ function dossierVariantDetailLabel(variant: MissionVariantView, groupLabel: stri
 }
 
 function dossierVariantRewardHint(variant: MissionVariantView): string | undefined {
-  const credit = playerFacingCreditReward(variant.rewards);
-  if (credit !== AUEC_REWARD_NOT_REPORTED) return credit;
   const poolCount = variant.rewards.blueprintRewardGroups.length;
   if (poolCount > 0) return `${poolCount} blueprint pool${poolCount === 1 ? "" : "s"}`;
+  const credit = playerFacingCreditReward(variant.rewards);
+  if (credit !== AUEC_REWARD_NOT_REPORTED) return credit;
   return undefined;
 }
 
@@ -1175,11 +1180,13 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
   );
 }
 
-function requirementQuantityLabel(variant: MissionRequiredItemEvidenceView): string | undefined {
-  const entry = variant.content.entries?.[0];
+function requirementQuantityLabel(variant: MissionRequiredItemEvidenceView, entryIndex?: number): string | undefined {
+  const entry = entryIndex === undefined ? undefined : variant.content.entries?.[entryIndex];
   const min = entry?.quantity?.minAmount?.value;
   const max = entry?.quantity?.maxAmount?.value;
+  if (typeof min === "number" && min > 0 && (max === 0 || max == null)) return `At least ${min}`;
   if (typeof min === "number" && typeof max === "number") return min === max ? `${min}` : `${min}-${max}`;
+  if (typeof min === "number") return `At least ${min}`;
   const selectorMin = variant.content.selectionBounds?.minItemsToFind?.value;
   const selectorMax = variant.content.selectionBounds?.maxItemsToFind?.value;
   if (typeof selectorMin === "number" && typeof selectorMax === "number") {
@@ -1188,30 +1195,57 @@ function requirementQuantityLabel(variant: MissionRequiredItemEvidenceView): str
   return undefined;
 }
 
+function requiredItemLabel(item: MissionRequiredItemEvidenceView, entryIndex?: number): string {
+  const entry = entryIndex === undefined ? undefined : item.content.entries?.[entryIndex];
+  const identity = entry?.identity;
+  const resolvedEntryName = identity?.displayName
+    ?? identity?.members?.map((member) => member.displayName ?? member.recordName).filter(Boolean).join(" or ");
+  if (resolvedEntryName) return resolvedEntryName;
+  const definition = item.content.conditions?.flatMap((condition) => condition.items ?? [])[0];
+  return definition?.displayName
+    ?? definition?.entityClass?.displayName
+    ?? definition?.recordName
+    ?? (item.requirementRole === "hauling_order" ? "Mission cargo (identity unresolved)" : "Runtime-selected mission item");
+}
+
 function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) {
   const requiredItems = variant.requiredItems;
   if (!requiredItems || requiredItems.status === "proven_absent") return null;
-  const evidence = requiredItems.evidence ?? [];
+  const evidence = (requiredItems.evidence ?? []).filter(
+    (item) => item.roleStatus !== "bound_to_objective_order",
+  );
+  const rows = evidence.reduce<Array<{
+    item: MissionRequiredItemEvidenceView;
+    entryIndex?: number;
+  }>>((result, item) => {
+    if (item.content.entries?.length) {
+      item.content.entries.forEach((_, entryIndex) => result.push({ item, entryIndex }));
+    } else {
+      result.push({ item });
+    }
+    return result;
+  }, []);
   return (
     <section className="mission-dossier-card mission-dossier-required-items">
       <div className="mission-dossier-card__heading">
-        <h3>Required Mission Items</h3>
-        <span>{requiredItems.haulingOrderCount} order / {requiredItems.selectorCount} selector</span>
+        <h3>Items to Collect or Deliver</h3>
+        <span>{rows.length} item requirement{rows.length === 1 ? "" : "s"}</span>
       </div>
-      {evidence.length ? (
+      {rows.length ? (
         <div className="mission-required-item-list">
-          {evidence.map((item) => {
-            const quantity = requirementQuantityLabel(item);
-            const isProvenOrder = item.requirementRole === "hauling_order" && item.requirementStatus === "source_backed_order";
+          {rows.map(({ item, entryIndex }) => {
+            const quantity = requirementQuantityLabel(item, entryIndex);
+            const isProvenOrder = item.requirementRole === "hauling_order" && item.requirementStatus.startsWith("source_backed");
             const itemDefinition = item.content.conditions?.flatMap((condition) => condition.items ?? [])[0];
+            const itemLabel = requiredItemLabel(item, entryIndex);
             return (
-              <div className="mission-required-item-row" key={item.evidenceId}>
+              <div className="mission-required-item-row" key={`${item.evidenceId}-${entryIndex ?? "selector"}`}>
                 <div>
-                  <strong>{isProvenOrder ? "Required mission cargo" : "Mission item selector"}</strong>
-                  <span>{quantity ? `${quantity} item${quantity === "1" ? "" : "s"}` : "Quantity unresolved"}</span>
+                  <strong>{itemLabel}</strong>
+                  <span>{quantity ? `${quantity} required` : "Quantity determined at runtime or unresolved"}</span>
                 </div>
                 <Badge tone={isProvenOrder ? "is-amber" : "is-muted"}>
-                  {isProvenOrder ? "Source-backed order" : "Turn-in role not proven"}
+                  {isProvenOrder ? "Collect / deliver" : "Runtime-selected"}
                 </Badge>
                 {itemDefinition?.resolution === "unresolved_item_definition" && (
                   <small>Item identity is present in source but its display name is unresolved.</small>
@@ -1227,14 +1261,30 @@ function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) 
   );
 }
 
-function DossierBlueprintCard({ groups }: { groups: BlueprintRewardGroupView[] }) {
+function DossierBlueprintCard({
+  groups,
+  offeringVariantCount,
+  variantCount,
+}: {
+  groups: BlueprintRewardGroupView[];
+  offeringVariantCount: number;
+  variantCount: number;
+}) {
   return (
     <section className="mission-dossier-card mission-dossier-blueprint-panel">
       <div className="mission-dossier-card__heading">
-        <h3>Blueprint Pool</h3>
-        <span>{groups.length ? `${groups.length} reward pool${groups.length === 1 ? "" : "s"}` : "Pool unresolved"}</span>
+        <h3>Blueprint Rewards</h3>
+        <span>
+          {groups.length
+            ? `${groups.length} reward pool${groups.length === 1 ? "" : "s"}`
+            : offeringVariantCount > 0
+              ? `${offeringVariantCount} of ${variantCount} variants offer blueprints`
+              : "None reported"}
+        </span>
       </div>
-      <BlueprintRewardGroups groups={groups} compact dossier />
+      {groups.length
+        ? <BlueprintRewardGroups groups={groups} compact dossier />
+        : <p className="mb-empty-note">No blueprint reward for this selected variant.</p>}
     </section>
   );
 }
@@ -1330,6 +1380,10 @@ function DossierBody({
     () => Array.from(new Map(detailedVariant.rewards.blueprintRewardGroups.map((group) => [group.poolGuid ?? group.poolName, group])).values()),
     [detailedVariant],
   );
+  const blueprintOfferingVariantCount = useMemo(
+    () => variants.filter((variant) => variant.rewards.blueprintRewardGroups.length > 0).length,
+    [variants],
+  );
 
   useEffect(() => {
     if (exactVariants[selectedVariant.variantKey]) return;
@@ -1369,10 +1423,14 @@ function DossierBody({
             <p className="mb-empty-note">Mission briefing not reported.</p>
           )}
         </section>
-        <DossierBlueprintCard groups={blueprintGroups} />
         <div className="mission-dossier-right-rail">
-          <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
           <DossierRewardsCard variant={detailedVariant} />
+          <DossierBlueprintCard
+            groups={blueprintGroups}
+            offeringVariantCount={blueprintOfferingVariantCount}
+            variantCount={variants.length}
+          />
+          <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
         </div>
         <DossierRequiredItemsCard variant={detailedVariant} />
       </div>

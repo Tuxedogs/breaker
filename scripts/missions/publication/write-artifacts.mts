@@ -1,4 +1,4 @@
-import { mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 export type MissionGenerationPointerV1 = {
@@ -34,7 +34,20 @@ export async function publishImmutableMissionGeneration(options: {
   if (await directoryExists(finalGenerationRoot)) {
     await rm(options.stagingRoot, { recursive: true, force: true });
   } else {
-    await rename(options.stagingRoot, finalGenerationRoot);
+    try {
+      await rename(options.stagingRoot, finalGenerationRoot);
+    } catch (reason) {
+      const code = reason instanceof Error && "code" in reason
+        ? String((reason as NodeJS.ErrnoException).code)
+        : "";
+      if (process.platform !== "win32" || code !== "EPERM") throw reason;
+      await cp(options.stagingRoot, finalGenerationRoot, {
+        recursive: true,
+        errorOnExist: true,
+        force: false,
+      });
+      await rm(options.stagingRoot, { recursive: true, force: true });
+    }
   }
 
   const pointer: MissionGenerationPointerV1 = {

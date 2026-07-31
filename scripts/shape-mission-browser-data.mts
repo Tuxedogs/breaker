@@ -45,6 +45,7 @@ type RefIndexEntry = {
 
 type RawReward = {
   type?: string;
+  chance?: number;
   blueprintPoolGuid?: string;
   factionReputation?: string;
   reputationScope?: string;
@@ -137,6 +138,15 @@ type BlueprintPoolLookup = {
     weight?: number;
     poolChance?: number;
   }>;
+};
+
+type CraftingBlueprintLookup = {
+  id: string;
+  name?: string;
+  type?: string;
+  typeLabel?: string;
+  size?: number | string | null;
+  grade?: number | string | null;
 };
 
 type Lookups = {
@@ -548,6 +558,7 @@ type BlueprintRewardGroup = {
   poolGuid?: string;
   poolName: string;
   rewardCount: number;
+  missionChanceLabel?: string;
   chanceLabel?: string;
   rewards: Array<{
     blueprintGuid?: string;
@@ -776,7 +787,7 @@ const legacyShapedRootFiles = [
   ...legacyMissionOutputFiles,
 ] as const;
 const legacyShardDirectories = ["families", "family-variants", "variants"] as const;
-const missionShaperVersion = "moonbreaker_mission_shaper_v2_4";
+const missionShaperVersion = "moonbreaker_mission_shaper_v2_6";
 async function resolveMissionSourceRoot(): Promise<string> {
   try {
     await readFile(path.join(serverMissionSourceRoot, "mission_contracts.json"), "utf8");
@@ -791,6 +802,10 @@ async function resolveMissionSourceRoot(): Promise<string> {
 const sourceMissionRoot = await resolveMissionSourceRoot();
 const contractsPath = path.join(sourceMissionRoot, "mission_contracts.json");
 const lookupsPath = path.join(sourceMissionRoot, "mission_reward_lookups.json");
+const craftingBlueprintsPath = path.resolve(
+  process.env.MISSION_CRAFTING_BLUEPRINTS
+    ?? path.join("server-data", "crafting", "component-cards", "browse.json"),
+);
 const refIndexPath = process.env.MISSION_REF_INDEX
   ? path.resolve(process.env.MISSION_REF_INDEX)
   : undefined;
@@ -1005,8 +1020,8 @@ function deriveObjectiveSignature(
     "destroy-items",
   ]);
   const activityParts = activity.activityKey.split("+");
-  const normalizedOfferTitle = resolvedTitle.titleSource === "localized_clean"
-    ? normalizedObjectiveStem(resolvedTitle.displayName, removableTokens)
+  const normalizedOfferTitle = ["localized_clean", "token_template_cleaned"].includes(resolvedTitle.titleSource)
+    ? normalizedObjectiveStem(cleanTemplateTitle(resolvedTitle.displayName) ?? resolvedTitle.displayName, removableTokens)
     : undefined;
   const offerTitleIdentity = activityParts.length > 0
     && activityParts.every((part) => namedOfferBoundaryActivities.has(part))
@@ -1493,11 +1508,11 @@ function generatedMissionTitle(mission: RawMission, archetype: string, pickup?: 
 function variantTitle(mission: RawMission, archetype: string, pickup?: PickupLocation): { displayName: string; titleSource: ShapedVariant["titleSource"]; titleConfidence: ShapedVariant["titleConfidence"] } {
   const title = localizedTitle(mission);
   if (title && !hasUnresolvedTitleToken(title)) return { displayName: title, titleSource: "localized_clean", titleConfidence: "high" };
+  if (title && hasUnresolvedTitleToken(title)) {
+    return { displayName: title, titleSource: "token_template_cleaned", titleConfidence: "medium" };
+  }
   const cleaned = cleanTemplateTitle(title);
   if (cleaned) return { displayName: cleaned, titleSource: "token_template_cleaned", titleConfidence: "medium" };
-  if (title && hasUnresolvedTitleToken(title)) {
-    return { displayName: generatedMissionTitle(mission, archetype, pickup), titleSource: "generated_from_fields", titleConfidence: "medium" };
-  }
   return {
     displayName: readableName(mission.debugName ?? mission.handlerDebugName ?? mission.generatorName),
     titleSource: "internal_fallback",
@@ -2043,23 +2058,35 @@ function shapeItemRewards(mission: RawMission): { itemRewards: ItemRewardDetail[
   return { itemRewards, itemRewardStatus: "resolved", unresolvedTokens: [] };
 }
 
-function shapeRewards(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, rewardedReputationPaths: RewardedReputationPath[]): ShapedVariant["rewards"] {
+function shapeRewards(
+  mission: RawMission,
+  pools: Map<string, BlueprintPoolLookup>,
+  craftingBlueprints: Map<string, CraftingBlueprintLookup>,
+  rewardedReputationPaths: RewardedReputationPath[],
+): ShapedVariant["rewards"] {
   const blueprintRewardGroups: BlueprintRewardGroup[] = unique((mission.blueprintRewards ?? []).map((reward) => clean(reward.blueprintPoolGuid)))
     .map((poolGuid) => {
       const pool = pools.get(String(poolGuid ?? "").toLowerCase());
-      const rewards = (pool?.rewards ?? []).map((item) => ({
-        blueprintGuid: item.blueprintGuid,
-        displayName: item.displayName ?? item.blueprintName ?? item.blueprintGuid ?? "Unknown blueprint",
-        componentType: item.componentType,
-        size: item.size,
-        grade: item.grade,
-        chanceLabel: chanceLabel(item.poolChance),
-      }));
+      const rewards = (pool?.rewards ?? []).map((item) => {
+        const craftingItem = craftingBlueprints.get(String(item.blueprintGuid ?? "").toLowerCase());
+        return {
+          blueprintGuid: item.blueprintGuid,
+          displayName: item.displayName ?? item.blueprintName ?? craftingItem?.name ?? item.blueprintGuid ?? "Unknown blueprint",
+          componentType: item.componentType ?? craftingItem?.typeLabel ?? craftingItem?.type,
+          size: item.size ?? clean(craftingItem?.size),
+          grade: item.grade ?? clean(craftingItem?.grade),
+          chanceLabel: chanceLabel(item.poolChance),
+        };
+      });
       const chanceLabels = unique(rewards.map((item) => item.chanceLabel));
+      const missionReward = (mission.blueprintRewards ?? []).find(
+        (reward) => clean(reward.blueprintPoolGuid)?.toLowerCase() === String(poolGuid ?? "").toLowerCase(),
+      );
       return {
         poolGuid,
         poolName: pool?.displayName ?? pool?.poolName ?? "Unknown blueprint pool",
         rewardCount: rewards.length,
+        missionChanceLabel: chanceLabel(missionReward?.chance),
         chanceLabel: chanceLabels.length === 1 ? `${chanceLabels[0]} - 1 of ${rewards.length}` : undefined,
         rewards,
       };
@@ -2109,6 +2136,7 @@ function shapeVariant(
   catalog: RawCatalog,
   mission: RawMission,
   pools: Map<string, BlueprintPoolLookup>,
+  craftingBlueprints: Map<string, CraftingBlueprintLookup>,
   refMap: Map<string, RefIndexEntry>,
 ): ShapedVariant {
   const prerequisites = dedupePrerequisites([
@@ -2168,7 +2196,7 @@ function shapeVariant(
   const resolvedTitle = variantTitle(mission, missionArchetype, pickupLocation);
   const reputationScope = resolveReputationScope(mission, refMap, missionArchetype);
   const rewardedReputationPaths = shapeRewardedReputationPaths(mission, refMap, reputationScope);
-  const rewards = shapeRewards(mission, pools, rewardedReputationPaths);
+  const rewards = shapeRewards(mission, pools, craftingBlueprints, rewardedReputationPaths);
   const crimeRequirement = crimeStatRequirement(mission.prerequisites ?? []);
   const objectiveSignature = deriveObjectiveSignature(
     mission,
@@ -2440,6 +2468,14 @@ function resolveFamilyTitle(
 
   if (localizedFamilyTitle && !hasUnresolvedTitleToken(localizedFamilyTitle) && cleanVariantTitles.every((title) => title === localizedFamilyTitle)) {
     return { displayName: localizedFamilyTitle, titleSource: "localized_family", titleConfidence: "high" };
+  }
+
+  if (
+    localizedFamilyTitle
+    && hasUnresolvedTitleToken(localizedFamilyTitle)
+    && variants.every((variant) => variant.displayName === localizedFamilyTitle)
+  ) {
+    return { displayName: localizedFamilyTitle, titleSource: "token_template_cleaned", titleConfidence: "medium" };
   }
 
   const cleanedFamilyTitle = cleanTemplateTitle(localizedFamilyTitle);
@@ -3004,13 +3040,17 @@ async function assertMissionOutputSizes(): Promise<void> {
   throw new Error(`Mission shaped output exceeds ${maxMissionOutputBytes / (1024 * 1024)} MB:\n${details}`);
 }
 
-const [catalogInput, lookups, refIndexInput] = await Promise.all([
+const [catalogInput, lookups, craftingBlueprintInput, refIndexInput] = await Promise.all([
   readFile(contractsPath, "utf8")
     .then((content) => ({
       catalog: parseMissionSourceCatalogV3(JSON.parse(content)) as RawCatalog,
       sha256: createHash("sha256").update(content).digest("hex"),
     })),
   readFile(lookupsPath, "utf8").then((content) => JSON.parse(content) as Lookups),
+  readFile(craftingBlueprintsPath, "utf8").then((content) => ({
+    catalog: JSON.parse(content) as { records?: CraftingBlueprintLookup[] },
+    sha256: createHash("sha256").update(content).digest("hex"),
+  })),
   refIndexPath
     ? readFile(refIndexPath, "utf8").then((content) => ({
       records: JSON.parse(content) as RefIndexEntry[],
@@ -3026,6 +3066,9 @@ const [catalogInput, lookups, refIndexInput] = await Promise.all([
 const catalog = catalogInput.catalog;
 
 const poolMap = new Map((lookups.blueprintPools ?? []).map((pool) => [String(pool.poolGuid ?? "").toLowerCase(), pool]));
+const craftingBlueprintMap = new Map(
+  (craftingBlueprintInput.catalog.records ?? []).map((record) => [record.id.toLowerCase(), record]),
+);
 const refMap = new Map(refIndexInput.records.map((entry) => [String(entry.guid ?? "").toLowerCase(), entry]));
 const generationId = createHash("sha256").update(JSON.stringify({
   shaperVersion: missionShaperVersion,
@@ -3038,6 +3081,7 @@ const generationId = createHash("sha256").update(JSON.stringify({
   calculationInputsDigestSha256: catalog.source.calculationInputsDigestSha256,
   refIndexStatus: refIndexInput.status,
   refIndexSha256: "sha256" in refIndexInput ? refIndexInput.sha256 : null,
+  craftingBlueprintCatalogSha256: craftingBlueprintInput.sha256,
 })).digest("hex").slice(0, 24);
 const generatedAt = catalog.generatedAt;
 const solverReference = {
@@ -3075,7 +3119,7 @@ const stagingRoot = path.join(missionRoot, `.staging-${process.pid}-${generation
 const familyRoot = path.join(stagingRoot, "families");
 const familyVariantsRoot = path.join(stagingRoot, "family-variants");
 const variantRoot = path.join(stagingRoot, "variants");
-const variants = catalog.records.map((mission) => shapeVariant(catalog, mission, poolMap, refMap));
+const variants = catalog.records.map((mission) => shapeVariant(catalog, mission, poolMap, craftingBlueprintMap, refMap));
 const graphValidation = buildMissionGraphValidationV2(catalog.records);
 const rawByFamily = new Map<string, RawMission[]>();
 const variantsByFamily = new Map<string, ShapedVariant[]>();
@@ -3116,6 +3160,7 @@ const shaped: ShapedCatalog = {
   sourceFiles: [
     "server-data/missions/source/mission_contracts.json",
     "server-data/missions/source/mission_reward_lookups.json",
+    "server-data/crafting/component-cards/browse.json",
     ...(refIndexPath ? [refIndexPath] : []),
   ],
   sourceInputs: {

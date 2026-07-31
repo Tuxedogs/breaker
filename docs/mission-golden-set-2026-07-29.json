@@ -56,6 +56,9 @@
     "requiredItemEvidence": {
       "variants": 718,
       "propertyRows": 1555,
+      "canonicalVariants": 1077,
+      "canonicalEvidenceRows": 2141,
+      "canonicalHaulingOrders": 1166,
       "haulingOrders": 580,
       "haulingOrderVariants": 492,
       "missionItemSelectors": 975,
@@ -66,7 +69,7 @@
       "missionItemReferences": 290,
       "anyOfNodes": 11,
       "allOfOptions": 33,
-      "unresolvedMissionItemHandles": 289,
+      "unresolvedMissionItemHandles": 218,
       "missingMissionItemReferences": 1
     },
     "completionTagGraph": {
@@ -81,7 +84,7 @@
   "shapedContractV2": {
     "schemaVersion": 2,
     "sourceContractVersion": 3,
-    "shaperVersion": "moonbreaker_mission_shaper_v2_4",
+    "shaperVersion": "moonbreaker_mission_shaper_v2_6",
     "graph": {
       "parentRequiredTags": 80,
       "parentRequiredDanglingTags": 6,
@@ -467,6 +470,84 @@
         "explicit_order"
       ],
       "hasMissingSourceReference": true
+    },
+    {
+      "variantId": "956685c4-0324-4cf8-8a67-fed823254e61",
+      "contractPropertyCount": 0,
+      "requiredItemEvidenceCount": 1,
+      "roleStatuses": [
+        "objective_turn_in"
+      ],
+      "expectedDisplayNames": [
+        "Venture Core",
+        "MG Scrip",
+        "Carinite (Pure)"
+      ],
+      "hasMissingSourceReference": false
+    },
+    {
+      "variantId": "1136e707-15cb-49b9-9943-c3a2de91d3f2",
+      "contractPropertyCount": 1,
+      "requiredItemEvidenceCount": 1,
+      "roleStatuses": [
+        "explicit_order"
+      ],
+      "expectedDisplayNames": [
+        "Sunset Berries"
+      ],
+      "hasMissingSourceReference": false
+    },
+    {
+      "variantId": "b3a1bf21-e0be-4e8b-9888-f478b586fa07",
+      "contractPropertyCount": 2,
+      "requiredItemEvidenceCount": 2,
+      "roleStatuses": [
+        "bound_to_objective_order",
+        "explicit_order"
+      ],
+      "expectedDisplayNames": [
+        "Flight Recorder"
+      ],
+      "hasMissingSourceReference": false
+    },
+    {
+      "variantId": "d8332707-f74a-4b35-a363-0452aeed9fd0",
+      "contractPropertyCount": 1,
+      "requiredItemEvidenceCount": 2,
+      "roleStatuses": [
+        "bound_to_objective_order",
+        "objective_turn_in"
+      ],
+      "expectedDisplayNames": [
+        "FPS Consumable Hard Drive Generic"
+      ],
+      "hasMissingSourceReference": false
+    }
+  ],
+  "blueprintRewardAssertions": [
+    {
+      "variantId": "88bb3702-e20a-42e3-8ba3-328f2333e30c",
+      "expectedRewardNames": [
+        "Cds Combat Superheavy Backpack 01 03 01",
+        "Cds Combat Superheavy Suit 01 03 01",
+        "Cds Combat Superheavy Helmet 01 03 01"
+      ],
+      "expectedMissionChanceLabel": "100% chance"
+    },
+    {
+      "variantId": "115dab47-1987-4317-8a8f-b9466976a7b6",
+      "expectedRewardNames": [
+        "P8-AR Rifle",
+        "Palatino Arms"
+      ],
+      "expectedMissionChanceLabel": "25% chance"
+    },
+    {
+      "variantId": "b3a1bf21-e0be-4e8b-9888-f478b586fa07",
+      "expectedRewardNames": [
+        "Arbor MH1 Mining Laser"
+      ],
+      "expectedMissionChanceLabel": "100% chance"
     }
   ],
   "calculatedCreditAssertions": [

@@ -286,6 +286,13 @@ for (const value of array(golden.requiredItemAssertions, "requiredItemAssertions
     fixture.hasMissingSourceReference,
     `${id} missing item reference`,
   );
+  const evidenceJson = JSON.stringify(evidence);
+  for (const expectedDisplayName of array(fixture.expectedDisplayNames ?? [], `${id}.expectedDisplayNames`)) {
+    assert(
+      evidenceJson.includes(String(expectedDisplayName)),
+      `${id} required-item identity ${String(expectedDisplayName)} is missing.`,
+    );
+  }
   assert(
     edgeRows(record, "outcomeEdges").every(
       (edge) => edge.type !== "hauling_order" && edge.type !== "mission_item_selector",

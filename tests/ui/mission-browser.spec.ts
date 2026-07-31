@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { mkdir } from "node:fs/promises";
 
 test.describe("Mission Browser exact dossier", () => {
   test("selects a concept into a persistent workspace before opening its dossier", async ({ page }) => {
@@ -30,7 +31,7 @@ test.describe("Mission Browser exact dossier", () => {
   test("keeps a large exact-variant comparison bounded and sortable", async ({ page }) => {
     await page.goto("/industry/missions?selected=9cab64c0aa3664d21d3c");
 
-    const workspace = page.getByRole("region", { name: /Hauler Needed for Shipment selected mission workspace/i });
+    const workspace = page.getByRole("region", { name: /Hauler Needed for .*Shipment selected mission workspace/i });
     await expect(workspace.getByText("204", { exact: true }).first()).toBeVisible();
     await expect(workspace.getByText("207", { exact: true }).first()).toBeVisible();
     await expect(workspace.locator("tbody tr")).toHaveCount(204);
@@ -73,7 +74,7 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(path.getByText(/1 prerequisite mission/)).toBeVisible();
     await expect(path.getByText("Target mission is not included.", { exact: false })).toBeVisible();
     await expect(path.getByText("Interested in Building a Better Future?", { exact: true })).toBeVisible();
-    await expect(path.getByText(/Generation b42621a47bf58653e0ec17c3/)).toBeVisible();
+    await expect(path.getByText(/Generation [a-f0-9]{24}/)).toBeVisible();
   });
 
   test("preserves legacy concept favorites and writes typed concept bookmarks", async ({ page }) => {
@@ -114,19 +115,81 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(page.getByText("Tracking", { exact: true }).first()).toBeVisible();
   });
 
-  test("shows persisted base payout and distinguishes required-item evidence", async ({ page }) => {
-    await page.goto("/industry/missions?concept=70d0a94a8a837e887b3c");
+  test("shows a source-backed Rayari collection requirement", async ({ page }) => {
+    await page.goto("/industry/missions?search=Additional%20Resources%20For%20Research");
+    await page.locator(".mission-group-card").filter({ hasText: "Additional Resources For Research" }).first().click();
+    const workspace = page.getByRole("region", { name: /Additional Resources For Research selected mission workspace/i });
+    await workspace.getByRole("button", { name: "Open dossier" }).click();
 
-    const dossier = page.getByRole("dialog", { name: /Bit Zeros Black Box Recovery Nyx Easy mission dossier/i });
+    const dossier = page.getByRole("dialog", { name: /Additional Resources For Research mission dossier/i });
     await expect(dossier).toBeVisible();
-    await expect(dossier.locator(".mission-dossier-reward-status strong").filter({ hasText: "39,750 aUEC base / solo" })).toBeVisible();
-
     const requiredItems = dossier.locator(".mission-dossier-required-items");
-    await expect(requiredItems.getByRole("heading", { name: "Required Mission Items" })).toBeVisible();
-    await expect(requiredItems.getByText("Required mission cargo", { exact: true })).toBeVisible();
-    await expect(requiredItems.getByText("Source-backed order", { exact: true })).toBeVisible();
-    await expect(requiredItems.getByText("Mission item selector", { exact: true })).toBeVisible();
-    await expect(requiredItems.getByText("Turn-in role not proven", { exact: true })).toBeVisible();
+    await expect(requiredItems.getByRole("heading", { name: "Items to Collect or Deliver" })).toBeVisible();
+    await expect(requiredItems.getByText("Sunset Berries", { exact: true })).toBeVisible();
+    await expect(requiredItems.getByText("At least 15 required", { exact: true })).toBeVisible();
+    await expect(requiredItems.getByText("Collect / deliver", { exact: true })).toBeVisible();
+  });
+
+  test("shows readable Wikelo blueprint rewards", async ({ page }) => {
+    await page.goto("/industry/missions?concept=bb820f376f648ce1b071");
+
+    const dossier = page.getByRole("dialog", { name: /Heavy and Bright mission dossier/i });
+    const blueprintPanel = dossier.locator(".mission-dossier-blueprint-panel");
+    await expect(blueprintPanel.getByRole("heading", { name: "Blueprint Rewards" })).toBeVisible();
+    await expect(blueprintPanel.locator(".mb-blueprint-item span").filter({ hasText: "Cds Combat Superheavy Backpack 01 03 01" })).toBeVisible();
+    await expect(blueprintPanel.getByText(/100% chance to award pool/).first()).toBeVisible();
+  });
+
+  test("preserves source-backed runtime slots in mission titles", async ({ page }) => {
+    await page.goto("/industry/missions?concept=4ef1fb7075669edcf82f");
+    await expect(
+      page.getByRole("dialog", { name: /Shut Off Power at \[Location\] mission dossier/i }),
+    ).toBeVisible();
+  });
+
+  test("keeps the dossier readable at supported review sizes", async ({ page }) => {
+    const artifactRoot = "artifacts/mission-dossier-overhaul";
+    await mkdir(artifactRoot, { recursive: true });
+    for (const viewport of [
+      { width: 768, height: 900 },
+      { width: 1920, height: 1080 },
+      { width: 2560, height: 1440 },
+      { width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/industry/missions?concept=bb820f376f648ce1b071");
+      const dossier = page.getByRole("dialog", { name: /Heavy and Bright mission dossier/i });
+      await expect(dossier).toBeVisible();
+      await expect(dossier.locator(".mission-required-item-row strong").first()).toBeVisible();
+      await expect(dossier.locator(".mb-blueprint-item span").first()).toBeVisible();
+      const measurements = await dossier.evaluate((element) => {
+        const item = element.querySelector<HTMLElement>(".mission-required-item-row strong");
+        const blueprint = element.querySelector<HTMLElement>(".mb-blueprint-item span");
+        const title = element.querySelector<HTMLElement>(".mission-dossier-header__identity h2");
+        const body = element.querySelector<HTMLElement>(".mission-dossier-body-grid");
+        const rightRail = element.querySelector<HTMLElement>(".mission-dossier-right-rail");
+        const footer = element.querySelector<HTMLElement>(".mission-dossier-footer");
+        return {
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          itemFontSize: Number.parseFloat(getComputedStyle(item!).fontSize),
+          blueprintFontSize: Number.parseFloat(getComputedStyle(blueprint!).fontSize),
+          titleFontSize: Number.parseFloat(getComputedStyle(title!).fontSize),
+          bodyBottom: body!.getBoundingClientRect().bottom,
+          rightRailBottom: rightRail!.getBoundingClientRect().bottom,
+          footerTop: footer!.getBoundingClientRect().top,
+        };
+      });
+      expect(measurements.scrollWidth).toBeLessThanOrEqual(measurements.clientWidth + 1);
+      expect(measurements.itemFontSize).toBeGreaterThanOrEqual(16);
+      expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(15);
+      expect(measurements.titleFontSize).toBeGreaterThanOrEqual(20);
+      expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.bodyBottom);
+      expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.rightRailBottom);
+      await page.screenshot({
+        path: `${artifactRoot}/wikelo-heavy-and-bright-${viewport.width}x${viewport.height}.png`,
+      });
+    }
   });
 
   test("keeps certification buy-in separate from base payout", async ({ page }) => {

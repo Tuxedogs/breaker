@@ -1,0 +1,1618 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "fdfd54f65b1f84a621899b21",
+  "generatedAt": "2026-07-30T15:13:56.707205+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Hauling",
+  "variant": {
+    "variantKey": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+    "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Hauling",
+    "conceptKey": "dcd16dc29db16d7699d9",
+    "objectiveSignature": {
+      "key": "unknown-faction|unknown-faction:unknown-scope|deliver|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "deliver",
+      "titleStem": "foxwell-haul-cargo-multi-to-single",
+      "descriptionStem": "foxwell-haul-cargo-multi-to-single",
+      "handlerStem": "foxwell-enforcement-hauling",
+      "archetype": "Cargo",
+      "contractType": "Contract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:deliver",
+        "activity-source:structural",
+        "title:foxwell-haul-cargo-multi-to-single",
+        "description:foxwell-haul-cargo-multi-to-single",
+        "handler:foxwell-enforcement-hauling",
+        "contract:contract",
+        "archetype:cargo",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Cargo"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Hauling",
+        "Foxwell_PAF_HaulCargo_Multi2ToSingle_Small_Aluminum"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Red Level Contract: Clear PAFs, Recover Cargo, and Deliver to OLP",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Something weird is going on at the old Hathor mining facilities. Both the platform alignment facilities and orbital laser platforms have been abandoned and gathering dust for decades, but outlaws have started using them as a base of operations.\n\nWe’ve been hired by a concerned party who’s recently lost a lot of important cargo to one such gang. Currently, their stuff is stashed at [Location1] and [Location2], but there’s a growing fear that the gang may be offloading their goods soon. That’s why we’ve been hired to hit both of those Hathor facilities, retrieve the cargo from the freight elevators, and bring it to the freight elevator at [Destination]. \n\nHere’s the specifics on what to grab from each location. Doesn’t matter in what order you do this, as long as it all gets collected and delivered. Just be sure to bring a ship that can handle [MissionMaxSCUSize] cargo containers.  It also wouldn't hurt to bring a handheld tractor beam with you.   \n\n[MultiToSingleToken]\n\nFoxwell hasn’t been able to scout these locations, but if I were you, I’d expect to face some serious armed resistance. Best bring a bunch of gear and some friends.\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+    "rawName": "@Foxwell_HaulCargo_MultiToSingle_title_01",
+    "internalName": "Foxwell_PAF_HaulCargo_Multi2ToSingle_Small_Aluminum",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Hauling",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Hauling",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Hauling",
+        "Foxwell_PAF_HaulCargo_Multi2ToSingle_Small_Aluminum"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "No extracted standing requirement",
+    "reputationRequirement": "Foxwell Enforcement: Reputation requirement",
+    "prerequisiteSummary": "Foxwell Enforcement: Reputation requirement; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "reputation",
+        "label": "Foxwell Enforcement: Reputation requirement",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location1|Address",
+          "Location2|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location1|Address",
+          "Location2|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location1|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location2|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+        "Security unresolved",
+        "372,750 aUEC"
+      ],
+      "blueprintRewards": [
+        "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+          "poolName": "Foxwell Enforcement Generator",
+          "rewardCount": 8,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "12.5% chance - 1 of 8",
+          "rewards": [
+            {
+              "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+              "displayName": "Antium Helmet Jet",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+              "displayName": "Antium Core Maroon",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+              "displayName": "Antium Legs Maroon",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+              "displayName": "Antium Helmet Maroon",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+              "displayName": "Antium Helmet Moss Camo",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+              "displayName": "Antium Arms Moss Camo",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+              "displayName": "Antium Core Moss Camo",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+              "displayName": "Antium Legs Moss Camo",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "12.5% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Security unresolved"
+      ],
+      "credits": "372,750 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "372,750 aUEC",
+        "amount": 372750,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 372750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 372750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "scopeDisplayName": "Security",
+        "confidence": "partial",
+        "sourceRefs": [
+          "016c2950-0292-468c-a408-a5283b52f158",
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+        ],
+        "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+        "familyId": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Hauling",
+        "templateGuid": "8322078e-350a-4443-a113-4fb446ad0e6a"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_1cef7c50cdab021fd8acf57b",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "type": "reputation",
+          "polarity": "excluded",
+          "identifiers": {
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "scope": "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "scope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "exclude": "1"
+          },
+          "sourceElement": "ContractPrerequisite_Reputation",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_Hauling"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "sourceElement": "ContractPrerequisite_Reputation",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_1333affd6b4aca6f7440bc1f",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "50b65c1a-14ad-4e69-bba6-efac087a3735"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_6c87784cce7d57808071bac7",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_c6ac31e66b627cbbc68ab808",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "type": "calculated_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "rewardGuid": null,
+            "reputationAmount": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_reputation_v1",
+              "calculationStatus": "resolved",
+              "amount": 12212,
+              "rawAmount": 12212.339492959001,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.117999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.06
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "repCurve",
+                "rawAttributes": {
+                  "i": "0.139",
+                  "k": "0.36",
+                  "m": "-26"
+                },
+                "normalized": {
+                  "i": 0.139,
+                  "k": 0.36,
+                  "m": -26,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": null,
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/repCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": null,
+                "nearestIncrementMode": null,
+                "order": "integer_only"
+              },
+              "timeToComplete": {
+                "raw": "35",
+                "value": 35,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReputation",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "sourceElement": "ContractResult_CalculatedReputation"
+          }
+        },
+        {
+          "edgeId": "out_a5badc629b481e2637974fc0",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 372750,
+              "amount": 372750,
+              "rawAmount": 372785.1395463997,
+              "integerRoundedAmount": 372785,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.117999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.06
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "35",
+                "value": 35,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "8322078e-350a-4443-a113-4fb446ad0e6a",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/haulcargo_multi2tosingle_small_aluminum.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": false,
+        "contractOverride": false,
+        "overrideCandidate": false,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='FoxwellEnforcement_Hauling']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='FoxwellEnforcement_Hauling']/contracts/Contract[@id='50b65c1a-14ad-4e69-bba6-efac087a3735']/paramOverrides/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_multi2tosingle_small_aluminum.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 372750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 372750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_6c87784cce7d57808071bac7",
+            "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [],
+        "calculatedReputation": [
+          {
+            "edgeId": "out_c6ac31e66b627cbbc68ab808",
+            "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+            "type": "calculated_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+              "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+              "rewardGuid": null,
+              "reputationAmount": null,
+              "calculatedContext": {
+                "schemaVersion": 1,
+                "modelVersion": "sc_mission_calculated_reputation_v1",
+                "calculationStatus": "resolved",
+                "amount": 12212,
+                "rawAmount": 12212.339492959001,
+                "unresolvedReasons": [],
+                "validationWarnings": [],
+                "difficulty": {
+                  "status": "resolved",
+                  "value": 7.117999999999999,
+                  "formula": "sum(rating.level * profile.weight)",
+                  "profile": {
+                    "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                    "status": "resolved",
+                    "name": "Logistics",
+                    "recordName": "ContractDifficultyProfile.Logistics",
+                    "weightsRaw": {
+                      "mechanicalSkillWeight": "0.172",
+                      "mentalLoadWeight": "0.702",
+                      "riskOfLossWeight": "0.515",
+                      "gameKnowledgeWeight": "0.172"
+                    },
+                    "weights": {
+                      "mechanicalSkillWeight": 0.172,
+                      "mentalLoadWeight": 0.702,
+                      "riskOfLossWeight": 0.515,
+                      "gameKnowledgeWeight": 0.172
+                    },
+                    "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                    "sourceElement": "ContractDifficultyProfile.Logistics"
+                  },
+                  "ratings": [
+                    {
+                      "dimension": "mechanicalSkill",
+                      "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                      "level": 5,
+                      "weightRaw": "0.172",
+                      "weight": 0.172,
+                      "contribution": 0.8599999999999999
+                    },
+                    {
+                      "dimension": "mentalLoad",
+                      "raw": "Like_spinning_10_plates_at_once_5",
+                      "level": 5,
+                      "weightRaw": "0.702",
+                      "weight": 0.702,
+                      "contribution": 3.51
+                    },
+                    {
+                      "dimension": "riskOfLoss",
+                      "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                      "level": 4,
+                      "weightRaw": "0.515",
+                      "weight": 0.515,
+                      "contribution": 2.06
+                    },
+                    {
+                      "dimension": "gameKnowledge",
+                      "raw": "Standard_understanding_FPS_flight_professions_4",
+                      "level": 4,
+                      "weightRaw": "0.172",
+                      "weight": 0.172,
+                      "contribution": 0.688
+                    }
+                  ],
+                  "unresolvedReasons": [],
+                  "rawAttributes": {
+                    "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                    "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                    "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                    "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                  }
+                },
+                "curve": {
+                  "sourceTag": "repCurve",
+                  "rawAttributes": {
+                    "i": "0.139",
+                    "k": "0.36",
+                    "m": "-26"
+                  },
+                  "normalized": {
+                    "i": 0.139,
+                    "k": 0.36,
+                    "m": -26,
+                    "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                  },
+                  "currency": null,
+                  "sourceRef": "gamemode/sc_default.xml",
+                  "sourceElement": "SSubsumptionMission/repCurve",
+                  "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                  "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+                },
+                "rounding": {
+                  "integer": "half_away_from_zero",
+                  "nearestIncrement": null,
+                  "nearestIncrementMode": null,
+                  "order": "integer_only"
+                },
+                "timeToComplete": {
+                  "raw": "35",
+                  "value": 35,
+                  "unit": "minutes",
+                  "unitStatus": "normalized_by_source_formula_divisor_60"
+                },
+                "provenance": {
+                  "channel": "LIVE",
+                  "buildId": "4.9.0-live.12232306",
+                  "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                  "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                  "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+                  "sourceElement": "ContractResult_CalculatedReputation",
+                  "contextElement": "contractResults",
+                  "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "curveSourceRef": "gamemode/sc_default.xml"
+                }
+              },
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CalculatedReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+              "sourceElement": "ContractResult_CalculatedReputation"
+            }
+          }
+        ],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 372750,
+              "amount": 372750,
+              "rawAmount": 372785.1395463997,
+              "integerRoundedAmount": 372785,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.117999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.06
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "35",
+                "value": 35,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 372750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 372750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [],
+        "calculated": [
+          {
+            "type": "ContractResult_CalculatedReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_reputation_v1",
+              "calculationStatus": "resolved",
+              "amount": 12212,
+              "rawAmount": 12212.339492959001,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.117999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.06
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "repCurve",
+                "rawAttributes": {
+                  "i": "0.139",
+                  "k": "0.36",
+                  "m": "-26"
+                },
+                "normalized": {
+                  "i": 0.139,
+                  "k": 0.36,
+                  "m": -26,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": null,
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/repCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": null,
+                "nearestIncrementMode": null,
+                "order": "integer_only"
+              },
+              "timeToComplete": {
+                "raw": "35",
+                "value": 35,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReputation",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ]
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_9e150c0015029a68e2609ba3",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "8322078e-350a-4443-a113-4fb446ad0e6a",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "4",
+                  "minSCU": "4",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "4",
+                  "minSCU": "4",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "92b154b1-50de-4171-8004-39370b82c227",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_multi2tosingle_small_aluminum.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_9e150c0015029a68e2609ba3",
+          "variantId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "8322078e-350a-4443-a113-4fb446ad0e6a",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "4",
+                  "minSCU": "4",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "48c7080a-bbef-43d2-901a-698321ed4340",
+                  "maxContainerSize": "4",
+                  "minSCU": "4",
+                  "maxSCU": "16"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "48c7080a-bbef-43d2-901a-698321ed4340"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "16",
+                    "value": 16
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "92b154b1-50de-4171-8004-39370b82c227",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_multi2tosingle_small_aluminum.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "50b65c1a-14ad-4e69-bba6-efac087a3735",
+      "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+      "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@Foxwell_HaulCargo_MultiToSingle_title_01",
+      "descriptionRaw": "@Foxwell_HaulCargo_MultiToSingle_desc_01"
+    }
+  }
+}

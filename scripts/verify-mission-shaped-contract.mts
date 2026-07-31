@@ -132,6 +132,15 @@ const allVariants = await Promise.all(expectedVariantFiles.map(async (fileName) 
   equal(payload.generationId, generationId, `${fileName} generation`);
   return object(payload.variant, `${fileName}.variant`);
 }));
+const runtimeLocationTitle = allVariants.find(
+  (variant) => variant.variantKey === "54ecfe84-3b4c-4099-ab62-0d19286cca78",
+);
+assert(runtimeLocationTitle, "Runtime-location title fixture is missing.");
+equal(
+  runtimeLocationTitle.displayName,
+  "Shut Off Power at [Location]",
+  "runtime location placeholder title",
+);
 
 const graph = object(expected.graph, "golden.shapedContractV2.graph");
 const graphSummary = object(graphReport.summary, "graphReport.summary");
@@ -213,13 +222,17 @@ equal(
 const requiredItemVariants = allVariants.filter((variant) =>
   array(object(variant.requiredItems, "variant.requiredItems").evidence, "requiredItems.evidence").length > 0
 );
-equal(requiredItemVariants.length, requiredItemExpected.variants, "required-item variants");
+equal(
+  requiredItemVariants.length,
+  requiredItemExpected.canonicalVariants ?? requiredItemExpected.variants,
+  "required-item variants",
+);
 equal(
   requiredItemVariants.reduce(
     (sum, variant) => sum + array(object(variant.requiredItems, "variant.requiredItems").evidence, "requiredItems.evidence").length,
     0,
   ),
-  requiredItemExpected.propertyRows,
+  requiredItemExpected.canonicalEvidenceRows ?? requiredItemExpected.propertyRows,
   "required-item evidence rows",
 );
 equal(
@@ -227,7 +240,7 @@ equal(
     (sum, variant) => sum + Number(object(variant.requiredItems, "variant.requiredItems").haulingOrderCount ?? 0),
     0,
   ),
-  requiredItemExpected.haulingOrders,
+  requiredItemExpected.canonicalHaulingOrders ?? requiredItemExpected.haulingOrders,
   "hauling-order evidence rows",
 );
 equal(
@@ -246,6 +259,28 @@ async function variantById(variantId: string): Promise<JsonObject> {
   const payload = await readJson(path.join(generationRoot, detailFile));
   equal(payload.generationId, generationId, `${variantId} generation`);
   return object(payload.variant, `${variantId}.variant`);
+}
+
+for (const assertionValue of array(golden.blueprintRewardAssertions ?? [], "golden.blueprintRewardAssertions")) {
+  const assertion = object(assertionValue, "blueprint reward assertion");
+  const id = string(assertion.variantId, "blueprint reward assertion.variantId");
+  const variant = await variantById(id);
+  const rewards = object(variant.rewards, `${id}.rewards`);
+  const groups = array(rewards.blueprintRewardGroups, `${id}.blueprintRewardGroups`).map(
+    (value, index) => object(value, `${id}.blueprintRewardGroups[${index}]`),
+  );
+  const rewardNames = groups.flatMap((group, groupIndex) =>
+    array(group.rewards, `${id}.blueprintRewardGroups[${groupIndex}].rewards`).map(
+      (value) => object(value, `${id}.blueprintReward`).displayName,
+    )
+  );
+  for (const expectedName of array(assertion.expectedRewardNames, `${id}.expectedRewardNames`)) {
+    assert(rewardNames.includes(expectedName), `${id} blueprint reward ${String(expectedName)} is missing.`);
+  }
+  assert(
+    groups.some((group) => group.missionChanceLabel === assertion.expectedMissionChanceLabel),
+    `${id} mission-level blueprint chance is missing.`,
+  );
 }
 
 for (const assertionValue of array(golden.calculatedCreditAssertions, "golden.calculatedCreditAssertions")) {

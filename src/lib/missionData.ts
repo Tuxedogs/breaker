@@ -72,6 +72,19 @@ export type MissionRequiredItemEvidenceView = {
     entries?: Array<{
       ordinal: number;
       type: string;
+      identity?: {
+        status: string;
+        guid?: string;
+        recordName?: string;
+        displayName?: string;
+        path?: string;
+        members?: Array<{
+          guid?: string;
+          recordName?: string;
+          displayName?: string;
+          path?: string;
+        }>;
+      };
       itemReference?: {
         status: string;
         reference?: { raw?: string; kind?: string; resolution?: string };
@@ -84,7 +97,18 @@ export type MissionRequiredItemEvidenceView = {
     conditions?: Array<{
       ordinal: number;
       type: string;
-      items?: Array<{ guid: string; resolution: string }>;
+      items?: Array<{
+        guid: string;
+        resolution: string;
+        recordName?: string;
+        displayName?: string;
+        entityClass?: {
+          guid?: string;
+          recordName?: string;
+          displayName?: string;
+          path?: string;
+        };
+      }>;
     }>;
   };
   provenance?: {
@@ -144,6 +168,7 @@ export type BlueprintRewardGroupView = {
   poolGuid?: string;
   poolName: string;
   rewardCount: number;
+  missionChanceLabel?: string;
   chanceLabel?: string;
   rewards: Array<{
     blueprintGuid?: string;

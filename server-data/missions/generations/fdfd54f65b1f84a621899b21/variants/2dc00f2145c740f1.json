@@ -1,0 +1,1439 @@
+{
+  "schemaVersion": 2,
+  "sourceContractVersion": 3,
+  "generationId": "fdfd54f65b1f84a621899b21",
+  "generatedAt": "2026-07-30T15:13:56.707205+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career",
+  "variant": {
+    "variantKey": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+    "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career",
+    "conceptKey": "35e182cee1a0ff9cfa76",
+    "objectiveSignature": {
+      "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:6471f959cd6f|unknown:unknown||||",
+      "activityKey": "eliminate-specific",
+      "titleStem": "bhg-bounty-gen",
+      "descriptionStem": "bhg-bounty-gen",
+      "handlerStem": "bounty-hunters-guild-bounties",
+      "archetype": "Bounty",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:6471f959cd6f",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:eliminate-specific",
+        "activity-source:structural",
+        "title:bhg-bounty-gen",
+        "description:bhg-bounty-gen",
+        "handler:bounty-hunters-guild-bounties",
+        "contract:careercontract",
+        "archetype:bounty",
+        "intro:standard",
+        "chain:unlock:6471f959cd6f",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "veryeasy",
+    "tierLabel": "Very Low Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Bounty"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+      ]
+    },
+    "displayName": "Verified Bounty: [TargetName] | [Danger]",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+    "rawName": "@bhg_bounty_title_gen_001",
+    "internalName": "BountyHuntersGuild_Bounty_Pyro_VeryEasy",
+    "missionType": "Bounty Hunter",
+    "provider": "Bounty Hunters Guild",
+    "faction": "Bounty Hunters Guild",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+      "displayName": "Bounty Bounty Hunters Guild",
+      "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+      "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+      "factionDisplayName": "Bounty Hunters Guild",
+      "trackType": "Bounty Bounty Hunters Guild",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+      ]
+    },
+    "missionArchetype": "Bounty",
+    "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+    "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; Procedural location placeholder; Region A",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "MissionLocation_BP",
+          "propertyExtendedTextToken": "Location",
+          "locationLevelType": "SolarSystem"
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Region A",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "301c8246-3095-4f95-be34-1ddab8640d73"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "MissionLocality procedural region scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [
+        "Region A"
+      ],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "possibleLocations": [
+        "Region A"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "MissionLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "displayName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Region A"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Generated region pool: Region A",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "MissionLocation_BP",
+          "Location",
+          "SolarSystem",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "MissionLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Location",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "SolarSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+        "resolvedName": "Region A",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Region A"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Bounty Bounty Hunters Guild +500",
+        "Bounty Bounty Hunters Guild -250",
+        "11,250 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Bounty Bounty Hunters Guild +500",
+        "Bounty Bounty Hunters Guild -250"
+      ],
+      "credits": "11,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "11,250 aUEC",
+        "amount": 11250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 11250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 11250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "scopeDisplayName": "Bounty Bounty Hunters Guild",
+        "amount": 500,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "36d5786c-5258-48ca-a3b8-fefb5838e143"
+        ]
+      },
+      {
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "scopeDisplayName": "Bounty Bounty Hunters Guild",
+        "amount": -250,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "0c926b08-6567-490c-964e-a5413e757dc2"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 2,
+      "sourceSchemaVersion": 3,
+      "identity": {
+        "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+        "familyId": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career",
+        "templateGuid": "68935ccd-25dd-44c7-85ad-d5d92ce948bb"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_001a44706e00656e79bd0cc0",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "BountyHuntersGuild_Bounties_Pyro_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_04c7195cff9be21fa75232da",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "e0deb260-eeca-4a1a-b0cb-d88ca089522c"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_444d308b7db92309a746c833",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "301c8246-3095-4f95-be34-1ddab8640d73"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_0c766f6d12b9dd07ce4cff7c",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "301c8246-3095-4f95-be34-1ddab8640d73"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "e0deb260-eeca-4a1a-b0cb-d88ca089522c"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "03d036e2-e00d-434b-a914-b524eca46972": [
+          {
+            "edgeId": "pre_60f2fea1b1427074c399c615",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "03d036e2-e00d-434b-a914-b524eca46972",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "03d036e2-e00d-434b-a914-b524eca46972"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_39b572111660dae7428f35e3",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "03d036e2-e00d-434b-a914-b524eca46972",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "301c8246-3095-4f95-be34-1ddab8640d73"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_fae58393b1b97865481903d3",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "301c8246-3095-4f95-be34-1ddab8640d73"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "03d036e2-e00d-434b-a914-b524eca46972"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "ac320fe2-f424-4fb4-8d87-655762a638dd": [
+          {
+            "edgeId": "pre_0e36ff5071f976f305df8eff",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "ac320fe2-f424-4fb4-8d87-655762a638dd",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ac320fe2-f424-4fb4-8d87-655762a638dd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_cd0339fcb7447160cf5b1c7b",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "ac320fe2-f424-4fb4-8d87-655762a638dd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "301c8246-3095-4f95-be34-1ddab8640d73"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b3266c5f31943932a567cf15",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "301c8246-3095-4f95-be34-1ddab8640d73"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ac320fe2-f424-4fb4-8d87-655762a638dd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "89c494c8-a7fb-4740-8b1e-7591c758ed2e": [
+          {
+            "edgeId": "pre_e0b3f2c39d5a91720f838094",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "89c494c8-a7fb-4740-8b1e-7591c758ed2e",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "89c494c8-a7fb-4740-8b1e-7591c758ed2e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_881f650be91fda13357ae438",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "ownerScope": "subcontract",
+            "ownerId": "89c494c8-a7fb-4740-8b1e-7591c758ed2e",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "301c8246-3095-4f95-be34-1ddab8640d73"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_d164b888935db2b360cdbfee",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "301c8246-3095-4f95-be34-1ddab8640d73"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "89c494c8-a7fb-4740-8b1e-7591c758ed2e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_97d4d7d0b6ae50cd6620d1cf",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_47109c6c53ac777e3e78d5b7",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "rewardGuid": "0c926b08-6567-490c-964e-a5413e757dc2",
+            "reputationAmount": -250,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_e7ec6d613e503b1c2f4390c2",
+          "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 11250,
+              "amount": 11250,
+              "rawAmount": 11294.750623948235,
+              "integerRoundedAmount": 11295,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 0.68
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.66
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.44
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.22
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "5",
+                "value": 5,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "68935ccd-25dd-44c7-85ad-d5d92ce948bb",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/bounty.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/bounty.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 11250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 11250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_97d4d7d0b6ae50cd6620d1cf",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+              "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+              "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "reputationAmount": 500,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_47109c6c53ac777e3e78d5b7",
+            "variantId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+              "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+              "rewardGuid": "0c926b08-6567-490c-964e-a5413e757dc2",
+              "reputationAmount": -250,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 11250,
+              "amount": 11250,
+              "rawAmount": 11294.750623948235,
+              "integerRoundedAmount": 11295,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 0.68
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.66
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.44
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.22
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "5",
+                "value": 5,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 11250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 11250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "reward": {
+              "guid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XS",
+              "editorName": "+T_04",
+              "reputationAmount": 500,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xs.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "factionReputation": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "reputationScope": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "0c926b08-6567-490c-964e-a5413e757dc2",
+            "reputationAmount": -250,
+            "reward": {
+              "guid": "0c926b08-6567-490c-964e-a5413e757dc2",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Negative_XXS",
+              "editorName": "-T_03",
+              "reputationAmount": -250,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_negative_xxs.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "e0deb260-eeca-4a1a-b0cb-d88ca089522c",
+      "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+      "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@bhg_bounty_title_gen_001",
+      "descriptionRaw": "@bhg_bounty_desc_gen_001"
+    }
+  }
+}
