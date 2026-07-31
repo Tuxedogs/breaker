@@ -69,8 +69,6 @@ labels or coverage improve.
   state can provide them without raw-ID entry.
 - Add completion-history import rather than relying on manual empty-history
   declarations.
-- Add targeted Mission Browser interaction tests and deterministic loading/error
-  fixtures.
 - Complete the compact, 1080p, 2K, and 4K visual matrix for the final hierarchy.
 
 ## Validation for this slice
@@ -194,3 +192,24 @@ Known presentation limit:
   whose active tracker view does not resolve a display name. The exact mission
   source and tracking state remain resolved; display-name normalization is a
   separate shared crafting-data concern.
+
+## Acceptance coverage slice
+
+Mission Browser interaction coverage now includes deterministic fixtures for:
+
+- A selected workspace remaining stable while exact variants are loading
+- An explicit eligibility request failure
+- A typed unresolved prerequisite path with no invented steps
+
+The accepted Mission Browser behavior is now recorded in the Moonbreaker design
+canon, including concept and exact-variant grain, URL state, payout ownership,
+required-item evidence, server-owned eligibility and path rules, bookmark
+identity, and unresolved-data handling.
+
+Validation after this slice:
+
+- Mission Browser UI tests: 13 passed
+- Mission service tests: 31 passed
+- Crafting tests: 37 passed
+- Lint: passed
+- Production build: passed

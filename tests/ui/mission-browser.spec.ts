@@ -143,4 +143,70 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(page).not.toHaveURL(/search=/);
     await expect(page.locator(".mission-group-card").first()).toBeVisible();
   });
+
+  test("keeps the selected workspace stable while exact variants load", async ({ page }) => {
+    let releaseVariants: () => void = () => undefined;
+    const variantGate = new Promise<void>((resolve) => {
+      releaseVariants = resolve;
+    });
+    await page.route("**/api/missions/family/*/variants", async (route) => {
+      await variantGate;
+      await route.continue();
+    });
+
+    await page.goto("/industry/missions?selected=70d0a94a8a837e887b3c");
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    await expect(workspace.getByText("Loading exact variants...", { exact: true })).toBeVisible();
+    releaseVariants();
+    await expect(workspace.getByText("Exact mission comparison", { exact: true })).toBeVisible();
+  });
+
+  test("surfaces deterministic eligibility request errors", async ({ page }) => {
+    await page.route("**/eligibility", (route) => route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "Eligibility fixture unavailable." }),
+    }));
+    await page.goto("/industry/missions?selected=70d0a94a8a837e887b3c");
+
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    await workspace.getByRole("button", { name: "Check" }).click();
+    const eligibility = page.getByRole("region", { name: /eligibility/i });
+    await eligibility.getByRole("button", { name: "Evaluate eligibility" }).click();
+    await expect(eligibility.getByText("Eligibility fixture unavailable.", { exact: true })).toBeVisible();
+  });
+
+  test("preserves an unresolved prerequisite path without inventing steps", async ({ page }) => {
+    await page.route("**/prerequisite-path", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        schemaVersion: 1,
+        generationId: "fixture-generation",
+        result: {
+          generationId: "fixture-generation",
+          goal: { type: "variant_eligibility", variantId: "fixture-target" },
+          costModel: { type: "mission_count", unit: "mission_completion" },
+          status: "unresolved",
+          minimumMissionCount: null,
+          primaryPlan: null,
+          alternatePlans: [],
+          alternatePlansTruncated: false,
+          exploredStateCount: 1,
+          failures: [{ code: "dangling_completion_tag", message: "No source-backed producer is published for this required completion tag." }],
+          relevantCycles: [],
+        },
+      }),
+    }));
+    await page.goto("/industry/missions?selected=70d0a94a8a837e887b3c");
+
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    await workspace.getByRole("button", { name: "Check" }).click();
+    const eligibility = page.getByRole("region", { name: /eligibility/i });
+    await eligibility.getByRole("button", { name: "Find prerequisite path" }).click();
+    const path = eligibility.locator(".mission-path-result");
+    await expect(path.locator(".mission-eligibility-status strong")).toHaveText("unresolved");
+    await expect(path.getByText("No source-backed producer is published for this required completion tag.", { exact: true })).toBeVisible();
+    await expect(path.locator("ol li")).toHaveCount(0);
+  });
 });

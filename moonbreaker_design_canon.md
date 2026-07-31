@@ -523,6 +523,20 @@ Mission cards should remain dense and comparable. Category colors should organiz
 
 Blueprint Tracker should favor aligned repeated records, explicit acquired/open state, and compact detail disclosure.
 
+Mission concepts are the browsing and identity grain. Exact variants are the comparison, payout, eligibility, prerequisite-path, and solver grain. Do not collapse exact variants before those operations.
+
+The accepted Mission Browser hierarchy is a persistent selected-concept hero, a sortable exact-variant comparison, and peer dossier, eligibility, and unlock-path surfaces. `selected` identifies the persistent workspace in URL state; `concept` remains the dossier deep link. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
+
+Calculated payout is the persisted, source-backed Scintel base/solo amount. Keep certification buy-in separate, preserve valid zero as distinct from missing or unresolved, and do not calculate or split payout in React.
+
+Required-item evidence must distinguish a proven hauling order from a selector or possible turn-in whose role is not established. Unresolved item definitions remain visible as unresolved.
+
+Eligibility and prerequisite paths are server-owned exact-variant results. Unknown player state is not satisfied state. The accepted path cost is exact prerequisite mission completions only, excludes the target mission, and must not infer travel, time, risk, legality, credits, or title similarity as hidden costs.
+
+Bookmarks retain typed intent: concept favorites and exact mission blueprint sources are separate. Legacy concept keys remain compatible, and selecting a concept must not fan out into every possible blueprint source.
+
+Raw GUIDs belong in technical disclosure or explicit unresolved fallback, not normal mission labels.
+
 ## Mining Canon
 
 Mining retains semantic method, quality-band, encounter, and recommendation colors on the shared graphite foundation.
