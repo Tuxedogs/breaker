@@ -213,3 +213,26 @@ Validation after this slice:
 - Crafting tests: 37 passed
 - Lint: passed
 - Production build: passed
+
+## Readable mission URL slice
+
+Selected mission concepts now use canonical readable routes:
+
+`/industry/missions/<mission-name>--<concept-key>`
+
+- The slug is derived deterministically from the published concept display name.
+- The full stable concept key prevents collisions between duplicate titles.
+- A stale readable name repairs itself from the stable key after a title change.
+- Existing `selected=<conceptKey>` workspace links remain compatible and upgrade
+  to the canonical route.
+- Existing `concept=<conceptKey>` dossier links remain compatible and upgrade to
+  the canonical route with `dossier=1`.
+- Search and filter state remain query parameters and survive mission selection.
+- Clearing the workspace or changing browse filters returns to
+  `/industry/missions`.
+
+Validation after this slice:
+
+- Mission Browser UI tests: 14 passed, including canonical selection, legacy
+  link upgrade, and stale-slug repair
+- No visual hierarchy or gameplay-data behavior changed

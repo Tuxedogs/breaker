@@ -5,15 +5,26 @@ test.describe("Mission Browser exact dossier", () => {
     await page.goto("/industry/missions?search=Bit%20Zeros%20Black%20Box%20Recovery%20Nyx%20Easy");
 
     await page.locator(".mission-group-card").first().click();
-    await expect(page).toHaveURL(/selected=70d0a94a8a837e887b3c/);
+    await expect(page).toHaveURL(/\/industry\/missions\/bit-zeros-black-box-recovery-nyx-easy--70d0a94a8a837e887b3c\?/);
     const workspace = page.getByRole("region", { name: /selected mission workspace/i });
     await expect(workspace).toBeVisible();
     await expect(workspace.getByText("Exact mission comparison", { exact: true })).toBeVisible();
     await expect(page.getByRole("dialog")).toHaveCount(0);
 
     await workspace.getByRole("button", { name: "Open dossier" }).click();
-    await expect(page).toHaveURL(/concept=70d0a94a8a837e887b3c/);
+    await expect(page).toHaveURL(/dossier=1/);
     await expect(page.getByRole("dialog", { name: /Bit Zeros Black Box Recovery Nyx Easy mission dossier/i })).toBeVisible();
+  });
+
+  test("upgrades legacy mission links and repairs stale readable names", async ({ page }) => {
+    const canonicalPath = "/industry/missions/bit-zeros-black-box-recovery-nyx-easy--70d0a94a8a837e887b3c";
+
+    await page.goto("/industry/missions?selected=70d0a94a8a837e887b3c");
+    await expect(page).toHaveURL(new RegExp(`${canonicalPath}$`));
+    await expect(page.getByRole("region", { name: /selected mission workspace/i })).toBeVisible();
+
+    await page.goto("/industry/missions/old-mission-name--70d0a94a8a837e887b3c");
+    await expect(page).toHaveURL(new RegExp(`${canonicalPath}$`));
   });
 
   test("keeps a large exact-variant comparison bounded and sortable", async ({ page }) => {

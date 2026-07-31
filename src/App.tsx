@@ -263,6 +263,14 @@ export default function App() {
           }
         />
         <Route
+          path="industry/missions/:missionSlug"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryMissionBrowserPage />
+            </Suspense>
+          }
+        />
+        <Route
           path="industry/refinery"
           element={
             <Suspense fallback={<RouteFallback />}>

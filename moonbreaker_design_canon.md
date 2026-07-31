@@ -525,7 +525,7 @@ Blueprint Tracker should favor aligned repeated records, explicit acquired/open 
 
 Mission concepts are the browsing and identity grain. Exact variants are the comparison, payout, eligibility, prerequisite-path, and solver grain. Do not collapse exact variants before those operations.
 
-The accepted Mission Browser hierarchy is a persistent selected-concept hero, a sortable exact-variant comparison, and peer dossier, eligibility, and unlock-path surfaces. `selected` identifies the persistent workspace in URL state; `concept` remains the dossier deep link. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
+The accepted Mission Browser hierarchy is a persistent selected-concept hero, a sortable exact-variant comparison, and peer dossier, eligibility, and unlock-path surfaces. Canonical mission URLs use the readable concept name plus its stable concept key: `/industry/missions/<mission-name>--<concept-key>`. The readable portion may change with an authored title while the stable suffix preserves identity and repairs stale slugs. Legacy `selected` and `concept` query links remain compatible. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
 
 Calculated payout is the persisted, source-backed Scintel base/solo amount. Keep certification buy-in separate, preserve valid zero as distinct from missing or unresolved, and do not calculate or split payout in React.
 

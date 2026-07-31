@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   hasMissionConceptBookmark,
   MISSION_BOOKMARK_STORAGE_KEY,
@@ -29,6 +29,12 @@ import {
   type MissionVariantView,
   type PlayerMissionStateView,
 } from "@/lib/missionData";
+import {
+  MISSION_BROWSER_PATH,
+  missionConceptKeyFromSlug,
+  missionConceptPath,
+  missionConceptSlug,
+} from "@/lib/missionUrls";
 import "./mission-browser.css";
 import "@/components/industry/crafting/recipe-browser.css";
 
@@ -2251,7 +2257,9 @@ void FamilyDetail;
 void VariantTabs;
 
 export default function MissionBrowserPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { missionSlug } = useParams<{ missionSlug?: string }>();
   const [catalog, setCatalog] = useState<MissionBrowserCatalog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -2277,20 +2285,30 @@ export default function MissionBrowserPage() {
   const activeView: BrowserView = requestedView === "faction" || requestedView === "reputation" || requestedView === "full"
     ? requestedView
     : provider || exactSearchedFaction ? "faction" : "full";
-  const dossierConceptKey = searchParams.get("concept") ?? "";
-  const selectedConceptKey = searchParams.get("selected") ?? dossierConceptKey;
+  const routeConceptKey = missionConceptKeyFromSlug(missionSlug);
+  const legacyDossierConceptKey = searchParams.get("concept") ?? "";
+  const legacySelectedConceptKey = searchParams.get("selected") ?? legacyDossierConceptKey;
+  const selectedConceptKey = routeConceptKey || legacySelectedConceptKey;
+  const dossierConceptKey = routeConceptKey && searchParams.get("dossier") === "1"
+    ? routeConceptKey
+    : legacyDossierConceptKey;
   const selectedConcept = conceptsByKey.get(selectedConceptKey);
   const dossierConcept = conceptsByKey.get(dossierConceptKey);
   const selectedConceptVariants = conceptVariantsByKey[selectedConceptKey];
   const selectedConceptTriggerRef = useRef<HTMLButtonElement | null>(null);
   const modalShellRef = useRef<HTMLDivElement | null>(null);
   const requestedPage = Number.parseInt(searchParams.get("page") ?? "1", 10);
+  const navigateWithParams = useCallback((pathname: string, params: URLSearchParams, replace = false) => {
+    const search = params.toString();
+    navigate({ pathname, search: search ? `?${search}` : "" }, { replace });
+  }, [navigate]);
   const closeConceptDossier = useCallback(() => {
     const next = new URLSearchParams(searchParams);
     next.delete("concept");
-    setSearchParams(next);
+    next.delete("dossier");
+    navigateWithParams(selectedConcept ? missionConceptPath(selectedConcept) : MISSION_BROWSER_PATH, next);
     selectedConceptTriggerRef.current?.focus();
-  }, [searchParams, setSearchParams]);
+  }, [navigateWithParams, searchParams, selectedConcept]);
   const toggleMissionBookmark = useCallback((conceptKey: string) => {
     setBookmarkedMissionIds((current) => {
       const next = new Set(current);
@@ -2354,6 +2372,27 @@ export default function MissionBrowserPage() {
       });
     return () => { cancelled = true; };
   }, [missionFilters]);
+
+  useEffect(() => {
+    if (!selectedConcept) return;
+    const canonicalSlug = missionConceptSlug(selectedConcept);
+    const isLegacyMissionLink = !missionSlug && Boolean(legacySelectedConceptKey);
+    const hasStaleSlug = Boolean(missionSlug) && missionSlug !== canonicalSlug;
+    if (!isLegacyMissionLink && !hasStaleSlug) return;
+
+    const next = new URLSearchParams(searchParams);
+    const opensDossier = Boolean(next.get("concept"));
+    next.delete("selected");
+    next.delete("concept");
+    if (opensDossier) next.set("dossier", "1");
+    navigateWithParams(missionConceptPath(selectedConcept), next, true);
+  }, [
+    legacySelectedConceptKey,
+    missionSlug,
+    navigateWithParams,
+    searchParams,
+    selectedConcept,
+  ]);
 
   useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
@@ -2537,25 +2576,32 @@ export default function MissionBrowserPage() {
 
   const openConceptDossier = useCallback((conceptKey: string, trigger: HTMLButtonElement) => {
     selectedConceptTriggerRef.current = trigger;
+    const concept = conceptsByKey.get(conceptKey);
+    if (!concept) return;
     const next = new URLSearchParams(searchParams);
-    next.set("selected", conceptKey);
-    next.set("concept", conceptKey);
-    setSearchParams(next);
-  }, [searchParams, setSearchParams]);
+    next.delete("selected");
+    next.delete("concept");
+    next.set("dossier", "1");
+    navigateWithParams(missionConceptPath(concept), next);
+  }, [conceptsByKey, navigateWithParams, searchParams]);
 
   const selectConceptWorkspace = useCallback((conceptKey: string) => {
+    const concept = conceptsByKey.get(conceptKey);
+    if (!concept) return;
     const next = new URLSearchParams(searchParams);
-    next.set("selected", conceptKey);
+    next.delete("selected");
     next.delete("concept");
-    setSearchParams(next);
-  }, [searchParams, setSearchParams]);
+    next.delete("dossier");
+    navigateWithParams(missionConceptPath(concept), next);
+  }, [conceptsByKey, navigateWithParams, searchParams]);
 
   const closeConceptWorkspace = useCallback(() => {
     const next = new URLSearchParams(searchParams);
     next.delete("selected");
     next.delete("concept");
-    setSearchParams(next);
-  }, [searchParams, setSearchParams]);
+    next.delete("dossier");
+    navigateWithParams(MISSION_BROWSER_PATH, next);
+  }, [navigateWithParams, searchParams]);
 
   function setParam(key: string, value: string) {
     const next = new URLSearchParams(searchParams);
@@ -2564,9 +2610,10 @@ export default function MissionBrowserPage() {
     if (key !== "concept") {
       next.delete("concept");
       next.delete("selected");
+      next.delete("dossier");
     }
     if (key !== "page" && key !== "concept") next.delete("page");
-    setSearchParams(next);
+    navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
   function selectProvider(value: string) {
@@ -2579,8 +2626,9 @@ export default function MissionBrowserPage() {
     }
     next.delete("concept");
     next.delete("selected");
+    next.delete("dossier");
     next.delete("page");
-    setSearchParams(next);
+    navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
   function setSearch(value: string) {
@@ -2591,8 +2639,9 @@ export default function MissionBrowserPage() {
     if (matchesFaction) next.set("view", "faction");
     next.delete("concept");
     next.delete("selected");
+    next.delete("dossier");
     next.delete("page");
-    setSearchParams(next);
+    navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
   function setPage(page: number) {
@@ -2601,7 +2650,8 @@ export default function MissionBrowserPage() {
     else next.delete("page");
     next.delete("concept");
     next.delete("selected");
-    setSearchParams(next);
+    next.delete("dossier");
+    navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
   return (
@@ -2694,7 +2744,7 @@ export default function MissionBrowserPage() {
                 <span>Clear the search or filters to restore the mission registry.</span>
                 <button
                   type="button"
-                  onClick={() => setSearchParams(new URLSearchParams())}
+                  onClick={() => navigateWithParams(MISSION_BROWSER_PATH, new URLSearchParams())}
                 >
                   Clear filters
                 </button>
