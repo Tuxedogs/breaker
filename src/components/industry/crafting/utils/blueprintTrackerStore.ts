@@ -15,6 +15,40 @@ export const PINNED_MISSIONS_STORAGE_KEY = "scintel:blueprint-tracker:pinned-mis
 export const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
 export const MISSION_BLUEPRINT_REWARDS_URL = "/api/missions/mission_blueprint_rewards.json";
 
+export function missionConceptBookmarkId(conceptKey: string): string {
+  return `concept:${conceptKey}`;
+}
+
+export function hasMissionConceptBookmark(values: ReadonlySet<string>, conceptKey: string): boolean {
+  return values.has(missionConceptBookmarkId(conceptKey)) || values.has(conceptKey);
+}
+
+export function missionRewardSourceBookmarkId(contractId: string, poolGuid: string): string {
+  return `mission:${contractId}:${poolGuid}`;
+}
+
+export function resolveMissionBookmarkedBlueprintIds(
+  bookmarkedMissionIds: ReadonlySet<string>,
+  missionMap: ReadonlyMap<string, MissionSourceDetail[]>,
+): Set<string> {
+  const blueprintIds = new Set<string>();
+  const poolBlueprintIds = new Set(
+    Array.from(bookmarkedMissionIds)
+      .filter((bookmarkId) => bookmarkId.startsWith("pool:"))
+      .map((bookmarkId) => bookmarkId.split(":")[1])
+      .filter((blueprintId): blueprintId is string => Boolean(blueprintId)),
+  );
+  for (const [blueprintId, missions] of missionMap) {
+    if (
+      missions.some((mission) => bookmarkedMissionIds.has(mission.id))
+      || poolBlueprintIds.has(blueprintId)
+    ) {
+      blueprintIds.add(blueprintId);
+    }
+  }
+  return blueprintIds;
+}
+
 export function readStoredStringSet(key: string): Set<string> {
   if (typeof window === "undefined" || !window.localStorage) return new Set();
   try {
@@ -386,7 +420,7 @@ function normalizeReverseMission(value: unknown, releaseStateMap: Map<string, bo
   const poolChance = asFiniteNumber(mission.poolChance);
   const rewardChance = asFiniteNumber(mission.rewardChance);
   return {
-    id: `mission:${id}`,
+    id: contractId && poolGuid ? missionRewardSourceBookmarkId(contractId, poolGuid) : `mission:${id}`,
     title: normalizeMissionTitle(
       asNonEmptyString(mission.contractTitle) ?? asNonEmptyString(mission.contractDebugName) ?? "Unknown Blueprint Source"
     ),

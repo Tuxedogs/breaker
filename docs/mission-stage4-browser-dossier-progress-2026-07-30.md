@@ -69,8 +69,6 @@ labels or coverage improve.
   state can provide them without raw-ID entry.
 - Add completion-history import rather than relying on manual empty-history
   declarations.
-- Resolve concept bookmark compatibility with exact mission and blueprint-pool
-  identities without silently changing the shared storage key.
 - Add targeted Mission Browser interaction tests and deterministic loading/error
   fixtures.
 - Complete the compact, 1080p, 2K, and 4K visual matrix for the final hierarchy.
@@ -158,3 +156,41 @@ Validation after this slice:
 Local visual route:
 
 - `/industry/missions?selected=0c5a45e58399ed06bd30`
+
+## Bookmark compatibility slice
+
+Mission concept favorites and Blueprint Tracker source bookmarks now retain
+separate typed identities inside the existing shared storage key.
+
+- Existing raw concept keys remain recognized as legacy concept favorites.
+- New concept favorites are written as `concept:<conceptKey>`.
+- Exact blueprint-reward tracking writes the source identity already consumed by
+  Blueprint Tracker: `mission:<contractId>:<poolGuid>`.
+- Exact source tracking is offered only when the variant contains both a
+  source-backed contract ID and blueprint-pool GUID.
+- Blueprint Tracker resolves exact source tokens through its published
+  blueprint-source map and includes those blueprint GUIDs in **My Tracker**.
+- Concept favorites never masquerade as exact blueprint sources.
+- The shared `scintel:recipe:mission-bookmarks:v1` key is unchanged.
+- Unrelated and unrecognized saved entries remain untouched.
+
+The exact comparison table exposes **Track blueprint rewards** for supported
+variants. Tracking or untracking a row updates every source-backed blueprint
+pool on that exact mission while preserving concept favorites.
+
+Validation after this slice:
+
+- Mission Browser UI tests: 10 passed, including legacy concept migration and
+  exact Blueprint Tracker source identities
+- Crafting tests: 37 passed
+- Lint: passed
+- Production build: passed
+- Exact reward tracking visually reviewed at 768×900, 1920×1080, and
+  2560×1440
+
+Known presentation limit:
+
+- Blueprint Tracker still falls back to a blueprint GUID for reward records
+  whose active tracker view does not resolve a display name. The exact mission
+  source and tracking state remain resolved; display-name normalization is a
+  separate shared crafting-data concern.

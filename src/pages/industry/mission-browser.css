@@ -566,6 +566,7 @@
 }
 
 .mission-eligibility-open,
+.mission-blueprint-track,
 .mission-eligibility-workspace button {
   min-height: 26px;
   padding: 0 9px;
@@ -580,9 +581,20 @@
 }
 
 .mission-eligibility-open:hover,
+.mission-blueprint-track:hover,
+.mission-blueprint-track.is-active,
 .mission-eligibility-workspace button:hover {
   border-color: rgba(125, 211, 252, 0.48);
   color: var(--mb-text);
+}
+
+.mission-blueprint-track {
+  display: block;
+  min-height: 22px;
+  margin-top: 4px;
+  padding-inline: 6px;
+  color: var(--mb-cyan);
+  font-size: 9px;
 }
 
 .mission-eligibility-workspace {

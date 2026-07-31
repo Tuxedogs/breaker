@@ -15,6 +15,7 @@ import {
   loadMissionBlueprintRewards,
   loadMissionDetailMap,
   readStoredStringSet,
+  resolveMissionBookmarkedBlueprintIds,
   writeStoredStringSet,
   type BlueprintRewardItem,
   type BlueprintTrackerEntry,
@@ -1501,6 +1502,10 @@ export default function BlueprintTrackerPage() {
     () => buildTrackerEntries(recipes, bookmarkedRecipeIds, bookmarkedMissionIds, missionMap),
     [recipes, bookmarkedRecipeIds, bookmarkedMissionIds, missionMap],
   );
+  const missionBookmarkedBlueprintIds = useMemo(
+    () => resolveMissionBookmarkedBlueprintIds(bookmarkedMissionIds, missionMap),
+    [bookmarkedMissionIds, missionMap],
+  );
 
   const _libraryGroups = useMemo(() => {
     const map = new Map<string, { factionName: string; entries: BlueprintTrackerEntry[] }>();
@@ -1630,8 +1635,10 @@ export default function BlueprintTrackerPage() {
   }, [acquiredBlueprintIds, armorSetGroups, blueprintRewardViews, fpsWeaponFamilies, groupedArmorRewardIds, groupedFpsRewardIds, missionMap, recipes]);
 
   const isItemTracked = useCallback(
-    (item: TrackerItemView) => item.memberIds.some((id) => bookmarkedRecipeIds.has(id)),
-    [bookmarkedRecipeIds],
+    (item: TrackerItemView) => item.memberIds.some(
+      (id) => bookmarkedRecipeIds.has(id) || missionBookmarkedBlueprintIds.has(id),
+    ),
+    [bookmarkedRecipeIds, missionBookmarkedBlueprintIds],
   );
   const isItemComplete = useCallback(
     (item: TrackerItemView) => item.memberIds.length > 0 && item.memberIds.every((id) => acquiredBlueprintIds.has(id)),

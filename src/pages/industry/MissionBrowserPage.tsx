@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import {
+  hasMissionConceptBookmark,
   MISSION_BOOKMARK_STORAGE_KEY,
+  missionConceptBookmarkId,
+  missionRewardSourceBookmarkId,
   readStoredStringSet,
   writeStoredStringSet,
 } from "@/components/industry/crafting/utils/blueprintTrackerStore";
@@ -2048,6 +2051,17 @@ function exactVariantSystem(variant: MissionVariantView): string {
   return systems.length ? systems.join(", ") : variant.pickupLocation.system ?? "Unknown";
 }
 
+function exactVariantBlueprintBookmarkIds(variant: MissionVariantView): string[] {
+  const contractId = variant.technical.contractId;
+  if (!contractId) return [];
+  return Array.from(new Set(
+    variant.rewards.blueprintRewardGroups
+      .map((group) => group.poolGuid)
+      .filter((poolGuid): poolGuid is string => Boolean(poolGuid))
+      .map((poolGuid) => missionRewardSourceBookmarkId(contractId, poolGuid)),
+  ));
+}
+
 function compareOptionalNumbers(left: number | undefined, right: number | undefined): number {
   if (left === undefined && right === undefined) return 0;
   if (left === undefined) return 1;
@@ -2061,7 +2075,9 @@ function MissionSelectedWorkspace({
   loading,
   error,
   isBookmarked,
+  bookmarkedMissionIds,
   onToggleBookmark,
+  onToggleRewardBookmarks,
   onOpenDossier,
   onClose,
 }: {
@@ -2070,7 +2086,9 @@ function MissionSelectedWorkspace({
   loading: boolean;
   error?: string;
   isBookmarked: boolean;
+  bookmarkedMissionIds: ReadonlySet<string>;
   onToggleBookmark: (conceptKey: string) => void;
+  onToggleRewardBookmarks: (bookmarkIds: string[]) => void;
   onOpenDossier: (trigger: HTMLButtonElement) => void;
   onClose: () => void;
 }) {
@@ -2180,7 +2198,7 @@ function MissionSelectedWorkspace({
                     </th>
                   ))}
                   <th>Reputation</th>
-                  <th>Items</th>
+                  <th>Items / Blueprints</th>
                   <th>Availability</th>
                   <th>Eligibility</th>
                 </tr>
@@ -2190,6 +2208,9 @@ function MissionSelectedWorkspace({
                   const payout = exactVariantPayout(variant);
                   const requiredItems = variant.requiredItemSummary?.status === "present";
                   const rep = repPathSummary(variant.rewardedReputationPaths);
+                  const blueprintBookmarkIds = exactVariantBlueprintBookmarkIds(variant);
+                  const trackedBlueprints = blueprintBookmarkIds.filter((bookmarkId) => bookmarkedMissionIds.has(bookmarkId)).length;
+                  const allBlueprintsTracked = blueprintBookmarkIds.length > 0 && trackedBlueprints === blueprintBookmarkIds.length;
                   return (
                     <tr data-variant-key={variant.variantKey} key={variant.variantKey}>
                       <td><strong>{variant.displayName}</strong><small>{variant.missionArchetype}</small></td>
@@ -2198,7 +2219,19 @@ function MissionSelectedWorkspace({
                       <td>{variant.standingRequirement || "Unknown"}</td>
                       <td className="is-numeric">{payout === undefined ? "Unresolved" : `${payout.toLocaleString()} aUEC`}</td>
                       <td>{rep}</td>
-                      <td>{requiredItems ? "Required" : variant.requiredItemSummary?.status === "proven_absent" ? "None" : "Unresolved"}</td>
+                      <td>
+                        {requiredItems ? "Required" : variant.requiredItemSummary?.status === "proven_absent" ? "None" : "Unresolved"}
+                        {blueprintBookmarkIds.length > 0 && (
+                          <button
+                            type="button"
+                            className={`mission-blueprint-track${allBlueprintsTracked ? " is-active" : ""}`}
+                            aria-pressed={allBlueprintsTracked}
+                            onClick={() => onToggleRewardBookmarks(blueprintBookmarkIds)}
+                          >
+                            {allBlueprintsTracked ? "Rewards tracked" : trackedBlueprints > 0 ? "Track remaining rewards" : "Track blueprint rewards"}
+                          </button>
+                        )}
+                      </td>
                       <td><Badge tone={exactVariantIsActive(variant) ? "is-green" : "is-muted"}>{exactVariantIsActive(variant) ? "Active" : variant.releaseFlags.join(" / ") || "Unavailable"}</Badge></td>
                       <td><button type="button" className="mission-eligibility-open" onClick={() => setEligibilityVariant(variant)}>Check</button></td>
                     </tr>
@@ -2261,8 +2294,24 @@ export default function MissionBrowserPage() {
   const toggleMissionBookmark = useCallback((conceptKey: string) => {
     setBookmarkedMissionIds((current) => {
       const next = new Set(current);
-      if (next.has(conceptKey)) next.delete(conceptKey);
-      else next.add(conceptKey);
+      if (hasMissionConceptBookmark(next, conceptKey)) {
+        next.delete(conceptKey);
+        next.delete(missionConceptBookmarkId(conceptKey));
+      } else {
+        next.add(missionConceptBookmarkId(conceptKey));
+      }
+      writeStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY, next);
+      return next;
+    });
+  }, []);
+  const toggleMissionRewardBookmarks = useCallback((bookmarkIds: string[]) => {
+    setBookmarkedMissionIds((current) => {
+      const next = new Set(current);
+      const allTracked = bookmarkIds.length > 0 && bookmarkIds.every((bookmarkId) => next.has(bookmarkId));
+      for (const bookmarkId of bookmarkIds) {
+        if (allTracked) next.delete(bookmarkId);
+        else next.add(bookmarkId);
+      }
       writeStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY, next);
       return next;
     });
@@ -2630,8 +2679,10 @@ export default function MissionBrowserPage() {
                 variants={selectedConceptVariants}
                 loading={conceptLoadingKey === selectedConcept.conceptKey && !selectedConceptVariants}
                 error={conceptErrors[selectedConcept.conceptKey]}
-                isBookmarked={bookmarkedMissionIds.has(selectedConcept.conceptKey)}
+                isBookmarked={hasMissionConceptBookmark(bookmarkedMissionIds, selectedConcept.conceptKey)}
+                bookmarkedMissionIds={bookmarkedMissionIds}
                 onToggleBookmark={toggleMissionBookmark}
+                onToggleRewardBookmarks={toggleMissionRewardBookmarks}
                 onOpenDossier={(trigger) => openConceptDossier(selectedConcept.conceptKey, trigger)}
                 onClose={closeConceptWorkspace}
               />
@@ -2789,7 +2840,7 @@ export default function MissionBrowserPage() {
                 key={dossierConcept.conceptKey}
                 concept={dossierConcept}
                 variants={conceptVariantsByKey[dossierConcept.conceptKey]!}
-                isBookmarked={bookmarkedMissionIds.has(dossierConcept.conceptKey)}
+                isBookmarked={hasMissionConceptBookmark(bookmarkedMissionIds, dossierConcept.conceptKey)}
                 onToggleBookmark={toggleMissionBookmark}
                 onClose={closeConceptDossier}
               />

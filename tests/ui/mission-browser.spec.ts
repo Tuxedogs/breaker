@@ -65,6 +65,44 @@ test.describe("Mission Browser exact dossier", () => {
     await expect(path.getByText(/Generation b42621a47bf58653e0ec17c3/)).toBeVisible();
   });
 
+  test("preserves legacy concept favorites and writes typed concept bookmarks", async ({ page }) => {
+    const conceptKey = "70d0a94a8a837e887b3c";
+    await page.addInitScript(({ storageKey, legacyConceptKey }) => {
+      window.localStorage.setItem(storageKey, JSON.stringify([legacyConceptKey]));
+    }, {
+      storageKey: "scintel:recipe:mission-bookmarks:v1",
+      legacyConceptKey: conceptKey,
+    });
+    await page.goto(`/industry/missions?selected=${conceptKey}`);
+
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    const bookmark = workspace.getByRole("button", { name: "Bookmarked" });
+    await expect(bookmark).toBeVisible();
+    await bookmark.click();
+    await workspace.getByRole("button", { name: "Bookmark" }).click();
+
+    const stored = await page.evaluate((storageKey) => JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as string[], "scintel:recipe:mission-bookmarks:v1");
+    expect(stored).toContain(`concept:${conceptKey}`);
+    expect(stored).not.toContain(conceptKey);
+  });
+
+  test("tracks exact blueprint reward sources with Blueprint Tracker identities", async ({ page }) => {
+    await page.goto("/industry/missions?selected=0c5a45e58399ed06bd30");
+
+    const workspace = page.getByRole("region", { name: /Additional Resources For Research selected mission workspace/i });
+    const row = workspace.locator('tr[data-variant-key="115dab47-1987-4317-8a8f-b9466976a7b6"]');
+    await row.getByRole("button", { name: "Track blueprint rewards" }).click();
+
+    const expectedBookmark = "mission:115dab47-1987-4317-8a8f-b9466976a7b6:0f03e098-cc68-4a14-abe8-7b17a8bec97e";
+    const stored = await page.evaluate((storageKey) => JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as string[], "scintel:recipe:mission-bookmarks:v1");
+    expect(stored).toContain(expectedBookmark);
+    await expect(row.getByRole("button", { name: "Rewards tracked" })).toBeVisible();
+
+    await page.goto("/industry/blueprint-tracker");
+    await expect(page.getByText("Additional Resources For Research", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Tracking", { exact: true }).first()).toBeVisible();
+  });
+
   test("shows persisted base payout and distinguishes required-item evidence", async ({ page }) => {
     await page.goto("/industry/missions?concept=70d0a94a8a837e887b3c");
 
