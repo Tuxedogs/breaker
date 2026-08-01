@@ -1,167 +1,146 @@
-# Mission Browser Redesign Plan
+# Mission Browser Accepted Design Canon
 
-Updated: 2026-07-31
-Status: Design proposal only. Production implementation is intentionally blocked on visual-direction approval.
+Updated: 2026-08-01
 
-## Scope
+Status: Accepted and implemented. This document supersedes the proposal status previously recorded at this path and the rejected persistent-hero or inline-drawer direction.
+
+## Scope and authority
 
 Page: `/industry/missions`
-Components: Mission Browser filter/results shell, category/faction/reputation group surfaces, mission concept cards, complete mission-detail modal, exact-variant comparison, eligibility and prerequisite-path workspace.
 
-The redesign must not change mission APIs, extraction, routing, bookmarks, solver behavior, payout calculations, eligibility logic, prerequisite logic, or Blueprint Tracker identities.
+Components: Mission Browser filter/results shell, category/faction/reputation groups, mission concept cards, complete mission-detail modal, exact-variant comparison, eligibility workspace, and prerequisite paths.
 
-## Mockups
+The browser/card mockup and complete modal mockup were accepted. The production redesign was committed in `8a7d5f416`, with the later accepted refinements of a five-column desktop grid and a 1px semantic card edge incorporated into this canon.
 
-- Browser/card direction: `artifacts/mission-browser-redesign-concept/mission-browser-cards-concept-desktop.png`
-- Complete modal direction: `artifacts/mission-browser-redesign-concept/mission-browser-modal-concept-desktop.png`
+This is a presentation and interaction contract. It must not change mission APIs, extraction, routing, bookmarks, solver behavior, payout calculations, eligibility logic, prerequisite logic, or Blueprint Tracker identities.
 
-The mockups are layout and visual-system references. Representative text is used to demonstrate state hierarchy. Production badges must remain source-backed.
+## Visual direction
 
-## Design direction
+Use the Dashboard `Next Fabrication Run` card as the closest composition reference: a strong operational perimeter, compact summary, grouped peer regions, explicit state labels, layered internal cards, bounded scrolling, and a clear action path. Align with Build Queue through graphite-black and deep-navy surfaces, quiet borders, restrained elevation, compact header bands, aligned metrics, readable technical typography, and tabular numerals.
 
-Use the Dashboard `Next Fabrication Run` card as the composition benchmark: a strong operational perimeter, compact summary, grouped peer regions, explicit state labels, internal scrolling for long data, and a clear action path. Do not copy its exact three-column geometry.
-
-Align the page with Build Queue through:
-
-- Graphite-black and deep-navy surfaces.
-- Quiet borders and restrained elevation.
-- Compact header bands and aligned metric rows.
-- Readable, technical typography using shared density tokens.
-- Tabular numerals for payouts, counts, standing, and reputation amounts.
-- Semantic color only when the color represents a real mission category, reputation scope, restriction, outcome, or state.
-- Clear hover, keyboard-focus, and selected states that do not resemble one another.
+The page is a premium spacecraft operations interface, not a decorative card gallery. Repeated cards and rows do not receive independent glow, heavy outlines, or ornamental shadows. Cyan, teal, violet, amber, green, and red are semantic colors, not generic decoration.
 
 ## Browser hierarchy
 
-1. Compact page identity: `Contract Registry` kicker, `Mission Browser` title, current group/count summary.
+The accepted browser sequence is:
+
+1. Compact page identity with the `Contract Registry` kicker, `Mission Browser` title, and current group/count summary.
 2. Existing search and six filters in the shared filter shell.
 3. Existing `Full`, `Faction`, and `Reputation` views plus the reputation-path legend.
 4. Category, faction, or reputation group header.
-5. Responsive mission-card grid.
+5. Five-column mission concept grid at the primary desktop layout.
 6. Existing results count and pagination.
 
-The redesign must retain search, filters, view precedence, zero-results recovery, pagination, canonical URLs, and legacy URL repair.
+The five-column grid is the accepted desktop baseline. Each column may shrink with `minmax(0, 1fr)` so the group surface owns the available width. Responsive rules may reduce or stack columns when the viewport cannot preserve readable card content. Do not reintroduce the earlier two-column desktop baseline without new design approval.
 
-## Mission card anatomy
+Search, filters, view precedence, zero-results recovery, pagination, canonical URLs, and legacy URL repair remain unchanged.
 
-Each card remains one direct modal trigger and contains:
+## Mission card contract
 
-1. Reputation-scope accent rail.
+Each card is one direct modal trigger. It contains:
+
+1. A quiet 1px reputation-scope accent edge.
 2. Faction initials and mission identity.
 3. Provider and mission category.
-4. Stable comparison row: variant count, pickup summary, base/solo payout.
-5. Important semantic badges.
-6. Quiet supporting metadata and a disclosure chevron.
+4. A stable comparison row for variant count, pickup summary, and base/solo payout.
+5. Important source-backed semantic badges.
+6. Quiet supporting metadata and a disclosure icon.
 
-Badge priority:
+The 1px accent is a semantic reputation cue, not a heavy item outline. The card retains its quiet structural border, no independent shadow, and a restrained hover lift. Hover, keyboard focus, and selected states must remain visually distinct.
+
+Badge priority is:
 
 1. Reputation scope, always badged.
-2. Explicit `Verified Mission` or `Unverified Mission`, only when normalized source data explicitly provides it.
+2. Explicit `Verified Mission` or `Unverified Mission`, only when normalized source data provides it.
 3. Blueprint pool count, item rewards, or required mission items when present.
-4. CrimeStat or other real mission constraint when operationally important.
+4. CrimeStat or another real operational constraint when important.
 
-Do not badge lawful status. Preserve lawful classification as labeled text, for example `Legal classification: Unknown`, and retain full legal-source detail in technical disclosure. Search/filter match context remains visible as quiet contextual text rather than competing with mission evidence badges.
+Do not badge lawful status. Present it as labeled text such as `Legal classification: Unknown`, with full legal-source detail retained in technical disclosure. Do not infer verified/unverified status from title confidence, mission wording, legality, or page-local parsing. Search/filter match context remains quiet supporting text rather than an evidence badge.
 
-The current view contract does not expose a dedicated normalized verified/unverified field. Before production rendering, verify whether this tag already exists in source-backed title/specificity data. If it does, normalize it at the shaping or projection boundary. Do not infer it from title confidence or page-local string parsing.
+## Complete mission-detail modal
 
-## Modal hierarchy
+Selecting a concept card opens the complete modal directly. Do not restore an inline drawer, persistent selected-concept hero, intermediate hero panel, or obscure `Open dossier` action.
 
-The modal remains the complete mission detail, opened directly from a card.
+The accepted modal hierarchy is:
 
-1. Sticky identity header with initials, title, provider/category, source-backed badges, bookmark, close, and lawful classification as plain text.
-2. Compact facts strip: active variants, exact variants, pickup scope, base/solo payout range, and mission-item requirement count.
+1. Sticky identity header with faction icon/initials, title, provider/category, source-backed badges, bookmark icon, close icon, and lawful classification as plain text.
+2. Compact facts strip for active variants, exact variants, pickup scope, base/solo payout range, and mission-item requirement count.
 3. Peer overview surfaces:
-   - Main column: briefing and required-item rows.
-   - Right rail: reputation, payout, certification buy-in, item rewards, and blueprint rewards.
+   - Main column: briefing and required-item card.
+   - Right rail: layered rewards card and separate blueprint-rewards card.
 4. Full-width exact mission comparison.
 5. Eligibility and prerequisite-path workspace, replacing the comparison region only while the existing check flow is active.
 6. Confidence and unresolved-data footer.
 
-Required-item rows stay compact and preserve proven collect/deliver versus runtime-selected semantics. Blueprint rows retain pool evidence and Blueprint Tracker actions. The modal owns vertical scrolling; long tables keep bounded horizontal scrolling rather than clipping columns.
+The rewards region must read as layered operational cards. Reputation reward, aUEC payout, certification buy-in, item rewards, and blueprint pools remain distinct concepts; they must not collapse into a flat text block.
+
+Required-item rows remain compact and preserve proven collect/deliver versus runtime-selected semantics. Blueprint rows retain pool evidence, chance/count details, icons, and Blueprint Tracker actions. All information currently delivered by the mission contract remains presented.
+
+The modal owns vertical scrolling. Long comparison tables use bounded horizontal scrolling instead of clipping columns. Header controls remain visible, correctly scaled, and icon-led. Escape, backdrop click, and the close control dismiss the modal; focus returns to the invoking card and body scroll remains locked while open.
+
+## Typography and density
+
+Mission content must remain readable at every supported resolution. Identity, section headings, values, secondary evidence, and body copy each have a distinct level. Long briefing text uses a bounded readable line length and preserves authored line breaks. Blueprint reward names remain visually stronger than their evidence lines.
+
+Do not shrink type merely to force more information into view. Prefer bounded internal scrolling and compact row construction. Numeric comparisons, payouts, counts, and reputation amounts use tabular numerals.
 
 ## Color roles
 
-Replace the current page palette with a restrained page-local system derived from shared tokens:
-
-- Canvas and structural surfaces: graphite/deep navy.
-- Interaction, focus, links, selected boundary: cool cyan.
-- Reputation scope: controlled source-category accent used on the card rail and reputation badge.
-- Verified: green, with label and border.
-- Unverified or unresolved evidence: amber, with label and border.
+- Canvas and structural surfaces: graphite and deep navy.
+- Interaction, links, focus, and selected boundaries: cool cyan.
+- Reputation scope: controlled source-category accent on the 1px card edge and reputation badge.
+- Verified mission evidence: green label and border.
+- Unverified or unresolved evidence: amber label and border.
 - Blueprint evidence: teal.
 - Required items and collect/deliver attention: amber.
-- Active/eligible/complete: green.
+- Active, eligible, and complete outcomes: green.
 - Error, invalid, or required CrimeStat: red.
-- Missing or unavailable data: neutral/muted, never whole-card opacity.
+- Missing or unavailable data: neutral and muted, never whole-card opacity.
 
-Avoid generic cyan-plus-violet decoration, repeated glow, rainbow card borders, and independent shadows on repeated rows.
+Avoid generic cyan-plus-violet decoration, rainbow borders, broad glow, and heavy repeated outlines.
 
-## CSS refactor architecture
+## CSS ownership
 
-Current baseline: 4,220 physical lines, 97 `!important` declarations, 16 media blocks, and 11 distinct breakpoint conditions.
+Mission Browser styles remain page-local and split by responsibility:
 
-Do not append another recovery layer. Replace the current stylesheet with one entry file and bounded page-local owners:
+- `mission-browser.css`: import order and page-local tokens.
+- `mission-browser-shell.css`: page identity, filters, groups, pagination, and empty/error states.
+- `mission-browser-cards.css`: cards, the five-column grid, badges, the 1px reputation edge, and interaction states.
+- `mission-browser-modal.css`: backdrop, modal perimeter, header, facts, dossier cards, required items, rewards, blueprints, and footer.
+- `mission-browser-workspaces.css`: exact variants, eligibility, prerequisite paths, and technical disclosure.
+- `mission-browser-responsive.css`: consolidated viewport behavior.
 
-- `mission-browser.css`: import order and root page-local custom properties only.
-- `mission-browser-shell.css`: page identity, filter/results shell, grouping headers, pagination, loading/error/empty states.
-- `mission-browser-cards.css`: concept cards, badges, reputation accents, hover/focus/selected states.
-- `mission-browser-modal.css`: backdrop, perimeter, sticky header, facts strip, dossier surfaces, required items, rewards, blueprints, footer.
-- `mission-browser-workspaces.css`: exact-variant comparison, eligibility, prerequisite paths, technical disclosure.
-- `mission-browser-responsive.css`: consolidated compact, desktop, 1440p-density, and wide-screen behavior.
+Do not append recovery layers, restore historical drawer selectors, create a global primitive for this page, or use high-specificity overrides when a page-local owner exists.
 
-Ownership rules:
+## Responsive contract
 
-- Scope browser selectors under `.mb-page`.
-- Scope portal selectors under `.mission-workspace-modal-shell` or `.mission-workspace-modal-backdrop`.
-- Prefer single-class component selectors; avoid long descendant chains.
-- Use shared tokens first and a small set of page-local semantic custom properties second.
-- Goal: zero `!important`; document any unavoidable shared-control exception.
-- Delete historical drawer, persistent-workspace, and unused selector families after mapping rendered classes.
-- Keep responsive overrides next to one consolidated breakpoint strategy rather than scattered recovery blocks.
-- Preserve the shared 1440p density layer; page-local wide rules must come later and be intentionally scoped.
+Validate at minimum:
 
-The refactor is accepted only if it is materially smaller and has one clear owner for every rendered class family. Line count is evidence, not the sole objective.
+- `768x900`: stacked browser cards and an edge-safe single-column modal; icon controls remain visible and tables scroll horizontally.
+- `1920x1080`: five-column browser grid and the accepted main-column/right-rail modal composition.
+- `2560x1440`: density-aware layout with readable card contents and intentionally scaled modal regions.
+- `3840x2160`: wide-screen density without unbounded briefing lines, giant empty regions, or stretched row content.
 
-## Responsive behavior
+Column reductions at compact or density-scaled breakpoints are allowed only to preserve content readability. Long titles, many rows, many exact variants, required items, blueprint pools, and overflow must remain inspectable.
 
-- `768x900`: single-column cards; stacked filter controls; modal becomes an edge-safe single-column workspace; sticky header remains usable; tables scroll horizontally; close and bookmark remain visible.
-- `1920x1080`: two-column card grid; modal uses the two-thirds/one-third overview split shown in the concept.
-- `2560x1440`: three-column card grid when card minimum width and long titles remain readable; shared density tokens increase type and controls.
-- `3840x2160`: up to four cards per row; modal width grows intentionally but retains readable briefing line length and bounded internal regions.
-
-Use CSS grid with an explicit card minimum width rather than width-specific card selectors. Validate long names, many rows, many variants, and overflow at every required viewport.
-
-## Behavior intentionally preserved
+## Data and behavior preserved
 
 - Direct card-to-modal interaction.
-- Escape, backdrop, and close-button dismissal.
-- Focus restoration and body-scroll lock.
 - Readable mission URLs and legacy link repair.
 - Search, filters, Full/Faction/Reputation views, pagination, and zero-results recovery.
 - Exact-variant sorting and Active/All variants control.
-- Valid zero versus missing/unresolved payout.
+- Valid zero distinguished from missing or unresolved payout.
 - Certification buy-in separated from payout.
 - Required-item evidence semantics.
 - Blueprint reward pools, bookmark identity, and Blueprint Tracker compatibility.
 - Server-owned eligibility and prerequisite paths.
 - Unknown player state remains unknown.
 - Raw GUIDs remain outside normal presentation.
+- Runtime-selected locations remain explicit and are never invented.
 
-## Implementation sequence after approval
+## Validation
 
-1. Capture a rendered-class inventory from `MissionBrowserPage.tsx` and classify every current selector as active, shared, or historical.
-2. Add deterministic populated fixtures for a verified/unverified tag when source-backed, long titles, required items, blueprint pools, zero payout, unresolved payout, and many variants.
-3. Build the new page-local stylesheet files without changing behavior or data logic.
-4. Update card markup only where needed for the approved hierarchy and badge semantics.
-5. Update modal markup only where needed for the approved peer-surface layout, sticky header, facts strip, and internal scrolling.
-6. Remove replaced and unused CSS instead of overriding it.
-7. Run targeted behavioral tests, then lint and build.
-8. Capture and manually inspect populated and empty states at all required viewports.
-9. Request final visual approval before staging or committing.
-
-## Validation and acceptance
-
-Run:
+For future Mission Browser visual changes, run:
 
 ```powershell
 npm run ui:missions
@@ -169,15 +148,8 @@ npm run lint
 npm run build
 ```
 
-Capture deterministic evidence at `768x900`, `1920x1080`, `2560x1440`, and `3840x2160` for:
+Review populated and zero-result browser states and an information-rich modal at every required viewport. Include long mission names, long briefing text, required items, blueprint rewards, many exact variants, valid zero, missing and unresolved data, loading and error states, eligibility paths, keyboard focus, dismissal, clipping, contrast, and internal scrolling.
 
-- Populated browser.
-- Zero results.
-- Information-rich mission modal.
-- Long briefing and long mission title.
-- Many exact variants.
-- Required items and blueprint rewards.
-- Valid zero, missing, unresolved, loading, and error states.
-- Eligibility and prerequisite paths.
+## Stop condition
 
-Completion requires visual approval, materially simpler CSS, no stale drawer ownership, readable type at every viewport, and passing behavioral/build checks.
+Do not expand Mission Browser presentation changes into a global theme rewrite, API redesign, mission schema change, solver change, or unrelated page refactor. Any departure from the five-column desktop baseline, 1px reputation edge, direct complete-modal interaction, badge rules, or layered reward-card structure requires explicit design approval.
