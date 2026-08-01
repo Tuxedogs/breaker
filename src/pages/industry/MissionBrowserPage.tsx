@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -140,41 +139,6 @@ function ReputationPathIcon({ scope }: { scope: string }) {
     </svg>
   );
 }
-
-const MissionCardRowIcon = memo(function MissionCardRowIcon({ type }: { type: "pickup" | "missions" | "blueprints" | "credits" }) {
-  const paths: Record<typeof type, ReactNode> = {
-    pickup: (
-      <>
-        <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z" />
-        <circle cx="12" cy="10" r="2" />
-      </>
-    ),
-    missions: (
-      <>
-        <circle cx="8" cy="8" r="2.5" />
-        <circle cx="16" cy="8" r="2.5" />
-        <path d="M4.5 18c.6-2.5 2.4-4 3.5-4s2.9 1.5 3.5 4M12.5 18c.6-2.5 2.4-4 3.5-4s2.9 1.5 3.5 4" />
-      </>
-    ),
-    blueprints: (
-      <>
-        <path d="M7 4h10l3 3v13H7V4Z" />
-        <path d="M17 4v4h3M10 11h7M10 15h7" />
-      </>
-    ),
-    credits: (
-      <>
-        <circle cx="12" cy="12" r="7" />
-        <path d="M14.5 8.8c-.8-.5-1.7-.8-2.8-.8-1.5 0-2.7.7-2.7 1.9 0 2.8 6 1.2 6 4.2 0 1.2-1.2 1.9-2.8 1.9-1.2 0-2.3-.3-3.1-.9M12 6.5v11" />
-      </>
-    ),
-  };
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      {paths[type]}
-    </svg>
-  );
-});
 
 function repPathLabel(path: MissionRewardedReputationPathView, includeFaction = false): string {
   if (path.confidence === "unresolved") return "Rep reward unresolved";
@@ -318,13 +282,6 @@ function conceptPickupSummary(concept: MissionConceptView, familiesByKey: Map<st
   if (systems.length === 1) return `Pickup: ${systems[0]}`;
   const visible = systems.slice(0, 3);
   return `Across ${visible.join(", ")}${systems.length > visible.length ? ` +${systems.length - visible.length}` : ""}`;
-}
-
-function userFacingConceptBadges(concept: MissionConceptView): string[] {
-  return [...concept.archetypes, ...concept.specificityBadges]
-    .filter((badge) => !/crime\s*stat/i.test(badge))
-    .filter((badge) => !/contract|\+\d+$/i.test(badge))
-    .filter((badge, index, values) => values.indexOf(badge) === index);
 }
 
 function explicitVariantRegion(variant: MissionVariantView): string | undefined {
@@ -836,7 +793,7 @@ const MissionConceptCard = memo(function MissionConceptCard({
   familiesByKey: Map<string, MissionFamilyView>;
   filters: { query: string; reward: string; confidence: string; repReward: string; status: string; missionType: string; provider: string };
   isSelected: boolean;
-  onSelect: (conceptKey: string) => void;
+  onSelect: (conceptKey: string, trigger: HTMLButtonElement) => void;
 }) {
   const families = conceptFamilies(concept, familiesByKey);
   const pickupBadges = conceptPickupBadges(concept, familiesByKey);
@@ -845,13 +802,11 @@ const MissionConceptCard = memo(function MissionConceptCard({
   const displayVariantCount = families.reduce((sum, family) => sum + family.variantCount, 0) || concept.variantCount;
   const restrictions = restrictionBadgesForFamilies(families);
   const matchLabels = conceptMatchLabels(concept, families, filters);
-  const compactBadges = Array.from(new Set([
-    concept.displayCategory.label,
-    ...concept.displaySubcategories,
-    ...userFacingConceptBadges(concept),
-    concept.groupingConfidence !== "strong" ? `${concept.groupingConfidence} grouping` : undefined,
-  ].filter((badge): badge is string => Boolean(badge))));
-  const visibleBadges = compactBadges.slice(0, 4);
+  const missionSignals = [
+    blueprintCount > 0 ? { label: `${blueprintCount} blueprint pool${blueprintCount === 1 ? "" : "s"}`, tone: "is-blueprint" } : undefined,
+    hasItemRewards ? { label: "Item rewards", tone: "is-blueprint" } : undefined,
+    ...restrictions,
+  ].filter((signal): signal is { label: string; tone: string } => Boolean(signal)).slice(0, 3);
 
   return (
     <div className={`mb-family-block ${repScopeClass(concept.reputationScope.displayName)}${isSelected ? " is-selected" : ""}`}>
@@ -859,55 +814,34 @@ const MissionConceptCard = memo(function MissionConceptCard({
         type="button"
         className="mb-family-row mission-group-card"
         aria-expanded={isSelected}
-        onClick={() => onSelect(concept.conceptKey)}
+        aria-haspopup="dialog"
+        onClick={(event) => onSelect(concept.conceptKey, event.currentTarget)}
       >
-        <span className="mission-group-card__rail" aria-hidden="true" />
         <span className="mission-group-card__body">
           <span className="mission-group-card__header">
             <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
             <span className="mb-family-copy mission-group-card__title-block">
               <strong className="mission-group-card__title">{concept.displayName}</strong>
-              <small>{concept.factionDisplayName} / {shortRepScope(concept.reputationScope.displayName)} / {concept.displayCategory.label}</small>
+              <small>{concept.factionDisplayName} / {concept.displayCategory.label}</small>
+            </span>
+            <span className="mission-group-card__disclosure" aria-hidden="true">{isSelected ? "−" : "+"}</span>
+          </span>
+          <span className="mission-group-card__metrics">
+            <span><small>Variants</small><strong>{displayVariantCount}</strong></span>
+            <span><small>Pickup</small><strong title={pickupBadges.join(", ")}>{conceptPickupSummary(concept, familiesByKey)}</strong></span>
+            <span><small>Base / solo</small><strong>{conceptCreditSummary(concept, familiesByKey)}</strong></span>
+          </span>
+          <span className="mission-group-card__footer">
+            <span className="mb-badges">
+              <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName))}`}>{repPathSummary(concept.rewardedReputationPaths)}</span>
+              {missionSignals.map((signal) => <Badge key={signal.label} tone={signal.tone}>{signal.label}</Badge>)}
             </span>
           </span>
-          <span className="mission-group-card__primary">
-            <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName))}`}>{repPathSummary(concept.rewardedReputationPaths)}</span>
-            {concept.mixedRewardPaths && <span className="mb-rep-badge mission-rep-scope--mixed">Mixed rep paths</span>}
-            <Badge tone={blueprintCount > 0 ? "is-blueprint" : "is-muted"}>{blueprintCount > 0 ? "Blueprint rewards possible" : "No blueprint rewards reported"}</Badge>
-            {hasItemRewards && <Badge tone="is-blueprint">Item rewards</Badge>}
-          </span>
-          <span className="mb-badges">
-            {visibleBadges.map((badge) => <Badge key={badge} tone="is-type">{badge}</Badge>)}
-            {compactBadges.length > visibleBadges.length && <Badge tone="is-muted">{`+${compactBadges.length - visibleBadges.length} more`}</Badge>}
-          </span>
-          {restrictions.length > 0 && (
-            <span className="mb-badges mission-card-restrictions">
-              {restrictions.map((restriction) => <Badge key={restriction.label} tone={restriction.tone}>{restriction.label}</Badge>)}
-            </span>
-          )}
           {matchLabels.length > 0 && (
             <span className="mb-badges mission-card-matches">
               {matchLabels.slice(0, 2).map((label) => <Badge key={label} tone="is-violet">{label}</Badge>)}
             </span>
           )}
-          <span className="mission-group-card__meta">
-            <span className="mission-card-row mission-card-row--pickup" title={pickupBadges.join(", ")}>
-              <span className="mission-card-row__icon"><MissionCardRowIcon type="pickup" /></span>
-              <span>{conceptPickupSummary(concept, familiesByKey)}</span>
-            </span>
-            <span className="mission-card-row">
-              <span className="mission-card-row__icon"><MissionCardRowIcon type="missions" /></span>
-              <span>{displayVariantCount} variant{displayVariantCount === 1 ? "" : "s"} / {concept.variantCount} playable mission{concept.variantCount === 1 ? "" : "s"}</span>
-            </span>
-            <span className={`mission-card-row mission-card-row--blueprint${blueprintCount > 0 ? " has-blueprints" : ""}`}>
-              <span className="mission-card-row__icon"><MissionCardRowIcon type="blueprints" /></span>
-              <span>{blueprintCount > 0 ? `${blueprintCount} blueprint pool${blueprintCount === 1 ? "" : "s"}` : "Blueprint rewards not reported"}</span>
-            </span>
-            <span className="mission-card-row">
-              <span className="mission-card-row__icon"><MissionCardRowIcon type="credits" /></span>
-              <span>{conceptCreditSummary(concept, familiesByKey)}</span>
-            </span>
-          </span>
         </span>
       </button>
     </div>
@@ -1765,13 +1699,6 @@ function ConceptDetail({
     [variants],
   );
   const headerRestrictions = useMemo(() => restrictionBadgesForVariants(variants), [variants]);
-  const headerPickupSummary = useMemo(() => {
-    const regions = Array.from(new Set(variants.map(readableVariantRegion))).sort((a, b) => variantRegionSortOrder(a) - variantRegionSortOrder(b) || a.localeCompare(b));
-    if (!regions.length) return "Pickup: Unknown / unresolved";
-    if (regions.length === 1) return `Pickup: ${regions[0]}`;
-    return `Across ${regions.slice(0, 3).join(", ")}${regions.length > 3 ? ` +${regions.length - 3}` : ""}`;
-  }, [variants]);
-
   return (
     <section className={`mb-detail mission-group-expansion mission-concept-dossier ${repScopeClass(concept.reputationScope.displayName)}`} aria-label={`${concept.displayName} concept details`}>
       <header className="mission-dossier-header">
@@ -1782,10 +1709,8 @@ function ConceptDetail({
             <p>{concept.factionDisplayName} / {shortRepScope(concept.reputationScope.displayName)}</p>
             <div className="mb-badges">
               <Badge tone="is-type">{concept.displayCategory.label}</Badge>
-              <Badge tone="is-neutral">{headerPickupSummary}</Badge>
               <Badge tone={allBlueprintGroups.length ? "is-blueprint" : "is-muted"}>{allBlueprintGroups.length ? "Blueprint rewards possible" : "No blueprint rewards reported"}</Badge>
-              {headerRestrictions.map((restriction) => <Badge key={restriction.label} tone={restriction.tone}>{restriction.label}</Badge>)}
-              {concept.displaySubcategories.slice(0, 3).map((label) => <Badge key={label} tone="is-muted">{label}</Badge>)}
+              {headerRestrictions.slice(0, 2).map((restriction) => <Badge key={restriction.label} tone={restriction.tone}>{restriction.label}</Badge>)}
             </div>
             {(showRiskTierSelector || availabilityGroups.length > 0) && (
               <div className="mission-dossier-header__controls">
@@ -1857,8 +1782,7 @@ function ConceptDetail({
               <path d="M7 4h10v16l-5-3.2L7 20V4Z" />
             </svg>
           </button>
-          <Badge tone="is-violet">Standing / Rep</Badge>
-          <button type="button" className="mission-dossier-close" aria-label="Close mission dossier" autoFocus onClick={onClose}>x</button>
+          <button type="button" className="mission-dossier-close" aria-label="Close selected mission details" onClick={onClose}>×</button>
         </div>
       </header>
       {representative && (
@@ -2142,7 +2066,6 @@ function MissionSelectedWorkspace({
   bookmarkedMissionIds,
   onToggleBookmark,
   onToggleRewardBookmarks,
-  onOpenDossier,
   onClose,
 }: {
   concept: MissionConceptView;
@@ -2153,7 +2076,6 @@ function MissionSelectedWorkspace({
   bookmarkedMissionIds: ReadonlySet<string>;
   onToggleBookmark: (conceptKey: string) => void;
   onToggleRewardBookmarks: (bookmarkIds: string[]) => void;
-  onOpenDossier: (trigger: HTMLButtonElement) => void;
   onClose: () => void;
 }) {
   const [availability, setAvailability] = useState<"active" | "all">("active");
@@ -2199,28 +2121,15 @@ function MissionSelectedWorkspace({
 
   return (
     <section className={`mission-selected-workspace ops-primary-card${eligibilityVariant ? " is-solver-open" : ""}`} aria-label={`${concept.displayName} selected mission workspace`}>
-      <header className="mission-selected-hero">
-        <div className="mission-selected-hero__identity">
-          <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
-          <div>
-            <span className="mb-kicker">Selected mission concept</span>
-            <h2>{concept.displayName}</h2>
-            <p>{concept.factionDisplayName} / {concept.displayCategory.label} / {shortRepScope(concept.reputationScope.displayName)}</p>
-          </div>
-        </div>
-        <div className="mission-selected-hero__actions">
-          <button
-            type="button"
-            className={isBookmarked ? "is-active" : ""}
-            aria-pressed={isBookmarked}
-            onClick={() => onToggleBookmark(concept.conceptKey)}
-          >
-            {isBookmarked ? "Bookmarked" : "Bookmark"}
-          </button>
-          <button type="button" className="is-primary" onClick={(event) => onOpenDossier(event.currentTarget)}>Open dossier</button>
-          <button type="button" aria-label="Close selected mission workspace" onClick={onClose}>Close</button>
-        </div>
-      </header>
+      {variants && (
+        <ConceptDetail
+          concept={concept}
+          variants={variants}
+          isBookmarked={isBookmarked}
+          onToggleBookmark={onToggleBookmark}
+          onClose={onClose}
+        />
+      )}
       <div className="mission-selected-hero__facts">
         <span><strong>{activeVariants.length}</strong>Active variants</span>
         <span><strong>{variants?.length ?? concept.variantCount}</strong>Exact variants</span>
@@ -2347,11 +2256,7 @@ export default function MissionBrowserPage() {
   const legacyDossierConceptKey = searchParams.get("concept") ?? "";
   const legacySelectedConceptKey = searchParams.get("selected") ?? legacyDossierConceptKey;
   const selectedConceptKey = routeConceptKey || legacySelectedConceptKey;
-  const dossierConceptKey = routeConceptKey && searchParams.get("dossier") === "1"
-    ? routeConceptKey
-    : legacyDossierConceptKey;
   const selectedConcept = conceptsByKey.get(selectedConceptKey);
-  const dossierConcept = conceptsByKey.get(dossierConceptKey);
   const selectedConceptVariants = conceptVariantsByKey[selectedConceptKey];
   const selectedConceptTriggerRef = useRef<HTMLButtonElement | null>(null);
   const modalShellRef = useRef<HTMLDivElement | null>(null);
@@ -2360,13 +2265,6 @@ export default function MissionBrowserPage() {
     const search = params.toString();
     navigate({ pathname, search: search ? `?${search}` : "" }, { replace });
   }, [navigate]);
-  const closeConceptDossier = useCallback(() => {
-    const next = new URLSearchParams(searchParams);
-    next.delete("concept");
-    next.delete("dossier");
-    navigateWithParams(selectedConcept ? missionConceptPath(selectedConcept) : MISSION_BROWSER_PATH, next);
-    selectedConceptTriggerRef.current?.focus();
-  }, [navigateWithParams, searchParams, selectedConcept]);
   const toggleMissionBookmark = useCallback((conceptKey: string) => {
     setBookmarkedMissionIds((current) => {
       const next = new Set(current);
@@ -2439,10 +2337,9 @@ export default function MissionBrowserPage() {
     if (!isLegacyMissionLink && !hasStaleSlug) return;
 
     const next = new URLSearchParams(searchParams);
-    const opensDossier = Boolean(next.get("concept"));
     next.delete("selected");
     next.delete("concept");
-    if (opensDossier) next.set("dossier", "1");
+    next.delete("dossier");
     navigateWithParams(missionConceptPath(selectedConcept), next, true);
   }, [
     legacySelectedConceptKey,
@@ -2494,27 +2391,6 @@ export default function MissionBrowserPage() {
       cancelled = true;
     };
   }, [conceptVariantsByKey, conceptsByKey, selectedConceptKey]);
-
-  useEffect(() => {
-    if (!dossierConceptKey) return;
-    const previousOverflow = document.body.style.overflow;
-    const previousPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
-    const focusFrame = window.requestAnimationFrame(() => modalShellRef.current?.focus());
-
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeConceptDossier();
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      window.cancelAnimationFrame(focusFrame);
-      window.removeEventListener("keydown", closeOnEscape);
-      document.body.style.overflow = previousOverflow;
-      document.body.style.paddingRight = previousPaddingRight;
-    };
-  }, [closeConceptDossier, dossierConceptKey]);
 
   const providers = useMemo(
     () => catalog?.filtersMeta?.factions ?? Array.from(new Set(families.map((family) => family.provider))).sort().map((value) => ({ key: value, label: value, count: 0 })),
@@ -2603,7 +2479,11 @@ export default function MissionBrowserPage() {
     );
     const nextVisibleConceptCount = projectionConceptKeys.size;
     const nextTotalPages = Math.max(1, Math.ceil(nextVisibleConceptCount / CONCEPTS_PER_PAGE));
-    const nextCurrentPage = Number.isFinite(requestedPage) ? Math.min(Math.max(requestedPage, 1), nextTotalPages) : 1;
+    const selectedConceptIndex = selectedConceptKey ? Array.from(projectionConceptKeys).indexOf(selectedConceptKey) : -1;
+    const requestedCurrentPage = Number.isFinite(requestedPage) ? Math.min(Math.max(requestedPage, 1), nextTotalPages) : 1;
+    const nextCurrentPage = selectedConceptIndex >= 0
+      ? Math.floor(selectedConceptIndex / CONCEPTS_PER_PAGE) + 1
+      : requestedCurrentPage;
     const pageConceptKeys = new Set(Array.from(projectionConceptKeys).slice((nextCurrentPage - 1) * CONCEPTS_PER_PAGE, nextCurrentPage * CONCEPTS_PER_PAGE));
 
     return {
@@ -2630,20 +2510,10 @@ export default function MissionBrowserPage() {
         }))
         .filter((group) => group.reputationScopes.length > 0),
     };
-  }, [activeView, catalog, confidence, conceptsByKey, families, missionType, provider, query, repReward, requestedPage, reward, status]);
+  }, [activeView, catalog, confidence, conceptsByKey, families, missionType, provider, query, repReward, requestedPage, reward, selectedConceptKey, status]);
 
-  const openConceptDossier = useCallback((conceptKey: string, trigger: HTMLButtonElement) => {
+  const selectConceptWorkspace = useCallback((conceptKey: string, trigger: HTMLButtonElement) => {
     selectedConceptTriggerRef.current = trigger;
-    const concept = conceptsByKey.get(conceptKey);
-    if (!concept) return;
-    const next = new URLSearchParams(searchParams);
-    next.delete("selected");
-    next.delete("concept");
-    next.set("dossier", "1");
-    navigateWithParams(missionConceptPath(concept), next);
-  }, [conceptsByKey, navigateWithParams, searchParams]);
-
-  const selectConceptWorkspace = useCallback((conceptKey: string) => {
     const concept = conceptsByKey.get(conceptKey);
     if (!concept) return;
     const next = new URLSearchParams(searchParams);
@@ -2659,7 +2529,29 @@ export default function MissionBrowserPage() {
     next.delete("concept");
     next.delete("dossier");
     navigateWithParams(MISSION_BROWSER_PATH, next);
+    window.requestAnimationFrame(() => selectedConceptTriggerRef.current?.focus());
   }, [navigateWithParams, searchParams]);
+
+  useEffect(() => {
+    if (!selectedConcept) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
+    const focusFrame = window.requestAnimationFrame(() => modalShellRef.current?.focus());
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeConceptWorkspace();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      window.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
+    };
+  }, [closeConceptWorkspace, selectedConcept]);
 
   function setParam(key: string, value: string) {
     const next = new URLSearchParams(searchParams);
@@ -2712,6 +2604,19 @@ export default function MissionBrowserPage() {
     navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
+  function renderMissionCards(concepts: MissionConceptView[]) {
+    return concepts.map((concept) => (
+      <MissionConceptCard
+        key={concept.conceptKey}
+        concept={concept}
+        familiesByKey={familiesByKey}
+        filters={cardFilters}
+        isSelected={selectedConceptKey === concept.conceptKey}
+        onSelect={selectConceptWorkspace}
+      />
+    ));
+  }
+
   return (
     <div className="mb-page">
       <div className="mb-shell">
@@ -2748,30 +2653,31 @@ export default function MissionBrowserPage() {
                   {confidenceOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
                 </select>
               </div>
-            </div>
-          </div>
-          <div className="mb-filter-meta">
-            <nav className="mb-view-selector crb-chip-group" aria-label="Mission browser view">
-              {([
-                ["full", "Full"],
-                ["faction", "Faction"],
-                ["reputation", "Reputation"],
-              ] as Array<[BrowserView, string]>).map(([view, label]) => (
-                <button
-                  type="button"
-                  key={view}
-                  className={`craft-frl-chip craft-frl-chip--sm${activeView === view ? " craft-frl-chip--active" : ""}`}
-                  aria-pressed={activeView === view}
-                  onClick={() => setParam("view", view)}
-                >
-                  {label}
-                </button>
-              ))}
-            </nav>
-            <div className="mb-rep-legend" aria-label="Reputation path color legend">
-              {["Hauling", "Ship Combat", "Salvage", "Standing", "Bounty", "Courier", "Refuel"].map((item) => (
-                <span key={item} className={`mb-rep-badge ${repScopeClass(item)}`}>{item}</span>
-              ))}
+              <div className="mb-filter-meta">
+                <nav className="mb-view-selector crb-chip-group" aria-label="Mission browser view">
+                  {([
+                    ["full", "Full"],
+                    ["faction", "Faction"],
+                    ["reputation", "Reputation"],
+                  ] as Array<[BrowserView, string]>).map(([view, label]) => (
+                    <button
+                      type="button"
+                      key={view}
+                      className={`craft-frl-chip craft-frl-chip--sm${activeView === view ? " craft-frl-chip--active" : ""}`}
+                      aria-pressed={activeView === view}
+                      onClick={() => setParam("view", view)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </nav>
+                <div className="mb-rep-legend" aria-label="Reputation path color legend">
+                  <span className="mb-filter-meta__label">Reputation paths</span>
+                  {["Hauling", "Ship Combat", "Salvage", "Standing", "Bounty", "Courier", "Refuel"].map((item) => (
+                    <span key={item} className={`mb-rep-badge ${repScopeClass(item)}`}>{item}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2780,21 +2686,6 @@ export default function MissionBrowserPage() {
         {error && <div className="mb-state is-error">{error}</div>}
         {!loading && !error && catalog && (
           <div className="mb-results-shell">
-            {selectedConcept && (
-              <MissionSelectedWorkspace
-                key={selectedConcept.conceptKey}
-                concept={selectedConcept}
-                variants={selectedConceptVariants}
-                loading={conceptLoadingKey === selectedConcept.conceptKey && !selectedConceptVariants}
-                error={conceptErrors[selectedConcept.conceptKey]}
-                isBookmarked={hasMissionConceptBookmark(bookmarkedMissionIds, selectedConcept.conceptKey)}
-                bookmarkedMissionIds={bookmarkedMissionIds}
-                onToggleBookmark={toggleMissionBookmark}
-                onToggleRewardBookmarks={toggleMissionRewardBookmarks}
-                onOpenDossier={(trigger) => openConceptDossier(selectedConcept.conceptKey, trigger)}
-                onClose={closeConceptWorkspace}
-              />
-            )}
             <main className="mb-family-list">
             {visibleConceptCount === 0 && (
               <section className="mb-zero-results ops-primary-card" aria-live="polite">
@@ -2822,9 +2713,7 @@ export default function MissionBrowserPage() {
                     <strong>{categoryConcepts.length} concepts / {categoryConcepts.reduce((sum, concept) => sum + concept.variantCount, 0)} playable missions</strong>
                   </header>
                   <div className="mission-group-grid">
-                    {categoryConcepts.map((concept) => (
-                      <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
-                    ))}
+                    {renderMissionCards(categoryConcepts)}
                   </div>
                 </section>
               );
@@ -2850,9 +2739,7 @@ export default function MissionBrowserPage() {
                           <div><h3>{category.displayName}</h3><small>{categoryConcepts.length} concepts / {categoryConcepts.reduce((sum, concept) => sum + concept.variantCount, 0)} playable missions</small></div>
                         </header>
                         <div className="mission-group-grid">
-                          {categoryConcepts.map((concept) => (
-                            <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
-                          ))}
+                          {renderMissionCards(categoryConcepts)}
                         </div>
                       </section>
                     );
@@ -2899,9 +2786,7 @@ export default function MissionBrowserPage() {
                     </header>
                     <div className="mission-path-lane__body">
                       <div className="mission-group-grid">
-                        {scopeConcepts.map((concept) => (
-                          <MissionConceptCard key={concept.conceptKey} concept={concept} familiesByKey={familiesByKey} filters={cardFilters} isSelected={selectedConceptKey === concept.conceptKey} onSelect={selectConceptWorkspace} />
-                        ))}
+                        {renderMissionCards(scopeConcepts)}
                       </div>
                     </div>
                   </section>
@@ -2926,33 +2811,33 @@ export default function MissionBrowserPage() {
           </div>
         )}
       </div>
-      {dossierConcept && createPortal(
+      {selectedConcept && createPortal(
         <div
-          className="mission-dossier-modal-backdrop"
+          className="mission-dossier-modal-backdrop mission-workspace-modal-backdrop"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) closeConceptDossier();
+            if (event.target === event.currentTarget) closeConceptWorkspace();
           }}
         >
           <div
             ref={modalShellRef}
-            className="mission-dossier-modal-shell ops-primary-card"
+            className="mission-dossier-modal-shell mission-workspace-modal-shell ops-primary-card"
             role="dialog"
             aria-modal="true"
-            aria-label={`${dossierConcept.displayName} mission dossier`}
+            aria-label={`${selectedConcept.displayName} mission details`}
             tabIndex={-1}
           >
-            {conceptLoadingKey === dossierConcept.conceptKey && !conceptVariantsByKey[dossierConcept.conceptKey] && <div className="mb-state">Loading referenced family variants...</div>}
-            {conceptErrors[dossierConcept.conceptKey] && <div className="mb-state is-error">{conceptErrors[dossierConcept.conceptKey]}</div>}
-            {conceptVariantsByKey[dossierConcept.conceptKey] && (
-              <ConceptDetail
-                key={dossierConcept.conceptKey}
-                concept={dossierConcept}
-                variants={conceptVariantsByKey[dossierConcept.conceptKey]!}
-                isBookmarked={hasMissionConceptBookmark(bookmarkedMissionIds, dossierConcept.conceptKey)}
-                onToggleBookmark={toggleMissionBookmark}
-                onClose={closeConceptDossier}
-              />
-            )}
+            <MissionSelectedWorkspace
+              key={selectedConcept.conceptKey}
+              concept={selectedConcept}
+              variants={selectedConceptVariants}
+              loading={conceptLoadingKey === selectedConcept.conceptKey && !selectedConceptVariants}
+              error={conceptErrors[selectedConcept.conceptKey]}
+              isBookmarked={hasMissionConceptBookmark(bookmarkedMissionIds, selectedConcept.conceptKey)}
+              bookmarkedMissionIds={bookmarkedMissionIds}
+              onToggleBookmark={toggleMissionBookmark}
+              onToggleRewardBookmarks={toggleMissionRewardBookmarks}
+              onClose={closeConceptWorkspace}
+            />
           </div>
         </div>,
         document.body,

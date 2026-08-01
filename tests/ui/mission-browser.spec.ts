@@ -1,20 +1,30 @@
 import { expect, test } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 
-test.describe("Mission Browser exact dossier", () => {
-  test("selects a concept into a persistent workspace before opening its dossier", async ({ page }) => {
+test.describe("Mission Browser mission modal", () => {
+  test("opens the complete mission workspace directly in a modal", async ({ page }) => {
     await page.goto("/industry/missions?search=Bit%20Zeros%20Black%20Box%20Recovery%20Nyx%20Easy");
 
     await page.locator(".mission-group-card").first().click();
     await expect(page).toHaveURL(/\/industry\/missions\/bit-zeros-black-box-recovery-nyx-easy--70d0a94a8a837e887b3c\?/);
     const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    const modal = page.getByRole("dialog", { name: /Bit Zeros Black Box Recovery Nyx Easy mission details/i });
+    await expect(modal).toBeVisible();
     await expect(workspace).toBeVisible();
     await expect(workspace.getByText("Exact mission comparison", { exact: true })).toBeVisible();
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(workspace.locator(".mission-concept-dossier")).toBeVisible();
+    await expect(page.locator(".mission-inline-drawer")).toHaveCount(0);
+    const headerBadgeCount = await workspace.locator(".mission-dossier-header__identity > div > .mb-badges .mb-badge").count();
+    expect(headerBadgeCount).toBeLessThanOrEqual(4);
+    const canonSurface = await modal.evaluate((element) => ({
+      borderRadius: getComputedStyle(element).borderRadius,
+      backgroundColor: getComputedStyle(element).backgroundColor,
+    }));
+    expect(canonSurface.borderRadius).toBe("7px");
+    expect(canonSurface.backgroundColor).toBe("rgb(10, 17, 25)");
 
-    await workspace.getByRole("button", { name: "Open dossier" }).click();
-    await expect(page).toHaveURL(/dossier=1/);
-    await expect(page.getByRole("dialog", { name: /Bit Zeros Black Box Recovery Nyx Easy mission dossier/i })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(modal).toHaveCount(0);
   });
 
   test("upgrades legacy mission links and repairs stale readable names", async ({ page }) => {
@@ -88,10 +98,10 @@ test.describe("Mission Browser exact dossier", () => {
     await page.goto(`/industry/missions?selected=${conceptKey}`);
 
     const workspace = page.getByRole("region", { name: /selected mission workspace/i });
-    const bookmark = workspace.getByRole("button", { name: "Bookmarked" });
+    const bookmark = workspace.getByRole("button", { name: "Remove Bit Zeros Black Box Recovery Nyx Easy bookmark" });
     await expect(bookmark).toBeVisible();
     await bookmark.click();
-    await workspace.getByRole("button", { name: "Bookmark" }).click();
+    await workspace.getByRole("button", { name: /Bookmark Bit Zeros Black Box Recovery Nyx Easy/ }).click();
 
     const stored = await page.evaluate((storageKey) => JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as string[], "scintel:recipe:mission-bookmarks:v1");
     expect(stored).toContain(`concept:${conceptKey}`);
@@ -119,11 +129,7 @@ test.describe("Mission Browser exact dossier", () => {
     await page.goto("/industry/missions?search=Additional%20Resources%20For%20Research");
     await page.locator(".mission-group-card").filter({ hasText: "Additional Resources For Research" }).first().click();
     const workspace = page.getByRole("region", { name: /Additional Resources For Research selected mission workspace/i });
-    await workspace.getByRole("button", { name: "Open dossier" }).click();
-
-    const dossier = page.getByRole("dialog", { name: /Additional Resources For Research mission dossier/i });
-    await expect(dossier).toBeVisible();
-    const requiredItems = dossier.locator(".mission-dossier-required-items");
+    const requiredItems = workspace.locator(".mission-dossier-required-items");
     await expect(requiredItems.getByRole("heading", { name: "Items to Collect or Deliver" })).toBeVisible();
     await expect(requiredItems.getByText("Sunset Berries", { exact: true })).toBeVisible();
     await expect(requiredItems.getByText("At least 15 required", { exact: true })).toBeVisible();
@@ -133,8 +139,8 @@ test.describe("Mission Browser exact dossier", () => {
   test("shows readable Wikelo blueprint rewards", async ({ page }) => {
     await page.goto("/industry/missions?concept=bb820f376f648ce1b071");
 
-    const dossier = page.getByRole("dialog", { name: /Heavy and Bright mission dossier/i });
-    const blueprintPanel = dossier.locator(".mission-dossier-blueprint-panel");
+    const workspace = page.getByRole("region", { name: /Heavy and Bright selected mission workspace/i });
+    const blueprintPanel = workspace.locator(".mission-dossier-blueprint-panel");
     await expect(blueprintPanel.getByRole("heading", { name: "Blueprint Rewards" })).toBeVisible();
     await expect(blueprintPanel.locator(".mb-blueprint-item span").filter({ hasText: "Cds Combat Superheavy Backpack 01 03 01" })).toBeVisible();
     await expect(blueprintPanel.getByText(/100% chance to award pool/).first()).toBeVisible();
@@ -143,12 +149,12 @@ test.describe("Mission Browser exact dossier", () => {
   test("preserves source-backed runtime slots in mission titles", async ({ page }) => {
     await page.goto("/industry/missions?concept=4ef1fb7075669edcf82f");
     await expect(
-      page.getByRole("dialog", { name: /Shut Off Power at \[Location\] mission dossier/i }),
+      page.getByRole("region", { name: /Shut Off Power at \[Location\] selected mission workspace/i }),
     ).toBeVisible();
   });
 
-  test("keeps the dossier readable at supported review sizes", async ({ page }) => {
-    const artifactRoot = "artifacts/mission-dossier-overhaul";
+  test("keeps the mission modal readable at supported review sizes", async ({ page }) => {
+    const artifactRoot = "artifacts/mission-browser-modal";
     await mkdir(artifactRoot, { recursive: true });
     for (const viewport of [
       { width: 768, height: 900 },
@@ -157,12 +163,29 @@ test.describe("Mission Browser exact dossier", () => {
       { width: 3840, height: 2160 },
     ]) {
       await page.setViewportSize(viewport);
+      await page.goto("/industry/missions?search=Bit%20Zeros%20Black%20Box%20Recovery%20Nyx%20Easy");
+      const missionCard = page.locator(".mission-group-card").first();
+      await expect(missionCard).toBeVisible();
+      const cardStyle = await missionCard.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          borderRadius: style.borderRadius,
+          boxShadow: style.boxShadow,
+        };
+      });
+      expect(cardStyle.borderRadius).toBe("4px");
+      expect(cardStyle.boxShadow).toBe("none");
+      await page.screenshot({
+        path: `${artifactRoot}/mission-cards-${viewport.width}x${viewport.height}.png`,
+        fullPage: true,
+      });
+
       await page.goto("/industry/missions?concept=bb820f376f648ce1b071");
-      const dossier = page.getByRole("dialog", { name: /Heavy and Bright mission dossier/i });
-      await expect(dossier).toBeVisible();
-      await expect(dossier.locator(".mission-required-item-row strong").first()).toBeVisible();
-      await expect(dossier.locator(".mb-blueprint-item span").first()).toBeVisible();
-      const measurements = await dossier.evaluate((element) => {
+      const workspace = page.getByRole("region", { name: /Heavy and Bright selected mission workspace/i });
+      await expect(workspace).toBeVisible();
+      await expect(workspace.locator(".mission-required-item-row strong").first()).toBeVisible();
+      await expect(workspace.locator(".mb-blueprint-item span").first()).toBeVisible();
+      const measurements = await workspace.evaluate((element) => {
         const item = element.querySelector<HTMLElement>(".mission-required-item-row strong");
         const blueprint = element.querySelector<HTMLElement>(".mb-blueprint-item span");
         const title = element.querySelector<HTMLElement>(".mission-dossier-header__identity h2");
@@ -184,10 +207,24 @@ test.describe("Mission Browser exact dossier", () => {
       expect(measurements.itemFontSize).toBeGreaterThanOrEqual(16);
       expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(15);
       expect(measurements.titleFontSize).toBeGreaterThanOrEqual(20);
+      if (viewport.width >= 2200) {
+        expect(measurements.itemFontSize).toBeGreaterThanOrEqual(19);
+        expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(17);
+        expect(measurements.titleFontSize).toBeGreaterThanOrEqual(34);
+      }
       expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.bodyBottom);
       expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.rightRailBottom);
       await page.screenshot({
-        path: `${artifactRoot}/wikelo-heavy-and-bright-${viewport.width}x${viewport.height}.png`,
+        path: `${artifactRoot}/wikelo-heavy-and-bright-modal-${viewport.width}x${viewport.height}.png`,
+        fullPage: true,
+      });
+      await workspace.locator(".mission-dossier-header").scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${artifactRoot}/wikelo-heavy-and-bright-modal-top-${viewport.width}x${viewport.height}.png`,
+      });
+      await workspace.scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${artifactRoot}/wikelo-heavy-and-bright-modal-content-${viewport.width}x${viewport.height}.png`,
       });
     }
   });
@@ -195,18 +232,18 @@ test.describe("Mission Browser exact dossier", () => {
   test("keeps certification buy-in separate from base payout", async ({ page }) => {
     await page.goto("/industry/missions?concept=1cf7b7218006719074f0");
 
-    const dossier = page.getByRole("dialog", { name: /Advanced Tracker License Certification mission dossier/i });
-    await expect(dossier.locator(".mission-dossier-reward-status strong").filter({ hasText: "91,000 aUEC base / solo" })).toBeVisible();
-    await expect(dossier.getByText("Certification buy-in", { exact: true })).toBeVisible();
-    await expect(dossier.getByText("10,000 aUEC", { exact: true })).toBeVisible();
-    await expect(dossier.getByText("Separate from the base/solo payout.", { exact: true })).toBeVisible();
+    const workspace = page.getByRole("region", { name: /Advanced Tracker License Certification selected mission workspace/i });
+    await expect(workspace.locator(".mission-dossier-reward-status strong").filter({ hasText: "91,000 aUEC base / solo" })).toBeVisible();
+    await expect(workspace.getByText("Certification buy-in", { exact: true })).toBeVisible();
+    await expect(workspace.getByText("10,000 aUEC", { exact: true })).toBeVisible();
+    await expect(workspace.getByText("Separate from the base/solo payout.", { exact: true })).toBeVisible();
   });
 
   test("preserves a resolved calculated zero", async ({ page }) => {
     await page.goto("/industry/missions?concept=c870e1aef43e6d02bcd9");
 
-    const dossier = page.getByRole("dialog");
-    await expect(dossier.getByText("0 aUEC base / solo", { exact: true }).first()).toBeVisible();
+    const workspace = page.getByRole("region", { name: /selected mission workspace/i });
+    await expect(workspace.getByText("0 aUEC base / solo", { exact: true }).first()).toBeVisible();
   });
 
   test("offers a recoverable zero-results state", async ({ page }) => {
