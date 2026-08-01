@@ -34,8 +34,8 @@ import {
   missionConceptPath,
   missionConceptSlug,
 } from "@/lib/missionUrls";
-import "./mission-browser.css";
 import "@/components/industry/crafting/recipe-browser.css";
+import "./mission-browser.css";
 
 const MAX_VISIBLE_VARIANTS = 8;
 const CONCEPTS_PER_PAGE = 12;
@@ -88,7 +88,7 @@ function repScopeClass(value?: string): string {
   if (text.includes("bounty")) return "mission-rep-scope--bounty";
   if (text.includes("courier")) return "mission-rep-scope--courier";
   if (text.includes("refuel")) return "mission-rep-scope--refuel";
-  if (text.includes("standing")) return "mission-rep-scope--standing";
+  if (text.includes("standing") || text.includes("wikelo") || text.includes("favor")) return "mission-rep-scope--standing";
   if (text.includes("mixed")) return "mission-rep-scope--mixed";
   return "mission-rep-scope--unknown";
 }
@@ -196,6 +196,48 @@ function playerFacingCreditReward(reward: MissionRewardView): string {
   }
   if (reward.creditStatus === "fixed" && currency && currency !== "UEC" && currency !== "AUEC") return reward.credits;
   return AUEC_REWARD_NOT_REPORTED;
+}
+
+function MissionFactIcon({ label }: { label: string }) {
+  const normalized = label.toLowerCase();
+  if (normalized.includes("active")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    );
+  }
+  if (normalized.includes("exact")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="6" />
+        <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+      </svg>
+    );
+  }
+  if (normalized.includes("pickup")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9h16l-1 9H5L4 9Z" />
+        <path d="M7 9V6h10v3M9 13h6" />
+      </svg>
+    );
+  }
+  if (normalized.includes("payout")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <path d="M14.5 8.5h-4a2 2 0 0 0 0 4h3a2 2 0 0 1 0 4h-4M12 6.5v2M12 16.5v2" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z" />
+      <path d="m4 7 8 4 8-4M12 11v10" />
+    </svg>
+  );
 }
 
 function playerFacingBriefing(value: string): string {
@@ -690,6 +732,21 @@ function lawfulLabel(item: Pick<MissionFamilyView, "lawfulClassification" | "law
   return "Lawful status unknown";
 }
 
+function explicitMissionVerificationTag(values: string[]): "Verified Mission" | "Unverified Mission" | undefined {
+  const normalized = new Set(values.map((value) => value.trim().toLowerCase()));
+  if (normalized.has("verified") || normalized.has("verified mission")) return "Verified Mission";
+  if (normalized.has("unverified") || normalized.has("unverified mission")) return "Unverified Mission";
+  return undefined;
+}
+
+function legalClassificationSummary(items: Array<Pick<MissionFamilyView, "lawfulClassification" | "lawfulConfidence">>): string {
+  const labels = Array.from(new Set(items.map((item) => lawfulLabel(item))));
+  if (!labels.length) return "Unknown";
+  if (labels.length > 1) return "Varies by exact mission";
+  const label = labels[0]!;
+  return label === "Lawful status unknown" ? "Unknown" : label;
+}
+
 function titleSourceLabel(source: MissionFamilyView["titleSource"]): string {
   return {
     localized_family: "Localized family title",
@@ -737,26 +794,9 @@ function Badge({ children, tone = "is-neutral", title }: { children: string; ton
 function restrictionBadgesForFamilies(families: MissionFamilyView[]): Array<{ label: string; tone: string }> {
   const hasCrimeRequired = families.some((family) => family.crimeStatRequirement === "required");
   const hasCrimeLimited = families.some((family) => family.crimeStatRequirement === "bounded");
-  const hasUnlawful = families.some((family) => family.lawfulClassification === "unlawful");
-  const hasUnknownLaw = families.some((family) => family.lawfulClassification === "unknown" || family.crimeStatRequirement === "unknown");
   return [
     hasCrimeRequired ? { label: "CrimeStat required", tone: "is-red is-restriction" } : undefined,
     !hasCrimeRequired && hasCrimeLimited ? { label: "CrimeStat limited", tone: "is-amber is-restriction" } : undefined,
-    hasUnlawful ? { label: "Restricted", tone: "is-amber is-restriction" } : undefined,
-    !hasUnlawful && hasUnknownLaw ? { label: "Lawful status unknown", tone: "is-amber is-restriction" } : undefined,
-  ].filter((value): value is { label: string; tone: string } => Boolean(value));
-}
-
-function restrictionBadgesForVariants(variants: MissionVariantView[]): Array<{ label: string; tone: string }> {
-  const hasCrimeRequired = variants.some((variant) => variant.crimeStatRequirement === "required");
-  const hasCrimeLimited = variants.some((variant) => variant.crimeStatRequirement === "bounded");
-  const hasUnlawful = variants.some((variant) => variant.lawfulClassification === "unlawful");
-  const hasUnknownLaw = variants.some((variant) => variant.lawfulClassification === "unknown" || variant.crimeStatRequirement === "unknown");
-  return [
-    hasCrimeRequired ? { label: "CrimeStat required", tone: "is-red is-restriction" } : undefined,
-    !hasCrimeRequired && hasCrimeLimited ? { label: "CrimeStat limited", tone: "is-amber is-restriction" } : undefined,
-    hasUnlawful ? { label: "Restricted", tone: "is-amber is-restriction" } : undefined,
-    !hasUnlawful && hasUnknownLaw ? { label: "Lawful status unknown", tone: "is-amber is-restriction" } : undefined,
   ].filter((value): value is { label: string; tone: string } => Boolean(value));
 }
 
@@ -802,11 +842,15 @@ const MissionConceptCard = memo(function MissionConceptCard({
   const displayVariantCount = families.reduce((sum, family) => sum + family.variantCount, 0) || concept.variantCount;
   const restrictions = restrictionBadgesForFamilies(families);
   const matchLabels = conceptMatchLabels(concept, families, filters);
+  const repScope = shortRepScope(concept.reputationScope.displayName);
+  const verificationTag = explicitMissionVerificationTag(concept.specificityBadges);
+  const legalClassification = legalClassificationSummary(families);
   const missionSignals = [
+    verificationTag ? { label: verificationTag, tone: verificationTag === "Verified Mission" ? "is-verified" : "is-unverified" } : undefined,
     blueprintCount > 0 ? { label: `${blueprintCount} blueprint pool${blueprintCount === 1 ? "" : "s"}`, tone: "is-blueprint" } : undefined,
     hasItemRewards ? { label: "Item rewards", tone: "is-blueprint" } : undefined,
     ...restrictions,
-  ].filter((signal): signal is { label: string; tone: string } => Boolean(signal)).slice(0, 3);
+  ].filter((signal): signal is { label: string; tone: string } => Boolean(signal)).slice(0, 4);
 
   return (
     <div className={`mb-family-block ${repScopeClass(concept.reputationScope.displayName)}${isSelected ? " is-selected" : ""}`}>
@@ -833,14 +877,14 @@ const MissionConceptCard = memo(function MissionConceptCard({
           </span>
           <span className="mission-group-card__footer">
             <span className="mb-badges">
-              <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName))}`}>{repPathSummary(concept.rewardedReputationPaths)}</span>
+              <span className={`mission-rep-scope-badge ${repScopeClass(concept.reputationScope.displayName)}`}>{repScope}</span>
+              <span className="mission-rep-reward-text">{repPathSummary(concept.rewardedReputationPaths)}</span>
               {missionSignals.map((signal) => <Badge key={signal.label} tone={signal.tone}>{signal.label}</Badge>)}
             </span>
+            <span className="mission-card-legal">Legal classification: {legalClassification}</span>
           </span>
           {matchLabels.length > 0 && (
-            <span className="mb-badges mission-card-matches">
-              {matchLabels.slice(0, 2).map((label) => <Badge key={label} tone="is-violet">{label}</Badge>)}
-            </span>
+            <span className="mission-card-matches">{matchLabels.slice(0, 2).join(" • ")}</span>
           )}
         </span>
       </button>
@@ -893,7 +937,7 @@ function DossierReputationRewards({ paths }: { paths: MissionRewardedReputationP
         const unresolved = group.filter((path) => typeof path.amount !== "number" || path.confidence === "unresolved");
         return (
           <div className={`mb-dossier-reputation__group ${repScopeClass(first.scopeDisplayName)}`} key={`${first.factionKey}-${first.scopeKey}`}>
-            <strong>{first.factionDisplayName} / {shortRepScope(first.scopeDisplayName)}</strong>
+            <strong>{/^unknown(?: faction)?$/i.test(first.factionDisplayName) ? shortRepScope(first.scopeDisplayName) : `${first.factionDisplayName} / ${shortRepScope(first.scopeDisplayName)}`}</strong>
             <div className="mb-dossier-reputation__outcomes">
               {positive.map((path, index) => <span className={repOutcomeBadgeClass(path.amount)} key={`pos-${path.scopeKey}-${index}`}>{repOutcomeLabel(path.amount)}</span>)}
               {negative.map((path, index) => <span className={repOutcomeBadgeClass(path.amount)} key={`neg-${path.scopeKey}-${index}`}>{repOutcomeLabel(path.amount)}</span>)}
@@ -964,6 +1008,56 @@ function BlueprintRewardGroups({
       return next;
     });
   };
+
+  if (dossier) {
+    return (
+      <div className="mb-blueprint-groups is-compact is-dossier">
+        {groups.map((group) => {
+          const poolKey = group.poolGuid ?? group.poolName;
+          const isExpanded = expandedPools.has(poolKey);
+          return (
+            <section className="mb-blueprint-group is-dossier-row" key={poolKey}>
+              <div className="mb-blueprint-item mb-blueprint-pool-row">
+                <span className="mb-blueprint-pool-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="7" />
+                    <path d="M12 8.5 15 10v4l-3 1.5L9 14v-4l3-1.5Z" />
+                  </svg>
+                </span>
+                <div className="mb-blueprint-pool-copy">
+                  <span>{group.poolName}</span>
+                  <small>
+                    {[
+                      group.missionChanceLabel ? `${group.missionChanceLabel} to award pool` : undefined,
+                      playerFacingChance(group.chanceLabel),
+                    ].filter(Boolean).join(" / ") || "Chance not reported"}
+                  </small>
+                </div>
+                <button
+                  type="button"
+                  className="mb-blueprint-pool-action"
+                  aria-expanded={isExpanded}
+                  onClick={() => togglePoolExpanded(poolKey)}
+                >
+                  {isExpanded ? "Hide pool" : "View pool"}<span aria-hidden="true">↗</span>
+                </button>
+              </div>
+              {isExpanded && (
+                <div className="mb-blueprint-list is-expanded">
+                  {group.rewards.length > 0 ? group.rewards.map((reward) => (
+                    <div className="mb-blueprint-reward-detail" key={reward.blueprintGuid ?? reward.displayName}>
+                      <span>{reward.displayName}</span>
+                      <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, playerFacingChance(reward.chanceLabel)].filter(Boolean).join(" / ") || "Blueprint"}</small>
+                    </div>
+                  )) : <div className="mb-blueprint-unresolved">Blueprint reward pool unresolved</div>}
+                </div>
+              )}
+            </section>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}${dossier ? " is-dossier" : ""}`}>
@@ -1068,6 +1162,10 @@ function repOutcomeLabel(value?: number): string {
 
 function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
   const itemRewards = variant.rewards.itemRewards ?? [];
+  const reportedItemRewards = itemRewards.filter((reward) => {
+    const label = reward.displayName ?? reward.entityClass ?? "";
+    return Boolean(label) && !/^item reward$/i.test(label);
+  });
   const creditReward = playerFacingCreditReward(variant.rewards);
   const creditUnresolved = creditReward === AUEC_REWARD_NOT_REPORTED;
   const buyInAmounts = (variant.canonical?.financials.buyIns ?? [])
@@ -1081,7 +1179,7 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
         <h3>Rewards</h3>
       </div>
       <div className="mission-dossier-section mission-dossier-rewards-reputation">
-        <h4 className="mb-inline-heading">Reputation Impact</h4>
+        <h4 className="mb-inline-heading">Reputation Reward</h4>
         <DossierReputationRewards paths={variant.rewardedReputationPaths} />
       </div>
       <div className={`mission-dossier-reward-status${creditUnresolved ? " is-muted" : ""}`}>
@@ -1104,12 +1202,12 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
           Multiple calculated reward branches require result-loop verification. No branches were summed.
         </p>
       )}
-      {itemRewards.length > 0 && (
-        <div className="mission-dossier-section mission-dossier-item-rewards">
-          <h4 className="mb-inline-heading">Item Rewards</h4>
-          <BadgeList values={itemRewards.map((reward) => [reward.amount, reward.displayName ?? reward.entityClass ?? "Item reward"].filter(Boolean).join(" x "))} fallback="No item rewards reported" max={6} />
-        </div>
-      )}
+      <div className="mission-dossier-section mission-dossier-item-rewards">
+        <h4 className="mb-inline-heading">Item Reward</h4>
+        {reportedItemRewards.length > 0
+          ? <BadgeList values={reportedItemRewards.map((reward) => [reward.amount, reward.displayName ?? reward.entityClass ?? "Item reward"].filter(Boolean).join(" x "))} fallback="No item rewards reported" max={6} />
+          : <p className="mission-dossier-reward-muted">Item reward not reported</p>}
+      </div>
     </section>
   );
 }
@@ -1142,6 +1240,19 @@ function requiredItemLabel(item: MissionRequiredItemEvidenceView, entryIndex?: n
     ?? (item.requirementRole === "hauling_order" ? "Mission cargo (identity unresolved)" : "Runtime-selected mission item");
 }
 
+function requiredItemRowCount(variant?: MissionVariantView): number {
+  return (variant?.requiredItems?.evidence ?? [])
+    .filter((item) => item.roleStatus !== "bound_to_objective_order")
+    .reduce((total, item) => total + Math.max(1, item.content.entries?.length ?? 0), 0);
+}
+
+function requiredItemIcon(itemLabel: string): string | undefined {
+  const normalized = itemLabel.toLowerCase();
+  if (normalized.includes("helmet")) return "/images/component-icons/heavy_helmet.webp";
+  if (normalized.includes("armor") || normalized.includes("carrier")) return "/images/component-icons/heavy_torso.webp";
+  return undefined;
+}
+
 function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) {
   const requiredItems = variant.requiredItems;
   if (!requiredItems || requiredItems.status === "proven_absent") return null;
@@ -1163,7 +1274,7 @@ function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) 
     <section className="mission-dossier-card mission-dossier-required-items">
       <div className="mission-dossier-card__heading">
         <h3>Items to Collect or Deliver</h3>
-        <span>{rows.length} item requirement{rows.length === 1 ? "" : "s"}</span>
+        <span>{rows.length} required item{rows.length === 1 ? "" : "s"}</span>
       </div>
       {rows.length ? (
         <div className="mission-required-item-list">
@@ -1174,6 +1285,16 @@ function DossierRequiredItemsCard({ variant }: { variant: MissionVariantView }) 
             const itemLabel = requiredItemLabel(item, entryIndex);
             return (
               <div className="mission-required-item-row" key={`${item.evidenceId}-${entryIndex ?? "selector"}`}>
+                <span className="mission-required-item-icon" aria-hidden="true">
+                  {requiredItemIcon(itemLabel) ? (
+                    <img src={requiredItemIcon(itemLabel)} alt="" />
+                  ) : (
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="7" />
+                      <path d="M9.5 12h5M12 9.5v5" />
+                    </svg>
+                  )}
+                </span>
                 <div>
                   <strong>{itemLabel}</strong>
                   <span>{quantity ? `${quantity} required` : "Quantity determined at runtime or unresolved"}</span>
@@ -1210,7 +1331,7 @@ function DossierBlueprintCard({
         <h3>Blueprint Rewards</h3>
         <span>
           {groups.length
-            ? `${groups.length} reward pool${groups.length === 1 ? "" : "s"}`
+            ? `${groups.length} blueprint pool${groups.length === 1 ? "" : "s"}`
             : offeringVariantCount > 0
               ? `${offeringVariantCount} of ${variantCount} variants offer blueprints`
               : "None reported"}
@@ -1278,7 +1399,12 @@ function DossierVariantList({
   );
 }
 
-function DossierFooter({ variant, blueprintGroups }: { variant: MissionVariantView; blueprintGroups: BlueprintRewardGroupView[] }) {
+type MissionDossierFooterState = {
+  variant: MissionVariantView;
+  blueprintGroups: BlueprintRewardGroupView[];
+};
+
+function DossierFooter({ variant, blueprintGroups }: MissionDossierFooterState) {
   const confidence = variant.confidence.hasUnresolvedLocation || variant.confidence.hasUnresolvedPrerequisites || variant.confidence.hasUnresolvedRewards
     ? "Partial"
     : variant.pickupLocation.confidence === "high"
@@ -1286,7 +1412,10 @@ function DossierFooter({ variant, blueprintGroups }: { variant: MissionVariantVi
       : "Medium";
   const notes = [
     variant.confidence.hasUnresolvedRewards ? "Reward data may be partially unresolved." : undefined,
+    variant.crimeStatRequirement === "required" ? "CrimeStat is required." : undefined,
+    variant.crimeStatRequirement === "bounded" ? "CrimeStat access is limited." : undefined,
     blueprintGroups.some((group) => group.rewards.length === 0) ? "Blueprint pool item resolution incomplete." : undefined,
+    blueprintGroups.length > 1 && !explicitVariantRegion(variant) ? "Blueprint pools vary by generated locality; exact region mapping is unresolved." : undefined,
     variant.locationRoles?.destination?.status === "unresolved" ? "Destination unresolved in current data." : undefined,
   ].filter((value): value is string => Boolean(value));
   return (
@@ -1301,10 +1430,14 @@ function DossierBody({
   variants,
   selectedVariant,
   onSelectVariant,
+  onFooterChange,
+  onRequiredItemCountChange,
 }: {
   variants: MissionVariantView[];
   selectedVariant: MissionVariantView;
   onSelectVariant: (variantKey: string) => void;
+  onFooterChange: (state: MissionDossierFooterState) => void;
+  onRequiredItemCountChange: (count: number) => void;
 }) {
   const [exactVariants, setExactVariants] = useState<Record<string, MissionVariantView>>({});
   const [exactLoadingKey, setExactLoadingKey] = useState("");
@@ -1342,6 +1475,11 @@ function DossierBody({
     };
   }, [exactVariants, selectedVariant.variantKey]);
 
+  useEffect(() => {
+    onFooterChange({ variant: detailedVariant, blueprintGroups });
+    onRequiredItemCountChange(requiredItemRowCount(detailedVariant));
+  }, [blueprintGroups, detailedVariant, onFooterChange, onRequiredItemCountChange]);
+
   return (
     <>
       {exactLoadingKey === selectedVariant.variantKey && <div className="mission-dossier-detail-state">Loading exact payout and item evidence...</div>}
@@ -1364,11 +1502,10 @@ function DossierBody({
             offeringVariantCount={blueprintOfferingVariantCount}
             variantCount={variants.length}
           />
-          <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
+          {variants.length > 1 && <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />}
         </div>
         <DossierRequiredItemsCard variant={detailedVariant} />
       </div>
-      <DossierFooter variant={detailedVariant} blueprintGroups={blueprintGroups} />
     </>
   );
 }
@@ -1638,15 +1775,19 @@ function FamilyDetail({
 function ConceptDetail({
   concept,
   variants,
+  facts,
   isBookmarked,
   onToggleBookmark,
   onClose,
+  onFooterChange,
 }: {
   concept: MissionConceptView;
   variants: MissionVariantView[];
+  facts: Array<{ label: string; value: string | number }>;
   isBookmarked: boolean;
   onToggleBookmark: (conceptKey: string) => void;
   onClose: () => void;
+  onFooterChange: (state: MissionDossierFooterState) => void;
 }) {
   const tiers = useMemo(() => Array.from(variants.reduce((groups, variant) => {
     const key = variant.tierKey ?? "unclassified";
@@ -1672,19 +1813,19 @@ function ConceptDetail({
     [selectedAvailability],
   );
   const [selectedDossierVariantKey, setSelectedDossierVariantKey] = useState("");
+  const [detailedRequiredItemCounts, setDetailedRequiredItemCounts] = useState<Record<string, number>>({});
   const resolvedDossierVariantKey = useMemo(() => (
     selectedVariants.some((variant) => variant.variantKey === selectedDossierVariantKey)
       ? selectedDossierVariantKey
       : (selectedVariants[0]?.variantKey ?? "")
   ), [selectedDossierVariantKey, selectedVariants]);
   const representative = selectedVariants.find((variant) => variant.variantKey === resolvedDossierVariantKey) ?? selectedVariants[0];
-  const blueprintGroups = useMemo(
-    () => representative
-      ? Array.from(new Map(representative.rewards.blueprintRewardGroups.map((group) => [group.poolGuid ?? group.poolName, group])).values())
-      : [],
-    [representative],
-  );
-  const poolVariesWithoutRegion = blueprintGroups.length > 1 && !selectedVariants.some(explicitVariantRegion);
+  const handleRequiredItemCountChange = useCallback((count: number) => {
+    if (!representative) return;
+    setDetailedRequiredItemCounts((current) => current[representative.variantKey] === count
+      ? current
+      : { ...current, [representative.variantKey]: count });
+  }, [representative]);
   const meaningfulTiers = useMemo(() => tiers.filter(([tierKey, tierVariants]) => {
     const label = tierVariants[0]?.tierLabel ?? tierKey;
     return !/^(unclassified|unknown|unresolved)(\s+tier)?$/i.test(label);
@@ -1698,7 +1839,19 @@ function ConceptDetail({
     () => Array.from(new Map(variants.flatMap((variant) => variant.rewards.blueprintRewardGroups).map((group) => [group.poolGuid ?? group.poolName, group])).values()),
     [variants],
   );
-  const headerRestrictions = useMemo(() => restrictionBadgesForVariants(variants), [variants]);
+  const verificationTag = explicitMissionVerificationTag(concept.specificityBadges);
+  const requiresMissionItems = variants.some((variant) => variant.requiredItemSummary?.status === "present");
+  const requiredItemCount = representative
+    ? detailedRequiredItemCounts[representative.variantKey] ?? requiredItemRowCount(representative)
+    : 0;
+  const headerReputationScope = primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName);
+  const sourceBackedFaction = concept.rewardedReputationPaths.find((path) => (
+    path.confidence !== "unresolved" && !/^unknown(?: faction)?$/i.test(path.factionDisplayName)
+  ))?.factionDisplayName;
+  const headerFaction = /^unknown(?: faction)?$/i.test(concept.factionDisplayName) && sourceBackedFaction
+    ? sourceBackedFaction
+    : concept.factionDisplayName;
+  const legalClassification = legalClassificationSummary(variants);
   return (
     <section className={`mb-detail mission-group-expansion mission-concept-dossier ${repScopeClass(concept.reputationScope.displayName)}`} aria-label={`${concept.displayName} concept details`}>
       <header className="mission-dossier-header">
@@ -1706,13 +1859,15 @@ function ConceptDetail({
           <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
           <div>
             <h2>{concept.displayName}</h2>
-            <p>{concept.factionDisplayName} / {shortRepScope(concept.reputationScope.displayName)}</p>
+            <p>{headerFaction} / {concept.displayCategory.label}</p>
             <div className="mb-badges">
+              <span className={`mission-rep-scope-badge ${repScopeClass(headerReputationScope)}`}>{shortRepScope(headerReputationScope)}</span>
+              {verificationTag && <Badge tone={verificationTag === "Verified Mission" ? "is-verified" : "is-unverified"}>{verificationTag}</Badge>}
               <Badge tone="is-type">{concept.displayCategory.label}</Badge>
-              <Badge tone={allBlueprintGroups.length ? "is-blueprint" : "is-muted"}>{allBlueprintGroups.length ? "Blueprint rewards possible" : "No blueprint rewards reported"}</Badge>
-              {headerRestrictions.slice(0, 2).map((restriction) => <Badge key={restriction.label} tone={restriction.tone}>{restriction.label}</Badge>)}
+              <Badge tone={allBlueprintGroups.length ? "is-blueprint" : "is-muted"}>{allBlueprintGroups.length ? `${allBlueprintGroups.length} blueprint pool${allBlueprintGroups.length === 1 ? "" : "s"}` : "No blueprint rewards reported"}</Badge>
+              {requiresMissionItems && <Badge tone="is-amber">{requiredItemCount ? `${requiredItemCount} required item${requiredItemCount === 1 ? "" : "s"}` : "Mission items required"}</Badge>}
             </div>
-            {(showRiskTierSelector || availabilityGroups.length > 0) && (
+            {(showRiskTierSelector || availabilityGroups.length > 1) && (
               <div className="mission-dossier-header__controls">
                 {showRiskTierSelector && (
                   <div className="mission-dossier-inline-control">
@@ -1736,7 +1891,7 @@ function ConceptDetail({
                     </div>
                   </div>
                 )}
-                {availabilityGroups.length > 0 && (
+                {availabilityGroups.length > 1 && (
                   <div className="mission-dossier-inline-control">
                     <span>Systems</span>
                     <div
@@ -1771,6 +1926,7 @@ function ConceptDetail({
           </div>
         </div>
         <div className="mission-dossier-header__actions">
+          <span className="mission-dossier-legal">Legal classification: {legalClassification}</span>
           <button
             type="button"
             className={`mission-dossier-bookmark${isBookmarked ? " is-active" : ""}`}
@@ -1785,14 +1941,23 @@ function ConceptDetail({
           <button type="button" className="mission-dossier-close" aria-label="Close selected mission details" onClick={onClose}>×</button>
         </div>
       </header>
+      <div className="mission-selected-hero__facts">
+        {facts.map((fact) => (
+          <span key={fact.label}>
+            <MissionFactIcon label={fact.label} />
+            <span><strong>{fact.value}</strong><small>{fact.label}</small></span>
+          </span>
+        ))}
+      </div>
       {representative && (
         <section className="mission-dossier-panel">
-          {poolVariesWithoutRegion && <p className="mb-empty-note mission-dossier-panel-note">Blueprint pool varies by generated locality; exact region mapping unresolved.</p>}
           <DossierBody
             key={selectedAvailability?.[0]}
             variants={selectedVariants}
             selectedVariant={representative}
             onSelectVariant={setSelectedDossierVariantKey}
+            onFooterChange={onFooterChange}
+            onRequiredItemCountChange={handleRequiredItemCountChange}
           />
         </section>
       )}
@@ -2082,6 +2247,7 @@ function MissionSelectedWorkspace({
   const [sort, setSort] = useState<MissionComparisonSort>("mission");
   const [descending, setDescending] = useState(false);
   const [eligibilityVariant, setEligibilityVariant] = useState<MissionVariantView | null>(null);
+  const [dossierFooter, setDossierFooter] = useState<MissionDossierFooterState | null>(null);
   const activeVariants = useMemo(() => (variants ?? []).filter(exactVariantIsActive), [variants]);
   const visibleVariants = useMemo(() => {
     const rows = availability === "active" ? activeVariants : (variants ?? []);
@@ -2125,18 +2291,19 @@ function MissionSelectedWorkspace({
         <ConceptDetail
           concept={concept}
           variants={variants}
+          facts={[
+            { value: activeVariants.length, label: `Active variant${activeVariants.length === 1 ? "" : "s"}` },
+            { value: variants.length, label: `Exact variant${variants.length === 1 ? "" : "s"}` },
+            { value: systems.length === 1 ? systems[0]! : systems.length || "—", label: systems.length === 1 ? "Pickup" : "Pickup scopes" },
+            { value: payoutSummary === "Payout unresolved" ? "Unresolved" : payoutSummary, label: "Payout" },
+            { value: variants.filter((variant) => variant.requiredItemSummary?.status === "present").length, label: "Require mission items" },
+          ]}
           isBookmarked={isBookmarked}
           onToggleBookmark={onToggleBookmark}
           onClose={onClose}
+          onFooterChange={setDossierFooter}
         />
       )}
-      <div className="mission-selected-hero__facts">
-        <span><strong>{activeVariants.length}</strong>Active variants</span>
-        <span><strong>{variants?.length ?? concept.variantCount}</strong>Exact variants</span>
-        <span><strong>{systems.length || "—"}</strong>{systems.length === 1 ? systems[0] : "Pickup scopes"}</span>
-        <span><strong>{payoutSummary}</strong>Base / solo range</span>
-        <span><strong>{(variants ?? []).filter((variant) => variant.requiredItemSummary?.status === "present").length}</strong>Require mission items</span>
-      </div>
       {loading && <div className="mission-selected-state">Loading exact variants...</div>}
       {error && <div className="mission-selected-state is-error">{error}</div>}
       {variants && (
@@ -2149,7 +2316,7 @@ function MissionSelectedWorkspace({
               <span>{visibleVariants.length} {availability === "active" ? "active" : "total"} variants</span>
             </div>
             <div className="mission-comparison__availability" role="group" aria-label="Mission availability">
-              <button type="button" className={availability === "active" ? "is-active" : ""} aria-pressed={availability === "active"} onClick={() => setAvailability("active")}>Active</button>
+              <button type="button" className={availability === "active" ? "is-active" : ""} aria-pressed={availability === "active"} onClick={() => setAvailability("active")}>Active variants</button>
               <button type="button" className={availability === "all" ? "is-active" : ""} aria-pressed={availability === "all"} onClick={() => setAvailability("all")}>All variants</button>
             </div>
           </div>
@@ -2174,6 +2341,7 @@ function MissionSelectedWorkspace({
                   <th>Items / Blueprints</th>
                   <th>Availability</th>
                   <th>Eligibility</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -2206,6 +2374,7 @@ function MissionSelectedWorkspace({
                         )}
                       </td>
                       <td><Badge tone={exactVariantIsActive(variant) ? "is-green" : "is-muted"}>{exactVariantIsActive(variant) ? "Active" : variant.releaseFlags.join(" / ") || "Unavailable"}</Badge></td>
+                      <td>{requiredItems ? "Requires mission items" : "Check prerequisites"}</td>
                       <td><button type="button" className="mission-eligibility-open" onClick={() => setEligibilityVariant(variant)}>Check</button></td>
                     </tr>
                   );
@@ -2216,6 +2385,7 @@ function MissionSelectedWorkspace({
           {!visibleVariants.length && <p className="mb-empty-note">No active variants are available for this concept. Choose All variants to inspect authored records.</p>}
         </div>
       )}
+      {dossierFooter && <DossierFooter {...dossierFooter} />}
     </section>
   );
 }
@@ -2620,7 +2790,16 @@ export default function MissionBrowserPage() {
   return (
     <div className="mb-page">
       <div className="mb-shell">
-
+        <header className="mb-page-heading">
+          <div>
+            <span>Contract Registry</span>
+            <h1>Mission Browser</h1>
+          </div>
+          <div className="mb-page-heading__summary">
+            <strong>{activeView === "full" ? "Full Registry" : activeView === "faction" ? "Faction View" : "Reputation View"}</strong>
+            <span>{loading ? "Loading missions" : error ? "Registry unavailable" : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
+          </div>
+        </header>
 
         <div className="mb-filter-toolbar">
           <div className="mb-filter-shell scintel-filter-shell ops-primary-card">

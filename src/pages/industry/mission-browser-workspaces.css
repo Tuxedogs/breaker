@@ -1,0 +1,466 @@
+.mission-comparison,
+.mission-eligibility-workspace {
+  min-width: 0;
+  margin: 8px 18px 0;
+  overflow: hidden;
+  border: 1px solid rgba(60, 91, 116, 0.3);
+  border-radius: 5px;
+  background: linear-gradient(145deg, rgba(13, 27, 39, 0.76), rgba(6, 16, 24, 0.9));
+}
+
+.mission-comparison {
+  min-height: 166px;
+}
+
+.mission-comparison__toolbar,
+.mission-eligibility-workspace > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.mission-comparison__toolbar > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.mission-comparison__toolbar strong,
+.mission-eligibility-workspace h3 {
+  margin: 0;
+  color: var(--mb-text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.095em;
+  text-transform: uppercase;
+}
+
+.mission-comparison__toolbar span,
+.mission-eligibility-workspace header p {
+  margin: 2px 0 0;
+  color: var(--mb-text-dim);
+  font-size: var(--app-text-meta);
+}
+
+.mission-comparison__toolbar > div:first-child > span {
+  display: none;
+}
+
+.mission-comparison__availability,
+.mission-solver-tabs,
+.mission-path-alternates {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mission-comparison__availability button,
+.mission-solver-tabs button,
+.mission-path-alternates button,
+.mission-eligibility-workspace > header > button {
+  min-height: 25px;
+  padding: 2px 13px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+  color: var(--mb-text-muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.mission-comparison__availability button:hover,
+.mission-comparison__availability button.is-active,
+.mission-solver-tabs button:hover,
+.mission-solver-tabs button.is-active,
+.mission-path-alternates button.is-active {
+  border-color: rgba(125, 211, 252, 0.4);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--mb-text);
+}
+
+.mission-comparison__scroll {
+  max-height: min(38vh, 430px);
+  margin: 0 10px 10px;
+  overflow: auto;
+  border: 1px solid rgba(67, 96, 120, 0.3);
+  border-radius: 5px;
+}
+
+.mission-comparison table,
+.mb-variant-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+  color: var(--mb-text-muted);
+  font-size: 12px;
+}
+
+.mission-comparison thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #0b1620;
+}
+
+.mission-comparison th,
+.mission-comparison td,
+.mb-variant-table th,
+.mb-variant-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(67, 96, 120, 0.28);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.mission-comparison th {
+  color: var(--mb-text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mission-comparison th button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-transform: inherit;
+}
+
+.mission-comparison tbody tr:hover {
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.mission-comparison tbody td + td {
+  border-left: 1px solid rgba(67, 96, 120, 0.23);
+}
+
+.mission-comparison td strong,
+.mission-comparison td small {
+  display: block;
+}
+
+.mission-comparison td strong {
+  color: var(--mb-text);
+  font-size: 13px;
+}
+
+.mission-comparison td:first-child strong {
+  color: #bd8cff;
+}
+
+.mission-comparison td small {
+  margin-top: 2px;
+  color: var(--mb-text-dim);
+  font-size: var(--app-text-kicker);
+}
+
+.mission-comparison td.is-numeric {
+  color: var(--mb-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mission-blueprint-track,
+.mission-eligibility-open {
+  display: block;
+  min-height: 29px;
+  margin-top: 4px;
+  padding: 3px 7px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(56, 189, 248, 0.06);
+  color: #8dd9ff;
+  font-size: var(--app-text-kicker);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mission-eligibility-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-inline: 11px;
+  color: #72cfff;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mission-eligibility-open::after {
+  content: "›";
+  font-size: 17px;
+  line-height: 0;
+}
+
+.mission-blueprint-track.is-active {
+  border-color: rgba(110, 231, 160, 0.32);
+  background: rgba(110, 231, 160, 0.07);
+  color: var(--mb-positive);
+}
+
+.mission-eligibility-workspace > header {
+  align-items: flex-start;
+}
+
+.mission-solver-tabs {
+  padding: 8px 12px 0;
+}
+
+.mission-eligibility-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.7fr) minmax(0, 1.3fr);
+  gap: 12px;
+  padding: 12px;
+}
+
+.mission-eligibility-layout form,
+.mission-solver-results {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.mission-eligibility-layout form {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.mission-eligibility-layout label {
+  display: grid;
+  gap: 4px;
+}
+
+.mission-eligibility-layout label > span {
+  color: var(--mb-text-dim);
+  font-size: var(--app-text-kicker);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.mission-eligibility-layout select {
+  width: 100%;
+  min-height: var(--app-control-height);
+  padding: 0 8px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+  color: var(--mb-text);
+}
+
+.mission-eligibility-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.mission-eligibility-actions button {
+  min-height: var(--app-control-height);
+  padding: 4px 9px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-row);
+  color: var(--mb-text-muted);
+  cursor: pointer;
+}
+
+.mission-eligibility-actions button.is-primary {
+  border-color: rgba(125, 211, 252, 0.38);
+  background: rgba(56, 189, 248, 0.09);
+  color: var(--mb-text);
+}
+
+.mission-eligibility-actions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.mission-eligibility-result,
+.mission-path-result {
+  color: var(--mb-text-muted);
+  font-size: var(--app-text-body);
+  line-height: 1.45;
+}
+
+.mission-eligibility-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+  margin-bottom: 10px;
+  padding: 7px 9px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+}
+
+.mission-eligibility-status strong {
+  color: var(--mb-amber);
+  text-transform: uppercase;
+}
+
+.mission-eligibility-status.is-satisfied strong,
+.mission-eligibility-status.is-eligible strong,
+.mission-eligibility-status.is-path_found strong {
+  color: var(--mb-positive);
+}
+
+.mission-eligibility-result ul,
+.mission-path-failures {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.mission-eligibility-result li {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 8px;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--mb-border-soft);
+}
+
+.mission-path-summary strong {
+  color: var(--mb-text);
+  font-size: var(--app-text-stat);
+  font-variant-numeric: tabular-nums;
+}
+
+.mission-path-result ol {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.mission-path-result ol li {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+}
+
+.mission-path-result ol li strong {
+  color: var(--mb-text);
+}
+
+.mission-path-result small,
+.mission-path-warning {
+  color: var(--mb-text-dim);
+  font-size: var(--app-text-meta);
+}
+
+.mission-path-warning,
+.mission-path-failures li {
+  color: var(--mb-amber);
+}
+
+.mb-technical,
+.mb-family-technical,
+.mission-technical-toggle {
+  margin-top: 10px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+}
+
+.mb-technical summary,
+.mb-family-technical summary,
+.mission-technical-toggle summary {
+  padding: 8px 10px;
+  color: var(--mb-text-muted);
+  font-size: var(--app-text-meta);
+  cursor: pointer;
+}
+
+.mb-technical dl,
+.mb-family-technical dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 1px;
+  background: var(--mb-border-soft);
+}
+
+.mb-technical dl > div,
+.mb-family-technical dl > div {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1fr);
+  gap: 8px;
+  padding: 7px 8px;
+  background: var(--mb-surface-deep);
+}
+
+.mb-technical dt,
+.mb-family-technical dt {
+  color: var(--mb-text-dim);
+}
+
+.mb-technical dd,
+.mb-family-technical dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--mb-text-muted);
+}
+
+.mb-tech-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+}
+
+.mb-tech-tokens span {
+  padding: 2px 5px;
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  color: var(--mb-text-dim);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+}
+
+/* Dormant technical comparison components remain readable if re-enabled. */
+.mission-variant-tabs,
+.mission-variant-list,
+.mb-variant-row-wrap,
+.mb-variant-drawer,
+.mb-detail-actions,
+.mission-group-summary-strip,
+.mission-group-rep-summary {
+  min-width: 0;
+}
+
+.mission-variant-tabs__list,
+.mission-variant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mission-variant-tabs button,
+.mission-variant-row,
+.mb-variant-row {
+  border: 1px solid var(--mb-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--mb-surface-deep);
+  color: var(--mb-text-muted);
+}

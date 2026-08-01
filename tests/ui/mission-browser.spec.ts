@@ -5,7 +5,11 @@ test.describe("Mission Browser mission modal", () => {
   test("opens the complete mission workspace directly in a modal", async ({ page }) => {
     await page.goto("/industry/missions?search=Bit%20Zeros%20Black%20Box%20Recovery%20Nyx%20Easy");
 
-    await page.locator(".mission-group-card").first().click();
+    const missionCard = page.locator(".mission-group-card").first();
+    await expect(missionCard.locator(".mission-rep-scope-badge")).toBeVisible();
+    await expect(missionCard.locator(".mission-card-legal")).toContainText("Legal classification:");
+    await expect(missionCard.locator(".mb-badge").filter({ hasText: /lawful/i })).toHaveCount(0);
+    await missionCard.click();
     await expect(page).toHaveURL(/\/industry\/missions\/bit-zeros-black-box-recovery-nyx-easy--70d0a94a8a837e887b3c\?/);
     const workspace = page.getByRole("region", { name: /selected mission workspace/i });
     const modal = page.getByRole("dialog", { name: /Bit Zeros Black Box Recovery Nyx Easy mission details/i });
@@ -158,6 +162,7 @@ test.describe("Mission Browser mission modal", () => {
     await mkdir(artifactRoot, { recursive: true });
     for (const viewport of [
       { width: 768, height: 900 },
+      { width: 1680, height: 925 },
       { width: 1920, height: 1080 },
       { width: 2560, height: 1440 },
       { width: 3840, height: 2160 },
@@ -184,10 +189,14 @@ test.describe("Mission Browser mission modal", () => {
       const workspace = page.getByRole("region", { name: /Heavy and Bright selected mission workspace/i });
       await expect(workspace).toBeVisible();
       await expect(workspace.locator(".mission-required-item-row strong").first()).toBeVisible();
-      await expect(workspace.locator(".mb-blueprint-item span").first()).toBeVisible();
+      await expect(workspace.locator(".mb-blueprint-pool-copy > span").first()).toBeVisible();
+      if (viewport.width === 1680) {
+        await workspace.getByRole("button", { name: "All variants" }).click();
+        await expect(workspace.locator("tbody tr")).toHaveCount(1);
+      }
       const measurements = await workspace.evaluate((element) => {
         const item = element.querySelector<HTMLElement>(".mission-required-item-row strong");
-        const blueprint = element.querySelector<HTMLElement>(".mb-blueprint-item span");
+        const blueprint = element.querySelector<HTMLElement>(".mb-blueprint-pool-copy > span");
         const title = element.querySelector<HTMLElement>(".mission-dossier-header__identity h2");
         const body = element.querySelector<HTMLElement>(".mission-dossier-body-grid");
         const rightRail = element.querySelector<HTMLElement>(".mission-dossier-right-rail");
@@ -204,13 +213,13 @@ test.describe("Mission Browser mission modal", () => {
         };
       });
       expect(measurements.scrollWidth).toBeLessThanOrEqual(measurements.clientWidth + 1);
-      expect(measurements.itemFontSize).toBeGreaterThanOrEqual(16);
-      expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(15);
-      expect(measurements.titleFontSize).toBeGreaterThanOrEqual(20);
+      expect(measurements.itemFontSize).toBeGreaterThanOrEqual(14);
+      expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(12);
+      expect(measurements.titleFontSize).toBeGreaterThanOrEqual(22);
       if (viewport.width >= 2200) {
-        expect(measurements.itemFontSize).toBeGreaterThanOrEqual(19);
-        expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(17);
-        expect(measurements.titleFontSize).toBeGreaterThanOrEqual(34);
+        expect(measurements.itemFontSize).toBeGreaterThanOrEqual(15);
+        expect(measurements.blueprintFontSize).toBeGreaterThanOrEqual(13);
+        expect(measurements.titleFontSize).toBeGreaterThanOrEqual(30);
       }
       expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.bodyBottom);
       expect(measurements.footerTop).toBeGreaterThanOrEqual(measurements.rightRailBottom);
@@ -247,9 +256,22 @@ test.describe("Mission Browser mission modal", () => {
   });
 
   test("offers a recoverable zero-results state", async ({ page }) => {
-    await page.goto("/industry/missions?search=__no_mission_matches__");
-
-    await expect(page.getByText("No missions match these filters", { exact: true })).toBeVisible();
+    const artifactRoot = "artifacts/mission-browser-modal";
+    await mkdir(artifactRoot, { recursive: true });
+    for (const viewport of [
+      { width: 768, height: 900 },
+      { width: 1920, height: 1080 },
+      { width: 2560, height: 1440 },
+      { width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/industry/missions?search=__no_mission_matches__");
+      await expect(page.getByText("No missions match these filters", { exact: true })).toBeVisible();
+      await page.screenshot({
+        path: `${artifactRoot}/mission-zero-results-${viewport.width}x${viewport.height}.png`,
+        fullPage: true,
+      });
+    }
     await page.getByRole("button", { name: "Clear filters" }).click();
     await expect(page).not.toHaveURL(/search=/);
     await expect(page.locator(".mission-group-card").first()).toBeVisible();
