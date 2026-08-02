@@ -517,6 +517,8 @@ Do not turn every source into a large feature card.
 
 These pages use the same operational canvas and primary surfaces while retaining semantic mission and reputation colors.
 
+The detailed accepted Mission Browser visual and interaction contract is recorded in `docs/mission-browser-redesign-plan-2026-07-31.md`. That document is authoritative for Mission Browser cards and the complete mission-detail modal.
+
 Semantic cyan, blue, teal, violet, amber, green, and red are allowed when they identify a real category, system, outcome, restriction, or state.
 
 Mission cards should remain dense and comparable. Category colors should organize information, not make every card appear selected.
@@ -525,7 +527,11 @@ Blueprint Tracker should favor aligned repeated records, explicit acquired/open 
 
 Mission concepts are the browsing and identity grain. Exact variants are the comparison, payout, eligibility, prerequisite-path, and solver grain. Do not collapse exact variants before those operations.
 
-The accepted Mission Browser hierarchy is a persistent selected-concept hero, a sortable exact-variant comparison, and peer dossier, eligibility, and unlock-path surfaces. Canonical mission URLs use the readable concept name plus its stable concept key: `/industry/missions/<mission-name>--<concept-key>`. The readable portion may change with an authored title while the stable suffix preserves identity and repairs stale slugs. Legacy `selected` and `concept` query links remain compatible. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
+The accepted Mission Browser hierarchy is a filterable five-column desktop concept grid whose cards open a complete mission-detail modal directly. Do not restore a persistent selected-concept hero, inline dossier, or intermediate open-dossier step. The modal contains the identity header, facts strip, briefing, required items, layered reward cards, blueprint rewards, sortable exact-variant comparison, eligibility workspace, prerequisite paths, and confidence disclosure.
+
+Each concept card uses a quiet 1px reputation-scope accent edge. Reputation scope is always badged. When a normalized source-backed verified or unverified mission tag exists, use that badge; never infer it in presentation code. Do not badge lawful status. Present legal classification as plain labeled text.
+
+Canonical mission URLs use the readable concept name plus its stable concept key: `/industry/missions/<mission-name>--<concept-key>`. The readable portion may change with an authored title while the stable suffix preserves identity and repairs stale slugs. Legacy `selected` and `concept` query links remain compatible. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
 
 Calculated payout is the persisted, source-backed Scintel base/solo amount. Keep certification buy-in separate, preserve valid zero as distinct from missing or unresolved, and do not calculate or split payout in React.
 
