@@ -46,7 +46,7 @@
   gap: 12px;
   min-height: 0;
   height: 100%;
-  padding: 12px;
+  padding: 8px;
   box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
@@ -591,7 +591,7 @@
   flex: 1;
   padding: 0.25rem 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,153,0,0.18) transparent;
+  scrollbar-color: rgba(23, 119, 197, 0.18) transparent;
 }
 
 .mlist-items::-webkit-scrollbar { width: 4px; }
@@ -2392,6 +2392,12 @@
   grid-template-columns: clamp(320px, 23vw, 340px) minmax(0, 1fr);
 }
 
+@media (min-width: 2200px) and (max-width: 2999px) and (min-height: 1200px) {
+  .mine-page.mine-page--v2 {
+    zoom: 120%;
+  }
+}
+
 /* ── 4K / ultra-wide: max-width cap + centering ── */
 
 @media (min-width: 1800px) and (min-height: 1000px) {
@@ -2451,12 +2457,7 @@
 }
 
 @media (min-width: 2200px) {
-  .mine-page--v2 {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
-    padding-inline: clamp(0.5rem, 1.5vw, 1.25rem);
-  }
+
 
   .mconsole-layout {
     grid-template-columns: clamp(340px, 18vw, 420px) minmax(0, 1fr);
@@ -2695,12 +2696,7 @@
     margin-right: 0;
   }
 
-  .mlist-inline-stack--expanded .mlist-item--selected:hover,
-  .mlist-inline-stack--expanded .mlist-item:hover {
-    background:
-      linear-gradient(180deg, rgba(15, 20, 29, 0.98), rgba(8, 12, 18, 0.97)),
-      rgba(8, 12, 18, 0.97);
-  }
+
 
   .mlist-inline-stack--expanded .mdet-panel--inline-mobile {
     border: 0;
@@ -3994,17 +3990,25 @@
   padding: 10px;
   border: 1px solid var(--panel-border-soft);
   border-radius: 8px;
-  background: var(--panel-row-bg);
-}
-
-.mine-page--v2 .mlist-item:hover {
-  background: var(--panel-row-hover);
 }
 
 .mine-page--v2 .mlist-item--selected {
   border-color: rgba(77, 184, 168, 0.68);
-  background: linear-gradient(180deg, rgba(77, 184, 168, 0.1), rgba(5, 26, 40, 0.92));
-  box-shadow: inset 0 0 0 1px rgba(77, 184, 168, 0.1);
+}
+
+@media (min-width: 761px) {
+  .mine-page--v2 .mlist-item {
+    background: var(--panel-row-bg);
+  }
+
+  .mine-page--v2 .mlist-item:hover {
+    background: var(--panel-row-hover);
+  }
+
+  .mine-page--v2 .mlist-item--selected {
+    background: linear-gradient(180deg, rgba(77, 184, 168, 0.1), rgba(5, 26, 40, 0.92));
+    box-shadow: inset 0 0 0 1px rgba(77, 184, 168, 0.1);
+  }
 }
 
 .mine-page--v2 .mlist-item--selected .mlist-item-name {
@@ -4330,7 +4334,7 @@
   border-color: rgba(125, 211, 252, 0.56);
   background: rgba(125, 211, 252, 0.1);
   color: var(--accent-cyan);
-  box-shadow: inset 3px 0 0 rgba(125, 211, 252, 0.9);
+  box-shadow: inset 1px 0 0 rgba(125, 211, 252, 0.9);
 }
 
 .mine-page--v2 .mining-scope-switch,
@@ -4393,19 +4397,30 @@
 
 .mine-page--v2 .mlist-item {
   border-color: var(--panel-border-soft);
-  background: var(--panel-row-bg);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.018);
 }
 
 .mine-page--v2 .mlist-item:not(.mlist-item--selected):hover {
   border-color: rgba(125, 211, 252, 0.24);
-  background: var(--panel-row-hover);
 }
 
 .mine-page--v2 .mlist-item--selected {
   border-color: rgba(125, 211, 252, 0.56);
-  background: rgba(125, 211, 252, 0.075);
-  box-shadow: inset 3px 0 0 var(--accent-cyan), inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+@media (min-width: 761px) {
+  .mine-page--v2 .mlist-item {
+    background: var(--panel-row-bg);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.018);
+  }
+
+  .mine-page--v2 .mlist-item:not(.mlist-item--selected):hover {
+    background: var(--panel-row-hover);
+  }
+
+  .mine-page--v2 .mlist-item--selected {
+    background: rgba(125, 211, 252, 0.075);
+    box-shadow: inset 1px 0 0 var(--accent-cyan), inset 0 1px rgba(255, 255, 255, 0.025);
+  }
 }
 
 .mine-page--v2 .mlist-item--selected .mlist-item-name,

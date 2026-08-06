@@ -7,6 +7,7 @@ import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { getStaticLocationMaterialKeys, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
+import "./mining-redesign.css";
 import "../crafting/recipe-browser.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
@@ -41,8 +42,8 @@ import { useMiningLocations } from "./useMiningLocations";
 import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
 import { LocationDetail } from "./LocationDetail";
+import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
-const DEFAULT_VISIBLE_LOCATIONS = 12;
 const MIN_VISIBLE_ROUTE_LOCATIONS = 8;
 const SYSTEM_SELECTOR_ORDER = ["Stanton", "Pyro", "Nyx"];
 const DORMANT_MINING_TYPE_FILTERS = new Set<string>();
@@ -52,6 +53,40 @@ const debugMiningIdentity = Boolean(
   typeof localStorage !== "undefined" &&
   localStorage.getItem("debug:mining-materials") === "1"
 );
+
+const COVERAGE_MODE_DESCRIPTIONS: Record<MiningCoverageMode, string> = {
+  "complete-set": "Build a multi-stop route. Each next location adds the most queue materials you still need until no location can add more.",
+  "best-single": "Keep the normal ranked list. Locations that cover more selected queue materials appear first, then stronger material fit breaks ties.",
+  "rare-first": "Build a multi-stop route, giving extra priority to needed materials that appear at fewer locations.",
+  "quality-hunt": "Build a multi-stop route and prefer better-ranked material locations while still adding materials you do not yet cover.",
+};
+
+function CoverageModeButton({
+  mode,
+  active,
+  onSelect,
+}: {
+  mode: (typeof MINING_COVERAGE_MODES)[number];
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const tooltip = useMiningHoverTooltip(COVERAGE_MODE_DESCRIPTIONS[mode.value]);
+  return (
+    <>
+      <button
+        type="button"
+        className={`mlist-rank-btn${active ? " is-active" : ""}`}
+        aria-pressed={active}
+        aria-describedby={tooltip.open ? tooltip.tooltipId : undefined}
+        onClick={onSelect}
+        {...tooltip.triggerProps}
+      >
+        {mode.label}
+      </button>
+      {tooltip.tooltip}
+    </>
+  );
+}
 
 function useMediaQuery(queryText: string) {
   const [isMobile, setIsMobile] = useState(false);
@@ -369,9 +404,7 @@ export default function MiningModule() {
         ? "No locations match the current material filters."
         : "No locations match the current filters.";
 
-  const listLocations = mobileQueueDemandSatisfied
-    ? []
-    : showAllLocations ? searchFilteredLocations : searchFilteredLocations.slice(0, DEFAULT_VISIBLE_LOCATIONS);
+  const listLocations = mobileQueueDemandSatisfied ? [] : searchFilteredLocations;
   const explicitSelectedEntry = useMemo(() => {
     if (mobileQueueDemandSatisfied || !selectedLocationKey) return null;
     return searchFilteredLocations.find((entry) => entry.locationKey === selectedLocationKey) ?? null;
@@ -484,7 +517,7 @@ export default function MiningModule() {
                 />
                 <div className="mlist-browser-section">
                   <div className="mlist-header">
-                    <span className="mlist-header-label">All Locations</span>
+                    <span className="mlist-header-label">Ranked Locations</span>
                     <span className="mlist-header-count">{searchFilteredLocations.length}</span>
                   </div>
                   <div className="mlist-header-rank">
@@ -503,10 +536,16 @@ export default function MiningModule() {
                       </label>
                     )}
                     {buildQueueSelectionActive && (
-                      <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
-                        {MINING_COVERAGE_MODES.map((mode) => (
-                          <button key={mode.value} type="button" className={`mlist-rank-btn${coverageMode === mode.value ? " is-active" : ""}`} aria-pressed={coverageMode === mode.value} onClick={() => setCoverageMode(mode.value)}>{mode.label}</button>
-                        ))}
+                      <div className="mlist-route-strategy">
+                        <div className="mlist-route-strategy-head">
+                          <span>Route Strategy</span>
+                          <span>Hover or focus for help</span>
+                        </div>
+                        <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
+                          {MINING_COVERAGE_MODES.map((mode) => (
+                            <CoverageModeButton key={mode.value} mode={mode} active={coverageMode === mode.value} onSelect={() => setCoverageMode(mode.value)} />
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -570,11 +609,6 @@ export default function MiningModule() {
                     {showAllLocations && isMobileViewport && buildQueueSelectionActive && coveragePlan && (
                       <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(false)}>
                         Show needed route
-                      </button>
-                    )}
-                    {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > DEFAULT_VISIBLE_LOCATIONS && (
-                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
-                        {showAllLocations ? "Show top 12" : `View all ${searchFilteredLocations.length} locations`}
                       </button>
                     )}
                   </div>

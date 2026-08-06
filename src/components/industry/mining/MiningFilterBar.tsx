@@ -83,7 +83,7 @@ export function MiningFilterBar({
           <button
             key={chip.id}
             type="button"
-            className={`mining-filter-chip mining-filter-chip--material${selected ? " is-active" : ""}${chip.disabled ? " is-disabled" : ""}`}
+            className={`mining-filter-chip mining-filter-chip--material${chip.label.length > 12 ? " mining-filter-chip--long" : ""}${selected ? " is-active" : ""}${chip.disabled ? " is-disabled" : ""}`}
             aria-pressed={selected}
             aria-disabled={chip.disabled || undefined}
             disabled={chip.disabled}
@@ -106,6 +106,12 @@ export function MiningFilterBar({
       <div className="scintel-filter-body mining-filter-drawer">
         {allMaterialChips.length > 0 && (
           <div className="mining-filter-chip-block">
+            <div className="mining-material-index-head">
+              <span>Materials</span>
+              <span>
+                <strong>{selectedMaterials.size}</strong> selected · {allMaterialChips.length} total
+              </span>
+            </div>
             {renderMaterialChips()}
           </div>
         )}

@@ -21,7 +21,6 @@ import {
   qualityChanceHeader,
   resourceRowMaterialKey,
   scoreToneClass,
-  systemBadgeClass,
 } from "./miningFormatters";
 import type { DemandRow, ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
@@ -153,8 +152,9 @@ function MiningSourceBadge({
   sourceWeight: number | undefined;
   title?: string;
 }) {
+  const encounterTier = densityLabel.trim().toLowerCase();
   return (
-    <span className={`mining-source-badge mining-source-badge--${status}`} title={title}>
+    <span className={`mining-source-text mining-source-text--${status} mining-source-text--tier-${encounterTier}`} title={title}>
       {densityLabel}
       {sourceWeight !== undefined && (
         <span className="mdet-source-bar-wrap">
@@ -166,9 +166,18 @@ function MiningSourceBadge({
 }
 
 function MiningMethodDemandCell({ value }: { value: string | null | undefined }) {
-  const badge = miningMethodBadge(value);
-  if (badge) return <span className={`mloc-badge ${badge.className}`}>{badge.label}</span>;
-  return <span>{value || "Unknown"}</span>;
+  return <span className="mdet-method-text">{value || "Unknown"}</span>;
+}
+
+function MiningMethodIcon({ method }: { method: string }) {
+  const normalized = method.toLowerCase();
+  if (normalized.includes("vehicle")) {
+    return <svg className="mdet-method-icon mdet-method-icon--vehicle" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h16l-2-5H8l-4 5Z" /><path d="M6 14v3m12-3v3" /><circle cx="7" cy="18" r="1.5" /><circle cx="17" cy="18" r="1.5" /></svg>;
+  }
+  if (normalized.includes("hand")) {
+    return <svg className="mdet-method-icon mdet-method-icon--hand" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4 20 9.5 9 20.5 3.5 15 14.5 4Z" /><path d="m9 9 6 6" /></svg>;
+  }
+  return <svg className="mdet-method-icon mdet-method-icon--ship" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 14 8-9 8 9-8-2-8 2Z" /><path d="M12 12v7M8 19h8" /></svg>;
 }
 
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
@@ -385,7 +394,7 @@ export function LocationDetail({
     return [...byMaterial.values()];
   }, [demandedMaterialKeys, hasBuildQueueTarget, resourceRows]);
 
-  const materialProfileTitle = hasBuildQueueTarget ? "OTHER MATERIALS AT THIS LOCATION" : "MATERIAL PROFILE";
+  const materialProfileTitle = hasBuildQueueTarget ? "Other materials at this location" : "Material profile";
   const selectedDemandMaterialCount = activeDemandMaterials.length;
   const hasSingleDemandMaterial = selectedDemandMaterialCount === 1 && demandRows.length === 1;
   const hasMultipleDemandMaterials = selectedDemandMaterialCount > 1;
@@ -417,15 +426,18 @@ export function LocationDetail({
             </div>
             <div className="mdet-meta">
               {!isLagrangeChildGroup && (
-                <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+                <span className="mdet-system-text">{entry.systemName} <span>system</span></span>
               )}
               <StantonLagrangeChildrenSummary entry={entry} compact />
             </div>
-            {locationMethodMixItems.length > 0 && (
-              <div className="location-method-stat-grid">
-                {locationMethodMixItems.map((item) => (
-                  <div key={`method-mix:${item.method}`} className="location-stat-chip location-method-stat-chip">
-                    <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location.">{item.method.toUpperCase()}</InfoTip></div>
+          </div>
+          {locationMethodMixItems.length > 0 && (
+            <div className="location-method-stat-grid">
+              {locationMethodMixItems.map((item) => {
+                const displayMethod = miningMethodBadge(item.method)?.label ?? item.method;
+                return (
+                  <div key={`method-mix:${item.method}`} className={`location-stat-chip location-method-stat-chip location-method-stat-chip--${displayMethod.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}>
+                    <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location."><span className="mdet-method-label"><MiningMethodIcon method={item.method} />{displayMethod}</span></InfoTip></div>
                     <div
                       className={`location-stat-value ${methodBiasToneClass(item.share)}`}
                       title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}
@@ -433,10 +445,10 @@ export function LocationDetail({
                       {formatPercent(item.share)}
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
           {onToggleStar && (
             <>
               <button
@@ -457,7 +469,8 @@ export function LocationDetail({
       )}
 
       {((!hasMultipleDemandMaterials && total > 0) || hasMultipleDemandMaterials || hasSingleDemandMaterial) && (
-        <div className="location-stat-chip-grid">
+        <div className={`location-stat-chip-grid${hasMultipleDemandMaterials ? " location-stat-chip-grid--coverage" : " location-stat-chip-grid--single"}`}>
+          <div className="location-stat-ledger-label">{hasMultipleDemandMaterials ? "Queue Coverage" : "Material Fit"}</div>
           {!hasMultipleDemandMaterials && total > 0 && (
             <div className="location-stat-chip">
               <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>
@@ -474,6 +487,11 @@ export function LocationDetail({
               <div className="location-stat-chip">
                 <div className="location-stat-label">MISSING</div>
                 <div className={`location-stat-value ${missingBQ.length > 0 ? "mloc-score--poor" : "mloc-score--best"}`}>{missingBQ.length}</div>
+              </div>
+              <div className="location-coverage-progress">
+                <span><strong>{coveredBQ.length} of {total}</strong> materials</span>
+                <span>{coveragePct}%</span>
+                <span className="location-coverage-track"><span style={{ width: `${coveragePct}%` }} /></span>
               </div>
             </>
           )}
@@ -517,6 +535,7 @@ export function LocationDetail({
   
       {demandRows.length > 0 && (
         <div className="mining-demand-breakdown">
+          <div className="mdet-section-label mdet-section-label--demand">Selected materials at this location</div>
           <table className="mining-resource-index-table">
             <colgroup>
               <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
@@ -553,7 +572,6 @@ export function LocationDetail({
         <div className="mining-resource-index">
           <div className="mdet-section-label">
             {materialProfileTitle}
-            <span className="mdet-section-count">({otherLocationMaterialRows.length} resource{otherLocationMaterialRows.length !== 1 ? "s" : ""})</span>
           </div>
           <table className="mining-resource-index-table mining-resource-index-table--continuation">
             <colgroup>

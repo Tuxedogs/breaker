@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, passthrough } from "msw";
 import {
   componentCardBrowseResponse,
   componentCardFacetsResponse,
@@ -15,7 +15,18 @@ import {
   vehicleRecipeCatalog,
 } from "../fixtures/buildQueue";
 
+const localStaticMiningPaths = [
+  "/api/lagrange-children.generated.json",
+  "/api/lagrange-groups.generated.json",
+  "/api/recommendations/location_distribution_index.json",
+  "/api/recommendations/location_hierarchy_index.json",
+  "/api/recommendations/location_material_index.json",
+  "/api/recommendations/material_encounter_rankings.json",
+  "/api/recommendations/material_quality_index.json",
+] as const;
+
 export const handlers = [
+  ...localStaticMiningPaths.map((path) => http.get(`*${path}`, () => passthrough())),
   http.get("*/api/crafting/component-cards/index", () => HttpResponse.json(componentCardIndexResponse)),
   http.get("*/api/crafting/component-cards/facets", () => HttpResponse.json(componentCardFacetsResponse)),
   http.get("*/api/crafting/component-cards/browse", () => HttpResponse.json(componentCardBrowseResponse)),
