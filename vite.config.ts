@@ -86,6 +86,16 @@ const contentTypes: Record<string, string> = {
   ".json": "application/json; charset=utf-8",
 };
 
+const localMiningIndexPaths = new Set([
+  "/api/lagrange-children.generated.json",
+  "/api/lagrange-groups.generated.json",
+  "/api/recommendations/location_distribution_index.json",
+  "/api/recommendations/location_hierarchy_index.json",
+  "/api/recommendations/location_material_index.json",
+  "/api/recommendations/material_encounter_rankings.json",
+  "/api/recommendations/material_quality_index.json",
+]);
+
 async function readRequestBody(request: import("node:http").IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
   for await (const chunk of request) chunks.push(Buffer.from(chunk));
@@ -189,12 +199,29 @@ function installScintelApiMiddleware(
   server.middlewares.use(middleware);
 }
 
+function installLocalMiningIndexMiddleware(
+  server: Pick<ViteDevServer, "middlewares">,
+  localApiRoot: string,
+) {
+  const middleware: Connect.NextHandleFunction = async (request, response, next) => {
+    const url = request.url?.split("?")[0] ?? "";
+    if (!localMiningIndexPaths.has(url)) {
+      next();
+      return;
+    }
+    if (await tryServeScintelApiFile(request, response, localApiRoot)) return;
+    next();
+  };
+  server.middlewares.use(middleware);
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
   const fittingDataRoot = path.resolve(
     process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? path.join(process.cwd(), "server-data", "fitting"),
   );
+  const localPublicApiRoot = path.resolve(process.cwd(), "public", "api");
   const useLocalApi = process.env.SCINTEL_LOCAL_API === "1" || env.SCINTEL_LOCAL_API === "1";
 
   return {
@@ -207,6 +234,7 @@ export default defineConfig(({ mode }) => {
         // Normal `npm run dev` proxies /api → https://www.scintel.app.
         // SCINTEL_LOCAL_API=1 (Playwright / offline fixtures) serves crafting + fitting from local server-data.
         configureServer(server) {
+          installLocalMiningIndexMiddleware(server, localPublicApiRoot);
           if (useLocalApi) {
             installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
           }

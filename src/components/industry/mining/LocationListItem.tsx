@@ -7,10 +7,7 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
-import {
-  miningMethodBadge,
-  systemBadgeClass,
-} from "./miningFormatters";
+import { miningMethodBadge } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
@@ -69,6 +66,9 @@ export function LocationListItem({
   };
 
   const demandBar = totalRelevant > 0 ? coveragePct : null;
+  const methodLabel = methodMixItems.length > 0
+    ? methodMixItems.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
+    : entry.locationKind || entry.spawnType || "Unavailable";
 
   return (
     <div
@@ -100,36 +100,23 @@ export function LocationListItem({
         </div>
         <div className="mlist-item-sub">
           {!isLagrangeChildGroup && (
-            <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+            <span className="mlist-system-text">{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
-        </div>
-        <div className="mlist-method-row" aria-label="Mining methods available">
-          {methodMixItems.length > 0 ? methodMixItems.map((item) => {
-            const badge = miningMethodBadge(item.method);
-            return (
-              <span key={`${entry.locationKey}:method:${item.method}`} className={`mloc-badge ${badge?.className ?? "mloc-badge--mixed"}`}>
-                {badge?.label ?? item.method}
-              </span>
-            );
-          }) : (
-            <span className={`mloc-badge mloc-badge--mixed`}>{entry.locationKind || entry.spawnType}</span>
-          )}
-        </div>
-        <div className="mlist-item-bars">
-          {demandBar !== null && (
-            <div className="mlist-bar-row">
-              <span className="mlist-bar-label">Coverage</span>
-              <div className="mlist-bar-track">
-                <div
-                  className={`mlist-bar-fill${demandBar >= 100 ? " mlist-bar-fill--full" : demandBar >= 60 ? " mlist-bar-fill--good" : ""}`}
-                  style={{ width: `${demandBar}%` }}
-                />
-              </div>
-            </div>
-          )}
+          <span className="mlist-method-text">{methodLabel}</span>
         </div>
       </div>
+      {demandBar !== null && (
+        <div className="mlist-item-coverage">
+          <span className="mlist-bar-label"><strong>{primaryCovered.length}</strong> of {totalRelevant} </span>
+          <div className="mlist-bar-track">
+            <div
+              className={`mlist-bar-fill${demandBar >= 100 ? " mlist-bar-fill--full" : demandBar >= 60 ? " mlist-bar-fill--good" : ""}`}
+              style={{ width: `${demandBar}%` }}
+            />
+          </div>
+        </div>
+      )}
       <button
         type="button"
         className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
