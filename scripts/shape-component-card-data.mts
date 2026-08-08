@@ -593,6 +593,7 @@ const BROWSE_TYPE_STAT_FIELDS: Record<string, readonly string[]> = {
     "ammoCapacity",
     "calculatedRange",
     "projectileSpeed",
+    "penetration",
   ],
   fpsWeapon: [
     "weaponClass",

@@ -166,20 +166,12 @@ function RecipeResultsTable({
   family,
   records,
   selectedId,
-  savedBlueprintIds,
-  variantCountMap,
-  nonFilterMatchIds,
-  isRecipeQueued,
   onSelect,
   onOpen,
 }: {
   family: RecipeBrowserFamily;
   records: ComponentCardIndexRecord[];
   selectedId: string;
-  savedBlueprintIds: Set<string>;
-  variantCountMap: Map<string, number>;
-  nonFilterMatchIds: Set<string>;
-  isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
   onSelect: (record: ComponentCardIndexRecord) => void;
   onOpen: (record: ComponentCardIndexRecord) => void;
 }) {
@@ -290,9 +282,6 @@ function RecipeResultsTable({
           <tbody>
             {sortedRecords.map((record) => {
               const selected = record.id === selectedId;
-              const queued = isRecipeQueued(record);
-              const saved = savedBlueprintIds.has(record.id);
-              const variantCount = variantCountMap.get(record.id);
               return (
                 <tr
                   key={record.id}
@@ -305,17 +294,6 @@ function RecipeResultsTable({
                 >
                   <th scope="row">
                     <span className="crb2-row-name">{record.name}</span>
-                    <span className="crb2-row-meta">
-                      {record.variantLabel || record.variantName ? (
-                        <span>{record.variantLabel ?? record.variantName}</span>
-                      ) : null}
-                      {queued ? <span>Queued</span> : null}
-                      {saved ? <span>Saved</span> : null}
-                      {variantCount && variantCount > 1 ? <span>{variantCount} variants</span> : null}
-                      {nonFilterMatchIds.has(record.id) ? (
-                        <span className="crb2-non-filter-match">Non-Filter Match</span>
-                      ) : null}
-                    </span>
                   </th>
                   {family.columns.map((column) => (
                     <td key={column.key}>{column.value(record)}</td>
@@ -530,10 +508,6 @@ export default function ComponentResultsBrowser({
             family={family}
             records={familyRecords}
             selectedId={selectedRecord?.id ?? ""}
-            savedBlueprintIds={savedBlueprintIds}
-            variantCountMap={variantCountMap}
-            nonFilterMatchIds={nonFilterMatchIds}
-            isRecipeQueued={isRecipeQueued}
             onSelect={(record) => setSelectedId(record.id)}
             onOpen={openRecord}
           />

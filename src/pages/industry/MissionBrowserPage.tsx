@@ -883,9 +883,6 @@ const MissionConceptCard = memo(function MissionConceptCard({
             </span>
             <span className="mission-card-legal">Legal classification: {legalClassification}</span>
           </span>
-          {matchLabels.length > 0 && (
-            <span className="mission-card-matches">{matchLabels.slice(0, 2).join(" • ")}</span>
-          )}
         </span>
       </button>
     </div>

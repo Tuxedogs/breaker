@@ -85,13 +85,7 @@
   font-size: var(--recipe-text-label);
 }
 
-.craft-detail-shell .craft-detail-header-facts strong,
-.craft-detail-shell .craft-detail-stat-value,
-.craft-detail-shell .craft-detail-material-required,
-.craft-detail-shell .craft-detail-quality-value {
-  font-size: var(--recipe-text-stat);
-  font-variant-numeric: tabular-nums;
-}
+
 
 .craft-detail-shell .craft-detail-workspace,
 .craft-detail-shell .craft-detail-grid {
@@ -135,14 +129,7 @@
   background: var(--ops-surface-hover);
 }
 
-.craft-detail-shell .craft-detail-material-id strong,
-.craft-detail-shell .craft-detail-effect-stat,
-.craft-detail-shell .craft-detail-effect-sources,
-.craft-detail-shell .craft-detail-effect-chip span,
-.craft-detail-shell .craft-detail-effect-chip strong,
-.craft-detail-shell .craft-detail-stat-row {
-  font-size: var(--recipe-text-meta);
-}
+
 
 .craft-detail-shell .craft-detail-effect-total {
   font-size: var(--recipe-text-stat);
@@ -162,7 +149,7 @@
 
 .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   align-items: start;
 }
@@ -250,7 +237,7 @@
 .craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .craft-stat-label {
   color: var(--void-text-muted);
   font-size: var(--recipe-text-meta);
-  font-weight: 650;
+  font-weight: 450;
 }
 
 .craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .craft-stat-value {
@@ -352,7 +339,7 @@
   min-height: 22px;
   padding-inline: 7px;
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 0.8rem;
 }
 
 .craft-detail-material-target-input .bq-target-slider-shell {
@@ -370,9 +357,9 @@
 }
 
 .craft-detail-material-target-input .bq-target-slider-marker span {
-  top: 10px;
-  font-size: 9px;
-  transform: translateX(-50%) rotate(-42deg);
+  top: -14px;
+  font-size: 0.75rem;
+  transform: translateX(-50%);
   transform-origin: top center;
 }
 
