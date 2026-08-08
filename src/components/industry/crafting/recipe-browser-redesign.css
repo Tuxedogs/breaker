@@ -558,6 +558,7 @@
   font-size: var(--recipe-text-title);
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  font-weight: 0.75rem;
 }
 
 .crb2-table-section > header > span {
@@ -694,7 +695,7 @@
   overflow: hidden;
   color: var(--craft-text, #edf7ff);
   text-overflow: ellipsis;
-  font-weight:550;
+  font-weight:450;
 }
 
 .crb2-row-open {
@@ -1026,6 +1027,7 @@
   .crb2-table thead th:first-child {
     z-index: 3;
     background: var(--ops-surface-deep);
+    width:clamp(90px, 27vw, 20px);
   }
 
   .crb2-table tbody tr:hover > :first-child,
@@ -1051,5 +1053,18 @@
   .crb2-pager > div {
     justify-content: space-between;
     width: 100%;
+  }
+
+  @media (max-width: 900px) {
+     .crb2-table thead th:first-child {
+    z-index: 3;
+    background: var(--ops-surface-deep);
+    width:6%;
+  }
+   .crb2-table thead th:first-child {
+    z-index: 3;
+    background: var(--ops-surface-deep);
+    width:clamp(90px, 27vw, 20px);
+  }
   }
 }

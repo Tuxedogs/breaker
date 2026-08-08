@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
@@ -51,6 +51,8 @@ import { BuildQueueCraftIdentity, BuildQueueCraftStatistics, BuildQueueStatsProv
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 import { getCompletedPresentationItem } from '../../lib/logistics/buildQueueEntries';
+import { createMaterialResolver } from '../../lib/logistics/materialResolver';
+import { formatMaterialDisplayName } from '../../lib/crafting/materialDisplayName';
 import TargetQualitySlider from '../shared/TargetQualitySlider';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -1068,6 +1070,7 @@ export default function BuildQueueGroup({
   const [inventoryEnabled, setInventoryEnabled] = useState(true);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
+  const resolveMaterial = useMemo(() => createMaterialResolver(materials), [materials]);
 
   const setAllocationOwnerHighlight = useCallback((itemId: string | null) => {
     setFocusedAssignmentItemId(itemId);
@@ -1209,8 +1212,13 @@ export default function BuildQueueGroup({
           const requirementId = getRequirementId(item, input, inputIndex);
           const groupKey = `${item.id}:${requirementId}`;
           const requirementCardKey = `${groupKey}:${requirementId}:${inputIndex}`;
-          const material = materials.find((e) => e.id === materialKey);
-          const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
+          const material = resolveMaterial({
+            materialKey,
+            materialId: input.materialId,
+            displayName: input.displayName,
+            materialName: input.materialName,
+          })?.material ?? materials.find((e) => e.id === materialKey);
+          const displayName = material?.name ?? formatMaterialDisplayName(input.displayName ?? input.materialName ?? `Unresolved: ${input.rawName ?? materialKey}`);
           const required = input.quantity * item.quantity;
           const qualityBands = getQuantizedBands(displayName) ?? (input.qualityBands?.length ? input.qualityBands : null);
           const recipeDefaultInput =

@@ -27,7 +27,7 @@ const MATERIAL_ALIASES = new Map<string, string>([
 const CANONICAL_DISPLAY_NAMES = new Map<string, string>([
   ["quantanium", "Quantanium"],
   ["savrilium", "Savrilium"],
-  ["hephaestanite", "Hephaestonite"],
+  ["hephaestanite", "Hephaestanite"],
 ]);
 
 function materialAliasVariants(canonicalKey: string): string[] {
