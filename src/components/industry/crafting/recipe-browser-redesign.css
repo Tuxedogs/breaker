@@ -387,8 +387,7 @@
   -webkit-line-clamp: 2;
 }
 
-.crb2-hero-badges,
-.crb2-row-meta {
+.crb2-hero-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -398,8 +397,7 @@
   margin-top: 8px;
 }
 
-.crb2-hero-badges > span,
-.crb2-row-meta > span {
+.crb2-hero-badges > span {
   padding: 2px 5px;
   border: 1px solid rgba(105, 132, 150, 0.2);
   border-radius: 3px;
@@ -422,7 +420,7 @@
 }
 
 .crb2-hero-badges > .crb2-non-filter-match,
-.crb2-row-meta > .crb2-non-filter-match {
+.crb2-hero-badges > .crb2-non-filter-match {
   border-color: rgba(255, 113, 133, 0.52);
   background: rgba(255, 113, 133, 0.1);
   color: var(--stat-detrimental, #ff7185);
@@ -571,6 +569,7 @@
 
 .crb2-table-scroll {
   overflow-x: auto;
+  zoom:120%;
 }
 
 .crb2-table {
@@ -695,15 +694,7 @@
   overflow: hidden;
   color: var(--craft-text, #edf7ff);
   text-overflow: ellipsis;
-}
-
-.crb2-row-meta {
-  margin-top: 4px;
-}
-
-.crb2-row-meta > span {
-  padding: 1px 4px;
-  font-size: var(--recipe-text-kicker);
+  font-weight:550;
 }
 
 .crb2-row-open {
@@ -792,6 +783,7 @@
 
   .crb2-table-scroll {
     overflow: visible;
+    zoom:120%
   }
 }
 

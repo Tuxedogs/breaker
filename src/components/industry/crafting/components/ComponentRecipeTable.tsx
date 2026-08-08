@@ -1464,7 +1464,7 @@ export function DetailMaterialQualityRow({
       <div className="craft-detail-material-required">{requiredAmount}</div>
       <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
         <TargetQualitySlider
-          label={`Target ${selectedQuality}`}
+          label={`${selectedQuality}`}
           tone="cyan"
           materialName={materialName}
           min={1}
@@ -1548,7 +1548,7 @@ function GroupedDetailStatGroups({
 }) {
   const groups = buildDetailStatGroups(detail, stats);
   const displaySections = buildDetailStatScanSections(groups, stats);
-  const columns = splitDetailStatScanColumns(displaySections, 2);
+  const columns = splitDetailStatScanColumns(displaySections, 3);
 
   const renderSection = (section: DetailStatScanSection) => (
     <section

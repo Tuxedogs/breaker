@@ -204,7 +204,7 @@ test.describe("Crafting browser and detail refactor", () => {
         .toBeGreaterThanOrEqual(8);
 
       await firstSlider.fill("723");
-      await expect(page.locator(".craft-detail-material-target-input .bq-target-quality").first()).toHaveText("Target 723");
+      await expect(page.locator(".craft-detail-material-target-input .bq-target-quality").first()).toHaveText("723");
       await expect(page.locator(".craft-detail-material-target-input .bq-target-quality")).toHaveCount(3);
       for (const target of await page.locator(".craft-detail-material-target-input .bq-target-quality").all()) {
         await expect(target).toBeVisible();
@@ -317,7 +317,7 @@ test.describe("Crafting browser and detail refactor", () => {
         const renderedColumns = await page.locator(".detail-stat-groups--scannable").evaluate((element) => (
           getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length
         ));
-        expect(renderedColumns).toBe(viewport.width <= 900 ? 1 : 2);
+        expect(renderedColumns).toBe(viewport.width <= 900 ? 1 : 3);
 
         await page.locator(".craft-detail-summary-section").evaluate((element) => {
           element.scrollIntoView({ block: "start" });
