@@ -205,6 +205,18 @@ function RequiredByValue({ requirements }: { requirements: QueueRequirementRef[]
   );
 }
 
+function MiningRefinedAmount({ row }: { row: MiningOverviewRow }) {
+  if (!row.isRefinable) return <span className="dash-overview-muted">—</span>;
+  return (
+    <span className="dash-mining-amount dash-tabnum">
+      <span className="dash-material-state-badge dash-material-state-badge--refined">
+        {formatDashNumber(row.requiredQuantity)}
+      </span>
+      <span className="dash-mining-amount-unit">SCU</span>
+    </span>
+  );
+}
+
 
 
 function getOwnedQuantityForRequirement(materialId: string, inventoryEntries: InventoryEntry[]) {
@@ -945,6 +957,7 @@ export default function DashboardPage() {
                               <span className="dash-overview-header-tooltip">Band</span>
                             </OverviewTooltip>
                           </th>
+                          <th>Refined</th>
                           <th>Required By</th>
                         </tr>
                       </thead>
@@ -970,7 +983,7 @@ export default function DashboardPage() {
                                   <span className="dash-overview-band-value dash-tabnum">{bandLabel}</span>
                                 </OverviewTooltip>
                               </td>
-                         
+                              <td><MiningRefinedAmount row={row} /></td>
                               <td><RequiredByValue requirements={row.requiredBy} /></td>
                             </tr>
                           );

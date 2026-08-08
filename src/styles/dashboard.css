@@ -4605,9 +4605,10 @@
 .dash-material-state-badge {
   display: inline-flex;
   align-items: center;
-  min-height: 18px;
-  padding: 0.08rem 0.32rem;
-  border-radius: 3px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -4621,29 +4622,8 @@
   white-space: nowrap;
 }
 
-.dash-overview-amount-heading .dash-material-state-badge {
-  min-height: 16px;
-  padding: 0.06rem 0.24rem;
-  font-size: 0.52rem;
-  letter-spacing: 0.02em;
-}
-
-.dash-material-state-badge--ore {
-  color: #978779;
-  border-color: rgba(151, 135, 121, 0.46);
-  background: rgba(151, 135, 121, 0.11);
-}
-
 .dash-material-state-badge--refined {
   color: #ffc200;
-  border-color: rgba(255, 194, 0, 0.42);
-  background: rgba(255, 194, 0, 0.09);
-}
-
-.dash-material-state-badge--raw {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.34);
-  color: #ffffff;
 }
 
 .dash-mining-amount .dash-material-state-badge {

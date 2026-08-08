@@ -800,38 +800,14 @@ function restrictionBadgesForFamilies(families: MissionFamilyView[]): Array<{ la
   ].filter((value): value is { label: string; tone: string } => Boolean(value));
 }
 
-function conceptMatchLabels(
-  concept: MissionConceptView,
-  families: MissionFamilyView[],
-  filters: { query: string; reward: string; confidence: string; repReward: string; status: string; missionType: string; provider: string },
-): string[] {
-  const labels = [
-    filters.query.trim() ? "Matches search" : undefined,
-    concept.variantCount !== families.reduce((sum, family) => sum + family.variantCount, 0) && families.length
-      ? `Matches: ${families.reduce((sum, family) => sum + family.variantCount, 0)} variant${families.reduce((sum, family) => sum + family.variantCount, 0) === 1 ? "" : "s"}`
-      : undefined,
-    filters.reward === "blueprints" ? "Matches: Blueprint rewards" : undefined,
-    filters.reward && filters.reward !== "blueprints" ? "Matches: reward filter" : undefined,
-    filters.confidence === "crime-bounded" ? "Matches: CrimeStat limited" : undefined,
-    filters.confidence && filters.confidence !== "crime-bounded" ? "Matches: confidence filter" : undefined,
-    filters.repReward ? "Matches: rep path" : undefined,
-    filters.status ? "Matches: status" : undefined,
-    filters.missionType ? "Matches: mission type" : undefined,
-    filters.provider ? "Matches: provider" : undefined,
-  ].filter((value): value is string => Boolean(value));
-  return Array.from(new Set(labels));
-}
-
 const MissionConceptCard = memo(function MissionConceptCard({
   concept,
   familiesByKey,
-  filters,
   isSelected,
   onSelect,
 }: {
   concept: MissionConceptView;
   familiesByKey: Map<string, MissionFamilyView>;
-  filters: { query: string; reward: string; confidence: string; repReward: string; status: string; missionType: string; provider: string };
   isSelected: boolean;
   onSelect: (conceptKey: string, trigger: HTMLButtonElement) => void;
 }) {
@@ -841,7 +817,6 @@ const MissionConceptCard = memo(function MissionConceptCard({
   const hasItemRewards = conceptHasItemRewards(concept, familiesByKey);
   const displayVariantCount = families.reduce((sum, family) => sum + family.variantCount, 0) || concept.variantCount;
   const restrictions = restrictionBadgesForFamilies(families);
-  const matchLabels = conceptMatchLabels(concept, families, filters);
   const repScope = shortRepScope(concept.reputationScope.displayName);
   const verificationTag = explicitMissionVerificationTag(concept.specificityBadges);
   const legalClassification = legalClassificationSummary(families);
@@ -2466,16 +2441,6 @@ export default function MissionBrowserPage() {
     status,
     confidence,
   }), [confidence, missionType, provider, query, repReward, reward, status]);
-  const cardFilters = useMemo(() => ({
-    query,
-    provider,
-    missionType,
-    reward,
-    repReward,
-    status,
-    confidence,
-  }), [confidence, missionType, provider, query, repReward, reward, status]);
-
   useEffect(() => {
     let cancelled = false;
     queueMicrotask(() => {
@@ -2777,7 +2742,6 @@ export default function MissionBrowserPage() {
         key={concept.conceptKey}
         concept={concept}
         familiesByKey={familiesByKey}
-        filters={cardFilters}
         isSelected={selectedConceptKey === concept.conceptKey}
         onSelect={selectConceptWorkspace}
       />
