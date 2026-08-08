@@ -11,6 +11,9 @@ const MATERIAL_GUID_ALIASES: Record<string, string> = {
 };
 
 const TEXT_ALIASES: Record<string, string> = {
+  ice: "rawice",
+  rawice: "rawice",
+  pressurizedice: "rawice",
   quantanium: "quantanium",
   quantainium: "quantanium",
   savrilium: "savrilium",
@@ -26,7 +29,8 @@ const TEXT_ALIASES: Record<string, string> = {
 
 const DISPLAY_NAMES: Record<string, string> = {
   "carinite-pure": "Pure Carinite",
-  hephaestanite: "Hephaestonite",
+  rawice: "Ice",
+  hephaestanite: "Hephaestanite",
   quantanium: "Quantanium",
   savrilium: "Savrilium",
 };

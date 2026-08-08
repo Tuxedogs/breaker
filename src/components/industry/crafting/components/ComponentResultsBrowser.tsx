@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
-import { buildComponentCardBrowseMetadataFromIndex } from "../utils/componentCardSchema";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -14,11 +12,9 @@ import {
   compareRecipeBrowserRecords,
   compareRecipeBrowserSearchRecords,
   getRecipeBrowserSearchParam,
-  matchesRecipeBrowserAppliedFilters,
   pickPreferredRecipeBrowserSearchRecord,
 } from "../utils/recipeBrowserFilters";
 import {
-  getRecipeBrowserDamageBadges,
   getRecipeBrowserFamily,
   type RecipeBrowserColumn,
   type RecipeBrowserFamily,
@@ -73,94 +69,10 @@ function ComponentBrowserState({ title, body }: { title: string; body: string })
   );
 }
 
-function SelectedRecipeHero({
-  record,
-  queued,
-  saved,
-  variantCount,
-  nonFilterMatch,
-}: {
-  record: ComponentCardIndexRecord;
-  queued: boolean;
-  saved: boolean;
-  variantCount?: number;
-  nonFilterMatch: boolean;
-}) {
-  const location = useLocation();
-  const schema = buildComponentCardBrowseMetadataFromIndex(record);
-  const family = getRecipeBrowserFamily(record);
-  const iconUrl = getComponentCategoryIconUrl(record);
-  const heroStats = family.columns
-    .filter((column) => column.key !== "gradeClass")
-    .slice(0, 4);
-  const materialPreview = record.card?.materialsPreview ?? [];
-  const damageBadges = getRecipeBrowserDamageBadges(record);
 
-  return (
-    <article className="crb2-hero">
-      <div className="crb2-hero-icon" aria-hidden="true">
-        {iconUrl ? <img src={iconUrl} alt="" /> : <span>{record.id.slice(0, 3)}</span>}
-      </div>
-      <div className="crb2-hero-identity">
-        <p className="crb2-eyebrow">
-          <span>{record.kind === "fps" ? "FPS" : "Vehicle"}</span>
-          <span>{record.typeLabel}</span>
-        </p>
-        <h2>{schema.displayName}</h2>
-        <p className="crb2-description">
-          {record.description?.trim() || "Extracted component statistics and fabrication requirements."}
-        </p>
-        <div className="crb2-hero-badges" aria-label="Component status">
-          {record.variantLabel || record.variantName ? (
-            <span>{record.variantLabel ?? record.variantName}</span>
-          ) : null}
-          {record.size !== null ? <span>Size {record.size}</span> : null}
-          {record.grade ? <span>Grade {record.grade}</span> : null}
-          {record.class ? <span>{record.class}</span> : null}
-          {damageBadges.map((badge) => (
-            <span key={badge.key} className={`crb2-damage-badge crb2-damage-badge--${badge.key}`}>
-              {badge.label}{badge.value ? ` ${badge.value}` : ""}
-            </span>
-          ))}
-          {queued ? <span>Queued</span> : null}
-          {saved ? <span>Saved</span> : null}
-          {variantCount && variantCount > 1 ? <span>{variantCount} variants</span> : null}
-          {nonFilterMatch ? <span className="crb2-non-filter-match">Non-Filter Match</span> : null}
-        </div>
-      </div>
-      <dl className="crb2-hero-stats">
-        {heroStats.map((column) => (
-          <div key={column.key}>
-            <dt>{column.label}</dt>
-            <dd>{column.value(record)}</dd>
-          </div>
-        ))}
-      </dl>
-      <div className="crb2-hero-materials">
-        <span>Primary materials</span>
-        <div>
-          {materialPreview.length ? materialPreview.slice(0, 3).map((material) => (
-            <span key={`${material.name}:${material.quantity}`}>
-              <strong>{material.name}</strong>
-              <small>
-                {material.quantity}
-                {material.unit ? ` ${material.unit.toUpperCase()}` : ""}
-              </small>
-            </span>
-          )) : <em>Material preview unavailable</em>}
-        </div>
-      </div>
-      <Link
-        className="crb2-hero-action"
-        to={{ pathname: `/industry/crafting/${record.id}`, search: location.search }}
-        state={{ from: location.pathname + location.search }}
-      >
-        View recipe
-        <span aria-hidden="true">→</span>
-      </Link>
-    </article>
-  );
-}
+
+ 
+
 
 function RecipeResultsTable({
   family,
@@ -325,7 +237,6 @@ export default function ComponentResultsBrowser({
   records,
   loading,
   error,
-  isRecipeQueued,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
@@ -379,7 +290,7 @@ export default function ComponentResultsBrowser({
     [records, savedBlueprintIds, savedOnly, searchParams],
   );
 
-  const { groupedRecords, variantCountMap } = useMemo(() => {
+  const { groupedRecords,  } = useMemo(() => {
     const groups = new Map<string, ComponentCardIndexRecord[]>();
     const ungrouped: ComponentCardIndexRecord[] = [];
     for (const record of filteredRecords) {
@@ -403,21 +314,10 @@ export default function ComponentResultsBrowser({
     grouped.sort(search
       ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
       : compareRecipeBrowserRecords);
-    return { groupedRecords: grouped, variantCountMap: counts };
+    return { groupedRecords: grouped };
   }, [filteredRecords, search]);
 
-  const nonFilterMatchIds = useMemo(() => {
-    if (!search) return new Set<string>();
-    return new Set(
-      groupedRecords
-        .filter((record) => !matchesRecipeBrowserAppliedFilters(record, searchParams, {
-          savedOnly,
-          savedBlueprintIds,
-        }))
-        .map((record) => record.id),
-    );
-  }, [groupedRecords, savedBlueprintIds, savedOnly, search, searchParams]);
-
+  
   const totalPages = Math.max(1, Math.ceil(groupedRecords.length / resultsPerPage));
   const visiblePage = Math.min(page, totalPages);
   const pageStart = (visiblePage - 1) * resultsPerPage;
@@ -491,15 +391,7 @@ export default function ComponentResultsBrowser({
 
   return (
     <main className="crb2-results">
-      {selectedRecord ? (
-        <SelectedRecipeHero
-          record={selectedRecord}
-          queued={isRecipeQueued(selectedRecord)}
-          saved={savedBlueprintIds.has(selectedRecord.id)}
-          variantCount={variantCountMap.get(selectedRecord.id)}
-          nonFilterMatch={nonFilterMatchIds.has(selectedRecord.id)}
-        />
-      ) : null}
+      
 
       <div className="crb2-list" aria-label="Component results">
         {tableGroups.map(({ family, records: familyRecords }) => (

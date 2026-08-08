@@ -205,27 +205,19 @@ function RequiredByValue({ requirements }: { requirements: QueueRequirementRef[]
   );
 }
 
-function MiningAmount({ row }: { row: MiningOverviewRow }) {
-  if (row.isRefinable) {
-    const oreRequired = row.ledgerLine?.rawOreNeeded ?? 0;
-    return (
-      <span className="dash-mining-amount dash-tabnum">
-        <span className="dash-material-state-badge dash-material-state-badge--ore">{formatDashNumber(oreRequired)}</span>
-        <span className="dash-material-state-badge dash-material-state-badge--refined">{formatDashNumber(row.requiredQuantity)}</span>
-        <span className="dash-mining-amount-unit">SCU</span>
-      </span>
-    );
-  }
-  const unitType = row.unitType === "SCU" || row.unitType === "scu" || row.unitType === "cscu" ? "scu" : "unit";
+function MiningRefinedAmount({ row }: { row: MiningOverviewRow }) {
+  if (!row.isRefinable) return <span className="dash-overview-muted">—</span>;
   return (
     <span className="dash-mining-amount dash-tabnum">
-      <span className="dash-material-state-badge dash-material-state-badge--raw">
-        {unitType === "unit" ? `x ${formatDashNumber(row.requiredQuantity)}` : formatDashNumber(row.requiredQuantity)}
+      <span className="dash-material-state-badge dash-material-state-badge--refined">
+        {formatDashNumber(row.requiredQuantity)}
       </span>
-      {unitType === "scu" && <span className="dash-mining-amount-unit">SCU</span>}
+      <span className="dash-mining-amount-unit">SCU</span>
     </span>
   );
 }
+
+
 
 function getOwnedQuantityForRequirement(materialId: string, inventoryEntries: InventoryEntry[]) {
   return inventoryEntries
@@ -965,13 +957,7 @@ export default function DashboardPage() {
                               <span className="dash-overview-header-tooltip">Band</span>
                             </OverviewTooltip>
                           </th>
-                          <th>
-                            <span className="dash-overview-amount-heading" aria-label="Amount state badges">
-                              <span className="dash-material-state-badge dash-material-state-badge--ore">ore</span>
-                              <span className="dash-material-state-badge dash-material-state-badge--refined">Refined</span>
-                              <span className="dash-material-state-badge dash-material-state-badge--raw">raw</span>
-                            </span>
-                          </th>
+                          <th>Refined</th>
                           <th>Required By</th>
                         </tr>
                       </thead>
@@ -997,7 +983,7 @@ export default function DashboardPage() {
                                   <span className="dash-overview-band-value dash-tabnum">{bandLabel}</span>
                                 </OverviewTooltip>
                               </td>
-                              <td><MiningAmount row={row} /></td>
+                              <td><MiningRefinedAmount row={row} /></td>
                               <td><RequiredByValue requirements={row.requiredBy} /></td>
                             </tr>
                           );

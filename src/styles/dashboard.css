@@ -1383,7 +1383,7 @@
 
 .dash-reserve-preview-name {
   font-family: var(--font-primary);
-  font-size: 0.74rem;
+  font-size: 1rem;
   font-weight: 600;
   color: rgba(199, 210, 230, 0.82);
   overflow: hidden;
@@ -3574,9 +3574,11 @@
     height: 1.1rem;
   }
   .dash-mobile-nav {
-    position: fixed;
-    inset-inline: 0;
-    bottom: 0;
+    position: relative;
+    inset-inline: auto;
+    bottom: auto;
+    width: 100%;
+    flex: 0 0 auto;
     z-index: 50;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -4022,7 +4024,7 @@
 .dash-stat-icon-wrap {
   width: 30px;
   height: 30px;
-  background: transparent !important;
+  background: rgba(15, 22, 34, 0.64);
   opacity: 0.8;
 }
 
@@ -4081,9 +4083,8 @@
   grid-template-columns: minmax(250px, 0.86fr) minmax(315px, 1.14fr);
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgba(115, 143, 171, 0.15);
-  border-radius: 6px;
   background: rgba(9, 16, 23, 0.72);
+  gap: 0.5rem;
 }
 
 .dash-status-deck > .dash-card {
@@ -4465,7 +4466,7 @@
   padding: 0.32rem 0.45rem;
   border-bottom: 1px solid rgba(115, 143, 171, 0.095);
   font-family: var(--font-primary);
-  font-size: 0.73rem;
+  font-size: 1rem;
   color: rgba(205, 218, 238, 0.86);
   vertical-align: middle;
 }
@@ -4479,28 +4480,16 @@
 }
 
 .dash-overview-table--mining th:nth-child(1),
-.dash-overview-table--mining td:nth-child(1) { width: 24%; }
+.dash-overview-table--mining td:nth-child(1) { width: 6%; }
 .dash-overview-table--mining th:nth-child(2),
-.dash-overview-table--mining td:nth-child(2) { width: 9%; }
+.dash-overview-table--mining td:nth-child(2) { width: 6%; }
 .dash-overview-table--mining th:nth-child(3),
-.dash-overview-table--mining td:nth-child(3) { width: 13%; }
+.dash-overview-table--mining td:nth-child(3) { width: 6%; }
 .dash-overview-table--mining th:nth-child(4),
-.dash-overview-table--mining td:nth-child(4) { width: 38%; }
+.dash-overview-table--mining td:nth-child(4) { width: 5%; }
 .dash-overview-table--mining th:nth-child(5),
 .dash-overview-table--mining td:nth-child(5) { width: 16%; }
 
-.dash-overview-table--inventory th:nth-child(1),
-.dash-overview-table--inventory td:nth-child(1) { width: 24%; }
-.dash-overview-table--inventory th:nth-child(2),
-.dash-overview-table--inventory td:nth-child(2) { width: 22%; }
-.dash-overview-table--inventory th:nth-child(3),
-.dash-overview-table--inventory td:nth-child(3) { width: 10%; text-align: center; }
-.dash-overview-table--inventory th:nth-child(4),
-.dash-overview-table--inventory td:nth-child(4) { width: 16%; }
-.dash-overview-table--inventory th:nth-child(5),
-.dash-overview-table--inventory td:nth-child(5) { width: 10%; }
-.dash-overview-table--inventory th:nth-child(6),
-.dash-overview-table--inventory td:nth-child(6) { width: 18%; }
 
 .dash-overview-material {
   display: inline-flex;
@@ -4508,7 +4497,7 @@
   max-width: 100%;
   align-items: center;
   gap: 0.48rem;
-  font-weight: 700;
+  font-weight: 600;
   color: rgba(226, 235, 249, 0.94);
 }
 
@@ -4616,12 +4605,12 @@
 .dash-material-state-badge {
   display: inline-flex;
   align-items: center;
-  min-height: 18px;
-  padding: 0.08rem 0.32rem;
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  font-size: 0.58rem;
-  font-weight: 800;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: none;
 }
@@ -4633,29 +4622,8 @@
   white-space: nowrap;
 }
 
-.dash-overview-amount-heading .dash-material-state-badge {
-  min-height: 16px;
-  padding: 0.06rem 0.24rem;
-  font-size: 0.52rem;
-  letter-spacing: 0.02em;
-}
-
-.dash-material-state-badge--ore {
-  color: #978779;
-  border-color: rgba(151, 135, 121, 0.46);
-  background: rgba(151, 135, 121, 0.11);
-}
-
 .dash-material-state-badge--refined {
   color: #ffc200;
-  border-color: rgba(255, 194, 0, 0.42);
-  background: rgba(255, 194, 0, 0.09);
-}
-
-.dash-material-state-badge--raw {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.34);
-  color: #ffffff;
 }
 
 .dash-mining-amount .dash-material-state-badge {
@@ -4732,7 +4700,7 @@
 }
 
 .dash-reservation-popover strong {
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(159, 176, 197, 0.76);
@@ -4766,7 +4734,7 @@
 @media (min-width: 2200px) and (min-height: 1200px) {
   .dash-overview-tabs button { padding-inline: 1rem; font-size: 0.72rem; }
   .dash-overview-table th { height: 31px; font-size: 0.62rem; }
-  .dash-overview-table td { height: 40px; font-size: 0.79rem; }
+  .dash-overview-table td { height: 40px; font-size: 1rem; }
   .dash-required-by-value { font-size: 0.7rem; }
   .dash-overview-tooltip-content { font-size: 0.68rem; }
 }
