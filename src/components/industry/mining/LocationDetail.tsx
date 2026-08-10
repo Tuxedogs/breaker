@@ -169,6 +169,57 @@ function MiningMethodDemandCell({ value }: { value: string | null | undefined })
   return <span className="mdet-method-text">{value || "Unknown"}</span>;
 }
 
+function MiningOccurrenceCell({ row }: { row: DemandRow | ResourceRow }) {
+  if (row.occurrence.mode === "legacy") {
+    return <MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={"sourceTitle" in row ? row.sourceTitle : undefined} />;
+  }
+  const title = `Primary share: ${row.occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.name}. Spawn roll: ${row.occurrence.spawnRollProbabilityLabel} is the chance that one game-data roll selects both the pool and ${row.name}. Location rank: ${row.occurrence.locationRankLabel} among places using the same mining method. These values describe game-data weights, not a guaranteed percentage of scanned rocks.`;
+  return (
+    <div className="mdet-occurrence" title={title}>
+      <strong>{row.occurrence.primaryRockShareLabel} primary</strong>
+      <span>{row.occurrence.spawnRollProbabilityLabel} spawn roll</span>
+      <span>{row.occurrence.locationRankLabel}</span>
+    </div>
+  );
+}
+
+function TraceMaterialList({ row, mobile = false }: { row: DemandRow | ResourceRow; mobile?: boolean }) {
+  if (row.occurrence.mode !== "probability" || row.occurrence.traceMaterials.length === 0) return null;
+  return (
+    <ul className={`mdet-trace-list${mobile ? " mdet-trace-list--mobile" : ""}`} aria-label={`Trace materials found with ${row.name}`}>
+      {row.occurrence.traceMaterials.map((trace) => (
+        <li key={`${row.key}:trace:${trace.name}`}>
+          <span className="mdet-trace-branch" aria-hidden="true">↳</span>
+          <span className="mdet-trace-copy">
+            <strong>{trace.name}</strong>
+            <span>{trace.compositionRangeLabel} · {trace.qualityRangeLabel}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function MiningMaterialCell({ row }: { row: DemandRow | ResourceRow }) {
+  return (
+    <div className="mdet-material-cell">
+      <MaterialNameCell name={row.name} miningMethod={row.miningType} />
+      <TraceMaterialList row={row} />
+    </div>
+  );
+}
+
+function MiningMethodCell({ row, value }: { row: DemandRow | ResourceRow; value: string }) {
+  return (
+    <div className="mdet-method-cell">
+      <MiningMethodDemandCell value={value} />
+      {row.occurrence.mode === "probability" && (
+        <span className="mdet-method-availability">{row.occurrence.methodAvailabilityLabel} available</span>
+      )}
+    </div>
+  );
+}
+
 function MiningMethodIcon({ method }: { method: string }) {
   const normalized = method.toLowerCase();
   if (normalized.includes("vehicle")) {
@@ -222,6 +273,7 @@ function MiningMobileMaterialCard({
   const primaryQualityLabel = mode === "demand"
     ? (row as DemandRow).targetQualityChanceLabel
     : (row as ResourceRow).qualityLabel;
+  const probabilityOccurrence = row.occurrence.mode === "probability";
 
   return (
     <article className={`mdet-mobile-material-card mining-resource-row--${row.status}`}>
@@ -235,13 +287,19 @@ function MiningMobileMaterialCard({
           <span className={`mdet-mobile-source-chip${methodBadge ? ` mloc-badge ${methodBadge.className}` : ""}`}>
             {methodLabel}
           </span>
-          <MobileMaterialStatusPill label={row.densityLabel} status={row.status} />
+          {probabilityOccurrence
+            ? <MobileMaterialStatusPill label={`${row.occurrence.primaryRockShareLabel} primary`} status={row.status} />
+            : <MobileMaterialStatusPill label={row.densityLabel} status={row.status} />}
         </div>
+        <TraceMaterialList row={row} mobile />
       </div>
       <div
         className="mdet-mobile-stat-grid"
         title={"sourceTitle" in row ? row.sourceTitle : undefined}
       >
+        {probabilityOccurrence && <MiningMobileStat label="Spawn Roll" value={row.occurrence.spawnRollProbabilityLabel} />}
+        {probabilityOccurrence && <MiningMobileStat label="Location Rank" value={row.occurrence.locationRankLabel} />}
+        {probabilityOccurrence && <MiningMobileStat label="Method Available" value={row.occurrence.methodAvailabilityLabel} />}
         <MiningMobileStat label={qualityHeader} value={primaryQualityLabel} />
         <MiningMobileStat label="900+ Quality" value={row.quality900Label} />
         <MiningMobileStat label="Composition" value={row.compositionLabel} />
@@ -283,6 +341,7 @@ export function LocationDetail({
   starred,
   onToggleStar,
   hideHeader = false,
+  contextSummary,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
@@ -293,6 +352,12 @@ export function LocationDetail({
   starred?: boolean;
   onToggleStar?: (e: MouseEvent<HTMLButtonElement>) => void;
   hideHeader?: boolean;
+  contextSummary?: {
+    scopeLabel: string;
+    selectedMaterialCount: number;
+    totalMaterialCount: number;
+    rankedLocationCount: number;
+  };
 }) {
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
@@ -468,8 +533,17 @@ export function LocationDetail({
         </div>
       )}
 
+      {!hideHeader && contextSummary && (
+        <div className="mining-detail-context" aria-label="Mining view context">
+          <span className="mining-detail-context__item mining-detail-context__item--scope">{contextSummary.scopeLabel}</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.selectedMaterialCount}</strong> selected</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.totalMaterialCount}</strong> materials</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.rankedLocationCount}</strong> ranked locations</span>
+        </div>
+      )}
+
       {((!hasMultipleDemandMaterials && total > 0) || hasMultipleDemandMaterials || hasSingleDemandMaterial) && (
-        <div className={`location-stat-chip-grid${hasMultipleDemandMaterials ? " location-stat-chip-grid--coverage" : " location-stat-chip-grid--single"}`}>
+        <div className={`location-stat-chip-grid${hasMultipleDemandMaterials ? " location-stat-chip-grid--coverage" : " location-stat-chip-grid--single"}${hasSingleDemandMaterial && selectedDemandRow?.occurrence.mode === "probability" ? " location-stat-chip-grid--probability" : ""}`}>
           <div className="location-stat-ledger-label">{hasMultipleDemandMaterials ? "Queue Coverage" : "Material Fit"}</div>
           {!hasMultipleDemandMaterials && total > 0 && (
             <div className="location-stat-chip">
@@ -501,11 +575,31 @@ export function LocationDetail({
               <div className="location-stat-chip">
                 <div className="location-stat-label"><InfoTip text="Mining method for the selected material at this location.">METHOD</InfoTip></div>
                 <div className="location-stat-value">{singleDemandMethodLabel}</div>
+                {selectedDemandRow.occurrence.mode === "probability" && (
+                  <div className="location-stat-subvalue">{selectedDemandRow.occurrence.methodAvailabilityLabel} available</div>
+                )}
               </div>
-              <div className="location-stat-chip">
-                <div className="location-stat-label"><InfoTip text="Bucketed encounter strength for the selected material at this location.">ENCOUNTER TIER</InfoTip></div>
-                <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
-              </div>
+              {selectedDemandRow.occurrence.mode === "probability" ? (
+                <>
+                  <div className="location-stat-chip">
+                    <div className="location-stat-label"><InfoTip text={`Of the primary rocks in this mining pool, ${selectedDemandRow.occurrence.primaryRockShareLabel} are ${selectedDemandRow.name}.`}>PRIMARY ROCK SHARE</InfoTip></div>
+                    <div className="location-stat-value">{selectedDemandRow.occurrence.primaryRockShareLabel}</div>
+                  </div>
+                  <div className="location-stat-chip">
+                    <div className="location-stat-label"><InfoTip text={`A single game-data spawn roll has a ${selectedDemandRow.occurrence.spawnRollProbabilityLabel} chance to select both this mining pool and ${selectedDemandRow.name}. This is not the percentage of scanned rocks you are guaranteed to see.`}>SPAWN ROLL</InfoTip></div>
+                    <div className="location-stat-value">{selectedDemandRow.occurrence.spawnRollProbabilityLabel}</div>
+                  </div>
+                  <div className="location-stat-chip">
+                    <div className="location-stat-label"><InfoTip text={`This location is ${selectedDemandRow.occurrence.locationRankLabel} for ${selectedDemandRow.name} when compared only with locations using the same mining method.`}>LOCATION RANK</InfoTip></div>
+                    <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.occurrence.locationRankLabel}</div>
+                  </div>
+                </>
+              ) : (
+                <div className="location-stat-chip">
+                  <div className="location-stat-label"><InfoTip text="Location-specific encounter presentation retained for this material.">ENCOUNTER TIER</InfoTip></div>
+                  <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
+                </div>
+              )}
               <div className="location-stat-chip">
                 <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></div>
                 <div className="location-stat-value">{selectedDemandRow.targetQualityChanceLabel}</div>
@@ -545,7 +639,7 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
@@ -554,9 +648,9 @@ export function LocationDetail({
             <tbody>
               {coveredDemandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
-                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
+                  <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
+                  <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
+                  <td><MiningOccurrenceCell row={row} /></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
@@ -582,7 +676,7 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Shows three separate values: how often this is the primary material inside its mining pool, the chance that one game-data spawn roll selects it, and this location's rank against places using the same mining method.">Occurrence</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("800+")}>800+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
@@ -591,9 +685,9 @@ export function LocationDetail({
             <tbody>
               {otherLocationMaterialRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.miningType || "Unknown"} /></td>
-                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={row.sourceTitle} /></td>
+                  <td className="mdet-mat-name"><MiningMaterialCell row={row} /></td>
+                  <td className="mdet-mat-demand"><MiningMethodCell row={row} value={row.miningType || "Unknown"} /></td>
+                  <td><MiningOccurrenceCell row={row} /></td>
                   <td className="mdet-mat-score">{row.qualityLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>

@@ -1,10 +1,10 @@
 import type { PublicLocationEntry } from "../../../features/mining/types";
 import {
-  formatStaticEncounterSignal,
   formatStaticMethodFit,
   formatStaticQualityChanceFromChances,
   formatStaticQualityChanceDecimalBelow1,
   getStaticDensityScore,
+  getStaticEncounterRankingRow,
   getStaticMaterialQualityRow,
   getStaticMaterialKey,
   getStaticResourcesForLocation,
@@ -13,7 +13,7 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import type { RequiredMaterial } from "../../../features/mining/types";
-import type { MiningQueueScope, QualityDisplay, DemandRow, ResourceRow } from "./miningTypes";
+import type { MaterialOccurrenceDisplay, MiningQueueScope, QualityDisplay, DemandRow, ResourceRow } from "./miningTypes";
 import { findRouteScoreForMaterial } from "./miningScoring";
 
 export function spawnTypeLabel(spawnType: string): string {
@@ -240,6 +240,119 @@ export function formatPercent(value: number): string {
   return `${Number((value * 100).toFixed(1)).toString()}%`;
 }
 
+const SPECIFIC_LOCATION_MATERIAL_KEYS = new Set(["carinite-pure", "saldynium", "jaclium", "sadaryx"]);
+
+export function usesSpecificLocationOccurrence(materialKey: string): boolean {
+  return SPECIFIC_LOCATION_MATERIAL_KEYS.has(canonicalMiningMaterialKey(materialKey));
+}
+
+export function formatMiningProbability(value: number | null | undefined): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return "Unknown";
+  const pct = value * 100;
+  const decimals = pct >= 10 ? 1 : pct >= 1 ? 2 : pct >= 0.1 ? 2 : pct >= 0.01 ? 3 : 4;
+  return `${Number(pct.toFixed(decimals)).toString()}%`;
+}
+
+function primaryRockShare(row: Parameters<typeof getStaticEncounterRankingRow>[0]): number | null {
+  if (typeof row.primaryRockShare === "number" && Number.isFinite(row.primaryRockShare)) return row.primaryRockShare;
+  let weightedShare = 0;
+  let totalGroupWeight = 0;
+  for (const source of row.sources ?? []) {
+    if (!Number.isFinite(source.groupProbability) || !Number.isFinite(source.relativeProbability)) continue;
+    const groupWeight = Number(source.groupProbability) / 100;
+    const materialProbability = Number.isFinite(source.materialProbability) ? Number(source.materialProbability) : 1;
+    weightedShare += groupWeight * (Number(source.relativeProbability) / 100) * materialProbability;
+    totalGroupWeight += groupWeight;
+  }
+  return totalGroupWeight > 0 ? weightedShare / totalGroupWeight : null;
+}
+
+function formatTraceMaterials(row: Parameters<typeof getStaticEncounterRankingRow>[0]): MaterialOccurrenceDisplay["traceMaterials"] {
+  const details = row.traceMaterialDetails ?? row.sources?.flatMap((source) => source.traceMaterialDetails ?? []) ?? [];
+  const traces = new Map<string, MaterialOccurrenceDisplay["traceMaterials"][number]>();
+  for (const detail of details) {
+    const name = detail.materialName?.trim();
+    if (!name) continue;
+    const min = detail.minPercentage;
+    const max = detail.maxPercentage;
+    let qualityFloor = detail.qualityFloor;
+    let qualityCeiling = detail.qualityCeiling;
+    if (!Number.isFinite(qualityFloor) || !Number.isFinite(qualityCeiling)) {
+      const qualityRanges = (row.sources ?? []).flatMap((source) => (source.traceMaterialDetails ?? [])
+        .filter((sourceDetail) => sourceDetail.materialName?.trim().toLowerCase() === name.toLowerCase())
+        .map((sourceDetail) => {
+          const scale = sourceDetail.qualityScale;
+          return {
+            floor: Number.isFinite(scale) && Number.isFinite(source.quality?.min) ? Number(scale) * Number(source.quality?.min) : null,
+            ceiling: Number.isFinite(scale) && Number.isFinite(source.quality?.max) ? Number(scale) * Number(source.quality?.max) : null,
+          };
+        }));
+      const floors = qualityRanges.map((range) => range.floor).filter((value): value is number => value !== null);
+      const ceilings = qualityRanges.map((range) => range.ceiling).filter((value): value is number => value !== null);
+      qualityFloor = floors.length > 0 ? Math.min(...floors) : qualityFloor;
+      qualityCeiling = ceilings.length > 0 ? Math.max(...ceilings) : qualityCeiling;
+    }
+    traces.set(name.toLowerCase(), {
+      name,
+      compositionRangeLabel: Number.isFinite(min) && Number.isFinite(max)
+        ? `${Number(min).toString()}–${Number(max).toString()}% composition`
+        : "Composition range unknown",
+      qualityRangeLabel: Number.isFinite(qualityFloor) && Number.isFinite(qualityCeiling)
+        ? `Quality ${Math.round(Number(qualityFloor))}–${Math.round(Number(qualityCeiling))}`
+        : "Quality range unknown",
+    });
+  }
+  for (const name of row.traceMaterials ?? row.sources?.flatMap((source) => source.traceMaterials ?? []) ?? []) {
+    const trimmed = name.trim();
+    if (trimmed && !traces.has(trimmed.toLowerCase())) {
+      traces.set(trimmed.toLowerCase(), {
+        name: trimmed,
+        compositionRangeLabel: "Composition range unknown",
+        qualityRangeLabel: "Quality range unknown",
+      });
+    }
+  }
+  return [...traces.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function buildOccurrenceDisplay(
+  row: Parameters<typeof getStaticEncounterRankingRow>[0],
+  index: StaticMiningIndex | null,
+  materialKey = getStaticMaterialKey(row),
+): MaterialOccurrenceDisplay {
+  const traceMaterials = formatTraceMaterials(row);
+  const traceMaterialsLabel = traceMaterials.length > 0
+    ? traceMaterials.map((trace) => `${trace.name} · ${trace.compositionRangeLabel} · ${trace.qualityRangeLabel}`).join(", ")
+    : "None indexed";
+  if (usesSpecificLocationOccurrence(materialKey)) {
+    return {
+      mode: "legacy",
+      primaryRockShareLabel: "Not applicable",
+      spawnRollProbabilityLabel: "Not applicable",
+      locationRankLabel: "Location-specific",
+      methodAvailabilityLabel: formatStaticMethodFit(row),
+      traceMaterialsLabel,
+      traceMaterials,
+    };
+  }
+  const ranking = getStaticEncounterRankingRow(row, index);
+  return {
+    mode: "probability",
+    primaryRockShareLabel: formatMiningProbability(primaryRockShare(row)),
+    spawnRollProbabilityLabel: formatMiningProbability(row.providerWeightedSignal ?? row.sourceProbabilitySum),
+    locationRankLabel: ranking ? `#${ranking.encounterRank} of ${ranking.encounterRankOutOf}` : "Not ranked",
+    methodAvailabilityLabel: formatStaticMethodFit(row),
+    traceMaterialsLabel,
+    traceMaterials,
+  };
+}
+
+function occurrenceRankWeight(row: Parameters<typeof getStaticEncounterRankingRow>[0], index: StaticMiningIndex | null): number | undefined {
+  const ranking = getStaticEncounterRankingRow(row, index);
+  if (!ranking?.encounterRank || !ranking.encounterRankOutOf) return undefined;
+  return ((ranking.encounterRankOutOf - ranking.encounterRank + 1) / ranking.encounterRankOutOf) * 100;
+}
+
 export function formatEncounterTier(value: number | null | undefined): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return "Not indexed";
   return encounterSignalFromWeight(value);
@@ -339,7 +452,10 @@ export function buildDemandRows(
     const demandMaterial = demandMaterialByKey.get(key);
     const targetThreshold = demandMaterial?.selectedQuality ?? routeScoreEntry?.selectedQuality ?? routeScoreEntry?.signals.selectedQuality ?? 800;
     const densityScore = staticRow ? getStaticDensityScore(staticRow, staticMiningIndex) ?? routeScoreEntry?.signals.encounterPct : routeScoreEntry?.signals.encounterPct;
-    const sw = densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
+    const occurrence = staticRow ? buildOccurrenceDisplay(staticRow, staticMiningIndex, key) : null;
+    const sw = staticRow && occurrence?.mode === "probability"
+      ? occurrenceRankWeight(staticRow, staticMiningIndex)
+      : densityScore ?? (covered ? routeScoreEntry?.signals.sourceWeight : undefined);
     const signal = covered ? encounterSignalFromWeight(sw) : "Unknown";
     const st = covered ? encounterStatusFromSignal(signal) : "missing";
     const rowStatus = st === "none" ? "low" : st;
@@ -358,6 +474,15 @@ export function buildDemandRows(
       compositionLabel: covered && staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
       sourceStrength: signal,
       sourceWeight: sw,
+      occurrence: occurrence ?? {
+        mode: "legacy",
+        primaryRockShareLabel: "Unknown",
+        spawnRollProbabilityLabel: "Unknown",
+        locationRankLabel: "Not ranked",
+        methodAvailabilityLabel: "Unknown",
+        traceMaterialsLabel: "None indexed",
+        traceMaterials: [],
+      },
       status: rowStatus as "strong" | "moderate" | "low" | "missing",
     });
   }
@@ -380,7 +505,10 @@ export function buildResourceRows(
       const key = getStaticMaterialKey(row);
       const qualityRow = getStaticMaterialQualityRow(row, staticMiningIndex);
       const densityScore = getStaticDensityScore(row, staticMiningIndex);
-      const sourceWeight = densityScore ?? undefined;
+      const occurrence = buildOccurrenceDisplay(row, staticMiningIndex, key);
+      const sourceWeight = occurrence.mode === "probability"
+        ? occurrenceRankWeight(row, staticMiningIndex)
+        : densityScore ?? undefined;
       const sourceStrength = sourceStrengthFromWeight(sourceWeight);
       const qualitySourceName = qualityRow?.qualityDistributionSourceName ?? qualityRow?.qualityDistributionSourceNames?.[0] ?? row.qualityDistributionSourceNames?.[0];
       const qualityOverrideApplied = qualityRow?.qualityOverrideApplied ?? row.qualityOverrideApplied;
@@ -407,7 +535,10 @@ export function buildResourceRows(
         compositionLabel: formatCompositionYield(row.compositionAveragePercentage),
         sourceStrength: encounterSignalFromWeight(sourceWeight),
         sourceWeight,
-        sourceTitle: `Encounter tier uses indexed density ${formatStaticEncounterSignal(row)}. Method mix share for ${displayMiningMethodLabel(row.resolvedMineableClass)} is ${formatStaticMethodFit(row)}. Sources: ${row.sourceCount}. ${qualityDetails}. ${compositionDetails}`,
+        occurrence,
+        sourceTitle: occurrence.mode === "probability"
+          ? `Primary share: ${occurrence.primaryRockShareLabel} of primary rocks in this mining pool are ${row.materialName}. Spawn roll: ${occurrence.spawnRollProbabilityLabel} is the chance that one provider roll selects both this pool and ${row.materialName}. Rank: ${occurrence.locationRankLabel} among locations using the same mining method. These are game-data weights, not a guarantee about scanned rocks.`
+          : `This material appears only at specific locations, so Moonbreaker keeps its location-specific encounter rating. Sources: ${row.sourceCount}. ${qualityDetails}. ${compositionDetails}`,
         status,
       };
     });
@@ -431,6 +562,15 @@ export function buildResourceRows(
       compositionLabel: "Unknown",
       sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "-",
       sourceWeight: sw,
+      occurrence: {
+        mode: "legacy",
+        primaryRockShareLabel: "Unknown",
+        spawnRollProbabilityLabel: "Unknown",
+        locationRankLabel: "Not ranked",
+        methodAvailabilityLabel: "Unknown",
+        traceMaterialsLabel: "None indexed",
+        traceMaterials: [],
+      },
       status: st,
     };
   });

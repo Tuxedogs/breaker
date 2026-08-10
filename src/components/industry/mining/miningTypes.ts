@@ -58,6 +58,20 @@ export type QualityDisplay =
   | { kind: "none" }
   | { kind: "chance"; label: string };
 
+export type MaterialOccurrenceDisplay = {
+  mode: "probability" | "legacy";
+  primaryRockShareLabel: string;
+  spawnRollProbabilityLabel: string;
+  locationRankLabel: string;
+  methodAvailabilityLabel: string;
+  traceMaterialsLabel: string;
+  traceMaterials: Array<{
+    name: string;
+    compositionRangeLabel: string;
+    qualityRangeLabel: string;
+  }>;
+};
+
 export type DemandRow = {
   name: string;
   key: string;
@@ -69,6 +83,7 @@ export type DemandRow = {
   compositionLabel: string;
   sourceStrength: string;
   sourceWeight: number | undefined;
+  occurrence: MaterialOccurrenceDisplay;
   status: "strong" | "moderate" | "low" | "missing";
 };
 
@@ -82,6 +97,7 @@ export type ResourceRow = {
   compositionLabel: string;
   sourceStrength: string;
   sourceWeight: number | undefined;
+  occurrence: MaterialOccurrenceDisplay;
   sourceTitle?: string;
   status: "strong" | "moderate" | "low" | "none";
 };

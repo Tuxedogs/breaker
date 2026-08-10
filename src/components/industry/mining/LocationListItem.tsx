@@ -14,6 +14,7 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 export function LocationListItem({
+  rank,
   entry,
   selectedMaterials,
   buildQueueMaterialKeys,
@@ -25,6 +26,7 @@ export function LocationListItem({
   onSelect,
   onToggleStar,
 }: {
+  rank?: number;
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
@@ -80,6 +82,7 @@ export function LocationListItem({
       aria-pressed={selected}
       aria-label={`${selected ? "Collapse" : "Select"} ${locationDisplayName} mining location`}
     >
+      {rank !== undefined && <span className="mlist-item-rank" aria-hidden="true">{rank}</span>}
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (
           <img

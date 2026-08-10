@@ -25,12 +25,24 @@ export type StaticLocationMaterialRow = {
   qualityDistributionSourceNames: string[];
   locationClassDistributionShare: number;
   encounterScore: number;
+  primaryRockShare?: number | null;
   materialEncounterScore?: number | null;
   candidateMaterialEncounterRank?: number | null;
   candidateMaterialEncounterRankOutOf?: number | null;
   methodFit?: number | null;
   materialBiasSignal?: number | null;
   providerWeightedSignal?: number | null;
+  traceMaterials?: string[];
+  traceMaterialDetails?: Array<{
+    materialId?: string;
+    materialName?: string;
+    minPercentage?: number;
+    maxPercentage?: number;
+    probability?: number;
+    qualityScale?: number;
+    qualityFloor?: number;
+    qualityCeiling?: number;
+  }>;
   sources?: Array<{
     materialKey?: string;
     materialId?: string;
@@ -40,6 +52,22 @@ export type StaticLocationMaterialRow = {
     sourceProbability?: number;
     relativeProbability?: number;
     groupProbability?: number;
+    materialProbability?: number;
+    traceMaterials?: string[];
+    traceMaterialDetails?: Array<{
+      materialId?: string;
+      materialName?: string;
+      minPercentage?: number;
+      maxPercentage?: number;
+      probability?: number;
+      qualityScale?: number;
+      qualityFloor?: number;
+      qualityCeiling?: number;
+    }>;
+    quality?: {
+      min?: number;
+      max?: number;
+    };
   }>;
 };
 
