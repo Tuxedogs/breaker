@@ -220,6 +220,7 @@
   .mine-page--v2 .location-stat-chip-grid { display: grid; align-items: center; gap: 0; min-height: 48px; padding: 0 13px; border: 1px solid var(--mine-border); border-radius: 6px; background: rgba(10, 21, 32, 0.9); }
   .mine-page--v2 .location-stat-chip-grid--coverage { grid-template-columns: 132px 82px 82px minmax(170px, 1fr); }
   .mine-page--v2 .location-stat-chip-grid--single { grid-template-columns: 132px repeat(6, minmax(0, 1fr)); min-height: 56px; }
+  .mine-page--v2 .location-stat-chip-grid--single.location-stat-chip-grid--probability { grid-template-columns: 132px repeat(7, minmax(0, 1fr)); }
   .mine-page--v2 .location-stat-ledger-label { padding-right: 12px; }
   .mine-page--v2 .location-stat-chip-grid .location-stat-chip { min-width: 0; padding: 0 12px; border: 0; border-left: 1px solid var(--mine-border); background: transparent; }
   .mine-page--v2 .location-stat-chip-grid .location-stat-value { margin-top: 2px; font-size: 13px; }
@@ -234,6 +235,7 @@
   .mine-page--v2 .mining-resource-index-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   .mine-page--v2 .mining-resource-index-table thead th { height: 25px; padding: 0 9px; border-bottom: 1px solid var(--mine-border); color: var(--mine-muted); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-align: left; text-transform: uppercase; }
   .mine-page--v2 .mining-resource-index-table tbody td { height: 40px; padding: 0 9px; border-bottom: 1px solid rgba(142, 175, 203, 0.1); color: #cddae5; font-size: 11px; vertical-align: middle; }
+  .mine-page--v2 .mining-resource-index-table tbody td:has(.mdet-occurrence) { height: 52px; }
   .mine-page--v2 .mining-resource-index-table--continuation tbody td { height: 36px; }
   .mine-page--v2 .mining-resource-index-table tbody tr:last-child td { border-bottom: 0; }
   .mine-page--v2 .mining-resource-col--material { width: 26%; }
@@ -246,6 +248,11 @@
   .mine-page--v2 .mining-material-name-cell img,
   .mine-page--v2 .mining-material-name-cell svg { width: 20px; height: 20px; flex: 0 0 20px; }
   .mine-page--v2 .mdet-method-text { color: #99acbc; font-size: 10px; }
+  .mine-page--v2 .mdet-occurrence strong { color: #d8e5ef; font-size: 11px; }
+  .mine-page--v2 .mdet-occurrence span,
+  .mine-page--v2 .mdet-trace-list,
+  .mine-page--v2 .mdet-method-availability,
+  .mine-page--v2 .location-stat-subvalue { color: var(--mine-muted); font-size: 9px; }
   .mine-page--v2 .mining-source-text { display: inline-flex; align-items: center; gap: 7px; color: #d8e5ef; font-size: 10px; white-space: nowrap; }
   .mine-page--v2 .mining-source-text--high { color: var(--mine-green); }
   .mine-page--v2 .mining-source-text--medium { color: var(--mine-amber); }
