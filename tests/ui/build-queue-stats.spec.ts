@@ -651,6 +651,30 @@ test.describe("Build Queue stats fixture", () => {
     expect(failures).toEqual([]);
   });
 
+  test("Add Inventory preserves the form and stable box ids when a confirmed save must be retried", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${INVENTORY_ADD_MODAL_FIXTURE_PATH}?fail-first=1`, { waitUntil: "domcontentloaded" });
+
+    const dialog = page.getByRole("dialog", { name: "Add Inventory" });
+    const submit = dialog.getByRole("button", { name: "Add to inventory" });
+    await submit.click();
+    await expect(dialog.getByText("Simulated inventory save failure.")).toBeVisible();
+    await expect(dialog.getByRole("region", { name: /Quality group/ })).toHaveCount(2);
+    await expect(dialog.getByRole("spinbutton", { name: /^Box/ })).toHaveCount(6);
+
+    const output = page.locator("[data-fixture-attempts]");
+    const firstAttempts = JSON.parse((await output.getAttribute("data-fixture-attempts")) ?? "[]") as Array<Array<{ id: string }>>;
+    expect(firstAttempts).toHaveLength(1);
+
+    await submit.click();
+    await expect.poll(async () => page.locator("[data-fixture-emitted]").getAttribute("data-fixture-emitted")).not.toBe("[]");
+    const finalAttempts = JSON.parse((await output.getAttribute("data-fixture-attempts")) ?? "[]") as Array<Array<{ id: string }>>;
+    expect(finalAttempts).toHaveLength(2);
+    expect(finalAttempts[1].map((entry) => entry.id)).toEqual(finalAttempts[0].map((entry) => entry.id));
+    expect(failures).toEqual([]);
+  });
+
   test("renders identity-only headers + consolidated component statistics for ship and FPS components", async ({ page }) => {
     const failures = installFailureGuards(page);
     const externalApiRequests: string[] = [];

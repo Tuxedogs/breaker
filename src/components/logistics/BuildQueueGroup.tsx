@@ -1042,7 +1042,7 @@ interface Props {
   onUpdateAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
   onAllocationOwnerHighlightChange?: (itemId: string | null) => void;
-  onQuickAddInventory: (entries: InventoryEntry[]) => void;
+  onQuickAddInventory: (entries: InventoryEntry[]) => void | Promise<void>;
   iconMode: FittingIconMode;
 }
 
@@ -1093,8 +1093,8 @@ export default function BuildQueueGroup({
     setQuickAddTarget(null);
   }
 
-  function handleQuickAddSave(entries: InventoryEntry[]) {
-    onQuickAddInventory(entries);
+  async function handleQuickAddSave(entries: InventoryEntry[]) {
+    await onQuickAddInventory(entries);
     closeQuickAdd();
   }
 

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import {
   canMutateInventory,
+  getInventoryAddReadinessBlockReason,
   getInventoryMutationBlockReason,
   getInventoryFreshnessBlockReason,
 } from "../../src/lib/logistics/inventoryFreshness";
@@ -59,5 +60,30 @@ describe("inventory mutation guard", () => {
     const sync = syncedState();
     assert.equal(canMutateInventory(sync, userId, readyContext), true);
     assert.equal(getInventoryMutationBlockReason(sync, userId, readyContext), null);
+  });
+
+  it("allows creating discrete boxes after the general freshness window expires", () => {
+    const sync = syncedState({ lastSuccessfulSyncAt: 1 });
+    assert.ok(getInventoryMutationBlockReason(sync, userId, readyContext));
+    assert.equal(getInventoryAddReadinessBlockReason(sync, userId, readyContext), null);
+  });
+
+  it("still blocks box creation before initial server inventory is ready", () => {
+    const sync = syncedState({
+      status: "pending",
+      hasFetchedServerInventory: false,
+      loadedForUserId: userId,
+    });
+    assert.ok(getInventoryAddReadinessBlockReason(sync, userId, readyContext));
+  });
+
+  it("still blocks box creation for a different authenticated user", () => {
+    const sync = syncedState({ loadedForUserId: "user-b" });
+    assert.ok(getInventoryAddReadinessBlockReason(sync, userId, readyContext));
+  });
+
+  it("allows retrying a failed add when the authenticated server inventory was already loaded", () => {
+    const sync = syncedState({ status: "error", syncError: "Temporary network failure" });
+    assert.equal(getInventoryAddReadinessBlockReason(sync, userId, readyContext), null);
   });
 });
