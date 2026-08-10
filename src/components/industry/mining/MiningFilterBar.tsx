@@ -15,15 +15,19 @@ interface ResourceGroups {
 }
 
 export function MiningScopeActions({
+  exploreActive,
   buildQueueSelectionActive,
   buildQueueMaterials,
   showOnlyStarred,
+  onSelectExplore,
   onSelectBuildQueueMaterials,
   onToggleStarred,
 }: {
+  exploreActive: boolean;
   buildQueueSelectionActive: boolean;
   buildQueueMaterials: Set<string>;
   showOnlyStarred: boolean;
+  onSelectExplore: () => void;
   onSelectBuildQueueMaterials: () => void;
   onToggleStarred: () => void;
 }) {
@@ -32,6 +36,14 @@ export function MiningScopeActions({
   return (
     <div className="mining-filter-rail-actions">
       <div className="mining-scope-switch" role="group" aria-label="Mining location scope">
+        <button
+          type="button"
+          className={`mining-scope-button mining-scope-button--explore${exploreActive ? " mining-scope-button--active" : ""}`}
+          aria-pressed={exploreActive}
+          onClick={onSelectExplore}
+        >
+          Explore
+        </button>
         <button
           type="button"
           className={`mining-scope-button mining-scope-button--queue${buildQueueSelectionActive ? " mining-scope-button--active" : ""}`}
@@ -50,6 +62,7 @@ export function MiningScopeActions({
           onClick={onToggleStarred}
           {...savedTooltip.triggerProps}
         >
+          <span>Saved</span>
           <MiningBookmarkIcon className="mining-scope-button__icon" />
         </button>
       </div>

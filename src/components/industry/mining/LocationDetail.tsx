@@ -341,6 +341,7 @@ export function LocationDetail({
   starred,
   onToggleStar,
   hideHeader = false,
+  contextSummary,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
@@ -351,6 +352,12 @@ export function LocationDetail({
   starred?: boolean;
   onToggleStar?: (e: MouseEvent<HTMLButtonElement>) => void;
   hideHeader?: boolean;
+  contextSummary?: {
+    scopeLabel: string;
+    selectedMaterialCount: number;
+    totalMaterialCount: number;
+    rankedLocationCount: number;
+  };
 }) {
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
@@ -523,6 +530,15 @@ export function LocationDetail({
               {bookmarkTooltip.tooltip}
             </>
           )}
+        </div>
+      )}
+
+      {!hideHeader && contextSummary && (
+        <div className="mining-detail-context" aria-label="Mining view context">
+          <span className="mining-detail-context__item mining-detail-context__item--scope">{contextSummary.scopeLabel}</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.selectedMaterialCount}</strong> selected</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.totalMaterialCount}</strong> materials</span>
+          <span className="mining-detail-context__item"><strong>{contextSummary.rankedLocationCount}</strong> ranked locations</span>
         </div>
       )}
 

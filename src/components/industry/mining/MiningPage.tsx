@@ -446,6 +446,10 @@ export default function MiningModule() {
   function selectBuildQueueMaterials() {
     setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setQueueScope("all-shortfalls"); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
   }
+  function selectExploreMode() {
+    setBuildQueueSelectionActive(false);
+    if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
+  }
   function clearAllFilters() {
     setBuildQueueSelectionActive(false);
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
@@ -473,167 +477,216 @@ export default function MiningModule() {
       : selectedSystemName
         ? `No indexed mining locations are available for ${selectedSystemName}.`
         : "No indexed mining locations are available.";
+  const visibleMaterialCount = visibleResourceGroups.shipAndHarvestable.length
+    + visibleResourceGroups.vehicle.length
+    + visibleResourceGroups.hand.filter((resource) => resource.label.trim().toLowerCase() !== "pure carinite").length;
+  const miningScopeLabel = buildQueueSelectionActive
+    ? "Queue mode"
+    : planner.filters.showOnlyStarred
+      ? "Saved mode"
+      : "Explore mode";
 
   return (
     <div className="mine-page mine-page--v2">
       {hasRecommendationData && (
-        <>
-          <div className="mine-body">
-            <div className="mining-shell">
-              <aside className="mlist-panel mining-left-rail">
-                <div className="mine-browse-header">
-                  <div className="mine-browse-header-copy">
-                    <h1>Mining Locations</h1>
-                    <p>Explore systems, locations and mineral compositions.</p>
-                  </div>
-                  <MiningScopeActions
-                    buildQueueSelectionActive={buildQueueSelectionActive}
-                    buildQueueMaterials={buildQueueMaterials}
-                    showOnlyStarred={planner.filters.showOnlyStarred}
-                    onSelectBuildQueueMaterials={selectBuildQueueMaterials}
-                    onToggleStarred={() => planner.toggleShowOnlyStarred()}
-                  />
-                </div>
-                <div className="mine-browse-section">
-                  <span className="mine-browse-section-label">System</span>
-                  <div className="mine-system-selector" role="group" aria-label="System filters">
-                    {orderedSystemFilters.map((sys) => (
-                      <button
-                        key={sys}
-                        type="button"
-                        className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
-                        aria-pressed={selectedSystemName === sys}
-                        onClick={() => toggleSystem(sys)}
-                      >
-                        {sys}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <MiningFilterBar
-                  selectedMaterials={effectiveSelectedMaterials}
-                  visibleResourceGroups={visibleResourceGroups}
-                  onToggleMaterial={toggleMaterial}
-                />
-                <div className="mlist-browser-section">
-                  <div className="mlist-header">
-                    <span className="mlist-header-label">Ranked Locations</span>
-                    <span className="mlist-header-count">{searchFilteredLocations.length}</span>
-                  </div>
-                  <div className="mlist-header-rank">
-                    {!buildQueueSelectionActive && (
-                      <div className="mlist-mode-hint">
-                        <span className="mlist-mode-hint-tip">Click a location to view details</span>
-                      </div>
-                    )}
-                    {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
-                      <label className="mlist-focus-control">
-                        <span>Priority Focus</span>
-                        <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)}>
-                          <option value="">All queue items</option>
-                          {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
-                        </select>
-                      </label>
-                    )}
-                    {buildQueueSelectionActive && (
-                      <div className="mlist-route-strategy">
-                        <div className="mlist-route-strategy-head">
-                          <span>Route Strategy</span>
-                          <span>Hover or focus for help</span>
-                        </div>
-                        <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
-                          {MINING_COVERAGE_MODES.map((mode) => (
-                            <CoverageModeButton key={mode.value} mode={mode} active={coverageMode === mode.value} onSelect={() => setCoverageMode(mode.value)} />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="mlist-items">
-                    {mobileQueueDemandSatisfied ? (
-                      <div className="mine-empty-state mine-empty-state--queue-covered">
-                        <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
-                      </div>
-                    ) : listLocations.length === 0 ? (
-                      <div className="mine-empty-state">
-                        <p className="mine-empty-text">{emptyStateMessage}</p>
-                        {shouldShowFilteredNoResults && (
-                          <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
-                        )}
-                      </div>
-                    ) : listLocations.map((entry) => {
-                      const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
-                      const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
-                      return (
-                        <Fragment key={getLocationCardKey(entry)}>
-                          <div
-                            className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}
-                          >
-                            <LocationListItem
-                              entry={entry}
-                              selectedMaterials={effectiveMaterialFilterKeys}
-                              buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
-                              locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                              staticMiningIndex={staticMiningIndex}
-                              planetAssetMap={planetAssetMap}
-                              starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
-                              selected={isSelected}
-                              onSelect={() => toggleSelectedLocation(entry.locationKey)}
-                              onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
-                            />
-                            {isMobileViewport && isSelected && (
-                              <div className="mlist-inline-detail">
-                                <LocationDetail
-                                  entry={entry}
-                                  activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
-                                    buildQueueMaterialKeys={effectiveMaterialFilterKeys}
-                                  locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                                  staticMiningIndex={staticMiningIndex}
-                                  planetAssetMap={planetAssetMap}
-                                  starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
-                                  onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
-                                  hideHeader
-                                />
-                              </div>
-                            )}
-                          </div>
-                          {plannedLocation?.isCompletionLocation && <div className="mlist-stop-marker">Coverage complete above this line</div>}
-                        </Fragment>
-                      );
-                    })}
-                    {mobileHiddenAlternateCount > 0 && (
-                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(true)}>
-                        Show {mobileHiddenAlternateCount} alternates
-                      </button>
-                    )}
-                    {showAllLocations && isMobileViewport && buildQueueSelectionActive && coveragePlan && (
-                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(false)}>
-                        Show needed route
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </aside>
+        <div className="mine-body">
+          <header className="mining-command-header">
+            <span className="mining-command-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 4h14v16H5z" />
+                <path d="m8 9 4-3 4 3-4 3-4-3Z" />
+                <path d="M8 15h8" />
+              </svg>
+            </span>
+            <div className="mining-command-copy">
+              <h1>Mining Intelligence</h1>
+              <p>Survey locations, compare material probability, plan the next extraction route.</p>
+            </div>
+          </header>
 
-              <div className="mdet-col mining-detail-column">
-                {!isMobileViewport && effectiveSelectedEntry ? (
-                  <LocationDetail
-                    entry={effectiveSelectedEntry}
-                    activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
-                    buildQueueMaterialKeys={effectiveMaterialFilterKeys}
-                    locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
-                    staticMiningIndex={staticMiningIndex}
-                    planetAssetMap={planetAssetMap}
-                    starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
-                    onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
-                  />
-                ) : !isMobileViewport ? (
-                  <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
-                ) : null}
+          <div className="mining-shell">
+            <aside className="mining-filter-panel" aria-label="Mining filters and constraints">
+              <div className="mining-panel-heading">Filters &amp; constraints</div>
+              <div className="mine-browse-section">
+                <span className="mine-browse-section-label">System</span>
+                <div className="mine-system-selector" role="group" aria-label="System filters">
+                  {orderedSystemFilters.map((sys) => (
+                    <button
+                      key={sys}
+                      type="button"
+                      className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
+                      aria-pressed={selectedSystemName === sys}
+                      onClick={() => toggleSystem(sys)}
+                    >
+                      {sys}
+                    </button>
+                  ))}
+                </div>
               </div>
+              <div className="mining-scope-section">
+                <span className="mine-browse-section-label">Scope</span>
+                <MiningScopeActions
+                  exploreActive={!buildQueueSelectionActive && !planner.filters.showOnlyStarred}
+                  buildQueueSelectionActive={buildQueueSelectionActive}
+                  buildQueueMaterials={buildQueueMaterials}
+                  showOnlyStarred={planner.filters.showOnlyStarred}
+                  onSelectExplore={selectExploreMode}
+                  onSelectBuildQueueMaterials={selectBuildQueueMaterials}
+                  onToggleStarred={() => planner.toggleShowOnlyStarred()}
+                />
+              </div>
+              <MiningFilterBar
+                selectedMaterials={effectiveSelectedMaterials}
+                visibleResourceGroups={visibleResourceGroups}
+                onToggleMaterial={toggleMaterial}
+              />
+            </aside>
+
+            <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
+              <div className="mlist-header">
+                <div className="mlist-header-line">
+                  <span className="mlist-header-label">Ranked locations</span>
+                  <span className="mlist-header-count">{searchFilteredLocations.length}</span>
+                </div>
+                <label className="mining-location-search">
+                  <span className="sr-only">Search mining locations</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="6" />
+                    <path d="m16 16 4 4" />
+                  </svg>
+                  <input
+                    type="search"
+                    value={locationSearch}
+                    onChange={(event) => setLocationSearch(event.target.value)}
+                    placeholder="Search locations..."
+                    aria-label="Search mining locations"
+                  />
+                  {locationSearch && (
+                    <button type="button" onClick={() => setLocationSearch("")} aria-label="Clear location search">&#215;</button>
+                  )}
+                </label>
+              </div>
+              <div className="mlist-browser-section">
+                <div className="mlist-header-rank">
+                  {!buildQueueSelectionActive && (
+                    <div className="mlist-mode-hint">
+                      <span className="mlist-mode-hint-tip">Click a location to view details</span>
+                    </div>
+                  )}
+                  {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
+                    <label className="mlist-focus-control">
+                      <span>Priority Focus</span>
+                      <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)}>
+                        <option value="">All queue items</option>
+                        {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
+                      </select>
+                    </label>
+                  )}
+                  {buildQueueSelectionActive && (
+                    <div className="mlist-route-strategy">
+                      <div className="mlist-route-strategy-head">
+                        <span>Route Strategy</span>
+                        <span>Hover or focus for help</span>
+                      </div>
+                      <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
+                        {MINING_COVERAGE_MODES.map((mode) => (
+                          <CoverageModeButton key={mode.value} mode={mode} active={coverageMode === mode.value} onSelect={() => setCoverageMode(mode.value)} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="mlist-items">
+                  {mobileQueueDemandSatisfied ? (
+                    <div className="mine-empty-state mine-empty-state--queue-covered">
+                      <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
+                    </div>
+                  ) : listLocations.length === 0 ? (
+                    <div className="mine-empty-state">
+                      <p className="mine-empty-text">{emptyStateMessage}</p>
+                      {shouldShowFilteredNoResults && (
+                        <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
+                      )}
+                    </div>
+                  ) : listLocations.map((entry, index) => {
+                    const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
+                    const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
+                    return (
+                      <Fragment key={getLocationCardKey(entry)}>
+                        <div
+                          className={isMobileViewport && isSelected ? "mlist-inline-stack mlist-inline-stack--expanded" : undefined}
+                        >
+                          <LocationListItem
+                            rank={index + 1}
+                            entry={entry}
+                            selectedMaterials={effectiveMaterialFilterKeys}
+                            buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
+                            locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                            staticMiningIndex={staticMiningIndex}
+                            planetAssetMap={planetAssetMap}
+                            starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                            selected={isSelected}
+                            onSelect={() => toggleSelectedLocation(entry.locationKey)}
+                            onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
+                          />
+                          {isMobileViewport && isSelected && (
+                            <div className="mlist-inline-detail">
+                              <LocationDetail
+                                entry={entry}
+                                activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                                buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                                locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                                staticMiningIndex={staticMiningIndex}
+                                planetAssetMap={planetAssetMap}
+                                starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                                onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
+                                hideHeader
+                              />
+                            </div>
+                          )}
+                        </div>
+                        {plannedLocation?.isCompletionLocation && <div className="mlist-stop-marker">Coverage complete above this line</div>}
+                      </Fragment>
+                    );
+                  })}
+                  {mobileHiddenAlternateCount > 0 && (
+                    <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(true)}>
+                      Show {mobileHiddenAlternateCount} alternates
+                    </button>
+                  )}
+                  {showAllLocations && isMobileViewport && buildQueueSelectionActive && coveragePlan && (
+                    <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(false)}>
+                      Show needed route
+                    </button>
+                  )}
+                </div>
+              </div>
+            </aside>
+
+            <div className="mdet-col mining-detail-column">
+              {!isMobileViewport && effectiveSelectedEntry ? (
+                <LocationDetail
+                  entry={effectiveSelectedEntry}
+                  activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                  buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                  locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
+                  staticMiningIndex={staticMiningIndex}
+                  planetAssetMap={planetAssetMap}
+                  starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
+                  onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
+                  contextSummary={{
+                    scopeLabel: miningScopeLabel,
+                    selectedMaterialCount: effectiveMaterialFilterKeys.size,
+                    totalMaterialCount: visibleMaterialCount,
+                    rankedLocationCount: searchFilteredLocations.length,
+                  }}
+                />
+              ) : !isMobileViewport ? (
+                <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
+              ) : null}
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {state.status === "loading" && <div className="mine-status-state"><span className="mine-status-text">Loading recommendations…</span></div>}
