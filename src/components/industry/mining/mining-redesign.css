@@ -260,6 +260,8 @@
   .mine-page--v2 .mining-source-text--missing { color: var(--mine-red); }
   .mine-page--v2 .mdet-source-bar-wrap { display: none; }
   .mine-page--v2 .mdet-mat-score { color: #dceaf4 !important; font-variant-numeric: tabular-nums; }
+  .mine-page--v2 .mining-resource-index-table tbody td:nth-child(4) { color: var(--accent-blue) !important; }
+  .mine-page--v2 .mining-resource-index-table tbody td:nth-child(5) { color: var(--accent-purple) !important; }
   .mine-page--v2 .mdet-mobile-material-list { display: none; }
 }
 
@@ -752,6 +754,14 @@
     font-weight: 600;
   }
 
+  .mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(4) {
+    color: var(--accent-blue) !important;
+  }
+
+  .mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(5) {
+    color: var(--accent-purple) !important;
+  }
+
   .mine-page.mine-page--v2 .mining-resource-index-table--continuation thead th {
     height: 26px;
   }
@@ -774,6 +784,18 @@
   .mine-page.mine-page--v2 .mdet-mat-name {
     font-size: 1rem !important;
     font-weight: 700;
+  }
+
+  .mine-page.mine-page--v2 .mining-material-name-text {
+    margin-top: 5px;
+  }
+
+  .mine-page.mine-page--v2 .mdet-trace-list {
+    margin: 0.12rem 0 0 1.42rem;
+  }
+
+  .mine-page.mine-page--v2 .mdet-trace-copy strong {
+    color: #71879a;
   }
 
   .mine-page.mine-page--v2 .mining-demand-breakdown .mdet-mat-name {
@@ -801,7 +823,11 @@
 
   .mine-page.mine-page--v2 .mining-resource-row,
   .mine-page.mine-page--v2 .mining-resource-row:nth-child(even) {
-    background: transparent;
+    background: rgba(5, 26, 40, 0.52);
+  }
+
+  .mine-page.mine-page--v2 .mining-resource-row:nth-child(even) {
+    background: rgba(5, 26, 40, 0.34);
   }
 
   .mine-page.mine-page--v2 .mining-resource-row:hover {
