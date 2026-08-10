@@ -457,6 +457,10 @@ export default function MiningModule() {
     setSelectedMaterials(new Set());
     setSelectedSystems(new Set());
   }
+  function clearSelectedMaterials() {
+    setBuildQueueSelectionActive(false);
+    setSelectedMaterials(new Set());
+  }
   function toggleSelectedLocation(locationKey: string) {
     if (!isMobileViewport) {
       setSelectedLocationKey(locationKey);
@@ -539,6 +543,7 @@ export default function MiningModule() {
                 selectedMaterials={effectiveSelectedMaterials}
                 visibleResourceGroups={visibleResourceGroups}
                 onToggleMaterial={toggleMaterial}
+                onClearMaterials={clearSelectedMaterials}
               />
             </aside>
 

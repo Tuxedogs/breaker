@@ -1082,8 +1082,11 @@
 }
 
 .mine-page.mine-page--v2 .mining-material-index-head {
+  display: flex;
   min-height: 25px;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   margin: 0 0 8px;
   padding: 0;
   color: var(--mine-intel-copy-muted);
@@ -1092,15 +1095,77 @@
 }
 
 .mine-page.mine-page--v2 .mining-material-index-head strong {
+  display: inline-block;
+  min-width: 2ch;
   color: var(--mine-intel-copy-secondary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
-.mine-page.mine-page--v2 .mining-material-index-head span:last-child {
+.mine-page.mine-page--v2 .mining-material-selection-summary {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.mine-page.mine-page--v2 .mining-material-selection-summary > span {
+  width: 91px;
   color: var(--mine-intel-copy-muted);
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
+  white-space: nowrap;
+}
+
+.mine-page.mine-page--v2 .mining-material-clear-button {
+  width: 58px;
+  min-width: 58px;
+  height: 21px;
+  padding: 0 6px;
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  border-radius: 2px;
+  background: rgba(190, 45, 65, 0.13);
+  color: #f38b9d;
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+.mine-page.mine-page--v2 .mining-material-clear-button:not(:disabled):hover {
+  border-color: rgba(251, 113, 133, 0.72);
+  background: rgba(190, 45, 65, 0.22);
+  color: #ffd5dc;
+}
+
+.mine-page.mine-page--v2 .mining-material-clear-button:focus-visible {
+  outline: 1px solid rgba(251, 113, 133, 0.9);
+  outline-offset: 2px;
+}
+
+.mine-page.mine-page--v2 .mining-material-clear-button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.mine-page.mine-page--v2 .mining-material-subgroup {
+  margin-top: 10px;
+}
+
+.mine-page.mine-page--v2 .mining-material-subgroup-label {
+  display: block;
+  margin: 0 0 5px 1px;
+  color: #607b90;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .mine-page.mine-page--v2 .mining-filter-chips--wrap {
