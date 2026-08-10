@@ -49,7 +49,10 @@ import {
   normalizeBuildQueueName,
   normalizeBuildQueueState,
 } from "../lib/logistics/buildQueues";
-import { getInventoryMutationBlockReason } from "../lib/logistics/inventoryFreshness";
+import {
+  getInventoryAddReadinessBlockReason,
+  getInventoryMutationBlockReason,
+} from "../lib/logistics/inventoryFreshness";
 import {
   hasInventoryImportSyncPayload,
   revertInventoryImportBatchLocalState,
@@ -169,6 +172,7 @@ interface LogisticsStoreState {
   updateLocation: (location: InventoryLocation) => void;
   deleteLocation: (id: string) => void;
   addInventoryEntries: (entries: InventoryEntry[]) => void;
+  addInventoryEntriesAsync: (entries: InventoryEntry[]) => Promise<void>;
   applyInventoryImportBatch: (input: {
     batchId: string;
     additions: InventoryEntry[];
@@ -735,6 +739,20 @@ function getInventoryMutationBlockReasonFromState(
   );
 }
 
+function getInventoryAddReadinessBlockReasonFromState(
+  state: Pick<LogisticsStoreState, "inventorySync">,
+): string | null {
+  const auth = getOnlinePersistenceAuth();
+  return getInventoryAddReadinessBlockReason(
+    state.inventorySync,
+    auth.userId,
+    {
+      hasAccessToken: Boolean(auth.accessToken),
+      hasHydratedPersist: state.inventorySync.hasHydratedPersist,
+    },
+  );
+}
+
 function trackInventoryMutation(
   set: LogisticsSet,
   get: () => LogisticsStoreState,
@@ -860,6 +878,85 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           }
           return { inventoryEntries };
         });
+      },
+      addInventoryEntriesAsync: async (entries) => {
+        if (entries.length === 0) return;
+
+        const initialState = get();
+        const startingSyncError = initialState.inventorySync.syncError;
+        const blockReason = getInventoryAddReadinessBlockReasonFromState(initialState);
+        if (blockReason) {
+          logInventorySyncDev("add inventory boxes blocked", { reason: blockReason, entryCount: entries.length });
+          throw new Error(blockReason);
+        }
+
+        const auth = getOnlinePersistenceAuth();
+        if (!auth.accessToken || !auth.userId) {
+          throw new Error("Authentication required. Sign in again to sync.");
+        }
+
+        const normalizedEntries = entries.map((entry) => normalizeInventoryEntry(entry, initialState.materialTemplates));
+        const locationIds = new Set(normalizedEntries.map((entry) => entry.locationId).filter(Boolean));
+        const locations = initialState.locations.filter((location) => locationIds.has(location.id));
+
+        set((state) => ({
+          inventorySync: {
+            ...state.inventorySync,
+            isSyncing: true,
+            pendingMutationCount: state.inventorySync.pendingMutationCount + 1,
+          },
+        }));
+
+        try {
+          await runOnlinePersistenceMutation(() => syncOnlinePersistenceState(auth.accessToken as string, {
+            locations,
+            inventoryEntries: normalizedEntries,
+          }));
+
+          const currentAuth = getOnlinePersistenceAuth();
+          const currentSync = get().inventorySync;
+          if (currentAuth.userId !== auth.userId || currentSync.loadedForUserId !== auth.userId) {
+            throw new Error("Inventory account changed while boxes were being added. Review the active account and try again.");
+          }
+
+          set((state) => {
+            const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+            const canClearStartingError = !initialState.inventorySync.hasUnsyncedChanges
+              && state.inventorySync.syncError === startingSyncError;
+            return {
+              inventoryEntries: mergeInventoryEntries(
+                state.inventoryEntries,
+                normalizedEntries,
+                state.materialTemplates,
+              ),
+              inventorySync: {
+                ...state.inventorySync,
+                status: canClearStartingError ? "synced" : state.inventorySync.status,
+                isSyncing: pendingMutationCount > 0,
+                pendingMutationCount,
+                lastSyncedAt: new Date().toISOString(),
+                syncError: canClearStartingError ? undefined : state.inventorySync.syncError,
+              },
+            };
+          });
+        } catch (error) {
+          const currentAuth = getOnlinePersistenceAuth();
+          if (currentAuth.userId === auth.userId && get().inventorySync.loadedForUserId === auth.userId) {
+            set((state) => {
+              const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+              return {
+                inventorySync: {
+                  ...state.inventorySync,
+                  status: "error",
+                  isSyncing: pendingMutationCount > 0,
+                  pendingMutationCount,
+                  syncError: error instanceof Error ? error.message : String(error),
+                },
+              };
+            });
+          }
+          throw error instanceof Error ? error : new Error(String(error));
+        }
       },
       applyInventoryImportBatch: async ({ batchId, additions, replaceEntryIds = [], locations = [] }) => {
         const state = get();

@@ -12,7 +12,10 @@ const fixtureTimestamp = '2026-07-16T12:00:00.000Z';
 
 export default function InventoryAddModalFixturePage() {
   const nextId = useRef(1);
+  const saveAttemptCount = useRef(0);
   const [emitted, setEmitted] = useState<InventoryEntry[]>([]);
+  const [attempts, setAttempts] = useState<InventoryEntry[][]>([]);
+  const failFirstSave = new URLSearchParams(window.location.search).get('fail-first') === '1';
   const reloaded = useMemo(
     () => repairInventoryEntryIds(emitted.map((entry) => ({ ...entry }))),
     [emitted],
@@ -20,6 +23,15 @@ export default function InventoryAddModalFixturePage() {
   const material = buildQueueStatsFixture.materials.find((entry) => entry.id === 'iron')
     ?? buildQueueStatsFixture.materials[0];
   const location = buildQueueStatsFixture.locations[0];
+
+  async function handleSave(entries: InventoryEntry[]) {
+    saveAttemptCount.current += 1;
+    setAttempts((current) => [...current, entries]);
+    if (failFirstSave && saveAttemptCount.current === 1) {
+      throw new Error('Simulated inventory save failure.');
+    }
+    setEmitted(entries);
+  }
 
   if (!import.meta.env.DEV || !material || !location) {
     return <Navigate to="/logistics/build-queue" replace />;
@@ -31,7 +43,7 @@ export default function InventoryAddModalFixturePage() {
         target={{ materialId: material.id, displayName: material.name, material }}
         materials={buildQueueStatsFixture.materials}
         locations={buildQueueStatsFixture.locations}
-        onSave={setEmitted}
+        onSave={handleSave}
         onCancel={() => undefined}
         fixture={{
           locationId: location.id,
@@ -45,7 +57,12 @@ export default function InventoryAddModalFixturePage() {
           syncWarning: 'Inventory needs a fresh server sync before this action.',
         }}
       />
-      <output hidden data-fixture-emitted={JSON.stringify(emitted)} data-fixture-reloaded={JSON.stringify(reloaded)} />
+      <output
+        hidden
+        data-fixture-emitted={JSON.stringify(emitted)}
+        data-fixture-reloaded={JSON.stringify(reloaded)}
+        data-fixture-attempts={JSON.stringify(attempts)}
+      />
     </main>
   );
 }

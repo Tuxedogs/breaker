@@ -140,7 +140,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const storeToggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const storeUpdateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
   const storeClearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
-  const storeAddInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
+  const storeAddInventoryEntriesAsync = useLogisticsStore((s) => s.addInventoryEntriesAsync);
 
   const inventoryEntries = fixture?.inventoryEntries ?? storeInventoryEntries;
   const buildQueue = fixture ? fixtureBuildQueue : storeBuildQueue;
@@ -209,12 +209,13 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const clearStaleBuildQueueItemAllocations = isFixture
     ? flagFixtureReadOnly
     : storeClearStaleBuildQueueItemAllocations;
-  const addInventoryEntries = isFixture
-    ? ((entries: Parameters<typeof storeAddInventoryEntries>[0]) => {
+  const addInventoryEntriesAsync = isFixture
+    ? (async (entries: Parameters<typeof storeAddInventoryEntriesAsync>[0]) => {
         void entries;
         setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
+        throw new Error(FIXTURE_READ_ONLY_MESSAGE);
       })
-    : storeAddInventoryEntries;
+    : storeAddInventoryEntriesAsync;
   const reorderBuildQueueItems = isFixture
     ? ((queueId: string, orderedIds: string[]) => setFixtureBuildQueue((current) => reorderActiveQueueEntries(current, queueId, orderedIds)))
     : storeReorderBuildQueueItems;
@@ -459,13 +460,18 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     reorderBuildQueueItems(activeBuildQueueId, orderedIds);
   }
 
-  function handleQuickAddInventory(entries: Parameters<typeof addInventoryEntries>[0]) {
+  async function handleQuickAddInventory(entries: Parameters<typeof addInventoryEntriesAsync>[0]) {
     if (isFixture) {
       setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
-      return;
+      throw new Error(FIXTURE_READ_ONLY_MESSAGE);
     }
-    addInventoryEntries(entries);
-    setInventoryGuardMessage("");
+    try {
+      await addInventoryEntriesAsync(entries);
+      setInventoryGuardMessage("");
+    } catch (error) {
+      setInventoryGuardMessage(error instanceof Error ? error.message : String(error));
+      throw error;
+    }
   }
 
   function handleQueueSelect(id: string) {

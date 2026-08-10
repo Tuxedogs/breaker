@@ -1795,6 +1795,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const setInventoryUi = useLogisticsStore((state) => state.setInventoryUi);
   const setInventorySync = useLogisticsStore((state) => state.setInventorySync);
   const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
+  const addInventoryEntriesAsync = useLogisticsStore((state) => state.addInventoryEntriesAsync);
   const applyInventoryImportBatch = useLogisticsStore((state) => state.applyInventoryImportBatch);
   const undoInventoryImportBatch = useLogisticsStore((state) => state.undoInventoryImportBatch);
   const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
@@ -2415,17 +2416,29 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
     // In new mode, keep the drawer open so users can add multiple stacks quickly.
   }
 
-  const handleAddSave = useCallback((updatedEntries: InventoryEntry[]) => {
-    handleSave(updatedEntries);
-    setAddContext(null);
+  const handleAddSave = useCallback(async (updatedEntries: InventoryEntry[]) => {
+    if (isFixture) {
+      setAddContext(null);
+      return;
+    }
+
+    await addInventoryEntriesAsync(updatedEntries);
+    pushUndoLedger({
+      id: createNewInventoryId(),
+      label: `Added ${updatedEntries.length} box${updatedEntries.length === 1 ? '' : 'es'}`,
+      action: { kind: 'add', entryIds: updatedEntries.map((entry) => entry.id) },
+    });
+    setSuccessNotice({
+      message: `Added ${updatedEntries.length} inventory box${updatedEntries.length === 1 ? '' : 'es'}.`,
+    });
+    setInventoryGuardMessage('');
     if (updatedEntries[0]) {
       const row = updatedEntries[0];
       const locationKey = row.locationId ?? '__unassigned__';
       setExpandedHierarchyKeys((current) => new Set(current).add(`location:${locationKey}`));
     }
-  // handleSave intentionally owns the existing mutation, undo, and freshness behavior.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entries, freshnessBlockReason, isFixture, panel]);
+    setAddContext(null);
+  }, [addInventoryEntriesAsync, isFixture, pushUndoLedger]);
 
   const startManageAtLocation = useCallback((locationId: string) => {
     setManageLocationId(locationId);

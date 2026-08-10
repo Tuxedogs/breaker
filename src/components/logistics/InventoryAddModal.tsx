@@ -5,7 +5,7 @@ import {
   buildInventoryLocationLookup,
   resolveInventoryLocationByInput,
 } from '../../lib/logistics/inventoryLocationOptions';
-import { getInventoryMutationBlockReason } from '../../lib/logistics/inventoryFreshness';
+import { getInventoryAddReadinessBlockReason } from '../../lib/logistics/inventoryFreshness';
 import { getOnlinePersistenceAuth } from '../../lib/userOnlinePersistence';
 import { type MaterialIdentity, useMaterialIdentityIndex } from '../../lib/logistics/materialIdentityIndex';
 import type {
@@ -27,7 +27,7 @@ type Props = {
   target?: InventoryQuickAddTarget;
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
-  onSave: (entries: InventoryEntry[]) => void;
+  onSave: (entries: InventoryEntry[]) => void | Promise<void>;
   onCancel: () => void;
   initialLocationId?: string;
   initialQuality?: number;
@@ -45,6 +45,8 @@ type Props = {
 
 type BoxQuantityDraft = {
   id: string;
+  entryId: string;
+  createdAt: string;
   value: string;
 };
 
@@ -212,6 +214,12 @@ export default function InventoryAddModal({
 
   const nextDraftId = useRef(1);
   const createDraftId = (kind: 'quality' | 'box') => `${kind}-${nextDraftId.current++}`;
+  const createBoxDraft = (value = ''): BoxQuantityDraft => ({
+    id: createDraftId('box'),
+    entryId: fixture?.createEntryId() ?? createNewInventoryId(),
+    createdAt: fixture?.timestamp ?? new Date().toISOString(),
+    value,
+  });
   const [locationId, setLocationId] = useState(fixture?.locationId ?? initialLocationId ?? '');
   const [locationSearch, setLocationSearch] = useState(
     () => locations.find((entry) => entry.id === (fixture?.locationId ?? initialLocationId))?.name ?? '',
@@ -224,15 +232,13 @@ export default function InventoryAddModal({
     return initial.map((group, groupIndex) => ({
       id: `quality-initial-${groupIndex + 1}`,
       quality: group.quality,
-      boxes: group.quantities.map((value, boxIndex) => ({
-        id: `box-initial-${groupIndex + 1}-${boxIndex + 1}`,
-        value,
-      })),
+      boxes: group.quantities.map((value) => createBoxDraft(value)),
     }));
   });
   const [unrefined, setUnrefined] = useState(false);
   const [hasTriedSave, setHasTriedSave] = useState(false);
   const [errorMessage, setErrorMessage] = useState(fixture?.syncWarning ?? '');
+  const [isSaving, setIsSaving] = useState(false);
 
   const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
 
@@ -248,11 +254,11 @@ export default function InventoryAddModal({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onCancel();
+      if (event.key === 'Escape' && !isSaving) onCancel();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onCancel]);
+  }, [isSaving, onCancel]);
 
   function addQualityGroup() {
     setQualityGroups((current) => current.length >= MAX_QUALITY_GROUPS
@@ -260,7 +266,7 @@ export default function InventoryAddModal({
       : [...current, {
           id: createDraftId('quality'),
           quality: '',
-          boxes: [{ id: createDraftId('box'), value: '' }],
+          boxes: [createBoxDraft()],
         }]);
   }
 
@@ -277,7 +283,7 @@ export default function InventoryAddModal({
   function addBox(groupId: string) {
     setQualityGroups((current) => current.map((group) => (
       group.id === groupId
-        ? { ...group, boxes: [...group.boxes, { id: createDraftId('box'), value: '' }] }
+        ? { ...group, boxes: [...group.boxes, createBoxDraft()] }
         : group
     )));
   }
@@ -314,8 +320,8 @@ export default function InventoryAddModal({
       for (const box of group.boxes) {
         const quantity = Number(box.value);
         if (!Number.isFinite(quantity) || quantity <= 0) return null;
-        const timestamp = fixture?.timestamp ?? new Date().toISOString();
-        const id = fixture?.createEntryId() ?? createNewInventoryId();
+        const timestamp = box.createdAt;
+        const id = box.entryId;
 
         if (showUnrefined) {
           const itemKind: InventoryItemKind = unrefined ? 'ore' : 'refined';
@@ -361,25 +367,10 @@ export default function InventoryAddModal({
     return entries.length > 0 ? entries : null;
   }
 
-  function handleSave() {
+  async function handleSave() {
+    if (isSaving) return;
     setHasTriedSave(true);
     setErrorMessage('');
-
-    if (!fixture?.bypassFreshnessGuard) {
-      const auth = getOnlinePersistenceAuth();
-      const blockReason = getInventoryMutationBlockReason(
-        inventorySync,
-        auth.userId,
-        {
-          hasAccessToken: Boolean(auth.accessToken),
-          hasHydratedPersist: inventorySync.hasHydratedPersist,
-        },
-      );
-      if (blockReason) {
-        setErrorMessage(blockReason);
-        return;
-      }
-    }
 
     const entries = buildEntries();
     if (!entries) {
@@ -395,7 +386,30 @@ export default function InventoryAddModal({
       return;
     }
 
-    onSave(entries);
+    if (!fixture?.bypassFreshnessGuard) {
+      const auth = getOnlinePersistenceAuth();
+      const blockReason = getInventoryAddReadinessBlockReason(
+        inventorySync,
+        auth.userId,
+        {
+          hasAccessToken: Boolean(auth.accessToken),
+          hasHydratedPersist: inventorySync.hasHydratedPersist,
+        },
+      );
+      if (blockReason) {
+        setErrorMessage(blockReason);
+        return;
+      }
+    }
+
+    setIsSaving(true);
+    try {
+      await onSave(entries);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   const qualityError = qualityGroups.some((group) => parseQuality(group.quality) === undefined);
@@ -405,12 +419,19 @@ export default function InventoryAddModal({
   }));
 
   return (
-    <div className="bq-inv-quick-backdrop" role="presentation" onMouseDown={onCancel}>
+    <div
+      className="bq-inv-quick-backdrop"
+      role="presentation"
+      onMouseDown={() => {
+        if (!isSaving) onCancel();
+      }}
+    >
       <div
         className="bq-inv-quick-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="bq-inv-quick-title"
+        aria-busy={isSaving}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="bq-inv-quick-head">
@@ -565,8 +586,15 @@ export default function InventoryAddModal({
         </div>
 
         <div className="bq-inv-quick-actions">
-          <button type="button" className="bq-btn" onClick={onCancel}>Cancel</button>
-          <button type="button" className="bq-btn bq-btn--confirm" onClick={handleSave}>Add to inventory</button>
+          <button type="button" className="bq-btn" onClick={onCancel} disabled={isSaving}>Cancel</button>
+          <button
+            type="button"
+            className="bq-btn bq-btn--confirm"
+            onClick={() => void handleSave()}
+            disabled={isSaving}
+          >
+            {isSaving ? 'Adding…' : 'Add to inventory'}
+          </button>
         </div>
       </div>
     </div>
