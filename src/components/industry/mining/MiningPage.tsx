@@ -55,10 +55,10 @@ const debugMiningIdentity = Boolean(
 );
 
 const COVERAGE_MODE_DESCRIPTIONS: Record<MiningCoverageMode, string> = {
-  "complete-set": "Build a multi-stop route. Each next location adds the most queue materials you still need until no location can add more.",
-  "best-single": "Keep the normal ranked list. Locations that cover more selected queue materials appear first, then stronger material fit breaks ties.",
-  "rare-first": "Build a multi-stop route, giving extra priority to needed materials that appear at fewer locations.",
-  "quality-hunt": "Build a multi-stop route and prefer better-ranked material locations while still adding materials you do not yet cover.",
+  "complete-set": "Each next location adds the most queue materials you still need until no location can add more.",
+  "best-single": "Locations that cover more selected queue materials appear first, then stronger material fit breaks ties.",
+  "rare-first": "Give extra priority to needed materials that appear at fewer locations.",
+  "quality-hunt": "Multi-stop route and prefer better-ranked material locations while still adding materials you do not yet cover.",
 };
 
 function CoverageModeButton({
