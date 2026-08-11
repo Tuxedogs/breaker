@@ -22,11 +22,11 @@ function stileronRequest(extra: Record<string, unknown> = {}) {
   };
 }
 
-test("Pyro deep-space child locations normalize into the parent asteroid bucket", () => {
-  assert.equal(normalizeMiningLocationName("Pyro", "Pyro Akirocluster"), "Pyro Deep Space Asteroids");
+test("Pyro source aliases normalize into their canonical location buckets", () => {
+  assert.equal(normalizeMiningLocationName("Pyro", "Pyro Akirocluster"), "Akiro Cluster");
   assert.equal(normalizeMiningLocationName("Pyro", "Pyro RAB-01"), "Pyro Deep Space Asteroids");
   assert.equal(normalizeMiningLocationName("Pyro", "Pyro RMB 02"), "Pyro Deep Space Asteroids");
-  assert.equal(normalizeMiningLocationName("Pyro", "Pyro1"), "Pyro1");
+  assert.equal(normalizeMiningLocationName("Pyro", "Pyro1"), "Pyro I");
 });
 
 test("Stileron resolves canonically without fuzzy source matching", () => {
@@ -38,11 +38,11 @@ test("Stileron resolves canonically without fuzzy source matching", () => {
 });
 
 test("Stileron 900+ uses only quantized outputs at or above 900", async () => {
-  const quantization = JSON.parse(await readFile("public/api/crafting/quality_quantization.json", "utf8")) as Array<{
-    materialKey: string;
+  const quantization = JSON.parse(await readFile("server-data/crafting/reference/quality-quantization.json", "utf8")) as Array<{
+    recordName: string;
     bands: Array<{ start: string; mappedValue: string }>;
   }>;
-  const stileron = quantization.find((row) => row.materialKey === "stileron");
+  const stileron = quantization.find((row) => row.recordName === "Quantization_Stileron");
   assert.deepEqual(
     stileron?.bands.filter((band) => Number(band.start) >= 900).map((band) => Number(band.mappedValue)),
     [947, 972, 1000],
@@ -51,10 +51,11 @@ test("Stileron 900+ uses only quantized outputs at or above 900", async () => {
 
 test("Stileron 900+ quality chance stays absolute and independent from recommendation score", async () => {
   const response = await getRecommendations(stileronRequest());
+  const akiroRoute = response.recommendations.find((entry) => entry.locationName === "Akiro Cluster");
   const route = response.recommendations.find((entry) => entry.locationName === "Pyro Deep Space Asteroids");
   const score = route?.routeScores?.find((entry) => entry.materialKey === "stileron");
 
-  assert.ok(route?.matchedLocationCodes?.includes("Pyro Akirocluster"));
+  assert.ok(akiroRoute?.matchedLocationCodes?.includes("Pyro Akirocluster"));
   assert.ok(route?.matchedLocationCodes?.includes("Pyro Deepspaceasteroids"));
   assert.equal(score?.signals.qualityChance, 0.050957);
   assert.equal(score?.signals.thresholdChance, 0.050957);

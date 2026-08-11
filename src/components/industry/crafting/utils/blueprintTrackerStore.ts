@@ -12,9 +12,6 @@ export const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1
 export const COMPLETED_MISSIONS_STORAGE_KEY = "scintel:blueprint-tracker:completed-missions:v1";
 export const ACQUIRED_BLUEPRINTS_STORAGE_KEY = "scintel:blueprint-tracker:acquired-blueprints:v1";
 export const PINNED_MISSIONS_STORAGE_KEY = "scintel:blueprint-tracker:pinned-missions:v1";
-export const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
-export const MISSION_BLUEPRINT_REWARDS_URL = "/api/missions/mission_blueprint_rewards.json";
-
 export function missionConceptBookmarkId(conceptKey: string): string {
   return `concept:${conceptKey}`;
 }

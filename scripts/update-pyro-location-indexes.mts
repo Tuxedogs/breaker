@@ -3,7 +3,10 @@ import path from "node:path";
 
 type IndexRow = Record<string, any>;
 
-const base = path.resolve(process.env.RECOMMENDATIONS_BASE ?? "public/api/recommendations");
+const base = path.resolve(
+  process.env.RECOMMENDATIONS_BASE
+    ?? path.join(process.env.SCINTEL_API_ROOT ?? "D:/scintel/api", "recommendations"),
+);
 const foundryRecordsRoot = process.env.FOUNDRY_RECORDS_ROOT ?? "D:/scintel/libs/foundry/records";
 const localizationRoot = process.env.SCINTEL_LOCALIZATION_ROOT ?? "D:/scintel/data/Data/Localization/english";
 const pyroProviderRoot = path.join(foundryRecordsRoot, "harvestable/providerpresets/system/pyro");

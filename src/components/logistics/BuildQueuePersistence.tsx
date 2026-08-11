@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { rehydrateBuildQueueItems } from "../../lib/buildQueueRehydration";
-import { getCraftingItems } from "../../lib/craftingData";
+import { getCraftingItemsByBlueprintGuids } from "../../lib/craftingData";
 import { fetchUserBuildQueue } from "../../lib/userBuildQueue";
 import { setBuildQueueAccessToken } from "../../lib/userBuildQueuePersistence";
 import { useLogisticsStore } from "../../stores/logisticsStore";
@@ -18,11 +18,15 @@ export default function BuildQueuePersistence() {
     if (!accessToken) return;
 
     let cancelled = false;
-    Promise.all([
-      fetchUserBuildQueue(accessToken),
-      getCraftingItems(),
-    ])
-      .then(([rows, recipes]) => {
+    fetchUserBuildQueue(accessToken)
+      .then(async (rows) => {
+        const blueprintGuids = rows.map((row) => (
+          row.recipeId.startsWith("craft-") ? row.recipeId.slice("craft-".length) : row.recipeId
+        ));
+        const recipes = await getCraftingItemsByBlueprintGuids(blueprintGuids);
+        return { rows, recipes };
+      })
+      .then(({ rows, recipes }) => {
         if (cancelled) return;
         const hydrated = rehydrateBuildQueueItems(rows, recipes, materialTemplates);
         replaceBuildQueueFromRemote(hydrated.buildQueue, {

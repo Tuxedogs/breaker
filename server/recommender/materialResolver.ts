@@ -119,7 +119,7 @@ export function findMaterialGroup(
     message: `No API source group found for ${requirement.materialName}.`,
     materialId: requirement.materialId,
     materialName: requirement.materialName,
-    path: "public/api/recommendations/material_source_scores.json:materials",
+    path: "server-data/mining/recommender/material-source-scores.json:materials",
   });
   return null;
 }

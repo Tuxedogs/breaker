@@ -7,6 +7,10 @@ import {
   enrichComponentCardRecord,
 } from "./component-card-fitting-identity.mts";
 import { isNonInventoryRecipePart } from "../src/lib/crafting/recipeInputClassification.ts";
+import {
+  getScintelComponentCardSourcePath,
+  getScintelCraftingSourcePath,
+} from "./lib/scintelDatasetSource.mts";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -29,10 +33,10 @@ type MaterialIdentityIndex = {
   }>;
 };
 
-const sourcePath = path.resolve("public", "api", "crafting", "component_card_index.json");
-const blueprintsPath = path.resolve("public", "api", "crafting", "blueprints.json");
-const fpsBlueprintsPath = path.resolve("public", "api", "crafting", "fps", "fps_blueprints.json");
-const materialIdentityPath = path.resolve("public", "api", "crafting", "material_identity_index.json");
+const sourcePath = getScintelComponentCardSourcePath();
+const blueprintsPath = getScintelCraftingSourcePath("blueprints.json");
+const fpsBlueprintsPath = getScintelCraftingSourcePath("fps", "fps_blueprints.json");
+const materialIdentityPath = getScintelCraftingSourcePath("material_identity_index.json");
 const outputRoot = getComponentCardsRoot();
 const byIdRoot = path.join(outputRoot, "by-id");
 

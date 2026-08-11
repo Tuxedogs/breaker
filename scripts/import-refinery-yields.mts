@@ -10,7 +10,7 @@ import type {
 } from "../src/types/refinery";
 
 const SOURCE_PATH = "D:/scintel/data/refinery/UEX - Refineries Yields Bonuses and Workloads.csv";
-const OUTPUT_PATH = "public/api/refinery/refinery_yields.json";
+const OUTPUT_PATH = "server-data/crafting/reference/refinery-yields.json";
 const AUDIT_PATH = "scripts/reports/refinery/refinery_yields_audit.json";
 
 const materialMappings = [

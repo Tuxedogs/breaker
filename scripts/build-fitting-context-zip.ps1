@@ -213,19 +213,6 @@ foreach ($rel in @(
     Copy-RelFile $Moonbreaker $rel $mbRoot | Out-Null
 }
 
-# public/api file list only
-$pubApi = Join-Path $Moonbreaker 'public\api'
-if (Test-Path $pubApi) {
-    $listPath = Join-Path $mbRoot 'public\api\_FILE_LIST.txt'
-    Ensure-Dir (Split-Path $listPath -Parent)
-    Get-ChildItem $pubApi -Recurse -File |
-        ForEach-Object {
-            $rel = $_.FullName.Substring($pubApi.Length).TrimStart('\', '/')
-            $mb = [math]::Round($_.Length / 1MB, 2)
-            "${rel}`t${mb} MB"
-        } | Out-File $listPath -Encoding utf8
-}
-
 # Scintel config/docs/scripts
 foreach ($tree in @('config', 'scripts\ingest', 'scripts\fitting')) {
     $abs = Join-Path $Scintel $tree
@@ -340,7 +327,7 @@ $(
     else { ($ExcludedLarge | Sort-Object -Unique | ForEach-Object { "   - $_" }) -join "`n" }
 )
 
-Also excluded globally: node_modules, dist, build, .git, .env*, raw game files (Data.p4k, Game2.dcb), foundry record dumps, Moonbreaker public/api JSON payloads (file list included instead), server-data/crafting/by-id/** monoliths.
+Also excluded globally: node_modules, dist, build, .git, .env*, raw game files (Data.p4k, Game2.dcb), foundry record dumps, and server-data/crafting/by-id/** detail shards.
 
 Notes:
 - Moonbreaker blueprintSourcesApi.ts not found; craftingBlueprintSourcesApi.ts included instead.

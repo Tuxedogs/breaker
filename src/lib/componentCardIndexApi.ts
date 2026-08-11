@@ -2,10 +2,6 @@ import { apiUrl } from "@/lib/apiUrl";
 import { parseJsonResponse } from "@/lib/safeJson";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { validateComponentCatalogGeneration } from "@/lib/componentCatalogGeneration";
-import {
-  clearComponentCardIndexMonolithCache,
-  getComponentCardIndexFromMonolith,
-} from "@/lib/componentCardIndex";
 
 const COMPONENT_CARDS_INDEX_URL = "/api/crafting/component-cards/index";
 const COMPONENT_CARDS_FACETS_URL = "/api/crafting/component-cards/facets";
@@ -140,17 +136,9 @@ export async function resolveComponentCardById(
 }
 
 export async function getComponentCardIndex(): Promise<ComponentCardIndex> {
-  try {
-    return await getComponentCardIndexFromApi();
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      console.warn("[component-card-index] API load failed; falling back to monolith.", error);
-    }
-    return getComponentCardIndexFromMonolith();
-  }
+  return getComponentCardIndexFromApi();
 }
 
 export function clearComponentCardIndexCache(): void {
   componentCardIndexPromise = null;
-  clearComponentCardIndexMonolithCache();
 }

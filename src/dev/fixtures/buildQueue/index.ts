@@ -92,13 +92,6 @@ export const componentCardBrowseResponse = {
   generatedAt: componentCardSourceGeneratedAt,
 };
 
-export const componentCardMonolithResponse = {
-  schemaVersion: 1,
-  generatedAt: componentCardSourceGeneratedAt,
-  sourceRecordCount: { vehicle: 7, fps: 5, total: 12 },
-  records: componentCardRecords,
-  facets: componentCardFacetsSource.facets,
-};
 export const recipeShards = new Map<string, unknown>([
   ["db3f4c97-8d40-4b36-b397-452dea1594fc", fr66Recipe],
   ["ba842720-ad32-4d53-8f56-992bacb1fc45", ad5bRecipe],
@@ -113,22 +106,30 @@ export const recipeShards = new Map<string, unknown>([
   ["9b4499d4-b54c-4eb9-b661-e65f3d0f501d", snowBlindRecipe],
   ["9585b0dc-b660-4e2a-9136-0092af1e72c1", js300Recipe],
 ]);
-export const vehicleRecipeCatalog = [
-  fr66Recipe.record,
-  ad5bRecipe.record,
-  hazardZoneWeaponRecipe.record,
-  m5aRecipe.record,
-  atlasRecipe.record,
-  snowBlindRecipe.record,
-  js300Recipe.record,
-];
-export const fpsRecipeCatalog = [
-  fpsWeaponRecipe.record,
-  fpsArmorRecipe.record,
-  secondWindArmorRecipe.record,
-  secondWindWeaponRecipe.record,
-  cq7Recipe.record,
-];
+export const vehicleRecipeBlueprintGuids = [
+  fr66Recipe,
+  ad5bRecipe,
+  hazardZoneWeaponRecipe,
+  m5aRecipe,
+  atlasRecipe,
+  snowBlindRecipe,
+  js300Recipe,
+].map((recipe) => recipe.record.blueprintGuid);
+export const fpsRecipeBlueprintGuids = [
+  fpsWeaponRecipe,
+  fpsArmorRecipe,
+  secondWindArmorRecipe,
+  secondWindWeaponRecipe,
+  cq7Recipe,
+].map((recipe) => recipe.record.blueprintGuid);
+export const recipeIndexResponse = {
+  schemaVersion: 1,
+  vehicleCount: vehicleRecipeBlueprintGuids.length,
+  fpsCount: fpsRecipeBlueprintGuids.length,
+  vehicleBlueprintGuids: vehicleRecipeBlueprintGuids,
+  fpsBlueprintGuids: fpsRecipeBlueprintGuids,
+  blueprintGuids: [...vehicleRecipeBlueprintGuids, ...fpsRecipeBlueprintGuids],
+};
 export { materialIdentityIndex, materialQualityQuantization };
 
 export const fittingMeta = { apiVersion: "1", artifactSchemaVersion: 1, channel: "LIVE", buildId: fixtureMetadata.buildId, generatedAt: "2026-07-12T00:00:00.000Z" } as const;

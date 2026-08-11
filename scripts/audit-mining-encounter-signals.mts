@@ -4,9 +4,10 @@ import path from "node:path";
 type JsonObject = Record<string, unknown>;
 
 const root = process.cwd();
-const materialSourceScoresPath = path.join(root, "public/api/recommendations/material_source_scores.json");
-const materialRankingsPath = path.join(root, "public/api/recommendations/material_encounter_rankings.json");
-const enrichedSourcesPath = path.join(root, "public/api/mining/material_sources_quality_enriched.json");
+const apiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:/scintel/api");
+const materialSourceScoresPath = path.join(apiRoot, "recommendations/material_source_scores.json");
+const materialRankingsPath = path.join(apiRoot, "recommendations/material_encounter_rankings.json");
+const enrichedSourcesPath = path.join(apiRoot, "mining/material_sources_quality_enriched.json");
 const auditReportPath = path.join(root, "scripts/reports/recommendations/encounter_signal_audit.json");
 
 function isFiniteNumber(value: unknown): value is number {

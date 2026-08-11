@@ -145,11 +145,11 @@ export type StaticMiningIndex = {
   locationHierarchy: StaticLocationHierarchyIndex | null;
 };
 
-const LOCATION_INDEX_URL = "/api/recommendations/location_material_index.json";
-const MATERIAL_RANKINGS_URL = "/api/recommendations/material_encounter_rankings.json";
-const MATERIAL_QUALITY_INDEX_URL = "/api/recommendations/material_quality_index.json";
-const LOCATION_DISTRIBUTION_INDEX_URL = "/api/recommendations/location_distribution_index.json";
-const LOCATION_HIERARCHY_INDEX_URL = "/api/recommendations/location_hierarchy_index.json";
+const LOCATION_INDEX_URL = "/api/mining/location-materials";
+const MATERIAL_RANKINGS_URL = "/api/mining/encounter-rankings";
+const MATERIAL_QUALITY_INDEX_URL = "/api/mining/material-quality";
+const LOCATION_DISTRIBUTION_INDEX_URL = "/api/mining/location-distribution";
+const LOCATION_HIERARCHY_INDEX_URL = "/api/mining/location-hierarchy";
 
 let resolvedCache: StaticMiningIndex | null = null;
 let loadPromise: Promise<StaticMiningIndex> | null = null;

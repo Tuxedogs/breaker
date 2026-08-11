@@ -4,6 +4,10 @@ import path from "node:path";
 import { getComponentCardsRoot } from "../server/config/componentCardsRoot.ts";
 import { handleComponentCardsRoute } from "../server/routes/componentCards.routes.ts";
 import { isNonInventoryRecipePart } from "../src/lib/crafting/recipeInputClassification.ts";
+import {
+  getScintelComponentCardSourcePath,
+  getScintelCraftingSourcePath,
+} from "./lib/scintelDatasetSource.mts";
 
 type ComponentCardsIndex = {
   shapedRecordCount?: number;
@@ -63,16 +67,16 @@ const index = JSON.parse(await readFile(path.join(root, "index.json"), "utf8")) 
 const browse = JSON.parse(await readFile(path.join(root, "browse.json"), "utf8")) as BrowsePayload;
 const facets = JSON.parse(await readFile(path.join(root, "facets.json"), "utf8")) as { facets?: unknown };
 const sourceIndex = JSON.parse(
-  await readFile(path.resolve("public", "api", "crafting", "component_card_index.json"), "utf8"),
+  await readFile(getScintelComponentCardSourcePath(), "utf8"),
 ) as SourceIndex;
 const vehicleRecipes = JSON.parse(
-  await readFile(path.resolve("public", "api", "crafting", "blueprints.json"), "utf8"),
+  await readFile(getScintelCraftingSourcePath("blueprints.json"), "utf8"),
 ) as CurrentRecipe[];
 const fpsRecipes = JSON.parse(
-  await readFile(path.resolve("public", "api", "crafting", "fps", "fps_blueprints.json"), "utf8"),
+  await readFile(getScintelCraftingSourcePath("fps", "fps_blueprints.json"), "utf8"),
 ) as CurrentRecipe[];
 const materialIdentity = JSON.parse(
-  await readFile(path.resolve("public", "api", "crafting", "material_identity_index.json"), "utf8"),
+  await readFile(getScintelCraftingSourcePath("material_identity_index.json"), "utf8"),
 ) as MaterialIdentityIndex;
 
 const shapedCount = index.shapedRecordCount ?? 0;

@@ -123,20 +123,13 @@ test("current recipes missing from the upstream snapshot receive catalog cards",
   assert.ok(buildComponentCatalogStatMetrics(fpsWeapon).some((metric) => metric.label === "Weapon Class"));
 });
 
-test("component card browse identities exactly match the current recipe catalogs", () => {
-  const vehicleRecipes = loadJson(
-    "public",
-    "api",
+test("component card browse identities exactly match the current recipe index", () => {
+  const recipeIndex = loadJson(
+    "server-data",
     "crafting",
-    "blueprints.json",
-  ) as Array<{ blueprintGuid?: string }>;
-  const fpsRecipes = loadJson(
-    "public",
-    "api",
-    "crafting",
-    "fps",
-    "fps_blueprints.json",
-  ) as Array<{ blueprintGuid?: string }>;
+    "recipes",
+    "index.json",
+  ) as { vehicleBlueprintGuids?: string[]; fpsBlueprintGuids?: string[] };
   const browse = loadJson(
     "server-data",
     "crafting",
@@ -145,8 +138,11 @@ test("component card browse identities exactly match the current recipe catalogs
   ) as { records?: Array<{ id?: string }> };
 
   const recipeIds = new Set(
-    [...vehicleRecipes, ...fpsRecipes]
-      .map((recipe) => recipe.blueprintGuid?.trim().toLowerCase())
+    [
+      ...(recipeIndex.vehicleBlueprintGuids ?? []),
+      ...(recipeIndex.fpsBlueprintGuids ?? []),
+    ]
+      .map((id) => id.trim().toLowerCase())
       .filter((id): id is string => Boolean(id)),
   );
   const browseIds = new Set(

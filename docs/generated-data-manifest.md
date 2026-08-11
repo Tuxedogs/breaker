@@ -1,127 +1,64 @@
 # Generated Data Manifest
 
-Phase 2.5 adds documentation and metadata only. It does not move files, regenerate data, change schemas, change fetch paths, or change API routes.
+The machine-readable manifest lives at `server/config/generatedDataManifest.ts`. It records data authority, provenance, validation status, runtime ownership, and the current server-only location for generated gameplay data.
 
-The machine-readable manifest lives at `server/config/generatedDataManifest.ts`.
+## Active Data Boundary
 
-## Architecture Note
+`public/api` must remain empty. Moonbreaker browser code uses routed API endpoints for crafting, Build Queue, mining, fitting, refinery reference data, locations, missions, and inventory. Those routes read route-owned `server-data` registries or user/database state.
 
-`public/api` currently contains generated static reference files. These are not true shaped API responses; many are raw or semi-raw generated source datasets that the frontend fetches directly.
+Raw crafting sources are not copied into Moonbreaker. The shaping commands require `SCINTEL_DATASET_ROOT` to identify an accepted Scintel channel snapshot. `SCINTEL_COMPONENT_CARD_SOURCE` is an explicit override when the accepted component-card index is stored outside the default dataset-relative path. Shaping writes only the smaller API registries under `server-data/crafting`.
 
-Future shaped API endpoints should consume generated data server-side and return smaller, route-specific responses. Debug/report artifacts should eventually leave `public/api`. Large files such as `mission_contracts.json`, `mission_blueprint_rewards.json`, `fps_blueprints.json`, and `component_card_index.json` should become server-only once shaped APIs replace direct frontend fetches.
+The following are enforced publication rules:
 
-Future fitting extraction, combat threshold mechanics, SPViewer replacement, and Erkul replacement are not fully covered by this manifest yet. Add explicit future manifest entries before treating any generated fitting/combat dataset as source-authoritative.
+- Never copy a Scintel dataset into Moonbreaker's web root.
+- Never add a browser fallback to `/api/*.json`.
+- Never make build or publication tooling depend on `public/api`.
+- Preserve channel/build identity for fitting and other build-sensitive registries.
+- Keep debug, report, provenance, and unresolved-reference artifacts in Scintel or a server-only report boundary.
+- Run `npm run api:check` before accepting a generated-data publication.
+
+## Current Locations
+
+| Domain | Current source or registry | Browser/API owner |
+|---|---|---|
+| Vehicle recipes | `${SCINTEL_DATASET_ROOT}/crafting/blueprints.json` -> `server-data/crafting/recipes` | `/api/crafting/recipes/*` |
+| FPS recipes | `${SCINTEL_DATASET_ROOT}/crafting/fps/fps_blueprints.json` -> `server-data/crafting/recipes` | `/api/crafting/recipes/*` |
+| Component cards | `${SCINTEL_COMPONENT_CARD_SOURCE:-${SCINTEL_DATASET_ROOT}/crafting/component_card_index.json}` -> `server-data/crafting/component-cards` | `/api/crafting/component-cards/*` |
+| Crafted properties | `server-data/crafting/reference/crafted-properties.json` | `/api/crafting/reference/crafted-properties` |
+| Quality quantization | `server-data/crafting/reference/quality-quantization.json` | `/api/crafting/reference/quality-quantization` |
+| Material quality quantization | `server-data/crafting/reference/material-quality-quantization.json` | `/api/crafting/reference/material-quality-quantization` |
+| Material identity | `server-data/crafting/reference/material-identity-index.json` | `/api/crafting/reference/material-identity` |
+| Refinery yields | `server-data/crafting/reference/refinery-yields.json` | `/api/crafting/reference/refinery-yields` |
+| Blueprint sources | `server-data/crafting/blueprint-sources` | `/api/crafting/blueprint-sources/*` and `/api/crafting/blueprint-rewards/*` |
+| Mission source and projections | `server-data/missions` | `/api/missions/*` |
+| Mining location/material index | `server-data/mining/indexes/location-material.json` | `/api/mining/location-materials` |
+| Mining encounter rankings | `server-data/mining/indexes/material-encounter-rankings.json` | `/api/mining/encounter-rankings` |
+| Mining material quality | `server-data/mining/indexes/material-quality.json` | `/api/mining/material-quality` |
+| Mining location distribution | `server-data/mining/indexes/location-distribution.json` | `/api/mining/location-distribution` |
+| Mining location hierarchy | `server-data/mining/indexes/location-hierarchy.json` | `/api/mining/location-hierarchy` |
+| Lagrange groups and children | `server-data/mining/locations/lagrange-{groups,children}.json` | `/api/mining/lagrange-{groups,children}` |
+| Mining recommender inputs | `server-data/mining/recommender` | `/api/mining/recommendations` |
+| Fitting registries | channel/build-owned fitting server data | `/api/v1/fitting/*` |
+| Inventory and Build Queue user state | database/user persistence | `/api/user/inventory/*` and `/api/user/build-queue` |
 
 ## Classifications
 
-- `runtime API source data`: public generated data currently fetched by runtime code.
-- `canonical generated reference data`: compact generated reference data that can remain stable and public as a fallback.
-- `public static fallback data`: static public data used as a runtime fallback until shaped APIs own the flow.
-- `server-internal source data`: generated data read by server/recommender code and not deployed through Moonbreaker `public/api`.
-- `debug/report artifact`: generated reports, unresolved lists, validation details, or debug-only payloads.
-- `obsolete/unused candidate`: public generated data with no exact runtime fetch found during audit.
-- `unknown/manual review`: referenced or expected data whose generator/status needs confirmation.
+- `runtime API source data`: generated data shaped into or read by a routed API registry.
+- `canonical generated reference data`: authoritative compact reference data served through an API.
+- `server-internal source data`: generated data used only inside server routes/services.
+- `debug/report artifact`: validation, provenance, unresolved-reference, or debug-only output that is not runtime data.
+- `obsolete/unused candidate`: generated output with no supported runtime owner.
+- `unknown/manual review`: referenced or expected data whose authority or publication status still needs confirmation.
 
-## Audit Metadata Fields
+## Audit Metadata
 
-Each entry in `server/config/generatedDataManifest.ts` also includes:
+Each manifest entry records `authority`, `confidence`, external inputs or comparison sources, validation status, size risk, generator provenance, and future API ownership. SPViewer and Erkul remain comparison sources only; they are not gameplay-data authority.
 
-- `authority`: `foundry`, `localization`, `ref_index`, `scintel-inferred`, `manual-override`, `external-import`, `mixed`, or `unknown`.
-- `confidence`: `high`, `medium`, `low`, or `needs-validation`.
-- `externalDependency`: whether the generated file depends on a non-Foundry/non-Scintel source.
-- `externalSources`: source-of-truth external inputs, when present.
-- `comparisonSources`: external tools used only for comparison or validation, not authority.
-- `validationStatus`: `not-needed`, `needs-source-audit`, `needs-mechanics-audit`, `needs-ingame-validation`, or `validated`.
-- `notes`: short caveats for source authority, mechanics, public cleanup, or future ownership.
+## Forbidden Legacy Paths
 
-## Authority Rollup
+The manifest's `legacyForbiddenPaths` documents the retired boundary without presenting former files as current assets:
 
-| Path | Authority | Confidence | Validation | External dependency | Comparison sources |
-|---|---|---|---|---|---|
-| `public/api/crafting/blueprints.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/crafting/blueprint_rewards.json` | foundry | high | not-needed | no |  |
-| `public/api/crafting/component_card_index.json` | mixed | needs-validation | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/crafted_properties.json` | foundry | high | not-needed | no |  |
-| `public/api/crafting/quality_quantization.json` | foundry | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/crafting/material_quality_quantization.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/crafting/material_quality_quantization_debug.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/crafting/material_quality_quantization_report.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/crafting/material_identity_index.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/crafting/unresolved_resource_ids.json` | scintel-inferred | medium | not-needed | no |  |
-| `public/api/crafting/fps/fps_blueprints.json` | mixed | medium | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/weapons.json` | mixed | medium | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/armor.json` | mixed | medium | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/ammo.json` | mixed | medium | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/weapon_families.json` | scintel-inferred | needs-validation | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/armor_families.json` | scintel-inferred | needs-validation | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/crafting/fps/fps_variant_families.json` | scintel-inferred | needs-validation | needs-source-audit | no | SPViewer, Erkul |
-| `public/api/missions/mission_contracts.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/missions/mission_blueprint_rewards.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/missions/blueprint_reward_sources.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/missions/mission_reward_lookups.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/missions/mission_extraction_report.json` | mixed | medium | not-needed | no |  |
-| `public/api/recommendations/location_material_index.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/recommendations/material_encounter_rankings.json` | scintel-inferred | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/recommendations/material_quality_index.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/recommendations/location_distribution_index.json` | scintel-inferred | needs-validation | needs-mechanics-audit | no |  |
-| `public/api/recommendations/location_hierarchy_index.json` | mixed | medium | needs-source-audit | no |  |
-| `public/api/lagrange-groups.generated.json` | localization | medium | needs-source-audit | no |  |
-| `public/api/lagrange-children.generated.json` | ref_index | medium | needs-source-audit | no |  |
-| `public/api/refinery/refinery_yields.json` | external-import | needs-validation | needs-source-audit | yes |  |
-| `D:/scintel/api/recommendations/material_source_scores.json` | scintel-inferred | needs-validation | needs-mechanics-audit | no |  |
-| `D:/scintel/api/mining/material_sources_quality_enriched.json` | mixed | needs-validation | needs-mechanics-audit | no |  |
-| `D:/scintel/api/recommendations/location_metadata.json` | unknown | low | needs-source-audit | no |  |
+- `public/api/**`
+- browser URLs matching `/api/**/*.json`
 
-## Public Generated Files
-
-| Path | Domain | Generator | Size | Runtime usage | Classification | Future visibility | Large? | Debug/provenance? | Safe public removal candidate? |
-|---|---|---|---:|---|---|---|---|---|---|
-| `public/api/crafting/blueprints.json` | crafting | `D:/scintel/scripts/link/build_blueprint_api.py` | 3.63 MB | fetched by `src/lib/craftingData.ts` | runtime API source data | server-only | yes | yes | no |
-| `public/api/crafting/blueprint_rewards.json` | crafting | `D:/scintel/scripts/link/build_blueprint_api.py` | 0.12 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | no | yes | yes |
-| `public/api/crafting/component_card_index.json` | crafting | `D:/scintel/scripts/generate-component-card-index.ts` | 13.18 MB | fetched by `src/lib/componentCardIndex.ts` | runtime API source data | server-only | yes | yes | no |
-| `public/api/crafting/crafted_properties.json` | crafting | `D:/scintel/scripts/link/build_blueprint_api.py` | 0.01 MB | fetched by `src/lib/craftingData.ts` | runtime API source data | public fallback | no | yes | no |
-| `public/api/crafting/quality_quantization.json` | crafting | `build_blueprint_api.py` / `build_mining_material_sources.py` | 0.04 MB | fetched by crafting/logistics helpers | canonical generated reference data | public fallback | no | yes | no |
-| `public/api/crafting/material_quality_quantization.json` | crafting | `D:/scintel/scripts/link/build_material_quality_quantization.py` | 0.01 MB | fetched by build queue and recipe material quality UI | runtime API source data | public fallback | no | no | no |
-| `public/api/crafting/material_quality_quantization_debug.json` | crafting | `D:/scintel/scripts/link/build_material_quality_quantization.py` | 0.05 MB | no runtime fetch found | debug/report artifact | debug/reports | no | yes | yes |
-| `public/api/crafting/material_quality_quantization_report.json` | crafting | `D:/scintel/scripts/link/build_material_quality_quantization.py` | 0.00 MB | no runtime fetch found | debug/report artifact | debug/reports | no | yes | yes |
-| `public/api/crafting/material_identity_index.json` | crafting | `D:/scintel/scripts/link/build_material_identity_index.py` | 0.31 MB | fetched by `src/lib/logistics/materialIdentityIndex.ts` | canonical generated reference data | public fallback | no | yes | no |
-| `public/api/crafting/unresolved_resource_ids.json` | crafting | `D:/scintel/scripts/link/build_blueprint_api.py` | 0.00 MB | no runtime fetch found | debug/report artifact | debug/reports | no | yes | yes |
-| `public/api/crafting/fps/fps_blueprints.json` | FPS crafting | `build_fps_crafting_api.py` / `build_fps_variant_families.py` | 15.55 MB | fetched by `src/lib/craftingData.ts` | runtime API source data | server-only | yes | yes | no |
-| `public/api/crafting/fps/weapons.json` | FPS crafting | `build_fps_crafting_api.py` / `build_fps_variant_families.py` | 3.23 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | yes | yes | yes |
-| `public/api/crafting/fps/armor.json` | FPS crafting | `build_fps_crafting_api.py` / `build_fps_variant_families.py` | 12.08 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | yes | yes | yes |
-| `public/api/crafting/fps/ammo.json` | FPS crafting | `D:/scintel/scripts/link/build_fps_crafting_api.py` | 0.22 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | no | yes | yes |
-| `public/api/crafting/fps/weapon_families.json` | FPS crafting | `D:/scintel/scripts/link/build_fps_variant_families.py` | 3.47 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | yes | yes | yes |
-| `public/api/crafting/fps/armor_families.json` | FPS crafting | `D:/scintel/scripts/link/build_fps_variant_families.py` | 12.59 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | yes | yes | yes |
-| `public/api/crafting/fps/fps_variant_families.json` | FPS crafting | `D:/scintel/scripts/link/build_fps_variant_families.py` | 16.06 MB | no exact runtime fetch found | obsolete/unused candidate | server-only | yes | yes | yes |
-| `public/api/missions/mission_contracts.json` | missions | `D:/scintel/scripts/link/build_mission_blueprint_rewards_api.py` | 47.70 MB | fetched by `src/lib/missionData.ts` | runtime API source data | server-only | yes | yes | no |
-| `public/api/missions/mission_blueprint_rewards.json` | missions | `D:/scintel/scripts/link/build_mission_blueprint_rewards_api.py` | 16.61 MB | fetched by recipe table and blueprint tracker store | runtime API source data | server-only | yes | yes | no |
-| `public/api/missions/blueprint_reward_sources.json` | missions | `D:/scintel/scripts/link/build_mission_blueprint_rewards_api.py` | 4.43 MB | fetched by recipe table and blueprint tracker store | runtime API source data | server-only | yes | no | no |
-| `public/api/missions/mission_reward_lookups.json` | missions | `D:/scintel/scripts/link/build_mission_blueprint_rewards_api.py` | 0.62 MB | fetched by `src/lib/missionData.ts` | runtime API source data | server-only | no | yes | no |
-| `public/api/missions/mission_extraction_report.json` | missions | `D:/scintel/scripts/link/build_mission_blueprint_rewards_api.py` | 0.01 MB | validation only | debug/report artifact | debug/reports | no | yes | yes |
-| `public/api/recommendations/location_material_index.json` | mining/recommendations | `build_mining_static_indexes.py` plus `scripts/update-pyro-location-indexes.mts` | 1.18 MB | fetched by `src/features/mining/staticMiningIndex.ts` | public static fallback data | public fallback | yes | yes | no |
-| `public/api/recommendations/material_encounter_rankings.json` | mining/recommendations | `build_mining_static_indexes.py` plus `scripts/update-pyro-location-indexes.mts` | 0.33 MB | fetched by `src/features/mining/staticMiningIndex.ts` | public static fallback data | public fallback | no | no | no |
-| `public/api/recommendations/material_quality_index.json` | mining/recommendations | `build_mining_static_indexes.py` plus `scripts/update-pyro-location-indexes.mts` | 0.20 MB | fetched by `src/features/mining/staticMiningIndex.ts` | public static fallback data | public fallback | no | no | no |
-| `public/api/recommendations/location_distribution_index.json` | mining/recommendations | `build_mining_static_indexes.py` plus `scripts/update-pyro-location-indexes.mts` | 0.03 MB | fetched by `src/features/mining/staticMiningIndex.ts` | public static fallback data | public fallback | no | no | no |
-| `public/api/recommendations/location_hierarchy_index.json` | mining/recommendations | `D:/scintel/scripts/link/build_mining_static_indexes.py` | 0.00 MB | fetched by `src/features/mining/staticMiningIndex.ts` | public static fallback data | public fallback | no | no | no |
-| `public/api/lagrange-groups.generated.json` | lagrange/locations | `D:/scintel/scripts/generate-lagrange-api.mjs` | 0.01 MB | fetched by `src/features/locations/stantonLagrangeChildren.ts` | public static fallback data | public fallback | no | yes | no |
-| `public/api/lagrange-children.generated.json` | lagrange/locations | `D:/scintel/scripts/generate-lagrange-api.mjs` | 0.37 MB | fetched by `src/features/locations/stantonLagrangeChildren.ts` | public static fallback data | public fallback | no | yes | no |
-| `public/api/refinery/refinery_yields.json` | refinery | `scripts/import-refinery-yields.mts` | 0.01 MB | fetched by `src/lib/refineryData.ts` | canonical generated reference data | public fallback | no | yes | no |
-
-## Server-Only Recommender Sources
-
-These are referenced by `server/config/apiPaths.ts` and recommender loaders. They are not deployed through Moonbreaker `public/api`.
-
-| Path | Domain | Generator | Size | Runtime usage | Classification | Future visibility | Large? | Debug/provenance? | Notes |
-|---|---|---|---:|---|---|---|---|---|---|
-| `D:/scintel/api/recommendations/material_source_scores.json` | mining/recommendations | `D:/scintel/scripts/link/build_material_source_scores.py` | 0.55 MB | read by recommender server loaders | server-internal source data | server-only | no | yes | keep server-side |
-| `D:/scintel/api/mining/material_sources_quality_enriched.json` | mining/recommendations | `D:/scintel/scripts/link/enrich_material_source_quality.py` | 1.49 MB | read by recommender server loaders | server-internal source data | server-only | yes | yes | keep server-side |
-| `D:/scintel/api/recommendations/location_metadata.json` | mining/recommendations | unknown/manual review | unknown | referenced by recommender loaders if present | unknown/manual review | manual review | no | no | referenced but not present in audited local API listing |
-
-## Future Ownership
-
-- Crafting and FPS crafting should be owned by shaped crafting recipe/component APIs.
-- Mission files should be owned by mission browser and blueprint source APIs.
-- Mining static files should remain public fallbacks until the recommender API owns shaped responses.
-- Server-only recommender files should remain internal and feed `server/recommender`.
-- Lagrange files should be owned by a location registry.
-- Refinery yields can remain a compact public fallback or move behind a refinery planner API.
+Historical audit reports may mention the deleted files to explain prior decisions. They must not be used as operational publication instructions.

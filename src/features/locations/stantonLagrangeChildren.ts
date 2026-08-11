@@ -53,8 +53,8 @@ export type ResolvedStantonLagrangeChildren = {
   points: ResolvedStantonLagrangePointChildren[];
 };
 
-const LAGRANGE_GROUPS_URL = "/api/lagrange-groups.generated.json";
-const LAGRANGE_CHILDREN_URL = "/api/lagrange-children.generated.json";
+const LAGRANGE_GROUPS_URL = "/api/mining/lagrange-groups";
+const LAGRANGE_CHILDREN_URL = "/api/mining/lagrange-children";
 
 const BODY_BY_PREFIX: Record<string, { bodyName: string; stantonBody: string }> = {
   HUR: { bodyName: "Hurston", stantonBody: "Stanton1" },
