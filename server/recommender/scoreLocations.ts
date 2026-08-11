@@ -5,17 +5,17 @@ import type {
   RecommenderWarning,
   ScoreContributionDiagnostic,
   ScoredLocation,
-} from "./recommender.types";
-import { resolveLocation } from "./locationResolver";
-import { canonicalMaterialDisplayName, canonicalMaterialKey, findMaterialGroup } from "./materialResolver";
-import { resolveSources } from "./sourceResolver";
-import { addWarning } from "./recommenderWarnings";
+} from "./recommender.types.js";
+import { resolveLocation } from "./locationResolver.js";
+import { canonicalMaterialDisplayName, canonicalMaterialKey, findMaterialGroup } from "./materialResolver.js";
+import { resolveSources } from "./sourceResolver.js";
+import { addWarning } from "./recommenderWarnings.js";
 import {
   isActivePyroMiningLocation,
   isActiveStantonLagrangeMiningLocation,
   isMaterialActiveAtPyroLocation,
   miningLocationMergeKey,
-} from "./locationNormalization";
+} from "./locationNormalization.js";
 
 function qualityFit(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number {
   if (requirement.selectedQuality === undefined) return 1;

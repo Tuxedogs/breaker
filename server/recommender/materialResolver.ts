@@ -1,5 +1,5 @@
-import type { AggregatedRequirement, MaterialSourceGroup, RecommenderWarning } from "./recommender.types";
-import { addWarning } from "./recommenderWarnings";
+import type { AggregatedRequirement, MaterialSourceGroup, RecommenderWarning } from "./recommender.types.js";
+import { addWarning } from "./recommenderWarnings.js";
 
 function normalize(value: string | undefined): string {
   return (value ?? "").trim().toLowerCase();

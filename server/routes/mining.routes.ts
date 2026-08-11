@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { getMiningDataRoot } from "../config/miningDataRoot";
-import { getRecommendations } from "../recommender";
-import type { RecommendRequest } from "../recommender";
+import { getMiningDataRoot } from "../config/miningDataRoot.js";
+import { getRecommendations } from "../recommender/index.js";
+import type { RecommendRequest } from "../recommender/index.js";
 
 export type MiningRouteResult = {
   status: number;

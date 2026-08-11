@@ -1,6 +1,6 @@
-import type { AggregatedRequirement, ApiSource, MaterialRouteScore, Recommendation, RouteTargetabilityLabel, ScoredLocation } from "./recommender.types";
-import { formatRequirementQuantity } from "../shared/quantityFormatter";
-import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver";
+import type { AggregatedRequirement, ApiSource, MaterialRouteScore, Recommendation, RouteTargetabilityLabel, ScoredLocation } from "./recommender.types.js";
+import { formatRequirementQuantity } from "../shared/quantityFormatter.js";
+import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver.js";
 
 function spawnTypeLabel(spawnType: string): string {
   const normalized = spawnType.toLowerCase();

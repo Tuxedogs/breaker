@@ -1,7 +1,7 @@
 import path from "node:path";
 
-import { getCraftingReferenceRoot } from "./craftingReferenceRoot";
-import { getMiningDataRoot } from "./miningDataRoot";
+import { getCraftingReferenceRoot } from "./craftingReferenceRoot.js";
+import { getMiningDataRoot } from "./miningDataRoot.js";
 
 const miningDataRoot = getMiningDataRoot();
 const craftingReferenceRoot = getCraftingReferenceRoot();

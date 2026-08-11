@@ -1,6 +1,6 @@
-import type { AggregatedRequirement, RequirementInput, RecommenderWarning } from "./recommender.types";
-import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver";
-import { addWarning } from "./recommenderWarnings";
+import type { AggregatedRequirement, RequirementInput, RecommenderWarning } from "./recommender.types.js";
+import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver.js";
+import { addWarning } from "./recommenderWarnings.js";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
