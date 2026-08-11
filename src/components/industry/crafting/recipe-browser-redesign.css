@@ -1,5 +1,45 @@
 /* Recipe browser redesign. Page-local layout on the shared operational system. */
 .component-results-browser {
+  /*
+   * Crafting-only surface and highlight system. Keep hue-bearing fills here so
+   * the browser/detail family can be retuned without editing component rules.
+   */
+  --craft-surface-canvas: #050b12;
+  --craft-surface-panel: #08121d;
+  --craft-surface-deep: #060e17;
+  --craft-surface-raised: #0b1824;
+  --craft-surface-row: #091520;
+  --craft-surface-row-alt: #0a1722;
+  --craft-surface-hover: #102231;
+  --craft-surface-selected: #102536;
+  --craft-surface-selected-strong: #153148;
+  --craft-surface-disabled: #080f17;
+  --craft-highlight-primary: #ffb21a;
+  --craft-highlight-primary-soft: rgba(255, 178, 26, 0.11);
+  --craft-highlight-primary-muted: rgba(255, 178, 26, 0.24);
+  --craft-highlight-focus: #67d2ff;
+  --craft-highlight-focus-soft: rgba(103, 210, 255, 0.11);
+  --craft-highlight-positive: #45d89d;
+  --craft-highlight-positive-soft: rgba(69, 216, 157, 0.09);
+  --craft-highlight-danger: #ff6b72;
+  --craft-highlight-danger-soft: rgba(255, 107, 114, 0.1);
+  --craft-border-soft: rgba(111, 148, 176, 0.13);
+  --craft-border-default: rgba(111, 148, 176, 0.22);
+  --craft-border-strong: rgba(132, 174, 205, 0.34);
+  --ops-canvas: var(--craft-surface-canvas);
+  --ops-surface-primary: var(--craft-surface-panel);
+  --ops-surface-deep: var(--craft-surface-deep);
+  --ops-surface-row: var(--craft-surface-row);
+  --ops-surface-hover: var(--craft-surface-hover);
+  --ops-surface-selected: var(--craft-surface-selected);
+  --ops-header-band: var(--craft-surface-raised);
+  --ops-border-soft: var(--craft-border-soft);
+  --ops-border-default: var(--craft-border-default);
+  --ops-focus-ring: var(--craft-highlight-focus);
+  --craft-orange: var(--craft-highlight-primary);
+  --craft-orange-border: var(--craft-highlight-primary-muted);
+  --stat-beneficial: var(--craft-highlight-positive);
+  --stat-detrimental: var(--craft-highlight-danger);
   --recipe-text-body: clamp(var(--app-text-body), 0.48vw, 18px);
   --recipe-text-meta: clamp(var(--app-text-meta), 0.42vw, 1rem);
   --recipe-text-label: clamp(var(--app-text-label), 0.38vw, 14.5px);
@@ -15,6 +55,73 @@
   border-radius: 0;
   background: var(--ops-canvas);
   box-shadow: none;
+}
+
+.component-browser-body > .craft-browser-workspace {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.craft-browser-workspace > .crb2-results {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.craft-detail-drawer-region {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-left: 1px solid var(--craft-highlight-primary);
+  background: var(--craft-surface-canvas);
+  box-shadow: -14px 0 30px rgba(0, 0, 0, 0.22);
+}
+
+.craft-detail-drawer-state {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  background: var(--craft-surface-panel);
+  font-size: var(--recipe-text-body);
+}
+
+.craft-detail-drawer-state--error {
+  color: var(--craft-highlight-danger);
+}
+
+@media (min-width: 1600px) {
+  .craft-browser-workspace--preview {
+    display: grid !important;
+    grid-template-columns: minmax(720px, 1.06fr) minmax(700px, 0.94fr);
+    gap: 10px;
+  }
+
+  .craft-browser-workspace--preview > .crb2-results {
+    overflow: hidden;
+  }
+
+  .craft-browser-workspace--preview .crb2-list {
+    overflow-y: auto;
+    padding-right: 2px;
+    scrollbar-gutter: stable;
+  }
+
+  .craft-browser-workspace--preview .crb2-table-scroll {
+    overflow-x: auto;
+    zoom: 1;
+  }
+
+  .craft-browser-workspace--preview .crb2-table th:first-child {
+    width: clamp(240px, 14vw, 320px);
+  }
 }
 
 .component-results-browser .crb2-toolbar {
@@ -660,7 +767,7 @@
 }
 
 .crb2-table th:first-child {
-  width: clamp(320px, 27vw, 620px);
+  width: clamp(260px, 22vw, 460px);
   text-align: left;
 }
 
@@ -682,7 +789,10 @@
 
 .crb2-table tbody .crb2-table-row--selected {
   background: var(--ops-surface-selected);
-  box-shadow: inset 3px 0 0 var(--ops-focus-ring);
+  box-shadow:
+    inset 3px 0 0 var(--craft-highlight-primary),
+    inset 0 1px 0 var(--craft-highlight-primary-muted),
+    inset 0 -1px 0 var(--craft-highlight-primary-muted);
 }
 
 .crb2-table tbody tr:last-child th,

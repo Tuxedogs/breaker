@@ -332,4 +332,37 @@ test.describe("Crafting browser and detail refactor", () => {
 
     expect(failures).toEqual([]);
   });
+
+  test("lays out drawer statistics in three columns", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${browserPath}?preview=1a85280e-7b8f-4486-a563-17cd2549d268`, {
+        waitUntil: "domcontentloaded",
+      });
+      await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
+      await page.getByRole("tab", { name: "Statistics" }).click();
+
+      const statColumns = page.locator(
+        ".craft-detail-drawer-stats .detail-stat-groups--scannable",
+      );
+      await expect(statColumns).toBeVisible();
+      const layout = await statColumns.evaluate((element) => ({
+        columns: getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length,
+        overflow: element.scrollWidth - element.clientWidth,
+      }));
+      expect(layout.columns).toBe(3);
+      expect(layout.overflow).toBeLessThanOrEqual(1);
+
+      await page.screenshot({
+        path: path.join(screenshotDir, `crafting-drawer-statistics-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+  });
 });
