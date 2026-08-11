@@ -1,5 +1,5 @@
-import type { ApiSource, MaterialSourceGroup, RecommenderWarning } from "./recommender.types";
-import { addWarning } from "./recommenderWarnings";
+import type { ApiSource, MaterialSourceGroup, RecommenderWarning } from "./recommender.types.js";
+import { addWarning } from "./recommenderWarnings.js";
 
 const OVERRIDE_FIELDS = ["locationOverrides", "perLocationOverrides", "locations", "providers"] as const;
 

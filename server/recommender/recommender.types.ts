@@ -1,4 +1,4 @@
-import type { ApiWarning } from "../shared/warnings";
+import type { ApiWarning } from "../shared/warnings.js";
 
 export type MaterialUnitType = "unit" | "SCU" | "scu" | "cscu";
 

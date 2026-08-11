@@ -1,10 +1,10 @@
-import { aggregateRequirements } from "./aggregateRequirements";
-import { buildRequirementInput } from "./buildRequirementInput";
-import { formatRecommendations } from "./formatRecommendations";
-import { loadApiData } from "./loadApiData";
-import { scoreLocations } from "./scoreLocations";
-import type { RecommendRequest, RecommendResponse, RecommenderWarning } from "./recommender.types";
-import { addWarning } from "./recommenderWarnings";
+import { aggregateRequirements } from "./aggregateRequirements.js";
+import { buildRequirementInput } from "./buildRequirementInput.js";
+import { formatRecommendations } from "./formatRecommendations.js";
+import { loadApiData } from "./loadApiData.js";
+import { scoreLocations } from "./scoreLocations.js";
+import type { RecommendRequest, RecommendResponse, RecommenderWarning } from "./recommender.types.js";
+import { addWarning } from "./recommenderWarnings.js";
 
 export async function getRecommendations(request: RecommendRequest): Promise<RecommendResponse> {
   const warnings: RecommenderWarning[] = [];

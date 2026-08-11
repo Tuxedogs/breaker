@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
-import { apiPaths } from "../config/apiPaths";
-import type { ApiSource, MaterialSourceGroup, RecommenderApiData, RecommenderWarning } from "./recommender.types";
-import { canonicalMaterialKey } from "./materialResolver";
-import { addWarning } from "./recommenderWarnings";
+import { apiPaths } from "../config/apiPaths.js";
+import type { ApiSource, MaterialSourceGroup, RecommenderApiData, RecommenderWarning } from "./recommender.types.js";
+import { canonicalMaterialKey } from "./materialResolver.js";
+import { addWarning } from "./recommenderWarnings.js";
 
 async function readJson<T>(filePath: string, warnings: RecommenderWarning[]): Promise<T | null> {
   try {

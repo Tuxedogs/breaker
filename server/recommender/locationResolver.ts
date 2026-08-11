@@ -1,6 +1,6 @@
-import type { ApiSource, RecommenderApiData, RecommenderWarning } from "./recommender.types";
-import { addWarning } from "./recommenderWarnings";
-import { normalizeMiningLocationName, normalizedMiningSystemName } from "./locationNormalization";
+import type { ApiSource, RecommenderApiData, RecommenderWarning } from "./recommender.types.js";
+import { addWarning } from "./recommenderWarnings.js";
+import { normalizeMiningLocationName, normalizedMiningSystemName } from "./locationNormalization.js";
 
 function normalizeLocationCode(value: string): string {
   return value.trim().toUpperCase().replace(/\s+/g, "");

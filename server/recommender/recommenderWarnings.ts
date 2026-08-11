@@ -1,1 +1,1 @@
-export { addWarning } from "../shared/warnings";
+export { addWarning } from "../shared/warnings.js";

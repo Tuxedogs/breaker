@@ -1,4 +1,4 @@
-import type { RecommendRequest, RequirementInput } from "./recommender.types";
+import type { RecommendRequest, RequirementInput } from "./recommender.types.js";
 
 export function buildRequirementInput(request: RecommendRequest): RequirementInput[] {
   if (Array.isArray(request.requiredMaterials)) return request.requiredMaterials;
