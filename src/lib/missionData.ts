@@ -758,132 +758,19 @@ function browserPath(filters: MissionBrowserFilters = {}): string {
   return key ? `/api/missions/browser?${key}` : "/api/missions/browser";
 }
 
-function staticIndexPath(filters: MissionBrowserFilters = {}): string {
-  const key = filterKey(filters);
-  return key ? `/api/missions/mission_browser_index.json?${key}` : "/api/missions/mission_browser_index.json";
-}
-
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
-}
-
-function rewardMatches(family: MissionFamilyView, reward: string): boolean {
-  if (!reward) return true;
-  if (reward === "blueprints") return family.blueprintRewards.length > 0;
-  if (reward === "reputation") return family.reputationRewards.length > 0;
-  if (reward === "credits-fixed") return family.creditRewardStatuses?.includes("fixed") ?? family.creditRewardSummary !== "No credit reward extracted";
-  if (reward === "credits-calculated") return family.creditRewardStatuses?.includes("calculated") ?? family.creditRewardSummary === "Calculated payout";
-  if (reward === "credits-variable") return family.creditRewardStatuses?.includes("variable") ?? family.creditRewardSummary === "Variable payout";
-  if (reward === "credits-formula-unresolved") return family.creditRewardStatuses?.includes("formula_unresolved") ?? family.creditRewardSummary === "Credits formula unresolved";
-  if (reward === "credits-unresolved") return family.creditRewardSummary === "Credits unresolved";
-  if (reward === "credits-none") return family.creditRewardSummary === "No credit reward extracted";
-  if (reward === "items") return family.itemRewardStatus === "resolved";
-  if (reward === "items-unresolved") return family.itemRewardStatus === "unresolved_entityClass" || family.itemRewardStatus === "weighted_unresolved";
-  return true;
-}
-
-function confidenceMatches(family: MissionFamilyView, confidence: string): boolean {
-  if (!confidence) return true;
-  if (confidence === "unresolved") return family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0;
-  if (confidence === "locations") return family.unresolvedLocationTokens.length > 0;
-  if (confidence === "rewards") return family.unresolvedRewardFields.length > 0 || (family.creditRewardStatuses?.includes("unresolved") ?? family.creditRewardSummary === "Credits unresolved");
-  if (confidence === "crime-bounded") return family.crimeStatRequirement === "bounded";
-  if (confidence === "unlawful") return family.lawfulClassification === "unlawful";
-  return true;
-}
-
-function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBrowserFilters): MissionBrowserCatalog {
-  const query = filters.search?.trim().toLowerCase() ?? "";
-  const visibleFamilies = catalog.families.filter((family) => {
-    const faction = filters.faction ?? filters.provider;
-    if (query && !family.searchText.includes(query)) return false;
-    if (faction && family.provider !== faction) return false;
-    if (filters.type && family.missionType !== filters.type) return false;
-    if (filters.repReward && !family.rewardedReputationPaths.some((path) => path.scopeDisplayName === filters.repReward)) return false;
-    if (filters.status && !family.releaseFlags.includes(filters.status)) return false;
-    if (!rewardMatches(family, filters.reward ?? "")) return false;
-    if (!confidenceMatches(family, filters.confidence ?? "")) return false;
-    return true;
-  });
-  const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
-  const visibleConceptKeys = new Set(
-    Object.values(catalog.conceptsByKey ?? {})
-      .filter((concept) => concept.familyKeys.some((familyKey) => visibleFamilyKeys.has(familyKey)))
-      .map((concept) => concept.conceptKey)
-  );
-  const missionBrowseGroups = catalog.missionBrowseGroups
-    .map((group) => ({
-      ...group,
-      reputationScopes: group.reputationScopes
-        .map((scope) => ({
-          ...scope,
-          conceptKeys: scope.conceptKeys?.filter((conceptKey) => visibleConceptKeys.has(conceptKey)),
-          familyKeys: scope.familyKeys?.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
-          missionArchetypes: scope.missionArchetypes
-            .map((archetype) => ({
-              ...archetype,
-              familyKeys: archetype.familyKeys.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
-            }))
-            .filter((archetype) => archetype.familyKeys.length > 0),
-        }))
-        .filter((scope) => scope.missionArchetypes.length > 0),
-    }))
-    .filter((group) => group.reputationScopes.length > 0);
-  const browseViews = catalog.browseViews ? {
-    full: {
-      categories: catalog.browseViews.full.categories
-        .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
-        .filter((category) => category.conceptKeys.length > 0),
-    },
-    factions: catalog.browseViews.factions
-      .map((faction) => ({
-        ...faction,
-        categories: faction.categories
-          .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
-          .filter((category) => category.conceptKeys.length > 0),
-      }))
-      .filter((faction) => faction.categories.length > 0),
-    reputation: missionBrowseGroups,
-  } : undefined;
-  const referencedFamilyKeys = new Set(
-    missionBrowseGroups.flatMap((group) =>
-      group.reputationScopes.flatMap((scope) => scope.missionArchetypes.flatMap((archetype) => archetype.familyKeys))
-    )
-  );
-  const families = visibleFamilies.filter((family) => referencedFamilyKeys.has(family.familyKey));
-  return {
-    ...catalog,
-    families,
-    familiesByKey: Object.fromEntries(families.map((family) => [family.familyKey, family])),
-    conceptsByKey: catalog.conceptsByKey
-      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, catalog.conceptsByKey?.[conceptKey]]).filter((entry): entry is [string, MissionConceptView] => Boolean(entry[1])))
-      : undefined,
-    conceptFamilyVariantFiles: catalog.conceptFamilyVariantFiles
-      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, catalog.conceptFamilyVariantFiles?.[conceptKey]]).filter((entry): entry is [string, string[]] => Boolean(entry[1])))
-      : undefined,
-    missionBrowseGroups,
-    browseViews,
-  };
 }
 
 export function loadMissionData(filters: MissionBrowserFilters = {}): Promise<MissionBrowserCatalog> {
   const key = filterKey(filters);
   if (!missionDataPromises.has(key)) {
     const dynamicPath = browserPath(filters);
-    const staticPath = staticIndexPath(filters);
     const request = fetchJson<MissionBrowserCatalog>(dynamicPath, "mission browser index")
         .then(toBrowserCatalog)
-        .catch((dynamicError: unknown) =>
-          fetchJson<MissionBrowserCatalog>(staticPath, "mission browser index")
-            .then(toBrowserCatalog)
-            .then((catalog) => applyBrowserFilters(catalog, filters))
-            .catch((staticError: unknown) => {
-              throw new Error(`Mission browser shaped data unavailable. ${dynamicPath}: ${errorMessage(dynamicError)}; ${staticPath}: ${errorMessage(staticError)}`);
-            })
-        )
         .catch((error: unknown) => {
           missionDataPromises.delete(key);
-          throw error;
+          throw new Error(`Mission browser API unavailable. ${dynamicPath}: ${errorMessage(error)}`);
         });
     missionDataPromises.set(key, request);
   }

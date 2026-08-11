@@ -17,11 +17,7 @@ interface QualityQuantizationRecord {
   bands: QualityQuantizationBand[];
 }
 
-const QUALITY_QUANTIZATION_URL_CANDIDATES = [
-  "/api/crafting/reference/quality-quantization",
-  "/api/crafting/quality_quantization",
-  "/api/crafting/quality_quantization.json",
-];
+const QUALITY_QUANTIZATION_URL = "/api/crafting/reference/quality-quantization";
 
 
 // ── Shared types ────────────────────────────────────────────────────────────
@@ -359,24 +355,19 @@ async function ensureQualityQuantizationLoaded(): Promise<void> {
 
   if (!qualityQuantizationLoadPromise) {
     qualityQuantizationLoadPromise = (async () => {
-      for (const url of QUALITY_QUANTIZATION_URL_CANDIDATES) {
-        try {
-          const requestUrl = apiUrl(url);
-          const response = await fetch(requestUrl, { cache: "force-cache" });
-          const records = await parseJsonResponse<QualityQuantizationRecord[]>(response, {
-            label: "refinery OCR quality quantization",
-            url: requestUrl,
-          });
-          if (!response.ok) continue;
-
-          if (!Array.isArray(records)) continue;
-
+      try {
+        const requestUrl = apiUrl(QUALITY_QUANTIZATION_URL);
+        const response = await fetch(requestUrl, { cache: "force-cache" });
+        const records = await parseJsonResponse<QualityQuantizationRecord[]>(response, {
+          label: "refinery OCR quality quantization",
+          url: requestUrl,
+        });
+        if (response.ok && Array.isArray(records)) {
           QUALITY_QUANTIZATION_BY_KEY = buildQualityQuantizationMap(records);
-          return;
-        } catch {
-          // Try the next candidate path. If all fail, parsing still works but
-          // quality values are marked for review instead of being quantized.
         }
+      } catch {
+        // OCR still works if the API is unavailable, but qualities are marked
+        // for review instead of being quantized.
       }
     })();
   }

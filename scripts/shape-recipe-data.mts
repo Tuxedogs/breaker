@@ -6,14 +6,14 @@ import {
   classifyRecipeInput,
   getRecipeInputDisplayName,
 } from "../src/lib/crafting/recipeInputClassification.ts";
+import { getScintelCraftingSourcePath } from "./lib/scintelDatasetSource.mts";
 
 type JsonRecord = Record<string, unknown>;
 
-const vehicleSourcePath = path.resolve("public", "api", "crafting", "blueprints.json");
-const fpsSourcePath = path.resolve("public", "api", "crafting", "fps", "fps_blueprints.json");
+const vehicleSourcePath = getScintelCraftingSourcePath("blueprints.json");
+const fpsSourcePath = getScintelCraftingSourcePath("fps", "fps_blueprints.json");
 const outputRoot = getCraftingRecipesRoot();
 const byBlueprintRoot = path.join(outputRoot, "by-blueprint");
-const catalogRoot = path.join(outputRoot, "catalog");
 
 function isGuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
@@ -71,9 +71,10 @@ async function main() {
   ]);
 
   await mkdir(byBlueprintRoot, { recursive: true });
-  await mkdir(catalogRoot, { recursive: true });
 
   const recordFiles: Record<string, string> = {};
+  const vehicleBlueprintGuids: string[] = [];
+  const fpsBlueprintGuids: string[] = [];
   let missingIdCount = 0;
   let duplicateIdCount = 0;
 
@@ -91,6 +92,7 @@ async function main() {
       }
       const relativePath = path.join("by-blueprint", `${guid}.json`).replace(/\\/g, "/");
       recordFiles[guid] = relativePath;
+      (kind === "vehicle" ? vehicleBlueprintGuids : fpsBlueprintGuids).push(guid);
       await writeFile(
         path.join(outputRoot, relativePath),
         `${JSON.stringify({ schemaVersion: 1, kind, record: shapedRecord }, null, 2)}\n`,
@@ -102,29 +104,17 @@ async function main() {
   await shapeRecords(vehicleRecords, "vehicle");
   await shapeRecords(fpsRecords, "fps");
 
-  const shapedVehicleRecords = vehicleRecords.map(shapeRecipeRecord);
-  const shapedFpsRecords = fpsRecords.map(shapeRecipeRecord);
-
-  await writeFile(
-    path.join(catalogRoot, "vehicle.json"),
-    `${JSON.stringify(shapedVehicleRecords, null, 2)}\n`,
-    "utf8",
-  );
-  await writeFile(
-    path.join(catalogRoot, "fps.json"),
-    `${JSON.stringify(shapedFpsRecords, null, 2)}\n`,
-    "utf8",
-  );
-
   const index = {
     schemaVersion: 1 as const,
     generatedAt: new Date().toISOString(),
     sourceGeneratedAt: new Date().toISOString(),
-    vehicleCount: vehicleRecords.length,
-    fpsCount: fpsRecords.length,
+    vehicleCount: vehicleBlueprintGuids.length,
+    fpsCount: fpsBlueprintGuids.length,
     shapedRecordCount: Object.keys(recordFiles).length,
     missingIdCount,
     duplicateIdCount,
+    vehicleBlueprintGuids,
+    fpsBlueprintGuids,
     recordFiles,
   };
 

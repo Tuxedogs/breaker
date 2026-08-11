@@ -77,7 +77,7 @@ function resolvedMaterial(input: {
   };
 }
 
-async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
+async function loadMaterialIndex(warnings: ApiWarning[]) {
   const index = new Map<string, ResolvedApiMaterial>();
   const add = (key: string | null | undefined, material: ResolvedApiMaterial) => {
     const normalized = normalizeToken(key);
@@ -107,7 +107,7 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
     addWarning(warnings, {
       code: "api_material_index_unreadable",
       message: `Unable to load enriched mining sources for material resolution: ${error instanceof Error ? error.message : String(error)}`,
-      path: "public/api/mining/material_sources_quality_enriched.json",
+      path: "server-data/mining/recommender/material-sources-quality-enriched.json",
     });
   }
 
@@ -130,7 +130,7 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
     addWarning(warnings, {
       code: "api_material_index_unreadable",
       message: `Unable to load material source scores for material resolution: ${error instanceof Error ? error.message : String(error)}`,
-      path: "public/api/recommendations/material_source_scores.json",
+      path: "server-data/mining/recommender/material-source-scores.json",
     });
   }
 
@@ -187,7 +187,7 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
     addWarning(warnings, {
       code: "api_material_index_unreadable",
       message: `Unable to load crafting material identity index for material aliases: ${error instanceof Error ? error.message : String(error)}`,
-      path: "public/api/crafting/material_identity_index.json",
+      path: "server-data/crafting/reference/material-identity-index.json",
     });
   }
 
@@ -195,7 +195,7 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
 }
 
 export async function createApiMaterialResolver(warnings: ApiWarning[]) {
-  const index = await loadPublicMaterialIndex(warnings);
+  const index = await loadMaterialIndex(warnings);
 
   return (input: MaterialIdentityInput): ResolvedApiMaterial | null => {
     const candidates = [

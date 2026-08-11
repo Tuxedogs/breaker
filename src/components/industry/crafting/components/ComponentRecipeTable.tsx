@@ -87,6 +87,7 @@ import {
   type DetailStatScanSection,
 } from "@/lib/crafting/detailStatPresentation";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
+import MaterialIcon from "@/components/logistics/MaterialIcon";
 import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
 import {
   getProjectileTravelDistance,
@@ -1445,8 +1446,11 @@ export function DetailMaterialQualityRow({
     return (
       <div className="craft-detail-material-row craft-detail-material-row--unavailable">
         <div className="craft-detail-material-id">
-          <span className="craft-detail-material-slot">{mat.slot}</span>
-          <strong>{materialName}</strong>
+          <MaterialIcon materialName={materialName} size={34} className="craft-detail-material-icon" />
+          <span className="craft-detail-material-copy">
+            <span className="craft-detail-material-slot">{mat.slot}</span>
+            <strong>{materialName}</strong>
+          </span>
         </div>
         <div className="craft-detail-material-required">{requiredAmount}</div>
         <div className="craft-detail-material-target">Unavailable</div>
@@ -1458,8 +1462,11 @@ export function DetailMaterialQualityRow({
   return (
     <div className="craft-detail-material-row">
       <div className="craft-detail-material-id">
-        <span className="craft-detail-material-slot">{mat.slot}</span>
-        <strong>{materialName}</strong>
+        <MaterialIcon materialName={materialName} size={34} className="craft-detail-material-icon" />
+        <span className="craft-detail-material-copy">
+          <span className="craft-detail-material-slot">{mat.slot}</span>
+          <strong>{materialName}</strong>
+        </span>
       </div>
       <div className="craft-detail-material-required">{requiredAmount}</div>
       <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
@@ -2408,6 +2415,8 @@ function RecipeDrawer({
   onToggleBookmark,
   isMissionBookmarked,
   onToggleMissionBookmark,
+  presentation = "page",
+  onClose,
 }: {
   recipe: ComponentRecipe;
   groupRecipes?: ComponentRecipe[];
@@ -2425,6 +2434,8 @@ function RecipeDrawer({
   onToggleBookmark: (recipe: ComponentRecipe) => void;
   isMissionBookmarked: (missionId: string) => boolean;
   onToggleMissionBookmark: (missionId: string) => void;
+  presentation?: "page" | "drawer";
+  onClose?: () => void;
 }) {
   const {
     loading: quantizationLoading,
@@ -2447,12 +2458,17 @@ function RecipeDrawer({
     : recipe.blueprint_id;
   const [selectedRecipeId, setSelectedRecipeId] = useState(initialSelectedRecipeId);
   const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
+  const [drawerTab, setDrawerTab] = useState<"overview" | "materials" | "stats">("materials");
   const [expandedDescriptionRecipeId, setExpandedDescriptionRecipeId] = useState<string | null>(null);
   const descriptionExpanded = expandedDescriptionRecipeId === selectedRecipe.blueprint_id;
 
   useEffect(() => {
     setSelectedRecipeId(initialSelectedRecipeId);
   }, [initialSelectedRecipeId]);
+
+  useEffect(() => {
+    if (presentation === "drawer") setDrawerTab("materials");
+  }, [presentation, selectedRecipe.blueprint_id]);
 
   const buildDefaultMaterialQualities = useCallback(
     (targetRecipe: ComponentRecipe) =>
@@ -2649,6 +2665,218 @@ function RecipeDrawer({
     ? trimItemDescription(selectedComponentCard.description)
     : "";
   const descriptionCanExpand = itemDescription.length > 150 || itemDescription.split("\n").length > 2;
+
+  if (presentation === "drawer") {
+    const detailSearch = new URLSearchParams(location.search);
+    detailSearch.delete("preview");
+    const detailSearchString = detailSearch.toString();
+    const fullDetailTo = {
+      pathname: `/industry/crafting/${selectedRecipe.blueprint_id}`,
+      search: detailSearchString ? `?${detailSearchString}` : "",
+    };
+    const browserReturnTo = `${location.pathname}${detailSearchString ? `?${detailSearchString}` : ""}`;
+
+    return (
+      <section
+        className="craft-detail-stage craft-detail-shell craft-detail-drawer-shell"
+        aria-label={`${displayName} component detail`}
+      >
+        <header className="craft-detail-drawer-header">
+          <div className="craft-detail-drawer-icon-wrap">
+            {heroIconUrl ? (
+              <img
+                src={heroIconUrl}
+                alt=""
+                aria-hidden="true"
+                className="craft-detail-hero-icon"
+              />
+            ) : (
+              <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
+            )}
+          </div>
+          <div className="craft-detail-drawer-identity">
+            {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
+            <h2 className="craft-detail-drawer-title">{displayName}</h2>
+            <div className="craft-summary-chips craft-detail-hero-chips">
+              <span className={`craft-detail-band-pill ${componentRarityClass}`}>
+                Quality {formatCompactNumber(finalProductQuality.averageBand)}
+              </span>
+              {heroMeta.map((value) => (
+                <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
+              ))}
+            </div>
+          </div>
+          <div className="craft-detail-drawer-facts" aria-label="Crafting summary">
+            {heroCraftTime && (
+              <span><span>Craft Time</span><strong>{heroCraftTime}</strong></span>
+            )}
+            <span>
+              <span>Materials</span>
+              <strong>{selectedRecipe.materials.length}</strong>
+            </span>
+          </div>
+          <div className="craft-detail-drawer-header-actions">
+            <Link
+              className="craft-detail-drawer-full-link"
+              to={fullDetailTo}
+              state={{ from: browserReturnTo }}
+            >
+              Open full details
+            </Link>
+            <button
+              type="button"
+              className="craft-detail-drawer-close"
+              aria-label={`Close ${displayName} detail`}
+              onClick={onClose}
+            >
+              ×
+            </button>
+          </div>
+        </header>
+
+        <nav className="craft-detail-drawer-tabs" aria-label="Component detail sections" role="tablist">
+          {(["overview", "materials", "stats"] as const).map((tabName) => (
+            <button
+              key={tabName}
+              type="button"
+              id={`craft-detail-drawer-tab-${tabName}`}
+              role="tab"
+              className={drawerTab === tabName ? "is-active" : undefined}
+              aria-selected={drawerTab === tabName}
+              aria-controls={`craft-detail-drawer-panel-${tabName}`}
+              onClick={() => setDrawerTab(tabName)}
+            >
+              {tabName === "stats" ? "Statistics" : tabName}
+            </button>
+          ))}
+        </nav>
+
+        <div className="craft-detail-drawer-body">
+          {drawerTab === "overview" && (
+            <div
+              className="craft-detail-drawer-overview"
+              id="craft-detail-drawer-panel-overview"
+              role="tabpanel"
+              aria-labelledby="craft-detail-drawer-tab-overview"
+            >
+              {itemDescription && <p className="craft-item-description">{itemDescription}</p>}
+              <EstimatedEffectsPanel
+                fittingDetail={fittingDetail}
+                totalModifiers={totalModifiers}
+                overallModifiers={overallModifiers}
+                overallQualitySource={overallQualitySource}
+                finalProductQuality={finalProductQuality}
+              />
+              <MissionSourcePanel
+                recipe={selectedRecipe}
+                rewardPools={rewardPools}
+                isMissionBookmarked={isMissionBookmarked}
+                onToggleMissionBookmark={onToggleMissionBookmark}
+              />
+            </div>
+          )}
+
+          {drawerTab === "materials" && (
+            <div
+              className="craft-detail-drawer-materials"
+              id="craft-detail-drawer-panel-materials"
+              role="tabpanel"
+              aria-labelledby="craft-detail-drawer-tab-materials"
+            >
+              {showVariantSelector && (
+                <div className="craft-variant-selector" aria-label="Select variant">
+                  <div className="craft-variant-selector-label">Select variant</div>
+                  <div className="craft-variant-list">
+                    {groupRecipes.map((variant) => {
+                      const isSelected = variant.blueprint_id === selectedRecipe.blueprint_id;
+                      return (
+                        <button
+                          key={variant.blueprint_id}
+                          type="button"
+                          className={`craft-variant-row${isSelected ? " is-selected" : ""}`}
+                          aria-pressed={isSelected}
+                          onClick={() => setSelectedRecipeId(variant.blueprint_id)}
+                        >
+                          <span className="craft-variant-name">{getVariantLabel(variant, baseDisplayName)}</span>
+                          {getInlineMeta(variant).length > 0 && (
+                            <span className="craft-variant-meta">{getInlineMeta(variant).join(" / ")}</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              <RightCraftingPanel
+                fittingDetail={fittingDetail}
+                totalModifiers={totalModifiers}
+                overallModifiers={overallModifiers}
+                overallQualitySource={overallQualitySource}
+                finalProductQuality={finalProductQuality}
+              >
+                {quantizationLoading && (
+                  <div className="craft-empty-card">Loading local quality quantization bands...</div>
+                )}
+                {selectedRecipe.materials.map((mat, inputIndex) => {
+                  const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
+                  return (
+                    <DetailMaterialQualityRow
+                      key={`${mat.slot}:${key}`}
+                      mat={mat}
+                      quality={selectedMaterialQualities[key]}
+                      fittingDetail={fittingDetail}
+                      onQualityChange={(quality) =>
+                        setMaterialQualities((prev) => ({ ...prev, [key]: clampQuality(quality) }))
+                      }
+                      getBandsForMaterial={getBandsForMaterial}
+                    />
+                  );
+                })}
+              </RightCraftingPanel>
+            </div>
+          )}
+
+          {drawerTab === "stats" && (
+            <div
+              className="craft-detail-drawer-stats"
+              id="craft-detail-drawer-panel-stats"
+              role="tabpanel"
+              aria-labelledby="craft-detail-drawer-tab-stats"
+            >
+              <ItemSummaryPanel
+                recipe={selectedRecipe}
+                componentCardRecord={selectedComponentCard}
+                fittingDetail={fittingDetail}
+                fittingStatsLoading={fittingStatsLoading}
+                fittingStatsMissing={fittingStatsMissing}
+                fittingStatsError={fittingStatsError}
+                totalModifiers={totalModifiers}
+              />
+            </div>
+          )}
+        </div>
+
+        <footer className="craft-detail-drawer-footer">
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
+            aria-pressed={selectedIsBookmarked}
+            onClick={() => onToggleBookmark(selectedRecipe)}
+          >
+            {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
+          </button>
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+            aria-pressed={selectedIsQueued}
+            onClick={() => onAddToQueue(selectedRecipe, selectedQualitySnapshot, finalProductQuality)}
+          >
+            {selectedIsQueued ? "Queued" : "Add to Queue"}
+          </button>
+        </footer>
+      </section>
+    );
+  }
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
@@ -2848,6 +3076,8 @@ interface Props {
     finalProductQuality: FinalProductQuality,
   ) => void;
   isRecipeQueued?: (recipe: ComponentRecipe) => boolean;
+  presentation?: "page" | "drawer";
+  onClose?: () => void;
 }
 
 export default function ComponentRecipeTable({
@@ -2856,6 +3086,8 @@ export default function ComponentRecipeTable({
   initialBlueprintId,
   onAddToQueue,
   isRecipeQueued = () => false,
+  presentation = "page",
+  onClose,
 }: Props) {
   const initialSidebarState = useMemo(
     () => initialBlueprintId
@@ -3192,7 +3424,10 @@ export default function ComponentRecipeTable({
 
   if (initialBlueprintId) {
     return (
-      <div className="craft-page craft-planner-shell craft-detail-page" ref={shellRef}>
+      <div
+        className={`craft-page craft-planner-shell craft-detail-page${presentation === "drawer" ? " craft-detail-page--drawer" : ""}`}
+        ref={shellRef}
+      >
         {selectedGroup ? (
           <RecipeDrawer
             recipe={selectedGroup.recipes[0]}
@@ -3207,6 +3442,8 @@ export default function ComponentRecipeTable({
             onToggleBookmark={toggleBookmark}
             isMissionBookmarked={(missionId) => bookmarkedMissionIds.has(missionId)}
             onToggleMissionBookmark={toggleMissionBookmark}
+            presentation={presentation}
+            onClose={onClose}
           />
         ) : (
           <section className="craft-detail-stage craft-detail-stage--empty">

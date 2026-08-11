@@ -1,8 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-export const publicMissionFallbackRoot = path.resolve(process.cwd(), "public", "api", "missions");
-
 export function getMissionDataRoot(): string {
   const baseRoot = path.resolve(
     process.env.MISSION_DATA_ROOT ?? path.join(process.cwd(), "server-data", "missions"),

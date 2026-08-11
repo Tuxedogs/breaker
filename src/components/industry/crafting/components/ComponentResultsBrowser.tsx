@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
@@ -198,6 +198,7 @@ function RecipeResultsTable({
                 <tr
                   key={record.id}
                   className={selected ? "crb2-table-row--selected" : undefined}
+                  data-crafting-record-id={record.id}
                   tabIndex={0}
                   aria-selected={selected}
                   onClick={() => onSelect(record)}
@@ -237,11 +238,15 @@ export default function ComponentResultsBrowser({
   records,
   loading,
   error,
+  previewId,
+  onPreviewRecord,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
   error: string | null;
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
+  previewId?: string | null;
+  onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -266,7 +271,22 @@ export default function ComponentResultsBrowser({
     () => readStoredStringSet(SAVED_BLUEPRINT_STORAGE_KEY),
   );
   const [selectedId, setSelectedId] = useState("");
+  const lastPreviewIdRef = useRef<string | null>(previewId ?? null);
   const { session } = useAuthSession();
+
+  useEffect(() => {
+    const previousPreviewId = lastPreviewIdRef.current;
+    lastPreviewIdRef.current = previewId ?? null;
+    if (!previousPreviewId || previewId) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const row = document.querySelector<HTMLElement>(
+        `[data-crafting-record-id="${CSS.escape(previousPreviewId)}"]`,
+      );
+      row?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [previewId]);
 
   useEffect(() => {
     const accessToken = session?.access_token;
@@ -330,7 +350,7 @@ export default function ComponentResultsBrowser({
     if (page > totalPages) setPage(totalPages);
   }, [page, setPage, totalPages]);
 
-  const selectedCandidate = pageRecords.find((record) => record.id === selectedId);
+  const selectedCandidate = pageRecords.find((record) => record.id === (previewId ?? selectedId));
   const preferredRecord = pickPreferredRecipeBrowserSearchRecord(pageRecords, search);
   const shouldPreferWeapon = Boolean(
     search
@@ -354,13 +374,24 @@ export default function ComponentResultsBrowser({
   }, [pageRecords]);
 
   const openRecord = useCallback((record: ComponentCardIndexRecord) => {
+    const nextSearch = new URLSearchParams(location.search);
+    nextSearch.delete("preview");
     navigate({
       pathname: `/industry/crafting/${record.id}`,
-      search: location.search,
+      search: nextSearch.toString() ? `?${nextSearch.toString()}` : "",
     }, {
-      state: { from: location.pathname + location.search },
+      state: {
+        from: `${location.pathname}${nextSearch.toString() ? `?${nextSearch.toString()}` : ""}`,
+      },
     });
   }, [location.pathname, location.search, navigate]);
+
+  const selectRecord = useCallback((record: ComponentCardIndexRecord) => {
+    setSelectedId(record.id);
+    if (window.matchMedia("(min-width: 1600px)").matches) {
+      onPreviewRecord?.(record);
+    }
+  }, [onPreviewRecord]);
 
   if (loading) {
     return (
@@ -400,7 +431,7 @@ export default function ComponentResultsBrowser({
             family={family}
             records={familyRecords}
             selectedId={selectedRecord?.id ?? ""}
-            onSelect={(record) => setSelectedId(record.id)}
+            onSelect={selectRecord}
             onOpen={openRecord}
           />
         ))}

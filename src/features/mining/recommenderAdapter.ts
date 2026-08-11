@@ -423,7 +423,7 @@ function buildStaticRecommendations(
     warnings: [{
       code: "STATIC_RECOMMENDER_FALLBACK",
       message: "Using static recommendation indexes because the recommender POST endpoint is unavailable.",
-      path: "/api/recommendations/location_material_index.json",
+      path: "/api/mining/location-materials",
     }],
     diagnostics: {
       materialCoverage: [...diagnosticsCoverage.values()],
@@ -505,10 +505,9 @@ export async function getMiningRecommendations(
     return getStaticMiningRecommendations(request);
   }
 
-  const url = apiUrl("/api/recommender/recommendations");
+  const url = apiUrl("/api/mining/recommendations");
 
-  // No Vercel recommender route exists in production yet; dev/preview still POSTs via Vite middleware.
-  if (import.meta.env.PROD || recommenderUnavailable) {
+  if (recommenderUnavailable) {
     return getStaticMiningRecommendations(request);
   }
 

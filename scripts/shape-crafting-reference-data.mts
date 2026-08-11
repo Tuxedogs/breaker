@@ -2,24 +2,25 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getCraftingReferenceRoot } from "../server/config/craftingReferenceRoot.ts";
+import { getScintelCraftingSourcePath } from "./lib/scintelDatasetSource.mts";
 
 const outputRoot = getCraftingReferenceRoot();
 
 const sources = [
   {
-    source: path.resolve("public", "api", "crafting", "crafted_properties.json"),
+    source: getScintelCraftingSourcePath("crafted_properties.json"),
     target: "crafted-properties.json",
   },
   {
-    source: path.resolve("public", "api", "crafting", "quality_quantization.json"),
+    source: getScintelCraftingSourcePath("quality_quantization.json"),
     target: "quality-quantization.json",
   },
   {
-    source: path.resolve("public", "api", "crafting", "material_quality_quantization.json"),
+    source: getScintelCraftingSourcePath("material_quality_quantization.json"),
     target: "material-quality-quantization.json",
   },
   {
-    source: path.resolve("public", "api", "crafting", "material_identity_index.json"),
+    source: getScintelCraftingSourcePath("material_identity_index.json"),
     target: "material-identity-index.json",
   },
 ] as const;

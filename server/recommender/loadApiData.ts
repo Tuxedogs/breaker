@@ -83,7 +83,7 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
     addWarning(warnings, {
       code: "api_field_missing",
       message: "mining/material_sources_quality_enriched.json did not expose source groups; using recommendation source scores.",
-      path: "public/api/mining/material_sources_quality_enriched.json",
+      path: "server-data/mining/recommender/material-sources-quality-enriched.json",
     });
   }
 
@@ -91,9 +91,9 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
     materialGroups,
     locationMetadata: locationMetadata ?? {},
     consumedFiles: [
-      "public/api/recommendations/material_source_scores.json",
-      "public/api/mining/material_sources_quality_enriched.json",
-      "public/api/recommendations/location_metadata.json",
+      "server-data/mining/recommender/material-source-scores.json",
+      "server-data/mining/recommender/material-sources-quality-enriched.json",
+      "server-data/mining/recommender/location-metadata.json",
     ],
   };
 }

@@ -9,6 +9,9 @@
     },
     "api/v1/fitting/[...path].ts": {
       "includeFiles": "server-data/fitting/**"
+    },
+    "api/mining/[...path].ts": {
+      "includeFiles": "server-data/mining/**"
     }
   },
   "rewrites": [
@@ -61,10 +64,6 @@
       "destination": "/api/crafting/[...path]"
     },
     {
-      "source": "/api/crafting/recipes/catalog/:kind",
-      "destination": "/api/crafting/[...path]"
-    },
-    {
       "source": "/api/crafting/recipes/batch",
       "destination": "/api/crafting/[...path]"
     },
@@ -79,6 +78,10 @@
     {
       "source": "/api/v1/fitting/:path*",
       "destination": "/api/v1/fitting/[...path]"
+    },
+    {
+      "source": "/api/mining/:path*",
+      "destination": "/api/mining/[...path]"
     },
     {
       "source": "/(.*)",

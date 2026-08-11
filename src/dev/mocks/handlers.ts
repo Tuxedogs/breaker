@@ -3,42 +3,37 @@ import {
   componentCardBrowseResponse,
   componentCardFacetsResponse,
   componentCardIndexResponse,
-  componentCardMonolithResponse,
   componentCards,
   blueprintSourceMissions,
   fittingDetails,
   fittingMeta,
-  fpsRecipeCatalog,
   materialIdentityIndex,
   materialQualityQuantization,
+  recipeIndexResponse,
   recipeShards,
-  vehicleRecipeCatalog,
 } from "../fixtures/buildQueue";
 
-const localStaticMiningPaths = [
-  "/api/lagrange-children.generated.json",
-  "/api/lagrange-groups.generated.json",
-  "/api/recommendations/location_distribution_index.json",
-  "/api/recommendations/location_hierarchy_index.json",
-  "/api/recommendations/location_material_index.json",
-  "/api/recommendations/material_encounter_rankings.json",
-  "/api/recommendations/material_quality_index.json",
+const localMiningApiPaths = [
+  "/api/mining/location-materials",
+  "/api/mining/encounter-rankings",
+  "/api/mining/material-quality",
+  "/api/mining/location-distribution",
+  "/api/mining/location-hierarchy",
+  "/api/mining/lagrange-groups",
+  "/api/mining/lagrange-children",
 ] as const;
 
 export const handlers = [
-  ...localStaticMiningPaths.map((path) => http.get(`*${path}`, () => passthrough())),
+  ...localMiningApiPaths.map((path) => http.get(`*${path}`, () => passthrough())),
+  http.post("*/api/mining/recommendations", () => passthrough()),
   http.get("*/api/crafting/component-cards/index", () => HttpResponse.json(componentCardIndexResponse)),
   http.get("*/api/crafting/component-cards/facets", () => HttpResponse.json(componentCardFacetsResponse)),
   http.get("*/api/crafting/component-cards/browse", () => HttpResponse.json(componentCardBrowseResponse)),
-  http.get("*/api/crafting/component_card_index.json", () => HttpResponse.json(componentCardMonolithResponse)),
-  http.get("*/api/crafting/recipes/catalog/vehicle", () => HttpResponse.json(vehicleRecipeCatalog)),
-  http.get("*/api/crafting/recipes/catalog/fps", () => HttpResponse.json(fpsRecipeCatalog)),
+  http.get("*/api/crafting/recipes/index", () => HttpResponse.json(recipeIndexResponse)),
   http.get("*/api/crafting/reference/material-quality-quantization", () => HttpResponse.json(materialQualityQuantization)),
   http.get("*/api/crafting/reference/material-identity", () => HttpResponse.json(materialIdentityIndex)),
-  http.get("*/api/crafting/material_identity_index.json", () => HttpResponse.json(materialIdentityIndex)),
   http.get("*/api/crafting/blueprint-rewards/release-state", () => HttpResponse.json({ states: {} })),
   http.get("*/api/crafting/blueprint-rewards/missions", () => HttpResponse.json({ missions: [] })),
-  http.get("*/api/missions/mission_blueprint_rewards.json", () => HttpResponse.json([])),
   http.get("*/api/crafting/blueprint-sources", ({ request }) => {
     const blueprintGuid = new URL(request.url).searchParams.get("blueprintGuid")?.trim().toLowerCase() ?? "";
     return HttpResponse.json({ blueprintGuid, missions: blueprintSourceMissions.get(blueprintGuid) ?? [] });

@@ -90,7 +90,7 @@ assert(optimizePerMaterial([], targets) === null, "Empty refinery candidates mus
 assert(findBestSingleRefinery([], targets) === null, "Empty single-refinery candidates must return null.");
 assert(optimizeSelectedRoute([alpha], ["missing"], targets) === null, "Unknown selected refinery IDs must return null.");
 
-const datasetPath = path.resolve("public/api/refinery/refinery_yields.json");
+const datasetPath = path.resolve("server-data/crafting/reference/refinery-yields.json");
 const dataset = JSON.parse(await readFile(datasetPath, "utf8")) as RefineryDataset;
 assert(dataset.schemaVersion === 1, "Generated dataset schema version must be 1.");
 assert(dataset.baseRefineryYield === 0.4, "Generated dataset base yield must be 0.4.");

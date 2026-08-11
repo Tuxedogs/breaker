@@ -13,7 +13,7 @@ const enriched = await readJson(`${API_ROOT}\\mining\\material_sources_quality_e
   materialName?: string;
   sources?: Array<Record<string, any>>;
 }>;
-const quantization = await readJson("public/api/crafting/quality_quantization.json") as Array<{
+const quantization = await readJson("server-data/crafting/reference/quality-quantization.json") as Array<{
   materialKey: string;
   bands: Array<{ start: string; end: string; mappedValue: string }>;
 }>;

@@ -7,7 +7,7 @@ import type {
 import { apiUrl } from "./apiUrl";
 import { parseJsonResponse } from "./safeJson";
 
-const REFINERY_YIELDS_URL = "/api/refinery/refinery_yields.json";
+const REFINERY_YIELDS_URL = "/api/crafting/reference/refinery-yields";
 const MATERIAL_IDENTITY_URL = "/api/crafting/reference/material-identity";
 let refineryDatasetPromise: Promise<RefineryDataset> | null = null;
 let refineryMaterialOptionsPromise: Promise<RefineryCanonicalMaterial[]> | null = null;

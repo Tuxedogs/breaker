@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -321,11 +322,6 @@ export default function CraftingFilterBar({
             ) : null}
           </div>
 
-          <FilterChip
-            option={VEHICLE_CATEGORY_OPTIONS[0]}
-            active={defaultVehicleWeapon || vehicleFilters.has("weaponGun")}
-            onClick={() => setValues("v", vehicleFilters, "weaponGun")}
-          />
           <span className="crb2-filter-divider" aria-hidden="true" />
           <FilterLabel>Size</FilterLabel>
           {SIZE_OPTIONS.map((option) => (
@@ -349,12 +345,20 @@ export default function CraftingFilterBar({
           <span className="crb2-filter-divider" aria-hidden="true" />
           <FilterLabel>Class</FilterLabel>
           {CLASS_OPTIONS.map((option) => (
-            <FilterChip
-              key={option.value}
-              option={option}
-              active={classFilters.has(option.value)}
-              onClick={() => setValues("cl", classFilters, option.value)}
-            />
+            <Fragment key={option.value}>
+              <FilterChip
+                option={option}
+                active={classFilters.has(option.value)}
+                onClick={() => setValues("cl", classFilters, option.value)}
+              />
+              {option.value === "competition" ? (
+                <FilterChip
+                  option={VEHICLE_CATEGORY_OPTIONS[0]}
+                  active={defaultVehicleWeapon || vehicleFilters.has("weaponGun")}
+                  onClick={() => setValues("v", vehicleFilters, "weaponGun")}
+                />
+              ) : null}
+            </Fragment>
           ))}
           <span className="crb2-filter-divider" aria-hidden="true" />
           {VEHICLE_CATEGORY_OPTIONS.slice(1).map((option) => (

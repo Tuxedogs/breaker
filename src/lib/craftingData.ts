@@ -3,8 +3,6 @@ import type {
   ComponentRecipe,
   QualityModifier,
 } from "../components/industry/crafting/utils/craftingTypes";
-import { apiUrl } from "./apiUrl";
-import { parseJsonResponse } from "./safeJson";
 import {
   getBlueprintRecordsFromApi,
   getCraftingRecipeShardFromApi,
@@ -20,9 +18,6 @@ import {
   classifyRecipeInput,
   getRecipeInputDisplayName,
 } from "./crafting/recipeInputClassification";
-
-const BLUEPRINTS_URL = "/api/crafting/blueprints.json";
-const FPS_BLUEPRINTS_URL = "/api/crafting/fps/fps_blueprints.json";
 
 interface ApiMaterialRecord {
   slot?: string | null;
@@ -163,24 +158,6 @@ let craftedPropertiesPromise: Promise<CraftedPropertyRecord[]> | null = null;
 let qualityQuantizationPromise: Promise<QualityQuantizationRecord[]> | null = null;
 let craftingItemsPromise: Promise<ComponentRecipe[]> | null = null;
 const craftingItemPromisesByGuid = new Map<string, Promise<ComponentRecipe | null>>();
-
-async function fetchJsonArray<T>(url: string): Promise<T[]> {
-  const requestUrl = apiUrl(url);
-  const response = await fetch(requestUrl);
-  const data = await parseJsonResponse<unknown>(response, {
-    label: `crafting static JSON ${url}`,
-    url: requestUrl,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to load ${url}: ${response.status}`);
-  }
-
-  if (!Array.isArray(data)) {
-    throw new Error(`Expected ${url} to contain a JSON array`);
-  }
-  return data as T[];
-}
 
 function toStringOrFallback(value: unknown, fallback = "Unknown"): string {
   if (typeof value === "string" && value.trim()) return value.trim();
@@ -351,30 +328,12 @@ function normalizeBlueprint(item: BlueprintRecord): ComponentRecipe {
 }
 
 export function getBlueprintRecords(): Promise<BlueprintRecord[]> {
-  blueprintsPromise ??= (async () => {
-    try {
-      return await getBlueprintRecordsFromApi();
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.warn("[crafting-data] vehicle recipe API failed; falling back to static JSON.", error);
-      }
-      return fetchJsonArray<BlueprintRecord>(BLUEPRINTS_URL);
-    }
-  })();
+  blueprintsPromise ??= getBlueprintRecordsFromApi();
   return blueprintsPromise;
 }
 
 export function getFPSBlueprintRecords(): Promise<FpsBlueprintRecord[]> {
-  fpsBlueprintsPromise ??= (async () => {
-    try {
-      return await getFPSBlueprintRecordsFromApi();
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.warn("[crafting-data] fps recipe API failed; falling back to static JSON.", error);
-      }
-      return fetchJsonArray<FpsBlueprintRecord>(FPS_BLUEPRINTS_URL);
-    }
-  })();
+  fpsBlueprintsPromise ??= getFPSBlueprintRecordsFromApi();
   return fpsBlueprintsPromise;
 }
 
@@ -512,14 +471,7 @@ export async function getCraftingItemByBlueprintGuid(
       if (error instanceof Error && /:\s*404$/.test(error.message)) {
         return null;
       }
-      if (import.meta.env.DEV) {
-        console.warn(
-          "[crafting-data] recipe shard API failed; falling back to recipe catalogs.",
-          error,
-        );
-      }
-      const items = await getCraftingItems();
-      return items.find((item) => item.blueprint_id.toLowerCase() === normalizedGuid) ?? null;
+      throw error;
     }
   })();
 

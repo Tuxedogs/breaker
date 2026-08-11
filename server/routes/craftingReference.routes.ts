@@ -12,6 +12,7 @@ const REFERENCE_FILES = {
   "/api/crafting/reference/quality-quantization": "quality-quantization.json",
   "/api/crafting/reference/material-quality-quantization": "material-quality-quantization.json",
   "/api/crafting/reference/material-identity": "material-identity-index.json",
+  "/api/crafting/reference/refinery-yields": "refinery-yields.json",
 } as const;
 
 const cache = new Map<string, { modifiedAt: number; promise: Promise<unknown> }>();

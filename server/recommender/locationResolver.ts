@@ -22,7 +22,7 @@ export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, 
       message: "A material source is missing system, location, or spawnType.",
       materialId: source.materialId,
       materialName: source.materialName,
-      path: "public/api/recommendations/material_source_scores.json:materials[].bestSources[]",
+      path: "server-data/mining/recommender/material-source-scores.json:materials[].bestSources[]",
     });
   }
 

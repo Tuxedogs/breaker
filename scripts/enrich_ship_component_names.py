@@ -14,7 +14,6 @@ LOOKUP_CSV = API_DIR / "ship_component_name_lookup.csv"
 NAMED_CSV = API_DIR / "ship_components_named.csv"
 NAMED_JSON = API_DIR / "ship_components_named.json"
 UNRESOLVED_CSV = API_DIR / "ship_component_unresolved.csv"
-PUBLIC_VEHICLE_JSON = Path("public/api/vehicle_components.json")
 
 TODO: delete this page it is not used.
 
@@ -333,8 +332,6 @@ def enrich():
         writer.writerows(unresolved)
 
     VEHICLE_JSON.write_text(json.dumps(named, indent=2, ensure_ascii=False), encoding="utf-8")
-    PUBLIC_VEHICLE_JSON.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_VEHICLE_JSON.write_text(json.dumps(named, indent=2, ensure_ascii=False), encoding="utf-8")
 
     display_counts = Counter(row["displayName"] for row in named if row.get("displayName"))
     id_counts = Counter(row["id"] for row in named if row.get("id"))

@@ -20,7 +20,7 @@ import {
   moveActiveQueueEntry,
   reorderActiveQueueEntries,
 } from "../../lib/logistics/buildQueueEntries";
-import { getCraftingItems } from "../../lib/craftingData";
+import { getCraftingItemsByBlueprintGuids } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
@@ -244,7 +244,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       return () => { cancelled = true; };
     }
 
-    getCraftingItems().then((items) => {
+    getCraftingItemsByBlueprintGuids(blueprintIds).then((items) => {
       if (cancelled) return;
       const next: Record<string, string> = {};
       for (const blueprintId of blueprintIds) {
@@ -252,6 +252,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         if (recipe) next[blueprintId] = formatBuildQueueItemTypeLabel(recipe);
       }
       setTypeLabelByBlueprintId(next);
+    }).catch(() => {
+      if (!cancelled) setTypeLabelByBlueprintId({});
     });
 
     return () => { cancelled = true; };

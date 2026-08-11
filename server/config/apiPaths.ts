@@ -1,12 +1,16 @@
 import path from "node:path";
 
-export const publicApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
+import { getCraftingReferenceRoot } from "./craftingReferenceRoot";
+import { getMiningDataRoot } from "./miningDataRoot";
+
+const miningDataRoot = getMiningDataRoot();
+const craftingReferenceRoot = getCraftingReferenceRoot();
 
 export const apiPaths = {
-  materialIdentityIndex: path.resolve("public", "api", "crafting", "material_identity_index.json"),
-  materialSourceScores: path.join(publicApiRoot, "recommendations", "material_source_scores.json"),
-  materialSourcesQualityEnriched: path.join(publicApiRoot, "mining", "material_sources_quality_enriched.json"),
-  locationMetadata: path.join(publicApiRoot, "recommendations", "location_metadata.json"),
+  materialIdentityIndex: path.join(craftingReferenceRoot, "material-identity-index.json"),
+  materialSourceScores: path.join(miningDataRoot, "recommender", "material-source-scores.json"),
+  materialSourcesQualityEnriched: path.join(miningDataRoot, "recommender", "material-sources-quality-enriched.json"),
+  locationMetadata: path.join(miningDataRoot, "recommender", "location-metadata.json"),
 } as const;
 
-export const recommenderApiPath = "/api/recommender/recommendations";
+export const recommenderApiPath = "/api/mining/recommendations";

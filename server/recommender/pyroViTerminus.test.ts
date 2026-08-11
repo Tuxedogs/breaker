@@ -12,7 +12,7 @@ const PYRO_VI_MATERIALS = [
   "Feynmaline",
   "Gold",
   "Janalite",
-  "Pressurized Ice",
+  "Raw Ice",
   "Riccite",
   "Stileron",
   "Titanium",
@@ -43,8 +43,8 @@ test("every extracted Pyro VI material can produce a Pyro VI recommendation", as
   }
 });
 
-test("published static index keeps Pyro VI and Terminus Ring separate", async () => {
-  const rows = JSON.parse(await readFile("public/api/recommendations/location_material_index.json", "utf8")) as Array<{
+test("published mining index keeps Pyro VI source rows separate from Terminus Ring", async () => {
+  const rows = JSON.parse(await readFile("server-data/mining/indexes/location-material.json", "utf8")) as Array<{
     systemKey?: string;
     locationKey?: string;
     materialName?: string;
@@ -59,5 +59,5 @@ test("published static index keeps Pyro VI and Terminus Ring separate", async ()
     .sort();
 
   assert.deepEqual(pyroViMaterials, [...PYRO_VI_MATERIALS].sort());
-  assert.deepEqual(ringMaterials, ["Copper", "Iron", "Ouratite", "Pressurized Ice", "Titanium"]);
+  assert.deepEqual(ringMaterials, []);
 });

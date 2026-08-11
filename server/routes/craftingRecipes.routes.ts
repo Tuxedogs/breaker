@@ -11,6 +11,8 @@ type RecipesIndex = {
   sourceGeneratedAt?: string;
   vehicleCount?: number;
   fpsCount?: number;
+  vehicleBlueprintGuids?: string[];
+  fpsBlueprintGuids?: string[];
   recordFiles: Record<string, string>;
 };
 
@@ -19,10 +21,6 @@ const MAX_BATCH_GUIDS = 100;
 
 let indexCache: Promise<RecipesIndex> | null = null;
 let indexModifiedAt = 0;
-let vehicleCatalogCache: Promise<unknown> | null = null;
-let vehicleCatalogModifiedAt = 0;
-let fpsCatalogCache: Promise<unknown> | null = null;
-let fpsCatalogModifiedAt = 0;
 
 function parseRouteUrl(rawUrl: string): URL {
   return new URL(rawUrl, "http://localhost");
@@ -55,26 +53,6 @@ async function loadIndex(): Promise<RecipesIndex> {
   return indexCache;
 }
 
-async function loadVehicleCatalog(): Promise<unknown> {
-  const catalogPath = path.join(recipesRoot, "catalog", "vehicle.json");
-  const modifiedAt = (await stat(catalogPath)).mtimeMs;
-  if (!vehicleCatalogCache || modifiedAt !== vehicleCatalogModifiedAt) {
-    vehicleCatalogModifiedAt = modifiedAt;
-    vehicleCatalogCache = readJson("catalog/vehicle.json");
-  }
-  return vehicleCatalogCache;
-}
-
-async function loadFpsCatalog(): Promise<unknown> {
-  const catalogPath = path.join(recipesRoot, "catalog", "fps.json");
-  const modifiedAt = (await stat(catalogPath)).mtimeMs;
-  if (!fpsCatalogCache || modifiedAt !== fpsCatalogModifiedAt) {
-    fpsCatalogModifiedAt = modifiedAt;
-    fpsCatalogCache = readJson("catalog/fps.json");
-  }
-  return fpsCatalogCache;
-}
-
 function methodNotAllowed(): RouteResult {
   return { status: 405, body: { error: "Method not allowed" } };
 }
@@ -98,19 +76,11 @@ export async function handleCraftingRecipesRoute(
         sourceGeneratedAt: index.sourceGeneratedAt,
         vehicleCount: index.vehicleCount ?? 0,
         fpsCount: index.fpsCount ?? 0,
+        vehicleBlueprintGuids: index.vehicleBlueprintGuids ?? [],
+        fpsBlueprintGuids: index.fpsBlueprintGuids ?? [],
         blueprintGuids: Object.keys(index.recordFiles),
       },
     };
-  }
-
-  if (pathName === "/api/crafting/recipes/catalog/vehicle") {
-    if (method !== "GET") return methodNotAllowed();
-    return { status: 200, body: await loadVehicleCatalog() };
-  }
-
-  if (pathName === "/api/crafting/recipes/catalog/fps") {
-    if (method !== "GET") return methodNotAllowed();
-    return { status: 200, body: await loadFpsCatalog() };
   }
 
   if (pathName === "/api/crafting/recipes/batch") {
