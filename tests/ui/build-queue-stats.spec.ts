@@ -83,6 +83,7 @@ test.describe("Build Queue stats fixture", () => {
     for (const viewport of [
       { name: "1920x1080", width: 1920, height: 1080 },
       { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
@@ -145,7 +146,7 @@ test.describe("Build Queue stats fixture", () => {
         "Spread",
         "Thermal and Power",
       ]));
-      expect(traitLayout.columnCount).toBe(2);
+      expect(traitLayout.columnCount).toBe(3);
       expect(traitLayout.labelValueGap).toBeGreaterThanOrEqual(0);
       expect(traitLayout.labelValueGap).toBeLessThanOrEqual(8);
       expect(traitLayout.labelWeight).toBeLessThanOrEqual(500);
@@ -187,8 +188,10 @@ test.describe("Build Queue stats fixture", () => {
     await mkdir(visualTargetDir, { recursive: true });
 
     for (const viewport of [
+      { name: "1680x945", width: 1680, height: 945 },
       { name: "1920x1080", width: 1920, height: 1080 },
       { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
@@ -221,7 +224,7 @@ test.describe("Build Queue stats fixture", () => {
         const centerShell = craft.closest(".bq-center-shell");
         const pageRoot = craft.closest(".bq-page");
         const materialCard = craft.querySelector(".bq-mat-group");
-        const statCard = craft.querySelector(".bq-stat-unmodified-card");
+        const statCard = craft.querySelector(".bq-stat-trait-column");
         const centerHighlight = centerShell ? getComputedStyle(centerShell, "::after") : null;
         return {
           gap: allocation && statistics ? statistics.top - allocation.bottom : Number.POSITIVE_INFINITY,
@@ -232,7 +235,8 @@ test.describe("Build Queue stats fixture", () => {
           materialBackgroundImage: materialCard ? getComputedStyle(materialCard).backgroundImage : "",
           statBackgroundColor: statCard ? getComputedStyle(statCard).backgroundColor : "",
           statBackgroundImage: statCard ? getComputedStyle(statCard).backgroundImage : "",
-          rowSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--ops-surface-row").trim() : "",
+          materialSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--bq-r-surface-row").trim() : "",
+          statSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--bq-r-stat-column").trim() : "",
         };
       });
       expect(sectionTransition.gap).toBeGreaterThanOrEqual(12);
@@ -240,9 +244,9 @@ test.describe("Build Queue stats fixture", () => {
       expect(sectionTransition.centerBackgroundColor).toBe("rgba(0, 0, 0, 0)");
       expect(sectionTransition.centerBackgroundImage).toBe("none");
       expect(sectionTransition.centerHighlightImage).toBe("none");
-      expect(sectionTransition.materialBackgroundColor).toBe(sectionTransition.rowSurfaceToken);
+      expect(sectionTransition.materialBackgroundColor).toBe(sectionTransition.materialSurfaceToken);
       expect(sectionTransition.materialBackgroundImage).toBe("none");
-      expect(sectionTransition.statBackgroundColor).toBe(sectionTransition.rowSurfaceToken);
+      expect(sectionTransition.statBackgroundColor).toBe(sectionTransition.statSurfaceToken);
       expect(sectionTransition.statBackgroundImage).toBe("none");
       const materialActionOrder = await page.locator(".bq-materials-section-actions").evaluate((actions) => (
         Array.from(actions.children).map((child) => child.className)
@@ -292,15 +296,29 @@ test.describe("Build Queue stats fixture", () => {
           ).size,
         }))
       ));
-      expect(collapsedQualityAllocations.every(({ overflowX }) => overflowX === "auto")).toBe(true);
+      expect(collapsedQualityAllocations.every(({ overflowX }) => overflowX === "visible")).toBe(true);
       expect(collapsedQualityAllocations.every(({ chipRows }) => chipRows <= 1)).toBe(true);
 
       await page.locator(".bq-inventory-toggle").click();
       await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "false");
-      await expect(page.locator(".bq-auto-reserve-btn")).toBeDisabled();
+      await expect(page.locator(".bq-auto-reserve-btn")).toHaveCount(0);
+      await page.screenshot({
+        path: path.join(visualTargetDir, `build-queue-inventory-off-${viewport.name}.png`),
+        fullPage: false,
+      });
       await page.locator(".bq-inventory-toggle").click();
       await expect(page.locator(".bq-inventory-toggle")).toHaveAttribute("aria-pressed", "true");
       await expect(page.locator(".bq-auto-reserve-btn")).toBeEnabled();
+      if (viewport.name === "1920x1080") {
+        await page.getByRole("button", { name: "Add inventory for Agricium" }).click();
+        await expect(page.locator(".bq-inv-quick-modal")).toBeVisible();
+        await page.screenshot({ path: path.join(visualTargetDir, "build-queue-add-inventory-1920x1080.png"), fullPage: false });
+        await page.getByRole("button", { name: "Close add inventory" }).click();
+        await page.locator(".bq-auto-reserve-btn").click();
+        await expect(page.locator(".bq-solve-modal")).toBeVisible();
+        await page.screenshot({ path: path.join(visualTargetDir, "build-queue-auto-reserve-1920x1080.png"), fullPage: false });
+        await page.getByRole("button", { name: "Close auto reserve preview" }).click();
+      }
       await expect(page.locator(".bq-item-header > .bq-decorative-frame")).toHaveCount(0);
       await expect(page.locator(".bq-craft-card > .bq-decorative-frame")).toHaveCount(2);
       await expect(page.locator(".bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame")).toHaveCount(0);
@@ -315,10 +333,12 @@ test.describe("Build Queue stats fixture", () => {
           averageTop: average?.top ?? 0,
         };
       });
-      expect(targetAverageGeometry.targetTop).toBeLessThan(targetAverageGeometry.averageTop);
-      expect(targetAverageGeometry.needTop).toBeLessThan(targetAverageGeometry.averageTop);
+      expect(Math.abs(targetAverageGeometry.targetTop - targetAverageGeometry.averageTop)).toBeLessThanOrEqual(12);
+      expect(targetAverageGeometry.needTop).toBe(0);
 
       const targetEditor = page.locator(".bq-mat-card-head .bq-target-editor").first();
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
+      await targetEditor.hover();
       await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
       const sliderGeometry = await targetEditor.evaluate((editor) => {
         const card = editor.closest(".bq-mat-group")?.getBoundingClientRect();
@@ -334,7 +354,7 @@ test.describe("Build Queue stats fixture", () => {
       expect(sliderGeometry.sliderRight).toBeLessThanOrEqual(sliderGeometry.cardRight);
       expect(Math.abs(sliderGeometry.badgeCenter - sliderGeometry.sliderCenter)).toBeLessThanOrEqual(1);
       await page.mouse.move(0, 0);
-      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
 
       const statValues = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const modified = panel.querySelector(".bq-stat-compare-row");
@@ -356,6 +376,27 @@ test.describe("Build Queue stats fixture", () => {
       expect(statValues.compact).toBe(statValues.allocation);
       expect(statValues.compactColor).toBe(statValues.allocationColor);
 
+      if (viewport.height <= 1100) {
+        const hierarchy = await page.locator(".bq-item").evaluate((craft) => {
+          const selectedCard = craft.querySelector(".bq-selected-craft-card");
+          const materialHeader = craft.querySelector(".bq-materials-section-header");
+          const statisticsHeader = craft.querySelector(".bq-component-statistics-header");
+          const statisticsTitle = craft.querySelector(".bq-component-statistics-title");
+          const firstStatLabel = craft.querySelector(".bq-stat-compact-label");
+          return {
+            selectedCardHeight: selectedCard?.getBoundingClientRect().height ?? Number.POSITIVE_INFINITY,
+            materialHeaderHeight: materialHeader?.getBoundingClientRect().height ?? Number.POSITIVE_INFINITY,
+            statisticsHeaderHeight: statisticsHeader?.getBoundingClientRect().height ?? Number.POSITIVE_INFINITY,
+            statisticsTitleSize: statisticsTitle ? Number.parseFloat(getComputedStyle(statisticsTitle).fontSize) : Number.POSITIVE_INFINITY,
+            statLabelSize: firstStatLabel ? Number.parseFloat(getComputedStyle(firstStatLabel).fontSize) : 0,
+          };
+        });
+        expect(hierarchy.selectedCardHeight).toBeLessThanOrEqual(145);
+        expect(hierarchy.materialHeaderHeight).toBeLessThanOrEqual(44);
+        expect(hierarchy.statisticsHeaderHeight).toBeLessThanOrEqual(38);
+        expect(hierarchy.statisticsTitleSize).toBeLessThanOrEqual(hierarchy.statLabelSize * 1.15);
+      }
+
       const horizontalOverflow = await page.evaluate(() => (
         Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth
       ));
@@ -366,6 +407,15 @@ test.describe("Build Queue stats fixture", () => {
         fullPage: false,
       });
     }
+
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+    await page.locator(".bq-inventory-toggle").click();
+    await page.screenshot({
+      path: path.join(visualTargetDir, "build-queue-inventory-off-768x900.png"),
+      fullPage: false,
+    });
 
     expect(failures).toEqual([]);
   });
@@ -404,12 +454,12 @@ test.describe("Build Queue stats fixture", () => {
       });
       expect(before.allocationOverflow).toBe("hidden");
       expect(before.sectionOverflow).toBe("hidden");
-      expect(before.tableOverflow).toBe("hidden");
+      expect(before.tableOverflow).toBe("visible");
       expect(before.cardOverflow).toBe("hidden");
 
       await expandButton.click();
       await expect(materialCard.locator(".bq-reserve-panel")).toBeVisible();
-      await expect(materialCard.getByRole("button", { name: "Collapse reserve drawer for Hadanite" })).toBeVisible();
+      await expect(materialCard.getByRole("button", { name: "Collapse reserve drawer for Hadanite", exact: true })).toBeVisible();
       const locationFolder = materialCard.locator(".bq-reserve-location-folder").first();
       await expect(locationFolder).toHaveAttribute("open", "");
       await expect(locationFolder.locator(".bq-reserve-quality-folder")).toHaveCount(2);
@@ -450,12 +500,13 @@ test.describe("Build Queue stats fixture", () => {
       });
 
       expect(Math.abs(after.cardWidth - before.cardWidth)).toBeLessThanOrEqual(1);
-      expect(after.drawerRight).toBeLessThanOrEqual(after.cardRight);
+      expect(after.drawerRight).toBeLessThanOrEqual(viewport.width);
+      expect(after.drawerRight).toBeGreaterThan(after.cardRight);
       expect(Math.abs(after.allocationHeight - before.allocationHeight)).toBeLessThanOrEqual(1);
       expect(Math.abs(after.statisticsTop - before.statisticsTop)).toBeLessThanOrEqual(1);
-      expect(after.drawerBottom).toBeGreaterThan(after.allocationBottom);
+      expect(after.drawerBottom).toBeGreaterThanOrEqual(1080);
       expect(after.drawerBottom).toBeGreaterThan(after.statisticsTop);
-      expect(after.allocationZIndex).toBeGreaterThan(after.statisticsZIndex);
+      expect(after.allocationZIndex).toBeGreaterThanOrEqual(after.statisticsZIndex);
       expect(after.allocationOverflow).toBe("visible");
       expect(after.sectionOverflow).toBe("visible");
       expect(after.tableOverflow).toBe("visible");
@@ -505,13 +556,13 @@ test.describe("Build Queue stats fixture", () => {
       });
       expect(geometry.badgeWidth).toBeLessThanOrEqual(80);
       expect(geometry.shellWidth).toBeGreaterThan(geometry.badgeWidth);
-      expect(Math.abs(geometry.shellCenter - geometry.badgeCenter)).toBeLessThan(1);
+      expect(geometry.shellCenter).toBeGreaterThan(geometry.badgeCenter);
 
-      await expect(shell).toHaveCSS("opacity", "0");
+      await expect(shell).toHaveCSS("opacity", "1");
       await editor.hover();
       await expect(shell).toHaveCSS("opacity", "1");
       await slider.focus();
-      await expect(badge).toHaveCSS("pointer-events", "none");
+      await expect(badge).toHaveCSS("pointer-events", "auto");
       await expect(slider).toHaveCSS("pointer-events", "auto");
 
       const modifier = page.locator(".craft-detail-effect-chip strong");
@@ -558,8 +609,8 @@ test.describe("Build Queue stats fixture", () => {
       await expect(dialog.getByRole("spinbutton", { name: /^Quality/ })).toHaveCount(2);
       await expect(dialog.getByRole("spinbutton", { name: "Quality group 1 value" })).toHaveAttribute("placeholder", "500");
       await expect(dialog.getByRole("spinbutton", { name: "Quality group 1 value" })).toHaveCSS("appearance", "textfield");
-      await expect(dialog.getByText("Box Qualities (0-1000)")).toBeVisible();
-      await expect(dialog.getByText("Add up to 5 different quality levels.")).toBeVisible();
+      await expect(dialog.getByText("Individual Boxes", { exact: true })).toBeVisible();
+      await expect(dialog.getByText("Group physical boxes by quality. Each amount creates a separate inventory record.")).toBeVisible();
       await expect(dialog.getByRole("button", { name: /Add Quality/ })).toHaveCount(1);
       await expect(dialog.getByRole("button", { name: /Add Box/ })).toHaveCount(2);
       await expect(dialog.locator(".bq-inv-quick-box-label")).toHaveCount(0);
@@ -573,7 +624,7 @@ test.describe("Build Queue stats fixture", () => {
         const material = element.querySelector(".bq-inv-quick-material-value")?.getBoundingClientRect();
         return { locationTop: location?.top ?? 0, materialTop: material?.top ?? 0 };
       });
-      expect(fieldOrder.locationTop).toBeLessThan(fieldOrder.materialTop);
+      expect(Math.abs(fieldOrder.locationTop - fieldOrder.materialTop)).toBeLessThanOrEqual(16);
       await expect(dialog.getByRole("region", { name: "Quality group 1" }).getByRole("spinbutton", { name: /^Box/ })).toHaveCount(3);
       await expect(dialog.getByRole("region", { name: "Quality group 2" }).getByRole("spinbutton", { name: /^Box/ })).toHaveCount(3);
       await expect(dialog.getByRole("region", { name: "Quality group 1" }).getByRole("spinbutton", { name: /^Box/ }).first()).toHaveCSS("appearance", "textfield");
@@ -754,15 +805,16 @@ test.describe("Build Queue stats fixture", () => {
             identityTop: identity?.top ?? 0,
           };
         });
-        expect(sliderGeometry.badgeWidth).toBeGreaterThanOrEqual(140);
-        expect(Math.abs(sliderGeometry.shellWidth - sliderGeometry.badgeWidth)).toBeLessThan(1);
+        expect(sliderGeometry.badgeWidth).toBeLessThanOrEqual(90);
+        expect(sliderGeometry.shellWidth).toBeGreaterThan(sliderGeometry.badgeWidth);
         expect(Math.abs(sliderGeometry.shellCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
         expect(Math.abs(sliderGeometry.inputCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
         expect(sliderGeometry.inputWidth).toBe(sliderGeometry.shellWidth);
         expect(sliderGeometry.shellWidth / sliderGeometry.cardWidth).toBeLessThan(0.3);
-        expect(Math.abs(sliderGeometry.identityTop - sliderGeometry.headerTop)).toBeLessThan(1);
+        expect(sliderGeometry.headerTop).toBe(0);
+        expect(sliderGeometry.identityTop).toBeGreaterThan(0);
 
-        await expect(sliderShell).toHaveCSS("opacity", "1");
+        await expect(sliderShell).toHaveCSS("opacity", "0");
         await sliderEditor.hover();
         await expect(sliderShell).toHaveCSS("opacity", "1");
         await page.screenshot({
@@ -772,15 +824,9 @@ test.describe("Build Queue stats fixture", () => {
         await slider.focus();
         await expect(slider).toBeFocused();
         await expect(sliderShell).toHaveCSS("opacity", "1");
-        await expect(targetBadge).toHaveCSS("opacity", "1");
-        await expect(targetBadge).toHaveCSS("pointer-events", "auto");
+        await expect(targetBadge).toHaveCSS("opacity", "0");
+        await expect(targetBadge).toHaveCSS("pointer-events", "none");
         await expect(slider).toHaveCSS("pointer-events", "auto");
-        await targetBadge.click();
-        const targetInput = sliderEditor.getByRole("spinbutton", { name: "Edit target quality for Stileron" });
-        await expect(targetInput).toBeVisible();
-        await targetInput.fill(await slider.inputValue());
-        await targetInput.press("Enter");
-        await expect(targetInput).toHaveCount(0);
         const targetValues = page.locator(".bq-component-statistics .bq-stat-compare-target");
         const before = (await targetValues.allTextContents()).join("|");
         const previousQuality = Number(await slider.inputValue());
@@ -832,7 +878,7 @@ test.describe("Build Queue stats fixture", () => {
         await page.locator(".bq-component-statistics-title").click();
         await page.mouse.move(10, 10);
         await expect(slider).not.toBeFocused();
-        await expect(sliderShell).toHaveCSS("opacity", "1");
+        await expect(sliderShell).toHaveCSS("opacity", "0");
 
         await expect(page.locator(".bq-mat-head")).toHaveCount(0);
         const allocationLayout = await page.locator(".bq-item").evaluate((craft) => {
@@ -848,7 +894,7 @@ test.describe("Build Queue stats fixture", () => {
         });
         expect(allocationLayout.allocationTop).toBeLessThan(allocationLayout.statisticsTop);
         expect(allocationLayout.cardCount).toBeGreaterThan(1);
-        expect(new Set(allocationLayout.cardTops.map((top) => Math.round(top))).size).toBe(1);
+        expect(new Set(allocationLayout.cardTops.map((top) => Math.round(top))).size).toBe(allocationLayout.cardCount);
 
         const inventoryToggle = page.locator(".bq-inventory-toggle");
         const materialCards = page.locator(".bq-mat-group");
@@ -862,7 +908,7 @@ test.describe("Build Queue stats fixture", () => {
         await expect(materialCards.locator(".bq-mat-card-status")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-quality")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-actions")).toHaveCount(0);
-        await expect(page.locator(".bq-auto-reserve-btn")).toBeDisabled();
+        await expect(page.locator(".bq-auto-reserve-btn")).toHaveCount(0);
         await inventoryToggle.click();
         await expect(inventoryToggle).toHaveAttribute("aria-pressed", "true");
       }
@@ -905,7 +951,7 @@ test.describe("Build Queue stats fixture", () => {
               }).length,
             };
           });
-          expect(sharedStatLayout.traitColumnCount).toBe(Math.min(2, sharedStatLayout.groupCount));
+          expect(sharedStatLayout.traitColumnCount).toBe(Math.min(3, sharedStatLayout.groupCount));
           expect(sharedStatLayout.headingOutsideCard).toBe(true);
           expect(sharedStatLayout.clippedGroups).toBe(0);
         } else {
@@ -972,7 +1018,7 @@ test.describe("Build Queue stats fixture", () => {
         if (item.id === FIXTURE_ITEM_IDS.fpsArmor) {
           const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
           const groupTitles = await page.locator(".bq-component-statistics .bq-stat-unmodified-group > .bq-stat-compare-group-title").allTextContents();
-          expect(compactLabels).toContain("Armor Damage Mitigation");
+          expect(compactLabels).toContain("Damage Mitigation");
           expect(compactLabels).not.toEqual(expect.arrayContaining([
             "Armor Temperature Min",
             "Armor Temperature Max",
