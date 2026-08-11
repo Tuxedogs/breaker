@@ -165,3 +165,30 @@ test("mixed component catalog generations are rejected", () => {
     { generatedAt: "2026-06-23T00:00:00.000Z" },
   ), /generation mismatch/);
 });
+
+test("generated component catalog payloads share one generation", () => {
+  const index = loadJson(
+    "server-data",
+    "crafting",
+    "component-cards",
+    "index.json",
+  ) as { generatedAt?: string; sourceGeneratedAt?: string };
+  const facets = loadJson(
+    "server-data",
+    "crafting",
+    "component-cards",
+    "facets.json",
+  ) as { generatedAt?: string };
+  const browse = loadJson(
+    "server-data",
+    "crafting",
+    "component-cards",
+    "browse.json",
+  ) as { generatedAt?: string };
+
+  validateComponentCatalogGeneration(
+    index.sourceGeneratedAt ?? index.generatedAt,
+    facets,
+    browse,
+  );
+});
