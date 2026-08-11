@@ -103,10 +103,30 @@ function splitStatGroupsAcrossColumns(groups: ConsolidatedStatGroup[]): Consolid
   const columns = [
     { groups: [] as ConsolidatedStatGroup[], weight: 0 },
     { groups: [] as ConsolidatedStatGroup[], weight: 0 },
+    { groups: [] as ConsolidatedStatGroup[], weight: 0 },
   ];
 
+  const preferredColumnByGroup = new Map<string, number>([
+    ["damageoutput", 0],
+    ["ballisticsanddamage", 0],
+    ["thermalandpower", 1],
+    ["thermalpower", 1],
+    ["durabilityandphysical", 2],
+    ["durabilityphysical", 2],
+  ]);
+  const assignedGroups = new Set<ConsolidatedStatGroup>();
+
   for (const group of groups) {
-    const target = columns[0].weight <= columns[1].weight ? columns[0] : columns[1];
+    const preferredColumn = preferredColumnByGroup.get(normalizeGroupKey(group.title));
+    if (preferredColumn === undefined || columns[preferredColumn].groups.length > 0) continue;
+    columns[preferredColumn].groups.push(group);
+    columns[preferredColumn].weight += group.stats.length + 1;
+    assignedGroups.add(group);
+  }
+
+  for (const group of groups) {
+    if (assignedGroups.has(group)) continue;
+    const target = columns.reduce((lightest, column) => column.weight < lightest.weight ? column : lightest, columns[0]);
     target.groups.push(group);
     target.weight += group.stats.length + 1;
   }

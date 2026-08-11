@@ -26,6 +26,7 @@ import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
+import "../../components/logistics/build-queue-redesign.css";
 
 const MAX_QUEUE_SLOTS = 12;
 const FIXTURE_READ_ONLY_MESSAGE = "Build Queue fixture is read-only.";
@@ -77,6 +78,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
+  const [inventoryEnabled, setInventoryEnabled] = useState(true);
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
   const [draggingEntryId, setDraggingEntryId] = useState<string | null>(null);
   const [queueDropIndex, setQueueDropIndex] = useState<number | null>(null);
@@ -639,6 +641,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
                     recipes={recipes}
                     recipeInputsByRecipeId={recipeInputsByRecipeId}
                     inventory={inventoryEntries}
+                    inventoryEnabled={inventoryEnabled}
                     selected={row.item.id === resolvedSelectedItemId}
                     highlighted={row.item.id === allocationOwnerHighlightId}
                     onSelect={setSelectedItemId}
@@ -724,6 +727,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               onAllocationOwnerHighlightChange={setAllocationOwnerHighlightId}
               onQuickAddInventory={handleQuickAddInventory}
               iconMode={iconMode}
+              inventoryEnabled={inventoryEnabled}
+              onInventoryEnabledChange={setInventoryEnabled}
             />
             </div>
           ) : (

@@ -49,6 +49,7 @@ interface Props {
   recipes: RecipeTemplate[];
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>;
   inventory: InventoryEntry[];
+  inventoryEnabled?: boolean;
   selected: boolean;
   highlighted?: boolean;
   onSelect: (id: string) => void;
@@ -66,6 +67,7 @@ export default function BuildQueueCraftCard({
   recipes,
   recipeInputsByRecipeId,
   inventory,
+  inventoryEnabled = true,
   selected,
   highlighted = false,
   onSelect,
@@ -117,10 +119,14 @@ export default function BuildQueueCraftCard({
         <span className="bq-craft-card-main">
           <span className="bq-craft-card-cat">{typeLabel}</span>
           <span className="bq-craft-card-name">{itemName}</span>
-          <span className={`bq-craft-card-status bq-craft-card-status--${statusClass}`}>{statusLabel}</span>
+          <span className={`bq-craft-card-status bq-craft-card-status--${inventoryEnabled ? statusClass : "queued"}`}>
+            {inventoryEnabled ? statusLabel : "Queued"}
+          </span>
         </span>
         <span className="bq-craft-card-progress-col">
-          {isCraftComplete ? (
+          {!inventoryEnabled ? (
+            <span className="bq-craft-card-quantity" aria-label={`${item.quantity} crafts`}>{item.quantity}x</span>
+          ) : isCraftComplete ? (
             <span className="bq-craft-card-check" aria-label="Completed">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m6.5 12.5 3.2 3.2 7.8-8" />

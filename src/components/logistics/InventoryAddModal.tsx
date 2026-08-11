@@ -417,6 +417,17 @@ export default function InventoryAddModal({
     const parsed = Number(box.value);
     return !Number.isFinite(parsed) || parsed <= 0;
   }));
+  const previewGroups = qualityGroups.map((group) => ({
+    quality: parseQuality(group.quality),
+    quantity: group.boxes.reduce((sum, box) => {
+      const value = Number(box.value);
+      return sum + (Number.isFinite(value) && value > 0 ? value : 0);
+    }, 0),
+    boxes: group.boxes.filter((box) => Number(box.value) > 0).length,
+  }));
+  const previewBoxCount = previewGroups.reduce((sum, group) => sum + group.boxes, 0);
+  const previewTotal = previewGroups.reduce((sum, group) => sum + group.quantity, 0);
+  const previewLocation = locations.find((entry) => entry.id === resolvedLocationId)?.name || locationSearch.trim() || 'Choose a location';
 
   return (
     <div
@@ -439,67 +450,79 @@ export default function InventoryAddModal({
             <h3 id="bq-inv-quick-title">Add Inventory</h3>
             <p className="bq-inv-quick-subtitle">{subtitle}</p>
           </div>
+          <button type="button" className="bq-inv-quick-close" aria-label="Close add inventory" onClick={onCancel}>×</button>
         </div>
 
         <div className="bq-inv-quick-body">
-          <LocationField
-            locations={locations}
-            locationId={locationId}
-            locationSearch={locationSearch}
-            hasError={hasTriedSave && !resolvedLocationId}
-            onLocationIdChange={setLocationId}
-            onLocationSearchChange={setLocationSearch}
-          />
-          {hasTriedSave && !resolvedLocationId ? (
-            <span className="logi-form-error">Choose a known inventory location.</span>
-          ) : null}
+          <div className="bq-inv-quick-context">
+            <div>
+              <LocationField
+                locations={locations}
+                locationId={locationId}
+                locationSearch={locationSearch}
+                hasError={hasTriedSave && !resolvedLocationId}
+                onLocationIdChange={setLocationId}
+                onLocationSearchChange={setLocationSearch}
+              />
+              {hasTriedSave && !resolvedLocationId ? (
+                <span className="logi-form-error">Choose a known inventory location.</span>
+              ) : null}
+            </div>
 
-          <div className="logi-form-field">
-            <span className="logi-form-label">Material</span>
-            {lockMaterial && material ? (
-              <>
-                <div className="bq-inv-quick-material-value" aria-label={`Material ${displayName}`}>
-                  <span>{displayName}</span>
-                  <span className="bq-inv-quick-material-lock" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
-                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
-                    </svg>
-                    Locked
-                  </span>
-                </div>
-                {target ? <span className="bq-inv-quick-material-helper">Add other materials from the Inventory page.</span> : null}
-              </>
-            ) : (
-              <select
-                className={`logi-form-select${hasTriedSave && !material ? ' logi-form-input--error' : ''}`}
-                value={selectedMaterialId}
-                onChange={(event) => {
-                  setSelectedMaterialId(event.target.value);
-                  setUnrefined(false);
-                }}
-                aria-label="Item"
-              >
-                <option value="">Choose an item</option>
-                {materials.slice().sort((left, right) => left.name.localeCompare(right.name)).map((entry) => (
-                  <option key={entry.id} value={entry.id}>{entry.name}</option>
-                ))}
-              </select>
-            )}
-            {hasTriedSave && !material ? <span className="logi-form-error">Choose a known inventory item.</span> : null}
+            <div className="logi-form-field">
+              <span className="logi-form-label">Material</span>
+              {lockMaterial && material ? (
+                <>
+                  <div className="bq-inv-quick-material-value" aria-label={`Material ${displayName}`}>
+                    <span>{displayName}</span>
+                    <span className="bq-inv-quick-material-lock" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3.5" y="7" width="9" height="6.5" rx="1.5" />
+                        <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                      </svg>
+                      Locked
+                    </span>
+                  </div>
+                  {target ? <span className="bq-inv-quick-material-helper">Add other materials from the Inventory page.</span> : null}
+                </>
+              ) : (
+                <select
+                  className={`logi-form-select${hasTriedSave && !material ? ' logi-form-input--error' : ''}`}
+                  value={selectedMaterialId}
+                  onChange={(event) => {
+                    setSelectedMaterialId(event.target.value);
+                    setUnrefined(false);
+                  }}
+                  aria-label="Item"
+                >
+                  <option value="">Choose an item</option>
+                  {materials.slice().sort((left, right) => left.name.localeCompare(right.name)).map((entry) => (
+                    <option key={entry.id} value={entry.id}>{entry.name}</option>
+                  ))}
+                </select>
+              )}
+              {hasTriedSave && !material ? <span className="logi-form-error">Choose a known inventory item.</span> : null}
+            </div>
           </div>
+
+          <div className="bq-inv-quick-workspace">
 
           <div className="bq-inv-quick-quality-groups">
             <div className="bq-inv-quick-quality-title-row">
-              <strong>Box Qualities (0-1000)</strong>
-              <span>Add up to 5 different quality levels.</span>
+              <div>
+                <strong>Individual Boxes</strong>
+                <span>Group physical boxes by quality. Each amount creates a separate inventory record.</span>
+              </div>
+              <span className="bq-inv-quick-quality-count">{qualityGroups.length} / {MAX_QUALITY_GROUPS} qualities</span>
             </div>
             {qualityGroups.map((group, groupIndex) => {
               const groupQualityError = hasTriedSave && parseQuality(group.quality) === undefined;
+              const groupPreview = previewGroups[groupIndex];
               return (
                 <section key={group.id} className="bq-inv-quick-quality-group" aria-label={`Quality group ${groupIndex + 1}`}>
                   <div className="bq-inv-quick-quality-head">
                     <label htmlFor={`bq-inv-quick-quality-${group.id}`} className="bq-inv-quick-quality-value">
+                      <span>Quality (0–1000)</span>
                       <input
                         id={`bq-inv-quick-quality-${group.id}`}
                         type="number"
@@ -512,19 +535,23 @@ export default function InventoryAddModal({
                         max={1000}
                         step={1}
                       />
-                      <span>Quality</span>
                     </label>
+                    <span className="bq-inv-quick-quality-summary">
+                      {groupPreview.boxes} {groupPreview.boxes === 1 ? 'box' : 'boxes'}
+                      <i aria-hidden="true">·</i>
+                      {groupPreview.quantity.toLocaleString(undefined, { maximumFractionDigits: 2 })} {unitLabel}
+                    </span>
                     <button
                       type="button"
                       className="bq-inv-quick-remove"
                       onClick={() => removeQualityGroup(group.id)}
                       aria-label={`Remove quality group ${groupIndex + 1}`}
-                    >X</button>
+                    >×</button>
                   </div>
 
                   <div className="bq-inv-quick-boxes">
                     <div className="bq-inv-quick-box-head" aria-hidden="true">
-                      <span>Boxes at this quality</span>
+                      <span>Box</span>
                       <span>Amount ({unitLabel})</span>
                     </div>
                     {group.boxes.map((box, boxIndex) => {
@@ -532,7 +559,7 @@ export default function InventoryAddModal({
                       const boxError = hasTriedSave && (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0);
                       return (
                         <div key={box.id} className="bq-inv-quick-box-row">
-                          <span className="bq-inv-quick-box-marker" aria-hidden="true">-</span>
+                          <span className="bq-inv-quick-box-marker">Box {String(boxIndex + 1).padStart(2, '0')}</span>
                           <label htmlFor={`bq-inv-quick-qty-${box.id}`} className="bq-inv-quick-box-input">
                           <input
                             id={`bq-inv-quick-qty-${box.id}`}
@@ -551,7 +578,7 @@ export default function InventoryAddModal({
                             className="bq-inv-quick-remove"
                             onClick={() => removeBox(group.id, box.id)}
                             aria-label={`Remove box ${boxIndex + 1} from quality group ${groupIndex + 1}`}
-                          >X</button>
+                          >×</button>
                         </div>
                       );
                     })}
@@ -568,6 +595,27 @@ export default function InventoryAddModal({
             >+ Add Quality (up to 5)</button>
           </div>
 
+          <aside className="bq-inv-quick-preview" aria-label="Inventory preview">
+            <h4>Inventory Preview</h4>
+            <div className="bq-inv-preview-card bq-inv-preview-card--primary">
+              <span className="bq-inv-preview-icon" aria-hidden="true">◇</span>
+              <div><strong>{previewBoxCount} individual {previewBoxCount === 1 ? 'box' : 'boxes'}</strong><span>{previewTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })} {unitLabel} total</span></div>
+            </div>
+            <div className="bq-inv-preview-card">
+              <span className="bq-inv-preview-icon" aria-hidden="true">⌖</span>
+              <div><small>Location</small><strong>{previewLocation}</strong></div>
+            </div>
+            <div className="bq-inv-preview-card bq-inv-preview-distribution">
+              <div><small>Quality distribution</small></div>
+              {previewGroups.filter((group) => group.quality !== undefined && group.quantity > 0).map((group) => (
+                <div key={group.quality}><span>Quality {group.quality}</span><strong>{group.quantity.toLocaleString(undefined, { maximumFractionDigits: 2 })} {unitLabel}</strong></div>
+              ))}
+              <div className="bq-inv-preview-total"><span>Total</span><strong>{previewTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })} {unitLabel}</strong></div>
+            </div>
+            <div className="bq-inv-preview-note">Individual boxes remain separate inventory records.</div>
+          </aside>
+          </div>
+
           {showUnrefined ? (
             <label className="bq-inv-quick-check">
               <input
@@ -579,22 +627,26 @@ export default function InventoryAddModal({
             </label>
           ) : null}
 
-          {hasTriedSave && (qualityError || quantityError) ? (
-            <span className="logi-form-error">Enter a valid quality and a quantity greater than zero for every box.</span>
-          ) : null}
-          {errorMessage ? <span className="logi-form-error">{errorMessage}</span> : null}
         </div>
 
         <div className="bq-inv-quick-actions">
-          <button type="button" className="bq-btn" onClick={onCancel} disabled={isSaving}>Cancel</button>
-          <button
-            type="button"
-            className="bq-btn bq-btn--confirm"
-            onClick={() => void handleSave()}
-            disabled={isSaving}
-          >
-            {isSaving ? 'Adding…' : 'Add to inventory'}
-          </button>
+          <div className="bq-inv-quick-feedback" aria-live="polite">
+            {hasTriedSave && (qualityError || quantityError) ? (
+              <span className="logi-form-error">Enter a valid quality and a quantity greater than zero for every box.</span>
+            ) : null}
+            {errorMessage ? <span className="logi-form-error">{errorMessage}</span> : null}
+          </div>
+          <div className="bq-inv-quick-action-buttons">
+            <button type="button" className="bq-btn" onClick={onCancel} disabled={isSaving}>Cancel</button>
+            <button
+              type="button"
+              className="bq-btn bq-btn--confirm"
+              onClick={() => void handleSave()}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Adding…' : 'Add to inventory'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
