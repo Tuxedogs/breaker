@@ -119,6 +119,20 @@
   border-radius: 0;
 }
 
+.craft-detail-shell .craft-detail-sources-section .craft-mission-source:nth-child(odd) {
+  background: var(--craft-surface-row, var(--ops-surface-row));
+  border-radius: 0;
+}
+
+.craft-detail-shell .craft-detail-sources-section .craft-mission-source:nth-child(even) {
+  background: var(--craft-surface-row-alt, var(--ops-surface-row));
+  border-radius: 0;
+}
+
+.craft-detail-shell .craft-detail-sources-section .craft-mission-source:hover {
+  background: var(--craft-surface-hover, var(--ops-surface-hover));
+}
+
 .craft-detail-shell .craft-detail-material-row:nth-child(even),
 .craft-detail-shell .craft-detail-effect-row:nth-child(even) {
   background: var(--ops-surface-row);
@@ -149,10 +163,10 @@
 
 .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   align-items: start;
-  width: 67%;
+  width: 100%;
 }
 
 .craft-detail-shell .detail-stat-scan-column {

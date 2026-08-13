@@ -57,20 +57,56 @@ test("preserves valid zero values in table cells", () => {
   assert.equal(family.columns.find((column) => column.key === "alpha")?.value(record({})), "0");
 });
 
-test("ship weapons expose penetration and shared-resolver DPS columns", () => {
+test("ship weapons expose penetration distance, energy maximum load, and shared-resolver DPS columns", () => {
   const weapon = record({
     stats: {
       ...record({}).stats,
       shipWeapon: {
         alphaDamageTotal: 72,
         fireRateRpm: 250,
-        penetration: 0.5,
+        penetrationDistance: 18,
+        ammoCapacity: 900,
+        maxAmmoLoad: 75,
       },
     },
   });
   const family = getRecipeBrowserFamily(weapon);
   assert.equal(family.columns.find((column) => column.key === "dps")?.value(weapon), "300");
-  assert.equal(family.columns.find((column) => column.key === "penetration")?.value(weapon), "0.5");
+  assert.equal(family.columns.find((column) => column.key === "penetration")?.label, "Pen. Dist.");
+  assert.equal(family.columns.find((column) => column.key === "penetration")?.value(weapon), "18m");
+  assert.equal(family.columns.find((column) => column.key === "capacity")?.value(weapon), "75");
+});
+
+test("ballistic weapon capacity falls back to the delivered ammo capacity", () => {
+  const weapon = record({
+    stats: {
+      ...record({}).stats,
+      shipWeapon: {
+        alphaDamageTotal: 72,
+        fireRateRpm: 250,
+        ammoCapacity: 492,
+        maxAmmoLoad: null,
+      },
+    },
+  });
+  const capacity = getRecipeBrowserFamily(weapon).columns.find((column) => column.key === "capacity");
+  assert.equal(capacity?.value(weapon), "492");
+});
+
+test("zero remains a valid energy maximum load", () => {
+  const weapon = record({
+    stats: {
+      ...record({}).stats,
+      shipWeapon: {
+        alphaDamageTotal: 72,
+        fireRateRpm: 250,
+        ammoCapacity: 492,
+        maxAmmoLoad: 0,
+      },
+    },
+  });
+  const capacity = getRecipeBrowserFamily(weapon).columns.find((column) => column.key === "capacity");
+  assert.equal(capacity?.value(weapon), "0");
 });
 
 test("radar exposes independent power-pip and assist-range columns", () => {

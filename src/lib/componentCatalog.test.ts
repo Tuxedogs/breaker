@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
+import { enrichComponentCardBrowseWithShipWeapons } from "../../server/routes/componentCards.routes.ts";
 import { buildComponentCatalogStatMetrics } from "../components/industry/crafting/utils/componentCardSchema.ts";
 import type { ComponentCardIndexRecord } from "./componentCardIndex.ts";
 import { validateComponentCatalogGeneration } from "./componentCatalogGeneration.ts";
@@ -191,4 +192,39 @@ test("generated component catalog payloads share one generation", () => {
     facets,
     browse,
   );
+});
+
+test("component card browse receives source-backed weapon capacity and penetration distance", () => {
+  const browse = {
+    generatedAt: "2026-08-13T00:00:00.000Z",
+    records: [
+      {
+        id: "weapon-card",
+        entityClass: " WEAPON-ENTITY ",
+        stats: {
+          shipWeapon: {
+            ammoCapacity: 900,
+            penetration: 0.5,
+          },
+        },
+      },
+      { id: "non-weapon", entityClass: "other-entity", stats: { generic: { mass: 1 } } },
+    ],
+  };
+
+  const enriched = enrichComponentCardBrowseWithShipWeapons(browse, [{
+    entityClass: "weapon-entity",
+    maxAmmoLoad: 75,
+    basePenetrationDistance: 18,
+  }]) as typeof browse;
+
+  assert.notEqual(enriched, browse);
+  assert.deepEqual(enriched.records[0]?.stats.shipWeapon, {
+    ammoCapacity: 900,
+    penetration: 0.5,
+    maxAmmoLoad: 75,
+    penetrationDistance: 18,
+  });
+  assert.equal(enriched.records[1], browse.records[1]);
+  assert.equal((browse.records[0]?.stats.shipWeapon as Record<string, unknown>).maxAmmoLoad, undefined);
 });

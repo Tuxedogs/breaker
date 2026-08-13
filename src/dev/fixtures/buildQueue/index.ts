@@ -90,6 +90,19 @@ export const componentCardFacetsResponse = {
 export const componentCardBrowseResponse = {
   ...componentCardBrowseSource,
   generatedAt: componentCardSourceGeneratedAt,
+  records: componentCardBrowseSource.records.map((record) => record.id === m5aCard.id
+    ? {
+        ...record,
+        stats: {
+          ...record.stats,
+          shipWeapon: {
+            ...record.stats.shipWeapon,
+            maxAmmoLoad: 25,
+            penetrationDistance: 0.07225,
+          },
+        },
+      }
+    : record),
 };
 
 export const recipeShards = new Map<string, unknown>([

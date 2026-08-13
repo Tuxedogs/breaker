@@ -2,6 +2,8 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { getComponentCardsRoot } from "../config/componentCardsRoot.js";
+import { resolveDataset } from "../fitting/datasetResolver.js";
+import { loadRegistry } from "../fitting/registryStore.js";
 
 type RouteResult = { status: number; body: unknown };
 
@@ -72,6 +74,76 @@ async function loadBrowse(): Promise<unknown> {
   return browseCache;
 }
 
+function normalizedIdentity(value: unknown): string | null {
+  return typeof value === "string" && value.trim().length > 0
+    ? value.trim().toLowerCase()
+    : null;
+}
+
+function deliveredNumber(value: unknown): number | null | undefined {
+  if (value === null) return null;
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+export function enrichComponentCardBrowseWithShipWeapons(
+  browse: unknown,
+  shipWeapons: Array<Record<string, unknown>>,
+): unknown {
+  if (!browse || typeof browse !== "object") return browse;
+
+  const payload = browse as Record<string, unknown>;
+  if (!Array.isArray(payload.records)) return browse;
+
+  const weaponByIdentity = new Map<string, Record<string, unknown>>();
+  for (const weapon of shipWeapons) {
+    const identity = normalizedIdentity(weapon.entityClass);
+    if (identity) weaponByIdentity.set(identity, weapon);
+  }
+
+  let changed = false;
+  const records = payload.records.map((candidate) => {
+    if (!candidate || typeof candidate !== "object") return candidate;
+    const record = candidate as Record<string, unknown>;
+    const identity = normalizedIdentity(record.entityClass);
+    const weapon = identity ? weaponByIdentity.get(identity) : undefined;
+    const stats = record.stats;
+    if (!weapon || !stats || typeof stats !== "object") return candidate;
+
+    const shipWeapon = (stats as Record<string, unknown>).shipWeapon;
+    if (!shipWeapon || typeof shipWeapon !== "object") return candidate;
+
+    const maxAmmoLoad = deliveredNumber(weapon.maxAmmoLoad);
+    const penetrationDistance = deliveredNumber(weapon.basePenetrationDistance);
+    if (maxAmmoLoad === undefined && penetrationDistance === undefined) return candidate;
+
+    changed = true;
+    return {
+      ...record,
+      stats: {
+        ...(stats as Record<string, unknown>),
+        shipWeapon: {
+          ...(shipWeapon as Record<string, unknown>),
+          ...(maxAmmoLoad !== undefined ? { maxAmmoLoad } : {}),
+          ...(penetrationDistance !== undefined ? { penetrationDistance } : {}),
+        },
+      },
+    };
+  });
+
+  return changed ? { ...payload, records } : browse;
+}
+
+async function loadEnrichedBrowse(): Promise<unknown> {
+  const browse = await loadBrowse();
+  try {
+    const selection = await resolveDataset(new URLSearchParams());
+    const shipWeapons = await loadRegistry(selection, "ship_weapons.json");
+    return enrichComponentCardBrowseWithShipWeapons(browse, shipWeapons.records);
+  } catch {
+    return browse;
+  }
+}
+
 async function loadFacets(): Promise<unknown> {
   const facetsPath = path.join(cardsRoot, "facets.json");
   const modifiedAt = (await stat(facetsPath)).mtimeMs;
@@ -120,7 +192,7 @@ export async function handleComponentCardsRoute(
 
   if (pathName === "/api/crafting/component-cards/browse") {
     if (method !== "GET") return methodNotAllowed();
-    return { status: 200, body: await loadBrowse() };
+    return { status: 200, body: await loadEnrichedBrowse() };
   }
 
   const recordMatch = pathName.match(/^\/api\/crafting\/component-cards\/([^/]+)$/);

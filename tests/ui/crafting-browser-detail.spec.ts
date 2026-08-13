@@ -365,4 +365,83 @@ test.describe("Crafting browser and detail refactor", () => {
       });
     }
   });
+
+  test("shows source-backed weapon columns and places linked blueprint sources after estimated effects", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await mkdir(screenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${browserPath}?search=M5A`, { waitUntil: "domcontentloaded" });
+
+      const table = page.locator(".crb2-table");
+      await expect(table.getByRole("button", { name: /^Pen\. Dist\./ })).toBeVisible();
+      const m5aRow = table.locator("tbody tr").filter({ hasText: "M5A Cannon" });
+      await expect(m5aRow).toContainText("0.07m");
+      await expect(m5aRow).toContainText("25");
+
+      await page.getByRole("searchbox", { name: "Search components" }).fill("Greatsword");
+      const ballisticRow = table.locator("tbody tr").filter({ hasText: "10-Series Greatsword Cannon" });
+      await expect(ballisticRow).toContainText("492");
+
+      await page.goto(`${browserPath}?preview=db3f4c97-8d40-4b36-b397-452dea1594fc`, {
+        waitUntil: "domcontentloaded",
+      });
+      const drawer = page.locator(".craft-detail-drawer-region");
+      await expect(drawer).toBeVisible();
+      await drawer.getByRole("tab", { name: "Overview" }).click();
+      await expect(drawer.locator(".craft-detail-sources-section")).toHaveCount(0);
+      await drawer.getByRole("tab", { name: "Materials" }).click();
+
+      const effects = drawer.locator(".craft-detail-effects-panel");
+      const sources = drawer.locator(".craft-detail-sources-section");
+      await expect(effects).toBeVisible();
+      await expect(sources).toBeVisible();
+      await expect(sources.locator(".craft-mission-source-link")).toHaveAttribute(
+        "href",
+        "/industry/missions?concept=xenothreat-2-85-01",
+      );
+      const sourceStyling = await drawer.evaluate((root) => {
+        const missionLink = root.querySelector<HTMLElement>(".craft-mission-source-link");
+        const fullLink = root.querySelector<HTMLElement>(".craft-detail-drawer-header-actions .craft-detail-drawer-full-link");
+        const sourceCard = root.querySelector<HTMLElement>(".craft-mission-source");
+        const materialCard = root.querySelector<HTMLElement>(".craft-detail-material-row");
+        const effectCell = root.querySelector<HTMLElement>(".craft-detail-material-effects");
+        const style = (element: HTMLElement | null) => element ? getComputedStyle(element) : null;
+        return {
+          missionLinkColor: style(missionLink)?.color,
+          fullLinkColor: style(fullLink)?.color,
+          missionLinkWeight: style(missionLink)?.fontWeight,
+          fullLinkWeight: style(fullLink)?.fontWeight,
+          sourceBackground: style(sourceCard)?.backgroundColor,
+          materialBackground: style(materialCard)?.backgroundColor,
+          sourceRadius: style(sourceCard)?.borderRadius,
+          materialRadius: style(materialCard)?.borderRadius,
+          effectPaddingLeft: style(effectCell)?.paddingLeft,
+        };
+      });
+      expect(sourceStyling.missionLinkColor).toBe(sourceStyling.fullLinkColor);
+      expect(sourceStyling.missionLinkWeight).toBe(sourceStyling.fullLinkWeight);
+      expect(sourceStyling.sourceBackground).toBe(sourceStyling.materialBackground);
+      expect(sourceStyling.sourceRadius).toBe(sourceStyling.materialRadius);
+      expect(sourceStyling.effectPaddingLeft).toBe("12px");
+      const panelOrder = await drawer.locator(".craft-detail-crafting-section").evaluate((section) => ({
+        effects: Array.from(section.children).findIndex((child) => child.classList.contains("craft-detail-effects-panel")),
+        sources: Array.from(section.children).findIndex((child) => child.classList.contains("craft-detail-sources-section")),
+      }));
+      expect(panelOrder.sources).toBeGreaterThan(panelOrder.effects);
+
+      await expectNoDocumentOverflow(page);
+      await page.screenshot({
+        path: path.join(screenshotDir, `crafting-blueprint-sources-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
 });

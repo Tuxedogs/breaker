@@ -137,6 +137,8 @@ type RecipeRewardPoolSummary = {
 
 type MissionRewardEntry = {
   id: string;
+  contractId?: string;
+  conceptKey?: string;
   title: string;
   subtitle?: string;
   poolName?: string;
@@ -147,6 +149,7 @@ type MissionRewardEntry = {
 };
 
 type ApiBlueprintMission = {
+  conceptKey?: unknown;
   contractId?: unknown;
   contractTitle?: unknown;
   contractDebugName?: unknown;
@@ -278,6 +281,7 @@ function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string
   if (!isRecord(value)) return null;
 
   const mission = value as ApiBlueprintMission;
+  const conceptKey = asNonEmptyString(mission.conceptKey);
   const contractId = asNonEmptyString(mission.contractId);
   const poolGuid = asNonEmptyString(mission.poolGuid);
   const contractTitle = asNonEmptyString(mission.contractTitle);
@@ -287,7 +291,7 @@ function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string
   const factionName = asNonEmptyString(mission.factionName);
   const poolChance = asFiniteNumber(mission.poolChance);
   const rewardChance = asFiniteNumber(mission.rewardChance);
-  const id = [contractId, poolGuid].filter(Boolean).join(":");
+  const id = [conceptKey, contractId, poolGuid].filter(Boolean).join(":");
 
   if (!id) return null;
 
@@ -298,6 +302,8 @@ function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string
 
   return {
     id: `mission:${id}`,
+    contractId,
+    conceptKey,
     title,
     subtitle: generatorName,
     poolName,
@@ -2166,6 +2172,12 @@ function MissionSourcePanel({
               {visibleMissionEntries.map((entry, entryIndex) => {
                 const bookmarked = isMissionBookmarked(entry.id);
                 const chance = formatMissionChance(entry.chance);
+                const missionParams = entry.conceptKey
+                  ? new URLSearchParams({ concept: entry.conceptKey })
+                  : entry.contractId
+                    ? new URLSearchParams({ search: entry.contractId })
+                    : null;
+                const missionHref = missionParams ? `/industry/missions?${missionParams.toString()}` : null;
 
                 return (
                   <div key={`${entry.id}:${entryIndex}`} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
@@ -2193,7 +2205,16 @@ function MissionSourcePanel({
                     <div className="craft-mission-source-copy">
                       <div className="craft-mission-source-name">
                         {entry.isDisabled && <span className="craft-disabled-badge">[DISABLED]</span>}
-                        <span>{entry.title}</span>
+                        {missionHref ? (
+                          <Link
+                            className="craft-detail-drawer-full-link craft-mission-source-link"
+                            to={missionHref}
+                          >
+                            {entry.title}
+                          </Link>
+                        ) : (
+                          <span>{entry.title}</span>
+                        )}
                       </div>
                       <div className="craft-mission-source-meta">
                         {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
@@ -2376,6 +2397,7 @@ function RightCraftingPanel({
   overallModifiers,
   overallQualitySource,
   finalProductQuality,
+  sourcePanel,
   children,
 }: {
   fittingDetail?: FittingComponentDetail | null;
@@ -2383,6 +2405,7 @@ function RightCraftingPanel({
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
+  sourcePanel: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -2398,6 +2421,7 @@ function RightCraftingPanel({
         overallQualitySource={overallQualitySource}
         finalProductQuality={finalProductQuality}
       />
+      {sourcePanel}
     </section>
   );
 }
@@ -2767,12 +2791,6 @@ function RecipeDrawer({
                 overallQualitySource={overallQualitySource}
                 finalProductQuality={finalProductQuality}
               />
-              <MissionSourcePanel
-                recipe={selectedRecipe}
-                rewardPools={rewardPools}
-                isMissionBookmarked={isMissionBookmarked}
-                onToggleMissionBookmark={onToggleMissionBookmark}
-              />
             </div>
           )}
 
@@ -2813,6 +2831,14 @@ function RecipeDrawer({
                 overallModifiers={overallModifiers}
                 overallQualitySource={overallQualitySource}
                 finalProductQuality={finalProductQuality}
+                sourcePanel={(
+                  <MissionSourcePanel
+                    recipe={selectedRecipe}
+                    rewardPools={rewardPools}
+                    isMissionBookmarked={isMissionBookmarked}
+                    onToggleMissionBookmark={onToggleMissionBookmark}
+                  />
+                )}
               >
                 {quantizationLoading && (
                   <div className="craft-empty-card">Loading local quality quantization bands...</div>
@@ -3020,6 +3046,14 @@ function RecipeDrawer({
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
           finalProductQuality={finalProductQuality}
+          sourcePanel={(
+            <MissionSourcePanel
+              recipe={selectedRecipe}
+              rewardPools={rewardPools}
+              isMissionBookmarked={isMissionBookmarked}
+              onToggleMissionBookmark={onToggleMissionBookmark}
+            />
+          )}
         >
           {quantizationLoading && (
             <div className="craft-empty-card">
@@ -3054,12 +3088,6 @@ function RecipeDrawer({
         </aside>
       </div>
 
-      <MissionSourcePanel
-        recipe={selectedRecipe}
-        rewardPools={rewardPools}
-        isMissionBookmarked={isMissionBookmarked}
-        onToggleMissionBookmark={onToggleMissionBookmark}
-      />
     </div>
   );
 };

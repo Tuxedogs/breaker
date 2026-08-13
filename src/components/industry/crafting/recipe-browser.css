@@ -1382,6 +1382,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.craft-mission-source-link {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--craft-highlight-focus);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.craft-mission-source-link:hover,
+.craft-mission-source-link:focus-visible {
+  color: var(--void-text-main);
+  text-decoration: none;
+}
 .craft-mission-source-meta {
   margin-top: 3px;
   overflow: hidden;
@@ -2556,20 +2569,29 @@
 
 .craft-detail-sources-section .craft-mission-source-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
   max-height: none;
   overflow: visible;
+  padding: 0;
+  border: 1px solid var(--panel-border-soft);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
 }
 
 .craft-detail-sources-section .craft-mission-source {
   min-height: 52px;
   box-sizing: border-box;
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: var(--panel-row-bg);
-  border: 1px solid var(--panel-border-soft);
-  border-radius: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--panel-border-soft);
+  border-radius: 0;
   transition: background 120ms ease, border-color 120ms ease;
+}
+
+.craft-detail-sources-section .craft-mission-source:last-child {
+  border-bottom: 0;
 }
 
 .craft-detail-sources-section .craft-mission-source:hover {
@@ -2880,6 +2902,13 @@
 .craft-detail-material-effects {
   flex-wrap: wrap;
   gap: 4px;
+  box-sizing: border-box;
+  padding-left: 12px;
+}
+
+.craft-detail-material-table-head > span:last-child {
+  box-sizing: border-box;
+  padding-left: 12px;
 }
 
 .craft-detail-effect-chip {
@@ -3616,6 +3645,11 @@
 
   .craft-detail-effect-values {
     justify-content: flex-start;
+  }
+
+  .craft-detail-material-effects,
+  .craft-detail-material-table-head > span:last-child {
+    padding-left: 0;
   }
 
   .craft-detail-material-table-head {
