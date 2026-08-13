@@ -1,10 +1,12 @@
 # Scintel / Moonbreaker — Claude Context
 
-Updated: 2026-07-28
+Updated: 2026-08-13
 
 Read `AGENTS.md` before making changes. It is the repository-wide working and safety authority.
 
 For visual work, use `moonbreaker_design_canon.md` as the detailed design authority. Do not recreate or override its palette, hierarchy, terminology, quality-formatting, or validation rules here.
+
+For operational API, generated-data, publication, and deployment work, use `docs/api-data-flow-runbook.md` and `docs/generated-data-manifest.md`. `public/api` is retired and must remain empty; treat older audits and handoffs that describe static files there as historical evidence rather than current operating instructions.
 
 ## Project Overview
 
@@ -48,8 +50,9 @@ Preserve the existing custom CSS and lazy route boundaries. Do not add dependenc
 - Fitting-detail consumers use the shared component store. Cache identity preserves channel, build ID, source type, and normalized identity; the persistent cache schema must advance when the response contract changes incompatibly.
 - Inventory defaults to Location → Material → Quality → Individual Boxes, with item-first and grouped-list alternatives.
 - Discrete inventory records are physical boxes in user-facing language. Legacy aggregate records must be labeled as aggregates.
-- Recipe Browser uses permanent filters, search-over-filter precedence with `Non-Filter Match` disclosure, a selected hero, and sortable family tables.
-- Crafting Detail uses Build Queue-style compact statistics, `Material | Required | Target | Input | Effect`, and charts below Material Requirements.
+- Recipe Browser uses a permanent horizontal filter bar, search-over-filter precedence with `Non-Filter Match` disclosure, sortable family tables, and a peer detail drawer at wide desktop widths.
+- Crafting Detail has full-page and wide-screen drawer presentations. Both reuse the same delivered recipe and shared component-stat paths; the drawer provides Overview, Materials, and Statistics tabs plus an explicit route to full details.
+- Full-page Crafting Detail uses Build Queue-style compact statistics, `Material | Required | Target | Input | Effect`, and charts below Material Requirements.
 
 For the current Crafting implementation map and validation contract, read `docs/crafting-browser-detail-handoff.md`.
 

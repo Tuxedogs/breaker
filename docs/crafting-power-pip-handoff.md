@@ -1,5 +1,7 @@
 # Crafting Modifier System — Findings & Power Pip Handoff
 
+> **Historical handoff — not operational guidance.** Static `public/api` paths and page-local calculation descriptions below record the implementation at the time of this investigation. `public/api` is retired. Use `docs/api-data-flow-runbook.md` for the current routed data boundary, `docs/crafting-browser-detail-handoff.md` for the active Crafting implementation, and the current shared crafting/fitting projection code for calculation ownership.
+
 ## What Was Fixed
 
 ### Bug: Wrong base value for Shield HP (and other vehicle component stats)

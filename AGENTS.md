@@ -10,6 +10,17 @@ You are working on Moonbreaker / Scintel.
 
 Do not assume work should occur in the clean fitting worktree. Use the repository named in the task.
 
+## Documentation Authority
+
+For operational API, generated-data, publication, and deployment work, use:
+
+* `docs/api-data-flow-runbook.md` for the current extraction-to-endpoint flow, endpoint catalog, publication commands, deployment wiring, and incident response.
+* `docs/generated-data-manifest.md` for the concise data-authority and runtime-ownership registry.
+
+`public/api` is retired and must remain empty. Historical audits and handoffs may describe former static-file paths; preserve those documents as evidence, but do not use them as current operating instructions unless their status explicitly says they are current.
+
+For visual work, use `moonbreaker_design_canon.md` as the detailed design authority and the current page source as implementation truth. Page-specific accepted canon linked from that file remains authoritative for its stated scope.
+
 ## Working Style
 
 * Prefer small, isolated changes.
@@ -174,7 +185,7 @@ The global color, card, border, and highlight system is currently being audited.
 
 Do not treat the current Dashboard palette or the blue, teal, and purple page family as the final global standard until that audit is approved.
 
-Detailed page and design guidance belongs in the Moonbreaker design canon rather than being duplicated here.
+Detailed page and design guidance belongs in `moonbreaker_design_canon.md` rather than being duplicated here.
 
 ## UI Implementation Rules
 

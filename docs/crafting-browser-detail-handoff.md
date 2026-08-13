@@ -1,6 +1,6 @@
 # Recipe Browser and Crafting Detail — Agent Handoff
 
-Updated: 2026-07-28  
+Updated: 2026-08-13
 Status: Implemented and visually validated
 
 This is the concise implementation map for `/industry/crafting` and `/industry/crafting/:blueprintId`. Visual authority remains `moonbreaker_design_canon.md`; repository safety authority remains `AGENTS.md`.
@@ -8,13 +8,15 @@ This is the concise implementation map for `/industry/crafting` and `/industry/c
 ## Runtime data path
 
 ```text
-D:/scintel/scripts/crafting/generate-component-card-index.ts
-  -> public/api/crafting/component_card_index.json
+D:/scintel/out/<CHANNEL>/<BUILD_ID>/datasets/crafting/component_card_index.json
   -> scripts/shape-component-card-data.mts
   -> server-data/crafting/component-cards/*
+  -> /api/crafting/component-cards/*
   -> src/lib/componentCardIndexApi.ts
   -> CraftingLayout / ComponentResultsBrowser
 ```
+
+Recipe shards follow the matching accepted-snapshot shaping path into `server-data/crafting/recipes` and are served through `/api/crafting/recipes/*`. `public/api` is retired and must remain empty. Use `docs/api-data-flow-runbook.md` for publication commands, endpoint ownership, and deployment wiring.
 
 Crafting Detail also joins normalized recipes and shared fitting/component-card detail:
 
@@ -32,6 +34,7 @@ Do not hand-edit generated component-card JSON to change production behavior. Ch
 Primary files:
 
 - `src/components/industry/crafting/CraftingLayout.tsx`
+- `src/components/industry/crafting/CraftingPage.tsx`
 - `src/components/industry/crafting/components/CraftingFilterBar.tsx`
 - `src/components/industry/crafting/components/ComponentResultsBrowser.tsx`
 - `src/components/industry/crafting/utils/recipeBrowserFilters.ts`
@@ -49,7 +52,10 @@ Behavioral contract:
 - Search-result ordering prioritizes name relevance and selects an FPS weapon before its matching magazine.
 - Bookmarks, pagination, row selection, keyboard access, double-click/open behavior, queue state, and detail routing remain intact.
 - Family tables sort from their headers. Numeric first activation is descending; Component first activation is ascending.
-- Desktop table headers stick at the top of the results viewport below the filter rail.
+- Desktop table headers stick at the top of the results viewport below the horizontal filter bar.
+- Below 1600px, a single click selects the table row; double-click or an explicit open action routes to the full detail page.
+- At 1600px and wider, a single selection opens the peer detail drawer through the `preview` query parameter. Escape, the close control, and `Open full details` preserve explicit navigation behavior.
+- The drawer resets to Materials for a newly opened item and exposes Overview, Materials, and Statistics without introducing a second data or calculation path.
 
 Important family columns:
 
@@ -76,6 +82,9 @@ Primary files:
 
 Presentation contract:
 
+- The full-page route and wide-screen drawer consume the same shaped recipe shard and shared fitting/component-card detail paths.
+- The drawer is a peer workflow surface beside the results table, not a statistics workspace nested inside an identity header.
+- Drawer identity, facts, tabs, scrollable body, and action footer remain distinct regions; full-detail navigation stays explicit.
 - Component Statistics mirrors Build Queue’s compact scan structure: external group labels, restrained grouped surfaces, aligned labels/values, and dense rows.
 - Source arrays, matrices, subtype rows, valid zero, missing, loading, and unavailable retain distinct semantics.
 - Beneficial and detrimental modifier text uses `--stat-beneficial` and `--stat-detrimental` from `src/styles/tokens.css`. Structural cyan/blue is not a modifier-direction color.
@@ -111,6 +120,7 @@ The UI suite covers:
 - search override and `Non-Filter Match`
 - FPS weapon-over-magazine selection
 - sorting and sticky headers
+- wide-screen drawer selection, tab layout, close behavior, and full-detail navigation
 - Target editing and 1–1000 range
 - canonical material casing
 - realistic FPS chart windows and chart placement

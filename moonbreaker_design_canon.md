@@ -1,6 +1,6 @@
 # Moonbreaker Design Canon
 
-Updated: 2026-07-28
+Updated: 2026-08-13
 
 This canon describes the visual system currently implemented across Moonbreaker / Scintel. It is the default reference for new UI work and for page-by-page visual refinement.
 
@@ -45,7 +45,7 @@ Rules:
 
 ## Recent Implementation Audit
 
-The July 24–27 Build Queue and Inventory work established several implemented patterns:
+The July 24–August 10 Build Queue, Inventory, and Crafting work established several implemented patterns:
 
 - Build Queue now uses a compact selected-craft command card followed by peer Component Statistics and Material Allocation workspace cards. Statistics and allocation are not header content.
 - Component Statistics consolidates source-backed end-product traits and isolates genuinely modified rows for Base, Target, and Allocation comparison.
@@ -53,8 +53,8 @@ The July 24–27 Build Queue and Inventory work established several implemented 
 - Repeated material requirements keep the target-quality control in the compact summary and use progressive disclosure for reserve detail.
 - Inventory defaults to a responsive Location → Material → Quality → Individual Boxes tree while retaining item-first and grouped-list alternatives.
 - Inventory hierarchy evidence now includes populated desktop, populated compact, and empty states.
-- Recipe Browser now uses a permanent operational filter rail, a selected-item hero, sortable family tables, and a material-first lookup path.
-- Crafting Detail now uses Build Queue-style compact statistic groups, a distinct Material Requirements workspace, and performance charts below the material workspace.
+- Recipe Browser now uses a permanent horizontal filter bar, sortable family tables, a material-first lookup path, and a peer detail drawer on wide desktop screens.
+- Crafting Detail now has full-page and drawer presentations backed by the same delivered recipe and shared component-stat paths. The full page retains compact statistic groups, a distinct Material Requirements workspace, and performance charts below the material workspace.
 - Build Queue and Crafting Detail share explicit beneficial and detrimental color tokens rather than using structural blue for modifier meaning.
 
 These are page-level precedents, not approval for a new global card primitive or a global palette change.
@@ -404,12 +404,12 @@ Recipe Browser is a discovery and comparison workspace, not a grid of unrelated 
 Preserve this composition:
 
 1. Search bar
-2. Permanent filter rail
-3. Selected-item hero
-4. Family-specific comparison tables
-5. Pagination
+2. Permanent horizontal filter bar
+3. Family-specific comparison tables
+4. Pagination
+5. Optional peer detail drawer at wide desktop widths
 
-The permanent filter rail includes:
+The permanent filter bar includes:
 
 - Materials
 - Vehicle Weapons
@@ -426,9 +426,11 @@ Manual text search intentionally overrides applied filters. Do not hide a valid 
 - Keep the filters selected so they resume when search is cleared.
 - Show a red, informational `Non-Filter Match` badge on results outside those filters.
 - Do not change queue, bookmark, pagination, or route behavior.
-- When an FPS weapon and its magazine both match a weapon search, select the weapon as the hero.
+- When an FPS weapon and its magazine both match a weapon search, prefer the weapon as the selected result.
 
-The selected hero should provide identity, concise description, compact category/state badges, four important family statistics, primary materials, and one clear `View Recipe` action. Keep Physical and Energy as explicit damage-channel badges for applicable weapons. Do not repeat a variant, size, or other value as both identity copy and a badge.
+At widths below 1600px, a single click selects the table row while double-click or an explicit open action routes to the full Crafting Detail page. At 1600px and wider, a single selection opens a peer detail drawer beside the comparison table; double-click and explicit open actions may route directly to full details. The drawer must not be nested inside a selected-item header or table card.
+
+The wide-screen drawer uses Overview, Materials, and Statistics tabs, defaults to Materials when a new item opens, supports Escape and an explicit close control, and provides a clear `Open full details` route. Its compact identity header, facts, tabs, body, and action footer remain separate regions. Drawer actions reuse the same bookmark, queue, recipe, and calculation behavior as the full detail page.
 
 Tables should:
 
@@ -440,11 +442,13 @@ Tables should:
 
 Ship-weapon comparison includes DPS and Penetration. Ship DPS must use the shared weapon-stat resolver rather than a page-local formula. Radar comparison includes independent minimum and maximum power-pip columns and independent minimum and maximum aim-assist range columns.
 
-At desktop widths, table headers remain sticky within the results viewport below the permanent filter rail. At compact width, the Component column remains the scanning anchor while the remaining statistics stay horizontally accessible.
+At desktop widths, table headers remain sticky within the results viewport below the permanent filter bar. At compact width, the Component column remains the scanning anchor while the remaining statistics stay horizontally accessible.
 
 ## Crafting Detail Canon
 
 Crafting Detail is the primary decision page between discovering an item and committing it to Build Queue.
+
+The canonical full-page route remains `/industry/crafting/:blueprintId`. At 1600px and wider, Recipe Browser may present the same item in a peer drawer for rapid comparison. The drawer is a compact presentation of the same source-backed detail, not a second calculation path or a replacement for the full page.
 
 It should use three primary regions:
 
