@@ -2,6 +2,11 @@
 
 React + Vite + TypeScript docs site project.
 
+## Operational API documentation
+
+- [API and data-flow runbook](docs/api-data-flow-runbook.md): extraction-to-endpoint map, endpoint catalog, publication commands, deployment wiring, and incident response.
+- [Generated data manifest](docs/generated-data-manifest.md): source authority, server-only boundaries, and runtime ownership.
+
 ## Alpha Threshold Ship Data
 
 Manual ship data for the Alpha Threshold tool lives in [src/tools/alpha-threshold/data/ships/manualSeeds.ts](./src/tools/alpha-threshold/data/ships/manualSeeds.ts).
@@ -51,5 +56,4 @@ ManualShipSeed[] -> normalizeManualShipRecord() -> ShipRecord[]
 ```
 
 Normalization and raw dump parsing live in [src/tools/alpha-threshold/lib/ships/adapters/manual.ts](./src/tools/alpha-threshold/lib/ships/adapters/manual.ts).
-
 

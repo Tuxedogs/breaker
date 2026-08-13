@@ -2,6 +2,8 @@
 
 The machine-readable manifest lives at `server/config/generatedDataManifest.ts`. It records data authority, provenance, validation status, runtime ownership, and the current server-only location for generated gameplay data.
 
+For the complete extraction-to-endpoint diagram, endpoint catalog, publication commands, deployment wiring, and incident checklist, use the [Moonbreaker API and data-flow runbook](api-data-flow-runbook.md). This file remains the concise data-authority registry.
+
 ## Active Data Boundary
 
 `public/api` must remain empty. Moonbreaker browser code uses routed API endpoints for crafting, Build Queue, mining, fitting, refinery reference data, locations, missions, and inventory. Those routes read route-owned `server-data` registries or user/database state.
