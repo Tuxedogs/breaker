@@ -11,36 +11,19 @@ export type RecipeInputClassification = {
   materialName?: unknown;
 };
 
-// Some Foundry recipes encode manufactured sub-parts with CraftingCost_Resource.
-// Keep those rows in the recipe, but never expose them as inventory materials.
-const NON_INVENTORY_RECIPE_PART_IDS = new Set([
-  "fde0cd65-8827-4b23-804d-cc8845dfa7ac", // Insulative Liner
-]);
-
-const NON_INVENTORY_RECIPE_PART_KEYS = new Set([
-  "insulativeliner",
-  "insulativelinermaterial",
-]);
-
 function normalized(value: unknown): string {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
 export function isNonInventoryRecipePart(input: RecipeInputClassification): boolean {
-  const ids = [input.costId, input.materialId].map(normalized);
-  if (ids.some((id) => NON_INVENTORY_RECIPE_PART_IDS.has(id))) return true;
-
-  const keys = [input.materialKey, input.materialName]
-    .map((value) => normalized(value).replace(/[^a-z0-9]+/g, ""));
-  return keys.some((key) => NON_INVENTORY_RECIPE_PART_KEYS.has(key));
+  return normalized(input.inputKind) === "part";
 }
 
 export function classifyRecipeInput(input: RecipeInputClassification): RecipeInputKind {
   const explicitKind = normalized(input.inputKind);
   if (explicitKind === "part" || explicitKind === "material") return explicitKind;
-  if (isNonInventoryRecipePart(input)) return "part";
   // Gems are inventory materials even though Foundry encodes their costs as items.
-  // Only explicit or known manufactured sub-parts should leave the material path.
+  // Only an explicit upstream inputKind may leave the material path.
   return "material";
 }
 

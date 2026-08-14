@@ -248,6 +248,43 @@ test.describe("Crafting browser and detail refactor", () => {
     expect(failures).toEqual([]);
   });
 
+  test("renders Insulative Liner's Aslarite requirement as an editable material-quality row", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await mkdir(screenshotDir, { recursive: true });
+
+    for (const viewport of [
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto("/industry/crafting/005d95db-96ca-45b7-9647-7e7537b8fac8", { waitUntil: "domcontentloaded" });
+      await expect(page.locator(".craft-detail-stage")).toBeVisible();
+      await expect(page.locator(".craft-detail-title")).toContainText("ADP-mk4 Arms Woodland");
+      await expect(page.locator(".craft-detail-header-facts")).toContainText("Materials Required");
+
+      const aslariteRow = page.locator(".craft-detail-material-row", { hasText: "Aslarite" });
+      await expect(aslariteRow).toHaveCount(1);
+      await expect(aslariteRow).toContainText("INSULATIVE LINER");
+      await expect(aslariteRow.locator('input[type="range"]')).toHaveCount(1);
+      const qualityEditor = aslariteRow.getByRole("button", { name: "Edit target quality for Aslarite" });
+      await expect(qualityEditor).toHaveCount(1);
+      await qualityEditor.click();
+      const qualityInput = aslariteRow.getByRole("spinbutton", { name: "Edit target quality for Aslarite" });
+      await expect(qualityInput).toHaveCount(1);
+      await qualityInput.press("Escape");
+      await expect(page.locator('[data-requirement-kind="part"]')).toHaveCount(0);
+
+      await expectNoDocumentOverflow(page);
+      await page.screenshot({
+        path: path.join(screenshotDir, `crafting-detail-insulative-liner-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+
+    expect(failures).toEqual([]);
+  });
+
   test("organizes representative item families into Build Queue-style statistic groups", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(screenshotDir, { recursive: true });

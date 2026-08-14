@@ -90,6 +90,9 @@ import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
 import MaterialIcon from "@/components/logistics/MaterialIcon";
 import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
 import {
+  projectCraftingDetailMaterialRows,
+} from "@/lib/crafting/craftingDetailRequirements";
+import {
   getProjectileTravelDistance,
   resolveFpsChartRange,
 } from "@/lib/crafting/fpsChartRange";
@@ -2482,6 +2485,10 @@ function RecipeDrawer({
     : recipe.blueprint_id;
   const [selectedRecipeId, setSelectedRecipeId] = useState(initialSelectedRecipeId);
   const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
+  const detailMaterialRows = useMemo(
+    () => projectCraftingDetailMaterialRows(selectedRecipe),
+    [selectedRecipe],
+  );
   const [drawerTab, setDrawerTab] = useState<"overview" | "materials" | "stats">("materials");
   const [expandedDescriptionRecipeId, setExpandedDescriptionRecipeId] = useState<string | null>(null);
   const descriptionExpanded = expandedDescriptionRecipeId === selectedRecipe.blueprint_id;
@@ -2497,7 +2504,7 @@ function RecipeDrawer({
   const buildDefaultMaterialQualities = useCallback(
     (targetRecipe: ComponentRecipe) =>
       Object.fromEntries(
-        targetRecipe.materials.map((mat, inputIndex) => {
+        projectCraftingDetailMaterialRows(targetRecipe).map(({ requirement: mat, inputIndex }) => {
           const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
           return [
             getMaterialQualityKey(targetRecipe, mat, inputIndex),
@@ -2525,12 +2532,12 @@ function RecipeDrawer({
   const materialBandsByKey = useMemo(
     () =>
       new Map(
-        selectedRecipe.materials.map((mat, inputIndex) => [
+        detailMaterialRows.map(({ requirement: mat, inputIndex }) => [
           getMaterialQualityKey(selectedRecipe, mat, inputIndex),
           getQualityBandsForMaterial(mat, getBandsForMaterial),
         ]),
       ),
-    [getBandsForMaterial, selectedRecipe],
+    [detailMaterialRows, getBandsForMaterial, selectedRecipe],
   );
 
   function getBandIndex(key: string): number {
@@ -2544,7 +2551,7 @@ function RecipeDrawer({
   const overallModifiers = selectedRecipe.overallQualityModifiers ?? [];
   const finalProductQuality = deriveFinalProductQuality(selectedRecipe, getBandIndex);
   const selectedQualitySnapshot = Object.fromEntries(
-    selectedRecipe.materials.map((mat, inputIndex) => {
+    detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
       const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
       return [key, {
         quality: selectedMaterialQualities[key],
@@ -2843,7 +2850,7 @@ function RecipeDrawer({
                 {quantizationLoading && (
                   <div className="craft-empty-card">Loading local quality quantization bands...</div>
                 )}
-                {selectedRecipe.materials.map((mat, inputIndex) => {
+                {detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
                   const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
                   return (
                     <DetailMaterialQualityRow
@@ -2968,7 +2975,7 @@ function RecipeDrawer({
             )}
             <span>
               <span>Materials Required</span>
-              <strong>{selectedRecipe.materials.length} <small>ingredients</small></strong>
+              <strong>{detailMaterialRows.length} <small>ingredients</small></strong>
             </span>
           </div>
           <div className="craft-summary-action-row craft-detail-actions">
@@ -3060,7 +3067,7 @@ function RecipeDrawer({
               Loading local quality quantization bands...
             </div>
           )}
-          {selectedRecipe.materials.map((mat, inputIndex) => {
+          {detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
             const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
 
             return (

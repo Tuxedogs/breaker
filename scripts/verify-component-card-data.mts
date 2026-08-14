@@ -158,7 +158,7 @@ const ingredientRecords = [...sourceRecords, ...currentRecipeRecords];
 const allRecipeMaterials = new Map<string, { label: string; materialKey: string | null }>();
 const excludedNonMaterialInputs = new Map<string, { label: string; materialKey: string | null }>();
 const unresolvedIngredientClassifications = new Map<string, { label: string; materialKey: string | null }>();
-let linerRequirementCount = 0;
+let linerAslariteRequirementCount = 0;
 
 for (const record of ingredientRecords) {
   for (const material of record.materials ?? []) {
@@ -167,7 +167,12 @@ for (const record of ingredientRecords) {
     if (!label || !value) continue;
     const materialKey = material.materialKey?.trim() || null;
     allRecipeMaterials.set(value, { label, materialKey });
-    if (/insulative liner/i.test(label)) linerRequirementCount += 1;
+    if (value.toLowerCase() === "fde0cd65-8827-4b23-804d-cc8845dfa7ac") {
+      if (label !== "Aslarite" || materialKey !== "aslarite") {
+        throw new Error("Insulative Liner recipe requirements must resolve to Aslarite material identity.");
+      }
+      linerAslariteRequirementCount += 1;
+    }
     if (!materialKey) {
       unresolvedIngredientClassifications.set(value, { label, materialKey });
     } else if (!filterableMaterialKeys.has(materialKey)) {
@@ -199,8 +204,8 @@ if (recordsWithInvalidMaterialFacets.length > 0) {
 if (linerInMaterialFacets) {
   throw new Error("Insulative Liner is present in material facets.");
 }
-if (linerRequirementCount === 0) {
-  throw new Error("Insulative Liner is missing from recipe requirements.");
+if (linerAslariteRequirementCount === 0) {
+  throw new Error("Insulative Liner's Aslarite requirement is missing from recipes.");
 }
 
 const browseIds = new Set<string>();
@@ -327,6 +332,6 @@ for (const excluded of [...excludedNonMaterialInputs.values()].slice(0, 20)) {
 }
 console.log(`Unresolved ingredient classifications: ${unresolvedIngredientClassifications.size}`);
 console.log(`Insulative Liner present in material facets: ${linerInMaterialFacets ? "yes" : "no"}`);
-console.log(`Insulative Liner recipe requirement rows: ${linerRequirementCount}`);
+console.log(`Insulative Liner to Aslarite requirement rows: ${linerAslariteRequirementCount}`);
 console.log(`Browse entityClass count: ${browseEntityClassCount}`);
 console.log(`Vehicle entityClass count: ${vehicleEntityClassCount}/${vehicleRecordCount}`);

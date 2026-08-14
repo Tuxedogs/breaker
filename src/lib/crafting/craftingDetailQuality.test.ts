@@ -10,6 +10,9 @@ import {
   FALLBACK_QUALITY_BANDS,
   findNearestBandForQuality,
 } from "../../components/industry/crafting/utils/qualityBands";
+import {
+  projectCraftingDetailMaterialRows,
+} from "./craftingDetailRequirements";
 
 const recipe: ComponentRecipe = {
   blueprint_id: "quality-test",
@@ -73,4 +76,51 @@ test("final product semantics use the nearest extracted band, not raw quality as
 
   assert.equal(nearestBandIndex, 3);
   assert.equal(finalProduct.band, 4);
+});
+
+test("crafting detail projects Insulative Liner's Aslarite requirement as an editable material row", () => {
+  const recipeWithAslarite: ComponentRecipe = {
+    ...recipe,
+    materials: [
+      recipe.materials[0],
+      {
+        slot: "INSULATIVE LINER",
+        cost_type: "resource",
+        input_kind: "material",
+        material_name: "Aslarite",
+        cost_id: "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        quantity: 0.02,
+      },
+    ],
+  };
+
+  const requirements = projectCraftingDetailMaterialRows(recipeWithAslarite);
+  assert.deepEqual(
+    requirements.map(({ inputIndex, renderKind, editableQuality, requirement }) => ({
+      inputIndex,
+      renderKind,
+      editableQuality,
+      slot: requirement.slot,
+      displayName: requirement.material_name,
+      quantity: requirement.quantity,
+    })),
+    [
+      {
+        inputIndex: 0,
+        renderKind: "material-quality",
+        editableQuality: true,
+        slot: "BARREL",
+        displayName: "Test Material",
+        quantity: 1,
+      },
+      {
+        inputIndex: 1,
+        renderKind: "material-quality",
+        editableQuality: true,
+        slot: "INSULATIVE LINER",
+        displayName: "Aslarite",
+        quantity: 0.02,
+      },
+    ],
+  );
 });

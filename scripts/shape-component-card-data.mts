@@ -6,7 +6,10 @@ import {
   createComponentCardIdentityContext,
   enrichComponentCardRecord,
 } from "./component-card-fitting-identity.mts";
-import { isNonInventoryRecipePart } from "../src/lib/crafting/recipeInputClassification.ts";
+import {
+  filterInventoryRecipeInputs,
+  stripNonInventoryRecipePartsFromSearchText,
+} from "./lib/componentCardRecipeSearch.mts";
 import {
   getScintelComponentCardSourcePath,
   getScintelCraftingSourcePath,
@@ -303,17 +306,7 @@ function filterFacetSummary(
 }
 
 function filterNonInventoryRecipeParts(value: unknown): unknown[] {
-  if (!Array.isArray(value)) return [];
-  return value.filter((rawMaterial) => {
-    const material = asRecord(rawMaterial);
-    if (!material) return true;
-    return !isNonInventoryRecipePart({
-      costId: material.costId,
-      materialId: material.materialId,
-      materialKey: material.materialKey,
-      materialName: material.materialName ?? material.name,
-    });
-  });
+  return filterInventoryRecipeInputs(value);
 }
 
 function supplementalMaterials(blueprint: BlueprintRecord): JsonRecord[] {
@@ -775,7 +768,7 @@ function toBrowseSlim(
     grade: record.grade,
     class: record.class,
     craftTimeSeconds: record.craftTimeSeconds,
-    searchText: record.searchText,
+    searchText: stripNonInventoryRecipePartsFromSearchText(record.searchText, record.materials),
   };
 
   const entityClass = normalizeId(record.entityClass);

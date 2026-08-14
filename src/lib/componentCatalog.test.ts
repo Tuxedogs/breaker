@@ -4,6 +4,10 @@ import path from "node:path";
 import test from "node:test";
 
 import { enrichComponentCardBrowseWithShipWeapons } from "../../server/routes/componentCards.routes.ts";
+import {
+  filterInventoryRecipeInputs,
+  stripNonInventoryRecipePartsFromSearchText,
+} from "../../scripts/lib/componentCardRecipeSearch.mts";
 import { buildComponentCatalogStatMetrics } from "../components/industry/crafting/utils/componentCardSchema.ts";
 import type { ComponentCardIndexRecord } from "./componentCardIndex.ts";
 import { validateComponentCatalogGeneration } from "./componentCatalogGeneration.ts";
@@ -64,16 +68,16 @@ test("tractor and utility records retain common catalog stats without Fitting", 
   }
 });
 
-test("Insulative Liner remains a named recipe part, not an inventory material", () => {
+test("Insulative Liner remains the slot name while Aslarite is the inventory material", () => {
   const input = {
     costId: "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
-    materialKey: "insulativelinermaterial",
+    materialKey: "aslarite",
     costType: "resource",
     slotDisplayName: "Insulative Liner",
-    materialName: "Insulative Liner Material",
+    materialName: "Aslarite",
   };
-  assert.equal(classifyRecipeInput(input), "part");
-  assert.equal(getRecipeInputDisplayName(input), "Insulative Liner");
+  assert.equal(classifyRecipeInput(input), "material");
+  assert.equal(getRecipeInputDisplayName(input), "Aslarite");
   assert.equal(classifyRecipeInput({ costId: "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270", costType: "resource" }), "material");
   assert.equal(classifyRecipeInput({
     costId: "125dd723-95ad-488d-830f-62c954445ca1",
@@ -88,11 +92,26 @@ test("Insulative Liner remains a named recipe part, not an inventory material", 
     "recipes",
     "by-blueprint",
     "02858dde-eb44-4326-84ca-bd1abc53b4fe.json",
-  ) as { record?: { materials?: Array<{ inputKind?: string; materialName?: string }> } };
-  const liner = recipeShard.record?.materials?.find((material) => material.inputKind === "part");
-  assert.deepEqual(liner && { inputKind: liner.inputKind, materialName: liner.materialName }, {
-    inputKind: "part",
-    materialName: "Insulative Liner",
+  ) as { record?: { materials?: Array<{
+    costId?: string;
+    inputKind?: string;
+    materialKey?: string;
+    materialName?: string;
+    slotDisplayName?: string;
+  }> } };
+  const liner = recipeShard.record?.materials?.find(
+    (material) => material.costId === "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+  );
+  assert.deepEqual(liner && {
+    inputKind: liner.inputKind,
+    materialKey: liner.materialKey,
+    materialName: liner.materialName,
+    slotDisplayName: liner.slotDisplayName,
+  }, {
+    inputKind: "material",
+    materialKey: "aslarite",
+    materialName: "Aslarite",
+    slotDisplayName: "Insulative Liner",
   });
 
   const facets = loadJson(
@@ -105,9 +124,34 @@ test("Insulative Liner remains a named recipe part, not an inventory material", 
   assert.ok(materialFacets.some((material) => material.label === "Iron"));
   assert.ok(!materialFacets.some((material) => /insulative liner/i.test(material.label ?? "")));
 
-  const armorCard = loadCard("005d95db-96ca-45b7-9647-7e7537b8fac8");
-  assert.ok(!armorCard.materials?.some((material) => /insulative liner/i.test(material.name)));
-  assert.ok(!armorCard.card.materialsPreview.some((material) => /insulative liner/i.test(material.name)));
+});
+
+test("component-card browse metadata excludes explicit recipe parts", () => {
+  const requirements = [
+    {
+      inputKind: "material",
+      slotDisplayName: "Insulative Liner",
+      materialName: "Aslarite",
+      materialKey: "aslarite",
+      costId: "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+    },
+    {
+      inputKind: "part",
+      slotDisplayName: "Cooling Manifold",
+      materialName: "Manufactured Cooling Manifold",
+      materialKey: "manufacturedcoolingmanifold",
+      costId: "manufactured-part-id",
+    },
+  ];
+  const searchText = [
+    "armor insulative liner aslarite fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+    "cooling manifold manufacturedcoolingmanifold manufactured-part-id",
+  ].join(" ");
+
+  assert.deepEqual(filterInventoryRecipeInputs(requirements), [requirements[0]]);
+  const sanitized = stripNonInventoryRecipePartsFromSearchText(searchText, requirements);
+  assert.match(sanitized, /insulative liner aslarite fde0cd65/);
+  assert.doesNotMatch(sanitized, /cooling|manifold|manufactured/);
 });
 
 test("current recipes missing from the upstream snapshot receive catalog cards", () => {
