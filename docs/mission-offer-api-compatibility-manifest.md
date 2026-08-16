@@ -9,7 +9,7 @@ Baseline shaped mission schema: `2`
 Target source contract: `4`  
 Target shaped mission schema: `3`  
 Target offer projection schema: `1`  
-Published Moonbreaker mission generation: `2cc966f1ae3dbd6e7db858a2`  
+Published Moonbreaker mission generation: `09845999a73432800e773946`
 Rollback Moonbreaker mission generation: `fdfd54f65b1f84a621899b21`
 
 This manifest is the compatibility agreement for introducing player-facing mission offers without changing exact mission truth. It supplements `docs/api-data-flow-runbook.md` and `docs/generated-data-manifest.md`; those documents remain authoritative for publication, deployment, and route ownership. `public/api` remains retired.
@@ -19,11 +19,15 @@ This manifest is the compatibility agreement for introducing player-facing missi
 The reader-first migration is complete for `LIVE` build `4.9.0-live.12232306`:
 
 - Scintel source contract 4 is accepted and published with additive offer evidence.
-- Moonbreaker shaped schema 3 / offer projection 1 is current at generation `2cc966f1ae3dbd6e7db858a2`.
+- Moonbreaker shaped schema 3 / offer projection 1 is current at generation `09845999a73432800e773946`.
 - The schema-2/source-3 generation remains present as the explicit rollback target.
-- The published generation contains 259 Mission Series, 1,012 Mission Offers, and the same 2,501 Exact Variants.
+- The published generation contains 259 Mission Series, 973 Mission Offers, and the same 2,501 Exact Variants. The lower offer count is an intentional identity correction: 77 formerly unresolved localized titles now resolve and group by their source-backed provider/title identity.
+- The accepted reference index is mandatory and recorded in the generation receipt. The current generation resolves 1,735 reputation scopes and has zero unresolved locations; publication rejects missing reference evidence, zero resolved scopes, or severe location-resolution collapse.
+- Reputation reward facets are structured offer-owned records with stable keys, faction and scope display labels, confidence, contributing path counts, and exact/range/partial amount summaries. UI filters never derive labels by splitting GUIDs.
+- CIG localization keys with comma metadata such as `,P` resolve through the normalized source token. Runtime-selected titles remain bracketed placeholders, such as `[Black Box Recovery — Medium]`; unresolved NFR/WIP debug names are hidden from the default active catalog and remain available only through explicit inactive filters.
 - The Headhunters golden report passes 10 offer identities, 25 exact variants, 10 exact-title search checks, the Ghost runtime-placeholder check, and all protected invariant gates.
-- Full validation passes: 51/51 mission tests, 3/3 offer-first Playwright tests, all six blueprint-source routes, source and shaped verifiers, lint, and production build.
+- Full validation passes: 60/60 mission tests, 4/4 offer-first Playwright tests, all six blueprint-source routes, source and shaped verifiers, lint, API boundary checks, and production build.
+- `npm run ui:missions` targets the current schema-3 offer-first suite. Use `npm run ui:missions:legacy` only when deliberately validating the schema-2/source-3 rollback fixture.
 
 The immutable generation receipt and contradiction ledger are recorded in `docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json`.
 
@@ -144,6 +148,24 @@ type MissionOfferV1 = {
   };
   verificationStatus: "verified" | "unverified" | "unknown";
   verificationEvidence: Record<string, unknown> | null;
+  reputationRewardFacets: Array<{
+    stableKey: string;
+    factionKey: string;
+    factionDisplayName: string;
+    scopeKey: string;
+    scopeDisplayName: string;
+    confidence: "resolved" | "partial" | "unresolved";
+    variantCount: number;
+    rewardPathCount: number;
+    amountSummary: {
+      status: "exact" | "range" | "partial" | "unresolved";
+      resolvedPathCount: number;
+      unresolvedPathCount: number;
+      minAmount?: number;
+      maxAmount?: number;
+    };
+  }>;
+  reputationRewardKeys: string[]; // compatibility index derived from facet stableKey
   variantKeys: string[];
   familyKeys: string[];
   relatedConceptKeys: string[];

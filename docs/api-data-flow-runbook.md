@@ -214,6 +214,10 @@ pwsh -File scripts/publish/publish_mission_api_to_moonbreaker.ps1 `
 
 Always pass `-SourceDir` and `-RefIndex`. Do not rely on a legacy repository-level default.
 
+For shaped schema 3 / source 4 / offer 1, mission publication is fail-closed. The shaper and immutable publisher require an explicit, readable reference index whose build, audited path, SHA-256, and record count agree with the accepted source receipt. Publication is rejected when reputation-scope resolution collapses to zero or unresolved locations exceed the semantic gate. `mission_browser_index.json.sourceInputs.refIndex.status` must be `explicit`; `not_configured` is never publishable.
+
+The accepted LIVE corrective generation is `09845999a73432800e773946`. It records 61,505 reference records, 1,735 resolved reputation scopes, and zero unresolved locations. The earlier shaped-3 generation `2cc966f1ae3dbd6e7db858a2` is retained only as incident evidence and must not be used as a rollback target because it was shaped without the reference index. Use the schema-2/source-3 generation `fdfd54f65b1f84a621899b21` for rollback.
+
 After mission publication, validate both cross-domain projections:
 
 ```powershell

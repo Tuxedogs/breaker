@@ -53,6 +53,23 @@ function offer(offerKey: string, displayTitle: string): MissionOfferView {
     missionTypes: ["Bounty"],
     rewardTypes: ["credits-calculated"],
     reputationRewardKeys: ["headhunters:bounty"],
+    reputationRewardFacets: [{
+      stableKey: "headhunters:bounty",
+      factionKey: "headhunters",
+      factionDisplayName: "Headhunters",
+      scopeKey: "bounty",
+      scopeDisplayName: "Bounty",
+      confidence: "resolved",
+      variantCount: 1,
+      rewardPathCount: 1,
+      amountSummary: {
+        status: "exact",
+        resolvedPathCount: 1,
+        unresolvedPathCount: 0,
+        minAmount: 100,
+        maxAmount: 100,
+      },
+    }],
     releaseFlags: [],
     confidenceFlags: [],
     auditFlags: ["verification_unknown"],
@@ -66,6 +83,12 @@ test("schema-3 client search remains offer-local", () => {
 
   assert.equal(missionOfferMatchesClientFilters(primo, { search: "Primo Target" }), true);
   assert.equal(missionOfferMatchesClientFilters(sibling, { search: "Primo Target" }), false);
+});
+
+test("schema-3 reputation filtering uses the structured stable facet key", () => {
+  const primo = offer("headhunters:primo-target", "Primo Target");
+  assert.equal(missionOfferMatchesClientFilters(primo, { repReward: "headhunters:bounty" }), true);
+  assert.equal(missionOfferMatchesClientFilters(primo, { repReward: "guid-label-fragment" }), false);
 });
 
 test("legacy one-to-many concepts remain an explicit series", () => {

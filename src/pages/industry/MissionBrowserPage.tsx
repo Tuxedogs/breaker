@@ -25,6 +25,7 @@ import {
   type MissionPathPayload,
   type MissionConceptView,
   type MissionOfferView,
+  type MissionOfferReputationRewardFacetView,
   type MissionPrerequisiteView,
   type MissionRequiredItemEvidenceView,
   type MissionRewardView,
@@ -62,6 +63,28 @@ function missionVerificationLabel(status: MissionOfferView["verificationStatus"]
   if (status === "verified") return "Verified";
   if (status === "unverified") return "Unverified";
   return "Verification unknown";
+}
+
+function offerReputationAmountLabel(facet: MissionOfferReputationRewardFacetView): string {
+  const { amountSummary } = facet;
+  const minimum = amountSummary.minAmount;
+  const maximum = amountSummary.maxAmount;
+  if (minimum === undefined || maximum === undefined) return "Reward amount unresolved";
+  if (amountSummary.status === "partial") {
+    const observed = minimum === maximum
+      ? signedAmount(minimum)
+      : `${signedAmount(minimum)} to ${signedAmount(maximum)}`;
+    return `${observed} observed; partial`;
+  }
+  if (minimum === maximum) return signedAmount(minimum);
+  return `${signedAmount(minimum)} to ${signedAmount(maximum)}`;
+}
+
+function offerReputationFilterLabel(facet: MissionOfferReputationRewardFacetView): string {
+  const faction = facet.factionDisplayName.trim();
+  const scope = shortRepScope(facet.scopeDisplayName);
+  if (!faction || /^unknown(?: faction)?$/i.test(faction)) return scope;
+  return `${faction} / ${scope}`;
 }
 
 function stripSummaryPrefix(value: string, prefix: string): string {
@@ -895,13 +918,14 @@ const MissionOfferCard = memo(function MissionOfferCard({
 }) {
   const provider = missionOfferProvider(offer);
   const verification = missionVerificationLabel(offer.verificationStatus);
+  const reputationFacets = offer.reputationRewardFacets ?? [];
   const rewardSignals = [
     offer.rewardTypes.includes("blueprints") ? "Blueprint rewards" : undefined,
     offer.rewardTypes.includes("items") ? "Item rewards" : undefined,
     offer.rewardTypes.includes("reputation") ? "Reputation rewards" : undefined,
   ].filter((value): value is string => Boolean(value));
   return (
-    <div className={`mb-family-block ${repScopeClass(offer.reputationRewardKeys.join(" "))}${isSelected ? " is-selected" : ""}`}>
+    <div className={`mb-family-block ${repScopeClass(reputationFacets[0]?.scopeDisplayName)}${isSelected ? " is-selected" : ""}`}>
       <button
         type="button"
         className="mb-family-row mission-group-card"
@@ -925,6 +949,16 @@ const MissionOfferCard = memo(function MissionOfferCard({
           </span>
           <span className="mission-group-card__footer">
             <span className="mb-badges">
+              {reputationFacets.slice(0, 2).map((facet) => (
+                <span key={facet.stableKey} className={`mission-rep-scope-badge ${repScopeClass(facet.scopeDisplayName)}`} title={`${offerReputationFilterLabel(facet)} / ${facet.confidence}`}>
+                  {shortRepScope(facet.scopeDisplayName)}
+                </span>
+              ))}
+              {reputationFacets.length > 0 && (
+                <span className="mission-rep-reward-text">
+                  {offerReputationAmountLabel(reputationFacets[0]!)} across {reputationFacets[0]!.variantCount} exact variant{reputationFacets[0]!.variantCount === 1 ? "" : "s"}
+                </span>
+              )}
               <Badge tone={offer.verificationStatus === "verified" ? "is-verified" : offer.verificationStatus === "unverified" ? "is-unverified" : "is-muted"}>{verification}</Badge>
               {rewardSignals.slice(0, 3).map((signal) => <Badge key={signal} tone={signal === "Blueprint rewards" ? "is-blueprint" : "is-neutral"}>{signal}</Badge>)}
             </span>
@@ -2491,7 +2525,7 @@ export default function MissionBrowserPage() {
   const missionType = searchParams.get("type") ?? "";
   const reward = searchParams.get("reward") ?? "";
   const repReward = searchParams.get("repReward") ?? "";
-  const status = searchParams.get("status") ?? "";
+  const status = searchParams.get("status") ?? (isOfferCatalog ? "Release flag not set" : "");
   const confidence = searchParams.get("confidence") ?? "";
   const verification = searchParams.get("verification") ?? "";
   const requestedView = searchParams.get("view");
@@ -2721,7 +2755,18 @@ export default function MissionBrowserPage() {
   );
   const rewardedRepPaths = useMemo(
     () => isOfferCatalog
-      ? Array.from(new Set(Array.from(offersByKey.values()).flatMap((offer) => offer.reputationRewardKeys))).sort().map((value) => ({ key: value, label: value.split(":").at(-1)?.replaceAll("-", " ") ?? value, count: 0 }))
+      ? Array.from(Array.from(offersByKey.values()).reduce((options, offer) => {
+        for (const facet of offer.reputationRewardFacets ?? []) {
+          const existing = options.get(facet.stableKey);
+          options.set(facet.stableKey, {
+            key: facet.stableKey,
+            label: existing?.label ?? offerReputationFilterLabel(facet),
+            count: (existing?.count ?? 0) + 1,
+          });
+        }
+        return options;
+      }, new Map<string, { key: string; label: string; count: number }>()).values())
+        .sort((left, right) => left.label.localeCompare(right.label) || left.key.localeCompare(right.key))
       : catalog?.filtersMeta?.reputationScopes ?? Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort().map((value) => ({ key: value, label: value, count: 0 })),
     [catalog, families, isOfferCatalog, offersByKey],
   );

@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "family": {
+    "familyKey": "6eb86e29-817a-4463-b37e-5a719004b4dc|Redwind Hauling Stanton Solar",
+    "displayName": "Cargo Transfer from Shuttered Facility",
+    "titleSource": "localized_family",
+    "titleConfidence": "high",
+    "rawName": "Redwind Hauling Stanton Solar",
+    "internalName": "Redwind_ASD_EletronicEquipment",
+    "provider": "Red Wind Linehaul",
+    "faction": "Red Wind Linehaul",
+    "missionType": "Hauling - Stellar",
+    "reputationScope": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+      "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+      "factionDisplayName": "Red Wind Linehaul",
+      "trackType": "Hauling",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "variantCount": 2,
+    "statusFlags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "rewardSummary": [
+      "Hauling +50",
+      "188,250 aUEC"
+    ],
+    "blueprintRewards": [],
+    "blueprintRewardGroups": [],
+    "reputationRewards": [
+      "Hauling +50"
+    ],
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "scopeDisplayName": "Hauling",
+        "amount": 50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+        ]
+      }
+    ],
+    "creditRewardSummary": "Calculated payout",
+    "creditRewardStatuses": [
+      "calculated"
+    ],
+    "itemRewardStatus": "none",
+    "unresolvedRewardFields": [],
+    "prerequisiteRequirements": [
+      "Rookie / 50 rep to Master / 237,750 rep",
+      "CrimeStat limited to 2 or below",
+      "Stanton 1",
+      "Prerequisite mission or completion tag"
+    ],
+    "pickupSummary": "Pickup: Stanton",
+    "pickupStatuses": [
+      "generated_from_pool"
+    ],
+    "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "locations": [
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "confidenceFlags": [
+      "Prerequisite unresolved"
+    ],
+    "unresolvedReferences": [],
+    "variantKeys": [
+      "59c42923-5140-4b18-b074-8d2ff21a25f0",
+      "dbb8eacd-d91f-42a3-a055-d998fff141d2"
+    ],
+    "searchText": "cargo transfer from shuttered facility redwind_asd_eletronicequipment red wind linehaul hauling - stellar hauling cargo pickup: stanton red wind linehaul \n'your goods in good hands' \n----------------------------    \n\nasd reached out to us as it seems one of their old labs, [location], still has some cargo being stored there they want to get their hands on.\n\nyou would fly there in a ship that can handle containers up to [missionmaxscusize] in size, land in the hangar, load up from the freight elevator, and then transport it all back to [destination]. \n\njust be sure to keep your head on swivel while you’re at the facility and try not to let your curiosity get the better of you abandoned sites like this can be home to all sort of nastiness.  and don't forget to pack a handheld tractor beam to bring along. \n\nbe your best – take pride in the work you do and you’ll do work to be proud of. 59c42923-5140-4b18-b074-8d2ff21a25f0 dbb8eacd-d91f-42a3-a055-d998fff141d2 hauling +50 188,250 auec"
+  },
+  "groupSummary": {
+    "familyKey": "6eb86e29-817a-4463-b37e-5a719004b4dc|Redwind Hauling Stanton Solar",
+    "provider": "Red Wind Linehaul",
+    "reputationScope": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+      "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+      "factionDisplayName": "Red Wind Linehaul",
+      "trackType": "Hauling",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "variantCount": 2
+  },
+  "rewardSummary": {
+    "rewardSummary": [
+      "Hauling +50",
+      "188,250 aUEC"
+    ],
+    "blueprintRewards": [],
+    "blueprintRewardGroups": [],
+    "reputationRewards": [
+      "Hauling +50"
+    ],
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "scopeDisplayName": "Hauling",
+        "amount": 50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+        ]
+      }
+    ],
+    "creditRewardSummary": "Calculated payout"
+  },
+  "pickupSummary": {
+    "pickupSummary": "Pickup: Stanton",
+    "pickupStatuses": [
+      "generated_from_pool"
+    ],
+    "pickupUnresolvedCount": 0,
+    "locations": [
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": []
+  },
+  "blueprintSummary": {
+    "blueprintRewards": [],
+    "blueprintRewardGroups": []
+  },
+  "variantKeys": [
+    "59c42923-5140-4b18-b074-8d2ff21a25f0",
+    "dbb8eacd-d91f-42a3-a055-d998fff141d2"
+  ],
+  "variantSummaries": [
+    {
+      "variantKey": "59c42923-5140-4b18-b074-8d2ff21a25f0",
+      "displayName": "Cargo Transfer from Shuttered Facility",
+      "missionType": "Hauling - Stellar",
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "confidence": "medium"
+      },
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "creditStatus": "calculated",
+      "credits": "188,250 aUEC",
+      "hasBlueprintRewards": false,
+      "hasUnresolvedRewards": false
+    },
+    {
+      "variantKey": "dbb8eacd-d91f-42a3-a055-d998fff141d2",
+      "displayName": "Cargo Transfer from Shuttered Facility",
+      "missionType": "Hauling - Stellar",
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "confidence": "medium"
+      },
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "creditStatus": "calculated",
+      "credits": "188,250 aUEC",
+      "hasBlueprintRewards": false,
+      "hasUnresolvedRewards": false
+    }
+  ],
+  "variantsFile": "family-variants/2b29ba5ae1952aac.json"
+}

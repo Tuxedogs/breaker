@@ -4,6 +4,7 @@ export type MissionOfferFilterable = {
   missionTypes: string[];
   rewardTypes: string[];
   reputationRewardKeys: string[];
+  reputationRewardFacets?: Array<{ stableKey: string }>;
   releaseFlags: string[];
   confidenceFlags: string[];
   verificationStatuses: string[];
@@ -29,7 +30,11 @@ export function missionOfferMatchesClientFilters(
   if (filters.provider && offer.providerKey !== filters.provider) return false;
   if (filters.type && !offer.missionTypes.includes(filters.type)) return false;
   if (filters.reward && !offer.rewardTypes.includes(filters.reward)) return false;
-  if (filters.repReward && !offer.reputationRewardKeys.includes(filters.repReward)) return false;
+  if (
+    filters.repReward
+    && !(offer.reputationRewardFacets?.some((facet) => facet.stableKey === filters.repReward)
+      ?? offer.reputationRewardKeys.includes(filters.repReward))
+  ) return false;
   if (filters.status && !offer.releaseFlags.includes(filters.status)) return false;
   if (filters.confidence && !offer.confidenceFlags.includes(filters.confidence)) return false;
   if (filters.verification && !offer.verificationStatuses.includes(filters.verification)) return false;

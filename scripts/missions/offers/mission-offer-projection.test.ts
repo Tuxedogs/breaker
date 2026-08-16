@@ -70,19 +70,80 @@ function record(
   };
 }
 
-function variant(variantKey: string, concept = "legacy-concept"): MissionOfferVariantProjectionV1 {
+function variant(
+  variantKey: string,
+  concept = "legacy-concept",
+  amount: number | null = 100,
+  confidence: "resolved" | "partial" | "unresolved" = "resolved",
+): MissionOfferVariantProjectionV1 {
   return {
     variantKey,
     familyKey: "family",
     legacyConceptKey: concept,
     missionType: "Bounty",
     rewardTypes: ["credit"],
-    reputationRewardKeys: ["headhunters:ship-combat"],
+    reputationRewardFacets: [{
+      stableKey: "headhunters:ship-combat",
+      factionKey: "headhunters",
+      factionDisplayName: "Headhunters",
+      scopeKey: "ship-combat",
+      scopeDisplayName: "Ship Combat",
+      ...(amount === null ? {} : { amount }),
+      confidence,
+    }],
     releaseFlags: ["Released"],
     confidenceFlags: [],
     objectiveTemplateKeys: ["template-guid"],
   };
 }
+
+test("projects structured offer-owned reputation facets from exact reward paths", () => {
+  const records = [
+    record("variant-a", "@title_001", "Primo Target"),
+    record("variant-b", "@title_001", "Primo Target"),
+  ];
+  const projection = buildMissionOffersV1(records, [
+    variant("variant-a", "legacy-concept", 100),
+    variant("variant-b", "legacy-concept", 200),
+  ]);
+  assert.deepEqual(projection.offers[0]?.reputationRewardFacets, [{
+    stableKey: "headhunters:ship-combat",
+    factionKey: "headhunters",
+    factionDisplayName: "Headhunters",
+    scopeKey: "ship-combat",
+    scopeDisplayName: "Ship Combat",
+    confidence: "resolved",
+    variantCount: 2,
+    rewardPathCount: 2,
+    amountSummary: {
+      status: "range",
+      resolvedPathCount: 2,
+      unresolvedPathCount: 0,
+      minAmount: 100,
+      maxAmount: 200,
+    },
+  }]);
+  assert.deepEqual(projection.offers[0]?.reputationRewardKeys, ["headhunters:ship-combat"]);
+});
+
+test("marks reputation amount summaries partial without inventing unresolved values", () => {
+  const records = [
+    record("variant-a", "@title_001", "Primo Target"),
+    record("variant-b", "@title_001", "Primo Target"),
+  ];
+  const projection = buildMissionOffersV1(records, [
+    variant("variant-a", "legacy-concept", 100),
+    variant("variant-b", "legacy-concept", null, "unresolved"),
+  ]);
+  assert.deepEqual(projection.offers[0]?.reputationRewardFacets[0]?.amountSummary, {
+    status: "partial",
+    resolvedPathCount: 1,
+    unresolvedPathCount: 1,
+    minAmount: 100,
+    maxAmount: 100,
+  });
+  assert.equal(projection.offers[0]?.reputationRewardFacets[0]?.confidence, "partial");
+});
 
 test("groups exact variants only by source-backed provider and raw title identity", () => {
   const records = [
@@ -133,6 +194,23 @@ test("preserves runtime tokens as placeholders and keeps search offer-local", ()
     displayTitle: "Ghost [TargetName]",
     exactVariantIds: ["ghost-variant"],
   }]);
+});
+
+test("uses the semantic runtime-title segment instead of exposing the Contractor selector", () => {
+  assert.equal(safeMissionOfferTitleV1({
+    raw: "@blackbox_recover_title_M_001",
+    localizationKey: "blackbox_recover_title_M_001",
+    template: "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+    displayText: "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+    runtimeTokens: [{
+      raw: "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+      expression: "Contractor|BlackBoxRecoverTitleMedium",
+      segments: ["Contractor", "BlackBoxRecoverTitleMedium"],
+    }],
+    rendering: "runtime_templated",
+    resolution: "source_backed",
+    provenance: "source_backed",
+  }), "[Black Box Recovery — Medium]");
 });
 
 test("disambiguates display-key collisions without merging provider/title identities", () => {

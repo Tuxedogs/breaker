@@ -1,6 +1,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
+import { verifyMissionPublicationGate } from "./missions/publication/publication-gates.mts";
+
 type JsonObject = Record<string, unknown>;
 
 function object(value: unknown, label: string): JsonObject {
@@ -56,6 +58,10 @@ const goldenPath = path.resolve(
   option("--golden")
     ?? path.join("docs", "mission-golden-set-2026-07-29.json"),
 );
+const auditPath = path.resolve(
+  "docs",
+  "mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
+);
 const pointer = await readJson(path.join(dataRoot, "current.json"));
 const generationId = string(pointer.generationId, "current.generationId");
 const generationPath = string(pointer.generationPath, "current.generationPath");
@@ -69,26 +75,40 @@ assert(
   "Current mission generation escapes the mission data root.",
 );
 
-const [index, manifest, graphReport, solverReference, golden] = await Promise.all([
+const [index, manifest, graphReport, solverReference, golden, audit, sourceCatalog] = await Promise.all([
   readJson(path.join(generationRoot, "mission_browser_index.json")),
   readJson(path.join(generationRoot, "mission_shard_manifest.json")),
   readJson(path.join(generationRoot, "mission_graph_validation_report.json")),
   readJson(path.join(generationRoot, "mission_solver_reference.json")),
   readJson(goldenPath),
+  readJson(auditPath),
+  readJson(path.resolve("server-data", "missions", "source", "mission_contracts.json")),
 ]);
 const legacyExpected = object(golden.shapedContractV2, "golden.shapedContractV2");
 const isOfferGeneration = pointer.missionSchemaVersion === 3;
+const supportedOfferShaperVersions = [
+  "moonbreaker_mission_shaper_v3_2_offer1",
+  "moonbreaker_mission_shaper_v3_3_offer_reputation_facets",
+  "moonbreaker_mission_shaper_v3_4_offer_reputation_runtime_titles",
+  "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles",
+];
 const expected = isOfferGeneration
   ? {
     ...legacyExpected,
     schemaVersion: 3,
     sourceContractVersion: 4,
-    shaperVersion: "moonbreaker_mission_shaper_v3_2_offer1",
+    shaperVersion: pointer.shaperVersion,
   }
   : legacyExpected;
 equal(pointer.missionSchemaVersion, expected.schemaVersion, "pointer mission schema");
 equal(pointer.sourceContractVersion, expected.sourceContractVersion, "pointer source schema");
 equal(pointer.shaperVersion, expected.shaperVersion, "pointer shaper version");
+if (isOfferGeneration) {
+  assert(
+    supportedOfferShaperVersions.includes(String(pointer.shaperVersion)),
+    `Unsupported offer shaper version ${String(pointer.shaperVersion)}.`,
+  );
+}
 if (isOfferGeneration) equal(pointer.offerSchemaVersion, 1, "pointer offer schema");
 for (const [label, envelope] of [["index", index], ["manifest", manifest], ["graph report", graphReport]] as const) {
   equal(envelope.schemaVersion, expected.schemaVersion, `${label} mission schema`);
@@ -113,6 +133,44 @@ assert(
 );
 
 const summary = object(index.summary, "index.summary");
+if (isOfferGeneration) {
+  const source = object(sourceCatalog.source, "mission source catalog.source");
+  const sourceBuildId = string(source.buildId, "mission source catalog.source.buildId");
+  const targetSourceV4 = object(audit.targetSourceV4, "audit.targetSourceV4");
+  const auditedBuildId = string(targetSourceV4.buildId, "audit.targetSourceV4.buildId");
+  const auditedRefIndexPath = array(audit.evidenceFiles, "audit.evidenceFiles")
+    .map((value) => object(value, "audit.evidenceFile"))
+    .find((evidence) => evidence.role === "source GUID and locality-name resolution"
+      && evidence.evidenceStatus === "source_backed")?.path;
+  const sourceInputs = object(index.sourceInputs, "index.sourceInputs");
+  const refIndex = object(sourceInputs.refIndex, "index.sourceInputs.refIndex");
+  await verifyMissionPublicationGate({
+    missionSchemaVersion: 3,
+    sourceContractVersion: 4,
+    offerSchemaVersion: 1,
+  }, {
+    schemaVersion: 1,
+    sourceBuildId,
+    refIndex: {
+      status: refIndex.status === "explicit" ? "explicit" : "not_configured",
+      path: typeof refIndex.path === "string" ? refIndex.path : undefined,
+      sha256: typeof refIndex.sha256 === "string" ? refIndex.sha256 : undefined,
+      buildId: typeof refIndex.buildId === "string" ? refIndex.buildId : undefined,
+      recordCount: typeof refIndex.recordCount === "number" ? refIndex.recordCount : 0,
+      auditedBuildId,
+      auditedPath: typeof auditedRefIndexPath === "string" ? auditedRefIndexPath : undefined,
+    },
+    semantics: {
+      variantCount: typeof summary.variantCount === "number" ? summary.variantCount : 0,
+      reputationScopeResolvedCount: typeof summary.reputationScopeResolvedCount === "number"
+        ? summary.reputationScopeResolvedCount
+        : 0,
+      unresolvedLocationCount: typeof summary.unresolvedLocationCount === "number"
+        ? summary.unresolvedLocationCount
+        : Number.POSITIVE_INFINITY,
+    },
+  });
+}
 const snapshot = object(golden.snapshot, "golden.snapshot");
 equal(summary.variantCount, snapshot.variantCount, "variant count");
 equal(summary.familyCount, object(golden.sourceContractV3, "golden.sourceContractV3").familyCount, "family count");
@@ -160,6 +218,24 @@ if (isOfferGeneration) {
     assert(Array.isArray(offer.missionTypes), `${offerKey} is missing offer-local mission type facets.`);
     assert(Array.isArray(offer.rewardTypes), `${offerKey} is missing offer-local reward facets.`);
     assert(Array.isArray(offer.reputationRewardKeys), `${offerKey} is missing offer-local reputation reward facets.`);
+    if (offer.reputationRewardFacets !== undefined) {
+      const facets = array(offer.reputationRewardFacets, `${offerKey}.reputationRewardFacets`);
+      const facetKeys = facets.map((facetValue, index) => {
+        const facet = object(facetValue, `${offerKey}.reputationRewardFacets[${index}]`);
+        const stableKey = string(facet.stableKey, `${offerKey}.reputationRewardFacets[${index}].stableKey`);
+        string(facet.factionKey, `${offerKey}.${stableKey}.factionKey`);
+        string(facet.factionDisplayName, `${offerKey}.${stableKey}.factionDisplayName`);
+        string(facet.scopeKey, `${offerKey}.${stableKey}.scopeKey`);
+        string(facet.scopeDisplayName, `${offerKey}.${stableKey}.scopeDisplayName`);
+        assert(["resolved", "partial", "unresolved"].includes(String(facet.confidence)), `${offerKey}.${stableKey} has invalid confidence.`);
+        assert(typeof facet.variantCount === "number" && facet.variantCount > 0, `${offerKey}.${stableKey} has invalid variantCount.`);
+        assert(typeof facet.rewardPathCount === "number" && facet.rewardPathCount > 0, `${offerKey}.${stableKey} has invalid rewardPathCount.`);
+        const amountSummary = object(facet.amountSummary, `${offerKey}.${stableKey}.amountSummary`);
+        assert(["exact", "range", "partial", "unresolved"].includes(String(amountSummary.status)), `${offerKey}.${stableKey} has invalid amount status.`);
+        return stableKey;
+      });
+      equal(facetKeys, offer.reputationRewardKeys, `${offerKey} reputation facet keys`);
+    }
     assert(Array.isArray(offer.releaseFlags), `${offerKey} is missing offer-local release facets.`);
     assert(Array.isArray(offer.confidenceFlags), `${offerKey} is missing offer-local confidence facets.`);
   }

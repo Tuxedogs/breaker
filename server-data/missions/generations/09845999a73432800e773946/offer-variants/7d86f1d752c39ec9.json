@@ -1,0 +1,3399 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "rough-ready:destination-stroll",
+  "variants": [
+    {
+      "variantKey": "009989b6-3250-47ef-b274-4aaa02a0daa0",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Gaslight_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Gaslight_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Gaslight_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P5 L2",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P5 L2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P5 L2",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60"
+        ],
+        "possibleLocations": [
+          "Rest Stop P5 L2"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60",
+            "resolvedName": "Rest Stop P5 L2",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60",
+            "displayName": "Rest Stop P5 L2",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l2.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P5 L2"
+          ],
+          "displayLabel": "Rest Stop P5 L2",
+          "detailLabel": "Rest Stop P5 L2",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P5 L2",
+          "displayLabel": "Rest Stop P5 L2",
+          "detailDisplay": "Rest Stop P5 L2",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60",
+              "displayName": "Rest Stop P5 L2",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l2.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P5 L2"
+            ],
+            "displayLabel": "Rest Stop P5 L2",
+            "detailLabel": "Rest Stop P5 L2",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "beaadc7f-9f3c-4a2d-8dd6-f56d57de1c60",
+          "resolvedName": "Rest Stop P5 L2",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P5 L2"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "009989b6-3250-47ef-b274-4aaa02a0daa0",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "32e00507-14bf-4d21-ac5b-dae27a55cbef",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RodsFuel_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_RodsFuel_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RodsFuel_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P5 L4",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P5 L4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P5 L4",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "1711f3cc-59ef-4b08-a762-19d8691ae268"
+        ],
+        "possibleLocations": [
+          "Rest Stop P5 L4"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "1711f3cc-59ef-4b08-a762-19d8691ae268",
+            "resolvedName": "Rest Stop P5 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "1711f3cc-59ef-4b08-a762-19d8691ae268",
+            "displayName": "Rest Stop P5 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l4.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P5 L4"
+          ],
+          "displayLabel": "Rest Stop P5 L4",
+          "detailLabel": "Rest Stop P5 L4",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P5 L4",
+          "displayLabel": "Rest Stop P5 L4",
+          "detailDisplay": "Rest Stop P5 L4",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "1711f3cc-59ef-4b08-a762-19d8691ae268"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "1711f3cc-59ef-4b08-a762-19d8691ae268",
+              "displayName": "Rest Stop P5 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l4.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P5 L4"
+            ],
+            "displayLabel": "Rest Stop P5 L4",
+            "detailLabel": "Rest Stop P5 L4",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1711f3cc-59ef-4b08-a762-19d8691ae268",
+          "resolvedName": "Rest Stop P5 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P5 L4"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "32e00507-14bf-4d21-ac5b-dae27a55cbef",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "64d68a4e-54d7-40df-a6ec-076594f6244c",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RuinStation_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_RuinStation_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RuinStation_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P6 LEO",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P6 LEO",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P6 LEO",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea"
+        ],
+        "possibleLocations": [
+          "Rest Stop P6 LEO"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+            "resolvedName": "Rest Stop P6 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+            "displayName": "Rest Stop P6 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P6 LEO"
+          ],
+          "displayLabel": "Rest Stop P6 LEO",
+          "detailLabel": "Rest Stop P6 LEO",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P6 LEO",
+          "displayLabel": "Rest Stop P6 LEO",
+          "detailDisplay": "Rest Stop P6 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+              "displayName": "Rest Stop P6 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P6 LEO"
+            ],
+            "displayLabel": "Rest Stop P6 LEO",
+            "detailLabel": "Rest Stop P6 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+          "resolvedName": "Rest Stop P6 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P6 LEO"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "64d68a4e-54d7-40df-a6ec-076594f6244c",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "73d60398-41a6-46c8-ae06-9583e47fb7e4",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RatsNest_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_RatsNest_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_RatsNest_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P5 L5",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P5 L5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P5 L5",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "5e241629-e58f-4c15-b938-acc2cc287cd4"
+        ],
+        "possibleLocations": [
+          "Rest Stop P5 L5"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "5e241629-e58f-4c15-b938-acc2cc287cd4",
+            "resolvedName": "Rest Stop P5 L5",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "5e241629-e58f-4c15-b938-acc2cc287cd4",
+            "displayName": "Rest Stop P5 L5",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l5.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P5 L5"
+          ],
+          "displayLabel": "Rest Stop P5 L5",
+          "detailLabel": "Rest Stop P5 L5",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P5 L5",
+          "displayLabel": "Rest Stop P5 L5",
+          "detailDisplay": "Rest Stop P5 L5",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "5e241629-e58f-4c15-b938-acc2cc287cd4"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "5e241629-e58f-4c15-b938-acc2cc287cd4",
+              "displayName": "Rest Stop P5 L5",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p5_l5.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P5 L5"
+            ],
+            "displayLabel": "Rest Stop P5 L5",
+            "detailLabel": "Rest Stop P5 L5",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "5e241629-e58f-4c15-b938-acc2cc287cd4",
+          "resolvedName": "Rest Stop P5 L5",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P5 L5"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "73d60398-41a6-46c8-ae06-9583e47fb7e4",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "98b20345-a027-424c-97af-b5b68364fac7",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Megumi_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Megumi_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Megumi_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P6 L5",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P6 L5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P6 L5",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "82a8afd8-cd0a-4f5b-b448-35fa1214684e"
+        ],
+        "possibleLocations": [
+          "Rest Stop P6 L5"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "82a8afd8-cd0a-4f5b-b448-35fa1214684e",
+            "resolvedName": "Rest Stop P6 L5",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "82a8afd8-cd0a-4f5b-b448-35fa1214684e",
+            "displayName": "Rest Stop P6 L5",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l5.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P6 L5"
+          ],
+          "displayLabel": "Rest Stop P6 L5",
+          "detailLabel": "Rest Stop P6 L5",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P6 L5",
+          "displayLabel": "Rest Stop P6 L5",
+          "detailDisplay": "Rest Stop P6 L5",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "82a8afd8-cd0a-4f5b-b448-35fa1214684e"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "82a8afd8-cd0a-4f5b-b448-35fa1214684e",
+              "displayName": "Rest Stop P6 L5",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l5.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P6 L5"
+            ],
+            "displayLabel": "Rest Stop P6 L5",
+            "detailLabel": "Rest Stop P6 L5",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "82a8afd8-cd0a-4f5b-b448-35fa1214684e",
+          "resolvedName": "Rest Stop P6 L5",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P6 L5"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "98b20345-a027-424c-97af-b5b68364fac7",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "a970e2d9-d1d4-48b3-8ec9-8fdbe8de2bad",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_DudleyAndDaughters_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_DudleyAndDaughters_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_DudleyAndDaughters_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P6 L4",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P6 L4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P6 L4",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "a88ae72e-15e9-43da-8a20-c14cc851d2da"
+        ],
+        "possibleLocations": [
+          "Rest Stop P6 L4"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "a88ae72e-15e9-43da-8a20-c14cc851d2da",
+            "resolvedName": "Rest Stop P6 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a88ae72e-15e9-43da-8a20-c14cc851d2da",
+            "displayName": "Rest Stop P6 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l4.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P6 L4"
+          ],
+          "displayLabel": "Rest Stop P6 L4",
+          "detailLabel": "Rest Stop P6 L4",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P6 L4",
+          "displayLabel": "Rest Stop P6 L4",
+          "detailDisplay": "Rest Stop P6 L4",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "a88ae72e-15e9-43da-8a20-c14cc851d2da"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "a88ae72e-15e9-43da-8a20-c14cc851d2da",
+              "displayName": "Rest Stop P6 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l4.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P6 L4"
+            ],
+            "displayLabel": "Rest Stop P6 L4",
+            "detailLabel": "Rest Stop P6 L4",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "a88ae72e-15e9-43da-8a20-c14cc851d2da",
+          "resolvedName": "Rest Stop P6 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P6 L4"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "a970e2d9-d1d4-48b3-8ec9-8fdbe8de2bad",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "bceb09f5-8bdf-4fa1-9088-cf5a04a6e8c7",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Endgame_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Endgame_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Endgame_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P6 L3",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P6 L3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P6 L3",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "b6771617-3965-4663-bb53-5f595ab1c761"
+        ],
+        "possibleLocations": [
+          "Rest Stop P6 L3"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "b6771617-3965-4663-bb53-5f595ab1c761",
+            "resolvedName": "Rest Stop P6 L3",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "b6771617-3965-4663-bb53-5f595ab1c761",
+            "displayName": "Rest Stop P6 L3",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l3.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P6 L3"
+          ],
+          "displayLabel": "Rest Stop P6 L3",
+          "detailLabel": "Rest Stop P6 L3",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P6 L3",
+          "displayLabel": "Rest Stop P6 L3",
+          "detailDisplay": "Rest Stop P6 L3",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "b6771617-3965-4663-bb53-5f595ab1c761"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "b6771617-3965-4663-bb53-5f595ab1c761",
+              "displayName": "Rest Stop P6 L3",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_l3.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P6 L3"
+            ],
+            "displayLabel": "Rest Stop P6 L3",
+            "detailLabel": "Rest Stop P6 L3",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "b6771617-3965-4663-bb53-5f595ab1c761",
+          "resolvedName": "Rest Stop P6 L3",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P6 L3"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "bceb09f5-8bdf-4fa1-9088-cf5a04a6e8c7",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "c63a6241-4881-48fd-92c7-908c6629116c",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_PatchCity_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_PatchCity_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_PatchCity_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P3 L3",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P3 L3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P3 L3",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "430316d5-f330-4e6c-93b8-823a062689db"
+        ],
+        "possibleLocations": [
+          "Rest Stop P3 L3"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "430316d5-f330-4e6c-93b8-823a062689db",
+            "resolvedName": "Rest Stop P3 L3",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "430316d5-f330-4e6c-93b8-823a062689db",
+            "displayName": "Rest Stop P3 L3",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l3.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P3 L3"
+          ],
+          "displayLabel": "Rest Stop P3 L3",
+          "detailLabel": "Rest Stop P3 L3",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P3 L3",
+          "displayLabel": "Rest Stop P3 L3",
+          "detailDisplay": "Rest Stop P3 L3",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "430316d5-f330-4e6c-93b8-823a062689db"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "430316d5-f330-4e6c-93b8-823a062689db",
+              "displayName": "Rest Stop P3 L3",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l3.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P3 L3"
+            ],
+            "displayLabel": "Rest Stop P3 L3",
+            "detailLabel": "Rest Stop P3 L3",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "430316d5-f330-4e6c-93b8-823a062689db",
+          "resolvedName": "Rest Stop P3 L3",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P3 L3"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "c63a6241-4881-48fd-92c7-908c6629116c",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "ec874469-6953-4beb-a5d3-a96b83d8a722",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Starlight_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Starlight_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Starlight_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P3 L1",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P3 L1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P3 L1",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "a8b1ec44-6287-4687-9a56-476663db591a"
+        ],
+        "possibleLocations": [
+          "Rest Stop P3 L1"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "a8b1ec44-6287-4687-9a56-476663db591a",
+            "resolvedName": "Rest Stop P3 L1",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a8b1ec44-6287-4687-9a56-476663db591a",
+            "displayName": "Rest Stop P3 L1",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l1.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P3 L1"
+          ],
+          "displayLabel": "Rest Stop P3 L1",
+          "detailLabel": "Rest Stop P3 L1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P3 L1",
+          "displayLabel": "Rest Stop P3 L1",
+          "detailDisplay": "Rest Stop P3 L1",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "a8b1ec44-6287-4687-9a56-476663db591a"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "a8b1ec44-6287-4687-9a56-476663db591a",
+              "displayName": "Rest Stop P3 L1",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_l1.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P3 L1"
+            ],
+            "displayLabel": "Rest Stop P3 L1",
+            "detailLabel": "Rest Stop P3 L1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "a8b1ec44-6287-4687-9a56-476663db591a",
+          "resolvedName": "Rest Stop P3 L1",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P3 L1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "ec874469-6953-4beb-a5d3-a96b83d8a722",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "fb689d82-0fd7-459b-aab2-8e417df6815a",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Checkmate_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Checkmate_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Checkmate_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P2 L4",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P2 L4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P2 L4",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "07463f54-4ecd-4323-8a28-fb65b8a4ebca"
+        ],
+        "possibleLocations": [
+          "Rest Stop P2 L4"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "resolvedName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "displayName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P2 L4"
+          ],
+          "displayLabel": "Rest Stop P2 L4",
+          "detailLabel": "Rest Stop P2 L4",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P2 L4",
+          "displayLabel": "Rest Stop P2 L4",
+          "detailDisplay": "Rest Stop P2 L4",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "07463f54-4ecd-4323-8a28-fb65b8a4ebca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+              "displayName": "Rest Stop P2 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P2 L4"
+            ],
+            "displayLabel": "Rest Stop P2 L4",
+            "detailLabel": "Rest Stop P2 L4",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P2 L4"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "fb689d82-0fd7-459b-aab2-8e417df6815a",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "fccb6c62-ee2a-4fd8-8751-4fec10fcbad3",
+      "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+      "conceptKey": "6aaf68d12fb46091ae60",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "roughready-delivery-station",
+        "descriptionStem": "roughready-delivery-station",
+        "handlerStem": "rr-courier",
+        "archetype": "Courier",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:roughready-delivery-station",
+          "description:roughready-delivery-station",
+          "handler:rr-courier",
+          "contract:contract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Obituary_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[Destination] Stroll",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Any chance you’re at [Destination]?\n\nNeed a box hustled from [Location] to [Destination]. Get it there on time and unbroken and it’ll be the easiest creds you’ll ever earn.   \n\n-Smokey",
+      "rawName": "@roughready_delivery_station_title_001",
+      "internalName": "RR_Pyro_Obituary_Local_1box_Single_Courier",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "56dc3384-2ec1-45bb-bee1-b5085952202d|RR_Courier",
+          "RR_Pyro_Obituary_Local_1box_Single_Courier"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P3 LEO",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P3 LEO",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P3 LEO",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "28e220ba-ba74-42eb-bae5-382475eba65d"
+        ],
+        "possibleLocations": [
+          "Rest Stop P3 LEO"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "resolvedName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "displayName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P3 LEO"
+          ],
+          "displayLabel": "Rest Stop P3 LEO",
+          "detailLabel": "Rest Stop P3 LEO",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P3 LEO",
+          "displayLabel": "Rest Stop P3 LEO",
+          "detailDisplay": "Rest Stop P3 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "28e220ba-ba74-42eb-bae5-382475eba65d"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+              "displayName": "Rest Stop P3 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P3 LEO"
+            ],
+            "displayLabel": "Rest Stop P3 LEO",
+            "detailLabel": "Rest Stop P3 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P3 LEO"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "8,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "8,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "8,000 aUEC",
+          "amount": 8000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/roughandready_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 8000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 8000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "fccb6c62-ee2a-4fd8-8751-4fec10fcbad3",
+        "generatorGuid": "56dc3384-2ec1-45bb-bee1-b5085952202d",
+        "generatorName": "ContractGenerator.RoughAndReady_Generator",
+        "generatorPath": "contracts/contractgenerator/roughandready_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_delivery_station_title_001",
+        "descriptionRaw": "@roughready_delivery_station_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    }
+  ]
+}

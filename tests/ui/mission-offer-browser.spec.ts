@@ -9,6 +9,9 @@ test.describe("Mission Browser offer-first schema 3", () => {
     await expect(cards.first()).toContainText("Primo Target");
     await expect(cards.first()).toContainText("Headhunters");
     await expect(cards.first()).toContainText("Verification unknown");
+    await expect(cards.first().locator(".mission-rep-scope-badge")).toHaveText("Ship Combat");
+    await expect(cards.first().locator(".mission-rep-reward-text")).toContainText("+1,200 across 4 exact variants");
+    await expect(page.getByLabel("Filter by reputation reward path").locator("option").filter({ hasText: "Headhunters / Ship Combat" })).toHaveCount(1);
     await expect(page.getByText("Deep Space Hit", { exact: true })).toHaveCount(0);
 
     await cards.first().click();
@@ -46,5 +49,22 @@ test.describe("Mission Browser offer-first schema 3", () => {
       JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as string[]
     ), "scintel:recipe:mission-bookmarks:v1");
     expect(stored).toContain("offer:headhunters:primo-target");
+  });
+
+  test("uses localized and runtime-safe titles while inactive debug offers stay opt-in", async ({ page }) => {
+    await page.goto("/industry/missions?search=Salvager%20Needed%20%28Small%20Supply%20of%20RMC%20%2F%20UCM%29");
+    await expect(page.locator(".mission-group-card")).toHaveCount(1);
+    await expect(page.locator(".mission-group-card").first()).toContainText("Salvager Needed (Small Supply of RMC / UCM)");
+    await expect(page.getByText("Adagio_RG_ShipSalvage_Stanton_Rank0_RMC_Rubble_Parts_Salvage_Choice", { exact: true })).toHaveCount(0);
+
+    await page.goto("/industry/missions?search=%5BBlack%20Box%20Recovery%20%E2%80%94%20Medium%5D");
+    await expect(page.locator(".mission-group-card")).toHaveCount(2);
+    await expect(page.locator(".mission-group-card").filter({ hasText: "[Black Box Recovery \u2014 Medium]" })).toHaveCount(2);
+    await expect(page.getByText("BitZeros_BlackBoxRecovery_Nyx_Medium", { exact: true })).toHaveCount(0);
+
+    await page.goto("/industry/missions?search=BattagliaStory1");
+    await expect(page.locator(".mission-group-card")).toHaveCount(0);
+    await page.goto("/industry/missions?search=BattagliaStory1&status=Not%20for%20release");
+    await expect(page.locator(".mission-group-card").filter({ hasText: "BattagliaStory1" }).first()).toBeVisible();
   });
 });

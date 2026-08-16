@@ -391,10 +391,29 @@ export type MissionOfferView = {
   missionTypes: string[];
   rewardTypes: string[];
   reputationRewardKeys: string[];
+  reputationRewardFacets?: MissionOfferReputationRewardFacetView[];
   releaseFlags: string[];
   confidenceFlags: string[];
   auditFlags: string[];
   searchText: string;
+};
+
+export type MissionOfferReputationRewardFacetView = {
+  stableKey: string;
+  factionKey: string;
+  factionDisplayName: string;
+  scopeKey: string;
+  scopeDisplayName: string;
+  confidence: "resolved" | "partial" | "unresolved";
+  variantCount: number;
+  rewardPathCount: number;
+  amountSummary: {
+    status: "exact" | "range" | "partial" | "unresolved";
+    resolvedPathCount: number;
+    unresolvedPathCount: number;
+    minAmount?: number;
+    maxAmount?: number;
+  };
 };
 
 export type MissionFamilyView = {

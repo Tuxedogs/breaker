@@ -23,7 +23,7 @@ export default defineConfig({
     timeout: 180_000,
     env: {
       SCINTEL_LOCAL_API: "1",
-      MISSION_DATA_ROOT: path.resolve("server-data/missions"),
+      MISSION_DATA_ROOT: process.env.MISSION_DATA_ROOT ?? path.resolve("server-data/missions"),
     },
   },
 });

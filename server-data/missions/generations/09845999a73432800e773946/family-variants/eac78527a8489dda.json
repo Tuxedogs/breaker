@@ -1,0 +1,2934 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+  "variants": [
+    {
+      "variantKey": "212ee743-03a1-48cd-93ed-85dd427f17a9",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "67b3e0d33e7aa070201a",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:e3aebef5856c|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e3aebef5856c",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:e3aebef5856c",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_VeryHard",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9b2af22c-4f06-48d9-86d2-1af5b3d2fc34"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "acc00479-1a44-469b-afa8-d9862e7fbc60"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "2051ba65-b635-46af-8719-453c9c0f1fae"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "fb843113-4644-4468-ab15-40ff6a7a4877"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +8,000",
+          "Bounty Bounty Hunters Guild -4,000",
+          "70,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +8,000",
+          "Bounty Bounty Hunters Guild -4,000"
+        ],
+        "credits": "70,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "70,500 aUEC",
+          "amount": 70500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 70500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 70500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 8000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -4000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "7115b8ce-9897-40b2-9f63-df3d6e262801"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "212ee743-03a1-48cd-93ed-85dd427f17a9",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "41e5920d-020e-4a73-a37f-b4ba95922ea3",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "371b2c4ff43b678d883c",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:f46356ee919c|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:f46356ee919c",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:f46356ee919c",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_Hard",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9b2af22c-4f06-48d9-86d2-1af5b3d2fc34"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "acc00479-1a44-469b-afa8-d9862e7fbc60"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "2051ba65-b635-46af-8719-453c9c0f1fae"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +2,000",
+          "Bounty Bounty Hunters Guild -1,000",
+          "47,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +2,000",
+          "Bounty Bounty Hunters Guild -1,000"
+        ],
+        "credits": "47,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "47,750 aUEC",
+          "amount": 47750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 47750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 47750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 2000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "aeda9081-30bd-4f3f-938b-1a5362905e25"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -1000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "c8df2809-5dd3-452e-9d03-12ede43fa8f4"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "41e5920d-020e-4a73-a37f-b4ba95922ea3",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "4f254b3d-f762-4c9a-be31-5786317805b3",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "de35dba30b720ca2c217",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:94e7f9b8989e|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:94e7f9b8989e",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:94e7f9b8989e",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_Easy",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9b2af22c-4f06-48d9-86d2-1af5b3d2fc34"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +1,000",
+          "Bounty Bounty Hunters Guild -500",
+          "26,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +1,000",
+          "Bounty Bounty Hunters Guild -500"
+        ],
+        "credits": "26,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "26,250 aUEC",
+          "amount": 26250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 26250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 26250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 1000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "1335b737-6188-4c21-8923-98a74bcd3071"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -500,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4f254b3d-f762-4c9a-be31-5786317805b3",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9c3a0eb4-de92-4d96-bac6-e1c48d2160a9",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "886b76d1cd4752da3400",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:463d8c53933e|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:463d8c53933e",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:463d8c53933e",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_Super",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9b2af22c-4f06-48d9-86d2-1af5b3d2fc34"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "acc00479-1a44-469b-afa8-d9862e7fbc60"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "2051ba65-b635-46af-8719-453c9c0f1fae"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "fb843113-4644-4468-ab15-40ff6a7a4877"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "a71144c2-7483-4eb3-9325-90210412cdbd"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +16,000",
+          "Bounty Bounty Hunters Guild -8,000",
+          "113,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +16,000",
+          "Bounty Bounty Hunters Guild -8,000"
+        ],
+        "credits": "113,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "113,000 aUEC",
+          "amount": 113000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 113000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 113000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 16000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "790c8c75-1600-4cc4-83f3-bce3f7b62fcc"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -8000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "4e6e5fba-fa33-494d-a657-b874d9587915"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9c3a0eb4-de92-4d96-bac6-e1c48d2160a9",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "aa1ed093-a478-4eab-9d2b-1063d7fd8601",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "20d640d06b1c6b926c46",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:5436742df0bc|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5436742df0bc",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:5436742df0bc",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_Medium",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9b2af22c-4f06-48d9-86d2-1af5b3d2fc34"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "acc00479-1a44-469b-afa8-d9862e7fbc60"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +2,000",
+          "Bounty Bounty Hunters Guild -1,000",
+          "33,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +2,000",
+          "Bounty Bounty Hunters Guild -1,000"
+        ],
+        "credits": "33,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "33,250 aUEC",
+          "amount": 33250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 33250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 33250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 2000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "aeda9081-30bd-4f3f-938b-1a5362905e25"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -1000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "c8df2809-5dd3-452e-9d03-12ede43fa8f4"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "aa1ed093-a478-4eab-9d2b-1063d7fd8601",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "ea15b45a-acfa-4ac0-995b-6a7194d0697b",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "4ef4f7fd9cf19494c54a",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:6471f959cd6f|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:6471f959cd6f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:6471f959cd6f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_VeryEasy",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +500",
+          "Bounty Bounty Hunters Guild -250",
+          "21,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +500",
+          "Bounty Bounty Hunters Guild -250"
+        ],
+        "credits": "21,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "21,500 aUEC",
+          "amount": 21500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 21500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 21500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 500,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": -250,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "ea15b45a-acfa-4ac0-995b-6a7194d0697b",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "ff797e2e-ce15-4b8d-8098-7ecafdc23a19",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Stanton_Career",
+      "conceptKey": "4ef4f7fd9cf19494c54a",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|d1eb915e-95c8-43a7-b5c7-a612bb7a16c9|eliminate-specific|activity-defined|standard|unlock:6471f959cd6f|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-gen",
+        "descriptionStem": "bhg-bounty-gen",
+        "handlerStem": "bounty-hunters-guild-bounties",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:6471f959cd6f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-gen",
+          "description:bhg-bounty-gen",
+          "handler:bounty-hunters-guild-bounties",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:6471f959cd6f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "displayName": "Verified Bounty: [TargetName] | [Danger]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: [System]\nRISK ASSESSMENT: [Danger]\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: They have several known associates with criminal records so they may not be alone so arm up and exercise caution when engaging.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_gen_001",
+      "internalName": "BountyHuntersGuild_Bounty_Stanton_Rehire",
+      "missionType": "Bounty Hunter",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "displayName": "Bounty Bounty Hunters Guild",
+        "rawName": "SReputationScopeParams.ReputationScope_Bounty_BountyHuntersGuild",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+        ]
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Probationary Guild Member / 1 rep to Applicant / 0 rep",
+      "prerequisiteSummary": "Probationary Guild Member / 1 rep to Applicant / 0 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Probationary Guild Member / 1 rep to Applicant / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Bounty Bounty Hunters Guild +500",
+          "Bounty -100",
+          "21,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +500",
+          "Bounty -100"
+        ],
+        "credits": "21,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "21,500 aUEC",
+          "amount": 21500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 21500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 21500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 500,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ]
+        },
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+          "scopeDisplayName": "Bounty",
+          "amount": -100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+            "d0ad40da-5ae0-4c39-bc1a-d1b276dbe2ca"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "ff797e2e-ce15-4b8d-8098-7ecafdc23a19",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@bhg_bounty_title_gen_001",
+        "descriptionRaw": "@bhg_bounty_desc_gen_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

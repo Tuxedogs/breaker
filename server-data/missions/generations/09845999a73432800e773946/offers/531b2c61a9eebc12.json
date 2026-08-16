@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "tecia-pacheco:prisoner-break",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@mg_pacheco_from",
+      "titleIdentity": "@prisonerbreak_title",
+      "sourceTuple": [
+        "@mg_pacheco_from",
+        "@prisonerbreak_title"
+      ]
+    },
+    "displayTitle": "[Prisoner Break]",
+    "displayTitleTemplate": "[Prisoner Break]",
+    "titleEvidence": {
+      "raw": "@prisonerbreak_title",
+      "localizationKey": "prisonerbreak_title",
+      "template": "~mission(Contractor|PrisonerBreakTitle)",
+      "displayText": "~mission(Contractor|PrisonerBreakTitle)",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(Contractor|PrisonerBreakTitle)",
+          "expression": "Contractor|PrisonerBreakTitle",
+          "segments": [
+            "Contractor",
+            "PrisonerBreakTitle"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@mg_pacheco_from",
+      "displayText": "Tecia Pacheco",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "tecia-pacheco",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "471d5f37-dad5-5ad1-fb25-20f8fbf2c883"
+    ],
+    "familyKeys": [
+      "98a2d07a-45f0-4f6e-8c56-4563b1775f58|Pacheco_HijackedCaterpillar_Career"
+    ],
+    "legacyConceptKeys": [
+      "0029a9800a1a008b9372"
+    ],
+    "objectiveTemplateKeys": [
+      "25902890-8f5f-4a51-bde7-1933023a73b8",
+      "contracts/contracttemplates/hijackedship_caterpillar.xml"
+    ],
+    "missionTypes": [
+      "CareerContract"
+    ],
+    "rewardTypes": [
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "7e716658-9c65-4ebe-819e-8fffd8390e6a:f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "7e716658-9c65-4ebe-819e-8fffd8390e6a:f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "factionKey": "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+        "factionDisplayName": "Tecia \"Twitch\" Pacheco",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "confidence": "resolved",
+        "variantCount": 1,
+        "rewardPathCount": 2,
+        "amountSummary": {
+          "status": "range",
+          "resolvedPathCount": 2,
+          "unresolvedPathCount": 0,
+          "minAmount": -50,
+          "maxAmount": 100
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "confidenceFlags": [
+      "prerequisites",
+      "unresolved"
+    ],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown"
+    ],
+    "searchText": "tecia-pacheco:prisoner-break [prisoner break] tecia-pacheco @mg_pacheco_from tecia pacheco @prisonerbreak_title prisonerbreak_title tecia \"twitch\" pacheco affinity 471d5f37-dad5-5ad1-fb25-20f8fbf2c883"
+  }
+}

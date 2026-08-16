@@ -26,10 +26,38 @@ export type MissionOfferVariantProjectionV1 = {
   legacyConceptKey: string;
   missionType: string;
   rewardTypes: string[];
-  reputationRewardKeys: string[];
+  reputationRewardFacets: MissionOfferReputationRewardMemberV1[];
   releaseFlags: string[];
   confidenceFlags: string[];
   objectiveTemplateKeys: string[];
+};
+
+export type MissionOfferReputationRewardMemberV1 = {
+  stableKey: string;
+  factionKey: string;
+  factionDisplayName: string;
+  scopeKey: string;
+  scopeDisplayName: string;
+  amount?: number;
+  confidence: "resolved" | "partial" | "unresolved";
+};
+
+export type MissionOfferReputationRewardFacetV1 = {
+  stableKey: string;
+  factionKey: string;
+  factionDisplayName: string;
+  scopeKey: string;
+  scopeDisplayName: string;
+  confidence: "resolved" | "partial" | "unresolved";
+  variantCount: number;
+  rewardPathCount: number;
+  amountSummary: {
+    status: "exact" | "range" | "partial" | "unresolved";
+    resolvedPathCount: number;
+    unresolvedPathCount: number;
+    minAmount?: number;
+    maxAmount?: number;
+  };
 };
 
 export type MissionOfferIdentityV1 = {
@@ -58,6 +86,7 @@ export type MissionOfferV1 = {
   missionTypes: string[];
   rewardTypes: string[];
   reputationRewardKeys: string[];
+  reputationRewardFacets: MissionOfferReputationRewardFacetV1[];
   releaseFlags: string[];
   confidenceFlags: string[];
   auditFlags: MissionOfferAuditFlagV1[];
@@ -124,8 +153,31 @@ export function missionOfferSlugV1(value: string): string {
     .replace(/^-+|-+$/g, "") || "unknown";
 }
 
+function readableRuntimeSegment(value: string): string {
+  const words = value
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\bTitle\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const normalized = words
+    .replace(/^Black Box Recover\b/, "Black Box Recovery")
+    .replace(/^Recover Space\b/, "Space Recovery")
+    .replace(/^Recover Item\b/, "Item Recovery")
+    .replace(/^Search Body Space\b/, "Body Search")
+    .replace(/^Salvage Contractor\b/, "Salvage Contract");
+  return normalized.replace(/\s+(Very Easy|Very Hard|Easy|Medium|Hard|Super|Intro)$/i, " — $1");
+}
+
 function runtimePlaceholder(token: { expression: string; segments: string[] }): string {
-  return `[${clean(token.segments[0]) ?? clean(token.expression) ?? "RuntimeValue"}]`;
+  const segments = token.segments.map((segment) => clean(segment)).filter((segment): segment is string => Boolean(segment));
+  const contractorTitleSegment = segments[0]?.toLowerCase() === "contractor" && segments.length > 1
+    ? segments[1]
+    : undefined;
+  const label = contractorTitleSegment
+    ? readableRuntimeSegment(contractorTitleSegment)
+    : segments[0] ?? clean(token.expression) ?? "RuntimeValue";
+  return `[${label}]`;
 }
 
 export function safeMissionOfferTitleV1(title: MissionOfferTitleEvidenceV1): string {
@@ -136,8 +188,8 @@ export function safeMissionOfferTitleV1(title: MissionOfferTitleEvidenceV1): str
     rendered = rendered.replaceAll(token.raw, runtimePlaceholder(token));
   }
   return rendered.replace(/~mission\(([^)]+)\)/g, (_match, expression: string) => {
-    const segment = expression.split("|").map((value) => value.trim()).find(Boolean);
-    return `[${segment ?? "RuntimeValue"}]`;
+    const segments = expression.split("|").map((value) => value.trim()).filter(Boolean);
+    return runtimePlaceholder({ expression, segments });
   });
 }
 
@@ -223,6 +275,82 @@ function stableCollisionSuffix(identity: MissionOfferIdentityV1): string {
   return createHash("sha256").update(identityGroupKey(identity)).digest("hex").slice(0, 10);
 }
 
+function buildReputationRewardFacets(members: OfferMember[]): MissionOfferReputationRewardFacetV1[] {
+  const grouped = new Map<string, Array<{
+    variantKey: string;
+    facet: MissionOfferReputationRewardMemberV1;
+  }>>();
+  for (const member of members) {
+    for (const facet of member.variant.reputationRewardFacets) {
+      grouped.set(facet.stableKey, [
+        ...(grouped.get(facet.stableKey) ?? []),
+        { variantKey: member.variant.variantKey, facet },
+      ]);
+    }
+  }
+
+  return Array.from(grouped.entries()).map(([stableKey, rows]) => {
+    const ordered = [...rows].sort((left, right) => (
+      left.variantKey.localeCompare(right.variantKey)
+      || left.facet.scopeDisplayName.localeCompare(right.facet.scopeDisplayName)
+    ));
+    const first = ordered[0]!.facet;
+    const identityTuples = new Set(ordered.map(({ facet }) => JSON.stringify([
+      facet.factionKey,
+      facet.scopeKey,
+    ])));
+    if (identityTuples.size !== 1) {
+      throw new Error(`Mission offer reputation facet ${stableKey} contains conflicting source identities.`);
+    }
+    const factionDisplayName = ordered
+      .map(({ facet }) => facet.factionDisplayName)
+      .find((label) => !/^unknown(?: faction)?$/i.test(label.trim()))
+      ?? first.factionDisplayName;
+    const scopeDisplayName = ordered
+      .map(({ facet }) => facet.scopeDisplayName)
+      .find((label) => !/^unknown(?: scope)?$/i.test(label.trim()))
+      ?? first.scopeDisplayName;
+    const amounts = ordered
+      .map(({ facet }) => facet.amount)
+      .filter((amount): amount is number => typeof amount === "number" && Number.isFinite(amount));
+    const unresolvedPathCount = ordered.length - amounts.length;
+    const minAmount = amounts.length ? Math.min(...amounts) : undefined;
+    const maxAmount = amounts.length ? Math.max(...amounts) : undefined;
+    const confidences = new Set(ordered.map(({ facet }) => facet.confidence));
+    const confidence = confidences.size === 1
+      ? ordered[0]!.facet.confidence
+      : "partial";
+    const status = amounts.length === 0
+      ? "unresolved"
+      : unresolvedPathCount > 0
+        ? "partial"
+        : minAmount === maxAmount
+          ? "exact"
+          : "range";
+    return {
+      stableKey,
+      factionKey: first.factionKey,
+      factionDisplayName,
+      scopeKey: first.scopeKey,
+      scopeDisplayName,
+      confidence,
+      variantCount: new Set(ordered.map(({ variantKey }) => variantKey)).size,
+      rewardPathCount: ordered.length,
+      amountSummary: {
+        status,
+        resolvedPathCount: amounts.length,
+        unresolvedPathCount,
+        ...(minAmount === undefined ? {} : { minAmount }),
+        ...(maxAmount === undefined ? {} : { maxAmount }),
+      },
+    } satisfies MissionOfferReputationRewardFacetV1;
+  }).sort((left, right) => (
+    left.factionDisplayName.localeCompare(right.factionDisplayName)
+    || left.scopeDisplayName.localeCompare(right.scopeDisplayName)
+    || left.stableKey.localeCompare(right.stableKey)
+  ));
+}
+
 function buildOffer(offerKey: string, members: OfferMember[], collision: boolean): MissionOfferV1 {
   const first = members[0]!;
   const verificationStatuses = unique(
@@ -242,7 +370,8 @@ function buildOffer(offerKey: string, members: OfferMember[], collision: boolean
   const objectiveTemplateKeys = unique(members.flatMap(({ variant }) => variant.objectiveTemplateKeys)).sort();
   const missionTypes = unique(members.map(({ variant }) => variant.missionType)).sort();
   const rewardTypes = unique(members.flatMap(({ variant }) => variant.rewardTypes)).sort();
-  const reputationRewardKeys = unique(members.flatMap(({ variant }) => variant.reputationRewardKeys)).sort();
+  const reputationRewardFacets = buildReputationRewardFacets(members);
+  const reputationRewardKeys = reputationRewardFacets.map((facet) => facet.stableKey);
   const releaseFlags = unique(members.flatMap(({ variant }) => variant.releaseFlags)).sort();
   const confidenceFlags = unique(members.flatMap(({ variant }) => variant.confidenceFlags)).sort();
   const searchText = unique([
@@ -255,6 +384,7 @@ function buildOffer(offerKey: string, members: OfferMember[], collision: boolean
     clean(first.record.offerEvidence.provider.organizationGuid),
     clean(first.record.offerEvidence.title.raw),
     clean(first.record.offerEvidence.title.localizationKey),
+    ...reputationRewardFacets.flatMap((facet) => [facet.factionDisplayName, facet.scopeDisplayName]),
     ...variantKeys,
   ]).join(" ").toLowerCase();
 
@@ -276,6 +406,7 @@ function buildOffer(offerKey: string, members: OfferMember[], collision: boolean
     missionTypes,
     rewardTypes,
     reputationRewardKeys,
+    reputationRewardFacets,
     releaseFlags,
     confidenceFlags,
     auditFlags,

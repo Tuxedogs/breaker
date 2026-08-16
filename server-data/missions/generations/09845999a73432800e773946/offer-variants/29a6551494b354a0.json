@@ -1,0 +1,513 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "rough-ready:salvage-wrecked-ships-on-the-drift",
+  "variants": [
+    {
+      "variantKey": "e054f8ec-0dd0-453e-9bb6-0524e991a5d8",
+      "familyKey": "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+      "conceptKey": "7bf45e0ab01ddafe4f29",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "roughready-salvage",
+        "descriptionStem": "roughready-salvage",
+        "handlerStem": "rr-salvage-list",
+        "archetype": "Salvage",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:roughready-salvage",
+          "description:roughready-salvage",
+          "handler:rr-salvage-list",
+          "contract:contract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+          "RR_Pyro_Orbituary_M_Civilians_Salvage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Salvage Wrecked Ships on the Drift",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Got word there’s a few ships near [Location] just floating all by their lonesome. It’s good salvage, but none of our crews have the time right now. We figured to give you first snap at it.\n\nIf you want the coords, we’ll sell them to you for a price. Then you’re free to pick the wreck as clean as you like and sell it all for a tidy profit. Now, you might run into some trouble out there from rival scavs, but I’m sure it won’t be anything you can’t handle.\n\n- Smokey",
+      "rawName": "@roughready_salvage_M_title_001",
+      "internalName": "RR_Pyro_Orbituary_M_Civilians_Salvage",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+          "RR_Pyro_Orbituary_M_Civilians_Salvage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P3 LEO",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P3 LEO",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P3 LEO",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "28e220ba-ba74-42eb-bae5-382475eba65d"
+        ],
+        "possibleLocations": [
+          "Rest Stop P3 LEO"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "resolvedName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "displayName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P3 LEO"
+          ],
+          "displayLabel": "Rest Stop P3 LEO",
+          "detailLabel": "Rest Stop P3 LEO",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P3 LEO",
+          "displayLabel": "Rest Stop P3 LEO",
+          "detailDisplay": "Rest Stop P3 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "28e220ba-ba74-42eb-bae5-382475eba65d"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+              "displayName": "Rest Stop P3 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P3 LEO"
+            ],
+            "displayLabel": "Rest Stop P3 LEO",
+            "detailLabel": "Rest Stop P3 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P3 LEO"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "No credit reward extracted"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "e054f8ec-0dd0-453e-9bb6-0524e991a5d8",
+        "generatorGuid": "3adb51f8-5a12-4892-98c5-9abb512a81a8",
+        "generatorName": "ContractGenerator.RR_Salvage",
+        "generatorPath": "contracts/contractgenerator/rr_salvage.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_salvage_M_title_001",
+        "descriptionRaw": "@roughready_salvage_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "fd8e44db-6c4d-4aac-8cd7-6f570254c591",
+      "familyKey": "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+      "conceptKey": "7bf45e0ab01ddafe4f29",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "roughready-salvage",
+        "descriptionStem": "roughready-salvage",
+        "handlerStem": "rr-salvage-list",
+        "archetype": "Salvage",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:roughready-salvage",
+          "description:roughready-salvage",
+          "handler:rr-salvage-list",
+          "contract:contract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+          "RR_Pyro_Checkmate_M_Civilians_Salvage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Salvage Wrecked Ships on the Drift",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Got word there’s a few ships near [Location] just floating all by their lonesome. It’s good salvage, but none of our crews have the time right now. We figured to give you first snap at it.\n\nIf you want the coords, we’ll sell them to you for a price. Then you’re free to pick the wreck as clean as you like and sell it all for a tidy profit. Now, you might run into some trouble out there from rival scavs, but I’m sure it won’t be anything you can’t handle.\n\n- Smokey",
+      "rawName": "@roughready_salvage_M_title_001",
+      "internalName": "RR_Pyro_Checkmate_M_Civilians_Salvage",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3adb51f8-5a12-4892-98c5-9abb512a81a8|RR_Salvage_List",
+          "RR_Pyro_Checkmate_M_Civilians_Salvage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Rest Stop P2 L4",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Rest Stop P2 L4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Rest Stop P2 L4",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "07463f54-4ecd-4323-8a28-fb65b8a4ebca"
+        ],
+        "possibleLocations": [
+          "Rest Stop P2 L4"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "resolvedName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "displayName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P2 L4"
+          ],
+          "displayLabel": "Rest Stop P2 L4",
+          "detailLabel": "Rest Stop P2 L4",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P2 L4",
+          "displayLabel": "Rest Stop P2 L4",
+          "detailDisplay": "Rest Stop P2 L4",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "07463f54-4ecd-4323-8a28-fb65b8a4ebca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+              "displayName": "Rest Stop P2 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P2 L4"
+            ],
+            "displayLabel": "Rest Stop P2 L4",
+            "detailLabel": "Rest Stop P2 L4",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Rest Stop P2 L4"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "No credit reward extracted"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "fd8e44db-6c4d-4aac-8cd7-6f570254c591",
+        "generatorGuid": "3adb51f8-5a12-4892-98c5-9abb512a81a8",
+        "generatorName": "ContractGenerator.RR_Salvage",
+        "generatorPath": "contracts/contractgenerator/rr_salvage.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@roughready_salvage_M_title_001",
+        "descriptionRaw": "@roughready_salvage_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

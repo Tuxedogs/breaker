@@ -1,6 +1,11 @@
 import { cp, mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  verifyMissionPublicationGate,
+  type MissionPublicationGateReceiptV1,
+} from "./publication-gates.mts";
+
 type MissionGenerationPointerBaseV1 = {
   schemaVersion: 1;
   shaperVersion: string;
@@ -27,6 +32,7 @@ export function buildMissionGenerationPointerV1(options: {
   generationId: string;
   shaperVersion: string;
   generationContract?: MissionGenerationContractV1;
+  publicationGate?: MissionPublicationGateReceiptV1;
 }): MissionGenerationPointerV1 {
   const generationContract = options.generationContract ?? {
     missionSchemaVersion: 2,
@@ -58,6 +64,11 @@ export async function publishImmutableMissionGeneration(options: {
   legacyRootFiles: readonly string[];
   legacyShardDirectories: readonly string[];
 }): Promise<MissionGenerationPointerV1> {
+  const generationContract = options.generationContract ?? {
+    missionSchemaVersion: 2,
+    sourceContractVersion: 3,
+  };
+  await verifyMissionPublicationGate(generationContract, options.publicationGate);
   const generationsRoot = path.join(options.missionRoot, "generations");
   const finalGenerationRoot = path.join(generationsRoot, options.generationId);
   await mkdir(generationsRoot, { recursive: true });

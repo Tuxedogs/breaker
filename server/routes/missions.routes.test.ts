@@ -286,7 +286,24 @@ async function writeOfferGeneration(
     providerKey: "headhunters",
     missionTypes: ["Bounty"],
     rewardTypes: fixture.rewardTypes,
-    reputationRewardKeys: ["Ship Combat"],
+    reputationRewardKeys: ["headhunters:ship-combat"],
+    reputationRewardFacets: [{
+      stableKey: "headhunters:ship-combat",
+      factionKey: "headhunters",
+      factionDisplayName: "Headhunters",
+      scopeKey: "ship-combat",
+      scopeDisplayName: "Ship Combat",
+      confidence: "resolved" as const,
+      variantCount: 1,
+      rewardPathCount: 1,
+      amountSummary: {
+        status: "exact" as const,
+        resolvedPathCount: 1,
+        unresolvedPathCount: 0,
+        minAmount: 100,
+        maxAmount: 100,
+      },
+    }],
     releaseFlags: ["released"],
     confidenceFlags: [],
     verificationStatuses: ["unknown" as const],
@@ -577,6 +594,15 @@ test("schema 3 offer routes and browser search stay isolated to exact offer evid
     ["headhunters:ground-the-upstarts"],
   );
   assert.deepEqual(
+    await visibleOfferKeys("repReward=headhunters%3Aship-combat"),
+    [
+      "headhunters:deep-space-hit",
+      "headhunters:primo-target",
+      "headhunters:plug-a-traitor",
+      "headhunters:ground-the-upstarts",
+    ],
+  );
+  assert.deepEqual(
     await visibleOfferKeys("provider=headhunters&verification=unknown"),
     [
       "headhunters:deep-space-hit",
@@ -615,6 +641,11 @@ test("schema 3 offer routes and browser search stay isolated to exact offer evid
   assert.equal(
     (detail?.body as { offer: { offerKey: string } }).offer.offerKey,
     "headhunters:primo-target",
+  );
+  assert.equal(
+    (detail?.body as { offer: { reputationRewardFacets: Array<{ scopeDisplayName: string }> } })
+      .offer.reputationRewardFacets[0]?.scopeDisplayName,
+    "Ship Combat",
   );
 
   const variants = await handleMissionsRoute(

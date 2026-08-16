@@ -1,0 +1,1509 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank0",
+  "variant": {
+    "variantKey": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+    "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank0",
+    "conceptKey": "fc46f19658e53f04670e",
+    "objectiveSignature": {
+      "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|intro|unlock:0d013fcd5880|unknown:bounded||||",
+      "activityKey": "resource-gathering+salvage-ship",
+      "titleStem": "adagio-industrial-salvage-universal",
+      "descriptionStem": "adagio-industrial-salvage-universal",
+      "handlerStem": "adagio-rg-ship-salvage",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "intro",
+      "chainState": "unlock:0d013fcd5880",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering+salvage-ship",
+        "activity-source:structural",
+        "title:adagio-industrial-salvage-universal",
+        "description:adagio-industrial-salvage-universal",
+        "handler:adagio-rg-ship-salvage",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:intro",
+        "chain:unlock:0d013fcd5880",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": true,
+    "specificityBadges": [
+      "Salvage",
+      "Intro",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Adagio Holdings in Need of Salvagers",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About us  About the job [Location] and strip an abandoned ship approved for salvage.\n\nOnce you've gathered the RMC, you'll deliver it to the freight elevator located at [Destination].\n\n> Requirements A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+    "rawName": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+    "internalName": "Adagio_Salvage_Stanton_Intro",
+    "missionType": "Salvage",
+    "provider": "Adagio Holdings",
+    "faction": "Adagio Holdings",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+      "factionDisplayName": "Adagio Holdings",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+    "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; CrimeStat limited to 2 or below; Stanton Solar System",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Neutral / 0 rep to Neutral / 0 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Solar System",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "48408311-629d-40ba-a2d6-40773d56b9b0"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Solar System",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+      ],
+      "possibleLocations": [
+        "Stanton Solar System"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "resolvedName": "Stanton Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "displayName": "Stanton Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Solar System"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Solar System",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Solar System",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Solar System",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "displayName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Solar System"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Solar System",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+        "resolvedName": "Stanton Solar System",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Solar System"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1",
+        "Standing +100",
+        "45,000 aUEC",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+          "poolName": "Adagio Resource Gathering Ship Salvage",
+          "rewardCount": 5,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "20% chance - 1 of 5",
+          "rewards": [
+            {
+              "blueprintGuid": "4e834db6-9b0e-461a-8465-ec90847bd7e5",
+              "displayName": "Trawler Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+              "displayName": "Abrade Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +100"
+      ],
+      "credits": "45,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "45,000 aUEC",
+        "amount": 45000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 45000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 45000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+        "familyId": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank0",
+        "templateGuid": "a24c2d47-de66-42c2-a92a-dcae6c267b49"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_eae7ae095d2a0d359e79f6b4",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_ShipSalvage_Rank0"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_6489967e89e4af786ba2834c",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "76ed5ffe-32b6-473a-9605-19f82c5d879e"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_f9ffb4f116cf39e1f06fd756",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "completion_tag",
+          "polarity": "excluded",
+          "identifiers": {
+            "completionTag": "48408311-629d-40ba-a2d6-40773d56b9b0"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_bf3ea4fb46657be39e472428",
+              "polarity": "excluded",
+              "memberCompletionTags": [
+                "48408311-629d-40ba-a2d6-40773d56b9b0"
+              ],
+              "countField": "excludedCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "76ed5ffe-32b6-473a-9605-19f82c5d879e"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/excludedCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_480df786328df63bf383aaec",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "48408311-629d-40ba-a2d6-40773d56b9b0",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_f27e28bd69e00481c3446769",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_17d6a3e0421bb196d852cf22",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_9f2318beee387eea664a7918",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 45000,
+              "amount": 45000,
+              "rawAmount": 44981.682884719805,
+              "integerRoundedAmount": 44982,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2.9349999999999996,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.918
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.612
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.946
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "15",
+                "value": 15,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "a24c2d47-de66-42c2-a92a-dcae6c267b49",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/salvage_resourcegathering.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/salvage_resourcegathering.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Adagio_from",
+          "displayText": "Adagio Holdings",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "recordName": "FactionReputation.FactionReputation_Lawful_AdagioHoldings",
+          "recordType": null,
+          "displayName": "Adagio Holdings",
+          "path": "factions/factionreputation/factionreputation_lawful_adagioholdings.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+          "localizationKey": "Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+          "template": "Adagio Holdings in Need of Salvagers",
+          "displayText": "Adagio Holdings in Need of Salvagers",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "requirements": [
+              {
+                "edgeId": "pre_6489967e89e4af786ba2834c",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+                  "recordName": "StarMapObject.StantonSolarSystem",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "76ed5ffe-32b6-473a-9605-19f82c5d879e"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 45000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 45000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_f27e28bd69e00481c3446769",
+            "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_17d6a3e0421bb196d852cf22",
+            "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_480df786328df63bf383aaec",
+            "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "48408311-629d-40ba-a2d6-40773d56b9b0",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 45000,
+              "amount": 45000,
+              "rawAmount": 44981.682884719805,
+              "integerRoundedAmount": 44982,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2.9349999999999996,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 0.918
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.612
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 0.946
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "15",
+                "value": 15,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 45000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 45000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_a69c7fb1189a2db5bee8bfae",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "sourceScope": "contract",
+          "sourceOwnerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "sourceOrdinal": 2,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                  "maxContainerSize": "-1",
+                  "minSCU": "1",
+                  "maxSCU": "1"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxSCU": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank0']/contracts/CareerContract[@id='76ed5ffe-32b6-473a-9605-19f82c5d879e']/paramOverrides/propertyOverrides/MissionProperty[3]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "sourceOrdinal": 2,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                    "maxContainerSize": "-1",
+                    "minSCU": "1",
+                    "maxSCU": "1"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxSCU": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank0']/contracts/CareerContract[@id='76ed5ffe-32b6-473a-9605-19f82c5d879e']/paramOverrides/propertyOverrides/MissionProperty[3]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_a69c7fb1189a2db5bee8bfae",
+          "variantId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "sourceScope": "contract",
+          "sourceOwnerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+          "sourceOrdinal": 2,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                  "maxContainerSize": "-1",
+                  "minSCU": "1",
+                  "maxSCU": "1"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxSCU": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank0']/contracts/CareerContract[@id='76ed5ffe-32b6-473a-9605-19f82c5d879e']/paramOverrides/propertyOverrides/MissionProperty[3]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+            "sourceOrdinal": 2,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                    "maxContainerSize": "-1",
+                    "minSCU": "1",
+                    "maxSCU": "1"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxSCU": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank0']/contracts/CareerContract[@id='76ed5ffe-32b6-473a-9605-19f82c5d879e']/paramOverrides/propertyOverrides/MissionProperty[3]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "76ed5ffe-32b6-473a-9605-19f82c5d879e",
+      "generatorGuid": "e29eae76-5a8a-4577-8c6a-f943a46aae90",
+      "generatorName": "ContractGenerator.Adagio_ResourceGathering_ShipSalvage",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+      "descriptionRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Desc_001"
+    }
+  }
+}

@@ -12,6 +12,10 @@ import {
   type CompactMissionVariant,
 } from "./missions/project/browser-projection.mts";
 import { publishImmutableMissionGeneration } from "./missions/publication/write-artifacts.mts";
+import {
+  assertMissionPublicationGate,
+  type MissionPublicationGateReceiptV1,
+} from "./missions/publication/publication-gates.mts";
 import { buildMissionGraphArtifactsV2 } from "./missions/report/graph-report.mts";
 import {
   assertMissionOfferGoldensV1,
@@ -592,6 +596,8 @@ type ShapedCatalog = {
       status: "explicit" | "not_configured";
       path?: string;
       sha256?: string;
+      buildId?: string;
+      recordCount: number;
     };
   };
   summary: {
@@ -839,7 +845,7 @@ const legacyShapedRootFiles = [
   ...legacyMissionOutputFiles,
 ] as const;
 const legacyShardDirectories = ["families", "family-variants", "variants", "offers", "offer-variants"] as const;
-const missionShaperVersion = "moonbreaker_mission_shaper_v3_2_offer1";
+const missionShaperVersion = "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles";
 const missionOfferGoldenManifestPath = path.resolve(
   "docs",
   "mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
@@ -3140,6 +3146,7 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOffe
         targets?: Array<{ name?: string; baselineSha256?: string }>;
       };
       targetSourceV4?: {
+        buildId?: string;
         artifacts?: Array<{ name?: string; sha256?: string }>;
         invariantResults?: {
           protectedFieldMismatchCount?: number;
@@ -3147,6 +3154,11 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOffe
           result?: string;
         };
       };
+      evidenceFiles?: Array<{
+        path?: string;
+        role?: string;
+        evidenceStatus?: string;
+      }>;
     },
     sha256: createHash("sha256").update(content).digest("hex"),
   })),
@@ -3190,6 +3202,11 @@ if (
 ) {
   throw new Error("Mission offer source-v4 preservation invariant receipt is missing or failed.");
 }
+const auditedBuildId = missionOfferManifestInput.manifest.targetSourceV4?.buildId;
+const auditedRefIndexPath = missionOfferManifestInput.manifest.evidenceFiles?.find(
+  (evidence) => evidence.role === "source GUID and locality-name resolution"
+    && evidence.evidenceStatus === "source_backed",
+)?.path;
 const protectedInvariantBaselines = Object.fromEntries(
   (missionOfferManifestInput.manifest.invariantHashTargets?.targets ?? []).flatMap((target) =>
     target.name && target.baselineSha256 ? [[target.name, target.baselineSha256]] : []
@@ -3331,9 +3348,15 @@ const missionOffers = buildMissionOffersV1(
           ? "items-unresolved"
           : undefined,
       ]),
-      reputationRewardKeys: unique(variant.rewardedReputationPaths.map((reward) =>
-        `${reward.factionKey}:${reward.scopeKey}`
-      )),
+      reputationRewardFacets: variant.rewardedReputationPaths.map((reward) => ({
+        stableKey: `${reward.factionKey}:${reward.scopeKey}`,
+        factionKey: reward.factionKey,
+        factionDisplayName: reward.factionDisplayName,
+        scopeKey: reward.scopeKey,
+        scopeDisplayName: reward.scopeDisplayName,
+        ...(typeof reward.amount === "number" && Number.isFinite(reward.amount) ? { amount: reward.amount } : {}),
+        confidence: reward.confidence,
+      })),
       releaseFlags: variant.releaseFlags,
       confidenceFlags: unique([
         variant.confidence.hasUnresolvedLocation ? "locations" : undefined,
@@ -3380,6 +3403,8 @@ const shaped: ShapedCatalog = {
       status: refIndexInput.status,
       path: "path" in refIndexInput ? refIndexInput.path : undefined,
       sha256: "sha256" in refIndexInput ? refIndexInput.sha256 : undefined,
+      buildId: refIndexInput.status === "explicit" ? catalog.source.buildId : undefined,
+      recordCount: refIndexInput.records.length,
     },
   },
   summary: {
@@ -3459,6 +3484,29 @@ const shardManifest: MissionShardManifest = {
   variantOfferKeys: missionOffers.variantOfferKeys,
   legacyConceptOfferKeys: missionOffers.legacyConceptOfferKeys,
 };
+const publicationGate: MissionPublicationGateReceiptV1 = {
+  schemaVersion: 1,
+  sourceBuildId: catalog.source.buildId,
+  refIndex: {
+    status: refIndexInput.status,
+    path: "path" in refIndexInput ? refIndexInput.path : undefined,
+    sha256: "sha256" in refIndexInput ? refIndexInput.sha256 : undefined,
+    buildId: refIndexInput.status === "explicit" ? catalog.source.buildId : undefined,
+    recordCount: refIndexInput.records.length,
+    auditedBuildId,
+    auditedPath: auditedRefIndexPath,
+  },
+  semantics: {
+    variantCount: shaped.summary.variantCount,
+    reputationScopeResolvedCount: shaped.summary.reputationScopeResolvedCount,
+    unresolvedLocationCount: shaped.summary.unresolvedLocationCount,
+  },
+};
+assertMissionPublicationGate({
+  missionSchemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+  sourceContractVersion: catalog.schemaVersion,
+  offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+}, publicationGate);
 const browserIndex: MissionBrowserIndex = {
   schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
   sourceContractVersion: catalog.schemaVersion,
@@ -4232,6 +4280,7 @@ await publishImmutableMissionGeneration({
     sourceContractVersion: 4,
     offerSchemaVersion: 1,
   },
+  publicationGate,
   legacyRootFiles: legacyShapedRootFiles,
   legacyShardDirectories,
 });

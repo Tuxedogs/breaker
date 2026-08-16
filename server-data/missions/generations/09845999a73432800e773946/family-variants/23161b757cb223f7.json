@@ -1,0 +1,830 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "8ccb1427-aeb2-45e2-bc3e-c5e78887cfcd|InterSecDefenseSolutions_RecoverData",
+  "variants": [
+    {
+      "variantKey": "4f735fe1-caec-4c9d-acba-606d8e096ba6",
+      "familyKey": "8ccb1427-aeb2-45e2-bc3e-c5e78887cfcd|InterSecDefenseSolutions_RecoverData",
+      "conceptKey": "2f46858606316a83289f",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:3cbd80e3ae2f|unknown:bounded||||variant:4f735fe1-caec-4c9d-acba-606d8e096ba6",
+        "activityKey": "unknown",
+        "titleStem": "kaboos",
+        "descriptionStem": "kaboos",
+        "handlerStem": "inter-sec-defense-solutions-recover-data",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3cbd80e3ae2f",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:kaboos",
+          "description:kaboos",
+          "handler:inter-sec-defense-solutions-recover-data",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:3cbd80e3ae2f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Retrieve Additional Smuggler Intel",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws present and armed\nEquipment Specs: Combat-rated Ship, Personal Arms\nBriefing: InterSec needs your services once again.\n\nThe intel you previously gathered has been invaluable in identifying several prominent buyers of the illegally-obtained Vanduul parts. However, since then the Shattered Blade have continued their operations and the UEE is requesting that we update our intel.\n\nWe believe more information can be retrieved from the storage facilities located at the old QV Logistics station.\n\nThe operation parameters haven’t changed since your last mission: find the encrypted data and use the decryption key to decipher and upload the list to us. The Shattered Blade will have reinforced the area since the last time, so expect resistance.\n\nGood luck. We’ll be in touch.\n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Kaboos_Mission_Title",
+      "internalName": "IDS_RecoverEncryptedData",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "InterSec Defense Solutions: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "reputation",
+          "label": "InterSec Defense Solutions: Jr. Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3dc9ba7f-61d8-4b7a-8566-742b8857f772"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: IDS Recover Encrypted Data: Pulse \"Blacklist\" Pistol, Quartz Energy SMG, Quartz \"Black Op\" Energy SMG, Testudo Arms +10",
+          "Blueprint: IDS Recover Encrypted Data Vgear: Attrition-1 Repeater, Attrition-2 Repeater, Attrition-3 Repeater",
+          "Standing +100",
+          "1,370,500 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "IDS Recover Encrypted Data: Pulse \"Blacklist\" Pistol, Quartz Energy SMG, Quartz \"Black Op\" Energy SMG, Testudo Arms +10",
+          "IDS Recover Encrypted Data Vgear: Attrition-1 Repeater, Attrition-2 Repeater, Attrition-3 Repeater"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "c9b51f5a-6073-49f8-bd40-b240d7d35ceb",
+            "poolName": "IDS Recover Encrypted Data",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "2d084e7a-056d-4e29-a824-cd459888d27f",
+                "displayName": "Pulse \"Blacklist\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "656bcd59-44ca-4812-a5f2-f1d2ec305571",
+                "displayName": "Quartz Energy SMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "b2ff9dfd-0b26-4b77-9118-e7e9ea60e42c",
+                "displayName": "Quartz \"Black Op\" Energy SMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d62c3e24-0b9a-4de9-8590-b22189fe030a",
+                "displayName": "Testudo Arms",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "82b03018-62d2-412e-b8c3-2471605e76fe",
+                "displayName": "Testudo Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "af5b9b3b-2b13-4ff7-8b2f-8d251a4fa272",
+                "displayName": "Testudo Legs",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "f561bc08-cb5e-46c4-8441-111710560c68",
+                "displayName": "Testudo Helmet",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "07e49825-48e7-454a-a20d-8e4257c52e61",
+                "displayName": "Testudo Helmet Clanguard",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6024a6ca-197f-42eb-8446-91fb06953b27",
+                "displayName": "Testudo Core Clanguard",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fba490b7-13e5-463b-a774-c8ebd215738e",
+                "displayName": "Testudo",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1ef86967-9f09-43af-b234-a5e9088345cc",
+                "displayName": "Testudo Arms Clanguard",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "Quartz Energy SMG Battery (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "0dd198ba-20ab-4119-88bb-d7d2deaa147a",
+                "displayName": "Testudo Backpack",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "1817df4b-2d1c-4735-872d-cb471cf07201",
+            "poolName": "IDS Recover Encrypted Data Vgear",
+            "rewardCount": 3,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "33.33% chance - 1 of 3",
+            "rewards": [
+              {
+                "blueprintGuid": "4c5a8d37-1eb2-4395-8c3e-54b8f738639d",
+                "displayName": "Attrition-1 Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "33.33% chance"
+              },
+              {
+                "blueprintGuid": "8f166b36-2bb7-4d38-9e3a-464801b40f83",
+                "displayName": "Attrition-2 Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "33.33% chance"
+              },
+              {
+                "blueprintGuid": "626da3a0-dc9c-49bd-ad97-497239675894",
+                "displayName": "Attrition-3 Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "33.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "1,370,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "1,370,500 aUEC",
+          "amount": 1370500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 1370500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 1370500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "30",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4f735fe1-caec-4c9d-acba-606d8e096ba6",
+        "generatorGuid": "8ccb1427-aeb2-45e2-bc3e-c5e78887cfcd",
+        "generatorName": "ContractGenerator.InterSec_RecoverData",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Kaboos_Mission_Title",
+        "descriptionRaw": "@Kaboos_Mission_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "34f8d04a-8c43-4fb8-bfdb-997234ccea54",
+      "familyKey": "8ccb1427-aeb2-45e2-bc3e-c5e78887cfcd|InterSecDefenseSolutions_RecoverData",
+      "conceptKey": "cd31e039d41e070aa7ec",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|intro|open|unknown:bounded||||variant:34f8d04a-8c43-4fb8-bfdb-997234ccea54",
+        "activityKey": "unknown",
+        "titleStem": "kaboos",
+        "descriptionStem": "kaboos",
+        "handlerStem": "inter-sec-defense-solutions-recover-data",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:kaboos",
+          "description:kaboos",
+          "handler:inter-sec-defense-solutions-recover-data",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:intro",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Recovery",
+        "Intro",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Vanduul-Tech Smugglers",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Unknown\nEquipment Specs: Combat-rated Ship, Personal Arms\nBriefing: InterSec has been enlisted by the UEE to gather intel on a group of black marketeers dealing in Vanduul parts, that have been linked to the illegal Vanduul experiments happening at ASD’s Onyx Facility. The UEE is eager to understand and put an end to their operations.\n\nBased on evidence extracted from the ASD facilities, we’ve potentially managed to track down the location of one of their storage sites.\n\nOnce accepted, head over to the old QV Planet Services Logistics station and we’ll be in touch.\n\nRespectfully, \n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Kaboos_Intro_Title",
+      "internalName": "IDS_RecoverEncryptedData_Intro",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "InterSec Defense Solutions: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "reputation",
+          "label": "InterSec Defense Solutions: Jr. Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "1,370,500 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "1,370,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "1,370,500 aUEC",
+          "amount": 1370500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 1370500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 1370500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "50",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "34f8d04a-8c43-4fb8-bfdb-997234ccea54",
+        "generatorGuid": "8ccb1427-aeb2-45e2-bc3e-c5e78887cfcd",
+        "generatorName": "ContractGenerator.InterSec_RecoverData",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_recoverdata.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Kaboos_Intro_Title",
+        "descriptionRaw": "@Kaboos_Intro_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

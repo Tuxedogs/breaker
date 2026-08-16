@@ -17,7 +17,7 @@
     "evidenceStatus": "source_and_generation_pinned"
   },
   "targetSourceV4": {
-    "status": "source_v4_shaped_v3_offer_v1_published_and_verified",
+    "status": "source_v4_localization_repair_shaped_v3_offer_v1_published_and_verified",
     "channel": "LIVE",
     "buildId": "4.9.0-live.12232306",
     "sourceContractVersion": 4,
@@ -27,35 +27,35 @@
       {
         "name": "mission_contracts.json",
         "schemaVersion": 4,
-        "bytes": 109328596,
-        "sha256": "761b960fb61a80fda0808f348d24ffb260861c02338d7b852da5c18624a8c40d"
+        "bytes": 109678214,
+        "sha256": "965000215032a267cd6d48bad514920273930b0011e5794348f4dcf803fbf5c5"
       },
       {
         "name": "mission_objective_templates.json",
         "schemaVersion": 2,
         "bytes": 13966789,
-        "sha256": "fdb64d86595aa4eafbccdabe3436fdd65c41f6b4317dc09362c079ee007c8abb"
+        "sha256": "89aa2a7d46ac5f7b330070e96aa00f61c30cc47916c8af0cdf06e0668b477fc5"
       },
       {
         "name": "mission_extraction_report.json",
         "schemaVersion": 4,
-        "bytes": 87300,
-        "sha256": "69411b524210140b9e56005f525cdc98984863547acb59498db4e641bedc19b2"
+        "bytes": 74556,
+        "sha256": "e753c4e5920156055ca2ef928ba735361ceffbb6173cffe253bff782abd234e4"
       },
       {
         "name": "mission_reward_lookups.json",
-        "bytes": 718045,
-        "sha256": "023f656a014eebcdfafbc366723140e062936bea7b273e0b6755a219417cf589"
+        "bytes": 717929,
+        "sha256": "b28098010408c57862a1fd843a4092462f28498f833dd0669b46ad76fc4747d8"
       },
       {
         "name": "mission_blueprint_rewards.json",
-        "bytes": 39388864,
-        "sha256": "bb3a4febcf1ac0e0accf59b725477757118c457a8afb474c6cfa12fd1d8defcc"
+        "bytes": 39596235,
+        "sha256": "768e41d2dd9f04fc96388b6d08f11c2b720f5122d94aba25a1bafb14f5e2ea19"
       },
       {
         "name": "blueprint_reward_sources.json",
-        "bytes": 5016049,
-        "sha256": "34109a74185b9e2e2e4599125e9bb47a08f75681af26359fbfa6736d8f98ee29"
+        "bytes": 5023961,
+        "sha256": "41db2a38966a67528af82cb2778f11ca3e8d8d60715acf99ff01725157efc979"
       }
     ],
     "counts": {
@@ -83,8 +83,8 @@
     },
     "readerTestResult": {
       "command": "npm run missions:test",
-      "tests": 51,
-      "passed": 51,
+      "tests": 60,
+      "passed": 60,
       "failed": 0,
       "result": "pass"
     },
@@ -101,30 +101,45 @@
       "missionSchemaVersion": 3,
       "sourceContractVersion": 4,
       "offerSchemaVersion": 1,
-      "shaperVersion": "moonbreaker_mission_shaper_v3_2_offer1",
-      "generationId": "2cc966f1ae3dbd6e7db858a2",
+      "shaperVersion": "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles",
+      "generationId": "09845999a73432800e773946",
       "counts": {
         "missionSeries": 259,
-        "missionOffers": 1012,
+        "missionOffers": 973,
         "exactVariants": 2501,
         "goldenOffers": 10,
         "goldenVariants": 25
       },
+      "correctiveAudit": {
+        "refIndexStatus": "explicit",
+        "refIndexRecordCount": 61505,
+        "resolvedReputationScopeCount": 1735,
+        "partialReputationScopeCount": 404,
+        "unresolvedReputationScopeCount": 362,
+        "unresolvedLocationCount": 0,
+        "localizationTokenMissCountBefore": 361,
+        "localizationTokenMissCountAfter": 98,
+        "unresolvedOfferTitleCountBefore": 128,
+        "unresolvedOfferTitleCountAfter": 51,
+        "reputationFacetContract": "structured offer-owned stable key plus faction and scope labels, confidence, path counts, and amount summary",
+        "runtimeTitlePolicy": "Contractor-selected runtime title segments are normalized into bracketed searchable placeholders; unresolved NFR and WIP debug titles remain opt-in technical evidence.",
+        "result": "pass"
+      },
       "artifacts": [
         {
           "name": "mission_browser_index.json",
-          "bytes": 9345191,
-          "sha256": "ca94095b7d79d2b40926129ff439df17881eb1a482aad4af61462716b4e9ea24"
+          "bytes": 9792087,
+          "sha256": "a3fe244008e21d1f52e9ba4a340d0229cc4ea7577731c04b1668a05f2f484c3f"
         },
         {
           "name": "mission_offers.json",
-          "bytes": 2951314,
-          "sha256": "b6272bfb792d8e76676b069ebe2965d509083945638288cb8b279d27dfb69d12"
+          "bytes": 3483937,
+          "sha256": "67dbdf25f1114c1f5b3fca7c9da3f5497a5d6b5302d2b2a8194547968f564f94"
         },
         {
           "name": "mission_shard_manifest.json",
-          "bytes": 3204458,
-          "sha256": "e5b1ed7cfcbd36d6697df6b6050fc55448745c830b49cc311213d51c03a7aa71"
+          "bytes": 3192864,
+          "sha256": "92ab9ed321d8b2247db1495c0d84a99795c5d1706c6a574ab11e48f6856ef73d"
         }
       ],
       "goldenReport": {
@@ -136,8 +151,8 @@
       "validation": {
         "sourceVerifier": "pass",
         "shapedVerifier": "pass",
-        "missionTests": "51/51 pass",
-        "offerUiPlaywright": "3/3 pass",
+        "missionTests": "60/60 pass",
+        "offerUiPlaywright": "4/4 pass",
         "blueprintSourceRoutes": "6/6 pass",
         "apiBoundary": "pass",
         "lint": "pass",
@@ -151,7 +166,7 @@
       "currentMissionSchemaVersion": 3,
       "currentSourceContractVersion": 4,
       "currentOfferSchemaVersion": 1,
-      "currentGenerationId": "2cc966f1ae3dbd6e7db858a2",
+      "currentGenerationId": "09845999a73432800e773946",
       "rollbackGenerationId": "fdfd54f65b1f84a621899b21",
       "nextRequiredStep": "none_publication_complete"
     },

@@ -84,6 +84,23 @@ type MissionOfferView = {
   missionTypes: string[];
   rewardTypes: string[];
   reputationRewardKeys: string[];
+  reputationRewardFacets?: Array<{
+    stableKey: string;
+    factionKey: string;
+    factionDisplayName: string;
+    scopeKey: string;
+    scopeDisplayName: string;
+    confidence: "resolved" | "partial" | "unresolved";
+    variantCount: number;
+    rewardPathCount: number;
+    amountSummary: {
+      status: "exact" | "range" | "partial" | "unresolved";
+      resolvedPathCount: number;
+      unresolvedPathCount: number;
+      minAmount?: number;
+      maxAmount?: number;
+    };
+  }>;
   releaseFlags: string[];
   confidenceFlags: string[];
   verificationStatuses: Array<"verified" | "unverified" | "unknown">;
@@ -378,7 +395,11 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
       if (provider && offer.providerKey !== provider) return false;
       if (missionType && !offer.missionTypes.includes(missionType)) return false;
       if (reward && !offer.rewardTypes.includes(reward)) return false;
-      if (repReward && !offer.reputationRewardKeys.includes(repReward)) return false;
+      if (
+        repReward
+        && !(offer.reputationRewardFacets?.some((facet) => facet.stableKey === repReward)
+          ?? offer.reputationRewardKeys.includes(repReward))
+      ) return false;
       if (status && !offer.releaseFlags.includes(status)) return false;
       if (confidence && !offer.confidenceFlags.includes(confidence)) return false;
       if (

@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "headhunters:location-needs-a-bunch-of-repairs--0488e161e8",
+  "variants": [
+    {
+      "variantKey": "4785d6e2-2543-8db6-2009-1524a3f38aaf",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_Handyman",
+      "conceptKey": "55c458517d9bc3126b85",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|missing-person-investigation|activity-defined|standard|open|unknown:unknown|||supporting-family:d8c52e38-f5d6-4a99-8531-326e3293d106|HH_Handyman|",
+        "activityKey": "missing-person-investigation",
+        "titleStem": "headhunters-maintenance-local",
+        "descriptionStem": "headhunters-maintenance-local",
+        "handlerStem": "hh-handyman",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "partial",
+        "evidence": [
+          "activity:missing-person-investigation",
+          "activity-source:supporting",
+          "title:headhunters-maintenance-local",
+          "description:headhunters-maintenance-local",
+          "handler:hh-handyman",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-3",
+      "tierLabel": "Rank 3",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "[Location] needs a bunch of repairs",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Sending a call out to anyone nearby. Got a pretty heavy work order for one of our outposts at [Location]. Sounds like we need six fuses fixed. You'll also need a salvaging tool with enough RMC to patch up about five pipes to stop the place from falling apart.\n\nIf you bring all the shit needed to patch them up, we'll pay you out.\n\nHopefully you know what you're doing, but just in case, the “Guide to Maintenance” in your mobiGlas Journal might be worth a look.\n\nStows out.",
+      "rawName": "@headhunters_maintenance_local_M_title_001",
+      "internalName": "HH_Pyro_RegionD_Rank3_LastLanding_Local_Handyman",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 6 Outpost col m scrp otlw 001",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro 6 Outpost col m scrp otlw 001",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro 6 Outpost col m scrp otlw 001",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "256e7587-7c08-41de-8786-2338e51be039"
+        ],
+        "possibleLocations": [
+          "Pyro 6 Outpost col m scrp otlw 001"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "256e7587-7c08-41de-8786-2338e51be039",
+            "resolvedName": "Pyro 6 Outpost col m scrp otlw 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_scrp_otlw_001.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "256e7587-7c08-41de-8786-2338e51be039",
+            "displayName": "Pyro 6 Outpost col m scrp otlw 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_scrp_otlw_001.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 6 Outpost col m scrp otlw 001"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 6 Outpost col m scrp otlw 001",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro 6 Outpost col m scrp otlw 001",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro 6 Outpost col m scrp otlw 001",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "256e7587-7c08-41de-8786-2338e51be039"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "256e7587-7c08-41de-8786-2338e51be039",
+              "displayName": "Pyro 6 Outpost col m scrp otlw 001",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_scrp_otlw_001.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 6 Outpost col m scrp otlw 001"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro 6 Outpost col m scrp otlw 001",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "256e7587-7c08-41de-8786-2338e51be039",
+          "resolvedName": "Pyro 6 Outpost col m scrp otlw 001",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 6 Outpost col m scrp otlw 001"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "20,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "20,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "20,750 aUEC",
+          "amount": 20750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 20750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 20750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "4785d6e2-2543-8db6-2009-1524a3f38aaf",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_maintenance_local_M_title_001",
+        "descriptionRaw": "@headhunters_maintenance_local_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

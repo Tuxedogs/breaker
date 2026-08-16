@@ -1,0 +1,3137 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+  "variants": [
+    {
+      "variantKey": "8413c1dc-0ad5-4268-97d5-6acb2d55d184",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "fc46f19658e53f04670e",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|intro|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-salvage-universal",
+        "descriptionStem": "adagio-industrial-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-salvage-universal",
+          "description:adagio-industrial-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:intro",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Salvage",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adagio Holdings in Need of Salvagers",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About us  About the job [Location] and strip an abandoned ship approved for salvage.\n\nOnce you've gathered the RMC, you'll deliver it to the freight elevator located at [Destination].\n\n> Requirements A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Pyro_Intro",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Pyro Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro Solar System",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "286cb603-b4ae-4279-80a1-d4505fee1916"
+        ],
+        "possibleLocations": [
+          "Pyro Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "resolvedName": "Pyro Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "displayName": "Pyro Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Solar System"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro Solar System",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro Solar System",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "286cb603-b4ae-4279-80a1-d4505fee1916"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+              "displayName": "Pyro Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro Solar System"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "resolvedName": "Pyro Solar System",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "8413c1dc-0ad5-4268-97d5-6acb2d55d184",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d0bf740e-a4a4-401f-95a9-97920b0154f1",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "fc46f19658e53f04670e",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|intro|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-salvage-universal",
+        "descriptionStem": "adagio-industrial-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-salvage-universal",
+          "description:adagio-industrial-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:intro",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Salvage",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adagio Holdings in Need of Salvagers",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About us  About the job [Location] and strip an abandoned ship approved for salvage.\n\nOnce you've gathered the RMC, you'll deliver it to the freight elevator located at [Destination].\n\n> Requirements A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Nyx_Intro",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Nyx Solar System",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Nyx Solar System",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+              "displayName": "Nyx Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx Solar System"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Nyx Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d0bf740e-a4a4-401f-95a9-97920b0154f1",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "e07b3007-6bc1-4b50-ac08-c5b31e345efd",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "fc46f19658e53f04670e",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|intro|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-salvage-universal",
+        "descriptionStem": "adagio-industrial-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-salvage-universal",
+          "description:adagio-industrial-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:intro",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Salvage",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adagio Holdings in Need of Salvagers",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About us  About the job [Location] and strip an abandoned ship approved for salvage.\n\nOnce you've gathered the RMC, you'll deliver it to the freight elevator located at [Destination].\n\n> Requirements A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Stanton_Intro",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Solar System",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "possibleLocations": [
+          "Stanton Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "resolvedName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "displayName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Solar System"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Solar System",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Solar System",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+              "displayName": "Stanton Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Solar System"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "resolvedName": "Stanton Solar System",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e07b3007-6bc1-4b50-ac08-c5b31e345efd",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Salvage_Universal_Intro_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage",
+        "descriptionStem": "adagio-industrial-component-salvage",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage",
+          "description:adagio-industrial-component-salvage",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Special Order of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. \n\nWe recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager. This request probably won't be as easy to satisfy as our normal contracts, even with the amount of ships buzzing through a system as populated as Stanton, so don't be surprised if you have to put a bit more effort into hunting down what's needed.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Stanton_Canisters_S1Components_Unique",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Solar System",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "possibleLocations": [
+          "Stanton Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "resolvedName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "displayName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Solar System"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Solar System",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Solar System",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+              "displayName": "Stanton Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Solar System"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "resolvedName": "Stanton Solar System",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Stanton_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "2e7d4387-dc53-4968-84a1-e9d64510668c",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage-levski",
+        "descriptionStem": "adagio-industrial-component-salvage-levski",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage-levski",
+          "description:adagio-industrial-component-salvage-levski",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Special Order of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. \n\nWe recommend searching for wreckage at Lagrange points, maybe in one of Nyx's asteroid belts, or you could purchase a salvage claim from us in your Contract Manager. We advise extra caution since there have been Vanduul sightings in the system, especially with how long it might take for you to track down this specific order.  \n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Levski_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Nyx_Canisters_Components_Unique",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Applicant / 750 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Applicant / 750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Applicant / 750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Nyx Solar System",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Nyx Solar System",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+              "displayName": "Nyx Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx Solar System"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Nyx Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "39,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "39,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "39,750 aUEC",
+          "amount": 39750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 39750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 39750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "2e7d4387-dc53-4968-84a1-e9d64510668c",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Levski_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Levski_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "814a3e55-7836-4019-8699-b987eefdebee",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage",
+        "descriptionStem": "adagio-industrial-component-salvage",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage",
+          "description:adagio-industrial-component-salvage",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Special Order of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. \n\nWe recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager. This request probably won't be as easy to satisfy as our normal contracts, partly in thanks to how many outlaws are flying around in Pyro and partly because this request isn't for your average everyday component. But lucky for you, the extra effort will be rewarded.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Pyro_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Pyro_Canisters_S1Components_Unique",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Pyro Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro Solar System",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "286cb603-b4ae-4279-80a1-d4505fee1916"
+        ],
+        "possibleLocations": [
+          "Pyro Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "resolvedName": "Pyro Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "displayName": "Pyro Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Solar System"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro Solar System",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro Solar System",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "286cb603-b4ae-4279-80a1-d4505fee1916"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+              "displayName": "Pyro Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro Solar System"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "resolvedName": "Pyro Solar System",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "63,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "63,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "63,250 aUEC",
+          "amount": 63250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 63250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 63250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "814a3e55-7836-4019-8699-b987eefdebee",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Pyro_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Pyro_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9530af4b-508d-4629-b2a5-edf28513bad4",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage-universal",
+        "descriptionStem": "adagio-industrial-component-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage-universal",
+          "description:adagio-industrial-component-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Supply of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. We recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Pyro_Canisters_S0Components",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9530af4b-508d-4629-b2a5-edf28513bad4",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "a8969701-285f-4f4c-88a9-22c75ff1722b",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage-universal",
+        "descriptionStem": "adagio-industrial-component-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage-universal",
+          "description:adagio-industrial-component-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Supply of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. We recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Stanton_Canisters_S0Components",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a8969701-285f-4f4c-88a9-22c75ff1722b",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "e053316c-eeac-4e76-a97f-b2fa57c511c7",
+      "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+      "conceptKey": "33df6d3c6482adf11250",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage-universal",
+        "descriptionStem": "adagio-industrial-component-salvage-universal",
+        "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:0d013fcd5880",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage-universal",
+          "description:adagio-industrial-component-salvage-universal",
+          "handler:adagio-rg-fpssalvage-notforrelease",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:0d013fcd5880",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Salvager Needed (Small Supply of RMC / Components)",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. We recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+      "internalName": "Adagio_RG_FPSSalvage_Nyx_Canisters_S0Components",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "48408311-629d-40ba-a2d6-40773d56b9b0"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Nyx Solar System",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Nyx Solar System",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+              "displayName": "Nyx Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx Solar System"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Nyx Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "0 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "0 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "0 aUEC",
+          "amount": 0,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 0,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 0,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [
+              "non_positive_time_to_complete"
+            ],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e053316c-eeac-4e76-a97f-b2fa57c511c7",
+        "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Universal_E_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

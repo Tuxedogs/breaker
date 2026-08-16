@@ -1,0 +1,4361 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "09845999a73432800e773946",
+  "generatedAt": "2026-08-16T04:30:02.462453+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+  "variants": [
+    {
+      "variantKey": "1f2d664c-2c64-4469-85ee-037febaa382b",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-high",
+        "descriptionStem": "uwc-refueling-high",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-high",
+          "description:uwc-refueling-high",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "CRITICAL REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi,\n\nAnother day another beacon. There's a [Ship] looking to be topped up with [FuelType] at [Location].  The client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nI can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. We've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nIf you decide to take the job, do me a favor and keep everything peeled. If you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nMaybe I'm being paranoid, but that doesn't mean they're not out to get you, as Momma Deloit used to say. \n\nActually she never said that - but I'm pretty sure she would if she did this for a living.\n\nJust do the job and get home safe, okay?\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_high_title_001",
+      "internalName": "Refueling_Stanton_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +200",
+          "198,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "198,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "198,500 aUEC",
+          "amount": 198500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 198500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 198500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1f2d664c-2c64-4469-85ee-037febaa382b",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_high_title_001",
+        "descriptionRaw": "@UWC_Refueling_high_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "b3db49e8-ec3c-42a4-a70f-d2e48fd71e46",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-high",
+        "descriptionStem": "uwc-refueling-high",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-high",
+          "description:uwc-refueling-high",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "CRITICAL REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi,\n\nAnother day another beacon. There's a [Ship] looking to be topped up with [FuelType] at [Location].  The client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nI can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. We've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nIf you decide to take the job, do me a favor and keep everything peeled. If you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nMaybe I'm being paranoid, but that doesn't mean they're not out to get you, as Momma Deloit used to say. \n\nActually she never said that - but I'm pretty sure she would if she did this for a living.\n\nJust do the job and get home safe, okay?\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_high_title_001",
+      "internalName": "Refueling_Stanton_NearLocation_Space_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "12,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "12,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "12,750 aUEC",
+          "amount": 12750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 12750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 12750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b3db49e8-ec3c-42a4-a70f-d2e48fd71e46",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_high_title_001",
+        "descriptionRaw": "@UWC_Refueling_high_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "6d1b2fe3-ed6b-4b94-9b6f-18fd3dccf2a0",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_easy_title_001",
+      "internalName": "Refueling_Stanton_Easy",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +200",
+          "19,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "19,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "19,750 aUEC",
+          "amount": 19750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 19750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 19750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6d1b2fe3-ed6b-4b94-9b6f-18fd3dccf2a0",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_easy_title_001",
+        "descriptionRaw": "@UWC_Refueling_easy_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "90da5507-58fa-45a6-8388-f2bb84d4b814",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_easy_title_001",
+      "internalName": "Refueling_Decoy_Stanton",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +100",
+          "49,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "49,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "49,250 aUEC",
+          "amount": 49250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 49250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 49250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "90da5507-58fa-45a6-8388-f2bb84d4b814",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_easy_title_001",
+        "descriptionRaw": "@UWC_Refueling_easy_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "fcd7e623-2711-465f-89c2-903716b97244",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_easy_title_001",
+      "internalName": "Refueling_Stanton_NearLocation_Easy",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +100",
+          "12,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "12,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "12,750 aUEC",
+          "amount": 12750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 12750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 12750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "fcd7e623-2711-465f-89c2-903716b97244",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_easy_title_001",
+        "descriptionRaw": "@UWC_Refueling_easy_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "14910f0b-9b69-41ae-bd78-d072725b074a",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Stanton_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +50",
+          "Standing +200",
+          "107,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +50",
+          "Standing +200"
+        ],
+        "credits": "107,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "107,500 aUEC",
+          "amount": 107500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 107500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 107500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        },
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "14910f0b-9b69-41ae-bd78-d072725b074a",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "33944d03-1b31-4457-8717-75b36a6f0ad6",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling-stanton",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling-stanton",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Stanton_Super",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +50",
+          "Standing +200",
+          "159,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +50",
+          "Standing +200"
+        ],
+        "credits": "159,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "159,000 aUEC",
+          "amount": 159000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 159000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 159000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        },
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "33944d03-1b31-4457-8717-75b36a6f0ad6",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "85d17b53-5f6c-4c8b-876b-5032d998642c",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Stanton_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +150",
+          "65,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "65,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "65,500 aUEC",
+          "amount": 65500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 65500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 65500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "85d17b53-5f6c-4c8b-876b-5032d998642c",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "b4e4ae39-322b-445d-aa04-2e2873422427",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling-stanton",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling-stanton",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Stanton_NearLocation_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "No credit reward extracted"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b4e4ae39-322b-445d-aa04-2e2873422427",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "ddd46f94-3762-4d25-8627-237015289bbe",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling-stanton",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling-stanton",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Stanton_NearLocation_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "No credit reward extracted"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "ddd46f94-3762-4d25-8627-237015289bbe",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "37e70865-127e-4554-aa3e-2b0dce92ff90",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-moderate",
+        "descriptionStem": "uwc-refueling-moderate",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-moderate",
+          "description:uwc-refueling-moderate",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey, you!\n\nI've got a beacon at [Location]. They say their tanks are running dry and they could use [FuelType]. If you're interested, I get the feeling they'll be really pleased to see you.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nThey're stuck out in an area with a bad reputation, though things have been a bit more quiet recently. Still worth staying alert I'd say, just in case there's still trouble lurking out there. \n\nEither way, the sooner everyone's able to get flying again - and that includes you - the better.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_moderate_title_001",
+      "internalName": "Refueling_Stanton_NearLocation_Space_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +100",
+          "12,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "12,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "12,750 aUEC",
+          "amount": 12750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 12750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 12750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "37e70865-127e-4554-aa3e-2b0dce92ff90",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_moderate_title_001",
+        "descriptionRaw": "@UWC_Refueling_moderate_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "40c66c12-9f62-4fdd-a2fc-afff1ca9e406",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-moderate",
+        "descriptionStem": "uwc-refueling-moderate",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-moderate",
+          "description:uwc-refueling-moderate",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey, you!\n\nI've got a beacon at [Location]. They say their tanks are running dry and they could use [FuelType]. If you're interested, I get the feeling they'll be really pleased to see you.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nThey're stuck out in an area with a bad reputation, though things have been a bit more quiet recently. Still worth staying alert I'd say, just in case there's still trouble lurking out there. \n\nEither way, the sooner everyone's able to get flying again - and that includes you - the better.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_moderate_title_001",
+      "internalName": "Refueling_Stanton_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +150",
+          "43,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "43,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "43,250 aUEC",
+          "amount": 43250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 43250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 43250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "40c66c12-9f62-4fdd-a2fc-afff1ca9e406",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_moderate_title_001",
+        "descriptionRaw": "@UWC_Refueling_moderate_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}
