@@ -122,13 +122,15 @@ Production and development use the same recommendation route. There is no produc
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `GET` | `/api/missions/browser` | Mission browser index. |
+| `GET` | `/api/missions/offer/:offerKey` | Player-facing Mission Offer detail. |
+| `GET` | `/api/missions/offer/:offerKey/variants` | Exact variants owned by one Mission Offer. |
 | `GET` | `/api/missions/family/:familyId` | Mission family detail. |
 | `GET` | `/api/missions/family/:familyId/variants` | Variants within a family. |
 | `GET` | `/api/missions/variant/:variantId` | One mission variant. |
 | `POST` | `/api/missions/variant/:variantId/eligibility` | Eligibility evaluation. |
 | `POST` | `/api/missions/variant/:variantId/prerequisite-path` | Prerequisite path calculation. |
 
-The singular `family` and `variant` routes are canonical. Compatibility aliases are not publication contracts.
+The singular `offer`, `family`, and `variant` routes are canonical; plural aliases exist for compatibility. Offer routes are browse/detail projections only. Eligibility and prerequisite paths require an exact variant. The active pointer must be either the rollback tuple shaped 2 / source 3 with no offer schema, or shaped 3 / source 4 / offer 1; mixed tuples are rejected.
 
 ### Fitting
 

@@ -5,7 +5,7 @@ Accepted channel: `LIVE`
 Accepted build: `4.9.0-live.12232306`
 Source latest modified: `2026-07-16T04:02:10.234294+00:00`
 
-This is the historical published version 1 baseline. The isolated Stage 1 source-contract version 3 accepted on 2026-07-30 resolves source-calculated payouts and adds required-item evidence, but it has not been published into Moonbreaker's runtime data.
+This is a historical published version 1 baseline and must not be used as current operating guidance. Source contract 4 / shaped schema 3 / offer schema 1 is now published. Use `docs/mission-offer-api-compatibility-manifest.md` and `server-data/missions/current.json` for current state; the paths and publication statements below are retained only as July 2026 evidence.
 
 ## Outcome
 

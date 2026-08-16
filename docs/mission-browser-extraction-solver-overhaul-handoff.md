@@ -1,7 +1,52 @@
 # Mission Browser, Extraction, and Solver Overhaul - Agent Handoff
 
-Updated: 2026-07-30  
-Status: Stages 1 through 3 implemented. Source contract version 3 is published through Moonbreaker shaped schema version 2, and the deterministic server-side eligibility/path service is ready for Stage 4 integration.
+Updated: 2026-08-15
+Status: Mission Offer rollout implemented, published, and verified. The active runtime is source contract 4 / shaped mission schema 3 / offer schema 1 at generation `2cc966f1ae3dbd6e7db858a2`. Source 3 / shaped 2 remains supported only as a pointer-based rollback.
+
+## Current implementation authority
+
+This section supersedes the July stage-status and proposed-model text later in this file. The older material remains as design history. When it conflicts with this section, the compatibility manifest, audit receipt, active pointer, and product code are authoritative.
+
+Read these first:
+
+- `D:/Moonbreaker/docs/mission-offer-api-compatibility-manifest.md`
+- `D:/Moonbreaker/docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json`
+- `D:/Moonbreaker/server-data/missions/current.json`
+- `D:/scintel/docs/contracts/mission-offer-source-audit-v1.json`
+
+The implemented identity model is:
+
+```text
+Mission Series (structural family/generator)
+  -> Mission Offer (player-facing localized title; searchable/bookmarkable card)
+      -> Exact Variant (contract UUID; exact payout/rewards/prerequisites/release)
+          -> Availability Branch (owner-scoped subcontract/locality tuple)
+```
+
+Current published facts:
+
+- LIVE build `4.9.0-live.12232306`.
+- 259 mission series, 1,012 Mission Offers, and 2,501 exact variants.
+- Every exact variant belongs to exactly one offer through `variantOfferKeys`.
+- Offer search uses only offer-local search text and facets. Family or concept membership cannot promote sibling offers.
+- `Primo Target`, `Plug a traitor`, and `Show Them Who's Boss` are first-class offers rather than hidden family variants.
+- Stable runtime substitutions are not invented; Ghost remains `Ghost [TargetName]` without live-instance evidence.
+- Display verification is `Verified | Unverified | Unknown`. Raw `Illegal` evidence is provenance, not a lawful/criminal UI classification. All current records remain `Unknown` until effective precedence is source-proven.
+- Provider identity is separate from reputation faction. Explicit Contractor text may resolve the provider without fabricating a reputation-faction join.
+- Offer summaries may show common values, ranges, or `varies`; exact payout, blueprint pool, reputation prerequisite/reward, eligibility, and path truth remain exact-variant-owned.
+- The aUEC solver output, blueprint pool tuples and reverse links, reputation prerequisite polarity/scope/bounds, release flags, and branch ownership are protected merge-veto invariants.
+- Canonical offer URLs/bookmarks coexist with legacy concept aliases. One-to-many legacy aliases show a chooser/series; they never silently select an offer.
+- Crafting mission-source bookmarks remain exact identities: `mission:<contractId>:<poolGuid>`.
+
+Current API additions:
+
+- `GET /api/missions/offer/:offerKey`
+- `GET /api/missions/offer/:offerKey/variants`
+- exact-variant eligibility and prerequisite-path routes remain unchanged; there is intentionally no offer-level solver route.
+
+Publication is complete in Moonbreaker commit `9ed198836` and Scintel source-contract commit `cc00f2f`. The accepted source artifact `mission_contracts.json` is Git LFS-managed in Moonbreaker without changing its audited SHA-256 (`761b960fb61a80fda0808f348d24ffb260861c02338d7b852da5c18624a8c40d`). Do not regenerate or rewrite it merely to avoid LFS.
+
+Last accepted validation receipt: 51/51 mission tests, 3/3 Mission Offer Playwright tests, source and shaped verifiers, six blueprint-source routes, API boundary check, lint, and production build all passed. Re-run the applicable gates after any new source, projection, route, solver, blueprint, or UI change.
 
 ## Start here
 
@@ -42,7 +87,7 @@ The finished mission experience should help a player answer:
 
 Browsing and solving are related but distinct workflows. The solver must be a peer operational surface, not a calculation hidden inside a mission identity card.
 
-## Current published runtime snapshot
+## Historical pre-offer runtime snapshot (superseded)
 
 Current shaped data was generated on 2026-07-16 from source last modified on 2026-07-16. Refresh and diff the current channel before treating these counts as permanent.
 
@@ -73,11 +118,11 @@ These figures come from:
 - `server-data/missions/mission_browser_extraction_report.json`
 - `server-data/missions/source/mission_extraction_report.json`
 
-This table describes the still-published version 1 runtime data. The accepted Stage 1 source contract described below is newer and has not been published or shaped into Moonbreaker.
+This table describes the pre-offer runtime and is retained only for comparison. It is not the active pointer.
 
 Do not present an unresolved payout as zero, a fixed payout, or an estimate. Do not convert unknown destinations into known pickup locations. Missing, unknown, generated, inferred, partial, and resolved are different states.
 
-## Accepted Stage 1 source contract
+## Historical Stage 1 source contract
 
 Scintel `mission_contracts.json` schema version 3 is implemented and passes an isolated accepted-LIVE dry run.
 
@@ -122,13 +167,13 @@ Required-item evidence acceptance:
 
 Direct hauling-order contents are explicit order evidence. Mission-item selectors are not automatically turn-in requirements. Opaque property handles remain unresolved and are never joined by list position.
 
-## Current extraction and publication path
+## Extraction and publication path
 
 ```text
 D:/scintel/libs/foundry/records
   + D:/scintel/data/Data/Localization/english/global.ini
   -> D:/scintel/scripts/missions/build_mission_blueprint_rewards_api.py
-  -> D:/scintel/api/missions/*
+  -> D:/scintel/out/<CHANNEL>/<BUILD_ID>/datasets/missions/*
   -> D:/scintel/scripts/publish/publish_mission_api_to_moonbreaker.ps1
   -> D:/Moonbreaker/server-data/missions/source/*
   -> D:/Moonbreaker/scripts/shape-mission-browser-data.mts
@@ -154,9 +199,9 @@ The publish script copies five source artifacts and then runs both mission shapi
 
 Do not hand-edit generated mission JSON.
 
-## Source contracts
+## Historical source-contract notes
 
-The published source tree still contains the version 1 contract. The isolated Stage 1 candidate is schema version 3 and emits fields including:
+These notes describe the predecessor source contract. The published source tree now contains source contract 4, which adds `offerEvidence` while preserving the exact-variant fields described below.
 
 - Contract, family, generator, handler, mission-type, and template identity
 - Localized and raw title/description values
@@ -170,7 +215,7 @@ The published source tree still contains the version 1 contract. The isolated St
 
 Related source files provide blueprint pool lookups, reverse blueprint sources, mission reward lookups, and extraction diagnostics.
 
-The source extractor resolves only source-backed identities and retains typed unresolved states. The downstream shaper still performs substantial semantic interpretation and has not yet been migrated to version 3.
+The source extractor resolves only source-backed identities and retains typed unresolved states. Moonbreaker validates source 4, carries `offerEvidence` into canonical exact variants, and creates the offer-v1 projection without changing protected exact-variant subtrees.
 
 ## Current shaping responsibilities
 
@@ -202,23 +247,23 @@ The runtime root defaults to `server-data/missions` and may be overridden with `
 Existing read-only endpoints:
 
 - `GET /api/missions/browser`
+- `GET /api/missions/offer/:offerKey`
+- `GET /api/missions/offer/:offerKey/variants`
 - `GET /api/missions/family/:familyKey`
 - `GET /api/missions/family/:familyKey/variants`
 - `GET /api/missions/variant/:variantKey`
 
-The browser endpoint filters by search, faction/provider, mission type, reward, reputation reward path, release status, and confidence. Family and variant bodies are lazy-loaded from shards.
+For schema 3, the browser endpoint filters offer-local search text and offer-local provider, mission type, reward, reputation reward, release, confidence, and verification facets. Offer, family, and variant bodies are lazy-loaded from generation-contained shards. Schema 2 retains its legacy family/concept behavior for rollback.
 
-`src/lib/missionData.ts` provides dynamic API loading with a static JSON fallback. It duplicates portions of server filter logic for that fallback. If the filter contract changes, centralize or contract-test both paths so they cannot drift.
-
-The current fallback requests `/api/missions/mission_browser_index.json`, but that file is not present under `public/api/missions` in the current checkout and the mission route handler does not serve that path. Treat the fallback as unverified/non-functional until a deployment-aware route test proves otherwise.
+`src/lib/missionData.ts` branches on runtime schema capability and loads offer detail/variant routes for schema 3 while preserving the schema-2 concept path. Do not add a `public/api` fallback; Vite, Vercel, and standalone adapters route `/api/missions/*` to the same mission handler.
 
 The sharded delivery model is sound and should be preserved unless measurements prove otherwise. The browser index is already several megabytes; do not put every exact variant body back into it.
 
-## Current browser behavior
+## Historical browser behavior (superseded by offer-first schema 3)
 
 Route: `/industry/missions`
 
-Current page:
+At that historical stage, the page:
 
 - Uses query parameters for search, filters, view, page, and selected concept
 - Supports Full, Faction, and Reputation projections
@@ -245,11 +290,11 @@ Known architecture concerns:
 
 Preserve bookmark compatibility with Blueprint Tracker unless an explicit migration is implemented.
 
-## Solver reality
+## Historical solver gap (resolved)
 
-There is no mission solver in Moonbreaker today.
+The deterministic exact-variant solver is implemented. Its artifact reader accepts only coherent schema tuples `2/3/(no offer)` and `3/4/1`, requires graph/report/manifest/solver-reference generation agreement, and rejects mixed or incomplete generations. Eligibility and prerequisite-path calls remain exact-variant operations.
 
-Current chain behavior is limited to:
+At that historical stage, chain behavior was limited to:
 
 - Recognizing prerequisite types
 - Hashing unlock references into an objective-signature `chainState`

@@ -1,6 +1,6 @@
 # Mission Browser Accepted Design Canon
 
-Updated: 2026-08-01
+Updated: 2026-08-15
 
 Status: Accepted and implemented. This document supersedes the proposal status previously recorded at this path and the rejected persistent-hero or inline-drawer direction.
 
@@ -8,11 +8,11 @@ Status: Accepted and implemented. This document supersedes the proposal status p
 
 Page: `/industry/missions`
 
-Components: Mission Browser filter/results shell, category/faction/reputation groups, mission concept cards, complete mission-detail modal, exact-variant comparison, eligibility workspace, and prerequisite paths.
+Components: Mission Browser filter/results shell, category/faction/reputation groups, Mission Offer cards, complete mission-detail modal, exact-variant comparison, eligibility workspace, and prerequisite paths.
 
 The browser/card mockup and complete modal mockup were accepted. The production redesign was committed in `8a7d5f416`, with the later accepted refinements of a five-column desktop grid and a 1px semantic card edge incorporated into this canon.
 
-This is a presentation and interaction contract. It must not change mission APIs, extraction, routing, bookmarks, solver behavior, payout calculations, eligibility logic, prerequisite logic, or Blueprint Tracker identities.
+This is a presentation and interaction contract. Mission identity was subsequently upgraded to source-v4 / shaped-v3 / offer-v1 without changing the accepted visual hierarchy. `docs/mission-offer-api-compatibility-manifest.md` owns identity, URLs, bookmarks, and compatibility behavior. This design canon must not change mission APIs, extraction, solver behavior, payout calculations, eligibility logic, prerequisite logic, or Blueprint Tracker exact-source identities.
 
 ## Visual direction
 
@@ -28,7 +28,7 @@ The accepted browser sequence is:
 2. Existing search and six filters in the shared filter shell.
 3. Existing `Full`, `Faction`, and `Reputation` views plus the reputation-path legend.
 4. Category, faction, or reputation group header.
-5. Five-column mission concept grid at the primary desktop layout.
+5. Five-column Mission Offer grid at the primary desktop layout.
 6. Existing results count and pagination.
 
 The five-column grid is the accepted desktop baseline. Each column may shrink with `minmax(0, 1fr)` so the group surface owns the available width. Responsive rules may reduce or stack columns when the viewport cannot preserve readable card content. Do not reintroduce the earlier two-column desktop baseline without new design approval.
@@ -51,19 +51,19 @@ The 1px accent is a semantic reputation cue, not a heavy item outline. The card 
 Badge priority is:
 
 1. Reputation scope, always badged.
-2. Explicit `Verified Mission` or `Unverified Mission`, only when normalized source data provides it.
+2. Explicit `Verified`, `Unverified`, or `Verification unknown`, taken only from normalized effective verification evidence.
 3. Blueprint pool count, item rewards, or required mission items when present.
 4. CrimeStat or another real operational constraint when important.
 
-Do not badge lawful status. Present it as labeled text such as `Legal classification: Unknown`, with full legal-source detail retained in technical disclosure. Do not infer verified/unverified status from title confidence, mission wording, legality, or page-local parsing. Search/filter match context remains quiet supporting text rather than an evidence badge.
+Do not badge or infer lawful/criminal status. Raw `Illegal` signals remain technical provenance. Do not infer verified/unverified status from title confidence, mission wording, a raw handler flag, or page-local parsing. Search/filter match context remains quiet supporting text rather than an evidence badge.
 
 ## Complete mission-detail modal
 
-Selecting a concept card opens the complete modal directly. Do not restore an inline drawer, persistent selected-concept hero, intermediate hero panel, or obscure `Open dossier` action.
+Selecting an offer card opens the complete modal directly. Do not restore an inline drawer, persistent selected-offer hero, intermediate hero panel, or obscure `Open dossier` action.
 
 The accepted modal hierarchy is:
 
-1. Sticky identity header with faction icon/initials, title, provider/category, source-backed badges, bookmark icon, close icon, and lawful classification as plain text.
+1. Sticky identity header with faction icon/initials, title, provider/category, source-backed badges, bookmark icon, close icon, and contract verification disclosure.
 2. Compact facts strip for active variants, exact variants, pickup scope, base/solo payout range, and mission-item requirement count.
 3. Peer overview surfaces:
    - Main column: briefing and required-item card.

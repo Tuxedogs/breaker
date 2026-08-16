@@ -32,7 +32,7 @@ The following are enforced publication rules:
 | Material identity | `server-data/crafting/reference/material-identity-index.json` | `/api/crafting/reference/material-identity` |
 | Refinery yields | `server-data/crafting/reference/refinery-yields.json` | `/api/crafting/reference/refinery-yields` |
 | Blueprint sources | `server-data/crafting/blueprint-sources` | `/api/crafting/blueprint-sources/*` and `/api/crafting/blueprint-rewards/*` |
-| Mission source and projections | `server-data/missions` | `/api/missions/*` |
+| Mission source and projections | `server-data/missions` selected by `current.json`; active tuple shaped 3 / source 4 / offer 1 | `/api/missions/*`, including offer, exact-variant eligibility, and path routes |
 | Mining location/material index | `server-data/mining/indexes/location-material.json` | `/api/mining/location-materials` |
 | Mining encounter rankings | `server-data/mining/indexes/material-encounter-rankings.json` | `/api/mining/encounter-rankings` |
 | Mining material quality | `server-data/mining/indexes/material-quality.json` | `/api/mining/material-quality` |

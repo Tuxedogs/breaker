@@ -529,13 +529,13 @@ Mission cards should remain dense and comparable. Category colors should organiz
 
 Blueprint Tracker should favor aligned repeated records, explicit acquired/open state, and compact detail disclosure.
 
-Mission concepts are the browsing and identity grain. Exact variants are the comparison, payout, eligibility, prerequisite-path, and solver grain. Do not collapse exact variants before those operations.
+Mission Offers are the schema-3 browsing, search, bookmark, and player-facing identity grain. Mission concepts remain structural series and legacy compatibility identities. Exact variants are the comparison, payout, eligibility, prerequisite-path, and solver grain. Do not collapse exact variants before those operations.
 
-The accepted Mission Browser hierarchy is a filterable five-column desktop concept grid whose cards open a complete mission-detail modal directly. Do not restore a persistent selected-concept hero, inline dossier, or intermediate open-dossier step. The modal contains the identity header, facts strip, briefing, required items, layered reward cards, blueprint rewards, sortable exact-variant comparison, eligibility workspace, prerequisite paths, and confidence disclosure.
+The accepted Mission Browser hierarchy is a filterable five-column desktop offer grid whose cards open a complete mission-detail modal directly. Do not restore a persistent selected-offer hero, inline dossier, or intermediate open-dossier step. The modal contains the identity header, facts strip, briefing, required items, layered reward cards, blueprint rewards, sortable exact-variant comparison, eligibility workspace, prerequisite paths, and confidence disclosure.
 
-Each concept card uses a quiet 1px reputation-scope accent edge. Reputation scope is always badged. When a normalized source-backed verified or unverified mission tag exists, use that badge; never infer it in presentation code. Do not badge lawful status. Present legal classification as plain labeled text.
+Each offer card uses a quiet 1px reputation-scope accent edge. Reputation scope is always badged. Display `Verified`, `Unverified`, or `Verification unknown` only from the source-backed effective verification field; never infer it in presentation code. Raw `Illegal` evidence is technical provenance, not a lawful/criminal presentation label.
 
-Canonical mission URLs use the readable concept name plus its stable concept key: `/industry/missions/<mission-name>--<concept-key>`. The readable portion may change with an authored title while the stable suffix preserves identity and repairs stale slugs. Legacy `selected` and `concept` query links remain compatible. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
+Canonical schema-3 mission selection uses `/industry/missions?offer=<offerKey>` with optional `variant=<variantKey>`. Legacy readable concept paths and `selected`/`concept` query links remain compatible through `legacyConceptOfferKeys`: one-to-one aliases resolve to the offer, one-to-many aliases show a series chooser, and missing aliases show an unavailable state. Active variants are the default, while authored inactive records remain available through an explicit all-variants control.
 
 Calculated payout is the persisted, source-backed Scintel base/solo amount. Keep certification buy-in separate, preserve valid zero as distinct from missing or unresolved, and do not calculate or split payout in React.
 
@@ -543,7 +543,7 @@ Required-item evidence must distinguish a proven hauling order from a selector o
 
 Eligibility and prerequisite paths are server-owned exact-variant results. Unknown player state is not satisfied state. The accepted path cost is exact prerequisite mission completions only, excludes the target mission, and must not infer travel, time, risk, legality, credits, or title similarity as hidden costs.
 
-Bookmarks retain typed intent: concept favorites and exact mission blueprint sources are separate. Legacy concept keys remain compatible, and selecting a concept must not fan out into every possible blueprint source.
+Bookmarks retain typed intent: new offer favorites use `offer:<offerKey>`, legacy concept favorites remain readable, and exact mission blueprint sources remain `mission:<contractId>:<poolGuid>`. Selecting an offer or legacy concept must not fan out into every possible blueprint source.
 
 Raw GUIDs belong in technical disclosure or explicit unresolved fallback, not normal mission labels.
 

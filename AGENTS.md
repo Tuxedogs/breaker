@@ -16,8 +16,12 @@ For operational API, generated-data, publication, and deployment work, use:
 
 * `docs/api-data-flow-runbook.md` for the current extraction-to-endpoint flow, endpoint catalog, publication commands, deployment wiring, and incident response.
 * `docs/generated-data-manifest.md` for the concise data-authority and runtime-ownership registry.
+* `docs/mission-offer-api-compatibility-manifest.md` for the implemented mission source-v4 / shaped-v3 / offer-v1 contract, compatibility rules, invariants, routes, and validation gates.
+* `docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json` for the pinned Headhunters golden tuples, contradiction ledger, immutable hashes, and current publication receipt. The filename retains the rollback generation ID for audit continuity; read `targetSourceV4.publicationState` for the active generation.
 
 `public/api` is retired and must remain empty. Historical audits and handoffs may describe former static-file paths; preserve those documents as evidence, but do not use them as current operating instructions unless their status explicitly says they are current.
+
+Mission agents must treat `server-data/missions/current.json` as the runtime selector. The current legal tuple is mission schema 3 / source contract 4 / offer schema 1. Schema 2 / source 3 remains a supported pointer rollback only. Never mix versions or edit an immutable generation in place.
 
 For visual work, use `moonbreaker_design_canon.md` as the detailed design authority and the current page source as implementation truth. Page-specific accepted canon linked from that file remains authoritative for its stated scope.
 
