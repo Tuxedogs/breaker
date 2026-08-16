@@ -237,6 +237,18 @@ npm run mining:publish
 
 The environment variable name `SCINTEL_API_ROOT` is retained by this publisher for compatibility. Its value must be the accepted build's `datasets` directory, never `D:\scintel\api`. Supplying `SCINTEL_REF_INDEX` prevents accidental cross-build location generation.
 
+Mining publication is fail-closed across the enriched source and its derived indexes. If `mining/material_sources_quality_enriched.json` contains trace-material details while `recommendations/location_material_index.json` contains none, `npm run mining:publish` rejects the snapshot instead of silently removing traces. Pyro location aliases are normalized during publication from their raw location keys, independently of provider XML discovery, so all six Pyro V moons remain addressable.
+
+Stanton Lagrange presentation uses deterministic material-signature parents named `Lagrange A` through `Lagrange L`. The physical `ARC-L#`, `CRU-L#`, `HUR-L#`, and `MIC-L#` locations remain the child identities and are displayed as badges. Generate the parent groups before normalizing mining locations; if the source indexes must be rebuilt, preserve this order:
+
+1. Generate `lagrange-groups.generated.json` from the accepted localization source.
+2. Run Scintel mining location normalization with that exact group file.
+3. Enrich the normalized material sources with quality and trace composition.
+4. Build the mining static indexes.
+5. Publish the accepted dataset and its matching `ref_index.json` into Moonbreaker.
+
+After publication, `npm run mining:test` verifies the Pyro V moon rows, trace preservation, refined-primary exclusion, Lagrange parent mapping, and physical child badges. A valid trace contract retains real composition traces such as Borase for Gold at ARC-L5 while keeping Raw Ice free of the refined Pressurized Ice alias.
+
 ### 5. Promote fitting when fitting changed
 
 Fitting is channel/build-owned and currently has an explicit promotion step:

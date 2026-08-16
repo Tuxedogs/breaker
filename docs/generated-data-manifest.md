@@ -43,6 +43,15 @@ The following are enforced publication rules:
 | Fitting registries | channel/build-owned fitting server data | `/api/v1/fitting/*` |
 | Inventory and Build Queue user state | database/user persistence | `/api/user/inventory/*` and `/api/user/build-queue` |
 
+### Mining publication contract
+
+- `SCINTEL_API_ROOT` must identify an accepted Scintel dataset snapshot; the retired `D:/scintel/api` tree is not a publication source.
+- The enriched mining source and location/material index must agree on trace-material presence. Publication rejects a trace-empty index when its enriched source contains trace details.
+- Raw Pyro location keys are normalized at publication so the Pyro V moon identities do not depend on provider XML discovery.
+- `lagrange-groups.json` owns the deterministic `Lagrange A` through `Lagrange L` parents. `lagrange-children.json` owns the physical ARC/CRU/HUR/MIC child identities used by badges and detail views.
+- Trace identity is composition identity, not refined-material identity. For example, Pressurized Ice must not appear as a trace of Raw Ice.
+- `npm run mining:test` is the required domain gate after changing any mining registry or publication logic.
+
 ## Classifications
 
 - `runtime API source data`: generated data shaped into or read by a routed API registry.

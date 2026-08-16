@@ -54,7 +54,7 @@ Create `.env.local` only when a workflow needs local configuration. Never commit
 | `DATABASE_URL` | PostgreSQL connection used by authenticated persistence and Drizzle tooling |
 | `VITE_SCINTEL_API_BASE_URL` | Optional browser API-base override |
 | `SCINTEL_LOCAL_API=1` | Serve supported API routes locally through Vite instead of proxying to production |
-| `SCINTEL_API_ROOT` | Local Scintel API root for remaining read-only development data |
+| `SCINTEL_API_ROOT` | Accepted Scintel dataset root used by mining publication and supported local data workflows; never the retired `D:/scintel/api` tree |
 | `FITTING_DATA_ROOT` | Optional fitting registry override; defaults to `server-data/fitting` |
 
 Publication and shaping commands use additional explicit source variables such as `SCINTEL_DATASET_ROOT`. Follow the [API and data-flow runbook](docs/api-data-flow-runbook.md) rather than guessing a source directory.
@@ -141,6 +141,8 @@ npm run mining:publish
 ```
 
 Shaping and publication commands can replace generated registries. Confirm the accepted channel and build in the operational runbook before running them.
+
+Mining publication should set `SCINTEL_REF_INDEX` explicitly to the matching accepted `ref_index.json`; otherwise the publisher searches LIVE builds for the newest available index. The publisher rejects trace-empty location indexes when the enriched source contains trace materials. Lagrange results are presented as deterministic `Lagrange A` through `Lagrange L` parents with their physical ARC/CRU/HUR/MIC locations retained as child badges.
 
 ## Development guidance
 
