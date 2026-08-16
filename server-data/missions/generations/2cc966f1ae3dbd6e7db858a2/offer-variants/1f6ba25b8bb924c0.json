@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "eckhart-security:requesting-help",
+  "variants": [
+    {
+      "variantKey": "9f45145a-4b5a-4145-b83c-41d78c8248b5",
+      "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+      "conceptKey": "85c375b403555a1e5264",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "eckhart-security-eliminate-all-storm-shut",
+        "descriptionStem": "eckhart-security-eliminate-all-storm-shut",
+        "handlerStem": "eckhart-security-kill-npc",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:eckhart-security-eliminate-all-storm-shut",
+          "description:eckhart-security-eliminate-all-storm-shut",
+          "handler:eckhart-security-kill-npc",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+          "EckhartSecurity_ShuttleCompound_RegionA_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Requesting Help",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Clear Location\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nGot an emergency request from Associated Science & Development for any available operators to report to [Location] and deal with some hostiles who have overtaken one of their facilities. \n\nOnce on site, you will need to engage and eliminate any hostile elements. ASD has indicated that this facility provides shuttle services to one of their embedded research centers but were very clear that you are not authorized to travel there. Trespassers will be shot and you will be no exception, so stick to the prescribed AO.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@EckhartSecurity_EliminateAll_storm_shut_H_title_001",
+      "internalName": "EckhartSecurity_ShuttleCompound_RegionA_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+          "EckhartSecurity_ShuttleCompound_RegionA_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +2,000",
+          "57,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +2,000"
+        ],
+        "credits": "57,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "57,500 aUEC",
+          "amount": 57500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 57500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 57500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 2000,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "aeda9081-30bd-4f3f-938b-1a5362905e25"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9f45145a-4b5a-4145-b83c-41d78c8248b5",
+        "generatorGuid": "95979a65-419a-4b7d-8dcf-34707187f99a",
+        "generatorName": "ContractGenerator.EckhartSecurity_KillNPC",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@EckhartSecurity_EliminateAll_storm_shut_H_title_001",
+        "descriptionRaw": "@EckhartSecurity_EliminateAll_storm_shut_H_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

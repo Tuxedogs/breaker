@@ -1,0 +1,998 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "eckhart-security:low-risk-cargo-retrieval",
+  "variants": [
+    {
+      "variantKey": "6748b11b-0e43-402c-951c-f0a6a00773ce",
+      "familyKey": "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
+      "conceptKey": "6e74902dfad5a01a7968",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|recover-cargo|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "eckhart-security-recover-cargo-very",
+        "descriptionStem": "eckhart-security-recover-cargo-very",
+        "handlerStem": "eckhart-security-recover-cargo-pyro",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:eckhart-security-recover-cargo-very",
+          "description:eckhart-security-recover-cargo-very",
+          "handler:eckhart-security-recover-cargo-pyro",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
+          "EchhartSecurity_Pyro_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Low Risk Cargo Retrieval",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Recover Cargo\nApproval code: = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nOne of my clients was in the process of transporting some cargo when they came under fire from a group of outlaws. We haven't been able to contact the crew onboard, but trackers indicate the cargo remains intact.\n\nWe need a contractor to head to [Location], recover the cargo, and deliver it to the freight elevator located at [Destination]. A ship that can store [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam are essential for this. Presently, we're not detecting any hostiles, but that could change by the time you've arrived.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+      "internalName": "EchhartSecurity_Pyro_VeryEasy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
+          "EchhartSecurity_Pyro_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +50",
+          "23,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +50"
+        ],
+        "credits": "23,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "23,000 aUEC",
+          "amount": 23000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 23000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 23000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6748b11b-0e43-402c-951c-f0a6a00773ce",
+        "generatorGuid": "fd860091-200e-4d26-b57b-2bdcc75b6ba0",
+        "generatorName": "ContractGenerator.EckhartSecurity_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+        "descriptionRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "94fd7e13-2f4f-45d0-943c-21b985cda6f8",
+      "familyKey": "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Nyx",
+      "conceptKey": "6e74902dfad5a01a7968",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|recover-cargo|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "eckhart-security-recover-cargo-very",
+        "descriptionStem": "eckhart-security-recover-cargo-very",
+        "handlerStem": "eckhart-security-recover-cargo-nyx",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:eckhart-security-recover-cargo-very",
+          "description:eckhart-security-recover-cargo-very",
+          "handler:eckhart-security-recover-cargo-nyx",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Nyx",
+          "EchhartSecurity_Nyx_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Low Risk Cargo Retrieval",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Recover Cargo\nApproval code: = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nOne of my clients was in the process of transporting some cargo when they came under fire from a group of outlaws. We haven't been able to contact the crew onboard, but trackers indicate the cargo remains intact.\n\nWe need a contractor to head to [Location], recover the cargo, and deliver it to the freight elevator located at [Destination]. A ship that can store [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam are essential for this. Presently, we're not detecting any hostiles, but that could change by the time you've arrived.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+      "internalName": "EchhartSecurity_Nyx_VeryEasy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Nyx",
+          "EchhartSecurity_Nyx_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +50",
+          "23,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +50"
+        ],
+        "credits": "23,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "23,000 aUEC",
+          "amount": 23000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 23000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 23000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "94fd7e13-2f4f-45d0-943c-21b985cda6f8",
+        "generatorGuid": "fd860091-200e-4d26-b57b-2bdcc75b6ba0",
+        "generatorName": "ContractGenerator.EckhartSecurity_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+        "descriptionRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "af658873-34d2-441e-a0e5-81751ca9ac01",
+      "familyKey": "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Stanton",
+      "conceptKey": "6e74902dfad5a01a7968",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|recover-cargo|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "eckhart-security-recover-cargo-very",
+        "descriptionStem": "eckhart-security-recover-cargo-very",
+        "handlerStem": "eckhart-security-recover-cargo-stanton",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:eckhart-security-recover-cargo-very",
+          "description:eckhart-security-recover-cargo-very",
+          "handler:eckhart-security-recover-cargo-stanton",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Stanton",
+          "EchhartSecurity_Stanton_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Low Risk Cargo Retrieval",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Recover Cargo\nApproval code: = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nOne of my clients was in the process of transporting some cargo when they came under fire from a group of outlaws. We haven't been able to contact the crew onboard, but trackers indicate the cargo remains intact.\n\nWe need a contractor to head to [Location], recover the cargo, and deliver it to the freight elevator located at [Destination]. A ship that can store [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam are essential for this. Presently, we're not detecting any hostiles, but that could change by the time you've arrived.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+      "internalName": "EchhartSecurity_Stanton_VeryEasy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Stanton",
+          "EchhartSecurity_Stanton_VeryEasy_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +50",
+          "23,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +50"
+        ],
+        "credits": "23,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "23,000 aUEC",
+          "amount": 23000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 23000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 23000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "af658873-34d2-441e-a0e5-81751ca9ac01",
+        "generatorGuid": "fd860091-200e-4d26-b57b-2bdcc75b6ba0",
+        "generatorName": "ContractGenerator.EckhartSecurity_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Title",
+        "descriptionRaw": "@EckhartSecurity_RecoverCargo_VeryEasy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "citizens-for-prosperity:recovering-valuable-supplies",
+  "variants": [
+    {
+      "variantKey": "befb9ad9-6ddc-4304-a696-95fa214a6800",
+      "familyKey": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RecoverCargo_Pyro",
+      "conceptKey": "169383ebcec16bab5d25",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|recover-cargo|activity-defined|standard|unlock:e532702ee188|unknown:unknown||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "cfp-recover-cargo",
+        "descriptionStem": "cfp-recover-cargo",
+        "handlerStem": "cfp-recover-cargo-pyro",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e532702ee188",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:cfp-recover-cargo",
+          "description:cfp-recover-cargo",
+          "handler:cfp-recover-cargo-pyro",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:e532702ee188",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RecoverCargo_Pyro",
+          "CFP_Pyro_Medium_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Recovering Valuable Supplies",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "A Citizens for Prosperity ship has been ambushed by a group of outlaws over at [Location] and we need a skilled pilot to help them out.\n\nWe lost contact with them mid comms, but it sounded like they were taking heavy fire. It may be too late for them, but the vital supplies they were carrying could still be put to good use. Fly over there, take out any hostiles, and recover the shipment. You'll need a ship that can support [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam to transport the supplies onto your ship.\n\nTake them to the freight elevator at [Destination] and I'll guarantee they'll be put to good use.\n\nBe safe out there,\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_RecoverCargo_Medium_Title",
+      "internalName": "CFP_Pyro_Medium_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RecoverCargo_Pyro",
+          "CFP_Pyro_Medium_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Recover Cargo Pyro: P8-SC SMG, C54 SMG, S71 Rifle, ORC-mkX Arms Woodland +10",
+          "Rep reward unresolved +150",
+          "61,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Recover Cargo Pyro: P8-SC SMG, C54 SMG, S71 Rifle, ORC-mkX Arms Woodland +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "6ba44ab4-9681-4bbf-9fd6-475da08bafd5",
+            "poolName": "Citizens For Prosperity Recover Cargo Pyro",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "73d270f0-3fc9-4bff-860d-aace2a6abbeb",
+                "displayName": "P8-SC SMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "dd37e7a8-d366-4bba-93a6-be7fca2048a1",
+                "displayName": "C54 SMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "9d733a8f-8a38-4a8a-8995-35592c1f9ce7",
+                "displayName": "S71 Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e7b3f216-1409-417f-b3ef-cd35534fad24",
+                "displayName": "ORC-mkX Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c87dbefb-d342-4998-bd7b-ee83bfc8623c",
+                "displayName": "ORC-mkX Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "396d2f59-125b-47f8-b5b6-601b58770bec",
+                "displayName": "ORC-mkX Core Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d7dda5f9-cd8f-4376-b57a-e5a4b2cc69e3",
+                "displayName": "ORC-mkX Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5748ffcc-b539-4e5e-b66c-fe86a3f887ed",
+                "displayName": "ORC-mkV Arms",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1cda1b30-b3d7-4cec-b218-3b2787275147",
+                "displayName": "ORC-mkV Legs",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "478e8c5a-5e53-41e2-b259-3707d62d1e66",
+                "displayName": "ORC-mkV Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "ba85d4ec-2199-4ae2-9b73-a301a5a58f64",
+                "displayName": "G-2 Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "39d39941-3c16-47fd-b7af-ce23e336d8e2",
+                "displayName": "P8-SC SMG Magazine (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d84901a7-cdf5-40fc-8f9b-a3610ef333c5",
+                "displayName": "C54 SMG Magazine (50 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "2ab23481-28dc-400c-b883-b226be8f9e64",
+                "displayName": "S71 Rifle Magazine (30 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +150"
+        ],
+        "credits": "61,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,500 aUEC",
+          "amount": 61500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 150,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "befb9ad9-6ddc-4304-a696-95fa214a6800",
+        "generatorGuid": "a1f72137-20f1-4d15-a15f-5ac6b97649a0",
+        "generatorName": "ContractGenerator.CitizensForProsperity_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_RecoverCargo_Medium_Title",
+        "descriptionRaw": "@CFP_RecoverCargo_Medium_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

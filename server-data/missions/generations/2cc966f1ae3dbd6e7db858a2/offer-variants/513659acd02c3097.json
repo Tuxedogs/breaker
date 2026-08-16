@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "deadsaints-from:dead-saints-reputation-rank-rank-cargo-grade-token-cargo-haul--dbbd7ebac3",
+  "variants": [
+    {
+      "variantKey": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+      "familyKey": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+      "conceptKey": "b8ddd0fb44d170f61d58",
+      "objectiveSignature": {
+        "key": "2da0657d-62dc-4f6c-8b25-fd88480d0834|2da0657d-62dc-4f6c-8b25-fd88480d0834:unknown-scope|deliver|activity-defined|standard|unlock:f06ed729ffae|unknown:bounded||||",
+        "activityKey": "deliver",
+        "titleStem": "dead-saints-haul-cargo-multi-to-single",
+        "descriptionStem": "dead-saints-haul-cargo-multi-to-single-drugs-danger",
+        "handlerStem": "dead-saints-hauling-intersteller",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:f06ed729ffae",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:dead-saints-haul-cargo-multi-to-single",
+          "description:dead-saints-haul-cargo-multi-to-single-drugs-danger",
+          "handler:dead-saints-hauling-intersteller",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:f06ed729ffae",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+          "HaulCargo_SingleToMulti_Interstellar_Medium_Etam_Slam_Neon"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "DEAD SAINTS - [ReputationRank] Rank - [CargoGradeToken] Cargo Haul",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "One of our best distributors got busted in Stanton so we need a replacement. The guy was an incredible salesman, but a shit smuggler. We need someone who won't run face-first into a security patrol or a pack of pirates to pick up some merchandise at these locations:\n\nPICK UP LOCATIONS (ANY ORDER) \n\n[MultiToSingleToken]\n\nAnd bring it all to [Destination] before security catches on to what's happening. You'll need enough space on your ship for size [MissionMaxSCUSize] containers, and a handheld tractor beam should make loading and unloading nice and easy. \n\n-Twitch",
+      "rawName": "@DeadSaints_HaulCargo_MultiToSingle_title",
+      "internalName": "HaulCargo_SingleToMulti_Interstellar_Medium_Etam_Slam_Neon",
+      "missionType": "Hauling Interstellar",
+      "provider": "Dead Saints",
+      "faction": "Dead Saints",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+        "factionDisplayName": "Dead Saints",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+          "HaulCargo_SingleToMulti_Interstellar_Medium_Etam_Slam_Neon"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "a90b76e0-edff-4999-9760-9dd703208318"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "b75c4f61-c0db-41d6-a405-c846ab11857d"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "a90b76e0-edff-4999-9760-9dd703208318"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "a90b76e0-edff-4999-9760-9dd703208318"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a90b76e0-edff-4999-9760-9dd703208318",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "a90b76e0-edff-4999-9760-9dd703208318"
+          ],
+          "unresolvedRefs": [
+            "a90b76e0-edff-4999-9760-9dd703208318"
+          ],
+          "unresolvedLocationTokens": [
+            "a90b76e0-edff-4999-9760-9dd703208318"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a90b76e0-edff-4999-9760-9dd703208318",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "a90b76e0-edff-4999-9760-9dd703208318"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +100",
+          "535,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "535,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "535,000 aUEC",
+          "amount": 535000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 535000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 535000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+          "factionDisplayName": "Dead Saints",
+          "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+            "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+        "generatorGuid": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4",
+        "generatorName": "ContractGenerator.DeadSaints_Hauling",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@DeadSaints_HaulCargo_MultiToSingle_title",
+        "descriptionRaw": "@DeadSaints_HaulCargo_MultiToSingle_desc_Drugs_Danger"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 2,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

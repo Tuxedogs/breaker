@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "headhunters:track-down-target-name--31c826c423",
+  "variants": [
+    {
+      "variantKey": "475ac5bf-921d-1377-ec3c-9c857d227b81",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "18638c5330248d94bc90",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope|missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "missing-person-investigation",
+        "titleStem": "hh-missingperson-inv-chain-xenothreat",
+        "descriptionStem": "hh-missingperson-inv-chain-xenothreat",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:missing-person-investigation",
+          "activity-source:structural",
+          "title:hh-missingperson-inv-chain-xenothreat",
+          "description:hh-missingperson-inv-chain-xenothreat",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-3",
+      "tierLabel": "Rank 3",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionC_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Track Down [TargetName]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Those XenoThreat assholes ambushed one of our outposts. We eventually kicked their ass out of there but once the cowards knew they'd been beat, they took [TargetName] hostage as a Human shield. We let 'em go, because we don't betray our own like that, but we're not planning on letting this stand. \n\nWord is that they fled to their base at [Location]. We need someone to break in, find [TargetName], and relay the info back to me. There's a lot of creds in it for you if you do the job right. \n\nKeep in mind this isn't their only outpost in the system. If they give you the slip, you may need to track them to another sector. \n\nStows out.",
+      "rawName": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+      "internalName": "HH_Pyro_RegionC_XTBase_Rank3_ChainMissingPerson",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionC_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedLocationTokens": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +400",
+          "91,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +400"
+        ],
+        "credits": "91,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "91,000 aUEC",
+          "amount": 91000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 91000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 91000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 400,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7c9b64e7-6528-4d64-8481-34c24e2af500"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "475ac5bf-921d-1377-ec3c-9c857d227b81",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+        "descriptionRaw": "@hh_missingperson_inv_chain_h_xenothreat_desc_01"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "4b36486f-192e-7f80-3f4e-210114b2b6a1",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "18638c5330248d94bc90",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope|missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "missing-person-investigation",
+        "titleStem": "hh-missingperson-inv-chain-xenothreat",
+        "descriptionStem": "hh-missingperson-inv-chain-xenothreat",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:missing-person-investigation",
+          "activity-source:structural",
+          "title:hh-missingperson-inv-chain-xenothreat",
+          "description:hh-missingperson-inv-chain-xenothreat",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-3",
+      "tierLabel": "Rank 3",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionD_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Track Down [TargetName]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Those XenoThreat assholes ambushed one of our outposts. We eventually kicked their ass out of there but once the cowards knew they'd been beat, they took [TargetName] hostage as a Human shield. We let 'em go, because we don't betray our own like that, but we're not planning on letting this stand. \n\nWord is that they fled to their base at [Location]. We need someone to break in, find [TargetName], and relay the info back to me. There's a lot of creds in it for you if you do the job right. \n\nKeep in mind this isn't their only outpost in the system. If they give you the slip, you may need to track them to another sector. \n\nStows out.",
+      "rawName": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+      "internalName": "HH_Pyro_RegionD_XTBase_Rank3_ChainMissingPerson",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionD_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedLocationTokens": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +400",
+          "91,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +400"
+        ],
+        "credits": "91,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "91,000 aUEC",
+          "amount": 91000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 91000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 91000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 400,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7c9b64e7-6528-4d64-8481-34c24e2af500"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4b36486f-192e-7f80-3f4e-210114b2b6a1",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+        "descriptionRaw": "@hh_missingperson_inv_chain_h_xenothreat_desc_01"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "4e2b36c5-a560-e813-718e-0d909369f7b2",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "18638c5330248d94bc90",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope|missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "missing-person-investigation",
+        "titleStem": "hh-missingperson-inv-chain-xenothreat",
+        "descriptionStem": "hh-missingperson-inv-chain-xenothreat",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:missing-person-investigation",
+          "activity-source:structural",
+          "title:hh-missingperson-inv-chain-xenothreat",
+          "description:hh-missingperson-inv-chain-xenothreat",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-3",
+      "tierLabel": "Rank 3",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionA_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Track Down [TargetName]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Those XenoThreat assholes ambushed one of our outposts. We eventually kicked their ass out of there but once the cowards knew they'd been beat, they took [TargetName] hostage as a Human shield. We let 'em go, because we don't betray our own like that, but we're not planning on letting this stand. \n\nWord is that they fled to their base at [Location]. We need someone to break in, find [TargetName], and relay the info back to me. There's a lot of creds in it for you if you do the job right. \n\nKeep in mind this isn't their only outpost in the system. If they give you the slip, you may need to track them to another sector. \n\nStows out.",
+      "rawName": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+      "internalName": "HH_Pyro_RegionA_XTBase_Rank3_ChainMissingPerson",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "HH_Pyro_RegionA_XTBase_Rank3_ChainMissingPerson"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +400",
+          "91,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +400"
+        ],
+        "credits": "91,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "91,000 aUEC",
+          "amount": 91000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 91000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 91000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 400,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7c9b64e7-6528-4d64-8481-34c24e2af500"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4e2b36c5-a560-e813-718e-0d909369f7b2",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@hh_missingperson_inv_chain_h_xenothreat_title_01",
+        "descriptionRaw": "@hh_missingperson_inv_chain_h_xenothreat_desc_01"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

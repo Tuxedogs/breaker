@@ -1,0 +1,900 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "tar-pits:ship-clean-up",
+  "variants": [
+    {
+      "variantKey": "152bc6c1-70e0-44fb-a89a-5200456f132c",
+      "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+      "conceptKey": "a68670cc0fa4850ae404",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|salvage-ship|activity-defined|standard|unlock:24a5edca6a60|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "tar-pits-ship-strip",
+        "descriptionStem": "tar-pits-ship-strip",
+        "handlerStem": "tar-pits-unlawful-salvage-cover-up",
+        "archetype": "Salvage",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:24a5edca6a60",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:tar-pits-ship-strip",
+          "description:tar-pits-ship-strip",
+          "handler:tar-pits-unlawful-salvage-cover-up",
+          "contract:contract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:24a5edca6a60",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[ship] clean up",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Got a particular salvage job that we could use some extra hands on. \n\nWe need you to find a [ship] that got punched out around [location]. Security’s already searching for it and if they find it, they’ll ID it for sure and we’ll be in loads of trouble.\n\nSo, we want you to make sure that can’t happen. Either tow the ship out of the search area or rip the entire hull off so nobody can tell who it belonged to. Whatever you decide, keep your mouth shut about this. \n\nWe’ll cred you up and anything you scrap is yours to keep. But if security finds the ship before you’re done, we’ll all be screwed and you won’t get paid so don’t disappoint.",
+      "rawName": "@TarPits_ShipStrip_title_001",
+      "internalName": "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Easy",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 5 or below; Procedural location placeholder; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 5 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 5
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "464cf1ba-6dec-4bf9-899b-79243b697d28"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "15,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "15,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "15,250 aUEC",
+          "amount": 15250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/tarpits_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 15250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 15250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "152bc6c1-70e0-44fb-a89a-5200456f132c",
+        "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+        "generatorName": "ContractGenerator.TarPits_Generator",
+        "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@TarPits_ShipStrip_title_001",
+        "descriptionRaw": "@TarPits_ShipStrip_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "3617c33e-0f3f-44e7-b468-7de2a2db1dc4",
+      "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+      "conceptKey": "3735baa75a2c314e14fa",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|salvage-ship|activity-defined|standard|unlock:2231fc01e795|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "tar-pits-ship-strip",
+        "descriptionStem": "tar-pits-ship-strip",
+        "handlerStem": "tar-pits-unlawful-salvage-cover-up",
+        "archetype": "Salvage",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:2231fc01e795",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:tar-pits-ship-strip",
+          "description:tar-pits-ship-strip",
+          "handler:tar-pits-unlawful-salvage-cover-up",
+          "contract:contract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:2231fc01e795",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[ship] clean up",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Got a particular salvage job that we could use some extra hands on. \n\nWe need you to find a [ship] that got punched out around [location]. Security’s already searching for it and if they find it, they’ll ID it for sure and we’ll be in loads of trouble.\n\nSo, we want you to make sure that can’t happen. Either tow the ship out of the search area or rip the entire hull off so nobody can tell who it belonged to. Whatever you decide, keep your mouth shut about this. \n\nWe’ll cred you up and anything you scrap is yours to keep. But if security finds the ship before you’re done, we’ll all be screwed and you won’t get paid so don’t disappoint.",
+      "rawName": "@TarPits_ShipStrip_title_001",
+      "internalName": "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Medium",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 5 or below; Procedural location placeholder; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 5 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 5
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "651c0479-3acf-4966-9d5d-c92171b99dea"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "26,500 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "26,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "26,500 aUEC",
+          "amount": 26500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/tarpits_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 26500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 26500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "3617c33e-0f3f-44e7-b468-7de2a2db1dc4",
+        "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+        "generatorName": "ContractGenerator.TarPits_Generator",
+        "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@TarPits_ShipStrip_title_001",
+        "descriptionRaw": "@TarPits_ShipStrip_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d46436e6-56ea-40ed-a0fd-e7c0c7218fbb",
+      "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+      "conceptKey": "25075b15ac8b60b2e71e",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "tar-pits-ship-strip",
+        "descriptionStem": "tar-pits-ship-strip",
+        "handlerStem": "tar-pits-unlawful-salvage-cover-up",
+        "archetype": "Salvage",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:tar-pits-ship-strip",
+          "description:tar-pits-ship-strip",
+          "handler:tar-pits-unlawful-salvage-cover-up",
+          "contract:contract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_VeryEasy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "[ship] clean up",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Got a particular salvage job that we could use some extra hands on. \n\nWe need you to find a [ship] that got punched out around [location]. Security’s already searching for it and if they find it, they’ll ID it for sure and we’ll be in loads of trouble.\n\nSo, we want you to make sure that can’t happen. Either tow the ship out of the search area or rip the entire hull off so nobody can tell who it belonged to. Whatever you decide, keep your mouth shut about this. \n\nWe’ll cred you up and anything you scrap is yours to keep. But if security finds the ship before you’re done, we’ll all be screwed and you won’t get paid so don’t disappoint.",
+      "rawName": "@TarPits_ShipStrip_title_001",
+      "internalName": "TarPits_Stanton2_Unlawful_Salvage_CoverUp_VeryEasy",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Unlawful_Salvage_CoverUp_Career",
+          "TarPits_Stanton2_Unlawful_Salvage_CoverUp_VeryEasy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 5 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 5 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 5
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "MissionLocation_BP",
+            "Location",
+            "SolarSystem",
+            "location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "15,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "15,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "15,250 aUEC",
+          "amount": 15250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/tarpits_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 15250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 15250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "d46436e6-56ea-40ed-a0fd-e7c0c7218fbb",
+        "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+        "generatorName": "ContractGenerator.TarPits_Generator",
+        "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@TarPits_ShipStrip_title_001",
+        "descriptionRaw": "@TarPits_ShipStrip_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

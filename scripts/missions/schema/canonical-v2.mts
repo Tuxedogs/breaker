@@ -3,14 +3,20 @@ import type {
   MissionCalculatedPayoutV1,
   MissionPropertyOverridesV3,
   MissionRequiredItemEvidenceV3,
-  MissionSourceCatalogV3,
   MissionSourceEdgeV3,
-  MissionSourceRecordV3,
   MissionSourceRewardV3,
 } from "./source-v3.mts";
+import type {
+  MissionOfferSourceEvidenceV1,
+  MissionSourceCatalog,
+  MissionSourceRecord,
+  MissionSourceRecordV4,
+  MissionSourceSchemaVersion,
+} from "./source-v4.mts";
 
-export const MISSION_SHAPED_SCHEMA_VERSION = 2 as const;
-export const MISSION_SOURCE_SCHEMA_VERSION = 3 as const;
+export const MISSION_SHAPED_SCHEMA_VERSION = 3 as const;
+export const MISSION_SOURCE_SCHEMA_VERSION = 4 as const;
+export const MISSION_SUPPORTED_SOURCE_SCHEMA_VERSIONS = [3, 4] as const;
 
 export type CanonicalMissionRewardsV2 = {
   calculatedPayout: MissionCalculatedPayoutV1 | null;
@@ -25,7 +31,7 @@ export type CanonicalMissionRewardsV2 = {
 
 export type CanonicalMissionVariantV2 = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceSchemaVersion: typeof MISSION_SOURCE_SCHEMA_VERSION;
+  sourceSchemaVersion: MissionSourceSchemaVersion;
   identity: {
     variantId: string;
     familyId: string;
@@ -40,6 +46,7 @@ export type CanonicalMissionVariantV2 = {
   outcomes: MissionSourceEdgeV3[];
   objectiveTemplate: JsonObject | null;
   legalityEvidence: JsonObject | null;
+  offerEvidence: MissionOfferSourceEvidenceV1 | null;
   rewards: CanonicalMissionRewardsV2;
   financials: {
     creditResults: MissionSourceRewardV3[];
@@ -68,13 +75,13 @@ function truthy(value: unknown): boolean {
   return value === true || value === 1 || value === "1" || value === "true";
 }
 
-function outcomesOfType(record: MissionSourceRecordV3, type: string): MissionSourceEdgeV3[] {
+function outcomesOfType(record: MissionSourceRecord, type: string): MissionSourceEdgeV3[] {
   return record.outcomeEdges.filter((edge) => edge.type === type);
 }
 
 export function normalizeCanonicalMissionVariantV2(
-  catalog: MissionSourceCatalogV3,
-  record: MissionSourceRecordV3,
+  catalog: MissionSourceCatalog,
+  record: MissionSourceRecord,
 ): CanonicalMissionVariantV2 {
   const creditResults = record.creditRewardTypes ?? [];
   const calculatedContexts = creditResults.flatMap((reward) =>
@@ -82,7 +89,7 @@ export function normalizeCanonicalMissionVariantV2(
   );
   return {
     schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
-    sourceSchemaVersion: MISSION_SOURCE_SCHEMA_VERSION,
+    sourceSchemaVersion: catalog.schemaVersion,
     identity: {
       variantId: record.contractId,
       familyId: record.familyId ?? record.contractId,
@@ -97,6 +104,9 @@ export function normalizeCanonicalMissionVariantV2(
     outcomes: record.outcomeEdges,
     objectiveTemplate: record.objectiveTemplate ?? null,
     legalityEvidence: record.legalityEvidence ?? null,
+    offerEvidence: catalog.schemaVersion === 4
+      ? (record as MissionSourceRecordV4).offerEvidence
+      : null,
     rewards: {
       calculatedPayout: record.calculatedPayout ?? null,
       fixedCurrency: outcomesOfType(record, "fixed_currency_reward"),

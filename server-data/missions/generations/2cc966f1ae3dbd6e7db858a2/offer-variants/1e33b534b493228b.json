@@ -1,0 +1,1183 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "ling-family-hauling:ling-family-reputation-rank-cargo-haul-cargo-grade-token-scale--e829f2f68b",
+  "variants": [
+    {
+      "variantKey": "34ba1fc9-c6fd-4505-8dfe-bc7d67509776",
+      "familyKey": "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+      "conceptKey": "fd45d6e4dc4149420540",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope|deliver|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "deliver",
+        "titleStem": "ling-family-haul-cargo-ato-b",
+        "descriptionStem": "ling-family-haul-cargo-ato-b-fruit-timed",
+        "handlerStem": "ling-family-hauling-hauling-interstellar",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:ling-family-haul-cargo-ato-b",
+          "description:ling-family-haul-cargo-ato-b-fruit-timed",
+          "handler:ling-family-hauling-hauling-interstellar",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_AToB_Interstellar_Small_SunB_GolDMed"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Ling Family [ReputationRank] Cargo Haul - [CargoGradeToken] Scale",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi, \n \nNormally Reyes schedules our hauls, but she’s gone for the day, and I just got a comm inquiring about a simple, direct run from [Location] to [Destination]. The cargo is a load of fruit that will lose its value if it spoils. We don't want to anger this client, so would appreciate it if you knocked this out in a timely manner.  \n\nHere’s some other details you should know. The largest container used is [MissionMaxSCUSize], so don’t forget your handheld tractor beam. \n\n \nSincerely,  \nPetra Ling  \nManaging Director of Cargo Operations \nLing Family Hauling\n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_HaulCargo_AToB_title",
+      "internalName": "HaulCargo_AToB_Interstellar_Small_SunB_GolDMed",
+      "missionType": "Hauling Interstellar",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_AToB_Interstellar_Small_SunB_GolDMed"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Ling Hard: Spectre, Zephyr, Bolt, Spicule +3",
+          "Rep reward unresolved +100",
+          "198,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Ling Hard: Spectre, Zephyr, Bolt, Spicule +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "8e69e4bd-3b6a-42a0-8b8b-808eede34d29",
+            "poolName": "Ling Hard",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "1f57b7a3-ae43-405f-b9cc-457efb01cbc8",
+                "displayName": "Spectre",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "8d52ba42-4652-46cc-8ab2-80208d2a86af",
+                "displayName": "Zephyr",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "ae7c1cc4-0e85-44b4-b975-5307f44ab4fe",
+                "displayName": "Bolt",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "99773ffb-9f57-40f0-9a52-1ff3235f0581",
+                "displayName": "Spicule",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "dc29ad18-61c1-48c5-b72e-48558de31d8f",
+                "displayName": "Guardian",
+                "componentType": "shield",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "9de8d5a0-7c70-4320-b67e-6adb4b0881e2",
+                "displayName": "Citadel",
+                "componentType": "shield",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b997eb17-cd7d-43a4-8e49-2a580d5019f9",
+                "displayName": "Barbican",
+                "componentType": "shield",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "198,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "198,000 aUEC",
+          "amount": 198000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 198000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 198000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "34ba1fc9-c6fd-4505-8dfe-bc7d67509776",
+        "generatorGuid": "ad5cab74-24dd-41d9-8471-33695fc60e0b",
+        "generatorName": "ContractGenerator.LingFamilyHauling_Hauling",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_HaulCargo_AToB_title",
+        "descriptionRaw": "@LingFamily_HaulCargo_AToB_desc_Fruit_Timed"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "44e71db6-73d6-4ca6-83b3-b83496306b63",
+      "familyKey": "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+      "conceptKey": "fd45d6e4dc4149420540",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope|deliver|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "deliver",
+        "titleStem": "ling-family-haul-cargo-ato-b",
+        "descriptionStem": "ling-family-haul-cargo-ato-b-party-timed",
+        "handlerStem": "ling-family-hauling-hauling-interstellar",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:ling-family-haul-cargo-ato-b",
+          "description:ling-family-haul-cargo-ato-b-party-timed",
+          "handler:ling-family-hauling-hauling-interstellar",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_AToB_Interstellar_Medium_DistSpri_PartyFav_ElecEq_Souv"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Ling Family [ReputationRank] Cargo Haul - [CargoGradeToken] Scale",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi, \n\nGuess the folks at [Destination] are planning a party and need help acquiring everything in a timely manner. You’ll need to make multiple pick-ups for this one, including one in Nyx to grab some Jynx gin. Not sure if you’ve ever had the stuff, but it’s a Nyx specialty. Some folks can’t get past that it glows pink, but I love it. Got a truly unique kick to it.\n\nHere are the pick ups:  \n\nPICK UP LOCATIONS (ANY ORDER) \n\n[MultiToSingleToken]     \n\nPlease remember to bring a handheld tractor beam, as you’ll be handling cargo containers up to [MissionMaxSCUSize].  \n\n  \nHappy Hauling,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling\n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_HaulCargo_AToB_title",
+      "internalName": "HaulCargo_AToB_Interstellar_Medium_DistSpri_PartyFav_ElecEq_Souv",
+      "missionType": "Hauling Interstellar",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_AToB_Interstellar_Medium_DistSpri_PartyFav_ElecEq_Souv"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Ling Hard: Spectre, Zephyr, Bolt, Spicule +3",
+          "Rep reward unresolved +100",
+          "194,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Ling Hard: Spectre, Zephyr, Bolt, Spicule +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "8e69e4bd-3b6a-42a0-8b8b-808eede34d29",
+            "poolName": "Ling Hard",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "1f57b7a3-ae43-405f-b9cc-457efb01cbc8",
+                "displayName": "Spectre",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "8d52ba42-4652-46cc-8ab2-80208d2a86af",
+                "displayName": "Zephyr",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "ae7c1cc4-0e85-44b4-b975-5307f44ab4fe",
+                "displayName": "Bolt",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "99773ffb-9f57-40f0-9a52-1ff3235f0581",
+                "displayName": "Spicule",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "dc29ad18-61c1-48c5-b72e-48558de31d8f",
+                "displayName": "Guardian",
+                "componentType": "shield",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "9de8d5a0-7c70-4320-b67e-6adb4b0881e2",
+                "displayName": "Citadel",
+                "componentType": "shield",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b997eb17-cd7d-43a4-8e49-2a580d5019f9",
+                "displayName": "Barbican",
+                "componentType": "shield",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "194,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "194,500 aUEC",
+          "amount": 194500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 194500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 194500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "44e71db6-73d6-4ca6-83b3-b83496306b63",
+        "generatorGuid": "ad5cab74-24dd-41d9-8471-33695fc60e0b",
+        "generatorName": "ContractGenerator.LingFamilyHauling_Hauling",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_HaulCargo_AToB_title",
+        "descriptionRaw": "@LingFamily_HaulCargo_AToB_desc_Party_Timed"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "45df5785-3b88-409f-80d8-e029c23b35d4",
+      "familyKey": "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+      "conceptKey": "fd45d6e4dc4149420540",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope|deliver|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "deliver",
+        "titleStem": "ling-family-haul-cargo-ato-b",
+        "descriptionStem": "ling-family-haul-cargo-multi-to-single-party",
+        "handlerStem": "ling-family-hauling-hauling-interstellar",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:ling-family-haul-cargo-ato-b",
+          "description:ling-family-haul-cargo-multi-to-single-party",
+          "handler:ling-family-hauling-hauling-interstellar",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_Multi2ToSingle_Interstellar_Medium_Souv"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Ling Family [ReputationRank] Cargo Haul - [CargoGradeToken] Scale",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi, \n\nGuess the folks at [Destination] are planning a party and need help acquiring everything in a timely manner. You’ll need to make multiple pick-ups for this one, including one in Nyx to grab some Jynx gin. Not sure if you’ve ever had the stuff, but it’s a Nyx specialty. Some folks can’t get past that it glows pink, but I love it. Got a truly unique kick to it.\n\nHere are the pick ups:  \n\nPICK UP LOCATIONS (ANY ORDER) \n\n[MultiToSingleToken]     \n\nPlease remember to bring a handheld tractor beam, as you’ll be handling cargo containers up to [MissionMaxSCUSize].  \n\n  \nHappy Hauling,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling\n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_HaulCargo_AToB_title",
+      "internalName": "HaulCargo_Multi2ToSingle_Interstellar_Medium_Souv",
+      "missionType": "Hauling Interstellar",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+          "HaulCargo_Multi2ToSingle_Interstellar_Medium_Souv"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Ling Hard: Spectre, Zephyr, Bolt, Spicule +3",
+          "Rep reward unresolved +100",
+          "257,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Ling Hard: Spectre, Zephyr, Bolt, Spicule +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "8e69e4bd-3b6a-42a0-8b8b-808eede34d29",
+            "poolName": "Ling Hard",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "1f57b7a3-ae43-405f-b9cc-457efb01cbc8",
+                "displayName": "Spectre",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "8d52ba42-4652-46cc-8ab2-80208d2a86af",
+                "displayName": "Zephyr",
+                "componentType": "quantumdrive",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "ae7c1cc4-0e85-44b4-b975-5307f44ab4fe",
+                "displayName": "Bolt",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "99773ffb-9f57-40f0-9a52-1ff3235f0581",
+                "displayName": "Spicule",
+                "componentType": "quantumdrive",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "dc29ad18-61c1-48c5-b72e-48558de31d8f",
+                "displayName": "Guardian",
+                "componentType": "shield",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "9de8d5a0-7c70-4320-b67e-6adb4b0881e2",
+                "displayName": "Citadel",
+                "componentType": "shield",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b997eb17-cd7d-43a4-8e49-2a580d5019f9",
+                "displayName": "Barbican",
+                "componentType": "shield",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "257,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "257,250 aUEC",
+          "amount": 257250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 257250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 257250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "45df5785-3b88-409f-80d8-e029c23b35d4",
+        "generatorGuid": "ad5cab74-24dd-41d9-8471-33695fc60e0b",
+        "generatorName": "ContractGenerator.LingFamilyHauling_Hauling",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_HaulCargo_AToB_title",
+        "descriptionRaw": "@LingFamily_HaulCargo_MultiToSingle_desc_Party"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

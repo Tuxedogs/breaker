@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "foxwell-enforcement:exact-a47adc37-c814-49c4-87a3-7618795a7474",
+  "variants": [
+    {
+      "variantKey": "a47adc37-c814-49c4-87a3-7618795a7474",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "cfp-eliminate-all-ff",
+        "descriptionStem": "cfp-eliminate-all-ff",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:cfp-eliminate-all-ff",
+          "description:cfp-eliminate-all-ff",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_FrontierFighters"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Foxwell Enforcement Eliminate All Frontier Fighters",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "rawName": "@cfp_EliminateAllFF_Title_001",
+      "internalName": "FoxwellEnforcement_EliminateAll_FrontierFighters",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_FrontierFighters"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500",
+          "49,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "49,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "49,750 aUEC",
+          "amount": 49750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 49750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 49750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a47adc37-c814-49c4-87a3-7618795a7474",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_EliminateAllFF_Title_001",
+        "descriptionRaw": "@cfp_EliminateAllFF_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "citizens-for-prosperity:first-haul-in-system",
+  "variants": [
+    {
+      "variantKey": "a2b7bc80-6147-42ec-8675-119204de8878",
+      "familyKey": "dca4e0f5-8f7b-42fb-95ea-1bb0a77a1e1b|CFP_Hauling",
+      "conceptKey": "ddf8d256ab0f10ecf0d4",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|deliver|activity-defined|intro|open|unknown:unknown||||",
+        "activityKey": "deliver",
+        "titleStem": "cfp-hauling",
+        "descriptionStem": "cfp-hauling",
+        "handlerStem": "cfp-hauling",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:cfp-hauling",
+          "description:cfp-hauling",
+          "handler:cfp-hauling",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:intro",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Cargo",
+        "Intro"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "dca4e0f5-8f7b-42fb-95ea-1bb0a77a1e1b|CFP_Hauling",
+          "CFP_Pyro_Intro_Hauling"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "First Haul in System",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Welcome to the system, not sure if you're familiar with our organization but Citizens for Prosperity are a non-profit organization dedicated to bringing security and civilization to unclaimed systems.\n\nIf you're looking for work in the system and would like to help achieve our goal, we need a package picked up from [Location] and taken to [Destination].\n\nOnce complete, we can offer you a variety of new job opportunities in this system and beyond.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_hauling_intro_title_001",
+      "internalName": "CFP_Pyro_Intro_Hauling",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "dca4e0f5-8f7b-42fb-95ea-1bb0a77a1e1b|CFP_Hauling",
+          "CFP_Pyro_Intro_Hauling"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        },
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "286cb603-b4ae-4279-80a1-d4505fee1916"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedRefs": [
+            "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "286cb603-b4ae-4279-80a1-d4505fee1916"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "286cb603-b4ae-4279-80a1-d4505fee1916"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "51,000 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "51,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "51,000 aUEC",
+          "amount": 51000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 51000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 51000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a2b7bc80-6147-42ec-8675-119204de8878",
+        "generatorGuid": "dca4e0f5-8f7b-42fb-95ea-1bb0a77a1e1b",
+        "generatorName": "ContractGenerator.CitizensForProsperity_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_hauling_intro_title_001",
+        "descriptionRaw": "@cfp_hauling_intro_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

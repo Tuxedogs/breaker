@@ -17,16 +17,18 @@ import type {
 } from "./missionSolverTypes.js";
 
 type MissionShardManifest = {
-  schemaVersion: 2;
-  sourceContractVersion: 3;
+  schemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId: string;
   variantFilesByMissionId?: Record<string, { detailFile: string }>;
   variantFilesByVariantId?: Record<string, { detailFile: string }>;
 };
 
 type MissionVariantEnvelope = {
-  schemaVersion: 2;
-  sourceContractVersion: 3;
+  schemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId: string;
   variant: {
     canonical?: MissionSolverVariant;
@@ -35,8 +37,8 @@ type MissionVariantEnvelope = {
 
 type MissionSolverReference = {
   schemaVersion: 1;
-  missionSchemaVersion: 2;
-  sourceContractVersion: 3;
+  missionSchemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
   generationId: string;
   standingThresholdsById: Record<string, number>;
 };
@@ -52,6 +54,13 @@ type MissionSolverGeneration = {
 
 const generationCache = new Map<string, Promise<MissionSolverGeneration>>();
 
+export type MissionSolverArtifactGeneration = {
+  schemaVersion: number;
+  sourceContractVersion: number;
+  offerSchemaVersion?: number;
+  generationId: string;
+};
+
 async function readJson<T>(root: string, relativePath: string): Promise<T> {
   const filePath = path.resolve(root, relativePath);
   const relativeToRoot = path.relative(root, filePath);
@@ -61,20 +70,35 @@ async function readJson<T>(root: string, relativePath: string): Promise<T> {
   return JSON.parse(await readFile(filePath, "utf8")) as T;
 }
 
-function assertGeneration(
-  graph: MissionSolverGraph,
-  report: MissionGraphValidationReport,
-  manifest: MissionShardManifest,
+function isSupportedArtifactGeneration(artifact: MissionSolverArtifactGeneration): boolean {
+  return (
+    artifact.schemaVersion === 2
+    && artifact.sourceContractVersion === 3
+    && artifact.offerSchemaVersion === undefined
+  ) || (
+    artifact.schemaVersion === 3
+    && artifact.sourceContractVersion === 4
+    && artifact.offerSchemaVersion === 1
+  );
+}
+
+export function assertMissionSolverArtifactGeneration(
+  graph: MissionSolverArtifactGeneration,
+  report: MissionSolverArtifactGeneration,
+  manifest: MissionSolverArtifactGeneration,
 ): void {
-  if (
-    graph.schemaVersion !== 2
-    || report.schemaVersion !== 2
-    || manifest.schemaVersion !== 2
-    || graph.sourceContractVersion !== 3
-    || report.sourceContractVersion !== 3
-    || manifest.sourceContractVersion !== 3
-  ) {
-    throw new Error("Mission solver requires shaped schema 2 and source contract 3.");
+  const artifacts = [graph, report, manifest];
+  if (!artifacts.every(isSupportedArtifactGeneration)) {
+    throw new Error(
+      "Mission solver requires shaped/source schema 2/3 or shaped/source/offer schema 3/4/1.",
+    );
+  }
+  if (artifacts.some((artifact) => (
+    artifact.schemaVersion !== graph.schemaVersion
+    || artifact.sourceContractVersion !== graph.sourceContractVersion
+    || artifact.offerSchemaVersion !== graph.offerSchemaVersion
+  ))) {
+    throw new Error("Mission solver artifacts use different schema contracts.");
   }
   if (
     !graph.generationId
@@ -94,11 +118,11 @@ async function loadGeneration(root = getMissionDataRoot()): Promise<MissionSolve
       readJson<MissionShardManifest>(root, "mission_shard_manifest.json"),
       readJson<MissionSolverReference>(root, "mission_solver_reference.json"),
     ]).then(([graph, report, manifest, reference]) => {
-      assertGeneration(graph, report, manifest);
+      assertMissionSolverArtifactGeneration(graph, report, manifest);
       if (
         reference.schemaVersion !== 1
-        || reference.missionSchemaVersion !== 2
-        || reference.sourceContractVersion !== 3
+        || reference.missionSchemaVersion !== graph.schemaVersion
+        || reference.sourceContractVersion !== graph.sourceContractVersion
         || reference.generationId !== graph.generationId
       ) {
         throw new Error("Mission solver reference belongs to a different generation.");
@@ -123,12 +147,19 @@ async function loadVariant(
     }
     cached = readJson<MissionVariantEnvelope>(generation.root, entry.detailFile).then((envelope) => {
       if (
-        envelope.schemaVersion !== 2
-        || envelope.sourceContractVersion !== 3
-        || envelope.generationId !== generation.graph.generationId
+        envelope.generationId !== generation.graph.generationId
         || !envelope.variant.canonical
         || envelope.variant.canonical.identity.variantId !== variantId
       ) {
+        throw new Error(`Mission solver variant ${variantId} has an invalid canonical envelope.`);
+      }
+      try {
+        assertMissionSolverArtifactGeneration(
+          generation.graph,
+          generation.graph,
+          envelope,
+        );
+      } catch {
         throw new Error(`Mission solver variant ${variantId} has an invalid canonical envelope.`);
       }
       return envelope.variant.canonical;

@@ -1,0 +1,4967 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+  "variants": [
+    {
+      "variantKey": "a33c1bf7-2685-4fe8-96d2-aaf33c2fce12",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "foxwell-eliminate-all-non-hostiles",
+        "descriptionStem": "foxwell-eliminate-all-non-hostiles",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:foxwell-eliminate-all-non-hostiles",
+          "description:foxwell-eliminate-all-non-hostiles",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_NonHostiles"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Carefully Clear Site",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve been contracted to take care of a delicate situation. A gang has settled into [Location] that we need to get cleared out. Only issue is that there’s still some civilians there too. \n\nLooking for someone with the skills and good trigger sense to get rid of those outlaws without harming any innocent people. If that’s you, grab your gear and get over there. \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateAll_NonHostiles_title_001",
+      "internalName": "FoxwellEnforcement_EliminateAll_NonHostiles",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_NonHostiles"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -1,000",
+          "62,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -1,000"
+        ],
+        "credits": "62,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "62,250 aUEC",
+          "amount": 62250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 62250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 62250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -1000,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "c8df2809-5dd3-452e-9d03-12ede43fa8f4"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a33c1bf7-2685-4fe8-96d2-aaf33c2fce12",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateAll_NonHostiles_title_001",
+        "descriptionRaw": "@Foxwell_EliminateAll_NonHostiles_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "275c47a7-9af7-4f68-bc1c-310c5f8e375c",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "90b366817e6b1ce8f81b",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|unknown|mercenary|standard|open|lawful:bounded||||variant:275c47a7-9af7-4f68-bc1c-310c5f8e375c",
+        "activityKey": "unknown",
+        "titleStem": "foxwell-destroy-narcotics",
+        "descriptionStem": "foxwell-destroy-narcotics",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:foxwell-destroy-narcotics",
+          "description:foxwell-destroy-narcotics",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Destroy Dangerous Drugs",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Reports of a spike in drug overdoses around Stanton has security services worried. Seems like some two-bit crew is juicing their profits by cutting their stuff with toxic chemicals. Shutting down this crew and stopping the distribution of their drugs has become a top priority.\n\nA Foxwell informant has revealed that part of this crew has currently set up shop at [Location]. Hiring a contractor to hustle over there and destroy whatever drugs they’ve got stashed before they’re spread across the system. Better be careful though, word is this crew is armed to the teeth and determined to profit off that poison no matter what.\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DestroyNarcotics_H_title_001",
+      "internalName": "FoxwellEnforcement_DestroyNarcotics_Hard",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Sr. Security Contractor / 120,000 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Sr. Security Contractor / 120,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Security Contractor / 120,000 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250",
+          "141,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250"
+        ],
+        "credits": "141,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "141,750 aUEC",
+          "amount": 141750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 141750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 141750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "275c47a7-9af7-4f68-bc1c-310c5f8e375c",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DestroyNarcotics_H_title_001",
+        "descriptionRaw": "@Foxwell_DestroyNarcotics_H_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d7696f35-b781-4c0b-8e9d-b95de9f3d43b",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "48badfc06ef84d2f98d1",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|unknown|mercenary|standard|open|unlawful:bounded||||variant:d7696f35-b781-4c0b-8e9d-b95de9f3d43b",
+        "activityKey": "unknown",
+        "titleStem": "foxwell-destroy-narcotics",
+        "descriptionStem": "foxwell-destroy-narcotics",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unlawful:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:foxwell-destroy-narcotics",
+          "description:foxwell-destroy-narcotics",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:unlawful:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "Possible unlawful",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Destroy Illegal Drugs",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve been contracted to take care of a problem at [Location]. There’s been a recent surge of activity in the area tied to the drug trade. It appears to be a well-run operation and there’s a growing concern that it’ll expand wider if not stopped. Any chance you’re available to make sure that doesn’t happen?   \n\nJob is pretty straightforward. Head to the site and destroy their stash of drugs. That way they won’t have the creds to expand their operations any further. I wouldn’t expect them to make this easy on you though. Armed guards are regularly seen around the facility, so be sure you’ve got enough gear to deal with them too. \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DestroyNarcotics_M_title_001",
+      "internalName": "FoxwellEnforcement_DestroyNarcotics_Medium",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Security Contractor / 30,000 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250",
+          "115,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250"
+        ],
+        "credits": "115,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "115,000 aUEC",
+          "amount": 115000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 115000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 115000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unlawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d7696f35-b781-4c0b-8e9d-b95de9f3d43b",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DestroyNarcotics_M_title_001",
+        "descriptionRaw": "@Foxwell_DestroyNarcotics_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "a47adc37-c814-49c4-87a3-7618795a7474",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "cfp-eliminate-all-ff",
+        "descriptionStem": "cfp-eliminate-all-ff",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:cfp-eliminate-all-ff",
+          "description:cfp-eliminate-all-ff",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_FrontierFighters"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Foxwell Enforcement Eliminate All Frontier Fighters",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "rawName": "@cfp_EliminateAllFF_Title_001",
+      "internalName": "FoxwellEnforcement_EliminateAll_FrontierFighters",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_FrontierFighters"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500",
+          "49,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "49,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "49,750 aUEC",
+          "amount": 49750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 49750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 49750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a47adc37-c814-49c4-87a3-7618795a7474",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_EliminateAllFF_Title_001",
+        "descriptionRaw": "@cfp_EliminateAllFF_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "bfc725de-6d4f-4b00-940e-3b96028aae58",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "foxwell-eliminate-all-allies",
+        "descriptionStem": "foxwell-eliminate-all-allies",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:foxwell-eliminate-all-allies",
+          "description:foxwell-eliminate-all-allies",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_WithHelp"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Help Protect Site",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Got word that outlaws are attempting to overrun [Location]. There’s local security forces there, but they’re struggling to stop that attack.\n\nNeed a contractor to hustle there and help take care of the aggressors. Bring plenty of gear, and be careful when engaging targets. Don’t want to hear about any security team members getting caught in your crossfire.    \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateAll_Allies_title_001",
+      "internalName": "FoxwellEnforcement_EliminateAll_WithHelp",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll_WithHelp"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250",
+          "50,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250"
+        ],
+        "credits": "50,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "50,500 aUEC",
+          "amount": 50500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 50500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 50500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "bfc725de-6d4f-4b00-940e-3b96028aae58",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateAll_Allies_title_001",
+        "descriptionRaw": "@Foxwell_EliminateAll_Allies_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9f87be01-d306-4663-9c63-b6f669783b48",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "c3450e7bc301015252b1",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|unknown|mercenary|standard|open|lawful:bounded||||variant:9f87be01-d306-4663-9c63-b6f669783b48",
+        "activityKey": "unknown",
+        "titleStem": "foxwell-destroy-narcotics",
+        "descriptionStem": "foxwell-destroy-narcotics",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:foxwell-destroy-narcotics",
+          "description:foxwell-destroy-narcotics",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Knock Out New Drug Op",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Some folks will do anything for a few creds. There’s a group of upstart outlaws over at [Location] that have decided to start manufacturing drugs. Turns out they’re not too good at it, or maybe a little too good. The junk they’re pumping out is stronger than the normal stuff and a real danger to anyone who uses it. \n\nWe’ve been hired to knock out their operation and destroy whatever drugs stashes are on site. Armed guards are protecting the place, but they don’t seem too skilled. Our surveillance teams observed one of them almost shoot himself in the foot. Can’t say for certain, but odds are they won’t give a pro like you too many problems.  \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DestroyNarcotics_E_title_001",
+      "internalName": "FoxwellEnforcement_DestroyNarcotics_Easy",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_DestroyNarcotics_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250",
+          "71,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250"
+        ],
+        "credits": "71,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "71,500 aUEC",
+          "amount": 71500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 71500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 71500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9f87be01-d306-4663-9c63-b6f669783b48",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DestroyNarcotics_E_title_001",
+        "descriptionRaw": "@Foxwell_DestroyNarcotics_E_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "94079b3a-b689-40ce-b8bf-f1371e4f6398",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "22c0f18a69e392407f89",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-specific|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "foxwell-eliminate-specific-non-hostiles",
+        "descriptionStem": "foxwell-eliminate-specific-non-hostiles",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:foxwell-eliminate-specific-non-hostiles",
+          "description:foxwell-eliminate-specific-non-hostiles",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateSpecific_NonHostiles"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Precision Strike on [TargetName]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Got a line on a bounty named [TargetName]. Someone spotted them along with known criminal accomplices at [Location]. Need you to get there before they get going. \n\n[TargetName] has a reputation for only showing their face in places with civs. Really need you to take down this bounty without there being any civilian collateral damage. Foxwell can’t afford to be caught in the shitstorm that would erupt over the loss of innocent life. \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateSpecific_NonHostiles_title_001",
+      "internalName": "FoxwellEnforcement_EliminateSpecific_NonHostiles",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateSpecific_NonHostiles"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +1,000",
+          "Rep reward unresolved -500",
+          "71,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +1,000",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "71,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "71,000 aUEC",
+          "amount": 71000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 71000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 71000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 1000,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "1335b737-6188-4c21-8923-98a74bcd3071"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "94079b3a-b689-40ce-b8bf-f1371e4f6398",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateSpecific_NonHostiles_title_001",
+        "descriptionRaw": "@Foxwell_EliminateSpecific_NonHostiles_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "c9654159-acbc-4e5d-8a2c-2db20dd499a7",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "8e8f5b43a82dbf811e62",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|unknown|mercenary|standard|unlock:3d81bc60eb17|lawful:bounded||||variant:c9654159-acbc-4e5d-8a2c-2db20dd499a7",
+        "activityKey": "unknown",
+        "titleStem": "foxwell-mercenary-rehire",
+        "descriptionStem": "foxwell-mercenary-rehire",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:foxwell-mercenary-rehire",
+          "description:foxwell-mercenary-rehire",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_Mercenary_Rehire"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Still Looking for Work?",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Due to a corporate restructuring, Foxwell has some new vacancies that need to be filled immediately. Foxwell knows you’ve previously expressed interest in this line of work, and we’re wondering if you would want to take another crack at a contract.\n\nOne of our clients needs support at [Location] where their security forces are struggling to handle an outlaw incursion. Head there and help the local forces get rid of the problem before it’s too late. \n\nSuccessfully complete this contract, and Foxwell would be happy to send more work your way.\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_Mercenary_Rehire_title_001",
+      "internalName": "FoxwellEnforcement_Mercenary_Rehire",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_Mercenary_Rehire"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Applicant / 0 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Applicant / 0 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Applicant / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -50",
+          "50,500 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -50"
+        ],
+        "credits": "50,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "50,500 aUEC",
+          "amount": 50500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 50500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 50500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "66bfae03-86c1-4982-977b-09bfcfc05e1a",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "66bfae03-86c1-4982-977b-09bfcfc05e1a",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "5a59f6f6-245f-4e43-a08b-8b67e38286a7"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "c9654159-acbc-4e5d-8a2c-2db20dd499a7",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_Mercenary_Rehire_title_001",
+        "descriptionRaw": "@Foxwell_Mercenary_Rehire_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "69fbad01-0ca8-4910-8c03-d0f73895df00",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "foxwell-eliminate-all",
+        "descriptionStem": "foxwell-eliminate-all",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:foxwell-eliminate-all",
+          "description:foxwell-eliminate-all",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Sweep and Clear Location",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Looking for someone willing to take out the trash at [Location]. Guess a gang has settled in without the permission of the owners. So they’ve hired us to get them out whatever way we see fit. \n\nI’d bring plenty of ammo, if I were you. Doubt they’ll want to leave willingly. \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateAll_title_001",
+      "internalName": "FoxwellEnforcement_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500",
+          "36,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "36,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "36,000 aUEC",
+          "amount": 36000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 36000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 36000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "69fbad01-0ca8-4910-8c03-d0f73895df00",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateAll_title_001",
+        "descriptionRaw": "@Foxwell_EliminateAll_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "5f54c243-3985-4509-85c1-e5e99665a7f6",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "22c0f18a69e392407f89",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-specific|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "foxwell-eliminate-specific",
+        "descriptionStem": "foxwell-eliminate-specific",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:foxwell-eliminate-specific",
+          "description:foxwell-eliminate-specific",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateSpecific"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Track Down [TargetName]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Looking to execute a bounty on [TargetName]. We’ve learned that they’re currently hiding out with some confederates at [Location]. \n\nI’d be prepared to deal with the lowlifes hanging around [TargetName], but our only real concern is that you land the target. \n    \n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateSpecific_title_001",
+      "internalName": "FoxwellEnforcement_EliminateSpecific",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_EliminateSpecific"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250",
+          "64,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -250"
+        ],
+        "credits": "64,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "64,250 aUEC",
+          "amount": 64250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 64250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 64250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "0c926b08-6567-490c-964e-a5413e757dc2"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5f54c243-3985-4509-85c1-e5e99665a7f6",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateSpecific_title_001",
+        "descriptionRaw": "@Foxwell_EliminateSpecific_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "2aff8901-0787-4a79-a87b-e6846f7b91c0",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "foxwell-eliminate-all-paf",
+        "descriptionStem": "foxwell-eliminate-all-paf",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:foxwell-eliminate-all-paf",
+          "description:foxwell-eliminate-all-paf",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_PAF_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Yellow Level Contract: Clear Out PAF",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve been tracking a group of outlaws who’ve been causing trouble for one of our clients. Seems they’ve taken up residence at an old Hathor facility. Don’t know what their plans with that old facility are but our client is eager to have them taken care of.\n\nLooking for someone to go to [Location] and neutralize these targets.\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateAll_PAF_M_title_001",
+      "internalName": "FoxwellEnforcement_PAF_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_PAF_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedLocationTokens": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500",
+          "36,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "36,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "36,000 aUEC",
+          "amount": 36000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 36000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 36000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "2aff8901-0787-4a79-a87b-e6846f7b91c0",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateAll_PAF_M_title_001",
+        "descriptionRaw": "@Foxwell_EliminateAll_PAF_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "c4fd412d-06e5-4428-8819-2b1f62d9e9c6",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "39f033512683be5017c4",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "foxwell-eliminate-all-olp",
+        "descriptionStem": "foxwell-eliminate-all-olp",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:foxwell-eliminate-all-olp",
+          "description:foxwell-eliminate-all-olp",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_OLP_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Yellow Level Contract: Merc Work",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve been following a group of outlaws on behalf of a client, and it looks like they’ve taken a permanent pit stop on an old orbital platform. \n\nWe’re looking for a contractor who can head over to [Location] and neutralize the targets. The platform is crawling with a bunch of armed and dangerous thugs, so we’ve designated this a yellow level contract.\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_EliminateAll_OLP_M_title_001",
+      "internalName": "FoxwellEnforcement_OLP_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "FoxwellEnforcement_OLP_EliminateAll"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedLocationTokens": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500",
+          "36,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -500"
+        ],
+        "credits": "36,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "36,000 aUEC",
+          "amount": 36000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 36000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 36000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "4ad8855c-862d-4681-bebb-99ac160cb7b0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "c4fd412d-06e5-4428-8819-2b1f62d9e9c6",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_EliminateAll_OLP_M_title_001",
+        "descriptionRaw": "@Foxwell_EliminateAll_OLP_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9ef512ad-9832-4fa9-bad7-60e99268df74",
+      "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+      "conceptKey": "eae33f8b988df241de6f",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|016c2950-0292-468c-a408-a5283b52f158:unknown-scope|unknown|mercenary|standard|open|lawful:bounded||||variant:9ef512ad-9832-4fa9-bad7-60e99268df74",
+        "activityKey": "unknown",
+        "titleStem": "destroyprobelegal",
+        "descriptionStem": "destroyprobelegal",
+        "handlerStem": "foxwell-enforcement-mercenary",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:destroyprobelegal",
+          "description:destroyprobelegal",
+          "handler:foxwell-enforcement-mercenary",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "Foxwell_Legal_DestroySatellite"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Foxwell Legal Destroy Satellite",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@destroyprobelegal_title",
+      "internalName": "Foxwell_Legal_DestroySatellite",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "016c2950-0292-468c-a408-a5283b52f158:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career",
+          "Foxwell_Legal_DestroySatellite"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -50",
+          "19,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+            "poolName": "Foxwell Enforcement Generator",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+                "displayName": "Antium Helmet Jet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+                "displayName": "Antium Core Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+                "displayName": "Antium Legs Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+                "displayName": "Antium Helmet Maroon",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+                "displayName": "Antium Helmet",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+                "displayName": "Antium Arms",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+                "displayName": "Antium Core",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+                "displayName": "Antium Legs",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +500",
+          "Rep reward unresolved -50"
+        ],
+        "credits": "19,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "19,750 aUEC",
+          "amount": 19750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 19750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 19750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 500,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": -50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "5a59f6f6-245f-4e43-a08b-8b67e38286a7"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9ef512ad-9832-4fa9-bad7-60e99268df74",
+        "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+        "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@destroyprobelegal_title",
+        "descriptionRaw": "@destroyprobelegal_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

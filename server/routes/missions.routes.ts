@@ -58,6 +58,37 @@ type MissionConceptView = {
   familyKeys: string[];
 };
 
+type MissionOfferProviderView = {
+  organizationGuid?: string | null;
+  displayRaw?: string | null;
+  displayText?: string | null;
+  displayResolution?: string;
+  organizationResolution?: string;
+  provenance?: string;
+};
+
+type MissionOfferView = {
+  offerSchemaVersion?: 1;
+  offerKey: string;
+  displayTitle: string;
+  displayTitleTemplate: string | null;
+  provider: MissionOfferProviderView;
+  verificationStatus: "verified" | "unverified" | "unknown";
+  variantKeys: string[];
+  familyKeys: string[];
+  legacyConceptKeys: string[];
+  objectiveTemplateKeys: string[];
+  auditFlags: string[];
+  searchText: string;
+  providerKey: string;
+  missionTypes: string[];
+  rewardTypes: string[];
+  reputationRewardKeys: string[];
+  releaseFlags: string[];
+  confidenceFlags: string[];
+  verificationStatuses: Array<"verified" | "unverified" | "unknown">;
+};
+
 type MissionBrowseViews = {
   full: { categories: Array<{ categoryKey: string; displayName: string; conceptKeys: string[] }> };
   factions: Array<{
@@ -69,8 +100,9 @@ type MissionBrowseViews = {
 };
 
 type MissionBrowserIndex = {
-  schemaVersion: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -94,6 +126,11 @@ type MissionBrowserIndex = {
   familyDetailFiles?: Record<string, string>;
   familyVariantFiles?: Record<string, string>;
   variantDetailFiles?: Record<string, string>;
+  offersByKey?: Record<string, MissionOfferView>;
+  offerDetailFiles?: Record<string, string>;
+  offerVariantFiles?: Record<string, string>;
+  variantOfferKeys?: Record<string, string>;
+  legacyConceptOfferKeys?: Record<string, string[]>;
   conceptsByKey?: Record<string, MissionConceptView>;
   conceptFamilyVariantFiles?: Record<string, string[]>;
   missionBrowseGroups: MissionBrowseGroupView[];
@@ -108,9 +145,12 @@ type MissionBrowserFilterOption = {
 };
 
 type MissionShardManifest = {
-  schemaVersion?: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion?: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId?: string;
+  offerDetailFiles?: Record<string, string>;
+  offerVariantFiles?: Record<string, string>;
   familyFilesByFamilyId?: Record<string, {
     familyKey: string;
     detailFile: string;
@@ -190,12 +230,62 @@ function assertSupportedMissionGeneration(
   index: MissionBrowserIndex,
   manifest: MissionShardManifest,
 ): void {
-  if (index.schemaVersion !== 1 && index.schemaVersion !== 2) {
+  if (index.schemaVersion !== 1 && index.schemaVersion !== 2 && index.schemaVersion !== 3) {
     throw new Error(`Unsupported mission shaped schema ${String(index.schemaVersion)}.`);
   }
-  if (index.schemaVersion !== 2) return;
-  if (index.sourceContractVersion !== 3 || manifest.sourceContractVersion !== 3) {
-    throw new Error("Mission schema version 2 requires source contract version 3.");
+  if (index.schemaVersion === 1) return;
+  if (index.schemaVersion === 2) {
+    if (index.sourceContractVersion !== 3 || manifest.sourceContractVersion !== 3) {
+      throw new Error("Mission schema version 2 requires source contract version 3.");
+    }
+  } else {
+    if (
+      index.sourceContractVersion !== 4
+      || manifest.sourceContractVersion !== 4
+      || index.offerSchemaVersion !== 1
+      || manifest.offerSchemaVersion !== 1
+    ) {
+      throw new Error(
+        "Mission schema version 3 requires source contract version 4 and offer schema version 1.",
+      );
+    }
+    if (
+      !index.offersByKey
+      || !index.offerDetailFiles
+      || !index.offerVariantFiles
+      || !index.variantOfferKeys
+      || !index.legacyConceptOfferKeys
+    ) {
+      throw new Error("Mission schema version 3 is missing offer capability maps.");
+    }
+    for (const [offerKey, offer] of Object.entries(index.offersByKey)) {
+      if (
+        offer.offerKey !== offerKey
+        || typeof offer.searchText !== "string"
+        || !Array.isArray(offer.variantKeys)
+        || !Array.isArray(offer.familyKeys)
+      ) {
+        throw new Error(`Mission offer ${offerKey} is invalid.`);
+      }
+      if (!index.offerDetailFiles[offerKey] || !index.offerVariantFiles[offerKey]) {
+        throw new Error(`Mission offer ${offerKey} is missing shard paths.`);
+      }
+      for (const variantKey of offer.variantKeys) {
+        if (index.variantOfferKeys[variantKey] !== offerKey) {
+          throw new Error(`Mission variant ${variantKey} has an inconsistent offer owner.`);
+        }
+      }
+    }
+    for (const [variantKey, offerKey] of Object.entries(index.variantOfferKeys)) {
+      if (!index.offersByKey[offerKey]) {
+        throw new Error(`Mission variant ${variantKey} references unknown offer ${offerKey}.`);
+      }
+    }
+    for (const [conceptKey, offerKeys] of Object.entries(index.legacyConceptOfferKeys)) {
+      if (!Array.isArray(offerKeys) || offerKeys.some((offerKey) => !index.offersByKey?.[offerKey])) {
+        throw new Error(`Legacy mission concept ${conceptKey} references an unknown offer.`);
+      }
+    }
   }
   if (
     !index.generationId
@@ -219,6 +309,32 @@ async function loadMissionGeneration(): Promise<{
   ]);
   assertSupportedMissionGeneration(index, manifest);
   return { missionRoot, index, manifest };
+}
+
+function assertOfferShardEnvelope(
+  value: unknown,
+  index: MissionBrowserIndex,
+  offerKey: string,
+  kind: "detail" | "variants",
+): void {
+  if (!isRecord(value)) throw new Error("Mission offer shard must be an object.");
+  if (
+    value.schemaVersion !== 3
+    || value.sourceContractVersion !== 4
+    || value.offerSchemaVersion !== 1
+    || value.generationId !== index.generationId
+  ) {
+    throw new Error("Mission offer shard belongs to a different generation or schema.");
+  }
+  if (kind === "detail") {
+    if (!isRecord(value.offer) || value.offer.offerKey !== offerKey) {
+      throw new Error("Mission offer detail shard has the wrong offer identity.");
+    }
+    return;
+  }
+  if (value.offerKey !== offerKey || !Array.isArray(value.variants)) {
+    throw new Error("Mission offer variants shard has the wrong offer identity.");
+  }
 }
 
 function rewardMatches(family: MissionFamilyView, reward: string): boolean {
@@ -254,9 +370,36 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
   const repReward = url.searchParams.get("repReward") ?? "";
   const status = url.searchParams.get("status") ?? "";
   const confidence = url.searchParams.get("confidence") ?? "";
+  const verification = url.searchParams.get("verification") ?? "";
+
+  const visibleOffers = index.schemaVersion === 3
+    ? Object.values(index.offersByKey ?? {}).filter((offer) => {
+      if (query && !offer.searchText.toLowerCase().includes(query)) return false;
+      if (provider && offer.providerKey !== provider) return false;
+      if (missionType && !offer.missionTypes.includes(missionType)) return false;
+      if (reward && !offer.rewardTypes.includes(reward)) return false;
+      if (repReward && !offer.reputationRewardKeys.includes(repReward)) return false;
+      if (status && !offer.releaseFlags.includes(status)) return false;
+      if (confidence && !offer.confidenceFlags.includes(confidence)) return false;
+      if (
+        verification
+        && !offer.verificationStatuses.includes(
+          verification as MissionOfferView["verificationStatuses"][number],
+        )
+      ) return false;
+      return true;
+    })
+    : [];
+  const visibleOfferKeys = new Set(visibleOffers.map((offer) => offer.offerKey));
+  const visibleOfferFamilyKeys = new Set(
+    visibleOffers.flatMap((offer) => offer.familyKeys),
+  );
 
   const visibleFamilies = Object.values(index.familiesByKey).filter((family) => {
-    if (query && !family.searchText.includes(query)) return false;
+    if (index.schemaVersion === 3) {
+      return visibleOfferFamilyKeys.has(family.familyKey);
+    }
+    if (query && !family.searchText.toLowerCase().includes(query)) return false;
     if (provider && family.provider !== provider) return false;
     if (missionType && family.missionType !== missionType) return false;
     if (repReward && !family.rewardedReputationPaths.some((path) => path.scopeDisplayName === repReward)) return false;
@@ -266,11 +409,17 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
     return true;
   });
   const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
-  const visibleConceptKeys = new Set(
-    Object.values(index.conceptsByKey ?? {})
-      .filter((concept) => concept.familyKeys.some((familyKey) => visibleFamilyKeys.has(familyKey)))
-      .map((concept) => concept.conceptKey)
-  );
+  const visibleConceptKeys = index.schemaVersion === 3
+    ? new Set(
+      Object.entries(index.legacyConceptOfferKeys ?? {})
+        .filter(([, offerKeys]) => offerKeys.some((offerKey) => visibleOfferKeys.has(offerKey)))
+        .map(([conceptKey]) => conceptKey),
+    )
+    : new Set(
+      Object.values(index.conceptsByKey ?? {})
+        .filter((concept) => concept.familyKeys.some((familyKey) => visibleFamilyKeys.has(familyKey)))
+        .map((concept) => concept.conceptKey),
+    );
   const missionBrowseGroups = index.missionBrowseGroups
     .map((group) => ({
       ...group,
@@ -310,10 +459,41 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
       group.reputationScopes.flatMap((scope) => scope.missionArchetypes.flatMap((archetype) => archetype.familyKeys))
     )
   );
+  const responseFamilyKeys = index.schemaVersion === 3
+    ? visibleFamilyKeys
+    : referencedFamilyKeys;
+  const offerVisibility = index.schemaVersion === 3 ? {
+    offersByKey: Object.fromEntries(
+      visibleOffers.map((offer) => [offer.offerKey, offer]),
+    ),
+    offerDetailFiles: Object.fromEntries(
+      Array.from(visibleOfferKeys)
+        .map((offerKey) => [offerKey, index.offerDetailFiles?.[offerKey]])
+        .filter((entry): entry is [string, string] => Boolean(entry[1])),
+    ),
+    offerVariantFiles: Object.fromEntries(
+      Array.from(visibleOfferKeys)
+        .map((offerKey) => [offerKey, index.offerVariantFiles?.[offerKey]])
+        .filter((entry): entry is [string, string] => Boolean(entry[1])),
+    ),
+    variantOfferKeys: Object.fromEntries(
+      Object.entries(index.variantOfferKeys ?? {})
+        .filter(([, offerKey]) => visibleOfferKeys.has(offerKey)),
+    ),
+    legacyConceptOfferKeys: Object.fromEntries(
+      Object.entries(index.legacyConceptOfferKeys ?? {})
+        .map(([conceptKey, offerKeys]) => [
+          conceptKey,
+          offerKeys.filter((offerKey) => visibleOfferKeys.has(offerKey)),
+        ] as [string, string[]])
+        .filter(([, offerKeys]) => offerKeys.length > 0),
+    ),
+  } : {};
 
   return {
     ...index,
-    familiesByKey: Object.fromEntries(Array.from(referencedFamilyKeys).map((familyKey) => [familyKey, index.familiesByKey[familyKey]]).filter((entry): entry is [string, MissionFamilyView] => Boolean(entry[1]))),
+    familiesByKey: Object.fromEntries(Array.from(responseFamilyKeys).map((familyKey) => [familyKey, index.familiesByKey[familyKey]]).filter((entry): entry is [string, MissionFamilyView] => Boolean(entry[1]))),
+    ...offerVisibility,
     conceptsByKey: index.conceptsByKey
       ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, index.conceptsByKey?.[conceptKey]]).filter((entry): entry is [string, MissionConceptView] => Boolean(entry[1])))
       : undefined,
@@ -465,6 +645,36 @@ export async function handleMissionsRoute(method: string, rawUrl: string, body?:
   if (pathName === "/api/missions/browser") {
     const { index } = await loadMissionGeneration();
     return { status: 200, body: filterBrowserIndex(index, url) };
+  }
+
+  const offerVariantsMatch = pathName.match(/^\/api\/missions\/offers?\/([^/]+)\/variants$/);
+  if (offerVariantsMatch) {
+    const offerKey = decodeURIComponent(offerVariantsMatch[1] ?? "");
+    const { missionRoot, index, manifest } = await loadMissionGeneration();
+    if (index.schemaVersion !== 3 || !index.offersByKey?.[offerKey]) {
+      return { status: 404, body: { error: "Mission offer variants not found." } };
+    }
+    const file = index.offerVariantFiles?.[offerKey]
+      ?? manifest.offerVariantFiles?.[offerKey];
+    if (!file) return { status: 404, body: { error: "Mission offer variants not found." } };
+    const payload = await readJson<unknown>(missionRoot, file);
+    assertOfferShardEnvelope(payload, index, offerKey, "variants");
+    return { status: 200, body: payload };
+  }
+
+  const offerMatch = pathName.match(/^\/api\/missions\/offers?\/([^/]+)$/);
+  if (offerMatch) {
+    const offerKey = decodeURIComponent(offerMatch[1] ?? "");
+    const { missionRoot, index, manifest } = await loadMissionGeneration();
+    if (index.schemaVersion !== 3 || !index.offersByKey?.[offerKey]) {
+      return { status: 404, body: { error: "Mission offer not found." } };
+    }
+    const file = index.offerDetailFiles?.[offerKey]
+      ?? manifest.offerDetailFiles?.[offerKey];
+    if (!file) return { status: 404, body: { error: "Mission offer not found." } };
+    const payload = await readJson<unknown>(missionRoot, file);
+    assertOfferShardEnvelope(payload, index, offerKey, "detail");
+    return { status: 200, body: payload };
   }
 
   const familyVariantsMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)\/variants$/);

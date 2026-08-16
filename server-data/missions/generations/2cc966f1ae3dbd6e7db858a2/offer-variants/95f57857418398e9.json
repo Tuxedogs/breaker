@@ -1,0 +1,1335 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "headhunters:tactical-strike",
+  "variants": [
+    {
+      "variantKey": "a953cc77-dde4-4000-ab2a-fb57f18c879a",
+      "familyKey": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Stanton",
+      "conceptKey": "8cf134466b092153bd2d",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|ambush|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "ambush",
+        "titleStem": "head-hunters-ship-ambush",
+        "descriptionStem": "head-hunters-ship-ambush",
+        "handlerStem": "head-hunters-ambush-stanton",
+        "archetype": "Ambush",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:head-hunters-ship-ambush",
+          "description:head-hunters-ship-ambush",
+          "handler:head-hunters-ambush-stanton",
+          "contract:contract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Stanton",
+          "HeadHunters_ShipAmbush_Stanton_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Tactical Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Some folks don’t seem happy with us. Got word that several sub-capital ships and a number of escorts are targeting our ops. Figured the best way to keep ‘em from causing us trouble is to hit them before they hit us. \n\nWe got eyes on a [AmbushTarget] that’s part of this squad, and it looks like they regularly pass by [Location], a spot tailor made for a surprise attack. A nearby emission cloud can hide you and anyone you bring along for muscle.\n\nNo sugarcoating it. This ain’t gonna be easy. But the payoff should make it worth your while. Finish the job and the main contractor gets a bonus [ScripAmount] Council Scrip. \n\nPlus, who knows what kinda good stuff you’ll find floating in all that wreckage.\n\nStows out.",
+      "rawName": "@HeadHunters_ShipAmbush_VH_title_001",
+      "internalName": "HeadHunters_ShipAmbush_Stanton_VeryHard",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Stanton",
+          "HeadHunters_ShipAmbush_Stanton_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "No extracted standing requirement",
+      "reputationRequirement": "Headhunters: Rank IV Rank VI",
+      "prerequisiteSummary": "Location unresolved; Headhunters: Rank IV Rank VI",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        },
+        {
+          "type": "reputation",
+          "label": "Headhunters: Rank IV Rank VI",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +8,000",
+          "136,250 aUEC",
+          "Item reward: Council Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +8,000"
+        ],
+        "credits": "136,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "136,250 aUEC",
+          "amount": 136250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 136250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 136250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "amount": "12",
+            "displayName": "Council Scrip",
+            "itemKey": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Unknown faction",
+          "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 8000,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "3792e4c6-665e-44e9-9410-40389182f918",
+            "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a953cc77-dde4-4000-ab2a-fb57f18c879a",
+        "generatorGuid": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26",
+        "generatorName": "ContractGenerator.HeadHunters_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@HeadHunters_ShipAmbush_VH_title_001",
+        "descriptionRaw": "@HeadHunters_ShipAmbush_VH_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d15bbff1-08f4-422a-8677-72a413cacd31",
+      "familyKey": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+      "conceptKey": "60d91536fc6298658769",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|ambush|activity-defined|standard|unlock:63c007475df8|unknown:unknown||||",
+        "activityKey": "ambush",
+        "titleStem": "head-hunters-ship-ambush",
+        "descriptionStem": "head-hunters-ship-ambush",
+        "handlerStem": "head-hunters-ship-ambush-nyx",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:63c007475df8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:head-hunters-ship-ambush",
+          "description:head-hunters-ship-ambush",
+          "handler:head-hunters-ship-ambush-nyx",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:unlock:63c007475df8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+          "HeadHunters_ShipAmbush_Nyx_VeryHard"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Tactical Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Some folks don’t seem happy with us. Got word that several sub-capital ships and a number of escorts are targeting our ops. Figured the best way to keep ‘em from causing us trouble is to hit them before they hit us. \n\nWe got eyes on a [AmbushTarget] that’s part of this squad, and it looks like they regularly pass by [Location], a spot tailor made for a surprise attack. A nearby emission cloud can hide you and anyone you bring along for muscle.\n\nNo sugarcoating it. This ain’t gonna be easy. But the payoff should make it worth your while. Finish the job and the main contractor gets a bonus [ScripAmount] Council Scrip. \n\nPlus, who knows what kinda good stuff you’ll find floating in all that wreckage.\n\nStows out.",
+      "rawName": "@HeadHunters_ShipAmbush_VH_title_001",
+      "internalName": "HeadHunters_ShipAmbush_Nyx_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "displayName": "Ship Combat",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Ship Combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+          "HeadHunters_ShipAmbush_Nyx_VeryHard"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9c1d5930-c5c0-4d11-a0f4-45568890747d"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Ship Combat +250",
+          "143,500 aUEC",
+          "Item reward: Council Scrip"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Ship Combat +250"
+        ],
+        "credits": "143,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "143,500 aUEC",
+          "amount": 143500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 143500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 143500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "amount": "12",
+            "displayName": "Council Scrip",
+            "itemKey": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
+          "amount": 250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d15bbff1-08f4-422a-8677-72a413cacd31",
+        "generatorGuid": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26",
+        "generatorName": "ContractGenerator.HeadHunters_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@HeadHunters_ShipAmbush_VH_title_001",
+        "descriptionRaw": "@HeadHunters_ShipAmbush_VH_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "da719df2-ad11-4757-8d01-bde6e6e0470d",
+      "familyKey": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+      "conceptKey": "60d91536fc6298658769",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|ambush|activity-defined|standard|unlock:63c007475df8|unknown:unknown||||",
+        "activityKey": "ambush",
+        "titleStem": "head-hunters-ship-ambush",
+        "descriptionStem": "head-hunters-ship-ambush",
+        "handlerStem": "head-hunters-ship-ambush-nyx",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:63c007475df8",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:head-hunters-ship-ambush",
+          "description:head-hunters-ship-ambush",
+          "handler:head-hunters-ship-ambush-nyx",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:unlock:63c007475df8",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+          "HeadHunters_ShipAmbush_Nyx_VeryHard_V"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Tactical Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Some folks don’t seem happy with us. Got word that several sub-capital ships and a number of escorts are targeting our ops. Figured the best way to keep ‘em from causing us trouble is to hit them before they hit us. \n\nWe got eyes on a [AmbushTarget] that’s part of this squad, and it looks like they regularly pass by [Location], a spot tailor made for a surprise attack. A nearby emission cloud can hide you and anyone you bring along for muscle.\n\nNo sugarcoating it. This ain’t gonna be easy. But the payoff should make it worth your while. Finish the job and the main contractor gets a bonus [ScripAmount] Council Scrip. \n\nPlus, who knows what kinda good stuff you’ll find floating in all that wreckage.\n\nStows out.",
+      "rawName": "@HeadHunters_ShipAmbush_VH_title_001",
+      "internalName": "HeadHunters_ShipAmbush_Nyx_VeryHard_V",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "displayName": "Ship Combat",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Ship Combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+          "HeadHunters_ShipAmbush_Nyx_VeryHard_V"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9c1d5930-c5c0-4d11-a0f4-45568890747d"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Ship Combat +250",
+          "143,500 aUEC",
+          "Item reward: Council Scrip"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Ship Combat +250"
+        ],
+        "credits": "143,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "143,500 aUEC",
+          "amount": 143500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 143500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 143500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "amount": "12",
+            "displayName": "Council Scrip",
+            "itemKey": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
+          "amount": 250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "da719df2-ad11-4757-8d01-bde6e6e0470d",
+        "generatorGuid": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26",
+        "generatorName": "ContractGenerator.HeadHunters_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@HeadHunters_ShipAmbush_VH_title_001",
+        "descriptionRaw": "@HeadHunters_ShipAmbush_VH_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "dd1160cf-7081-4f5e-bb65-bdf631b94852",
+      "familyKey": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Pyro",
+      "conceptKey": "8cf134466b092153bd2d",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|ambush|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "ambush",
+        "titleStem": "head-hunters-ship-ambush",
+        "descriptionStem": "head-hunters-ship-ambush",
+        "handlerStem": "head-hunters-ambush-pyro",
+        "archetype": "Ambush",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:head-hunters-ship-ambush",
+          "description:head-hunters-ship-ambush",
+          "handler:head-hunters-ambush-pyro",
+          "contract:contract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Pyro",
+          "HeadHunters_ShipAmbush_Pyro_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Tactical Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Some folks don’t seem happy with us. Got word that several sub-capital ships and a number of escorts are targeting our ops. Figured the best way to keep ‘em from causing us trouble is to hit them before they hit us. \n\nWe got eyes on a [AmbushTarget] that’s part of this squad, and it looks like they regularly pass by [Location], a spot tailor made for a surprise attack. A nearby emission cloud can hide you and anyone you bring along for muscle.\n\nNo sugarcoating it. This ain’t gonna be easy. But the payoff should make it worth your while. Finish the job and the main contractor gets a bonus [ScripAmount] Council Scrip. \n\nPlus, who knows what kinda good stuff you’ll find floating in all that wreckage.\n\nStows out.",
+      "rawName": "@HeadHunters_ShipAmbush_VH_title_001",
+      "internalName": "HeadHunters_ShipAmbush_Pyro_VeryHard",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_Ambush_Pyro",
+          "HeadHunters_ShipAmbush_Pyro_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "No extracted standing requirement",
+      "reputationRequirement": "Headhunters: Rank IV Rank VI",
+      "prerequisiteSummary": "Location unresolved; Headhunters: Rank IV Rank VI",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "a14bec87-5801-4440-8ca8-35597487ac9a"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        },
+        {
+          "type": "reputation",
+          "label": "Headhunters: Rank IV Rank VI",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "a14bec87-5801-4440-8ca8-35597487ac9a",
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +8,000",
+          "136,250 aUEC",
+          "Item reward: Council Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +8,000"
+        ],
+        "credits": "136,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "136,250 aUEC",
+          "amount": 136250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 136250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 136250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "amount": "12",
+            "displayName": "Council Scrip",
+            "itemKey": "cea4af31-612e-4d1c-9a03-e358898b5691",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Unknown faction",
+          "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 8000,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "3792e4c6-665e-44e9-9410-40389182f918",
+            "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "dd1160cf-7081-4f5e-bb65-bdf631b94852",
+        "generatorGuid": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26",
+        "generatorName": "ContractGenerator.HeadHunters_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@HeadHunters_ShipAmbush_VH_title_001",
+        "descriptionRaw": "@HeadHunters_ShipAmbush_VH_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

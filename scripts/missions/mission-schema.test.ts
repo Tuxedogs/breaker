@@ -12,7 +12,10 @@ import {
   missionPayloadFileName,
   projectCompactMissionVariantV2,
 } from "./project/browser-projection.mts";
-import { publishImmutableMissionGeneration } from "./publication/write-artifacts.mts";
+import {
+  buildMissionGenerationPointerV1,
+  publishImmutableMissionGeneration,
+} from "./publication/write-artifacts.mts";
 import { buildMissionGraphArtifactsV2 } from "./report/graph-report.mts";
 import { normalizeCanonicalMissionVariantV2 } from "./schema/canonical-v2.mts";
 import {
@@ -21,6 +24,13 @@ import {
   type MissionSourceEdgeV3,
   type MissionSourceRecordV3,
 } from "./schema/source-v3.mts";
+import {
+  parseMissionSourceCatalog,
+  parseMissionSourceCatalogV4,
+  type MissionOfferSourceEvidenceV1,
+  type MissionSourceCatalogV4,
+  type MissionSourceRecordV4,
+} from "./schema/source-v4.mts";
 
 function edge(
   variantId: string,
@@ -62,6 +72,80 @@ function catalog(records: MissionSourceRecordV3[]): MissionSourceCatalogV3 {
   };
 }
 
+function offerEvidence(
+  contractId: string,
+  values: Partial<MissionOfferSourceEvidenceV1> = {},
+): MissionOfferSourceEvidenceV1 {
+  return {
+    schemaVersion: 1,
+    variantId: contractId,
+    provider: {
+      sourceParam: "Contractor",
+      displayRaw: "@headhunters_from",
+      displayText: "Headhunters",
+      organizationGuid: null,
+      displayResolution: "source_backed",
+      organizationResolution: "unresolved_no_explicit_organization_guid",
+      provenance: "source_backed",
+    },
+    reputationFaction: {
+      guid: null,
+      displayName: null,
+      resolution: "unresolved_missing_guid",
+      provenance: "unresolved",
+    },
+    title: {
+      raw: "@Headhunters_EliminateSpecific_PAF_title_001",
+      localizationKey: "Headhunters_EliminateSpecific_PAF_title_001",
+      template: "Ghost ~mission(TargetName)",
+      displayText: "Ghost ~mission(TargetName)",
+      runtimeTokens: [{
+        raw: "~mission(TargetName)",
+        expression: "TargetName",
+        segments: ["TargetName"],
+      }],
+      rendering: "runtime_templated",
+      resolution: "source_backed",
+      provenance: "source_backed",
+    },
+    verification: {
+      vocabulary: "verified_unverified",
+      status: "unknown",
+      effectiveIllegal: null,
+      effectiveResolution: "unresolved_precedence",
+      rawEvidence: {
+        handlerIllegal: null,
+        contractIllegal: true,
+        templateIllegal: false,
+        comparison: "conflict",
+      },
+      provenance: "unresolved",
+    },
+    availabilityBranches: [],
+    reputationPrerequisites: [],
+    ...values,
+  };
+}
+
+function recordV4(
+  contractId: string,
+  values: Partial<MissionSourceRecordV4> = {},
+): MissionSourceRecordV4 {
+  return {
+    ...record(contractId),
+    offerEvidence: offerEvidence(contractId),
+    ...values,
+  };
+}
+
+function catalogV4(records: MissionSourceRecordV4[]): MissionSourceCatalogV4 {
+  return {
+    ...catalog(records),
+    schemaVersion: 4,
+    records,
+  };
+}
+
 test("source v3 guard rejects old schemas and duplicate identities", () => {
   assert.throws(
     () => parseMissionSourceCatalogV3({ ...catalog([]), schemaVersion: 1 }),
@@ -70,6 +154,119 @@ test("source v3 guard rejects old schemas and duplicate identities", () => {
   assert.throws(
     () => parseMissionSourceCatalogV3(catalog([record("same"), record("same")])),
     /Duplicate mission contractId same/,
+  );
+});
+
+test("source v4 reader validates offer evidence and keeps source v3 rollback readable", () => {
+  const contractId = "offer-variant";
+  const parentLocation = edge(contractId, "parent-location", "location", {
+    ownerScope: "parent_eligibility",
+    ownerId: contractId,
+    polarity: "required",
+    identifiers: { locationAvailable: "location-guid" },
+  });
+  const branchReputation = edge(contractId, "branch-reputation", "reputation", {
+    ownerScope: "subcontract",
+    ownerId: "branch-a",
+    polarity: "required",
+    identifiers: { factionReputation: "faction-guid", scope: "scope-guid" },
+  });
+  const source = recordV4(contractId, {
+    prerequisiteEdges: [parentLocation],
+    subContractPrerequisiteEdges: { "branch-a": [branchReputation] },
+    outcomeEdges: [edge(contractId, "blueprint", "blueprint_reward")],
+    fixedReputationRewards: [{ type: "ContractResult_Reputation", amount: 100 }],
+    offerEvidence: offerEvidence(contractId, {
+      availabilityBranches: [{
+        ownerScope: "parent_eligibility",
+        ownerId: contractId,
+        requirements: [{
+          edgeId: "parent-location",
+          type: "location",
+          polarity: "required",
+          sourceAttribute: "locationAvailable",
+          reference: {
+            guid: "location-guid",
+            recordName: "StarMapObject.StantonStar",
+            resolution: "source_backed",
+            provenance: "source_backed",
+          },
+          resolution: "source_backed",
+          sourceScopes: ["contract"],
+          sourceOwners: [{ scope: "contract", id: contractId }],
+          provenance: { sourceRef: "contracts/test.xml" },
+        }],
+      }],
+      reputationPrerequisites: [{
+        edgeId: "branch-reputation",
+        ownerScope: "subcontract",
+        ownerId: "branch-a",
+        polarity: "required",
+        faction: { guid: "faction-guid", resolution: "unresolved_reference", provenance: "unresolved" },
+        scope: { guid: "scope-guid", resolution: "source_backed", provenance: "source_backed" },
+        minStanding: { guid: null, resolution: "unresolved_missing_reference", provenance: "unresolved" },
+        maxStanding: { guid: null, resolution: "unresolved_missing_reference", provenance: "unresolved" },
+        identifiers: { factionReputation: "faction-guid", scope: "scope-guid" },
+        bounds: {},
+        resolution: "source_backed",
+        sourceScopes: ["subcontract"],
+        sourceOwners: [{ scope: "subcontract", id: "branch-a" }],
+        provenance: { sourceRef: "contracts/test.xml" },
+      }],
+    }),
+  });
+  const sourceV4 = catalogV4([source]);
+  const parsed = parseMissionSourceCatalogV4(sourceV4);
+  const parsedByVersionedReader = parseMissionSourceCatalog(sourceV4);
+  const legacy = parseMissionSourceCatalog(catalog([record("legacy")]));
+  const canonical = normalizeCanonicalMissionVariantV2(parsed, parsed.records[0]!);
+
+  assert.equal(parsedByVersionedReader.schemaVersion, 4);
+  assert.equal(legacy.schemaVersion, 3);
+  assert.equal(canonical.sourceSchemaVersion, 4);
+  assert.strictEqual(canonical.offerEvidence, source.offerEvidence);
+  assert.strictEqual(canonical.prerequisites, source.prerequisiteEdges);
+  assert.strictEqual(canonical.subcontractPrerequisites, source.subContractPrerequisiteEdges);
+  assert.strictEqual(canonical.outcomes, source.outcomeEdges);
+  assert.strictEqual(canonical.reputationOutcomes.fixed, source.fixedReputationRewards);
+  assert.deepEqual(canonical.rewards.blueprint.map((item) => item.edgeId), ["blueprint"]);
+});
+
+test("source v4 reader rejects missing evidence and owner-scope projection leaks", () => {
+  const contractId = "offer-variant";
+  const parentLocation = edge(contractId, "parent-location", "location", {
+    ownerScope: "parent_eligibility",
+    ownerId: contractId,
+  });
+  const source = recordV4(contractId, {
+    prerequisiteEdges: [parentLocation],
+    offerEvidence: offerEvidence(contractId, {
+      availabilityBranches: [{
+        ownerScope: "subcontract",
+        ownerId: "branch-a",
+        requirements: [{
+          edgeId: "parent-location",
+          type: "location",
+          sourceAttribute: "locationAvailable",
+          reference: { guid: "location-guid", resolution: "source_backed", provenance: "source_backed" },
+          sourceScopes: [],
+          sourceOwners: [],
+          provenance: { sourceRef: "contracts/test.xml" },
+        }],
+      }],
+    }),
+  });
+
+  assert.throws(
+    () => parseMissionSourceCatalogV4(catalogV4([source])),
+    /does not resolve within its canonical owner scope/,
+  );
+  assert.throws(
+    () => parseMissionSourceCatalogV4({
+      ...catalogV4([recordV4("missing")]),
+      records: [{ ...recordV4("missing"), offerEvidence: undefined }],
+    }),
+    /offerEvidence must be an object/,
   );
 });
 
@@ -295,6 +492,40 @@ test("browser shard projection is deterministic and keeps exact bodies out of th
     status: "present",
     haulingOrderCount: 1,
     selectorCount: 2,
+  });
+});
+
+test("generation pointer types represent legacy rollback and offer-capable contracts", () => {
+  const legacy = buildMissionGenerationPointerV1({
+    generationId: "legacy-generation",
+    shaperVersion: "legacy-shaper",
+  });
+  const offerCapable = buildMissionGenerationPointerV1({
+    generationId: "offer-generation",
+    shaperVersion: "offer-shaper",
+    generationContract: {
+      missionSchemaVersion: 3,
+      sourceContractVersion: 4,
+      offerSchemaVersion: 1,
+    },
+  });
+
+  assert.deepEqual(legacy, {
+    schemaVersion: 1,
+    missionSchemaVersion: 2,
+    sourceContractVersion: 3,
+    shaperVersion: "legacy-shaper",
+    generationId: "legacy-generation",
+    generationPath: "generations/legacy-generation",
+  });
+  assert.deepEqual(offerCapable, {
+    schemaVersion: 1,
+    missionSchemaVersion: 3,
+    sourceContractVersion: 4,
+    offerSchemaVersion: 1,
+    shaperVersion: "offer-shaper",
+    generationId: "offer-generation",
+    generationPath: "generations/offer-generation",
   });
 });
 

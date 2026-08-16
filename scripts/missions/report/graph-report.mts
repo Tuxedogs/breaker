@@ -1,8 +1,9 @@
 import type { MissionGraphValidationV2 } from "../graph/mission-graph.mts";
 
 export type MissionGenerationEnvelopeV2 = {
-  schemaVersion: 2;
-  sourceContractVersion: 3;
+  schemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;

@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "bounty-hunters-guild:tracker-beginners-permit-certification",
+  "variants": [
+    {
+      "variantKey": "bd175ab4-9077-418f-b6b9-f84fdf5c6a47",
+      "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Certification_Career",
+      "conceptKey": "4a92ab9ffff065b572ed",
+      "objectiveSignature": {
+        "key": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97|6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:unknown-scope|bounty-certification+eliminate-specific|activity-defined|standard|unlock:6471f959cd6f|unknown:bounded||||",
+        "activityKey": "bounty-certification+eliminate-specific",
+        "titleStem": "bhg-certification",
+        "descriptionStem": "bhg-certification",
+        "handlerStem": "bounty-hunters-guild-certification",
+        "archetype": "Bounty",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:6471f959cd6f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:bounty-certification+eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-certification",
+          "description:bhg-certification",
+          "handler:bounty-hunters-guild-certification",
+          "contract:careercontract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:6471f959cd6f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Certification_Career",
+          "BountyHuntersGuild_Certification_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Tracker Beginner's Permit Certification",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "rawName": "@BHG_Certification_Easy_Title",
+      "internalName": "BountyHuntersGuild_Certification_Easy",
+      "missionType": "CareerContract",
+      "provider": "Bounty Hunters Guild",
+      "faction": "Bounty Hunters Guild",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Certification_Career",
+          "BountyHuntersGuild_Certification_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "Junior Guild Member / 3,000 rep to Guild Steward / 480,000 rep",
+      "prerequisiteSummary": "Junior Guild Member / 3,000 rep to Guild Steward / 480,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Junior Guild Member / 3,000 rep to Guild Steward / 480,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "301c8246-3095-4f95-be34-1ddab8640d73"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "LocalSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +50",
+          "39,750 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +50"
+        ],
+        "credits": "39,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "39,750 aUEC",
+          "amount": 39750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 39750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 39750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Bounty Hunters Guild",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "21f73b65-3e45-4453-afba-d0713a239da0"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "bd175ab4-9077-418f-b6b9-f84fdf5c6a47",
+        "generatorGuid": "501147b8-3e02-456f-bd89-b17f11b09383",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_KIllShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_killship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@BHG_Certification_Easy_Title",
+        "descriptionRaw": "@BHG_Certification_Easy_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

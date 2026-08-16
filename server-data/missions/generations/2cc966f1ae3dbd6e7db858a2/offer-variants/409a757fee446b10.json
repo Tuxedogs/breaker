@@ -1,0 +1,730 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "eckhart-security:new-opportunity-ambush-strike",
+  "variants": [
+    {
+      "variantKey": "31015ee4-9ecf-4dd5-a090-91a9bce80437",
+      "familyKey": "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Pyro",
+      "conceptKey": "f214fd110b7be2ef070b",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|ambush|activity-defined|intro|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "ambush",
+        "titleStem": "eckhart-ship-ambush",
+        "descriptionStem": "eckhart-ship-ambush",
+        "handlerStem": "eckhart-security-ship-ambush-pyro",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:eckhart-ship-ambush",
+          "description:eckhart-ship-ambush",
+          "handler:eckhart-security-ship-ambush-pyro",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:intro",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Ambush",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Pyro",
+          "EckhartSecurity_ShipAmbush_Pyro_Intro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "New Opportunity - Ambush Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Ship Ambush\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nWe’re looking for contractors with combat experience who are willing to get their hands dirty so to speak. A client of ours was double-crossed by a [AmbushTarget] and we’ve been waiting for an opportunity to deal with the issue. After tracking them for several weeks, we’ve identified [Location] as the ideal spot to intercept them. It features an emission cloud where you can hide and power down your ship while waiting for the [AmbushTarget].\n\nIntel suggests that they may travel with an escort. If they do, you’ll have to deal with them too. Since this is your first contract, we will have other contractors in the area who can lend a hand once you strike.\n\nPayment will be issued upon successful completion of contract. There’s a bonus payment of [ScripAmount] MG Scrip in this for the main contractor too.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@Eckhart_ShipAmbush_Intro_title",
+      "internalName": "EckhartSecurity_ShipAmbush_Pyro_Intro",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Pyro",
+          "EckhartSecurity_ShipAmbush_Pyro_Intro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +100",
+          "26,250 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "26,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "26,250 aUEC",
+          "amount": 26250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 26250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 26250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "1",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "31015ee4-9ecf-4dd5-a090-91a9bce80437",
+        "generatorGuid": "507345dc-e889-4694-a404-72b2506e3b80",
+        "generatorName": "ContractGenerator.EckhartSecurity_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Eckhart_ShipAmbush_Intro_title",
+        "descriptionRaw": "@Eckhart_ShipAmbush_Intro_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "e25f601a-6734-4703-944c-69991778367d",
+      "familyKey": "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+      "conceptKey": "f214fd110b7be2ef070b",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope|ambush|activity-defined|intro|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "ambush",
+        "titleStem": "eckhart-ship-ambush",
+        "descriptionStem": "eckhart-ship-ambush",
+        "handlerStem": "eckhart-security-ship-ambush-nyx",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:eckhart-ship-ambush",
+          "description:eckhart-ship-ambush",
+          "handler:eckhart-security-ship-ambush-nyx",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:intro",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Ambush",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+          "EckhartSecurity_ShipAmbush_Nyx_Intro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "New Opportunity - Ambush Strike",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Ship Ambush\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nWe’re looking for contractors with combat experience who are willing to get their hands dirty so to speak. A client of ours was double-crossed by a [AmbushTarget] and we’ve been waiting for an opportunity to deal with the issue. After tracking them for several weeks, we’ve identified [Location] as the ideal spot to intercept them. It features an emission cloud where you can hide and power down your ship while waiting for the [AmbushTarget].\n\nIntel suggests that they may travel with an escort. If they do, you’ll have to deal with them too. Since this is your first contract, we will have other contractors in the area who can lend a hand once you strike.\n\nPayment will be issued upon successful completion of contract. There’s a bonus payment of [ScripAmount] MG Scrip in this for the main contractor too.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@Eckhart_ShipAmbush_Intro_title",
+      "internalName": "EckhartSecurity_ShipAmbush_Nyx_Intro",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+          "EckhartSecurity_ShipAmbush_Nyx_Intro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1",
+          "Rep reward unresolved +100",
+          "26,250 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "02642d19-8a53-481c-ab3e-f57a7f0dd7c7",
+            "poolName": "Eckhart Security Ship Ambush Easy",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "2a8d359b-08da-41e2-8809-92ffeef0dc6f",
+                "displayName": "SonicLite",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "02a12ac4-9436-4f03-9da4-043427bd5678",
+                "displayName": "Cirrus",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "78b1bf49-bdd8-48e9-9cbe-1faeb95f24d5",
+                "displayName": "Lightstrike I Cannon",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5907d8df-c6c0-4609-83d9-a6130a7b210a",
+                "displayName": "Lightstrike II Cannon",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5ef6986b-12eb-4e2d-93d3-a4def34584c0",
+                "displayName": "Lightstrike III Cannon",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "26,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "26,250 aUEC",
+          "amount": 26250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 26250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 26250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "1",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e25f601a-6734-4703-944c-69991778367d",
+        "generatorGuid": "507345dc-e889-4694-a404-72b2506e3b80",
+        "generatorName": "ContractGenerator.EckhartSecurity_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Eckhart_ShipAmbush_Intro_title",
+        "descriptionRaw": "@Eckhart_ShipAmbush_Intro_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

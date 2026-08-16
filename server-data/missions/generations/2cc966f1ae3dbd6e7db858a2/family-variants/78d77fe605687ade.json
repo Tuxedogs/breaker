@@ -1,0 +1,1286 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+  "variants": [
+    {
+      "variantKey": "a249020e-9c94-44dd-9d9a-ddb11cc74533",
+      "familyKey": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+      "conceptKey": "16449ee39ae645b85322",
+      "objectiveSignature": {
+        "key": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09|f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "battaglia-rpt-salvage",
+        "descriptionStem": "battaglia-rpt-salvage",
+        "handlerStem": "battaglia-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:battaglia-rpt-salvage",
+          "description:battaglia-rpt-salvage",
+          "handler:battaglia-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Salvage Job: Large",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "*********** People's Alliance ***********\n******/ 'Stronger When United' /******\n\nRE: Large Ship Salvage\n\nWORK BRIEF: \nWord got passed over that there's a large derelict ship out near [Location], so we're putting the word out for anyone who's got the ships and gear to break it down. \n\nIf you can chop it up, then deliver the resources to [Destination] and we'll pay you for your time.\n\nPAYMENT:\nStandard listed rate upon resource delivery\n\nAUTHORIZATION:\nBattaglia, Recco",
+      "rawName": "@Battaglia_RPT_Salvage_H_01_title",
+      "internalName": "Battaglia_Salvage_Hard",
+      "missionType": "Battaglia",
+      "provider": "Recco Battaglia",
+      "faction": "Recco Battaglia",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+        "factionDisplayName": "Recco Battaglia",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+      "prerequisiteSummary": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": []
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8",
+          "Rep reward unresolved +600",
+          "90,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "a866fb96-3a32-4028-b8bf-aa1e4ca3cb09",
+            "poolName": "Battaglia RPT2",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "3a4ba1b4-a688-4c5a-ba88-e82929d384b0",
+                "displayName": "Arbor MH1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ccbb801a-ad5e-4e15-a842-ad315f43dd4e",
+                "displayName": "Hofstede-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "04f1af4c-e8ed-4b99-8413-61622bdfcb30",
+                "displayName": "Klein-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "7ba597a6-b5c2-4513-b38c-62acd4cb138e",
+                "displayName": "Helix I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "20789dfa-a83c-4e00-8c43-e5828d65dfdd",
+                "displayName": "Impact I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+                "displayName": "Abrade Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ad3568b3-9a28-441e-b8cd-af572cd52e3f",
+                "displayName": "CF-117 Bulldog \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "51512369-2271-4ed6-9d65-b004924d2964",
+                "displayName": "CF-227 Badger \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e622355c-46fe-48c7-85d3-e9a843777d0c",
+                "displayName": "CF-337 Panther \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +600"
+        ],
+        "credits": "90,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "90,000 aUEC",
+          "amount": 90000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/missionproviders/battaglia_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 90000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 90000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+          "factionDisplayName": "Recco Battaglia",
+          "scopeKey": "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 600,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+            "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+            "c0a722c0-4d56-4a2b-bea9-189ce8ba5443"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a249020e-9c94-44dd-9d9a-ddb11cc74533",
+        "generatorGuid": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc",
+        "generatorName": "ContractGenerator.Battaglia_Generator",
+        "generatorPath": "contracts/contractgenerator/missionproviders/battaglia_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Battaglia_RPT_Salvage_H_01_title",
+        "descriptionRaw": "@Battaglia_RPT_Salvage_H_01_desc"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "f76726b6-a26d-4f21-bc84-558c6a1304a0",
+      "familyKey": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+      "conceptKey": "16449ee39ae645b85322",
+      "objectiveSignature": {
+        "key": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09|f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "battaglia-rpt-salvage",
+        "descriptionStem": "battaglia-rpt-salvage",
+        "handlerStem": "battaglia-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:battaglia-rpt-salvage",
+          "description:battaglia-rpt-salvage",
+          "handler:battaglia-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Salvage Job: Mid",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "*********** People's Alliance ***********\n******/ 'Stronger When United' /******\n\nRE: Medium Ship Salvage\n\nWORK BRIEF: \nGot word that a ship got destroyed out by [Location] after an ambush. Owner is willing to pay for someone to go salvage the parts and bring them to [Destination].\n\nPAYMENT:\nStandard listed rate upon resource delivery\n\nAUTHORIZATION:\nBattaglia, Recco",
+      "rawName": "@Battaglia_RPT_Salvage_M_01_title",
+      "internalName": "Battaglia_Salvage_Medium",
+      "missionType": "Battaglia",
+      "provider": "Recco Battaglia",
+      "faction": "Recco Battaglia",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+        "factionDisplayName": "Recco Battaglia",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+      "prerequisiteSummary": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": []
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8",
+          "Rep reward unresolved +400",
+          "60,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "a866fb96-3a32-4028-b8bf-aa1e4ca3cb09",
+            "poolName": "Battaglia RPT2",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "3a4ba1b4-a688-4c5a-ba88-e82929d384b0",
+                "displayName": "Arbor MH1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ccbb801a-ad5e-4e15-a842-ad315f43dd4e",
+                "displayName": "Hofstede-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "04f1af4c-e8ed-4b99-8413-61622bdfcb30",
+                "displayName": "Klein-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "7ba597a6-b5c2-4513-b38c-62acd4cb138e",
+                "displayName": "Helix I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "20789dfa-a83c-4e00-8c43-e5828d65dfdd",
+                "displayName": "Impact I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+                "displayName": "Abrade Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ad3568b3-9a28-441e-b8cd-af572cd52e3f",
+                "displayName": "CF-117 Bulldog \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "51512369-2271-4ed6-9d65-b004924d2964",
+                "displayName": "CF-227 Badger \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e622355c-46fe-48c7-85d3-e9a843777d0c",
+                "displayName": "CF-337 Panther \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +400"
+        ],
+        "credits": "60,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "60,000 aUEC",
+          "amount": 60000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/missionproviders/battaglia_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 60000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 60000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+          "factionDisplayName": "Recco Battaglia",
+          "scopeKey": "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 400,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+            "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+            "7c9b64e7-6528-4d64-8481-34c24e2af500"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "f76726b6-a26d-4f21-bc84-558c6a1304a0",
+        "generatorGuid": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc",
+        "generatorName": "ContractGenerator.Battaglia_Generator",
+        "generatorPath": "contracts/contractgenerator/missionproviders/battaglia_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Battaglia_RPT_Salvage_M_01_title",
+        "descriptionRaw": "@Battaglia_RPT_Salvage_M_01_desc"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "953f4c07-d7cc-429c-8b85-d52513ee5a66",
+      "familyKey": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+      "conceptKey": "16449ee39ae645b85322",
+      "objectiveSignature": {
+        "key": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09|f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope|salvage-ship|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "battaglia-rpt-salvage",
+        "descriptionStem": "battaglia-rpt-salvage",
+        "handlerStem": "battaglia-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:battaglia-rpt-salvage",
+          "description:battaglia-rpt-salvage",
+          "handler:battaglia-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Salvage Job: Small",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "*********** People's Alliance ***********\n******/ 'Stronger When United' /******\n\nRE: Salvage\n\nWORK BRIEF: \nGot a call about a derelict ship out near [Location]. Ran the regtag through the system to make sure we weren't taking someone's ride but it looks unclaimed, so I need someone with a salvage ship to head out and break it down. \n\nOnce you're done, take the resources to [Destination] and we'll get you paid.\n\nPAYMENT:\nStandard listed rate upon resource delivery\n\nAUTHORIZATION:\nBattaglia, Recco",
+      "rawName": "@Battaglia_RPT_Salvage_E_01_title",
+      "internalName": "Battaglia_Salvage_Easy",
+      "missionType": "Battaglia",
+      "provider": "Recco Battaglia",
+      "faction": "Recco Battaglia",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+        "factionDisplayName": "Recco Battaglia",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc|Battaglia_Salvage_Rank2",
+          "Battaglia_Salvage_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+      "prerequisiteSummary": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Trusted Associate / 6,000 rep to Prestige 3 / 69,600 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": []
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8",
+          "Rep reward unresolved +200",
+          "30,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Battaglia RPT2: Arbor MH1 Mining Laser, Hofstede-S1 Mining Laser, Klein-S1 Mining Laser, Helix I Mining Laser +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "a866fb96-3a32-4028-b8bf-aa1e4ca3cb09",
+            "poolName": "Battaglia RPT2",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "3a4ba1b4-a688-4c5a-ba88-e82929d384b0",
+                "displayName": "Arbor MH1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ccbb801a-ad5e-4e15-a842-ad315f43dd4e",
+                "displayName": "Hofstede-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "04f1af4c-e8ed-4b99-8413-61622bdfcb30",
+                "displayName": "Klein-S1 Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "7ba597a6-b5c2-4513-b38c-62acd4cb138e",
+                "displayName": "Helix I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "20789dfa-a83c-4e00-8c43-e5828d65dfdd",
+                "displayName": "Impact I Mining Laser",
+                "componentType": "weaponMining",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+                "displayName": "Abrade Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "ad3568b3-9a28-441e-b8cd-af572cd52e3f",
+                "displayName": "CF-117 Bulldog \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "51512369-2271-4ed6-9d65-b004924d2964",
+                "displayName": "CF-227 Badger \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e622355c-46fe-48c7-85d3-e9a843777d0c",
+                "displayName": "CF-337 Panther \"Hazard-Zone\" Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +200"
+        ],
+        "credits": "30,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "30,000 aUEC",
+          "amount": 30000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/missionproviders/battaglia_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 30000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 30000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+          "factionDisplayName": "Recco Battaglia",
+          "scopeKey": "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f4cc3bfe-ee9d-41d1-818b-fdb55c979d09",
+            "3d5342a7-c3da-4ca0-872b-4b184efe5a07",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "953f4c07-d7cc-429c-8b85-d52513ee5a66",
+        "generatorGuid": "0a42dd4d-6ad2-4970-bd3f-ac2e500e3abc",
+        "generatorName": "ContractGenerator.Battaglia_Generator",
+        "generatorPath": "contracts/contractgenerator/missionproviders/battaglia_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Battaglia_RPT_Salvage_E_01_title",
+        "descriptionRaw": "@Battaglia_RPT_Salvage_E_01_desc"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

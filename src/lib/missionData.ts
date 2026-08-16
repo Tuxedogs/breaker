@@ -342,6 +342,61 @@ export type MissionVariantView = {
   requiredItemSummary?: Pick<MissionRequiredItemsView, "status" | "haulingOrderCount" | "selectorCount">;
 };
 
+export type MissionOfferProviderView = {
+  sourceParam: "Contractor";
+  displayRaw: string | null;
+  displayText: string | null;
+  organizationGuid: string | null;
+  displayResolution: string;
+  organizationResolution: string;
+  provenance: "source_backed" | "derived" | "unresolved";
+};
+
+export type MissionOfferTitleEvidenceView = {
+  raw: string | null;
+  localizationKey: string | null;
+  template: string | null;
+  displayText: string | null;
+  runtimeTokens: Array<{
+    raw: string;
+    expression: string;
+    segments: string[];
+  }>;
+  rendering: "static" | "runtime_templated" | "unresolved";
+  resolution: string;
+  provenance: "source_backed" | "derived" | "unresolved";
+};
+
+export type MissionOfferView = {
+  offerSchemaVersion: 1;
+  offerKey: string;
+  identity: {
+    version: string;
+    strategy: "provider_and_raw_title" | "exact_variant_fallback";
+    providerIdentity: string;
+    titleIdentity: string;
+    sourceTuple: [providerIdentity: string, titleIdentity: string];
+  };
+  displayTitle: string;
+  displayTitleTemplate: string;
+  titleEvidence: MissionOfferTitleEvidenceView;
+  provider: MissionOfferProviderView;
+  providerKey: string;
+  verificationStatus: "verified" | "unverified" | "unknown";
+  verificationStatuses: Array<"verified" | "unverified" | "unknown">;
+  variantKeys: string[];
+  familyKeys: string[];
+  legacyConceptKeys: string[];
+  objectiveTemplateKeys: string[];
+  missionTypes: string[];
+  rewardTypes: string[];
+  reputationRewardKeys: string[];
+  releaseFlags: string[];
+  confidenceFlags: string[];
+  auditFlags: string[];
+  searchText: string;
+};
+
 export type MissionFamilyView = {
   familyKey: string;
   displayName: string;
@@ -399,8 +454,9 @@ export type MissionTitleSource =
 export type MissionTitleConfidence = "high" | "medium" | "low";
 
 export type MissionBrowserCatalog = {
-  schemaVersion: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -428,9 +484,14 @@ export type MissionBrowserCatalog = {
   variants: MissionVariantView[];
   familiesByKey?: Record<string, MissionFamilyView>;
   conceptsByKey?: Record<string, MissionConceptView>;
+  offersByKey?: Record<string, MissionOfferView>;
   familyDetailFiles?: Record<string, string>;
   familyVariantFiles?: Record<string, string>;
   variantDetailFiles?: Record<string, string>;
+  offerDetailFiles?: Record<string, string>;
+  offerVariantFiles?: Record<string, string>;
+  variantOfferKeys?: Record<string, string>;
+  legacyConceptOfferKeys?: Record<string, string[]>;
   conceptFamilyVariantFiles?: Record<string, string[]>;
   unresolvedSummary?: {
     unresolvedLocationCount: number;
@@ -449,6 +510,27 @@ export type MissionBrowserCatalog = {
   filtersMeta?: MissionBrowserFiltersMeta;
   missionBrowseGroups: MissionBrowseGroupView[];
   browseViews?: MissionBrowseViews;
+};
+
+export type MissionOfferDetailPayload = {
+  schemaVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: 1;
+  generationId: string;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  offer: MissionOfferView;
+};
+
+export type MissionOfferVariantsPayload = {
+  schemaVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: 1;
+  generationId: string;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  offerKey: string;
+  variants: MissionVariantView[];
 };
 
 export type MissionBrowserFilterOption = {
@@ -480,6 +562,7 @@ export type MissionBrowserFilters = {
   repReward?: string;
   status?: string;
   confidence?: string;
+  verification?: string;
 };
 
 export type MissionBrowseGroupView = {
@@ -557,8 +640,8 @@ export type MissionBrowseViews = {
 };
 
 export type MissionFamilyDetailPayload = {
-  schemaVersion: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
   generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -605,8 +688,8 @@ export type MissionFamilyDetailPayload = {
 };
 
 export type MissionFamilyVariantsPayload = {
-  schemaVersion: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
   generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -615,8 +698,8 @@ export type MissionFamilyVariantsPayload = {
 };
 
 export type MissionVariantDetailPayload = {
-  schemaVersion: 1 | 2;
-  sourceContractVersion?: 3;
+  schemaVersion: 1 | 2 | 3;
+  sourceContractVersion?: 3 | 4;
   generationId?: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -706,6 +789,8 @@ const missionDataPromises = new Map<string, Promise<MissionBrowserCatalog>>();
 const familyDetailPromises = new Map<string, Promise<MissionFamilyDetailPayload>>();
 const familyVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
 const variantDetailPromises = new Map<string, Promise<MissionVariantView>>();
+const offerDetailPromises = new Map<string, Promise<MissionOfferView>>();
+const offerVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
 const jsonPromises = new Map<string, Promise<unknown>>();
 
 function fetchJson<T>(path: string, label: string): Promise<T> {
@@ -815,6 +900,37 @@ export async function loadMissionConceptVariants(concept: MissionConceptView): P
     .flat()
     .filter((variant) => variant.conceptKey === concept.conceptKey);
   return Array.from(new Map(variants.map((variant) => [variant.variantKey, variant])).values());
+}
+
+export async function loadMissionOfferDetail(offerKey: string): Promise<MissionOfferView> {
+  const catalog = await loadMissionData();
+  const summary = catalog.offersByKey?.[offerKey];
+  if (catalog.schemaVersion !== 3 || !summary || !catalog.offerDetailFiles?.[offerKey]) {
+    throw new Error(`Mission offer detail unavailable for ${offerKey}`);
+  }
+  if (!offerDetailPromises.has(offerKey)) {
+    offerDetailPromises.set(
+      offerKey,
+      fetchJson<MissionOfferDetailPayload>(`/api/missions/offer/${encodeURIComponent(offerKey)}`, "mission offer detail")
+        .then((payload) => payload.offer),
+    );
+  }
+  return offerDetailPromises.get(offerKey)!;
+}
+
+export async function loadMissionOfferVariants(offerKey: string): Promise<MissionVariantView[]> {
+  const catalog = await loadMissionData();
+  if (catalog.schemaVersion !== 3 || !catalog.offersByKey?.[offerKey] || !catalog.offerVariantFiles?.[offerKey]) {
+    throw new Error(`Mission offer variants unavailable for ${offerKey}`);
+  }
+  if (!offerVariantPromises.has(offerKey)) {
+    offerVariantPromises.set(
+      offerKey,
+      fetchJson<MissionOfferVariantsPayload>(`/api/missions/offer/${encodeURIComponent(offerKey)}/variants`, "mission offer variants")
+        .then((payload) => payload.variants),
+    );
+  }
+  return offerVariantPromises.get(offerKey)!;
 }
 
 export async function loadMissionVariantDetail(variantKey: string): Promise<MissionVariantView> {

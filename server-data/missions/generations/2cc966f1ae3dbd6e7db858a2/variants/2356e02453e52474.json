@@ -1,0 +1,4024 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "aae7e5bd-e2d9-404f-ba43-703b61c70f79|Covalex_DeliveryPilot_Rank2",
+  "variant": {
+    "variantKey": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+    "familyKey": "aae7e5bd-e2d9-404f-ba43-703b61c70f79|Covalex_DeliveryPilot_Rank2",
+    "conceptKey": "805e6ef66d97c3c7921e",
+    "objectiveSignature": {
+      "key": "3b2f7882-73cc-41a4-9dce-f188d927e905|3b2f7882-73cc-41a4-9dce-f188d927e905:unknown-scope|courier-delivery|activity-defined|standard|unlock:fbcbb058b29f|unknown:bounded||||",
+      "activityKey": "courier-delivery",
+      "titleStem": "covalex-delivery-stanton-very",
+      "descriptionStem": "covalex-delivery-stanton-very",
+      "handlerStem": "covalex-delivery-pilot",
+      "archetype": "Courier",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:fbcbb058b29f",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:courier-delivery",
+        "activity-source:structural",
+        "title:covalex-delivery-stanton-very",
+        "description:covalex-delivery-stanton-very",
+        "handler:covalex-delivery-pilot",
+        "contract:careercontract",
+        "archetype:courier",
+        "intro:standard",
+        "chain:unlock:fbcbb058b29f",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "veryhard",
+    "tierLabel": "Very High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Courier",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "3b2f7882-73cc-41a4-9dce-f188d927e905:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "aae7e5bd-e2d9-404f-ba43-703b61c70f79|Covalex_DeliveryPilot_Rank2",
+        "Covalex_DeliveryPilot_Stanton_MedicalOrganMedGelAmmoniaPartiullium_Rank2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Very Long Distance Covalex Delivery Stanton",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hiya,\n\nCovalex requires a safe pair of hands to pick up some packages and get them where they need to go.\n\nDesignating this a long distance delivery so stock up on fuel and supplies. And definitely make sure you bring a handheld tractor beam.\n\nAs for what ship to bring, you'll also need something that can move [MissionMaxSCUSize] cargo containers.\n\n[Contractor]\n\nElla Tieno\nJr. Logistics Coordinator\nCovalex Shipping\n'Anything you need, anywhere you need it.'\n\nCovalex Shipping is a limited liability corporation. To encourage timely deliveries and prevent fraud on cargo hauls, Covalex Shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. Total payment will be prorated according to the percentage of cargo successfully delivered.",
+    "rawName": "@Covalex_Delivery_Stanton_VeryHard_Title_001",
+    "internalName": "Covalex_DeliveryPilot_Stanton_MedicalOrganMedGelAmmoniaPartiullium_Rank2",
+    "missionType": "Delivery",
+    "provider": "Covalex",
+    "faction": "Covalex",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "3b2f7882-73cc-41a4-9dce-f188d927e905:unknown-scope",
+      "displayName": "Hauling",
+      "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+      "factionDisplayName": "Covalex",
+      "trackType": "Hauling",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "aae7e5bd-e2d9-404f-ba43-703b61c70f79|Covalex_DeliveryPilot_Rank2",
+        "Covalex_DeliveryPilot_Stanton_MedicalOrganMedGelAmmoniaPartiullium_Rank2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Courier",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Location unresolved",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_Locality",
+        "raw": {
+          "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unresolved",
+      "displayName": "Unresolved",
+      "sourceRole": "unknown",
+      "confidence": "unresolved",
+      "reason": "Availability/location refs were present but did not resolve in the reference index.",
+      "sourceRefs": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "type": "ContractPrerequisite_Locality",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Pickup unresolved",
+        "detailLabel": "Pickup unresolved",
+        "confidence": "unresolved"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "displayLabel": "Pickup unresolved",
+        "detailDisplay": "Pickup unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRole": "unknown",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedLocationTokens": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "confidence": "unresolved"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [
+      "939dad8b-a944-4baa-a6b7-163ec203adad"
+    ],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Rep reward unresolved +150",
+        "145,000 aUEC",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Rep reward unresolved +150"
+      ],
+      "credits": "145,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "145,000 aUEC",
+        "amount": 145000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 145000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 145000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+        "factionDisplayName": "Covalex",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Rep reward unresolved",
+        "amount": 150,
+        "confidence": "partial",
+        "sourceRefs": [
+          "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ],
+        "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": true,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+        "familyId": "aae7e5bd-e2d9-404f-ba43-703b61c70f79|Covalex_DeliveryPilot_Rank2",
+        "templateGuid": "4240358c-06d3-4d4d-a227-d8cc0eeeb0ed"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_e144cb64b1b1f84a4e2b0ad8",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Covalex_DeliveryPilot_Rank2"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_1076ed69b8cf70de7bb18016",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_95c5ac5ea9187129446eb029",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler",
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Covalex_DeliveryPilot_Rank2"
+            },
+            {
+              "scope": "contract",
+              "id": "f09bf104-4e0d-4481-8006-3df0fae6d3ae"
+            },
+            {
+              "scope": "contract",
+              "id": "218c0738-484e-46d0-9d42-b7c699fdba6b"
+            },
+            {
+              "scope": "contract",
+              "id": "4ddbedd1-f03d-4de3-8f19-566be8b9e60e"
+            },
+            {
+              "scope": "contract",
+              "id": "f5606b80-6e0e-4bb4-8b68-e976748dd338"
+            },
+            {
+              "scope": "contract",
+              "id": "d835b60e-be11-4b06-8b11-5892b8bd1851"
+            },
+            {
+              "scope": "contract",
+              "id": "e27ba35e-8ef8-4bb0-b75d-27e0e5dc4446"
+            },
+            {
+              "scope": "contract",
+              "id": "68537d94-d066-4626-9072-e9123f7b11b7"
+            },
+            {
+              "scope": "contract",
+              "id": "b00f0e84-0c24-4a9c-984c-0145c7b2befb"
+            },
+            {
+              "scope": "contract",
+              "id": "871c5b5c-5ede-4c42-9c99-9f19d5d3a33c"
+            },
+            {
+              "scope": "contract",
+              "id": "e6aa24f9-fdfd-44ca-b7ba-4b74f4432eed"
+            },
+            {
+              "scope": "contract",
+              "id": "ea8da32e-c36e-493a-ad7f-0dfc8511e7bc"
+            },
+            {
+              "scope": "contract",
+              "id": "4730ca94-7b68-4fc2-9e76-0c2f994de2e9"
+            },
+            {
+              "scope": "contract",
+              "id": "280f67b7-5481-4808-a4b2-0b4da60b2953"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_e3606ba32fe8f621de99f33c",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "d835b60e-be11-4b06-8b11-5892b8bd1851"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "051ddf9d-e18d-4707-97c5-6ca0d2c38014": [
+          {
+            "edgeId": "pre_e44870dbdb8eee2756990a1b",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "051ddf9d-e18d-4707-97c5-6ca0d2c38014",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "051ddf9d-e18d-4707-97c5-6ca0d2c38014"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_032f83b5b4fa1228141e77d7",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "051ddf9d-e18d-4707-97c5-6ca0d2c38014",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_a8e6bd694cbb0b90795f44b9",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "051ddf9d-e18d-4707-97c5-6ca0d2c38014"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a": [
+          {
+            "edgeId": "pre_c799f6976e6168e023a7290d",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_815129f34f7d96bc2cac1d08",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_abda43a6b0974503d9a5936a",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "d928ea9a-a81c-47d0-adb9-7214e57068d7": [
+          {
+            "edgeId": "pre_da064edd19c4714f6a9c70dd",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "d928ea9a-a81c-47d0-adb9-7214e57068d7",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d928ea9a-a81c-47d0-adb9-7214e57068d7"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_2e4ba865accc8c6d298fdbb2",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "ownerScope": "subcontract",
+            "ownerId": "d928ea9a-a81c-47d0-adb9-7214e57068d7",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_5711d09e63d3f55c3085d9f6",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "ebd7f56e-7dee-4357-9625-09c464fe1d40"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d928ea9a-a81c-47d0-adb9-7214e57068d7"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_a2222d7cd5ad4193cd33d339",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "86122612-21b3-43e5-8e54-b9ad5e1351bc",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_d12b87b092d40f221bb85a3a",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f82c6183046edbb7bd2a2ca6",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 145000,
+              "amount": 145000,
+              "rawAmount": 145028.53852348513,
+              "integerRoundedAmount": 145029,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.510999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 2.106
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "4240358c-06d3-4d4d-a227-d8cc0eeeb0ed",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/deliverypilot_1pickup_5dropoff_5items.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/deliverypilot_1pickup_5dropoff_5items.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@mission_contractor_0003",
+          "displayText": "Covalex Independent Contractors",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+          "recordName": "FactionReputation.FactionReputation_Lawful_CovalexShipping",
+          "recordType": null,
+          "displayName": "Covalex",
+          "path": "factions/factionreputation/factionreputation_lawful_covalexshipping.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Covalex_Delivery_Stanton_VeryHard_Title_001",
+          "localizationKey": "Covalex_Delivery_Stanton_VeryHard_Title_001",
+          "template": "Very Long Distance Covalex Delivery Stanton",
+          "displayText": "Very Long Distance Covalex Delivery Stanton",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "requirements": [
+              {
+                "edgeId": "pre_e3606ba32fe8f621de99f33c",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "d835b60e-be11-4b06-8b11-5892b8bd1851"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "051ddf9d-e18d-4707-97c5-6ca0d2c38014",
+            "requirements": [
+              {
+                "edgeId": "pre_e44870dbdb8eee2756990a1b",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "051ddf9d-e18d-4707-97c5-6ca0d2c38014"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a",
+            "requirements": [
+              {
+                "edgeId": "pre_c799f6976e6168e023a7290d",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "b139d1c7-3da3-42de-bbdf-f17bb55c8f5a"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "d928ea9a-a81c-47d0-adb9-7214e57068d7",
+            "requirements": [
+              {
+                "edgeId": "pre_da064edd19c4714f6a9c70dd",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "d928ea9a-a81c-47d0-adb9-7214e57068d7"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 145000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 145000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_d12b87b092d40f221bb85a3a",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_a2222d7cd5ad4193cd33d339",
+            "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "86122612-21b3-43e5-8e54-b9ad5e1351bc",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 145000,
+              "amount": 145000,
+              "rawAmount": 145028.53852348513,
+              "integerRoundedAmount": 145029,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.510999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 2.106
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 145000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 145000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "3b2f7882-73cc-41a4-9dce-f188d927e905",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_6c0fe53c00633f3ce01f7c0d",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "828510e6-f04b-4bb6-836e-763395c5db67",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.MedicalSupplies_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/medicalsupplies_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "7ab1a3a5-579a-41b4-9b8f-f0d530c3c8b8",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedicalSupplies",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medicalsupplies.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0025"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_b5b5964f071b0b0c4af0c053",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "6a8cc325-4f75-46ae-b6f6-3d0bc1b3b08b",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Organs_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/organs_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "fc89492f-a38c-4beb-9720-da4276aee0eb",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_OrganHarvesting",
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_organharvesting.xml"
+                    },
+                    "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "297290a7-e3cd-44c9-baab-be844879be5c",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0206"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_d2e223e52cb38a2452cee10c",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 8,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "c81034a8-9f02-43d1-81f3-2deacf820693",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Medgel_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/medgel_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "24160bf1-cddf-4b3c-aa75-64bdf4fb91c6",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedGel",
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medgel.xml"
+                    },
+                    "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "a6cc5c2c-64e2-4e9c-a22b-6e33235b77df",
+                      "b33339b5-8cd4-4ae8-8710-a429c042adce"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0203"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_4f7c58b2c5d653057fe30732",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 9,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "debc1bae-22c4-4aa4-9445-f9b9f8c056d3",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Ammonia_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/ammonia_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "afa96ede-0c20-4e38-829b-872b5fbde02f",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Ammonia",
+                      "displayName": "Ammonia",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_ammonia.xml"
+                    },
+                    "displayName": "Ammonia",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "fa1e3e30-3a6c-47ad-bec3-1c002d676009",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0154"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[10]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f10567304d2951f4c4d48d7c",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 10,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "09cb0e87-93b8-440e-a718-c2a43dd34b62",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Partiullium_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/partiullium_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "735314ca-3b49-4767-9d5b-fab00fd38091",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Partiullium",
+                      "displayName": "Partillium",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_partiullium.xml"
+                    },
+                    "displayName": "Partillium",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                      "6a0d7c40-275d-4e37-a8f2-0fe85bd0ad89"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0158"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[11]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_aea9c84eeeba528f85d38db1",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 11,
+          "missionVariableName": "HaulingOrderContent1",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[16FE]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[12]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_717d56bec7143de39b1e336a",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 12,
+          "missionVariableName": "HaulingOrderContent2",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[16FF]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[13]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_16c7cb1962d53142c89429b3",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 13,
+          "missionVariableName": "HaulingOrderContent3",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1700]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[14]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_d27a6351d46f7117fad5f990",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 14,
+          "missionVariableName": "HaulingOrderContent4",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1701]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[15]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_db0fa0ec0024774309e5ab6b",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 15,
+          "missionVariableName": "HaulingOrderContent5",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1702]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[16]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "828510e6-f04b-4bb6-836e-763395c5db67",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.MedicalSupplies_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/medicalsupplies_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "7ab1a3a5-579a-41b4-9b8f-f0d530c3c8b8",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedicalSupplies",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medicalsupplies.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0025"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "6a8cc325-4f75-46ae-b6f6-3d0bc1b3b08b",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Organs_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/organs_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "fc89492f-a38c-4beb-9720-da4276aee0eb",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_OrganHarvesting",
+                        "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_organharvesting.xml"
+                      },
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "297290a7-e3cd-44c9-baab-be844879be5c",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0206"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 8,
+            "missionVariableName": "Item3",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "c81034a8-9f02-43d1-81f3-2deacf820693",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Medgel_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/medgel_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "24160bf1-cddf-4b3c-aa75-64bdf4fb91c6",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedGel",
+                        "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medgel.xml"
+                      },
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "a6cc5c2c-64e2-4e9c-a22b-6e33235b77df",
+                        "b33339b5-8cd4-4ae8-8710-a429c042adce"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0203"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 9,
+            "missionVariableName": "Item4",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "debc1bae-22c4-4aa4-9445-f9b9f8c056d3",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Ammonia_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/ammonia_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "afa96ede-0c20-4e38-829b-872b5fbde02f",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Ammonia",
+                        "displayName": "Ammonia",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_ammonia.xml"
+                      },
+                      "displayName": "Ammonia",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "fa1e3e30-3a6c-47ad-bec3-1c002d676009",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0154"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[10]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 10,
+            "missionVariableName": "Item5",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "09cb0e87-93b8-440e-a718-c2a43dd34b62",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Partiullium_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/partiullium_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "735314ca-3b49-4767-9d5b-fab00fd38091",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Partiullium",
+                        "displayName": "Partillium",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_partiullium.xml"
+                      },
+                      "displayName": "Partillium",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                        "6a0d7c40-275d-4e37-a8f2-0fe85bd0ad89"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0158"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[11]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 11,
+            "missionVariableName": "HaulingOrderContent1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent1"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[16FE]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[12]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 12,
+            "missionVariableName": "HaulingOrderContent2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent2"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[16FF]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[13]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 13,
+            "missionVariableName": "HaulingOrderContent3",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent3"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1700]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[14]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 14,
+            "missionVariableName": "HaulingOrderContent4",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent4"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1701]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[15]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 15,
+            "missionVariableName": "HaulingOrderContent5",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent5"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1702]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[16]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_6c0fe53c00633f3ce01f7c0d",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "828510e6-f04b-4bb6-836e-763395c5db67",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.MedicalSupplies_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/medicalsupplies_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "7ab1a3a5-579a-41b4-9b8f-f0d530c3c8b8",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedicalSupplies",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medicalsupplies.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0025"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_b5b5964f071b0b0c4af0c053",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "6a8cc325-4f75-46ae-b6f6-3d0bc1b3b08b",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Organs_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/organs_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "fc89492f-a38c-4beb-9720-da4276aee0eb",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_OrganHarvesting",
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_organharvesting.xml"
+                    },
+                    "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "297290a7-e3cd-44c9-baab-be844879be5c",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0206"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_d2e223e52cb38a2452cee10c",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 8,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "c81034a8-9f02-43d1-81f3-2deacf820693",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Medgel_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/medgel_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "24160bf1-cddf-4b3c-aa75-64bdf4fb91c6",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedGel",
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medgel.xml"
+                    },
+                    "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "a6cc5c2c-64e2-4e9c-a22b-6e33235b77df",
+                      "b33339b5-8cd4-4ae8-8710-a429c042adce"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0203"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_4f7c58b2c5d653057fe30732",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 9,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "debc1bae-22c4-4aa4-9445-f9b9f8c056d3",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Ammonia_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/ammonia_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "afa96ede-0c20-4e38-829b-872b5fbde02f",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Ammonia",
+                      "displayName": "Ammonia",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_ammonia.xml"
+                    },
+                    "displayName": "Ammonia",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "fa1e3e30-3a6c-47ad-bec3-1c002d676009",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0154"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[10]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_f10567304d2951f4c4d48d7c",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 10,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "09cb0e87-93b8-440e-a718-c2a43dd34b62",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Partiullium_1SCU",
+                    "path": "missiondata/pu_items/tbo/1scu/partiullium_1scu.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "735314ca-3b49-4767-9d5b-fab00fd38091",
+                      "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Partiullium",
+                      "displayName": "Partillium",
+                      "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_partiullium.xml"
+                    },
+                    "displayName": "Partillium",
+                    "tags": [
+                      "2c0d094d-d918-42e0-9c73-107a955f5228",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                      "6a0d7c40-275d-4e37-a8f2-0fe85bd0ad89"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@Mission_Item_0158"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[11]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_aea9c84eeeba528f85d38db1",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 11,
+          "missionVariableName": "HaulingOrderContent1",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[16FE]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[12]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_717d56bec7143de39b1e336a",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 12,
+          "missionVariableName": "HaulingOrderContent2",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[16FF]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[13]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_16c7cb1962d53142c89429b3",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 13,
+          "missionVariableName": "HaulingOrderContent3",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1700]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[14]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_d27a6351d46f7117fad5f990",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 14,
+          "missionVariableName": "HaulingOrderContent4",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1701]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[15]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_db0fa0ec0024774309e5ab6b",
+          "variantId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+          "sourceOrdinal": 15,
+          "missionVariableName": "HaulingOrderContent5",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1702]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[16]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "828510e6-f04b-4bb6-836e-763395c5db67",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.MedicalSupplies_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/medicalsupplies_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "7ab1a3a5-579a-41b4-9b8f-f0d530c3c8b8",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedicalSupplies",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medicalsupplies.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0025"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "6a8cc325-4f75-46ae-b6f6-3d0bc1b3b08b",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Organs_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/organs_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "fc89492f-a38c-4beb-9720-da4276aee0eb",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_OrganHarvesting",
+                        "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_organharvesting.xml"
+                      },
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Organ Harvesting",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "297290a7-e3cd-44c9-baab-be844879be5c",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0206"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 8,
+            "missionVariableName": "Item3",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "c81034a8-9f02-43d1-81f3-2deacf820693",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Medgel_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/medgel_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "24160bf1-cddf-4b3c-aa75-64bdf4fb91c6",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_ProcessedGoods_MedGel",
+                        "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_processedgoods_medgel.xml"
+                      },
+                      "displayName": "Carryable TBO FL 1SCU Commodity Processed Goods Med Gel",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "a6cc5c2c-64e2-4e9c-a22b-6e33235b77df",
+                        "b33339b5-8cd4-4ae8-8710-a429c042adce"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0203"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 9,
+            "missionVariableName": "Item4",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "debc1bae-22c4-4aa4-9445-f9b9f8c056d3",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Ammonia_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/ammonia_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "afa96ede-0c20-4e38-829b-872b5fbde02f",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Ammonia",
+                        "displayName": "Ammonia",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_ammonia.xml"
+                      },
+                      "displayName": "Ammonia",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "fa1e3e30-3a6c-47ad-bec3-1c002d676009",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0154"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[10]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 10,
+            "missionVariableName": "Item5",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "09cb0e87-93b8-440e-a718-c2a43dd34b62",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Partiullium_1SCU",
+                      "path": "missiondata/pu_items/tbo/1scu/partiullium_1scu.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "735314ca-3b49-4767-9d5b-fab00fd38091",
+                        "recordName": "EntityClassDefinition.Carryable_TBO_FL_1SCU_Commodity_Gas_Partiullium",
+                        "displayName": "Partillium",
+                        "path": "entities/scitem/carryables/tractorbeamonly/carryable_tbo_fl_1scu_commodity_gas_partiullium.xml"
+                      },
+                      "displayName": "Partillium",
+                      "tags": [
+                        "2c0d094d-d918-42e0-9c73-107a955f5228",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                        "6a0d7c40-275d-4e37-a8f2-0fe85bd0ad89"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@Mission_Item_0158"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[11]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 11,
+            "missionVariableName": "HaulingOrderContent1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent1"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[16FE]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[12]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 12,
+            "missionVariableName": "HaulingOrderContent2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent2"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[16FF]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[13]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 13,
+            "missionVariableName": "HaulingOrderContent3",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent3"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1700]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[14]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 14,
+            "missionVariableName": "HaulingOrderContent4",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent4"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1701]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[15]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+            "sourceOrdinal": 15,
+            "missionVariableName": "HaulingOrderContent5",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent5"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1702]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Covalex_DeliveryPilot_Rank2']/contracts/CareerContract[@id='d835b60e-be11-4b06-8b11-5892b8bd1851']/paramOverrides/propertyOverrides/MissionProperty[16]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 5,
+      "selectorCount": 5
+    },
+    "technical": {
+      "contractId": "d835b60e-be11-4b06-8b11-5892b8bd1851",
+      "generatorGuid": "aae7e5bd-e2d9-404f-ba43-703b61c70f79",
+      "generatorName": "ContractGenerator.Covalex_DeliveryPilot",
+      "generatorPath": "contracts/contractgenerator/interstellartransport_guild/covalex industries/covalex_deliverypilot.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Covalex_Delivery_Stanton_VeryHard_Title_001",
+      "descriptionRaw": "@Covalex_Delivery_Stanton_VeryHard_Desc_001"
+    }
+  }
+}

@@ -1,0 +1,712 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "stage": "Stage 1.2 meaningful offer-title boundary tuning",
+  "gatePassed": true,
+  "stage2Recommendation": "hold_for_concept-granularity_review",
+  "totals": {
+    "oldStage1GlobalConceptCount": 755,
+    "factionsProcessed": 28,
+    "reputationScopesProcessed": 31,
+    "oldGlobalFamilyCardCount": 259,
+    "newGlobalConceptCardCount": 611,
+    "conceptsWithOneFamily": 538,
+    "conceptsWithMultipleFamilies": 73,
+    "familiesSplitIntoMultipleConcepts": 120,
+    "variantsAssignedExactlyOnce": 2501,
+    "unassignedVariants": 0,
+    "multiplyAssignedVariants": 0,
+    "groupingConfidence": {
+      "strong": 355,
+      "partial": 21,
+      "unresolved": 235
+    },
+    "mixedRewardConcepts": 58,
+    "mixedRewardShelfViolations": 0,
+    "conceptsCrossingOwningScopes": 0,
+    "multiFamilyNonStrongConcepts": 0,
+    "headhuntersOldStage1ConceptCount": 141,
+    "headhuntersTunedConceptCount": 59
+  },
+  "slicedApi": {
+    "browserIndexVariantBodies": 0,
+    "browserIndexSerializedBytes": 7085141,
+    "conceptFamilyVariantReferenceCount": 737,
+    "familyVariantRouteReferences": 259,
+    "familyDetailRouteReferences": 259,
+    "exactVariantRouteReferences": 2501,
+    "familyRoutesPreserved": true,
+    "exactVariantRoutesPreserved": true
+  },
+  "failures": {
+    "unassignedVariantKeys": [],
+    "multiplyAssignedVariantKeys": [],
+    "conceptKeysCrossingOwningScopes": [],
+    "mixedRewardShelfViolationConceptKeys": [],
+    "multiFamilyNonStrongConceptKeys": []
+  },
+  "validationExamples": [
+    {
+      "factionName": "Headhunters",
+      "oldFamilyCardCount": 32,
+      "newConceptCardCount": 59,
+      "collapsed": [
+        {
+          "conceptKey": "90cf652017d4193d29b8",
+          "displayName": "Backup Needed Now",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "4a18ad5d-7727-4aec-a876-7084460c41ed|HeadHunters_DefendShip_Nyx",
+            "4a18ad5d-7727-4aec-a876-7084460c41ed|HeadHunters_DefendShip_Stanton"
+          ],
+          "variantCount": 12,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "53d174fed535c0a8c4bc",
+          "displayName": "Deep space hit",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "57d7286e-1786-4a4c-9ec4-37bf8c54eb61|HH_KillShip",
+            "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+            "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateSpecific_Pyro"
+          ],
+          "variantCount": 80,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "b04c36faf76206977af4",
+          "displayName": "Defend [Objects] From Mercs",
+          "owningScope": "Standing",
+          "familyKeys": [
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Pyro",
+            "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Stanton"
+          ],
+          "variantCount": 18,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "523caaf6448d5c03f3fd",
+          "displayName": "Finish the job",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Nyx",
+            "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Pyro",
+            "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton"
+          ],
+          "variantCount": 18,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "5a854ae2477cfafebe39",
+          "displayName": "Get Our Shit!",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HH_RetrieveCargo",
+            "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier"
+          ],
+          "variantCount": 27,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+          "displayName": "A tricky tricky task",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "67dd254aca603b5b37dc",
+            "fc0023b4e19e12b4df22",
+            "8fe9d6305b25cfca0d2e",
+            "588dd416456a66a7f36c",
+            "b515b67bc27778eb23f8"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "4feaaaba-d078-4cb0-8f7c-5ae41d8c6a26|HeadHunters_ShipAmbush_Nyx",
+          "displayName": "Ambush Op",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "60d91536fc6298658769",
+            "46dbacb1f2f6f982567a"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|HH_Sabotage",
+          "displayName": "Blow Up Citizens for Prosperity Fuel Reserves",
+          "owningScope": "Standing",
+          "conceptKeys": [
+            "464ca30374e72d014cd9",
+            "4addc26fd914b1066f6c",
+            "af096355ddcb008c204c",
+            "2e33a756a381c0fd6d58",
+            "70fcc3dd96fdf9cadc55",
+            "f6f95d884ff032aefda3",
+            "2ae8b1cdb28890b9c3d1",
+            "d14625763ac845f211f0",
+            "163fb8bb6109af3f52a4"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "57d7286e-1786-4a4c-9ec4-37bf8c54eb61|HH_KillShip",
+          "displayName": "Crash some ships",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "def7995ddab4856ee5a9",
+            "53d174fed535c0a8c4bc"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+          "displayName": "Find Headhunter Crewmember and Help Finish the Job",
+          "owningScope": "Standing",
+          "conceptKeys": [
+            "c3ad40abe77bc7aa329d",
+            "1412a6642019393dfe82",
+            "7c410579ac6066654b88",
+            "18638c5330248d94bc90"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Covalex",
+      "oldFamilyCardCount": 10,
+      "newConceptCardCount": 7,
+      "collapsed": [
+        {
+          "conceptKey": "cc8c42047b31efe0345b",
+          "displayName": "Bulk Covalex Shipment Needs Recovering",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Nyx",
+            "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Pyro",
+            "70a423da-c0c8-4fc1-b17c-e2f619927fa1|Covalex_RecoverCargo_Stanton"
+          ],
+          "variantCount": 18,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "ca3b5070b6bcefe992a5",
+          "displayName": "Opportunity for Independent Cargo Hauler",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "4f9a20ad-f76e-47e9-a9d1-412a0931f15f|Covalex Hauling Nyx Planetary",
+            "4f9a20ad-f76e-47e9-a9d1-412a0931f15f|Covalex Hauling Pyro Planetary"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": []
+    },
+    {
+      "factionName": "Adagio Holdings",
+      "oldFamilyCardCount": 8,
+      "newConceptCardCount": 7,
+      "collapsed": [
+        {
+          "conceptKey": "2d36d1534ec559047213",
+          "displayName": "Adagio Holdings in Need of Salvagers",
+          "owningScope": "Salvage",
+          "familyKeys": [
+            "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+            "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank0"
+          ],
+          "variantCount": 6,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "e563b63701c106ae5556",
+          "displayName": "Adaigo Nyx Lawful Salvage Easy",
+          "owningScope": "Salvage",
+          "familyKeys": [
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Nyx_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Pyro_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career"
+          ],
+          "variantCount": 3,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "7a4ed3e9964c14acab22",
+          "displayName": "Adaigo Nyx Lawful Salvage Hard",
+          "owningScope": "Salvage",
+          "familyKeys": [
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Nyx_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Pyro_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career"
+          ],
+          "variantCount": 3,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "5814fed96f91ed2e9d68",
+          "displayName": "Adaigo Nyx Lawful Salvage Medium",
+          "owningScope": "Salvage",
+          "familyKeys": [
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Nyx_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Pyro_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career"
+          ],
+          "variantCount": 3,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "ca375ee06a94d80ddede",
+          "displayName": "Adaigo Nyx Lawful Salvage Very Easy",
+          "owningScope": "Salvage",
+          "familyKeys": [
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Nyx_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Pyro_Career",
+            "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career"
+          ],
+          "variantCount": 3,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Nyx_Career",
+          "displayName": "Adagio Holdings CareerContract",
+          "owningScope": "Salvage",
+          "conceptKeys": [
+            "e563b63701c106ae5556",
+            "7a4ed3e9964c14acab22",
+            "5814fed96f91ed2e9d68",
+            "ca375ee06a94d80ddede"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Pyro_Career",
+          "displayName": "Adagio Holdings CareerContract",
+          "owningScope": "Salvage",
+          "conceptKeys": [
+            "e563b63701c106ae5556",
+            "7a4ed3e9964c14acab22",
+            "5814fed96f91ed2e9d68",
+            "ca375ee06a94d80ddede"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+          "displayName": "Adagio Holdings CareerContract",
+          "owningScope": "Salvage",
+          "conceptKeys": [
+            "e563b63701c106ae5556",
+            "7a4ed3e9964c14acab22",
+            "5814fed96f91ed2e9d68",
+            "ca375ee06a94d80ddede"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+          "displayName": "Adagio Holdings in Need of Salvagers",
+          "owningScope": "Salvage",
+          "conceptKeys": [
+            "2d36d1534ec559047213",
+            "f65ab76be6096e4088f9"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank0",
+          "displayName": "Adagio Holdings in Need of Salvagers",
+          "owningScope": "Salvage",
+          "conceptKeys": [
+            "2d36d1534ec559047213",
+            "f65ab76be6096e4088f9"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Citizens For Prosperity",
+      "oldFamilyCardCount": 19,
+      "newConceptCardCount": 46,
+      "collapsed": [
+        {
+          "conceptKey": "2276674075b0a66df5df",
+          "displayName": "CFP Pyro Destroy Remaining Frontier Fighters",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "baf9ec45-1e9d-4db3-9851-dfa44f150c96|CFP_EliminateSpecific",
+            "ce6385f6-f0d6-4e57-8128-af389056ca81|CFP_KillShip"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "f7de94fe81c1528d32cc",
+          "displayName": "Defenders needed against Headhunters",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "baf9ec45-1e9d-4db3-9851-dfa44f150c96|CFP_EliminateAll_Nyx",
+            "baf9ec45-1e9d-4db3-9851-dfa44f150c96|CFP_EliminateAll_Pyro"
+          ],
+          "variantCount": 21,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "aabc478dec6bedb091d0",
+          "displayName": "Recover Cargo",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+            "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier"
+          ],
+          "variantCount": 42,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "1cfb3fe3-ef92-42d4-ab79-1e79a9d4b445|CitizensForProsperity_DefendShip_Nyx",
+          "displayName": "Citizens For Prosperity CareerContract",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "8bbc8494378ba76979fa",
+            "5d2a8b02d5cb818d767c"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "7e1299e1-2c89-402b-a2eb-19db67e6071d|CFP_ShipWaveAttack_ClearOutHostiles_Nyx_Career",
+          "displayName": "Citizens For Prosperity CareerContract",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "6a51b0c8099d3435e2be",
+            "c9c351cc0a6692f85161"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "7e1299e1-2c89-402b-a2eb-19db67e6071d|CFP_ShipWaveAttack_ClearOutHostiles_Pyro_Career",
+          "displayName": "Citizens For Prosperity CareerContract",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "b55d145ff585ba2d4691",
+            "b907cc7306a268f65428"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+          "displayName": "Cross System Haul",
+          "owningScope": "Hauling",
+          "conceptKeys": [
+            "2b1a34a628e988807bdc",
+            "aabc478dec6bedb091d0",
+            "6eab0b01396330343fbe"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "ce6385f6-f0d6-4e57-8128-af389056ca81|CFP_KillShip",
+          "displayName": "Danger: Contraband Weapons Inbound",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "2276674075b0a66df5df",
+            "afb0aaf09757ca4318f4"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Dead Saints",
+      "oldFamilyCardCount": 6,
+      "newConceptCardCount": 20,
+      "collapsed": [
+        {
+          "conceptKey": "3af548cb240b5910f592",
+          "displayName": "Finishing The Job",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "b4a2ede2-a910-495b-aa14-2e7ff30ae951|DeadSaints_RecoverCargo_Nyx",
+            "b4a2ede2-a910-495b-aa14-2e7ff30ae951|DeadSaints_RecoverCargo_Stanton"
+          ],
+          "variantCount": 12,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+          "displayName": "DEAD SAINTS - Trial Cargo Haul",
+          "owningScope": "Hauling",
+          "conceptKeys": [
+            "b8ddd0fb44d170f61d58",
+            "09b0154e4250ea8e9989"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "046dfa69-be94-487a-b28c-60705621879a|DeadSaints_RecoverItem_Nyx_Career",
+          "displayName": "Dead Saints CareerContract",
+          "owningScope": "Hauling",
+          "conceptKeys": [
+            "ef7fbea0107480e75809",
+            "3ebea2813fb5c0ccbe33",
+            "15ec45b231f8ba8aaa5c",
+            "37697f3497e78b06920c",
+            "51fc2974fe8295da733c"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "046dfa69-be94-487a-b28c-60705621879a|DeadSaints_RecoverItem_Space_Nyx_Career",
+          "displayName": "Dead Saints CareerContract",
+          "owningScope": "Hauling",
+          "conceptKeys": [
+            "4a5bc855ca0f66ff3c47",
+            "16c1c0b7261787ff403f",
+            "a2af42cc47a2db97546e",
+            "967d193ab48c32e6b994",
+            "5a6bfad06dc1b230bafc",
+            "12dffe249785823760f2"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "046dfa69-be94-487a-b28c-60705621879a|DeadSaints_RecoverItem_Space_Stanton_Career",
+          "displayName": "Dead Saints CareerContract",
+          "owningScope": "Hauling",
+          "conceptKeys": [
+            "24984707f678a4a03199",
+            "39cd91d031a3d367bcd5",
+            "89da0be543892ddb8189",
+            "9a5c1a11b0c724acb82b",
+            "0a537a86b26185ef5764",
+            "6730eb2c76b425bce946"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Bounty Hunters Guild",
+      "oldFamilyCardCount": 8,
+      "newConceptCardCount": 24,
+      "collapsed": [
+        {
+          "conceptKey": "2e813b363d3910203361",
+          "displayName": "Reclusive Bounty: [TargetName] | Extreme Risk",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Nyx_Career",
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Pyro_Career"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "361d946dcf31c83a76b8",
+          "displayName": "Reclusive Bounty: [TargetName] | High Risk",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Nyx_Career",
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Pyro_Career",
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Stanton_Career"
+          ],
+          "variantCount": 4,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "e94d2340b70812d29cdc",
+          "displayName": "Reclusive Bounty: [TargetName] | Very-High Risk",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Nyx_Career",
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Pyro_Career",
+            "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Stanton_Career"
+          ],
+          "variantCount": 3,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "2a6be62b25e3d93ebf41",
+          "displayName": "Verified Bounty: [TargetName] | [Danger]",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Nyx_Career",
+            "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "505fbc2dccdde82b00a4",
+          "displayName": "Verified Bounty: [TargetName] | [Danger]",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Nyx_Career",
+            "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Certification_Career",
+          "displayName": "Bounty Hunters Guild CareerContract",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "370cb120337d7874fa84",
+            "c32c3a69a45c1e5467af",
+            "25601b2e27c924a97f3c",
+            "4a92ab9ffff065b572ed",
+            "475954b06f970979c398"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "f52b6df3-4a40-418e-b32e-30ac6381d144|BountyHuntersGuild_FPS_Nyx",
+          "displayName": "High-Risk Bounty: at QV Breaker Station",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "91988dbc393df5e92675",
+            "c5e3f159e721e3c22afc",
+            "edd30b925ca5d7246ab8",
+            "8f403e395ae8a2df1d51"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Nyx_Career",
+          "displayName": "Reclusive Bounty: | Extreme Risk",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "2e813b363d3910203361",
+            "361d946dcf31c83a76b8",
+            "e94d2340b70812d29cdc"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Pyro_Career",
+          "displayName": "Reclusive Bounty: | Extreme Risk",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "2e813b363d3910203361",
+            "361d946dcf31c83a76b8",
+            "e94d2340b70812d29cdc"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "20d974d1-c60b-4e2b-9183-133b82a6c630|BountyHuntersGuild_ShipWaveAttack_DrawOutBoss_Stanton_Career",
+          "displayName": "Reclusive Bounty: | Extreme Risk",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "361d946dcf31c83a76b8",
+            "e94d2340b70812d29cdc"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Eckhart Security",
+      "oldFamilyCardCount": 9,
+      "newConceptCardCount": 16,
+      "collapsed": [
+        {
+          "conceptKey": "6e74902dfad5a01a7968",
+          "displayName": "Client's Cargo Needs Recovering",
+          "owningScope": "Hauling",
+          "familyKeys": [
+            "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Nyx",
+            "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
+            "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Stanton"
+          ],
+          "variantCount": 18,
+          "confidence": "strong"
+        },
+        {
+          "conceptKey": "f214fd110b7be2ef070b",
+          "displayName": "New Opportunity - Ambush Strike",
+          "owningScope": "Ship Combat",
+          "familyKeys": [
+            "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+            "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Pyro"
+          ],
+          "variantCount": 2,
+          "confidence": "strong"
+        }
+      ],
+      "intentionallySeparate": [
+        {
+          "familyKey": "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+          "displayName": "Dangerous Ambush",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "554500260589b727dbb6",
+            "f214fd110b7be2ef070b"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "1ae0525d-a436-455e-b44c-c8ae8427065e|EckhartSecurity_DestroyServers",
+          "displayName": "Eckhart Security CareerContract",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "ff9620e45cc7074bf6cf",
+            "354a824796b8e31dd126",
+            "7fd829ce174bf8915962",
+            "601648dad7e06bfb1752"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        },
+        {
+          "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+          "displayName": "Expel Outlaws",
+          "owningScope": "Ship Combat",
+          "conceptKeys": [
+            "85c375b403555a1e5264",
+            "ef404d92d4f76b8d47b2",
+            "f9dfe6d11bc02ed7af1c",
+            "7b5840a59812a033882a",
+            "1d9a57999e6b5b3606d8",
+            "272af874ae191d1966ce",
+            "8090f785cf49289d7d27"
+          ],
+          "reason": "Family contains multiple evidence-gated objective signatures."
+        }
+      ]
+    },
+    {
+      "factionName": "Clovus Darneely",
+      "oldFamilyCardCount": 1,
+      "newConceptCardCount": 1,
+      "collapsed": [],
+      "intentionallySeparate": []
+    }
+  ],
+  "reviewFlags": [
+    "Conservative objective splitting increases candidate cards from 259 families to 611 concepts; review readability before Stage 2.",
+    "256 partial or unresolved concepts remain intentionally unmerged."
+  ],
+  "notes": [
+    "Concept grouping is global and contains no faction-specific grouping rules.",
+    "Raw title and description stems are supporting evidence only. Clean localized offer titles become concept boundaries only for broad generated activities where activity identity alone is insufficient.",
+    "Partial activity derivations remain within their source family; unresolved activity derivations remain variant-specific.",
+    "Rewarded reputation paths are metadata only and never determine owning shelf placement.",
+    "Partial and unresolved signatures remain separate because their fallback signature includes variant identity when no structural objective evidence exists.",
+    "Existing family and exact variant payloads remain the lazy-loading and technical-detail provenance layer."
+  ]
+}

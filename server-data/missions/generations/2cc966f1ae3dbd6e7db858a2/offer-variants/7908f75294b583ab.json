@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "gillys-flight-school:combat-gauntlet-scenario-8",
+  "variants": [
+    {
+      "variantKey": "a602d2ee-8776-4037-aeb9-d5dbd5f392d6",
+      "familyKey": "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+      "conceptKey": "6768bfb18c90e730e694",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|eliminate-all|activity-defined|standard|unlock:48ad9a15da91|unknown:bounded|||supporting-family:cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List|",
+        "activityKey": "eliminate-all",
+        "titleStem": "gfs-ship-wave-attack-mission08",
+        "descriptionStem": "gfs-ship-wave-attack-mission08",
+        "handlerStem": "unaffiliated-gillys-training-school-list",
+        "archetype": "Mercenary",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:48ad9a15da91",
+        "legalState": "unknown:bounded",
+        "confidence": "partial",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:supporting",
+          "title:gfs-ship-wave-attack-mission08",
+          "description:gfs-ship-wave-attack-mission08",
+          "handler:unaffiliated-gillys-training-school-list",
+          "contract:contract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:48ad9a15da91",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+          "GillysPilotSchool_Mission08"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Combat Gauntlet - Scenario #8",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Welcome to the final scenario of the Combat Gauntlet.\n\nThroughout this course, you’ve gotten to experience the advanced combat and defensive tactics needed to survive a variety of encounters. Time to take all those new skills and knowledge and see how they hold up against a large capital vessel and some escort ships.\n\nYou know the drill by now. Once you and all your allies are set, find your way to [Location] to see how you do when truly pushed to the limits.\n\nAs a bonus, successful completion of the scenario will net the original contractor holder an award of [ScripAmount] MG Scrip.\n\nTRICKS OF THE TRADE\n- Patience is a Virtue – If you’ve balanced your squadron properly, you should be able to come out on top, just don’t expect it to be a quick fight. Ships this big don’t go down quickly.\n\nGood luck out there, \nInstructor Gilly     \n\nABOUT GILLY’S FLIGHT SCHOOL   \nInstructor Lucas “Gilly” Baramsco has served in six squadrons and has over ten years of teaching experience. Whether a student with zero flight experience or a professional looking to polish their skills, Gilly Flight School offers a variety of courses to “Launch Your Piloting Career.”",
+      "rawName": "@GFS_ShipWaveAttack_Mission08_Title",
+      "internalName": "GillysPilotSchool_Mission08",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+          "GillysPilotSchool_Mission08"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "0ad97e41-32fa-419c-bf62-a9d1f067da03"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "349,750 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "349,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "349,750 aUEC",
+          "amount": 349750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unaffiliated_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 349750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 349750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "20",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/unaffiliated_generator.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a602d2ee-8776-4037-aeb9-d5dbd5f392d6",
+        "generatorGuid": "cb1e6955-675a-4919-9c1c-07af70a2b3f4",
+        "generatorName": "ContractGenerator.Unaffiliated_Generator",
+        "generatorPath": "contracts/contractgenerator/unaffiliated_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@GFS_ShipWaveAttack_Mission08_Title",
+        "descriptionRaw": "@GFS_ShipWaveAttack_Mission08_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

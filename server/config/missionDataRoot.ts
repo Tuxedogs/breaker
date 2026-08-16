@@ -11,12 +11,23 @@ export function getMissionDataRoot(): string {
   const pointer = JSON.parse(readFileSync(pointerPath, "utf8")) as {
     schemaVersion?: unknown;
     missionSchemaVersion?: unknown;
+    sourceContractVersion?: unknown;
+    offerSchemaVersion?: unknown;
     generationId?: unknown;
     generationPath?: unknown;
   };
+  const supportedContract = (
+    pointer.missionSchemaVersion === 2
+    && pointer.sourceContractVersion === 3
+    && pointer.offerSchemaVersion === undefined
+  ) || (
+    pointer.missionSchemaVersion === 3
+    && pointer.sourceContractVersion === 4
+    && pointer.offerSchemaVersion === 1
+  );
   if (
     pointer.schemaVersion !== 1
-    || pointer.missionSchemaVersion !== 2
+    || !supportedContract
     || typeof pointer.generationId !== "string"
     || !pointer.generationId
     || typeof pointer.generationPath !== "string"

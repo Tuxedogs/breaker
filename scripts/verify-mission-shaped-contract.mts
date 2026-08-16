@@ -76,14 +76,25 @@ const [index, manifest, graphReport, solverReference, golden] = await Promise.al
   readJson(path.join(generationRoot, "mission_solver_reference.json")),
   readJson(goldenPath),
 ]);
-const expected = object(golden.shapedContractV2, "golden.shapedContractV2");
+const legacyExpected = object(golden.shapedContractV2, "golden.shapedContractV2");
+const isOfferGeneration = pointer.missionSchemaVersion === 3;
+const expected = isOfferGeneration
+  ? {
+    ...legacyExpected,
+    schemaVersion: 3,
+    sourceContractVersion: 4,
+    shaperVersion: "moonbreaker_mission_shaper_v3_2_offer1",
+  }
+  : legacyExpected;
 equal(pointer.missionSchemaVersion, expected.schemaVersion, "pointer mission schema");
 equal(pointer.sourceContractVersion, expected.sourceContractVersion, "pointer source schema");
 equal(pointer.shaperVersion, expected.shaperVersion, "pointer shaper version");
+if (isOfferGeneration) equal(pointer.offerSchemaVersion, 1, "pointer offer schema");
 for (const [label, envelope] of [["index", index], ["manifest", manifest], ["graph report", graphReport]] as const) {
   equal(envelope.schemaVersion, expected.schemaVersion, `${label} mission schema`);
   equal(envelope.sourceContractVersion, expected.sourceContractVersion, `${label} source schema`);
   equal(envelope.generationId, generationId, `${label} generation`);
+  if (isOfferGeneration) equal(envelope.offerSchemaVersion, 1, `${label} offer schema`);
 }
 equal(solverReference.schemaVersion, 1, "solver reference schema");
 equal(solverReference.missionSchemaVersion, expected.schemaVersion, "solver reference mission schema");
@@ -116,6 +127,58 @@ const expectedVariantFiles = Object.values(variantDetailFiles).map((value) => pa
 equal(await jsonNames(path.join(generationRoot, "families")), expectedFamilyFiles, "reachable family shards");
 equal(await jsonNames(path.join(generationRoot, "family-variants")), expectedFamilyVariantFiles, "reachable family-variant shards");
 equal(await jsonNames(path.join(generationRoot, "variants")), expectedVariantFiles, "reachable variant shards");
+if (isOfferGeneration) {
+  const offersByKey = object(index.offersByKey, "index.offersByKey");
+  const variantOfferKeys = object(index.variantOfferKeys, "index.variantOfferKeys");
+  const legacyConceptOfferKeys = object(index.legacyConceptOfferKeys, "index.legacyConceptOfferKeys");
+  const offerDetailFiles = object(index.offerDetailFiles, "index.offerDetailFiles");
+  const offerVariantFiles = object(index.offerVariantFiles, "index.offerVariantFiles");
+  equal(Object.keys(variantOfferKeys).length, summary.variantCount, "offer exact variant assignments");
+  equal(Object.keys(offersByKey).length, summary.offerCount, "offer count");
+  equal(Object.keys(offerDetailFiles).sort(), Object.keys(offersByKey).sort(), "offer detail map keys");
+  equal(Object.keys(offerVariantFiles).sort(), Object.keys(offersByKey).sort(), "offer variant map keys");
+  equal(
+    await jsonNames(path.join(generationRoot, "offers")),
+    Object.values(offerDetailFiles).map((value) => path.basename(string(value, "offer detail file"))).sort(),
+    "reachable offer shards",
+  );
+  equal(
+    await jsonNames(path.join(generationRoot, "offer-variants")),
+    Object.values(offerVariantFiles).map((value) => path.basename(string(value, "offer variants file"))).sort(),
+    "reachable offer-variant shards",
+  );
+  for (const [offerKey, offerValue] of Object.entries(offersByKey)) {
+    const offer = object(offerValue, `offer ${offerKey}`);
+    equal(offer.offerKey, offerKey, `${offerKey} key`);
+    equal(offer.offerSchemaVersion, 1, `${offerKey} schema`);
+    const variantKeys = array(offer.variantKeys, `${offerKey}.variantKeys`).map((value) => string(value, `${offerKey}.variantKey`));
+    assert(variantKeys.length > 0, `${offerKey} has no exact variants.`);
+    for (const variantKey of variantKeys) {
+      equal(variantOfferKeys[variantKey], offerKey, `${variantKey} offer assignment`);
+    }
+    assert(typeof offer.searchText === "string", `${offerKey} is missing offer-local search text.`);
+    assert(Array.isArray(offer.missionTypes), `${offerKey} is missing offer-local mission type facets.`);
+    assert(Array.isArray(offer.rewardTypes), `${offerKey} is missing offer-local reward facets.`);
+    assert(Array.isArray(offer.reputationRewardKeys), `${offerKey} is missing offer-local reputation reward facets.`);
+    assert(Array.isArray(offer.releaseFlags), `${offerKey} is missing offer-local release facets.`);
+    assert(Array.isArray(offer.confidenceFlags), `${offerKey} is missing offer-local confidence facets.`);
+  }
+  for (const value of Object.values(legacyConceptOfferKeys)) {
+    for (const offerKey of array(value, "legacy concept offer keys")) {
+      assert(offersByKey[string(offerKey, "legacy offer key")], `Legacy concept references unknown offer ${String(offerKey)}.`);
+    }
+  }
+  const [identityReport, goldenReport] = await Promise.all([
+    readJson(path.join(generationRoot, "mission_offer_identity_report.json")),
+    readJson(path.join(generationRoot, "mission_offer_golden_report.json")),
+  ]);
+  equal(identityReport.assignmentGate && object(identityReport.assignmentGate, "identity assignment gate").passed, true, "offer assignment gate");
+  equal(goldenReport.status, "passed", "offer golden status");
+  equal(goldenReport.goldenOfferCount, 10, "golden offer count");
+  equal(goldenReport.goldenVariantCount, 25, "golden exact variant count");
+  equal(goldenReport.runtimeGhostPlaceholderPreserved, true, "runtime Ghost placeholder gate");
+  equal(goldenReport.exactTitleSearchUsesOfferPredicateOnly, true, "offer-only exact title search gate");
+}
 for (const fileName of expectedFamilyVariantFiles) {
   const payload = await readJson(path.join(generationRoot, "family-variants", fileName));
   equal(payload.generationId, generationId, `${fileName} generation`);
@@ -325,7 +388,7 @@ equal(merDetail.amount, 3000, "MER amount");
 equal(merDetail.currency, "MER", "MER currency");
 
 console.log(
-  `Verified mission shaped schema 2 generation ${generationId}: `
+  `Verified mission shaped schema ${String(expected.schemaVersion)} generation ${generationId}: `
   + `${String(summary.familyCount)} families, ${String(summary.variantCount)} variants, `
   + `${String(graphSummary.cycleComponentCount)} graph cycle components.`,
 );

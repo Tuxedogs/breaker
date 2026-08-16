@@ -112,13 +112,13 @@ const [catalog, objectives, report, golden] = await Promise.all([
 ]);
 
 const expected = object(golden.sourceContractV3, "golden.sourceContractV3");
-equal(catalog.schemaVersion, expected.schemaVersion, "mission contract schema version");
+equal(catalog.schemaVersion, 4, "mission contract schema version");
 equal(
   objectives.schemaVersion,
   expected.objectiveTemplateSchemaVersion,
   "objective template schema version",
 );
-equal(report.missionContractSchemaVersion, expected.schemaVersion, "report contract schema version");
+equal(report.missionContractSchemaVersion, 4, "report contract schema version");
 equal(catalog.sourceLatestModifiedAt, object(golden.snapshot, "golden.snapshot").sourceLatestModifiedAt, "source snapshot");
 equal(objectives.sourceLatestModifiedAt, catalog.sourceLatestModifiedAt, "objective/catalog snapshot");
 equal(report.sourceLatestModifiedAt, catalog.sourceLatestModifiedAt, "report/catalog snapshot");
@@ -135,6 +135,35 @@ const records = recordMap(array(catalog.records, "catalog.records"), "contractId
 const templates = recordMap(array(objectives.records, "objectives.records"), "templateGuid", "objectives.records");
 equal(records.size, object(golden.snapshot, "golden.snapshot").variantCount, "variant count");
 equal(report.missionFamilyCount, expected.familyCount, "family count");
+
+for (const [contractId, record] of records) {
+  const offerEvidence = object(record.offerEvidence, `${contractId}.offerEvidence`);
+  equal(offerEvidence.schemaVersion, 1, `${contractId} offer evidence schema`);
+  equal(offerEvidence.variantId, contractId, `${contractId} offer evidence owner`);
+  const provider = object(offerEvidence.provider, `${contractId}.offerEvidence.provider`);
+  equal(provider.sourceParam, "Contractor", `${contractId} provider source param`);
+  assert(text(provider.provenance), `${contractId} provider provenance is missing.`);
+  const title = object(offerEvidence.title, `${contractId}.offerEvidence.title`);
+  assert(text(title.provenance), `${contractId} title provenance is missing.`);
+  const runtimeTokens = array(title.runtimeTokens, `${contractId}.offerEvidence.title.runtimeTokens`);
+  if (runtimeTokens.length > 0) {
+    equal(title.rendering, "runtime_templated", `${contractId} runtime title rendering`);
+    for (const [index, tokenValue] of runtimeTokens.entries()) {
+      const token = object(tokenValue, `${contractId}.runtimeTokens[${index}]`);
+      assert(
+        typeof title.template === "string" && title.template.includes(String(token.raw)),
+        `${contractId} runtime title token was substituted during extraction.`,
+      );
+    }
+  }
+  const verification = object(offerEvidence.verification, `${contractId}.offerEvidence.verification`);
+  equal(verification.vocabulary, "verified_unverified", `${contractId} verification vocabulary`);
+  if (verification.effectiveIllegal === true) equal(verification.status, "unverified", `${contractId} verification status`);
+  else if (verification.effectiveIllegal === false) equal(verification.status, "verified", `${contractId} verification status`);
+  else equal(verification.status, "unknown", `${contractId} unresolved verification status`);
+  array(offerEvidence.availabilityBranches, `${contractId}.offerEvidence.availabilityBranches`);
+  array(offerEvidence.reputationPrerequisites, `${contractId}.offerEvidence.reputationPrerequisites`);
+}
 
 for (const goldenValue of array(golden.variants, "golden.variants")) {
   const fixture = object(goldenValue, "golden variant");
@@ -495,7 +524,7 @@ for (const edge of completionTagEdges) {
 }
 
 console.log(
-  `Mission source contract v3 verified: ${records.size} variants, ${templates.size} templates, `
+  `Mission source contract v4 verified: ${records.size} variants, ${templates.size} templates, `
   + `${String(graph.producedTagCount)} produced completion tags, `
   + `${completionTagEdges.length} grouped prerequisite edges.`,
 );

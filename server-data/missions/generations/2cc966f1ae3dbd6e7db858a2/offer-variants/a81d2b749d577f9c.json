@@ -1,0 +1,1046 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "red-wind-linehaul:red-wind-dangerous-cargo-recovery",
+  "variants": [
+    {
+      "variantKey": "056485bc-693e-49c6-a684-a8d5803a096c",
+      "familyKey": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Nyx",
+      "conceptKey": "63af45d5f129645520f9",
+      "objectiveSignature": {
+        "key": "aa5f0bf8-f36f-423a-b9dd-73084139db23|aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope|recover-cargo|activity-defined|standard|unlock:baf9c16dbaa4|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "red-wind-recover-cargo-very",
+        "descriptionStem": "red-wind-recover-cargo-very",
+        "handlerStem": "redwind-recover-cargo-nyx",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:baf9c16dbaa4",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:red-wind-recover-cargo-very",
+          "description:red-wind-recover-cargo-very",
+          "handler:redwind-recover-cargo-nyx",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:baf9c16dbaa4",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Nyx",
+          "RedWind_Nyx_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Red Wind Dangerous Cargo Recovery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "RED WIND LINEHAUL\n'YOUR GOODS IN GOOD HANDS'\n----------------------------\n\nPutting out a call for a highly skilled pilot who can recover our client’s cargo. Please only accept this contract if you have experience dealing with extremely hostile situations involving multiple combatants. Additional crew members and a heavy-duty tractor beam are highly recommended.\n\nRECOVERY LOCATION\n     · [Location]\n\nDROP OFF LOCATION\n     · Freight elevator at [Destination]\n\nThe cargo should be in the bay of the abandoned ship. The client has already expressed frustration regarding the cargo’s delay so please work quickly and efficiently.\n\nBE RESILIENT – Life is hard and sometimes you have to roll with the punches. Keep going and don’t let it bring you down.",
+      "rawName": "@RedWind_RecoverCargo_VeryHard_Title",
+      "internalName": "RedWind_Nyx_VeryHard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Red Wind Linehaul",
+      "faction": "Red Wind Linehaul",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Nyx",
+          "RedWind_Nyx_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Member / 5,250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Member / 5,250 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Member / 5,250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "77ed5653-bd14-4952-b904-afd79faeef60"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "77ed5653-bd14-4952-b904-afd79faeef60"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "77ed5653-bd14-4952-b904-afd79faeef60"
+        ],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "77ed5653-bd14-4952-b904-afd79faeef60",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "77ed5653-bd14-4952-b904-afd79faeef60"
+          ],
+          "unresolvedRefs": [
+            "77ed5653-bd14-4952-b904-afd79faeef60"
+          ],
+          "unresolvedLocationTokens": [
+            "77ed5653-bd14-4952-b904-afd79faeef60"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "77ed5653-bd14-4952-b904-afd79faeef60"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50",
+          "81,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "81,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "81,750 aUEC",
+          "amount": 81750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 81750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 81750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "056485bc-693e-49c6-a684-a8d5803a096c",
+        "generatorGuid": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4",
+        "generatorName": "ContractGenerator.RedWind_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@RedWind_RecoverCargo_VeryHard_Title",
+        "descriptionRaw": "@RedWind_RecoverCargo_VeryHard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "57ffca1d-0bcc-4f35-a5c7-d88a2d06eca8",
+      "familyKey": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Stanton",
+      "conceptKey": "63af45d5f129645520f9",
+      "objectiveSignature": {
+        "key": "aa5f0bf8-f36f-423a-b9dd-73084139db23|aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope|recover-cargo|activity-defined|standard|unlock:baf9c16dbaa4|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "red-wind-recover-cargo-very",
+        "descriptionStem": "red-wind-recover-cargo-very",
+        "handlerStem": "redwind-recover-cargo-stanton",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:baf9c16dbaa4",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:red-wind-recover-cargo-very",
+          "description:red-wind-recover-cargo-very",
+          "handler:redwind-recover-cargo-stanton",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:baf9c16dbaa4",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Stanton",
+          "RedWind_Stanton_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Red Wind Dangerous Cargo Recovery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "RED WIND LINEHAUL\n'YOUR GOODS IN GOOD HANDS'\n----------------------------\n\nPutting out a call for a highly skilled pilot who can recover our client’s cargo. Please only accept this contract if you have experience dealing with extremely hostile situations involving multiple combatants. Additional crew members and a heavy-duty tractor beam are highly recommended.\n\nRECOVERY LOCATION\n     · [Location]\n\nDROP OFF LOCATION\n     · Freight elevator at [Destination]\n\nThe cargo should be in the bay of the abandoned ship. The client has already expressed frustration regarding the cargo’s delay so please work quickly and efficiently.\n\nBE RESILIENT – Life is hard and sometimes you have to roll with the punches. Keep going and don’t let it bring you down.",
+      "rawName": "@RedWind_RecoverCargo_VeryHard_Title",
+      "internalName": "RedWind_Stanton_VeryHard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Red Wind Linehaul",
+      "faction": "Red Wind Linehaul",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Stanton",
+          "RedWind_Stanton_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Member / 5,250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Member / 5,250 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Member / 5,250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedLocationTokens": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50",
+          "81,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "81,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "81,750 aUEC",
+          "amount": 81750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 81750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 81750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "57ffca1d-0bcc-4f35-a5c7-d88a2d06eca8",
+        "generatorGuid": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4",
+        "generatorName": "ContractGenerator.RedWind_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@RedWind_RecoverCargo_VeryHard_Title",
+        "descriptionRaw": "@RedWind_RecoverCargo_VeryHard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "dfe48e58-c179-4e3e-bfad-23a5adc7b550",
+      "familyKey": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Pyro",
+      "conceptKey": "63af45d5f129645520f9",
+      "objectiveSignature": {
+        "key": "aa5f0bf8-f36f-423a-b9dd-73084139db23|aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope|recover-cargo|activity-defined|standard|unlock:baf9c16dbaa4|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "red-wind-recover-cargo-very",
+        "descriptionStem": "red-wind-recover-cargo-very",
+        "handlerStem": "redwind-recover-cargo-pyro",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:baf9c16dbaa4",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:red-wind-recover-cargo-very",
+          "description:red-wind-recover-cargo-very",
+          "handler:redwind-recover-cargo-pyro",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:baf9c16dbaa4",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Pyro",
+          "RedWind_Pyro_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Red Wind Dangerous Cargo Recovery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "RED WIND LINEHAUL\n'YOUR GOODS IN GOOD HANDS'\n----------------------------\n\nPutting out a call for a highly skilled pilot who can recover our client’s cargo. Please only accept this contract if you have experience dealing with extremely hostile situations involving multiple combatants. Additional crew members and a heavy-duty tractor beam are highly recommended.\n\nRECOVERY LOCATION\n     · [Location]\n\nDROP OFF LOCATION\n     · Freight elevator at [Destination]\n\nThe cargo should be in the bay of the abandoned ship. The client has already expressed frustration regarding the cargo’s delay so please work quickly and efficiently.\n\nBE RESILIENT – Life is hard and sometimes you have to roll with the punches. Keep going and don’t let it bring you down.",
+      "rawName": "@RedWind_RecoverCargo_VeryHard_Title",
+      "internalName": "RedWind_Pyro_VeryHard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Red Wind Linehaul",
+      "faction": "Red Wind Linehaul",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Pyro",
+          "RedWind_Pyro_VeryHard_RecoverCargo"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Member / 5,250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Member / 5,250 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Member / 5,250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50",
+          "81,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "81,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "81,750 aUEC",
+          "amount": 81750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 81750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 81750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "factionDisplayName": "Red Wind Linehaul",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "dfe48e58-c179-4e3e-bfad-23a5adc7b550",
+        "generatorGuid": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4",
+        "generatorName": "ContractGenerator.RedWind_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@RedWind_RecoverCargo_VeryHard_Title",
+        "descriptionRaw": "@RedWind_RecoverCargo_VeryHard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import {
   loadBlueprintRewardMissionsCatalog,
   loadBlueprintSourceMissionMap,
 } from "@/lib/craftingBlueprintSourcesApi";
+import { missionOfferBookmarkMatches } from "@/lib/missionOfferCompatibility";
 
 export const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 export const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -18,6 +19,18 @@ export function missionConceptBookmarkId(conceptKey: string): string {
 
 export function hasMissionConceptBookmark(values: ReadonlySet<string>, conceptKey: string): boolean {
   return values.has(missionConceptBookmarkId(conceptKey)) || values.has(conceptKey);
+}
+
+export function missionOfferBookmarkId(offerKey: string): string {
+  return `offer:${offerKey}`;
+}
+
+export function hasMissionOfferBookmark(
+  values: ReadonlySet<string>,
+  offerKey: string,
+  legacyConceptOfferKeys: Readonly<Record<string, string[]>> = {},
+): boolean {
+  return missionOfferBookmarkMatches(values, offerKey, legacyConceptOfferKeys);
 }
 
 export function missionRewardSourceBookmarkId(contractId: string, poolGuid: string): string {

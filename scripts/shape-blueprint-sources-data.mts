@@ -9,6 +9,13 @@ import {
   craftingBlueprintSourcesMissionSourceRoot,
   getCraftingBlueprintSourcesRoot,
 } from "../server/config/craftingBlueprintSourcesRoot.ts";
+import { getMissionDataRoot } from "../server/config/missionDataRoot.ts";
+import {
+  assertRewardBearingContractOwnership,
+  attachOfferKeysToBlueprintMissions,
+  attachOfferKeysToNormalizedMissions,
+  parseMissionBlueprintOfferJoin,
+} from "./missions/blueprint-offer-join.mts";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -39,6 +46,12 @@ async function resolveMissionSourceRoot(): Promise<string> {
   }
 }
 
+function resolveMissionGenerationRoot(): string {
+  return process.env.MISSION_GENERATION_ROOT
+    ? path.resolve(process.env.MISSION_GENERATION_ROOT)
+    : getMissionDataRoot();
+}
+
 async function readJson<T>(filePath: string): Promise<T> {
   return JSON.parse(await readFile(filePath, "utf8")) as T;
 }
@@ -57,20 +70,57 @@ function contractFileName(contractId: string): string {
 }
 
 const sourceRoot = await resolveMissionSourceRoot();
-const [blueprintSources, missionRewards, missionCatalog] = await Promise.all([
+const missionGenerationRoot = resolveMissionGenerationRoot();
+const [blueprintSources, missionRewards, missionCatalog, missionIndex, missionManifest] = await Promise.all([
   readJson<BlueprintSourceRecord[]>(path.join(sourceRoot, "blueprint_reward_sources.json")),
   readJson<unknown[]>(path.join(sourceRoot, "mission_blueprint_rewards.json")),
   readJson<MissionContractsCatalog>(path.join(sourceRoot, "mission_contracts.json")).catch(() => ({})),
+  readJson<unknown>(path.join(missionGenerationRoot, "mission_browser_index.json")),
+  readJson<unknown>(path.join(missionGenerationRoot, "mission_shard_manifest.json")),
 ]);
 
 const generatedAt = new Date().toISOString();
 const sourceLatestModifiedAt = missionCatalog.sourceLatestModifiedAt ?? generatedAt;
 const releaseStates = buildReleaseStateMap(missionRewards);
+const missionJoin = parseMissionBlueprintOfferJoin(
+  missionIndex,
+  missionManifest,
+  sourceLatestModifiedAt,
+);
+
+const joinedBlueprintSources = blueprintSources.map((record) => ({
+  ...record,
+  missions: attachOfferKeysToBlueprintMissions(
+    Array.isArray(record.missions) ? record.missions : [],
+    missionJoin,
+  ),
+}));
+
+const normalizedMissions = attachOfferKeysToNormalizedMissions(
+  missionRewards
+    .map((mission) => normalizeMissionBlueprintReward(mission))
+    .filter((mission): mission is NonNullable<typeof mission> => Boolean(mission)),
+  missionJoin,
+);
+assertRewardBearingContractOwnership(
+  new Set([
+    ...normalizedMissions.map((mission) => mission.missionId),
+    ...joinedBlueprintSources.flatMap((record) =>
+      (record.missions ?? []).flatMap((value) => {
+        const contractId = value && typeof value === "object" && !Array.isArray(value)
+          ? (value as JsonRecord).contractId
+          : undefined;
+        return typeof contractId === "string" && contractId ? [contractId] : [];
+      })
+    ),
+  ]),
+  missionJoin,
+);
 
 const blueprintFiles: Record<string, string> = {};
 let blueprintMissionCount = 0;
 
-for (const record of blueprintSources) {
+for (const record of joinedBlueprintSources) {
   const blueprintGuid = typeof record.blueprintGuid === "string" ? record.blueprintGuid.trim().toLowerCase() : "";
   if (!blueprintGuid) continue;
   const missions = Array.isArray(record.missions) ? record.missions : [];
@@ -81,14 +131,11 @@ for (const record of blueprintSources) {
     schemaVersion: 1,
     generatedAt,
     sourceLatestModifiedAt,
+    missionGeneration: missionJoin.metadata,
     blueprintGuid,
     missions,
   });
 }
-
-const normalizedMissions = missionRewards
-  .map((mission) => normalizeMissionBlueprintReward(mission))
-  .filter((mission): mission is NonNullable<typeof mission> => Boolean(mission));
 
 const missionFiles: Record<string, string> = {};
 for (const mission of normalizedMissions) {
@@ -98,6 +145,7 @@ for (const mission of normalizedMissions) {
     schemaVersion: 1,
     generatedAt,
     sourceLatestModifiedAt,
+    missionGeneration: missionJoin.metadata,
     missionId: mission.missionId,
     mission,
   });
@@ -111,6 +159,7 @@ await Promise.all([
     generatedAt,
     sourceLatestModifiedAt,
     sourceRoot,
+    missionGeneration: missionJoin.metadata,
     summary: {
       blueprintSourceCount: Object.keys(blueprintFiles).length,
       blueprintMissionLinkCount: blueprintMissionCount,
@@ -124,12 +173,14 @@ await Promise.all([
     schemaVersion: 1,
     generatedAt,
     sourceLatestModifiedAt,
+    missionGeneration: missionJoin.metadata,
     states: releaseStates,
   }),
   writeJson(path.join(missionsRoot, "catalog.json"), {
     schemaVersion: 1,
     generatedAt,
     sourceLatestModifiedAt,
+    missionGeneration: missionJoin.metadata,
     summary: {
       missionCount: normalizedMissions.length,
       rewardCount,

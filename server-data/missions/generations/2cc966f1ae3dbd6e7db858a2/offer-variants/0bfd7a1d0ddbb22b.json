@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "inter-sec-defense-solutions:recover-vanduul-corpses",
+  "variants": [
+    {
+      "variantKey": "706aedbf-efdb-44f6-b075-f5d0d775ce37",
+      "familyKey": "6955d7e7-8776-4420-97fb-f1713c89e68a|InterSecDefenseSolutions_ResourceGathering",
+      "conceptKey": "4a56ec100f45521e048c",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|resource-gathering|activity-defined|standard|unlock:3cbd80e3ae2f|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "inter-sec-resource-gathering-cryopods",
+        "descriptionStem": "inter-sec-resource-gathering-cryopods",
+        "handlerStem": "inter-sec-defense-solutions-resource-gathering",
+        "archetype": "Recovery",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:3cbd80e3ae2f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:inter-sec-resource-gathering-cryopods",
+          "description:inter-sec-resource-gathering-cryopods",
+          "handler:inter-sec-defense-solutions-resource-gathering",
+          "contract:contract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:3cbd80e3ae2f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "6955d7e7-8776-4420-97fb-f1713c89e68a|InterSecDefenseSolutions_ResourceGathering",
+          "IDS_ResourceGathering_CryoP"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Recover Vanduul Corpses",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws present and armed\nEquipment Specs: Cargo Capable Ship, Personal Arms, Heavy-Duty Tractor Beam\nBriefing: \nOur latest intel shows that the Shattered Blade have replenished their stock of Vanduul corpses and will shortly be transferring them from the old QV Logistics stationthey're operating from to an interested buyer. The UEE can't have another incident like what happened with ASD so they're eager for us to recover the cryopods and deliver them to the freight elevator at [Destination].\n\nWhile the Shattered Blade members present at the site might offer resistance, they are not the focus of you mission. Deal with them as needed and get the cryopods. \n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@InterSec_ResourceGathering_Cryopods_Title",
+      "internalName": "IDS_ResourceGathering_CryoP",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "6955d7e7-8776-4420-97fb-f1713c89e68a|InterSecDefenseSolutions_ResourceGathering",
+          "IDS_ResourceGathering_CryoP"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Location unresolved; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3dc9ba7f-61d8-4b7a-8566-742b8857f772"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Resource Gathering: Pulse Laser Pistol, Testudo Arms Earthshake, Testudo Core Earthshake, Testudo Legs Earthshake +3",
+          "142,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Resource Gathering: Pulse Laser Pistol, Testudo Arms Earthshake, Testudo Core Earthshake, Testudo Legs Earthshake +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "36e8ac4d-8962-4b03-89e7-cd7a06fc4adc",
+            "poolName": "Inter Sec Resource Gathering",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "f9de8917-a3a2-4471-974e-123b49910271",
+                "displayName": "Pulse Laser Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "7f5ec201-ae52-437a-9327-72732e7c4b84",
+                "displayName": "Testudo Arms Earthshake",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "8f25d62c-40cb-4cda-9d7b-acfa7704606e",
+                "displayName": "Testudo Core Earthshake",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "9a5f0389-4850-442c-8d3d-73bde5418406",
+                "displayName": "Testudo Legs Earthshake",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "1bfb2db6-2be8-4960-ae41-202cd89019a1",
+                "displayName": "Testudo Helmet Earthshake",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "47068d3b-a8e1-4329-ae08-8ed34eb76834",
+                "displayName": "Testudo Backpack Earthshake",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [],
+        "credits": "142,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "142,000 aUEC",
+          "amount": 142000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_resourcegathering.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 142000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 142000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "706aedbf-efdb-44f6-b075-f5d0d775ce37",
+        "generatorGuid": "6955d7e7-8776-4420-97fb-f1713c89e68a",
+        "generatorName": "ContractGenerator.InterSec_ResourceGathering",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_resourcegathering.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@InterSec_ResourceGathering_Cryopods_Title",
+        "descriptionRaw": "@InterSec_ResourceGathering_Cryopods_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

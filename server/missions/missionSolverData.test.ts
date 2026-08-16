@@ -2,10 +2,45 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  assertMissionSolverArtifactGeneration,
   evaluateCurrentMissionEligibility,
   solveCurrentMissionPath,
 } from "./missionSolverData.js";
 import type { PlayerMissionState } from "./missionSolverTypes.js";
+
+const generation = "generation";
+
+test("solver generation guard accepts only complete legacy and offer schema contracts", () => {
+  const legacy = {
+    schemaVersion: 2,
+    sourceContractVersion: 3,
+    generationId: generation,
+  };
+  const offer = {
+    schemaVersion: 3,
+    sourceContractVersion: 4,
+    offerSchemaVersion: 1,
+    generationId: generation,
+  };
+
+  assert.doesNotThrow(() => assertMissionSolverArtifactGeneration(legacy, legacy, legacy));
+  assert.doesNotThrow(() => assertMissionSolverArtifactGeneration(offer, offer, offer));
+
+  for (const invalid of [
+    { ...legacy, offerSchemaVersion: 1 },
+    { ...offer, offerSchemaVersion: undefined },
+    { ...offer, sourceContractVersion: 3 },
+  ]) {
+    assert.throws(
+      () => assertMissionSolverArtifactGeneration(invalid, invalid, invalid),
+      /requires shaped\/source schema 2\/3 or shaped\/source\/offer schema 3\/4\/1/,
+    );
+  }
+  assert.throws(
+    () => assertMissionSolverArtifactGeneration(offer, legacy, offer),
+    /different schema contracts/,
+  );
+});
 
 const introVariantId = "1035d0f0-82e7-4cee-8d10-789925b3d138";
 const consumerVariantId = "1136e707-15cb-49b9-9943-c3a2de91d3f2";

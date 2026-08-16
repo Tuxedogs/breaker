@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "eckhart-security:alliance-aid-urgent-rescue-mission",
+  "variants": [
+    {
+      "variantKey": "f5e3f732-7221-42d4-8d22-1bf2aa4ae2d0",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_MilestoneMissions",
+      "conceptKey": "43811e88da12c9059f72",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|recover-cargo|activity-defined|standard|unlock:5a7a4195c939|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "clean-air-defense-milestone1",
+        "descriptionStem": "clean-air-defense-milestone1",
+        "handlerStem": "clean-air-milestone-missions",
+        "archetype": "Cargo",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:5a7a4195c939",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:clean-air-defense-milestone1",
+          "description:clean-air-defense-milestone1",
+          "handler:clean-air-milestone-missions",
+          "contract:contract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:5a7a4195c939",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_MilestoneMissions",
+          "CleanAir_RecoverCargo_VIP"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Alliance Aid: Urgent Rescue Mission",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Since you've been doing so much work helping out the Defense Division I wanted to come to you with this contract direct. It's a bit of a delicate one. Two VIPs fell ill and the worry was that if word got out they were being transported they would become major targets.\n\nUnfortunately, it seems that's exactly what happened. Our attempts to smuggle them from Nyx to Stanton for medical treatment have failed, and now the ship carrying them is under attack. \n\nWe need you to hurry to [Location], neutralize the attackers and ensure that the cryopods make it safely to the freight elevator at [Destination]. \n\nIn fact, I want you to make sure you have a ship that can carry the cryopods just in case their original transport is too damaged to go on.\n\nI sincerely hope you manage to pull this rescue mission off. \n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_Defense-Milestone1_title",
+      "internalName": "CleanAir_RecoverCargo_VIP",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_MilestoneMissions",
+          "CleanAir_RecoverCargo_VIP"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unknown",
+          "displayName": "Unknown",
+          "displayLabel": "Unknown pickup",
+          "detailDisplay": "Unknown pickup",
+          "systems": [],
+          "confidence": "low",
+          "sourceRole": "unknown",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Unknown pickup",
+            "detailLabel": "Unknown pickup",
+            "confidence": "unknown"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "124,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "124,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "124,250 aUEC",
+          "amount": 124250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 124250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 124250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "f5e3f732-7221-42d4-8d22-1bf2aa4ae2d0",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_Defense-Milestone1_title",
+        "descriptionRaw": "@CleanAir_Defense-Milestone1_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

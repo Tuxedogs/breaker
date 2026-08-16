@@ -1,14 +1,45 @@
 import { cp, mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-export type MissionGenerationPointerV1 = {
+type MissionGenerationPointerBaseV1 = {
   schemaVersion: 1;
-  missionSchemaVersion: 2;
-  sourceContractVersion: 3;
   shaperVersion: string;
   generationId: string;
   generationPath: string;
 };
+
+export type MissionGenerationContractV1 =
+  | {
+    missionSchemaVersion: 2;
+    sourceContractVersion: 3;
+    offerSchemaVersion?: never;
+  }
+  | {
+    missionSchemaVersion: 3;
+    sourceContractVersion: 4;
+    offerSchemaVersion: 1;
+  };
+
+export type MissionGenerationPointerV1 = MissionGenerationPointerBaseV1
+  & MissionGenerationContractV1;
+
+export function buildMissionGenerationPointerV1(options: {
+  generationId: string;
+  shaperVersion: string;
+  generationContract?: MissionGenerationContractV1;
+}): MissionGenerationPointerV1 {
+  const generationContract = options.generationContract ?? {
+    missionSchemaVersion: 2,
+    sourceContractVersion: 3,
+  };
+  return {
+    schemaVersion: 1,
+    ...generationContract,
+    shaperVersion: options.shaperVersion,
+    generationId: options.generationId,
+    generationPath: `generations/${options.generationId}`,
+  };
+}
 
 async function directoryExists(directory: string): Promise<boolean> {
   try {
@@ -23,12 +54,12 @@ export async function publishImmutableMissionGeneration(options: {
   stagingRoot: string;
   generationId: string;
   shaperVersion: string;
+  generationContract?: MissionGenerationContractV1;
   legacyRootFiles: readonly string[];
   legacyShardDirectories: readonly string[];
 }): Promise<MissionGenerationPointerV1> {
   const generationsRoot = path.join(options.missionRoot, "generations");
   const finalGenerationRoot = path.join(generationsRoot, options.generationId);
-  const relativeGenerationPath = `generations/${options.generationId}`;
   await mkdir(generationsRoot, { recursive: true });
 
   if (await directoryExists(finalGenerationRoot)) {
@@ -50,14 +81,11 @@ export async function publishImmutableMissionGeneration(options: {
     }
   }
 
-  const pointer: MissionGenerationPointerV1 = {
-    schemaVersion: 1,
-    missionSchemaVersion: 2,
-    sourceContractVersion: 3,
+  const pointer = buildMissionGenerationPointerV1({
     shaperVersion: options.shaperVersion,
     generationId: options.generationId,
-    generationPath: relativeGenerationPath,
-  };
+    generationContract: options.generationContract,
+  });
   const pointerPath = path.join(options.missionRoot, "current.json");
   const temporaryPointerPath = path.join(
     options.missionRoot,

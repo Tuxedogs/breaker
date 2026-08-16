@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "adagio-holdings:exact-3b19ec12-1267-4cc7-be0e-7c0c5273fb81",
+  "variants": [
+    {
+      "variantKey": "3b19ec12-1267-4cc7-be0e-7c0c5273fb81",
+      "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+      "conceptKey": "0707ba44c86bf6af4b52",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope|resource-gathering+salvage-ship|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering+salvage-ship",
+        "titleStem": "adagio-industrial-component-salvage-universal",
+        "descriptionStem": "adagio-industrial-component-salvage-universal",
+        "handlerStem": "adagio-rg-ship-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering+salvage-ship",
+          "activity-source:structural",
+          "title:adagio-industrial-component-salvage-universal",
+          "description:adagio-industrial-component-salvage-universal",
+          "handler:adagio-rg-ship-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+          "Adagio_RG_ShipSalvage_Nyx_Rank2_RMC_CMats_IndustrialComponents (DISABLED)"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Adagio RG Ship Salvage Nyx Rank 2 RMC CMats Industrial Components (DISABLED)",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "rawName": "@Adagio_Industrial_Component_Salvage_Universal_H_Title_001",
+      "internalName": "Adagio_RG_ShipSalvage_Nyx_Rank2_RMC_CMats_IndustrialComponents (DISABLED)",
+      "missionType": "Salvage",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope",
+        "displayName": "Salvage",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Salvage",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+          "Adagio_RG_ShipSalvage_Nyx_Rank2_RMC_CMats_IndustrialComponents (DISABLED)"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "location",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Location",
+          "raw": {
+            "token": "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "DropoffLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "type": "ContractPrerequisite_Location",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedLocationTokens": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "DropoffLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "LocalSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "confidence": "unresolved"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1",
+          "Rep reward unresolved +150",
+          "393,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+            "poolName": "Adagio Resource Gathering Ship Salvage",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "4e834db6-9b0e-461a-8465-ec90847bd7e5",
+                "displayName": "Trawler Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+                "displayName": "Abrade Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+                "displayName": "Cinch Scraper Module",
+                "componentType": "salvageModifier",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +150"
+        ],
+        "credits": "393,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "393,750 aUEC",
+          "amount": 393750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 393750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 393750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 150,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release",
+        "Work in progress"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "3b19ec12-1267-4cc7-be0e-7c0c5273fb81",
+        "generatorGuid": "e29eae76-5a8a-4577-8c6a-f943a46aae90",
+        "generatorName": "ContractGenerator.Adagio_ResourceGathering_ShipSalvage",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Adagio_Industrial_Component_Salvage_Universal_H_Title_001",
+        "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Universal_H_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

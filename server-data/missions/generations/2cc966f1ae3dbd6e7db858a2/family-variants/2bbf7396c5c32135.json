@@ -1,0 +1,932 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+  "variants": [
+    {
+      "variantKey": "0ada3f08-3f76-46ec-96e2-fc0f856b8eeb",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+      "conceptKey": "22985284bdb2be340154",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope|refuel|activity-defined|intro|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:intro",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Refuel",
+        "Intro"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Nyx"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "UWC'S HIRING REFUELERS",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey!\n\nDD from the United Wayfarers Club here.\n\nThe UWC offers repair, rearming and refueling services across the UEE. It just so happens that we're on the look-out for new affiliates whose ships are fitted for refueling. If you've got the fuel pods and like it when people are pleased to see you, the UWC might be the club for you.\n\nAnd if you think it might be, I've got a live beacon you might like.\n\nIf you do happen to like it, a word to the wise: make sure your fuel pods are full before you head out.\n\nA Club member has run out of ~misssion(FuelType) at [Location]. I'm not sure on the details, like how they ended up out there with no Go Juice, but the UWC doesn't like to leave folk hanging.\n\nThe client vessel will pay you at the rate of [RefuelRequest]. As a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nIt's a straightforward run. Perfect if you want to get a feel for this kind of job. Get out there, fill up the tanks of their [Ship] and get them on their way. Do enough runs like this, and the process becomes muscle memory. Until then, there's a journal entry on your mobiGlas called \"Refueling Protocols\" that covers the basics.\n\nThere have been no reports of outlaw activity in that sector, but stay alert. I always recommend you aim for a fast turnaround. The sooner you're done, the sooner I can fix you up with another contract. UWC's always looking for new affiliates. \n\nLooking forward to working with you.\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_intro_title_001",
+      "internalName": "Ship_Refueling_Intro_Nyx",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "displayName": "Refueling",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Refueling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Nyx"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "23,750 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200"
+        ],
+        "credits": "23,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "23,750 aUEC",
+          "amount": 23750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 23750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 23750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0ada3f08-3f76-46ec-96e2-fc0f856b8eeb",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_intro_title_001",
+        "descriptionRaw": "@UWC_Refueling_intro_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "66f31bca-1961-47f7-a4af-f7392271b15c",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+      "conceptKey": "22985284bdb2be340154",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope|refuel|activity-defined|intro|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:intro",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Refuel",
+        "Intro"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Stanton"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "UWC'S HIRING REFUELERS",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey!\n\nDD from the United Wayfarers Club here.\n\nThe UWC offers repair, rearming and refueling services across the UEE. It just so happens that we're on the look-out for new affiliates whose ships are fitted for refueling. If you've got the fuel pods and like it when people are pleased to see you, the UWC might be the club for you.\n\nAnd if you think it might be, I've got a live beacon you might like.\n\nIf you do happen to like it, a word to the wise: make sure your fuel pods are full before you head out.\n\nA Club member has run out of ~misssion(FuelType) at [Location]. I'm not sure on the details, like how they ended up out there with no Go Juice, but the UWC doesn't like to leave folk hanging.\n\nThe client vessel will pay you at the rate of [RefuelRequest]. As a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nIt's a straightforward run. Perfect if you want to get a feel for this kind of job. Get out there, fill up the tanks of their [Ship] and get them on their way. Do enough runs like this, and the process becomes muscle memory. Until then, there's a journal entry on your mobiGlas called \"Refueling Protocols\" that covers the basics.\n\nThere have been no reports of outlaw activity in that sector, but stay alert. I always recommend you aim for a fast turnaround. The sooner you're done, the sooner I can fix you up with another contract. UWC's always looking for new affiliates. \n\nLooking forward to working with you.\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_intro_title_001",
+      "internalName": "Ship_Refueling_Intro_Stanton",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "displayName": "Refueling",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Refueling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Stanton"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "a335e8b0-e551-4126-a213-5634d7d23511"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "a335e8b0-e551-4126-a213-5634d7d23511"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "a335e8b0-e551-4126-a213-5634d7d23511"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "a335e8b0-e551-4126-a213-5634d7d23511"
+          ],
+          "unresolvedRefs": [
+            "a335e8b0-e551-4126-a213-5634d7d23511"
+          ],
+          "unresolvedLocationTokens": [
+            "a335e8b0-e551-4126-a213-5634d7d23511"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a335e8b0-e551-4126-a213-5634d7d23511",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "a335e8b0-e551-4126-a213-5634d7d23511"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "19,750 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200"
+        ],
+        "credits": "19,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "19,750 aUEC",
+          "amount": 19750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 19750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 19750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "66f31bca-1961-47f7-a4af-f7392271b15c",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_intro_title_001",
+        "descriptionRaw": "@UWC_Refueling_intro_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "68667545-1978-4dbf-95e7-8fcdc03d017e",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+      "conceptKey": "22985284bdb2be340154",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope|refuel|activity-defined|intro|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:intro",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Refuel",
+        "Intro"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Pyro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "UWC'S HIRING REFUELERS",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey!\n\nDD from the United Wayfarers Club here.\n\nThe UWC offers repair, rearming and refueling services across the UEE. It just so happens that we're on the look-out for new affiliates whose ships are fitted for refueling. If you've got the fuel pods and like it when people are pleased to see you, the UWC might be the club for you.\n\nAnd if you think it might be, I've got a live beacon you might like.\n\nIf you do happen to like it, a word to the wise: make sure your fuel pods are full before you head out.\n\nA Club member has run out of ~misssion(FuelType) at [Location]. I'm not sure on the details, like how they ended up out there with no Go Juice, but the UWC doesn't like to leave folk hanging.\n\nThe client vessel will pay you at the rate of [RefuelRequest]. As a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nIt's a straightforward run. Perfect if you want to get a feel for this kind of job. Get out there, fill up the tanks of their [Ship] and get them on their way. Do enough runs like this, and the process becomes muscle memory. Until then, there's a journal entry on your mobiGlas called \"Refueling Protocols\" that covers the basics.\n\nThere have been no reports of outlaw activity in that sector, but stay alert. I always recommend you aim for a fast turnaround. The sooner you're done, the sooner I can fix you up with another contract. UWC's always looking for new affiliates. \n\nLooking forward to working with you.\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_intro_title_001",
+      "internalName": "Ship_Refueling_Intro_Pyro",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b:unknown-scope",
+        "displayName": "Refueling",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Refueling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Intro",
+          "Ship_Refueling_Intro_Pyro"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedRefs": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "unresolvedLocationTokens": [
+            "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Rep reward unresolved +200",
+          "33,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Rep reward unresolved +200"
+        ],
+        "credits": "33,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "33,250 aUEC",
+          "amount": 33250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 33250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 33250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "68667545-1978-4dbf-95e7-8fcdc03d017e",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_intro_title_001",
+        "descriptionRaw": "@UWC_Refueling_intro_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

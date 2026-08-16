@@ -3,8 +3,10 @@ import { createPortal } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   hasMissionConceptBookmark,
+  hasMissionOfferBookmark,
   MISSION_BOOKMARK_STORAGE_KEY,
   missionConceptBookmarkId,
+  missionOfferBookmarkId,
   missionRewardSourceBookmarkId,
   readStoredStringSet,
   writeStoredStringSet,
@@ -13,6 +15,7 @@ import {
   evaluateMissionVariantEligibility,
   loadMissionConceptVariants,
   loadMissionData,
+  loadMissionOfferVariants,
   loadMissionVariantDetail,
   solveMissionVariantPrerequisitePath,
   type BlueprintRewardGroupView,
@@ -21,6 +24,7 @@ import {
   type MissionEligibilityPayload,
   type MissionPathPayload,
   type MissionConceptView,
+  type MissionOfferView,
   type MissionPrerequisiteView,
   type MissionRequiredItemEvidenceView,
   type MissionRewardView,
@@ -28,21 +32,37 @@ import {
   type MissionVariantView,
   type PlayerMissionStateView,
 } from "@/lib/missionData";
+import { missionOfferMatchesClientFilters } from "@/lib/missionOfferCompatibility";
 import {
   MISSION_BROWSER_PATH,
   missionConceptKeyFromSlug,
   missionConceptPath,
   missionConceptSlug,
+  resolveLegacyMissionConcept,
 } from "@/lib/missionUrls";
 import "@/components/industry/crafting/recipe-browser.css";
 import "./mission-browser.css";
 
 const MAX_VISIBLE_VARIANTS = 8;
 const CONCEPTS_PER_PAGE = 12;
+const OFFERS_PER_PAGE = 12;
 
 type RewardFilter = "blueprints" | "reputation" | "credits-fixed" | "credits-calculated" | "credits-variable" | "credits-formula-unresolved" | "credits-unresolved" | "credits-none" | "items" | "items-unresolved";
 type ConfidenceFilter = "unresolved" | "locations" | "rewards" | "crime-bounded" | "unlawful";
 type BrowserView = "full" | "faction" | "reputation";
+
+function missionOfferProvider(offer: MissionOfferView): string {
+  return offer.provider.displayText?.trim()
+    || offer.provider.displayRaw?.replace(/^@/, "").trim()
+    || offer.providerKey
+    || "Unknown provider";
+}
+
+function missionVerificationLabel(status: MissionOfferView["verificationStatus"]): string {
+  if (status === "verified") return "Verified";
+  if (status === "unverified") return "Unverified";
+  return "Verification unknown";
+}
 
 function stripSummaryPrefix(value: string, prefix: string): string {
   return value.startsWith(prefix) ? value.slice(prefix.length).trim() : value;
@@ -857,6 +877,57 @@ const MissionConceptCard = memo(function MissionConceptCard({
               {missionSignals.map((signal) => <Badge key={signal.label} tone={signal.tone}>{signal.label}</Badge>)}
             </span>
             <span className="mission-card-legal">Legal classification: {legalClassification}</span>
+          </span>
+        </span>
+      </button>
+    </div>
+  );
+});
+
+const MissionOfferCard = memo(function MissionOfferCard({
+  offer,
+  isSelected,
+  onSelect,
+}: {
+  offer: MissionOfferView;
+  isSelected: boolean;
+  onSelect: (offerKey: string, trigger: HTMLButtonElement) => void;
+}) {
+  const provider = missionOfferProvider(offer);
+  const verification = missionVerificationLabel(offer.verificationStatus);
+  const rewardSignals = [
+    offer.rewardTypes.includes("blueprints") ? "Blueprint rewards" : undefined,
+    offer.rewardTypes.includes("items") ? "Item rewards" : undefined,
+    offer.rewardTypes.includes("reputation") ? "Reputation rewards" : undefined,
+  ].filter((value): value is string => Boolean(value));
+  return (
+    <div className={`mb-family-block ${repScopeClass(offer.reputationRewardKeys.join(" "))}${isSelected ? " is-selected" : ""}`}>
+      <button
+        type="button"
+        className="mb-family-row mission-group-card"
+        aria-expanded={isSelected}
+        aria-haspopup="dialog"
+        onClick={(event) => onSelect(offer.offerKey, event.currentTarget)}
+      >
+        <span className="mission-group-card__body">
+          <span className="mission-group-card__header">
+            <span className="mission-faction-initials" aria-hidden="true">{factionInitials(provider)}</span>
+            <span className="mb-family-copy mission-group-card__title-block">
+              <strong className="mission-group-card__title">{offer.displayTitle}</strong>
+              <small>{provider} / {offer.missionTypes.join(" / ") || "Mission"}</small>
+            </span>
+            <span className="mission-group-card__disclosure" aria-hidden="true">{isSelected ? "−" : "+"}</span>
+          </span>
+          <span className="mission-group-card__metrics">
+            <span><small>Exact variants</small><strong>{offer.variantKeys.length}</strong></span>
+            <span><small>Provider</small><strong title={provider}>{provider}</strong></span>
+            <span><small>Reward detail</small><strong>Per variant</strong></span>
+          </span>
+          <span className="mission-group-card__footer">
+            <span className="mb-badges">
+              <Badge tone={offer.verificationStatus === "verified" ? "is-verified" : offer.verificationStatus === "unverified" ? "is-unverified" : "is-muted"}>{verification}</Badge>
+              {rewardSignals.slice(0, 3).map((signal) => <Badge key={signal} tone={signal === "Blueprint rewards" ? "is-blueprint" : "is-neutral"}>{signal}</Badge>)}
+            </span>
           </span>
         </span>
       </button>
@@ -1746,18 +1817,24 @@ function FamilyDetail({
 
 function ConceptDetail({
   concept,
+  offer,
   variants,
+  initialVariantKey,
   facts,
   isBookmarked,
   onToggleBookmark,
+  onSelectVariant,
   onClose,
   onFooterChange,
 }: {
   concept: MissionConceptView;
+  offer?: MissionOfferView;
   variants: MissionVariantView[];
+  initialVariantKey?: string;
   facts: Array<{ label: string; value: string | number }>;
   isBookmarked: boolean;
-  onToggleBookmark: (conceptKey: string) => void;
+  onToggleBookmark: (identityKey: string) => void;
+  onSelectVariant?: (variantKey: string) => void;
   onClose: () => void;
   onFooterChange: (state: MissionDossierFooterState) => void;
 }) {
@@ -1767,7 +1844,8 @@ function ConceptDetail({
     return groups;
   }, new Map<string, MissionVariantView[]>()).entries())
     .sort((a, b) => tierDisplayOrder(a[0]) - tierDisplayOrder(b[0]) || a[0].localeCompare(b[0])), [variants]);
-  const [selectedTierKey, setSelectedTierKey] = useState(() => tiers[0]?.[0] ?? "");
+  const initialVariant = variants.find((variant) => variant.variantKey === initialVariantKey);
+  const [selectedTierKey, setSelectedTierKey] = useState(() => initialVariant?.tierKey ?? tiers[0]?.[0] ?? "");
   const selectedTier = useMemo(() => tiers.find(([tierKey]) => tierKey === selectedTierKey) ?? tiers[0], [selectedTierKey, tiers]);
   const availabilityGroups = useMemo(() => Array.from((selectedTier?.[1] ?? []).reduce((groups, variant) => {
     const key = expansionGroupKey(variant);
@@ -1775,7 +1853,7 @@ function ConceptDetail({
     return groups;
   }, new Map<string, MissionVariantView[]>()).entries())
     .sort((a, b) => variantRegionSortOrder(a[0]) - variantRegionSortOrder(b[0]) || a[0].localeCompare(b[0])), [selectedTier]);
-  const [selectedAvailabilityKey, setSelectedAvailabilityKey] = useState(() => availabilityGroups[0]?.[0] ?? "");
+  const [selectedAvailabilityKey, setSelectedAvailabilityKey] = useState(() => initialVariant ? expansionGroupKey(initialVariant) : availabilityGroups[0]?.[0] ?? "");
   const selectedAvailability = useMemo(
     () => availabilityGroups.find(([groupKey]) => groupKey === selectedAvailabilityKey) ?? availabilityGroups[0],
     [availabilityGroups, selectedAvailabilityKey],
@@ -1784,7 +1862,7 @@ function ConceptDetail({
     () => selectedAvailability?.[1] ?? [],
     [selectedAvailability],
   );
-  const [selectedDossierVariantKey, setSelectedDossierVariantKey] = useState("");
+  const [selectedDossierVariantKey, setSelectedDossierVariantKey] = useState(initialVariantKey ?? "");
   const [detailedRequiredItemCounts, setDetailedRequiredItemCounts] = useState<Record<string, number>>({});
   const resolvedDossierVariantKey = useMemo(() => (
     selectedVariants.some((variant) => variant.variantKey === selectedDossierVariantKey)
@@ -1811,7 +1889,9 @@ function ConceptDetail({
     () => Array.from(new Map(variants.flatMap((variant) => variant.rewards.blueprintRewardGroups).map((group) => [group.poolGuid ?? group.poolName, group])).values()),
     [variants],
   );
-  const verificationTag = explicitMissionVerificationTag(concept.specificityBadges);
+  const verificationTag = offer
+    ? missionVerificationLabel(offer.verificationStatus)
+    : explicitMissionVerificationTag(concept.specificityBadges);
   const requiresMissionItems = variants.some((variant) => variant.requiredItemSummary?.status === "present");
   const requiredItemCount = representative
     ? detailedRequiredItemCounts[representative.variantKey] ?? requiredItemRowCount(representative)
@@ -1820,22 +1900,27 @@ function ConceptDetail({
   const sourceBackedFaction = concept.rewardedReputationPaths.find((path) => (
     path.confidence !== "unresolved" && !/^unknown(?: faction)?$/i.test(path.factionDisplayName)
   ))?.factionDisplayName;
-  const headerFaction = /^unknown(?: faction)?$/i.test(concept.factionDisplayName) && sourceBackedFaction
+  const headerFaction = offer
+    ? missionOfferProvider(offer)
+    : /^unknown(?: faction)?$/i.test(concept.factionDisplayName) && sourceBackedFaction
     ? sourceBackedFaction
     : concept.factionDisplayName;
   const legalClassification = legalClassificationSummary(variants);
+  const displayTitle = offer?.displayTitle ?? concept.displayName;
+  const displayType = offer?.missionTypes.join(" / ") || concept.displayCategory.label;
+  const bookmarkKey = offer?.offerKey ?? concept.conceptKey;
   return (
-    <section className={`mb-detail mission-group-expansion mission-concept-dossier ${repScopeClass(concept.reputationScope.displayName)}`} aria-label={`${concept.displayName} concept details`}>
+    <section className={`mb-detail mission-group-expansion mission-concept-dossier ${repScopeClass(concept.reputationScope.displayName)}`} aria-label={`${displayTitle} mission offer details`}>
       <header className="mission-dossier-header">
         <div className="mission-dossier-header__identity">
           <span className="mission-faction-initials" aria-hidden="true">{factionInitials(concept.factionDisplayName)}</span>
           <div>
-            <h2>{concept.displayName}</h2>
-            <p>{headerFaction} / {concept.displayCategory.label}</p>
+            <h2>{displayTitle}</h2>
+            <p>{headerFaction} / {displayType}</p>
             <div className="mb-badges">
               <span className={`mission-rep-scope-badge ${repScopeClass(headerReputationScope)}`}>{shortRepScope(headerReputationScope)}</span>
-              {verificationTag && <Badge tone={verificationTag === "Verified Mission" ? "is-verified" : "is-unverified"}>{verificationTag}</Badge>}
-              <Badge tone="is-type">{concept.displayCategory.label}</Badge>
+              {verificationTag && <Badge tone={offer?.verificationStatus === "verified" || verificationTag === "Verified Mission" ? "is-verified" : offer?.verificationStatus === "unknown" ? "is-muted" : "is-unverified"}>{verificationTag}</Badge>}
+              <Badge tone="is-type">{displayType}</Badge>
               <Badge tone={allBlueprintGroups.length ? "is-blueprint" : "is-muted"}>{allBlueprintGroups.length ? `${allBlueprintGroups.length} blueprint pool${allBlueprintGroups.length === 1 ? "" : "s"}` : "No blueprint rewards reported"}</Badge>
               {requiresMissionItems && <Badge tone="is-amber">{requiredItemCount ? `${requiredItemCount} required item${requiredItemCount === 1 ? "" : "s"}` : "Mission items required"}</Badge>}
             </div>
@@ -1898,13 +1983,15 @@ function ConceptDetail({
           </div>
         </div>
         <div className="mission-dossier-header__actions">
-          <span className="mission-dossier-legal">Legal classification: {legalClassification}</span>
+          {offer
+            ? <span className="mission-dossier-legal">Verification: {missionVerificationLabel(offer.verificationStatus)}</span>
+            : <span className="mission-dossier-legal">Legal classification: {legalClassification}</span>}
           <button
             type="button"
             className={`mission-dossier-bookmark${isBookmarked ? " is-active" : ""}`}
             aria-pressed={isBookmarked}
-            aria-label={isBookmarked ? `Remove ${concept.displayName} bookmark` : `Bookmark ${concept.displayName}`}
-            onClick={() => onToggleBookmark(concept.conceptKey)}
+            aria-label={isBookmarked ? `Remove ${displayTitle} bookmark` : `Bookmark ${displayTitle}`}
+            onClick={() => onToggleBookmark(bookmarkKey)}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M7 4h10v16l-5-3.2L7 20V4Z" />
@@ -1927,7 +2014,10 @@ function ConceptDetail({
             key={selectedAvailability?.[0]}
             variants={selectedVariants}
             selectedVariant={representative}
-            onSelectVariant={setSelectedDossierVariantKey}
+            onSelectVariant={(variantKey) => {
+              setSelectedDossierVariantKey(variantKey);
+              onSelectVariant?.(variantKey);
+            }}
             onFooterChange={onFooterChange}
             onRequiredItemCountChange={handleRequiredItemCountChange}
           />
@@ -2196,23 +2286,29 @@ function compareOptionalNumbers(left: number | undefined, right: number | undefi
 
 function MissionSelectedWorkspace({
   concept,
+  offer,
   variants,
+  initialVariantKey,
   loading,
   error,
   isBookmarked,
   bookmarkedMissionIds,
   onToggleBookmark,
   onToggleRewardBookmarks,
+  onSelectVariant,
   onClose,
 }: {
   concept: MissionConceptView;
+  offer?: MissionOfferView;
   variants?: MissionVariantView[];
+  initialVariantKey?: string;
   loading: boolean;
   error?: string;
   isBookmarked: boolean;
   bookmarkedMissionIds: ReadonlySet<string>;
-  onToggleBookmark: (conceptKey: string) => void;
+  onToggleBookmark: (identityKey: string) => void;
   onToggleRewardBookmarks: (bookmarkIds: string[]) => void;
+  onSelectVariant?: (variantKey: string) => void;
   onClose: () => void;
 }) {
   const [availability, setAvailability] = useState<"active" | "all">("active");
@@ -2258,11 +2354,13 @@ function MissionSelectedWorkspace({
   }
 
   return (
-    <section className={`mission-selected-workspace ops-primary-card${eligibilityVariant ? " is-solver-open" : ""}`} aria-label={`${concept.displayName} selected mission workspace`}>
+    <section className={`mission-selected-workspace ops-primary-card${eligibilityVariant ? " is-solver-open" : ""}`} aria-label={`${offer?.displayTitle ?? concept.displayName} selected mission workspace`}>
       {variants && (
         <ConceptDetail
           concept={concept}
+          offer={offer}
           variants={variants}
+          initialVariantKey={initialVariantKey}
           facts={[
             { value: activeVariants.length, label: `Active variant${activeVariants.length === 1 ? "" : "s"}` },
             { value: variants.length, label: `Exact variant${variants.length === 1 ? "" : "s"}` },
@@ -2272,6 +2370,7 @@ function MissionSelectedWorkspace({
           ]}
           isBookmarked={isBookmarked}
           onToggleBookmark={onToggleBookmark}
+          onSelectVariant={onSelectVariant}
           onClose={onClose}
           onFooterChange={setDossierFooter}
         />
@@ -2375,6 +2474,9 @@ export default function MissionBrowserPage() {
   const [conceptVariantsByKey, setConceptVariantsByKey] = useState<Record<string, MissionVariantView[]>>({});
   const [conceptLoadingKey, setConceptLoadingKey] = useState("");
   const [conceptErrors, setConceptErrors] = useState<Record<string, string>>({});
+  const [offerVariantsByKey, setOfferVariantsByKey] = useState<Record<string, MissionVariantView[]>>({});
+  const [offerLoadingKey, setOfferLoadingKey] = useState("");
+  const [offerErrors, setOfferErrors] = useState<Record<string, string>>({});
   const [bookmarkedMissionIds, setBookmarkedMissionIds] = useState<Set<string>>(
     () => readStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY),
   );
@@ -2382,6 +2484,8 @@ export default function MissionBrowserPage() {
   const families = useMemo(() => catalog?.families ?? [], [catalog]);
   const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
   const conceptsByKey = useMemo(() => new Map(Object.entries(catalog?.conceptsByKey ?? {})), [catalog]);
+  const offersByKey = useMemo(() => new Map(Object.entries(catalog?.offersByKey ?? {})), [catalog]);
+  const isOfferCatalog = catalog?.schemaVersion === 3;
   const query = searchParams.get("search") ?? "";
   const provider = searchParams.get("provider") ?? "";
   const missionType = searchParams.get("type") ?? "";
@@ -2389,6 +2493,7 @@ export default function MissionBrowserPage() {
   const repReward = searchParams.get("repReward") ?? "";
   const status = searchParams.get("status") ?? "";
   const confidence = searchParams.get("confidence") ?? "";
+  const verification = searchParams.get("verification") ?? "";
   const requestedView = searchParams.get("view");
   const exactSearchedFaction = (catalog?.filtersMeta?.factions ?? []).find((item) => item.label.toLowerCase() === query.trim().toLowerCase())?.label;
   const activeView: BrowserView = requestedView === "faction" || requestedView === "reputation" || requestedView === "full"
@@ -2396,10 +2501,25 @@ export default function MissionBrowserPage() {
     : provider || exactSearchedFaction ? "faction" : "full";
   const routeConceptKey = missionConceptKeyFromSlug(missionSlug);
   const legacyDossierConceptKey = searchParams.get("concept") ?? "";
-  const legacySelectedConceptKey = searchParams.get("selected") ?? legacyDossierConceptKey;
+  const legacySelectedValue = searchParams.get("selected") ?? "";
+  const selectedExactVariantKey = searchParams.get("variant")
+    ?? searchParams.get("contract")
+    ?? (catalog?.variantOfferKeys?.[legacySelectedValue] ? legacySelectedValue : "");
+  const legacySelectedConceptKey = catalog?.variantOfferKeys?.[legacySelectedValue] ? legacyDossierConceptKey : legacySelectedValue || legacyDossierConceptKey;
   const selectedConceptKey = routeConceptKey || legacySelectedConceptKey;
-  const selectedConcept = conceptsByKey.get(selectedConceptKey);
+  const selectedConcept = isOfferCatalog ? undefined : conceptsByKey.get(selectedConceptKey);
   const selectedConceptVariants = conceptVariantsByKey[selectedConceptKey];
+  const legacyResolution = isOfferCatalog && selectedConceptKey
+    ? resolveLegacyMissionConcept(selectedConceptKey, catalog?.legacyConceptOfferKeys ?? {})
+    : undefined;
+  const selectedOfferKey = searchParams.get("offer")
+    ?? (selectedExactVariantKey ? catalog?.variantOfferKeys?.[selectedExactVariantKey] : undefined)
+    ?? (legacyResolution?.kind === "offer" ? legacyResolution.offerKey : "");
+  const selectedOffer = offersByKey.get(selectedOfferKey);
+  const selectedOfferVariants = offerVariantsByKey[selectedOfferKey];
+  const selectedOfferConcept = selectedOffer?.legacyConceptKeys
+    .map((conceptKey) => conceptsByKey.get(conceptKey))
+    .find((concept): concept is MissionConceptView => Boolean(concept));
   const selectedConceptTriggerRef = useRef<HTMLButtonElement | null>(null);
   const modalShellRef = useRef<HTMLDivElement | null>(null);
   const requestedPage = Number.parseInt(searchParams.get("page") ?? "1", 10);
@@ -2420,6 +2540,25 @@ export default function MissionBrowserPage() {
       return next;
     });
   }, []);
+  const toggleMissionOfferBookmark = useCallback((offerKey: string) => {
+    setBookmarkedMissionIds((current) => {
+      const next = new Set(current);
+      const bookmarkId = missionOfferBookmarkId(offerKey);
+      const oneToOneLegacyKeys = Object.entries(catalog?.legacyConceptOfferKeys ?? {})
+        .filter(([, offerKeys]) => offerKeys.length === 1 && offerKeys[0] === offerKey)
+        .map(([conceptKey]) => conceptKey)
+        .filter((conceptKey) => hasMissionConceptBookmark(next, conceptKey));
+      if (next.has(bookmarkId)) next.delete(bookmarkId);
+      else if (oneToOneLegacyKeys.length) {
+        for (const conceptKey of oneToOneLegacyKeys) {
+          next.delete(conceptKey);
+          next.delete(missionConceptBookmarkId(conceptKey));
+        }
+      } else next.add(bookmarkId);
+      writeStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY, next);
+      return next;
+    });
+  }, [catalog?.legacyConceptOfferKeys]);
   const toggleMissionRewardBookmarks = useCallback((bookmarkIds: string[]) => {
     setBookmarkedMissionIds((current) => {
       const next = new Set(current);
@@ -2440,7 +2579,8 @@ export default function MissionBrowserPage() {
     repReward,
     status,
     confidence,
-  }), [confidence, missionType, provider, query, repReward, reward, status]);
+    verification,
+  }), [confidence, missionType, provider, query, repReward, reward, status, verification]);
   useEffect(() => {
     let cancelled = false;
     queueMicrotask(() => {
@@ -2482,6 +2622,17 @@ export default function MissionBrowserPage() {
   ]);
 
   useEffect(() => {
+    if (!isOfferCatalog || legacyResolution?.kind !== "offer" || searchParams.get("offer") === legacyResolution.offerKey) return;
+    const next = new URLSearchParams(searchParams);
+    next.set("offer", legacyResolution.offerKey);
+    if (selectedExactVariantKey) next.set("variant", selectedExactVariantKey);
+    next.delete("selected");
+    next.delete("concept");
+    next.delete("dossier");
+    navigateWithParams(MISSION_BROWSER_PATH, next, true);
+  }, [isOfferCatalog, legacyResolution, navigateWithParams, searchParams, selectedExactVariantKey]);
+
+  useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
       if (event.key === MISSION_BOOKMARK_STORAGE_KEY) {
         setBookmarkedMissionIds(readStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY));
@@ -2493,7 +2644,7 @@ export default function MissionBrowserPage() {
 
   useEffect(() => {
     const concept = conceptsByKey.get(selectedConceptKey);
-    if (!concept || conceptVariantsByKey[selectedConceptKey]) return;
+    if (isOfferCatalog || !concept || conceptVariantsByKey[selectedConceptKey]) return;
     let cancelled = false;
     queueMicrotask(() => {
       if (cancelled) return;
@@ -2522,19 +2673,57 @@ export default function MissionBrowserPage() {
     return () => {
       cancelled = true;
     };
-  }, [conceptVariantsByKey, conceptsByKey, selectedConceptKey]);
+  }, [conceptVariantsByKey, conceptsByKey, isOfferCatalog, selectedConceptKey]);
+
+  useEffect(() => {
+    if (!isOfferCatalog || !selectedOffer || offerVariantsByKey[selectedOfferKey]) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setOfferLoadingKey(selectedOfferKey);
+      setOfferErrors((current) => {
+        const next = { ...current };
+        delete next[selectedOfferKey];
+        return next;
+      });
+    });
+    loadMissionOfferVariants(selectedOfferKey)
+      .then((variants) => {
+        if (!cancelled) setOfferVariantsByKey((current) => ({ ...current, [selectedOfferKey]: variants }));
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) setOfferErrors((current) => ({
+          ...current,
+          [selectedOfferKey]: reason instanceof Error ? reason.message : "Mission offer variants unavailable",
+        }));
+      })
+      .finally(() => {
+        if (!cancelled) setOfferLoadingKey((current) => current === selectedOfferKey ? "" : current);
+      });
+    return () => { cancelled = true; };
+  }, [isOfferCatalog, offerVariantsByKey, selectedOffer, selectedOfferKey]);
 
   const providers = useMemo(
-    () => catalog?.filtersMeta?.factions ?? Array.from(new Set(families.map((family) => family.provider))).sort().map((value) => ({ key: value, label: value, count: 0 })),
-    [catalog, families],
+    () => isOfferCatalog
+      ? Array.from(new Map(Array.from(offersByKey.values()).map((offer) => [offer.providerKey, {
+        key: offer.providerKey,
+        label: missionOfferProvider(offer),
+        count: 0,
+      }])).values()).sort((left, right) => left.label.localeCompare(right.label))
+      : catalog?.filtersMeta?.factions ?? Array.from(new Set(families.map((family) => family.provider))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families, isOfferCatalog, offersByKey],
   );
   const missionTypes = useMemo(
-    () => catalog?.filtersMeta?.missionTypes ?? Array.from(new Set(families.map((family) => family.missionType))).sort().map((value) => ({ key: value, label: value, count: 0 })),
-    [catalog, families],
+    () => isOfferCatalog
+      ? Array.from(new Set(Array.from(offersByKey.values()).flatMap((offer) => offer.missionTypes))).sort().map((value) => ({ key: value, label: value, count: 0 }))
+      : catalog?.filtersMeta?.missionTypes ?? Array.from(new Set(families.map((family) => family.missionType))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families, isOfferCatalog, offersByKey],
   );
   const rewardedRepPaths = useMemo(
-    () => catalog?.filtersMeta?.reputationScopes ?? Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort().map((value) => ({ key: value, label: value, count: 0 })),
-    [catalog, families],
+    () => isOfferCatalog
+      ? Array.from(new Set(Array.from(offersByKey.values()).flatMap((offer) => offer.reputationRewardKeys))).sort().map((value) => ({ key: value, label: value.split(":").at(-1)?.replaceAll("-", " ") ?? value, count: 0 }))
+      : catalog?.filtersMeta?.reputationScopes ?? Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families, isOfferCatalog, offersByKey],
   );
   const rewardOptions = catalog?.filtersMeta?.rewardTypes ?? [
     { key: "blueprints", label: "Blueprint rewards", count: 0 },
@@ -2549,13 +2738,49 @@ export default function MissionBrowserPage() {
     { key: "items-unresolved", label: "Item reward unresolved", count: 0 },
   ];
   const statuses = catalog?.filtersMeta?.releaseStates ?? ["Release flag not set", "Not for release", "Work in progress"].map((value) => ({ key: value, label: value, count: 0 }));
-  const confidenceOptions = catalog?.filtersMeta?.confidenceStates ?? [
+  const confidenceOptions = isOfferCatalog ? [
+    { key: "unresolved", label: "Any unresolved", count: 0 },
+    { key: "locations", label: "Locations unresolved", count: 0 },
+    { key: "rewards", label: "Rewards unresolved", count: 0 },
+    { key: "prerequisites", label: "Prerequisites unresolved", count: 0 },
+  ] : catalog?.filtersMeta?.confidenceStates ?? [
     { key: "unresolved", label: "Any unresolved", count: 0 },
     { key: "locations", label: "Locations unresolved", count: 0 },
     { key: "rewards", label: "Rewards unresolved", count: 0 },
     { key: "crime-bounded", label: "CrimeStat limited", count: 0 },
     { key: "unlawful", label: "Possible unlawful", count: 0 },
   ];
+
+  const offerProjection = useMemo(() => {
+    if (!isOfferCatalog) return {
+      visibleOfferCount: 0,
+      offerTotalPages: 1,
+      offerCurrentPage: 1,
+      pagedOffers: [] as MissionOfferView[],
+    };
+    const visibleOffers = Array.from(offersByKey.values()).filter((offer) => missionOfferMatchesClientFilters(offer, {
+      search: query,
+      provider,
+      type: missionType,
+      reward,
+      repReward,
+      status,
+      confidence,
+      verification,
+    })).sort((left, right) => left.displayTitle.localeCompare(right.displayTitle) || left.offerKey.localeCompare(right.offerKey));
+    const offerTotalPages = Math.max(1, Math.ceil(visibleOffers.length / OFFERS_PER_PAGE));
+    const selectedOfferIndex = selectedOfferKey ? visibleOffers.findIndex((offer) => offer.offerKey === selectedOfferKey) : -1;
+    const requestedCurrentPage = Number.isFinite(requestedPage) ? Math.min(Math.max(requestedPage, 1), offerTotalPages) : 1;
+    const offerCurrentPage = selectedOfferIndex >= 0
+      ? Math.floor(selectedOfferIndex / OFFERS_PER_PAGE) + 1
+      : requestedCurrentPage;
+    return {
+      visibleOfferCount: visibleOffers.length,
+      offerTotalPages,
+      offerCurrentPage,
+      pagedOffers: visibleOffers.slice((offerCurrentPage - 1) * OFFERS_PER_PAGE, offerCurrentPage * OFFERS_PER_PAGE),
+    };
+  }, [confidence, isOfferCatalog, missionType, offersByKey, provider, query, repReward, requestedPage, reward, selectedOfferKey, status, verification]);
 
   const {
     visibleConceptCount,
@@ -2655,17 +2880,33 @@ export default function MissionBrowserPage() {
     navigateWithParams(missionConceptPath(concept), next);
   }, [conceptsByKey, navigateWithParams, searchParams]);
 
+  const selectOfferWorkspace = useCallback((offerKey: string, trigger: HTMLButtonElement) => {
+    selectedConceptTriggerRef.current = trigger;
+    if (!offersByKey.has(offerKey)) return;
+    const next = new URLSearchParams(searchParams);
+    next.set("offer", offerKey);
+    next.delete("variant");
+    next.delete("contract");
+    next.delete("selected");
+    next.delete("concept");
+    next.delete("dossier");
+    navigateWithParams(MISSION_BROWSER_PATH, next);
+  }, [navigateWithParams, offersByKey, searchParams]);
+
   const closeConceptWorkspace = useCallback(() => {
     const next = new URLSearchParams(searchParams);
     next.delete("selected");
     next.delete("concept");
     next.delete("dossier");
+    next.delete("offer");
+    next.delete("variant");
+    next.delete("contract");
     navigateWithParams(MISSION_BROWSER_PATH, next);
     window.requestAnimationFrame(() => selectedConceptTriggerRef.current?.focus());
   }, [navigateWithParams, searchParams]);
 
   useEffect(() => {
-    if (!selectedConcept) return;
+    if (!selectedConcept && !selectedOffer && legacyResolution?.kind !== "series") return;
     const previousOverflow = document.body.style.overflow;
     const previousPaddingRight = document.body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -2683,7 +2924,7 @@ export default function MissionBrowserPage() {
       document.body.style.overflow = previousOverflow;
       document.body.style.paddingRight = previousPaddingRight;
     };
-  }, [closeConceptWorkspace, selectedConcept]);
+  }, [closeConceptWorkspace, legacyResolution, selectedConcept, selectedOffer]);
 
   function setParam(key: string, value: string) {
     const next = new URLSearchParams(searchParams);
@@ -2693,6 +2934,9 @@ export default function MissionBrowserPage() {
       next.delete("concept");
       next.delete("selected");
       next.delete("dossier");
+      next.delete("offer");
+      next.delete("variant");
+      next.delete("contract");
     }
     if (key !== "page" && key !== "concept") next.delete("page");
     navigateWithParams(MISSION_BROWSER_PATH, next);
@@ -2709,6 +2953,9 @@ export default function MissionBrowserPage() {
     next.delete("concept");
     next.delete("selected");
     next.delete("dossier");
+    next.delete("offer");
+    next.delete("variant");
+    next.delete("contract");
     next.delete("page");
     navigateWithParams(MISSION_BROWSER_PATH, next);
   }
@@ -2722,6 +2969,9 @@ export default function MissionBrowserPage() {
     next.delete("concept");
     next.delete("selected");
     next.delete("dossier");
+    next.delete("offer");
+    next.delete("variant");
+    next.delete("contract");
     next.delete("page");
     navigateWithParams(MISSION_BROWSER_PATH, next);
   }
@@ -2733,6 +2983,9 @@ export default function MissionBrowserPage() {
     next.delete("concept");
     next.delete("selected");
     next.delete("dossier");
+    next.delete("offer");
+    next.delete("variant");
+    next.delete("contract");
     navigateWithParams(MISSION_BROWSER_PATH, next);
   }
 
@@ -2748,6 +3001,17 @@ export default function MissionBrowserPage() {
     ));
   }
 
+  function renderMissionOfferCards(offers: MissionOfferView[]) {
+    return offers.map((offer) => (
+      <MissionOfferCard
+        key={offer.offerKey}
+        offer={offer}
+        isSelected={selectedOfferKey === offer.offerKey}
+        onSelect={selectOfferWorkspace}
+      />
+    ));
+  }
+
   return (
     <div className="mb-page">
       <div className="mb-shell">
@@ -2758,7 +3022,9 @@ export default function MissionBrowserPage() {
           </div>
           <div className="mb-page-heading__summary">
             <strong>{activeView === "full" ? "Full Registry" : activeView === "faction" ? "Faction View" : "Reputation View"}</strong>
-            <span>{loading ? "Loading missions" : error ? "Registry unavailable" : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
+            <span>{loading ? "Loading missions" : error ? "Registry unavailable" : isOfferCatalog
+              ? `${offerProjection.visibleOfferCount} offer${offerProjection.visibleOfferCount === 1 ? "" : "s"}`
+              : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
           </div>
         </header>
 
@@ -2792,6 +3058,14 @@ export default function MissionBrowserPage() {
                   <option value="">All confidence</option>
                   {confidenceOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
                 </select>
+                {isOfferCatalog && (
+                  <select value={verification} onChange={(event) => setParam("verification", event.target.value)} aria-label="Filter by verification">
+                    <option value="">All verification states</option>
+                    <option value="verified">Verified</option>
+                    <option value="unverified">Unverified</option>
+                    <option value="unknown">Unknown</option>
+                  </select>
+                )}
               </div>
               <div className="mb-filter-meta">
                 <nav className="mb-view-selector crb-chip-group" aria-label="Mission browser view">
@@ -2827,7 +3101,7 @@ export default function MissionBrowserPage() {
         {!loading && !error && catalog && (
           <div className="mb-results-shell">
             <main className="mb-family-list">
-            {visibleConceptCount === 0 && (
+            {(isOfferCatalog ? offerProjection.visibleOfferCount : visibleConceptCount) === 0 && (
               <section className="mb-zero-results ops-primary-card" aria-live="polite">
                 <strong>No missions match these filters</strong>
                 <span>Clear the search or filters to restore the mission registry.</span>
@@ -2840,7 +3114,23 @@ export default function MissionBrowserPage() {
               </section>
             )}
 
-            {activeView === "full" && pagedFullCategories.map((category) => {
+            {isOfferCatalog && offerProjection.pagedOffers.length > 0 && (
+              <section className="mb-browse-group mission-category-block ops-primary-card">
+                <header className="mb-group-header mission-category-block__header">
+                  <div>
+                    <span>{activeView === "faction" ? "Faction offers" : activeView === "reputation" ? "Reputation offers" : "Mission offers"}</span>
+                    <h2>Player-facing contracts</h2>
+                    <small>Each card is a title players can search for and see in game.</small>
+                  </div>
+                  <strong>{offerProjection.visibleOfferCount} offers / {Array.from(offersByKey.values()).reduce((sum, offer) => sum + offer.variantKeys.length, 0)} exact variants</strong>
+                </header>
+                <div className="mission-group-grid">
+                  {renderMissionOfferCards(offerProjection.pagedOffers)}
+                </div>
+              </section>
+            )}
+
+            {!isOfferCatalog && activeView === "full" && pagedFullCategories.map((category) => {
               const categoryConcepts = category.conceptKeys.map((conceptKey) => conceptsByKey.get(conceptKey)).filter((concept): concept is MissionConceptView => Boolean(concept));
               return (
                 <section className="mb-browse-group mission-category-block ops-primary-card" key={category.categoryKey}>
@@ -2859,7 +3149,7 @@ export default function MissionBrowserPage() {
               );
             })}
 
-            {activeView === "faction" && pagedFactionViews.map((faction) => {
+            {!isOfferCatalog && activeView === "faction" && pagedFactionViews.map((faction) => {
               const factionConceptKeys = new Set(faction.categories.flatMap((category) => category.conceptKeys));
               return (
                 <section className="mb-browse-group mission-faction-block ops-primary-card" key={faction.factionKey}>
@@ -2888,7 +3178,7 @@ export default function MissionBrowserPage() {
               );
             })}
 
-            {activeView === "reputation" && pagedReputationGroups.map((group) => {
+            {!isOfferCatalog && activeView === "reputation" && pagedReputationGroups.map((group) => {
               const groupCount = group.reputationScopes.reduce((sum, scope) => sum + (scope.conceptKeys?.length ?? 0), 0);
               const variantCount = group.reputationScopes.reduce((sum, scope) => sum + (scope.conceptKeys ?? []).reduce((scopeSum, conceptKey) => scopeSum + (conceptsByKey.get(conceptKey)?.variantCount ?? 0), 0), 0);
               const pathNames = group.reputationScopes.map((scope) => shortRepScope(scope.displayName));
@@ -2936,15 +3226,17 @@ export default function MissionBrowserPage() {
               );
             })}
             </main>
-            {visibleConceptCount > CONCEPTS_PER_PAGE && (
-              <footer className="mb-pagination mb-results-footer" aria-label="Mission concept pages">
+            {(isOfferCatalog ? offerProjection.visibleOfferCount > OFFERS_PER_PAGE : visibleConceptCount > CONCEPTS_PER_PAGE) && (
+              <footer className="mb-pagination mb-results-footer" aria-label={isOfferCatalog ? "Mission offer pages" : "Mission concept pages"}>
                 <span>
-                  Showing {(currentPage - 1) * CONCEPTS_PER_PAGE + 1}-{Math.min(currentPage * CONCEPTS_PER_PAGE, visibleConceptCount)} of {visibleConceptCount} concepts
+                  {isOfferCatalog
+                    ? `Showing ${(offerProjection.offerCurrentPage - 1) * OFFERS_PER_PAGE + 1}-${Math.min(offerProjection.offerCurrentPage * OFFERS_PER_PAGE, offerProjection.visibleOfferCount)} of ${offerProjection.visibleOfferCount} offers`
+                    : `Showing ${(currentPage - 1) * CONCEPTS_PER_PAGE + 1}-${Math.min(currentPage * CONCEPTS_PER_PAGE, visibleConceptCount)} of ${visibleConceptCount} concepts`}
                 </span>
                 <nav aria-label="Pagination">
-                  <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
-                  <span>Page {currentPage} of {totalPages}</span>
-                  <button type="button" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>Next</button>
+                  <button type="button" disabled={(isOfferCatalog ? offerProjection.offerCurrentPage : currentPage) === 1} onClick={() => setPage((isOfferCatalog ? offerProjection.offerCurrentPage : currentPage) - 1)}>Previous</button>
+                  <span>Page {isOfferCatalog ? offerProjection.offerCurrentPage : currentPage} of {isOfferCatalog ? offerProjection.offerTotalPages : totalPages}</span>
+                  <button type="button" disabled={(isOfferCatalog ? offerProjection.offerCurrentPage === offerProjection.offerTotalPages : currentPage === totalPages)} onClick={() => setPage((isOfferCatalog ? offerProjection.offerCurrentPage : currentPage) + 1)}>Next</button>
                 </nav>
               </footer>
             )}
@@ -2978,6 +3270,90 @@ export default function MissionBrowserPage() {
               onToggleRewardBookmarks={toggleMissionRewardBookmarks}
               onClose={closeConceptWorkspace}
             />
+          </div>
+        </div>,
+        document.body,
+      )}
+      {selectedOffer && createPortal(
+        <div
+          className="mission-dossier-modal-backdrop mission-workspace-modal-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeConceptWorkspace();
+          }}
+        >
+          <div
+            ref={modalShellRef}
+            className="mission-dossier-modal-shell mission-workspace-modal-shell ops-primary-card"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedOffer.displayTitle} mission offer details`}
+            tabIndex={-1}
+          >
+            {selectedOfferConcept ? (
+              <MissionSelectedWorkspace
+                key={selectedOffer.offerKey}
+                concept={selectedOfferConcept}
+                offer={selectedOffer}
+                variants={selectedOfferVariants}
+                initialVariantKey={selectedExactVariantKey}
+                loading={offerLoadingKey === selectedOffer.offerKey && !selectedOfferVariants}
+                error={offerErrors[selectedOffer.offerKey]}
+                isBookmarked={hasMissionOfferBookmark(bookmarkedMissionIds, selectedOffer.offerKey, catalog?.legacyConceptOfferKeys)}
+                bookmarkedMissionIds={bookmarkedMissionIds}
+                onToggleBookmark={toggleMissionOfferBookmark}
+                onToggleRewardBookmarks={toggleMissionRewardBookmarks}
+                onSelectVariant={(variantKey) => {
+                  const next = new URLSearchParams(searchParams);
+                  next.set("offer", selectedOffer.offerKey);
+                  next.set("variant", variantKey);
+                  next.delete("selected");
+                  next.delete("concept");
+                  next.delete("contract");
+                  next.delete("dossier");
+                  navigateWithParams(MISSION_BROWSER_PATH, next, true);
+                }}
+                onClose={closeConceptWorkspace}
+              />
+            ) : (
+              <section className="mission-selected-workspace ops-primary-card">
+                <div className="mission-selected-state is-error">This offer has no readable legacy series metadata. Exact variants were not selected.</div>
+                <button type="button" className="mission-dossier-close" aria-label="Close selected mission details" onClick={closeConceptWorkspace}>×</button>
+              </section>
+            )}
+          </div>
+        </div>,
+        document.body,
+      )}
+      {legacyResolution?.kind === "series" && !selectedOffer && createPortal(
+        <div
+          className="mission-dossier-modal-backdrop mission-workspace-modal-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeConceptWorkspace();
+          }}
+        >
+          <div
+            ref={modalShellRef}
+            className="mission-dossier-modal-shell mission-workspace-modal-shell ops-primary-card"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Choose a mission offer from this legacy series"
+            tabIndex={-1}
+          >
+            <section className="mission-selected-workspace ops-primary-card">
+              <header className="mission-dossier-header">
+                <div className="mission-dossier-header__identity">
+                  <div>
+                    <span className="mb-kicker">Legacy mission series</span>
+                    <h2>Choose a player-facing mission title</h2>
+                    <p>This older link represents multiple player-facing offers. Choose the title you intended.</p>
+                  </div>
+                </div>
+                <button type="button" className="mission-dossier-close" aria-label="Close mission series chooser" onClick={closeConceptWorkspace}>×</button>
+              </header>
+              <div className="mission-group-grid">
+                {renderMissionOfferCards(legacyResolution.offerKeys.map((offerKey) => offersByKey.get(offerKey)).filter((offer): offer is MissionOfferView => Boolean(offer)))}
+              </div>
+            </section>
           </div>
         </div>,
         document.body,

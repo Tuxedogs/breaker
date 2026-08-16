@@ -79,6 +79,8 @@ function isDynamicApiPath(pathname: string) {
     || pathname.startsWith("/api/v1/fitting/")
     || pathname.startsWith("/api/missions/family/")
     || pathname.startsWith("/api/missions/families/")
+    || pathname.startsWith("/api/missions/offer/")
+    || pathname.startsWith("/api/missions/offers/")
     || pathname.startsWith("/api/missions/variant/")
     || pathname.startsWith("/api/missions/variants/")
     || pathname.startsWith("/api/user/inventory/stacks/")

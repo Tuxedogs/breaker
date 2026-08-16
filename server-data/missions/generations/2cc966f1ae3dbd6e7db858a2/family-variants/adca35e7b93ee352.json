@@ -1,0 +1,1888 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+  "variants": [
+    {
+      "variantKey": "af4ffb08-954a-4f75-9493-e3cd102af48d",
+      "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+      "conceptKey": "dfbd81af6aabffd53eae",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope|defend-ship|activity-defined|standard|unlock:3d819bf4d49f|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "intersec-defend-ship",
+        "descriptionStem": "intersec-defend-ship",
+        "handlerStem": "inter-sec-defense-solutions-defend-ship-nyx",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d819bf4d49f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:intersec-defend-ship",
+          "description:intersec-defend-ship",
+          "handler:inter-sec-defense-solutions-defend-ship-nyx",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d819bf4d49f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Defend InterSec Operative",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ship \nBriefing: Require urgent assistance for an InterSec operative who is currently under fire at [Location].\n\nA group of outlaws had previously taken our operative captive with the intention of extracting sensitive information from them, but miraculously they were able to escape. Unfortunately, the pursuing outlaws now have them pinned down.\n\nDue to the number of the ships assaulting them, we're offering additional compensation to accommodate the added danger. Recruiting additional ships to support you in this mission is highly advised.\n\nRespectfully,   \n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Intersec_DefendShip_Title_Easy_001",
+      "internalName": "InterSec_DefendShip_Nyx_Easy",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+          "Rep reward unresolved +100",
+          "98,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "poolName": "Inter Sec Defend Ship",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+                "displayName": "Pulse \"Rouge\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+                "displayName": "Testudo Arms Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+                "displayName": "Testudo Core Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+                "displayName": "Testudo Legs Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+                "displayName": "Testudo Helmet Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+                "displayName": "Testudo Backpack Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +100"
+        ],
+        "credits": "98,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "98,250 aUEC",
+          "amount": 98250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 98250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 98250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 100,
+          "confidence": "partial",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "af4ffb08-954a-4f75-9493-e3cd102af48d",
+        "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+        "generatorName": "ContractGenerator.InterSec_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Intersec_DefendShip_Title_Easy_001",
+        "descriptionRaw": "@Intersec_DefendShip_Desc_Easy_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "588aadf2-a064-4af2-bdd2-d771b8beca38",
+      "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+      "conceptKey": "314ac96469010811c606",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope|defend-ship|activity-defined|standard|unlock:a39c0bc1b188|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "intersec-defend-ship-vanduul",
+        "descriptionStem": "intersec-defend-ship-vanduul",
+        "handlerStem": "inter-sec-defense-solutions-defend-ship-nyx",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:a39c0bc1b188",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:intersec-defend-ship-vanduul",
+          "description:intersec-defend-ship-vanduul",
+          "handler:inter-sec-defense-solutions-defend-ship-nyx",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:a39c0bc1b188",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Super"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Handle Vanduul Attack on Ship",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Vanduul\nEquipment Specs: Combat-rated Ship\nBriefing: An operator working with InterSec is currently being attacked by Vanduul ships at [Location]. The likelihood of them surviving on their own is low, so we’re looking for a contractor willing to provide combat support.  \n\nContractors accepting this mission should be well supplied and ready to face the Vanduul threat head-on. \n\nRespectfully, \n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Intersec_DefendShip_Vanduul_Title_Super_001",
+      "internalName": "InterSec_DefendShip_Nyx_Super",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Super"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3dc9ba7f-61d8-4b7a-8566-742b8857f772"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+          "Rep reward unresolved +300",
+          "274,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "poolName": "Inter Sec Defend Ship",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+                "displayName": "Pulse \"Rouge\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+                "displayName": "Testudo Arms Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+                "displayName": "Testudo Core Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+                "displayName": "Testudo Legs Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+                "displayName": "Testudo Helmet Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+                "displayName": "Testudo Backpack Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +300"
+        ],
+        "credits": "274,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "274,000 aUEC",
+          "amount": 274000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 274000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 274000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 300,
+          "confidence": "partial",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "588aadf2-a064-4af2-bdd2-d771b8beca38",
+        "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+        "generatorName": "ContractGenerator.InterSec_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Intersec_DefendShip_Vanduul_Title_Super_001",
+        "descriptionRaw": "@Intersec_DefendShip_Vanduul_Desc_Super_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "2b4a7a21-7932-4304-8e10-1d2026300271",
+      "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+      "conceptKey": "dfbd81af6aabffd53eae",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope|defend-ship|activity-defined|standard|unlock:3d819bf4d49f|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "intersec-defend-ship",
+        "descriptionStem": "intersec-defend-ship",
+        "handlerStem": "inter-sec-defense-solutions-defend-ship-nyx",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d819bf4d49f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:intersec-defend-ship",
+          "description:intersec-defend-ship",
+          "handler:inter-sec-defense-solutions-defend-ship-nyx",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d819bf4d49f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Operative Extraction",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: An undercover agent of ours was compromised and is now being pursued by the outlaw pack they had infiltrated. As such, they are in need of immediate extraction at [Location]. \n\nOnce on site, engage with all hostiles in order to provide cover so our operative can QT away.\n\nBring additional backup and don't underestimate these outlaws. They are violent and motivated so they are unlikely to give up anytime soon.\n\nRespectfully,\n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Intersec_DefendShip_Title_Medium_001",
+      "internalName": "InterSec_DefendShip_Nyx_Medium",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+          "Rep reward unresolved +150",
+          "126,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "poolName": "Inter Sec Defend Ship",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+                "displayName": "Pulse \"Rouge\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+                "displayName": "Testudo Arms Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+                "displayName": "Testudo Core Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+                "displayName": "Testudo Legs Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+                "displayName": "Testudo Helmet Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+                "displayName": "Testudo Backpack Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +150"
+        ],
+        "credits": "126,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "126,750 aUEC",
+          "amount": 126750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 126750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 126750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 150,
+          "confidence": "partial",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "2b4a7a21-7932-4304-8e10-1d2026300271",
+        "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+        "generatorName": "ContractGenerator.InterSec_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Intersec_DefendShip_Title_Medium_001",
+        "descriptionRaw": "@Intersec_DefendShip_Desc_Medium_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "a57db8d3-0d2a-457c-be2c-671a4c4bf664",
+      "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+      "conceptKey": "314ac96469010811c606",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope|defend-ship|activity-defined|standard|unlock:a39c0bc1b188|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "intersec-defend-ship-vanduul-very",
+        "descriptionStem": "intersec-defend-ship-vanduul-very",
+        "handlerStem": "inter-sec-defense-solutions-defend-ship-nyx",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:a39c0bc1b188",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:intersec-defend-ship-vanduul-very",
+          "description:intersec-defend-ship-vanduul-very",
+          "handler:inter-sec-defense-solutions-defend-ship-nyx",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:a39c0bc1b188",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Pilot Under Fire From Vanduul",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Vanduul \nEquipment Specs: Combat-rated Ships \nBriefing: We've just lost contact with a pilot who engaged with Vanduul forces at [Location].\n\nTravel to their last known location and if they're still alive, defend them long enough to ensure they can escape. Ensuring the safety of the operative is crucial, as is eliminating any Vanduul threats to the UEE.\n\nYou'll most likely need a strong group of ships to successfully neutralize these Vanduul.\n\nRespectfully,   \n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Intersec_DefendShip_Vanduul_Title_VeryHard_001",
+      "internalName": "InterSec_DefendShip_Nyx_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_VeryHard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3dc9ba7f-61d8-4b7a-8566-742b8857f772"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+          "Rep reward unresolved +250",
+          "196,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "poolName": "Inter Sec Defend Ship",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+                "displayName": "Pulse \"Rouge\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+                "displayName": "Testudo Arms Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+                "displayName": "Testudo Core Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+                "displayName": "Testudo Legs Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+                "displayName": "Testudo Helmet Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+                "displayName": "Testudo Backpack Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +250"
+        ],
+        "credits": "196,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "196,250 aUEC",
+          "amount": 196250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 196250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 196250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 250,
+          "confidence": "partial",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a57db8d3-0d2a-457c-be2c-671a4c4bf664",
+        "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+        "generatorName": "ContractGenerator.InterSec_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Intersec_DefendShip_Vanduul_Title_VeryHard_001",
+        "descriptionRaw": "@Intersec_DefendShip_Vanduul_Desc_VeryHard_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+      "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+      "conceptKey": "dfbd81af6aabffd53eae",
+      "objectiveSignature": {
+        "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope|defend-ship|activity-defined|standard|unlock:3d819bf4d49f|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "intersec-defend-ship",
+        "descriptionStem": "intersec-defend-ship",
+        "handlerStem": "inter-sec-defense-solutions-defend-ship-nyx",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d819bf4d49f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:intersec-defend-ship",
+          "description:intersec-defend-ship",
+          "handler:inter-sec-defense-solutions-defend-ship-nyx",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d819bf4d49f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Protect Vital Asset",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: One of our pilots is under attack at [Location] and is in need of assistance.\n\nThis operative is carrying key information regarding a coordinated attack on key UEE infrastructure and it is vital that they are able to deliver it to us. You and any dependable pilots you can recruit are charged with protecting them from the outlaws in pursuit long enough for them to QT away.\n\nRespectfully,   \n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+      "rawName": "@Intersec_DefendShip_Title_Hard_001",
+      "internalName": "InterSec_DefendShip_Nyx_Hard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+          "InterSec_DefendShip_Nyx_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedLocationTokens": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+          "Rep reward unresolved +200",
+          "168,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "poolName": "Inter Sec Defend Ship",
+            "rewardCount": 7,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "14.29% chance - 1 of 7",
+            "rewards": [
+              {
+                "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+                "displayName": "Pulse \"Rouge\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+                "displayName": "Testudo Arms Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+                "displayName": "Testudo Core Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+                "displayName": "Testudo Legs Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+                "displayName": "Testudo Helmet Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+                "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+                "componentType": "ammo",
+                "chanceLabel": "14.29% chance"
+              },
+              {
+                "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+                "displayName": "Testudo Backpack Combustion",
+                "componentType": "armor",
+                "chanceLabel": "14.29% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +200"
+        ],
+        "credits": "168,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "168,250 aUEC",
+          "amount": 168250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 168250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 168250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 200,
+          "confidence": "partial",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+        "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+        "generatorName": "ContractGenerator.InterSec_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Intersec_DefendShip_Title_Hard_001",
+        "descriptionRaw": "@Intersec_DefendShip_Desc_Hard_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

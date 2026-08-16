@@ -1,0 +1,3291 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "offerKey": "citizens-for-prosperity:disable-outlaw-stronghold-at-location",
+  "variants": [
+    {
+      "variantKey": "0df79063-e778-4fa2-982d-6fdc003c7d2d",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-0",
+      "tierLabel": "Rank 0",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionB_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionB_Rank0_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionB_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedLocationTokens": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "61,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "cf847b27-bf3b-4d50-87c0-de3c68e4e387",
+            "poolName": "Citizens For Prosperity Destroy Items AB",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "b627e348-29b5-44c8-a836-258df60bcd08",
+                "displayName": "FS-9 LMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "52bf8b6a-b795-4c03-aedd-80d60945ff42",
+                "displayName": "BR-2 Shotgun",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5c6fa3ff-5913-4d74-aa4c-8a1f0b40bc23",
+                "displayName": "Gallant Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1244f177-7b33-4f16-8e63-8d19e87f2a48",
+                "displayName": "ADP Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e5af6fcb-b69c-42ae-859d-462ec2d78782",
+                "displayName": "ADP Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5aaa1189-c6a9-4154-8ae4-1fe34ac3c70e",
+                "displayName": "ADP Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "39480ccf-608c-4e41-ab7b-d8821aef3b96",
+                "displayName": "Balor HCH Helmet",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "005d95db-96ca-45b7-9647-7e7537b8fac8",
+                "displayName": "ADP-mk4 Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "f65a6b00-2c0b-4ee8-b76d-17713c56b36f",
+                "displayName": "ADP-mk4 Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c63cd790-9741-47f4-aba0-718077ccdcce",
+                "displayName": "ADP-mk4 Core Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "33c91dc9-c6fe-4f38-ac17-4e5ebefcc7b9",
+                "displayName": "ADP-mk4 Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "017bb372-2fe2-4615-8bcb-e18020baaa4f",
+                "displayName": "FS-9 Magazine (75 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e191cc6b-bc91-4a06-a410-c8e0cfee3f61",
+                "displayName": "BR-2 Shotgun Magazine (12 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d0c3285f-0779-4120-9dec-85e7cf5bd5af",
+                "displayName": "Gallant Rifle Battery (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0df79063-e778-4fa2-982d-6fdc003c7d2d",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "5bff9fb5-f386-4e93-924c-9a99b4eb20a7",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionC_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionC_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionC_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedLocationTokens": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "38,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "16948a53-7be2-4869-9b21-3af06e99f8b7",
+            "poolName": "Citizens For Prosperity Destroy Items CD",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "343ab6b2-5ffe-45cf-9fe7-b6ec48d30208",
+                "displayName": "P6-LR Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "eba027dc-b709-4911-bed5-4bc0ae9c8a0f",
+                "displayName": "A03 Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "2f976074-31fd-4a06-9ccc-ebf125b9ecd0",
+                "displayName": "CBH-3 Helmet Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "90bf3459-4ad8-49f2-bc05-8103033cf49a",
+                "displayName": "PAB-1 Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "85eee009-0a5c-43fa-804e-34766e464a08",
+                "displayName": "PAB-1 Core",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "8457fd65-c1ae-43ba-834c-19f4f1d2371c",
+                "displayName": "PAB-1 Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "02826831-2501-4e3c-ae60-6f97ff5353c1",
+                "displayName": "TrueDef-Pro Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f5f2c887-2efb-4b0b-b66f-89f0ed873e88",
+                "displayName": "TrueDef-Pro Core Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "78ac5dc3-5f2f-47ab-86b8-052368eedddb",
+                "displayName": "Argus Helmet",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "1363635d-8c6c-4463-ae26-2bb1a681b5b5",
+                "displayName": "TrueDef-Pro Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e5dbfcd7-031c-4483-82f5-37a616d327d1",
+                "displayName": "A03 Sniper Rifle Magazine (15 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "4940c111-ffb2-45bb-a7f6-abe9859599f7",
+                "displayName": "P6-LR Magazine (8 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "38,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "38,000 aUEC",
+          "amount": 38000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 38000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 38000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5bff9fb5-f386-4e93-924c-9a99b4eb20a7",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "6dd3942c-b1c7-4466-8bd4-709261178add",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionA_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionA_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionA_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "38,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "cf847b27-bf3b-4d50-87c0-de3c68e4e387",
+            "poolName": "Citizens For Prosperity Destroy Items AB",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "b627e348-29b5-44c8-a836-258df60bcd08",
+                "displayName": "FS-9 LMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "52bf8b6a-b795-4c03-aedd-80d60945ff42",
+                "displayName": "BR-2 Shotgun",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5c6fa3ff-5913-4d74-aa4c-8a1f0b40bc23",
+                "displayName": "Gallant Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1244f177-7b33-4f16-8e63-8d19e87f2a48",
+                "displayName": "ADP Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e5af6fcb-b69c-42ae-859d-462ec2d78782",
+                "displayName": "ADP Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5aaa1189-c6a9-4154-8ae4-1fe34ac3c70e",
+                "displayName": "ADP Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "39480ccf-608c-4e41-ab7b-d8821aef3b96",
+                "displayName": "Balor HCH Helmet",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "005d95db-96ca-45b7-9647-7e7537b8fac8",
+                "displayName": "ADP-mk4 Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "f65a6b00-2c0b-4ee8-b76d-17713c56b36f",
+                "displayName": "ADP-mk4 Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c63cd790-9741-47f4-aba0-718077ccdcce",
+                "displayName": "ADP-mk4 Core Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "33c91dc9-c6fe-4f38-ac17-4e5ebefcc7b9",
+                "displayName": "ADP-mk4 Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "017bb372-2fe2-4615-8bcb-e18020baaa4f",
+                "displayName": "FS-9 Magazine (75 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e191cc6b-bc91-4a06-a410-c8e0cfee3f61",
+                "displayName": "BR-2 Shotgun Magazine (12 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d0c3285f-0779-4120-9dec-85e7cf5bd5af",
+                "displayName": "Gallant Rifle Battery (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "38,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "38,000 aUEC",
+          "amount": 38000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 38000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 38000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6dd3942c-b1c7-4466-8bd4-709261178add",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "8b18d982-1e25-41a5-b159-e7e4ea5c9620",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-0",
+      "tierLabel": "Rank 0",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionA_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionA_Rank0_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionA_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "9d323b1b-5805-4ddd-8641-563246d55279"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedLocationTokens": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "38,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "cf847b27-bf3b-4d50-87c0-de3c68e4e387",
+            "poolName": "Citizens For Prosperity Destroy Items AB",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "b627e348-29b5-44c8-a836-258df60bcd08",
+                "displayName": "FS-9 LMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "52bf8b6a-b795-4c03-aedd-80d60945ff42",
+                "displayName": "BR-2 Shotgun",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5c6fa3ff-5913-4d74-aa4c-8a1f0b40bc23",
+                "displayName": "Gallant Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1244f177-7b33-4f16-8e63-8d19e87f2a48",
+                "displayName": "ADP Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e5af6fcb-b69c-42ae-859d-462ec2d78782",
+                "displayName": "ADP Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5aaa1189-c6a9-4154-8ae4-1fe34ac3c70e",
+                "displayName": "ADP Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "39480ccf-608c-4e41-ab7b-d8821aef3b96",
+                "displayName": "Balor HCH Helmet",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "005d95db-96ca-45b7-9647-7e7537b8fac8",
+                "displayName": "ADP-mk4 Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "f65a6b00-2c0b-4ee8-b76d-17713c56b36f",
+                "displayName": "ADP-mk4 Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c63cd790-9741-47f4-aba0-718077ccdcce",
+                "displayName": "ADP-mk4 Core Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "33c91dc9-c6fe-4f38-ac17-4e5ebefcc7b9",
+                "displayName": "ADP-mk4 Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "017bb372-2fe2-4615-8bcb-e18020baaa4f",
+                "displayName": "FS-9 Magazine (75 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e191cc6b-bc91-4a06-a410-c8e0cfee3f61",
+                "displayName": "BR-2 Shotgun Magazine (12 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d0c3285f-0779-4120-9dec-85e7cf5bd5af",
+                "displayName": "Gallant Rifle Battery (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "38,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "38,000 aUEC",
+          "amount": 38000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 38000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 38000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "8b18d982-1e25-41a5-b159-e7e4ea5c9620",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "8bcab8a3-6237-4ad6-bd25-004a34b540ed",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionB_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionB_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionB_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedLocationTokens": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "38,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items AB: FS-9 LMG, BR-2 Shotgun, Gallant Rifle, ADP Arms Woodland +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "cf847b27-bf3b-4d50-87c0-de3c68e4e387",
+            "poolName": "Citizens For Prosperity Destroy Items AB",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "b627e348-29b5-44c8-a836-258df60bcd08",
+                "displayName": "FS-9 LMG",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "52bf8b6a-b795-4c03-aedd-80d60945ff42",
+                "displayName": "BR-2 Shotgun",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5c6fa3ff-5913-4d74-aa4c-8a1f0b40bc23",
+                "displayName": "Gallant Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "1244f177-7b33-4f16-8e63-8d19e87f2a48",
+                "displayName": "ADP Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e5af6fcb-b69c-42ae-859d-462ec2d78782",
+                "displayName": "ADP Core",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "5aaa1189-c6a9-4154-8ae4-1fe34ac3c70e",
+                "displayName": "ADP Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "39480ccf-608c-4e41-ab7b-d8821aef3b96",
+                "displayName": "Balor HCH Helmet",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "005d95db-96ca-45b7-9647-7e7537b8fac8",
+                "displayName": "ADP-mk4 Arms Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "f65a6b00-2c0b-4ee8-b76d-17713c56b36f",
+                "displayName": "ADP-mk4 Legs Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c63cd790-9741-47f4-aba0-718077ccdcce",
+                "displayName": "ADP-mk4 Core Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "33c91dc9-c6fe-4f38-ac17-4e5ebefcc7b9",
+                "displayName": "ADP-mk4 Helmet Woodland",
+                "componentType": "armor",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "017bb372-2fe2-4615-8bcb-e18020baaa4f",
+                "displayName": "FS-9 Magazine (75 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "e191cc6b-bc91-4a06-a410-c8e0cfee3f61",
+                "displayName": "BR-2 Shotgun Magazine (12 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d0c3285f-0779-4120-9dec-85e7cf5bd5af",
+                "displayName": "Gallant Rifle Battery (45 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "38,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "38,000 aUEC",
+          "amount": 38000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 38000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 38000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "8bcab8a3-6237-4ad6-bd25-004a34b540ed",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "bc4031f7-3f93-4d18-b4f9-a9b6771812da",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-0",
+      "tierLabel": "Rank 0",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionC_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionC_Rank0_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionC_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedLocationTokens": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "61,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "16948a53-7be2-4869-9b21-3af06e99f8b7",
+            "poolName": "Citizens For Prosperity Destroy Items CD",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "343ab6b2-5ffe-45cf-9fe7-b6ec48d30208",
+                "displayName": "P6-LR Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "eba027dc-b709-4911-bed5-4bc0ae9c8a0f",
+                "displayName": "A03 Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "2f976074-31fd-4a06-9ccc-ebf125b9ecd0",
+                "displayName": "CBH-3 Helmet Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "90bf3459-4ad8-49f2-bc05-8103033cf49a",
+                "displayName": "PAB-1 Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "85eee009-0a5c-43fa-804e-34766e464a08",
+                "displayName": "PAB-1 Core",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "8457fd65-c1ae-43ba-834c-19f4f1d2371c",
+                "displayName": "PAB-1 Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "02826831-2501-4e3c-ae60-6f97ff5353c1",
+                "displayName": "TrueDef-Pro Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f5f2c887-2efb-4b0b-b66f-89f0ed873e88",
+                "displayName": "TrueDef-Pro Core Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "78ac5dc3-5f2f-47ab-86b8-052368eedddb",
+                "displayName": "Argus Helmet",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "1363635d-8c6c-4463-ae26-2bb1a681b5b5",
+                "displayName": "TrueDef-Pro Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e5dbfcd7-031c-4483-82f5-37a616d327d1",
+                "displayName": "A03 Sniper Rifle Magazine (15 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "4940c111-ffb2-45bb-a7f6-abe9859599f7",
+                "displayName": "P6-LR Magazine (8 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "bc4031f7-3f93-4d18-b4f9-a9b6771812da",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "c26e0ab8-515d-4caa-8f16-6cddeebbaa79",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "rank-0",
+      "tierLabel": "Rank 0",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionD_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionD_Rank0_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionD_Rank0_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedLocationTokens": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "61,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "16948a53-7be2-4869-9b21-3af06e99f8b7",
+            "poolName": "Citizens For Prosperity Destroy Items CD",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "343ab6b2-5ffe-45cf-9fe7-b6ec48d30208",
+                "displayName": "P6-LR Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "eba027dc-b709-4911-bed5-4bc0ae9c8a0f",
+                "displayName": "A03 Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "2f976074-31fd-4a06-9ccc-ebf125b9ecd0",
+                "displayName": "CBH-3 Helmet Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "90bf3459-4ad8-49f2-bc05-8103033cf49a",
+                "displayName": "PAB-1 Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "85eee009-0a5c-43fa-804e-34766e464a08",
+                "displayName": "PAB-1 Core",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "8457fd65-c1ae-43ba-834c-19f4f1d2371c",
+                "displayName": "PAB-1 Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "02826831-2501-4e3c-ae60-6f97ff5353c1",
+                "displayName": "TrueDef-Pro Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f5f2c887-2efb-4b0b-b66f-89f0ed873e88",
+                "displayName": "TrueDef-Pro Core Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "78ac5dc3-5f2f-47ab-86b8-052368eedddb",
+                "displayName": "Argus Helmet",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "1363635d-8c6c-4463-ae26-2bb1a681b5b5",
+                "displayName": "TrueDef-Pro Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e5dbfcd7-031c-4483-82f5-37a616d327d1",
+                "displayName": "A03 Sniper Rifle Magazine (15 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "4940c111-ffb2-45bb-a7f6-abe9859599f7",
+                "displayName": "P6-LR Magazine (8 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "c26e0ab8-515d-4caa-8f16-6cddeebbaa79",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "fb339a08-14cb-4de5-b8c0-3a9a731105a1",
+      "familyKey": "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+      "conceptKey": "64e1c5500128065eacd9",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope|destroy-items+sabotage-generator|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+sabotage-generator",
+        "titleStem": "cfp-sabotage-generators",
+        "descriptionStem": "cfp-sabotage-generators",
+        "handlerStem": "citizens-for-prosperity-destroy-items-pyro",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+sabotage-generator",
+          "activity-source:structural",
+          "title:cfp-sabotage-generators",
+          "description:cfp-sabotage-generators",
+          "handler:citizens-for-prosperity-destroy-items-pyro",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionD_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Disable Outlaw Stronghold at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Following a series of raids against Citizens for Prosperity aligned settlements, we believe we have traced those responsible back to [Location].\n\nAttacking them directly will pose too great of a risk and most likely encourage aggressive reprisals. Instead, we believe that if their power generators were to be disable it could force them to settle somewhere else.\n\nDo you think you could handle it for us?\n \nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_sabotage_generators_VE_title_001",
+      "internalName": "CFP_Pyro_RegionD_VE_1AsteroidBase_Criminals_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ec2faa45-6ebc-4fcc-8220-45ab4786329c|CitizensForProsperity_DestroyItems_Pyro",
+          "CFP_Pyro_RegionD_VE_1AsteroidBase_Criminals_Sabotage"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Location unresolved",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Location unresolved",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_Locality",
+          "raw": {
+            "token": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "sourceRole": "unknown",
+        "confidence": "unresolved",
+        "reason": "Availability/location refs were present but did not resolve in the reference index.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "type": "ContractPrerequisite_Locality",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "unresolved",
+          "displayName": "Unresolved",
+          "displayLabel": "Pickup unresolved",
+          "detailDisplay": "Pickup unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRole": "unknown",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedLocationTokens": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [],
+          "grouping": {
+            "systems": [],
+            "localityNames": [],
+            "displayLabel": "Pickup unresolved",
+            "detailLabel": "Pickup unresolved",
+            "confidence": "unresolved"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [],
+      "unresolvedLocationTokens": [
+        "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+      ],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8",
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50",
+          "38,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Citizens For Prosperity Destroy Items CD: P6-LR Sniper Rifle, A03 Sniper Rifle, CBH-3 Helmet Base, PAB-1 Arms +8"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "16948a53-7be2-4869-9b21-3af06e99f8b7",
+            "poolName": "Citizens For Prosperity Destroy Items CD",
+            "rewardCount": 12,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "8.33% chance - 1 of 12",
+            "rewards": [
+              {
+                "blueprintGuid": "343ab6b2-5ffe-45cf-9fe7-b6ec48d30208",
+                "displayName": "P6-LR Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "eba027dc-b709-4911-bed5-4bc0ae9c8a0f",
+                "displayName": "A03 Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "2f976074-31fd-4a06-9ccc-ebf125b9ecd0",
+                "displayName": "CBH-3 Helmet Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "90bf3459-4ad8-49f2-bc05-8103033cf49a",
+                "displayName": "PAB-1 Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "85eee009-0a5c-43fa-804e-34766e464a08",
+                "displayName": "PAB-1 Core",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "8457fd65-c1ae-43ba-834c-19f4f1d2371c",
+                "displayName": "PAB-1 Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "02826831-2501-4e3c-ae60-6f97ff5353c1",
+                "displayName": "TrueDef-Pro Arms",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "f5f2c887-2efb-4b0b-b66f-89f0ed873e88",
+                "displayName": "TrueDef-Pro Core Base",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "78ac5dc3-5f2f-47ab-86b8-052368eedddb",
+                "displayName": "Argus Helmet",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "1363635d-8c6c-4463-ae26-2bb1a681b5b5",
+                "displayName": "TrueDef-Pro Legs",
+                "componentType": "armor",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "e5dbfcd7-031c-4483-82f5-37a616d327d1",
+                "displayName": "A03 Sniper Rifle Magazine (15 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              },
+              {
+                "blueprintGuid": "4940c111-ffb2-45bb-a7f6-abe9859599f7",
+                "displayName": "P6-LR Magazine (8 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "8.33% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Rep reward unresolved +25",
+          "Rep reward unresolved +50"
+        ],
+        "credits": "38,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "38,000 aUEC",
+          "amount": 38000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 38000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 38000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 25,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "88e61ecb-a0ba-4226-b76b-c12043c03e35"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Rep reward unresolved",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": true,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "fb339a08-14cb-4de5-b8c0-3a9a731105a1",
+        "generatorGuid": "ec2faa45-6ebc-4fcc-8220-45ab4786329c",
+        "generatorName": "ContractGenerator.CitizensForProsperity_DestroyItems",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_destroyitems.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_sabotage_generators_VE_title_001",
+        "descriptionRaw": "@cfp_sabotage_generators_VE_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

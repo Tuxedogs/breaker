@@ -1,0 +1,1543 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
+  "variant": {
+    "variantKey": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+    "familyKey": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
+    "conceptKey": "51ddeff01e48d7f23f2f",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+escort-ship|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "defend-location+escort-ship",
+      "titleStem": "head-hunters-defend-entites-and-escort",
+      "descriptionStem": "head-hunters-defend-entites-and-escort",
+      "handlerStem": "head-hunters-defend-entities-and-escort-nyx",
+      "archetype": "Defend Ship",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:defend-location+escort-ship",
+        "activity-source:structural",
+        "title:head-hunters-defend-entites-and-escort",
+        "description:head-hunters-defend-entites-and-escort",
+        "handler:head-hunters-defend-entities-and-escort-nyx",
+        "contract:careercontract",
+        "archetype:defend-ship",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "veryhard",
+    "tierLabel": "Very High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Defend Ship"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
+        "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "displayName": "Defend [Location] From Mercs",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "So, I thought we had done a good job of keeping things on the quiet side, but looks like the fact [Location] has Headhunters ties has gotten out. Now there are some heavy operators causing major problems there, targeting the [Objects] and generally causing me a massive headache.\n\nWith the amount of firepower these interlopers are packing, you're gonna need to bring along a crew of your own to pull this off. Especially since I need you to be protecting any friendly ships that need help.\n\nThis op needs to go off without a hitch, so I’m offering the main contractor [ScripAmount] Council Scrip for a job well done. \n\nStows out.",
+    "rawName": "@HeadHunters_DefendEntitesAndEscort_VH_Title",
+    "internalName": "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard",
+    "missionType": "CareerContract",
+    "provider": "Headhunters",
+    "faction": "Headhunters",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+      "displayName": "Ship Combat",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
+      "trackType": "Ship Combat",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
+        "HeadHunters_DefendEntitiesAndEscort_Nyx_VeryHard"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "missionArchetype": "Defend Ship",
+    "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+    "reputationRequirement": "Headhunters: Veteran Contractor Elite Contractor",
+    "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Location unresolved; Headhunters: Veteran Contractor Elite Contractor",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "locality",
+        "label": "Location unresolved",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_Locality",
+        "raw": {
+          "token": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        }
+      },
+      {
+        "type": "reputation",
+        "label": "Headhunters: Veteran Contractor Elite Contractor",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      }
+    ],
+    "pickupLocation": {
+      "status": "unresolved",
+      "displayName": "Unresolved",
+      "sourceRole": "unknown",
+      "confidence": "unresolved",
+      "reason": "Availability/location refs were present but did not resolve in the reference index.",
+      "sourceRefs": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "type": "ContractPrerequisite_Locality",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Pickup unresolved",
+        "detailLabel": "Pickup unresolved",
+        "confidence": "unresolved"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "displayLabel": "Pickup unresolved",
+        "detailDisplay": "Pickup unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRole": "unknown",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedLocationTokens": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [
+      "339a0c2f-18be-4a4b-9766-0b43763fb102"
+    ],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Nyx Headhunters Easy: Cryo-Star SL, Winter-Star SL, Kelvid, Cryo-Star +13",
+        "Blueprint: Nyx Headhunters Hard: Tarantula GT-870 Mark 1 Cannon, Tarantula GT-870 Mark 2 Cannon, Tarantula GT-870 Mark 3 Cannon, YellowJacket GT-210 Gatling +3",
+        "Ship Combat +250",
+        "637,500 aUEC",
+        "Item reward: Council Scrip",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Nyx Headhunters Easy: Cryo-Star SL, Winter-Star SL, Kelvid, Cryo-Star +13",
+        "Nyx Headhunters Hard: Tarantula GT-870 Mark 1 Cannon, Tarantula GT-870 Mark 2 Cannon, Tarantula GT-870 Mark 3 Cannon, YellowJacket GT-210 Gatling +3"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "ed0b8aaa-eec6-4c72-b9e7-b0b48ab5e135",
+          "poolName": "Nyx Headhunters Easy",
+          "rewardCount": 17,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "5.88% chance - 1 of 17",
+          "rewards": [
+            {
+              "blueprintGuid": "a1b5c9ef-be2e-4077-ba67-4a3028970c49",
+              "displayName": "Cryo-Star SL",
+              "componentType": "cooler",
+              "size": "0",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "f6c07dae-cca0-4abd-adc9-e1c6b6acfca1",
+              "displayName": "Winter-Star SL",
+              "componentType": "cooler",
+              "size": "0",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "7f553855-0712-42cc-8d2a-1bc301b63ea4",
+              "displayName": "Kelvid",
+              "componentType": "cooler",
+              "size": "0",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "1239aec1-9d22-4fd8-a694-2eee52243aad",
+              "displayName": "Cryo-Star",
+              "componentType": "cooler",
+              "size": "1",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "0c113b8f-0bff-4b62-adf1-64c31786c85b",
+              "displayName": "Winter-Star",
+              "componentType": "cooler",
+              "size": "1",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "1414bc9f-2a10-440d-86b0-91c85cfaa28d",
+              "displayName": "BlastChill",
+              "componentType": "cooler",
+              "size": "1",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "b19e0018-91e7-4f53-9d87-4c083131b851",
+              "displayName": "FlashFreeze",
+              "componentType": "cooler",
+              "size": "1",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "f24ec6ba-88fe-44a9-ae11-996385696c8f",
+              "displayName": "Endo",
+              "componentType": "cooler",
+              "size": "1",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "787f5cf3-cb9f-4811-b991-475b09d2d039",
+              "displayName": "Cryo-Star EX",
+              "componentType": "cooler",
+              "size": "2",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "7be41934-c13b-41a0-be05-5b8dab42cf23",
+              "displayName": "Winter-Star EX",
+              "componentType": "cooler",
+              "size": "2",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "571b10ba-8033-4d00-b767-3f2edde7e9e3",
+              "displayName": "FullFrost",
+              "componentType": "cooler",
+              "size": "2",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "770ba210-bb7e-4b88-a7d8-2f132fa4bc0f",
+              "displayName": "WhiteOut",
+              "componentType": "cooler",
+              "size": "2",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "524a5e92-3b86-459f-ac0f-cc4fb96d7577",
+              "displayName": "Taiga",
+              "componentType": "cooler",
+              "size": "2",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "95fc7cad-58d5-4bc4-b643-c0633c6f2b0e",
+              "displayName": "Cryo-Star XL",
+              "componentType": "cooler",
+              "size": "3",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "8efd4e68-449f-48f2-a6d3-fda82c575e61",
+              "displayName": "Winter-Star XL",
+              "componentType": "cooler",
+              "size": "3",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "6ec023c3-d739-40bf-899e-4a3e66520263",
+              "displayName": "ColdSurge",
+              "componentType": "cooler",
+              "size": "3",
+              "grade": "D",
+              "chanceLabel": "5.88% chance"
+            },
+            {
+              "blueprintGuid": "abdb3c60-cdc5-4bd5-bbcc-55da792bc584",
+              "displayName": "FrostBite",
+              "componentType": "cooler",
+              "size": "3",
+              "grade": "B",
+              "chanceLabel": "5.88% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "3373506b-2ba7-4493-af0d-f336966d1151",
+          "poolName": "Nyx Headhunters Hard",
+          "rewardCount": 7,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "14.29% chance - 1 of 7",
+          "rewards": [
+            {
+              "blueprintGuid": "511c22a9-7ba1-487b-b768-1b14d2ddbf2f",
+              "displayName": "Tarantula GT-870 Mark 1 Cannon",
+              "componentType": "weaponGun",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "4ac17f62-86b3-453c-adf0-b52fcf1ebf6c",
+              "displayName": "Tarantula GT-870 Mark 2 Cannon",
+              "componentType": "weaponGun",
+              "size": "2",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "6851a453-e5c5-4d29-82d5-c233f04d92db",
+              "displayName": "Tarantula GT-870 Mark 3 Cannon",
+              "componentType": "weaponGun",
+              "size": "3",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "d9999ce7-5565-4d8a-b31c-3a833b159756",
+              "displayName": "YellowJacket GT-210 Gatling",
+              "componentType": "weaponGun",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "7ebefb45-b494-4d2c-9ae0-06360079c727",
+              "displayName": "Scorpion GT-215 Gatling",
+              "componentType": "weaponGun",
+              "size": "2",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "1b6eb647-f144-4643-9d8d-ec76bf5c985f",
+              "displayName": "Mantis GT-220 Gatling",
+              "componentType": "weaponGun",
+              "size": "3",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "4f494fdb-d489-4b51-9f0a-c148e7d9f6b9",
+              "displayName": "V880",
+              "componentType": "radar",
+              "size": "3",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Ship Combat +250"
+      ],
+      "credits": "637,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "637,500 aUEC",
+        "amount": 637500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 637500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 637500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [
+        {
+          "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+          "amount": "6",
+          "displayName": "Council Scrip",
+          "itemKey": "cea4af31-612e-4d1c-9a03-e358898b5691",
+          "deliveryTarget": "player_home_location",
+          "ownerOnly": true,
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml"
+          ],
+          "status": "resolved",
+          "confidence": "resolved_entityClass"
+        }
+      ],
+      "itemRewardStatus": "resolved",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "scopeDisplayName": "Ship Combat",
+        "amount": 250,
+        "confidence": "partial",
+        "sourceRefs": [
+          "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7b82e00e-07eb-4b56-990c-b23399673504"
+        ],
+        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": true,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+        "familyId": "58c6b5a3-f998-47c5-baeb-4c7e38f26489|HeadHunters_DefendEntitiesAndEscort_Nyx",
+        "templateGuid": "b7f1702a-e29a-4dff-96e7-51c0c11bb7df"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_b2e38e27e4e9c02bec74f6ae",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_ffe6c5df0b8bfbd4b84447bb",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "reputation",
+          "polarity": "required",
+          "identifiers": {
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "scope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "minStanding": "f97544c1-66a4-4aff-af1a-4da20f114f72",
+            "maxStanding": "426da095-27b1-4ac3-8722-af57a973c79c"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "scope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "exclude": "0",
+            "minStanding": "f97544c1-66a4-4aff-af1a-4da20f114f72",
+            "maxStanding": "426da095-27b1-4ac3-8722-af57a973c79c"
+          },
+          "sourceElement": "ContractPrerequisite_Reputation",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractPrerequisite_Reputation",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_663a2b0f59e7dadcb7c39f68",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "b013dca0-465e-41df-92f4-99b8c2409f93",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_4eccdd4b9a020e69439c8830",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "ed0b8aaa-eec6-4c72-b9e7-b0b48ab5e135",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_e9a9ab1c9c943d17f7abda0b",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "blueprint_reward",
+          "index": 1,
+          "payload": {
+            "blueprintPoolGuid": "3373506b-2ba7-4493-af0d-f336966d1151",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_6d7bf1b7445c1ab9a08772b6",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_80c2620344bab74128281ea6",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 637500,
+              "amount": 637500,
+              "rawAmount": 637603.71732281,
+              "integerRoundedAmount": 637604,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.04
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "84",
+                "value": 84,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        },
+        {
+          "edgeId": "out_8374177366a58f3347f18da3",
+          "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+          "type": "item_reward",
+          "index": 0,
+          "payload": {
+            "attributes": {
+              "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+              "amount": "6",
+              "sendToPlayerHomeLocation": "1",
+              "awardOnlyToMissionOwner": "1"
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_Item"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+            "sourceElement": "ContractResult_Item"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "b7f1702a-e29a-4dff-96e7-51c0c11bb7df",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/defendentitesandescort_4phases.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/defendentitesandescort_4phases.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@headhunters_from",
+          "displayText": "Headhunters",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_HeadHunters",
+          "recordType": null,
+          "displayName": "Headhunters",
+          "path": "factions/factionreputation/factionreputation_unlawful_headhunters.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@HeadHunters_DefendEntitesAndEscort_VH_Title",
+          "localizationKey": "HeadHunters_DefendEntitesAndEscort_VH_Title",
+          "template": "Defend ~mission(Location) From Mercs",
+          "displayText": "Defend ~mission(Location) From Mercs",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Location)",
+              "expression": "Location",
+              "segments": [
+                "Location"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "requirements": [
+              {
+                "edgeId": "pre_b2e38e27e4e9c02bec74f6ae",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+                  "recordName": "MissionLocality.Nyx",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": [
+          {
+            "edgeId": "pre_ffe6c5df0b8bfbd4b84447bb",
+            "ownerScope": "parent_eligibility",
+            "ownerId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "polarity": "required",
+            "faction": {
+              "guid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "recordName": "FactionReputation.FactionReputation_Unlawful_HeadHunters",
+              "recordType": null,
+              "displayName": "Headhunters",
+              "path": "factions/factionreputation/factionreputation_unlawful_headhunters.xml",
+              "resolution": "source_backed",
+              "provenance": "source_backed"
+            },
+            "scope": {
+              "guid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "recordName": "SReputationScopeParams.FactionReputationScope",
+              "recordType": "SReputationScopeParams",
+              "displayName": null,
+              "path": "libs/foundry/records/reputation/scopes/factionreputationscope.xml",
+              "resolution": "source_backed",
+              "provenance": "source_backed"
+            },
+            "minStanding": {
+              "guid": "f97544c1-66a4-4aff-af1a-4da20f114f72",
+              "recordName": "SReputationStandingParams.ReputationStanding_FactionRep_Rank4",
+              "recordType": null,
+              "displayName": "Veteran Contractor",
+              "path": "reputation/standings/faction_reputation_pyro/reputationstanding_factionrep_rank4.xml",
+              "resolution": "source_backed",
+              "provenance": "source_backed"
+            },
+            "maxStanding": {
+              "guid": "426da095-27b1-4ac3-8722-af57a973c79c",
+              "recordName": "SReputationStandingParams.ReputationStanding_FactionRep_Rank6",
+              "recordType": null,
+              "displayName": "Elite Contractor",
+              "path": "reputation/standings/faction_reputation_pyro/reputationstanding_factionrep_rank6.xml",
+              "resolution": "source_backed",
+              "provenance": "source_backed"
+            },
+            "identifiers": {
+              "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "scope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "minStanding": "f97544c1-66a4-4aff-af1a-4da20f114f72",
+              "maxStanding": "426da095-27b1-4ac3-8722-af57a973c79c"
+            },
+            "bounds": {},
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "contract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "contract",
+                "id": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "ContractPrerequisite_Reputation",
+              "referencePath": null
+            }
+          }
+        ]
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 637500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 637500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_4eccdd4b9a020e69439c8830",
+            "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "ed0b8aaa-eec6-4c72-b9e7-b0b48ab5e135",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_e9a9ab1c9c943d17f7abda0b",
+            "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "type": "blueprint_reward",
+            "index": 1,
+            "payload": {
+              "blueprintPoolGuid": "3373506b-2ba7-4493-af0d-f336966d1151",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [
+          {
+            "edgeId": "out_8374177366a58f3347f18da3",
+            "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "type": "item_reward",
+            "index": 0,
+            "payload": {
+              "attributes": {
+                "entityClass": "cea4af31-612e-4d1c-9a03-e358898b5691",
+                "amount": "6",
+                "sendToPlayerHomeLocation": "1",
+                "awardOnlyToMissionOwner": "1"
+              },
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_Item"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "ContractResult_Item"
+            }
+          }
+        ],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_6d7bf1b7445c1ab9a08772b6",
+            "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "reputationAmount": 250,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_663a2b0f59e7dadcb7c39f68",
+            "variantId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "b013dca0-465e-41df-92f4-99b8c2409f93",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 637500,
+              "amount": 637500,
+              "rawAmount": 637603.71732281,
+              "integerRoundedAmount": 637604,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.04
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "84",
+                "value": 84,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 637500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 637500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "reward": {
+              "guid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_250",
+              "editorName": "Undefined Name",
+              "reputationAmount": 250,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_250.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "dfaa5175-9226-4e7b-9980-2ef5f13ac5a0",
+      "generatorGuid": "58c6b5a3-f998-47c5-baeb-4c7e38f26489",
+      "generatorName": "ContractGenerator.HeadHunters_DefendEntitiesAndEscort",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_defendentitiesandescort.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@HeadHunters_DefendEntitesAndEscort_VH_Title",
+      "descriptionRaw": "@HeadHunters_DefendEntitesAndEscort_VH_Desc"
+    }
+  }
+}

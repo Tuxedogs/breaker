@@ -14,15 +14,24 @@ import {
 import { publishImmutableMissionGeneration } from "./missions/publication/write-artifacts.mts";
 import { buildMissionGraphArtifactsV2 } from "./missions/report/graph-report.mts";
 import {
+  assertMissionOfferGoldensV1,
+  buildMissionOfferShardPathsV1,
+  buildMissionOffersV1,
+  computeMissionOfferInvariantHashesV1,
+  MISSION_OFFER_SCHEMA_VERSION,
+  type MissionOfferGoldenSpecV1,
+  type MissionOfferV1,
+} from "./missions/offers/mission-offer-projection.mts";
+import {
   MISSION_SHAPED_SCHEMA_VERSION,
   normalizeCanonicalMissionVariantV2,
   type CanonicalMissionVariantV2,
 } from "./missions/schema/canonical-v2.mts";
 import {
-  parseMissionSourceCatalogV3,
-  type MissionSourceCatalogV3,
-  type MissionSourceRecordV3,
-} from "./missions/schema/source-v3.mts";
+  parseMissionSourceCatalogV4,
+  type MissionSourceCatalogV4,
+  type MissionSourceRecordV4,
+} from "./missions/schema/source-v4.mts";
 
 type RawStanding = {
   displayName?: string;
@@ -80,7 +89,7 @@ type RawReward = {
   sourceRefs?: string[];
 };
 
-type RawMission = MissionSourceRecordV3 & {
+type RawMission = MissionSourceRecordV4 & {
   contractId: string;
   familyId?: string;
   template?: string;
@@ -118,11 +127,11 @@ type RawMission = MissionSourceRecordV3 & {
 };
 
 type RawCatalog = {
-  schemaVersion: 3;
+  schemaVersion: 4;
   generatedAt: string;
   sourceLatestModifiedAt: string;
   records: RawMission[];
-} & MissionSourceCatalogV3;
+} & MissionSourceCatalogV4;
 
 type BlueprintPoolLookup = {
   poolGuid?: string;
@@ -292,7 +301,7 @@ type CreditRewardDetail =
     unresolvedReason?: string;
     attributes?: Record<string, unknown>;
     sourceRefs: string[];
-    payout?: MissionSourceRecordV3["calculatedPayout"];
+    payout?: MissionSourceRecordV4["calculatedPayout"];
   }
   | {
     status: "provenAbsent";
@@ -572,7 +581,8 @@ type BlueprintRewardGroup = {
 
 type ShapedCatalog = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -603,6 +613,8 @@ type ShapedCatalog = {
     reputationScopeGroupCount: number;
     archetypeGroupCount: number;
     conceptCount: number;
+    offerCount: number;
+    offerFallbackCount: number;
   };
   families: ShapedFamily[];
   variants: ShapedVariant[];
@@ -613,7 +625,8 @@ type ShapedCatalog = {
 
 type MissionBrowserIndex = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -634,14 +647,21 @@ type MissionBrowserIndex = {
     conceptCatalog: string;
     categoryReport: string;
     graphReport: string;
+    offerIdentityReport: string;
+    offerGoldenReport: string;
   };
   filtersMeta: MissionBrowserFiltersMeta;
   familiesByKey: Record<string, ShapedFamily>;
   conceptsByKey: Record<string, MissionConcept>;
+  offersByKey: Record<string, MissionOfferV1>;
   familyDetailFiles: Record<string, string>;
   familyVariantFiles: Record<string, string>;
   variantDetailFiles: Record<string, string>;
   conceptFamilyVariantFiles: Record<string, string[]>;
+  offerDetailFiles: Record<string, string>;
+  offerVariantFiles: Record<string, string>;
+  variantOfferKeys: Record<string, string>;
+  legacyConceptOfferKeys: Record<string, string[]>;
   missionBrowseGroups: MissionBrowseGroup[];
   browseViews: MissionBrowseViews;
 };
@@ -668,7 +688,8 @@ type MissionBrowserFiltersMeta = {
 
 type MissionFamilyDetailPayload = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -716,7 +737,8 @@ type MissionFamilyDetailPayload = {
 
 type MissionFamilyVariantsPayload = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -726,7 +748,8 @@ type MissionFamilyVariantsPayload = {
 
 type MissionVariantDetailPayload = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -736,7 +759,8 @@ type MissionVariantDetailPayload = {
 
 type MissionShardManifest = {
   schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
-  sourceContractVersion: 3;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
   generationId: string;
   generatedAt: string;
   sourceLatestModifiedAt: string;
@@ -763,6 +787,31 @@ type MissionShardManifest = {
     familyDetailFile: string;
     familyVariantsFile: string;
   }>;
+  offerDetailFiles: Record<string, string>;
+  offerVariantFiles: Record<string, string>;
+  variantOfferKeys: Record<string, string>;
+  legacyConceptOfferKeys: Record<string, string[]>;
+};
+
+type MissionOfferDetailPayload = {
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
+  generationId: string;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  offer: MissionOfferV1;
+};
+
+type MissionOfferVariantsPayload = {
+  schemaVersion: typeof MISSION_SHAPED_SCHEMA_VERSION;
+  sourceContractVersion: 4;
+  offerSchemaVersion: typeof MISSION_OFFER_SCHEMA_VERSION;
+  generationId: string;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  offerKey: string;
+  variants: Array<CompactMissionVariant<ShapedVariant>>;
 };
 
 const serverMissionSourceRoot = path.resolve(
@@ -783,11 +832,18 @@ const legacyShapedRootFiles = [
   "mission_reputation.json",
   "mission_rewards.json",
   "mission_shard_manifest.json",
+  "mission_offers.json",
+  "mission_offer_identity_report.json",
+  "mission_offer_golden_report.json",
   "mission_unresolved_refs.json",
   ...legacyMissionOutputFiles,
 ] as const;
-const legacyShardDirectories = ["families", "family-variants", "variants"] as const;
-const missionShaperVersion = "moonbreaker_mission_shaper_v2_6";
+const legacyShardDirectories = ["families", "family-variants", "variants", "offers", "offer-variants"] as const;
+const missionShaperVersion = "moonbreaker_mission_shaper_v3_2_offer1";
+const missionOfferGoldenManifestPath = path.resolve(
+  "docs",
+  "mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
+);
 async function resolveMissionSourceRoot(): Promise<string> {
   try {
     await readFile(path.join(serverMissionSourceRoot, "mission_contracts.json"), "utf8");
@@ -2071,7 +2127,7 @@ function shapeRewards(
         const craftingItem = craftingBlueprints.get(String(item.blueprintGuid ?? "").toLowerCase());
         return {
           blueprintGuid: item.blueprintGuid,
-          displayName: item.displayName ?? item.blueprintName ?? craftingItem?.name ?? item.blueprintGuid ?? "Unknown blueprint",
+          displayName: craftingItem?.name ?? item.displayName ?? item.blueprintName ?? item.blueprintGuid ?? "Unknown blueprint",
           componentType: item.componentType ?? craftingItem?.typeLabel ?? craftingItem?.type,
           size: item.size ?? clean(craftingItem?.size),
           grade: item.grade ?? clean(craftingItem?.grade),
@@ -2095,7 +2151,11 @@ function shapeRewards(
   const blueprintRewards = unique((mission.blueprintRewards ?? []).flatMap((reward) => {
     const pool = pools.get(String(reward.blueprintPoolGuid ?? "").toLowerCase());
     const poolName = pool?.displayName ?? pool?.poolName;
-    const blueprintNames = pool?.rewards?.map((item) => item.displayName ?? item.blueprintGuid).filter(Boolean).slice(0, 4) ?? [];
+    const blueprintNames = pool?.rewards?.map((item) =>
+      craftingBlueprints.get(String(item.blueprintGuid ?? "").toLowerCase())?.name
+        ?? item.displayName
+        ?? item.blueprintGuid
+    ).filter(Boolean).slice(0, 4) ?? [];
     const suffix = (pool?.rewards?.length ?? 0) > 4 ? ` +${(pool?.rewards?.length ?? 0) - 4}` : "";
     return poolName ? [`${poolName}${blueprintNames.length ? `: ${blueprintNames.join(", ")}${suffix}` : ""}`] : ["Unknown blueprint pool"];
   }));
@@ -3040,10 +3100,10 @@ async function assertMissionOutputSizes(): Promise<void> {
   throw new Error(`Mission shaped output exceeds ${maxMissionOutputBytes / (1024 * 1024)} MB:\n${details}`);
 }
 
-const [catalogInput, lookups, craftingBlueprintInput, refIndexInput] = await Promise.all([
+const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOfferManifestInput] = await Promise.all([
   readFile(contractsPath, "utf8")
     .then((content) => ({
-      catalog: parseMissionSourceCatalogV3(JSON.parse(content)) as RawCatalog,
+      catalog: parseMissionSourceCatalogV4(JSON.parse(content)) as RawCatalog,
       sha256: createHash("sha256").update(content).digest("hex"),
     })),
   readFile(lookupsPath, "utf8").then((content) => JSON.parse(content) as Lookups),
@@ -3062,8 +3122,103 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput] = await Pro
       records: [] as RefIndexEntry[],
       status: "not_configured" as const,
     }),
+  readFile(missionOfferGoldenManifestPath, "utf8").then((content) => ({
+    manifest: JSON.parse(content) as {
+      offerKeyNormalizationContract?: {
+        mappings?: Array<{
+          offerKey?: string;
+          providerKey?: string;
+          titleRaw?: string;
+        }>;
+      };
+      goldenMissionOffers?: Array<{
+        offerKey?: string;
+        displayTitle?: string;
+        exactVariants?: Array<{ variantId?: string }>;
+      }>;
+      invariantHashTargets?: {
+        targets?: Array<{ name?: string; baselineSha256?: string }>;
+      };
+      targetSourceV4?: {
+        artifacts?: Array<{ name?: string; sha256?: string }>;
+        invariantResults?: {
+          protectedFieldMismatchCount?: number;
+          auditedHeadhuntersTupleCount?: number;
+          result?: string;
+        };
+      };
+    },
+    sha256: createHash("sha256").update(content).digest("hex"),
+  })),
 ]);
 const catalog = catalogInput.catalog;
+const goldenMappingRows = missionOfferManifestInput.manifest.offerKeyNormalizationContract?.mappings ?? [];
+const goldenOfferRows = missionOfferManifestInput.manifest.goldenMissionOffers ?? [];
+const missionOfferGoldens: MissionOfferGoldenSpecV1[] = goldenMappingRows.map((mapping) => {
+  const golden = goldenOfferRows.find((candidate) => candidate.offerKey === mapping.offerKey);
+  if (!mapping.offerKey || !mapping.providerKey || !mapping.titleRaw || !golden?.displayTitle) {
+    throw new Error("Mission offer audit manifest contains an incomplete golden mapping.");
+  }
+  const exactVariantIds = (golden.exactVariants ?? []).flatMap((variant) =>
+    typeof variant.variantId === "string" && variant.variantId ? [variant.variantId] : []
+  );
+  if (exactVariantIds.length === 0) {
+    throw new Error(`Mission offer audit manifest ${mapping.offerKey} has no exact variants.`);
+  }
+  return {
+    offerKey: mapping.offerKey,
+    providerKey: mapping.providerKey,
+    titleRaw: mapping.titleRaw,
+    displayTitle: golden.displayTitle,
+    exactVariantIds,
+  };
+});
+if (missionOfferGoldens.length !== 10) {
+  throw new Error(`Mission offer audit manifest must contain 10 golden offers; received ${missionOfferGoldens.length}.`);
+}
+const auditedSourceArtifact = missionOfferManifestInput.manifest.targetSourceV4?.artifacts?.find((artifact) =>
+  artifact.name === "mission_contracts.json"
+);
+if (!auditedSourceArtifact?.sha256 || auditedSourceArtifact.sha256 !== catalogInput.sha256) {
+  throw new Error("Mission offer shaping source does not match the externally audited source-v4 artifact hash.");
+}
+const externalInvariantReceipt = missionOfferManifestInput.manifest.targetSourceV4?.invariantResults;
+if (
+  externalInvariantReceipt?.result !== "pass"
+  || externalInvariantReceipt.protectedFieldMismatchCount !== 0
+  || externalInvariantReceipt.auditedHeadhuntersTupleCount !== 25
+) {
+  throw new Error("Mission offer source-v4 preservation invariant receipt is missing or failed.");
+}
+const protectedInvariantBaselines = Object.fromEntries(
+  (missionOfferManifestInput.manifest.invariantHashTargets?.targets ?? []).flatMap((target) =>
+    target.name && target.baselineSha256 ? [[target.name, target.baselineSha256]] : []
+  ),
+);
+const requiredInvariantTargetNames = [
+  "auec_solver_projection",
+  "blueprint_pool_rewards",
+  "reputation_eligibility_and_rewards",
+  "release_and_availability_branches",
+];
+if (
+  Object.keys(protectedInvariantBaselines).length !== requiredInvariantTargetNames.length
+  || requiredInvariantTargetNames.some((name) => !/^[0-9a-f]{64}$/.test(protectedInvariantBaselines[name] ?? ""))
+) {
+  throw new Error("Mission offer audit manifest is missing a protected invariant hash target.");
+}
+const computedInvariantHashes = computeMissionOfferInvariantHashesV1(
+  catalog.records,
+  missionOfferGoldens.flatMap((golden) => golden.exactVariantIds),
+);
+// The payout baseline was authored with Python's numeric JSON encoding. JavaScript
+// cannot reproduce that byte stream after parsing, so its hard gate is the exact
+// audited source artifact SHA plus the passing external preservation receipt above.
+for (const name of Object.keys(computedInvariantHashes)) {
+  if (computedInvariantHashes[name] !== protectedInvariantBaselines[name]) {
+    throw new Error(`Mission offer protected invariant ${name} changed.`);
+  }
+}
 
 const poolMap = new Map((lookups.blueprintPools ?? []).map((pool) => [String(pool.poolGuid ?? "").toLowerCase(), pool]));
 const craftingBlueprintMap = new Map(
@@ -3082,6 +3237,8 @@ const generationId = createHash("sha256").update(JSON.stringify({
   refIndexStatus: refIndexInput.status,
   refIndexSha256: "sha256" in refIndexInput ? refIndexInput.sha256 : null,
   craftingBlueprintCatalogSha256: craftingBlueprintInput.sha256,
+  missionOfferSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+  missionOfferGoldenManifestSha256: missionOfferManifestInput.sha256,
 })).digest("hex").slice(0, 24);
 const generatedAt = catalog.generatedAt;
 const solverReference = {
@@ -3119,6 +3276,8 @@ const stagingRoot = path.join(missionRoot, `.staging-${process.pid}-${generation
 const familyRoot = path.join(stagingRoot, "families");
 const familyVariantsRoot = path.join(stagingRoot, "family-variants");
 const variantRoot = path.join(stagingRoot, "variants");
+const offerRoot = path.join(stagingRoot, "offers");
+const offerVariantsRoot = path.join(stagingRoot, "offer-variants");
 const variants = catalog.records.map((mission) => shapeVariant(catalog, mission, poolMap, craftingBlueprintMap, refMap));
 const graphValidation = buildMissionGraphValidationV2(catalog.records);
 const rawByFamily = new Map<string, RawMission[]>();
@@ -3148,12 +3307,64 @@ const concepts = shapeConcepts(variants).map((concept) => ({
   ...concept,
   familyVariantFiles: concept.familyKeys.map((familyKey) => familyVariantFiles[familyKey]!).filter(Boolean),
 }));
+const missionOffers = buildMissionOffersV1(
+  catalog.records,
+  variants.map((variant) => {
+    const source = catalog.records.find((record) => record.contractId === variant.variantKey)!;
+    const objectiveTemplate = source.objectiveTemplate as Record<string, unknown> | undefined;
+    return {
+      variantKey: variant.variantKey,
+      familyKey: variant.familyKey,
+      legacyConceptKey: variant.conceptKey,
+      missionType: variant.missionType,
+      rewardTypes: unique([
+        variant.rewards.blueprintRewardGroups.length > 0 ? "blueprints" : undefined,
+        variant.rewards.reputationRewards.length > 0 ? "reputation" : undefined,
+        variant.rewards.creditStatus === "fixed" ? "credits-fixed" : undefined,
+        variant.rewards.creditStatus === "calculated" ? "credits-calculated" : undefined,
+        variant.rewards.creditStatus === "variable" ? "credits-variable" : undefined,
+        variant.rewards.creditStatus === "formula_unresolved" ? "credits-formula-unresolved" : undefined,
+        variant.rewards.creditStatus === "unresolved" ? "credits-unresolved" : undefined,
+        variant.rewards.creditStatus === "provenAbsent" ? "credits-none" : undefined,
+        variant.rewards.itemRewardStatus === "resolved" ? "items" : undefined,
+        variant.rewards.itemRewardStatus === "unresolved_entityClass" || variant.rewards.itemRewardStatus === "weighted_unresolved"
+          ? "items-unresolved"
+          : undefined,
+      ]),
+      reputationRewardKeys: unique(variant.rewardedReputationPaths.map((reward) =>
+        `${reward.factionKey}:${reward.scopeKey}`
+      )),
+      releaseFlags: variant.releaseFlags,
+      confidenceFlags: unique([
+        variant.confidence.hasUnresolvedLocation ? "locations" : undefined,
+        variant.confidence.hasUnresolvedRewards ? "rewards" : undefined,
+        variant.confidence.hasUnresolvedPrerequisites ? "prerequisites" : undefined,
+        variant.confidence.hasUnresolvedLocation
+          || variant.confidence.hasUnresolvedRewards
+          || variant.confidence.hasUnresolvedPrerequisites
+          ? "unresolved"
+          : undefined,
+      ]),
+      objectiveTemplateKeys: unique([
+        clean(source.template),
+        clean(objectiveTemplate?.templateGuid),
+        clean(objectiveTemplate?.path),
+      ]),
+    };
+  }),
+);
+const missionOfferGoldenGate = assertMissionOfferGoldensV1(missionOffers, missionOfferGoldens);
+const {
+  offerDetailFiles,
+  offerVariantFiles,
+} = buildMissionOfferShardPathsV1(missionOffers.offers.map((offer) => offer.offerKey));
 const missionBrowseGroups = buildBrowseGroups(families, concepts);
 const browseViews = buildBrowseViews(concepts, missionBrowseGroups);
 
 const shaped: ShapedCatalog = {
   schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
   sourceContractVersion: catalog.schemaVersion,
+  offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
   generationId,
   generatedAt,
   sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
@@ -3162,6 +3373,7 @@ const shaped: ShapedCatalog = {
     "server-data/missions/source/mission_reward_lookups.json",
     "server-data/crafting/component-cards/browse.json",
     ...(refIndexPath ? [refIndexPath] : []),
+    "docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
   ],
   sourceInputs: {
     refIndex: {
@@ -3189,6 +3401,8 @@ const shaped: ShapedCatalog = {
     reputationScopeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.length, 0),
     archetypeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.reduce((scopeSum, scope) => scopeSum + scope.missionArchetypes.length, 0), 0),
     conceptCount: concepts.length,
+    offerCount: missionOffers.offers.length,
+    offerFallbackCount: missionOffers.identityReport.fallbackOfferCount,
   },
   families,
   variants,
@@ -3199,10 +3413,12 @@ const shaped: ShapedCatalog = {
 
 const familiesByKey = Object.fromEntries(families.map((family) => [family.familyKey, family]));
 const conceptsByKey = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept]));
+const variantsByKey = Object.fromEntries(variants.map((variant) => [variant.variantKey, variant]));
 const conceptFamilyVariantFiles = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept.familyVariantFiles]));
 const shardManifest: MissionShardManifest = {
   schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
   sourceContractVersion: catalog.schemaVersion,
+  offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
   generationId,
   generatedAt: shaped.generatedAt,
   sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3238,10 +3454,15 @@ const shardManifest: MissionShardManifest = {
       familyVariantsFile: familyVariantFiles[variant.familyKey]!,
     }])
   ),
+  offerDetailFiles,
+  offerVariantFiles,
+  variantOfferKeys: missionOffers.variantOfferKeys,
+  legacyConceptOfferKeys: missionOffers.legacyConceptOfferKeys,
 };
 const browserIndex: MissionBrowserIndex = {
   schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
   sourceContractVersion: catalog.schemaVersion,
+  offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
   generationId,
   generatedAt: shaped.generatedAt,
   sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3262,20 +3483,28 @@ const browserIndex: MissionBrowserIndex = {
     conceptCatalog: "mission_concepts.json",
     categoryReport: "mission_category_projection_report.json",
     graphReport: "mission_graph_validation_report.json",
+    offerIdentityReport: "mission_offer_identity_report.json",
+    offerGoldenReport: "mission_offer_golden_report.json",
   },
   filtersMeta: buildFiltersMeta(families, variants, concepts),
   familiesByKey,
   conceptsByKey,
+  offersByKey: missionOffers.offersByKey,
   familyDetailFiles,
   familyVariantFiles,
   variantDetailFiles,
   conceptFamilyVariantFiles,
+  offerDetailFiles,
+  offerVariantFiles,
+  variantOfferKeys: missionOffers.variantOfferKeys,
+  legacyConceptOfferKeys: missionOffers.legacyConceptOfferKeys,
   missionBrowseGroups,
   browseViews,
 };
 const graphArtifacts = buildMissionGraphArtifactsV2({
   schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
   sourceContractVersion: catalog.schemaVersion,
+  offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
   generationId,
   generatedAt: shaped.generatedAt,
   sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3816,11 +4045,61 @@ await Promise.all([
   mkdir(familyRoot, { recursive: true }),
   mkdir(familyVariantsRoot, { recursive: true }),
   mkdir(variantRoot, { recursive: true }),
+  mkdir(offerRoot, { recursive: true }),
+  mkdir(offerVariantsRoot, { recursive: true }),
 ]);
 await removeLegacyMissionOutputs();
 await Promise.all([
   writeJson("mission_browser_index.json", browserIndex),
   writeJson("mission_shard_manifest.json", shardManifest),
+  writeJson("mission_offers.json", {
+    schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+    sourceContractVersion: catalog.schemaVersion,
+    offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+    generationId,
+    generatedAt: shaped.generatedAt,
+    sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+    records: missionOffers.offers,
+  }),
+  writeJson("mission_offer_identity_report.json", {
+    schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+    sourceContractVersion: catalog.schemaVersion,
+    offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+    generationId,
+    generatedAt: shaped.generatedAt,
+    sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+    ...missionOffers.identityReport,
+    identityManifest: path.relative(process.cwd(), missionOfferGoldenManifestPath).replaceAll("\\", "/"),
+    identityManifestSha256: missionOfferManifestInput.sha256,
+    assignmentGate: {
+      passed: Object.keys(missionOffers.variantOfferKeys).length === variants.length,
+      assignedVariantCount: Object.keys(missionOffers.variantOfferKeys).length,
+      expectedVariantCount: variants.length,
+    },
+  }),
+  writeJson("mission_offer_golden_report.json", {
+    schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+    sourceContractVersion: catalog.schemaVersion,
+    offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+    generationId,
+    generatedAt: shaped.generatedAt,
+    sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+    status: "passed",
+    ...missionOfferGoldenGate,
+    expectedGoldenOfferCount: 10,
+    expectedGoldenVariantCount: 25,
+    runtimeGhostPlaceholderPreserved: missionOffers.offersByKey["headhunters:ghost-target-name"]?.displayTitle === "Ghost [TargetName]",
+    exactTitleSearchUsesOfferPredicateOnly: true,
+    protectedInvariantGate: {
+      passed: true,
+      sourceArtifactSha256: catalogInput.sha256,
+      externalReceipt: externalInvariantReceipt,
+      targets: protectedInvariantBaselines,
+      computed: computedInvariantHashes,
+      externalSourceHashBackedTargets: ["auec_solver_projection"],
+    },
+    goldens: missionOfferGoldens,
+  }),
   writeJson("mission_families.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
   writeJson("mission_browse_groups.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
   writeJson("mission_rewards.json", { schemaVersion: MISSION_SHAPED_SCHEMA_VERSION, sourceContractVersion: catalog.schemaVersion, generationId, generatedAt: shaped.generatedAt, records: rewards }),
@@ -3839,6 +4118,7 @@ await Promise.all([
     const detail: MissionFamilyDetailPayload = {
       schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
       sourceContractVersion: catalog.schemaVersion,
+      offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
       generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3893,6 +4173,7 @@ await Promise.all([
     const payload: MissionFamilyVariantsPayload = {
       schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
       sourceContractVersion: catalog.schemaVersion,
+      offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
       generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3905,6 +4186,7 @@ await Promise.all([
     const payload: MissionVariantDetailPayload = {
       schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
       sourceContractVersion: catalog.schemaVersion,
+      offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
       generationId,
       generatedAt: shaped.generatedAt,
       sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
@@ -3913,6 +4195,31 @@ await Promise.all([
     };
     return writeJsonAt(variantRoot, missionPayloadFileName(variant.variantKey), payload);
   }),
+  ...missionOffers.offers.map((offer) => {
+    const payload: MissionOfferDetailPayload = {
+      schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+      sourceContractVersion: catalog.schemaVersion,
+      offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+      generationId,
+      generatedAt: shaped.generatedAt,
+      sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+      offer,
+    };
+    return writeJsonAt(offerRoot, path.basename(offerDetailFiles[offer.offerKey]!), payload);
+  }),
+  ...missionOffers.offers.map((offer) => {
+    const payload: MissionOfferVariantsPayload = {
+      schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
+      sourceContractVersion: catalog.schemaVersion,
+      offerSchemaVersion: MISSION_OFFER_SCHEMA_VERSION,
+      generationId,
+      generatedAt: shaped.generatedAt,
+      sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+      offerKey: offer.offerKey,
+      variants: offer.variantKeys.map((variantKey) => projectCompactMissionVariantV2(variantsByKey[variantKey]!)),
+    };
+    return writeJsonAt(offerVariantsRoot, path.basename(offerVariantFiles[offer.offerKey]!), payload);
+  }),
 ]);
 await assertMissionOutputSizes();
 await publishImmutableMissionGeneration({
@@ -3920,10 +4227,15 @@ await publishImmutableMissionGeneration({
   stagingRoot,
   generationId,
   shaperVersion: missionShaperVersion,
+  generationContract: {
+    missionSchemaVersion: 3,
+    sourceContractVersion: 4,
+    offerSchemaVersion: 1,
+  },
   legacyRootFiles: legacyShapedRootFiles,
   legacyShardDirectories,
 });
 
 console.log(
-  `Shaped ${families.length} mission families and ${variants.length} variants into generation ${generationId} at ${missionRoot}.`,
+  `Shaped ${families.length} mission families, ${missionOffers.offers.length} offers, and ${variants.length} variants into generation ${generationId} at ${missionRoot}.`,
 );

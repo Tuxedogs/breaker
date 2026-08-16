@@ -1,0 +1,1917 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "2cc966f1ae3dbd6e7db858a2",
+  "generatedAt": "2026-08-16T00:44:45.504769+00:00",
+  "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+  "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+  "variant": {
+    "variantKey": "993fbe39-f45a-456a-a94a-a65714c1db49",
+    "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+    "conceptKey": "0707ba44c86bf6af4b52",
+    "objectiveSignature": {
+      "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope|resource-gathering+salvage-ship|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "resource-gathering+salvage-ship",
+      "titleStem": "adagio-industrial-component-salvage-stanton",
+      "descriptionStem": "adagio-industrial-component-salvage-stanton",
+      "handlerStem": "adagio-rg-ship-salvage",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering+salvage-ship",
+        "activity-source:structural",
+        "title:adagio-industrial-component-salvage-stanton",
+        "description:adagio-industrial-component-salvage-stanton",
+        "handler:adagio-rg-ship-salvage",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "rank-2",
+    "tierLabel": "Rank 2",
+    "isIntro": false,
+    "specificityBadges": [
+      "Salvage",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+        "Adagio_RG_ShipSalvage_Stanton_Rank2_Components_Unique"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Adagio RG Ship Salvage Stanton Rank 2 Components Unique",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "rawName": "@Adagio_Industrial_Component_Salvage_Stanton_H_Title_001",
+    "internalName": "Adagio_RG_ShipSalvage_Stanton_Rank2_Components_Unique",
+    "missionType": "Salvage",
+    "provider": "Adagio Holdings",
+    "faction": "Adagio Holdings",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11:unknown-scope",
+      "displayName": "Salvage",
+      "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+      "factionDisplayName": "Adagio Holdings",
+      "trackType": "Salvage",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+        "Adagio_RG_ShipSalvage_Stanton_Rank2_Components_Unique"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "DropoffLocation_BP",
+          "propertyExtendedTextToken": "Destination",
+          "locationLevelType": "LocalSystem"
+        }
+      },
+      {
+        "type": "location",
+        "label": "Location unresolved",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_Location",
+        "raw": {
+          "token": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unresolved",
+      "displayName": "Unresolved",
+      "sourceRole": "unknown",
+      "confidence": "unresolved",
+      "reason": "Availability/location refs were present but did not resolve in the reference index.",
+      "sourceRefs": [
+        "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [
+        "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+      ],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "DropoffLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        },
+        {
+          "role": "availability / accepted-at",
+          "ref": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "type": "ContractPrerequisite_Location",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Pickup unresolved",
+        "detailLabel": "Pickup unresolved",
+        "confidence": "unresolved"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unresolved",
+        "displayName": "Unresolved",
+        "displayLabel": "Pickup unresolved",
+        "detailDisplay": "Pickup unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRole": "unknown",
+        "sourceRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "unresolvedRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "unresolvedLocationTokens": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Pickup unresolved",
+          "detailLabel": "Pickup unresolved",
+          "confidence": "unresolved"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "DropoffLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+        "confidence": "unresolved"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [
+      "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+    ],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1",
+        "Rep reward unresolved +150",
+        "584,500 aUEC"
+      ],
+      "blueprintRewards": [
+        "Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Cinch Scraper Module, Cinch Scraper Module +1"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+          "poolName": "Adagio Resource Gathering Ship Salvage",
+          "rewardCount": 5,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "20% chance - 1 of 5",
+          "rewards": [
+            {
+              "blueprintGuid": "4e834db6-9b0e-461a-8465-ec90847bd7e5",
+              "displayName": "Trawler Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+              "displayName": "Abrade Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Rep reward unresolved +150"
+      ],
+      "credits": "584,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "584,500 aUEC",
+        "amount": 584500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 584500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 584500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Rep reward unresolved",
+        "amount": 150,
+        "confidence": "partial",
+        "sourceRefs": [
+          "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ],
+        "unresolvedReason": "Reputation reward amount or scope path could not be fully resolved from current refs."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": true,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+        "familyId": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank2",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_ef141f7b4ad2e491b14ba939",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_ShipSalvage_Rank2"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_feb36987b86d7780c3b145ff",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_ShipSalvage_Rank2"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_1c295c02c2b763a55c91c5ec",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "993fbe39-f45a-456a-a94a-a65714c1db49"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_92595de0d1469aefd59b4665",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_95d1856497813e328240b7d2",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_9553de6b126ab33ca8cb46c6",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 584500,
+              "amount": 584500,
+              "rawAmount": 584546.1157858259,
+              "integerRoundedAmount": 584546,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.105,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "101",
+                "value": 101,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Adagio_from",
+          "displayText": "Adagio Holdings",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "recordName": "FactionReputation.FactionReputation_Lawful_AdagioHoldings",
+          "recordType": null,
+          "displayName": "Adagio Holdings",
+          "path": "factions/factionreputation/factionreputation_lawful_adagioholdings.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Adagio_Industrial_Component_Salvage_Stanton_H_Title_001",
+          "localizationKey": "Adagio_Industrial_Component_Salvage_Stanton_H_Title_001",
+          "template": null,
+          "displayText": "Adagio_RG_ShipSalvage_Stanton_Rank2_Components_Unique",
+          "runtimeTokens": [],
+          "rendering": "unresolved",
+          "resolution": "unresolved_missing_title_param",
+          "provenance": "unresolved"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+            "requirements": [
+              {
+                "edgeId": "pre_1c295c02c2b763a55c91c5ec",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+                  "recordName": "StarMapObject.StantonSolarSystem",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "993fbe39-f45a-456a-a94a-a65714c1db49"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 584500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 584500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_92595de0d1469aefd59b4665",
+            "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_95d1856497813e328240b7d2",
+            "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 584500,
+              "amount": 584500,
+              "rawAmount": 584546.1157858259,
+              "integerRoundedAmount": 584546,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.105,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "101",
+                "value": 101,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.9.0-live.12232306",
+                "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+                "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 584500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 584500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.9.0-live.12232306",
+              "recordsRoot": "D:/scintel/out/LIVE/4.9.0-live.12232306/foundry/records",
+              "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_a6fb55901ddae04231777420",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "sourceScope": "contract",
+          "sourceOwnerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_PowerPlant_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Power_Plant_S2_Comp_G_Name",
+                  "displayName": "Power Plant, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_powerplant_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "78e0c040-6668-4b43-a29c-4c47051bba8d",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_LuxCore_SCItem",
+                      "displayName": "LuxCore",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_luxcore_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bec88ea5-1dc1-4c87-836c-e9b9026369be",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_SolarFlare_SCItem",
+                      "displayName": "SolarFlare",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_solarflare_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1fc13db3-38bd-40b4-aada-3d4d665d1679",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_StarBurn_SCItem",
+                      "displayName": "StarBurn",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_starburn_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_Cooler_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Cooler_S2_Comp_G_Name",
+                  "displayName": "Cooler, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_cooler_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "67b6c401-1017-4c39-93f6-8305c4c67f69",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_AbsoluteZero_SCItem",
+                      "displayName": "AbsoluteZero",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_absolutezero_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c5b36e51-f6ea-4823-be8b-f3dd12fbda3c",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_IceDive_SCItem",
+                      "displayName": "IceDive",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_icedive_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8db577f4-7874-4c0d-950f-1722015b6f5f",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_RapidCool_SCItem",
+                      "displayName": "RapidCool",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_rapidcool_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShieldGenerator_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Shield_Generator_S2_Comp_G_Name",
+                  "displayName": "Shield Generator, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shieldgenerator_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "e2dc5036-24ea-4b85-ab00-34c179ac2e04",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Bamoty_SCItem",
+                      "displayName": "Bamoty",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_bamoty_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "78f47f2b-6680-4b08-a50a-e0b902ad4d9e",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Haltur_SCItem",
+                      "displayName": "Haltur",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_haltur_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "33c31f29-03e7-4a23-a26c-5d625d48c1bc",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Trenta_SCItem",
+                      "displayName": "Trenta",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank2']/contracts/CareerContract[@id='993fbe39-f45a-456a-a94a-a65714c1db49']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_PowerPlant_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Power_Plant_S2_Comp_G_Name",
+                    "displayName": "Power Plant, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_powerplant_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "78e0c040-6668-4b43-a29c-4c47051bba8d",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_LuxCore_SCItem",
+                        "displayName": "LuxCore",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_luxcore_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bec88ea5-1dc1-4c87-836c-e9b9026369be",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_SolarFlare_SCItem",
+                        "displayName": "SolarFlare",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_solarflare_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1fc13db3-38bd-40b4-aada-3d4d665d1679",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_StarBurn_SCItem",
+                        "displayName": "StarBurn",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_starburn_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_Cooler_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Cooler_S2_Comp_G_Name",
+                    "displayName": "Cooler, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_cooler_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "67b6c401-1017-4c39-93f6-8305c4c67f69",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_AbsoluteZero_SCItem",
+                        "displayName": "AbsoluteZero",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_absolutezero_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c5b36e51-f6ea-4823-be8b-f3dd12fbda3c",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_IceDive_SCItem",
+                        "displayName": "IceDive",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_icedive_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8db577f4-7874-4c0d-950f-1722015b6f5f",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_RapidCool_SCItem",
+                        "displayName": "RapidCool",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_rapidcool_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShieldGenerator_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Shield_Generator_S2_Comp_G_Name",
+                    "displayName": "Shield Generator, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shieldgenerator_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "e2dc5036-24ea-4b85-ab00-34c179ac2e04",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Bamoty_SCItem",
+                        "displayName": "Bamoty",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_bamoty_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "78f47f2b-6680-4b08-a50a-e0b902ad4d9e",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Haltur_SCItem",
+                        "displayName": "Haltur",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_haltur_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "33c31f29-03e7-4a23-a26c-5d625d48c1bc",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Trenta_SCItem",
+                        "displayName": "Trenta",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank2']/contracts/CareerContract[@id='993fbe39-f45a-456a-a94a-a65714c1db49']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.9.0-live.12232306",
+        "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_a6fb55901ddae04231777420",
+          "variantId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "sourceScope": "contract",
+          "sourceOwnerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_PowerPlant_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Power_Plant_S2_Comp_G_Name",
+                  "displayName": "Power Plant, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_powerplant_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "78e0c040-6668-4b43-a29c-4c47051bba8d",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_LuxCore_SCItem",
+                      "displayName": "LuxCore",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_luxcore_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bec88ea5-1dc1-4c87-836c-e9b9026369be",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_SolarFlare_SCItem",
+                      "displayName": "SolarFlare",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_solarflare_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1fc13db3-38bd-40b4-aada-3d4d665d1679",
+                      "recordName": "EntityClassDefinition.POWR_ACOM_S02_StarBurn_SCItem",
+                      "displayName": "StarBurn",
+                      "path": "entities/scitem/ships/powerplant/powr_acom_s02_starburn_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_Cooler_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Cooler_S2_Comp_G_Name",
+                  "displayName": "Cooler, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_cooler_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "67b6c401-1017-4c39-93f6-8305c4c67f69",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_AbsoluteZero_SCItem",
+                      "displayName": "AbsoluteZero",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_absolutezero_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c5b36e51-f6ea-4823-be8b-f3dd12fbda3c",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_IceDive_SCItem",
+                      "displayName": "IceDive",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_icedive_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8db577f4-7874-4c0d-950f-1722015b6f5f",
+                      "recordName": "EntityClassDefinition.COOL_ACOM_S02_RapidCool_SCItem",
+                      "displayName": "RapidCool",
+                      "path": "entities/scitem/ships/cooler/cool_acom_s02_rapidcool_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShieldGenerator_S02_Competition",
+                  "displayNameRaw": "@Salvage_Ship_Component_Shield_Generator_S2_Comp_G_Name",
+                  "displayName": "Shield Generator, Competition Grade (S2)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shieldgenerator_s02_competition.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "e2dc5036-24ea-4b85-ab00-34c179ac2e04",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Bamoty_SCItem",
+                      "displayName": "Bamoty",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_bamoty_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "78f47f2b-6680-4b08-a50a-e0b902ad4d9e",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Haltur_SCItem",
+                      "displayName": "Haltur",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_haltur_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "33c31f29-03e7-4a23-a26c-5d625d48c1bc",
+                      "recordName": "EntityClassDefinition.SHLD_YORM_S02_Trenta_SCItem",
+                      "displayName": "Trenta",
+                      "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank2']/contracts/CareerContract[@id='993fbe39-f45a-456a-a94a-a65714c1db49']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "ce3cdcec-83e3-42bb-a547-fb0722a62a6e",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_PowerPlant_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Power_Plant_S2_Comp_G_Name",
+                    "displayName": "Power Plant, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_powerplant_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "78e0c040-6668-4b43-a29c-4c47051bba8d",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_LuxCore_SCItem",
+                        "displayName": "LuxCore",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_luxcore_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bec88ea5-1dc1-4c87-836c-e9b9026369be",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_SolarFlare_SCItem",
+                        "displayName": "SolarFlare",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_solarflare_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1fc13db3-38bd-40b4-aada-3d4d665d1679",
+                        "recordName": "EntityClassDefinition.POWR_ACOM_S02_StarBurn_SCItem",
+                        "displayName": "StarBurn",
+                        "path": "entities/scitem/ships/powerplant/powr_acom_s02_starburn_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "58a46d28-b13f-44d9-a014-228ad36e49de",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_Cooler_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Cooler_S2_Comp_G_Name",
+                    "displayName": "Cooler, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_cooler_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "67b6c401-1017-4c39-93f6-8305c4c67f69",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_AbsoluteZero_SCItem",
+                        "displayName": "AbsoluteZero",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_absolutezero_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c5b36e51-f6ea-4823-be8b-f3dd12fbda3c",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_IceDive_SCItem",
+                        "displayName": "IceDive",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_icedive_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8db577f4-7874-4c0d-950f-1722015b6f5f",
+                        "recordName": "EntityClassDefinition.COOL_ACOM_S02_RapidCool_SCItem",
+                        "displayName": "RapidCool",
+                        "path": "entities/scitem/ships/cooler/cool_acom_s02_rapidcool_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "c6f65c72-245a-40b8-bed3-365f5c4814e7",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShieldGenerator_S02_Competition",
+                    "displayNameRaw": "@Salvage_Ship_Component_Shield_Generator_S2_Comp_G_Name",
+                    "displayName": "Shield Generator, Competition Grade (S2)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shieldgenerator_s02_competition.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "e2dc5036-24ea-4b85-ab00-34c179ac2e04",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Bamoty_SCItem",
+                        "displayName": "Bamoty",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_bamoty_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "78f47f2b-6680-4b08-a50a-e0b902ad4d9e",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Haltur_SCItem",
+                        "displayName": "Haltur",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_haltur_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "33c31f29-03e7-4a23-a26c-5d625d48c1bc",
+                        "recordName": "EntityClassDefinition.SHLD_YORM_S02_Trenta_SCItem",
+                        "displayName": "Trenta",
+                        "path": "entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank2']/contracts/CareerContract[@id='993fbe39-f45a-456a-a94a-a65714c1db49']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "993fbe39-f45a-456a-a94a-a65714c1db49",
+      "generatorGuid": "e29eae76-5a8a-4577-8c6a-f943a46aae90",
+      "generatorName": "ContractGenerator.Adagio_ResourceGathering_ShipSalvage",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Adagio_Industrial_Component_Salvage_Stanton_H_Title_001",
+      "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Stanton_H_Desc_001"
+    }
+  }
+}

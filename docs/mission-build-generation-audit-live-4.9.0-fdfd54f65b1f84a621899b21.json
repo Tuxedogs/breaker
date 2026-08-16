@@ -1,0 +1,1311 @@
+{
+  "schemaVersion": 1,
+  "manifestKind": "moonbreaker_mission_build_generation_audit",
+  "manifestId": "LIVE:4.9.0-live.12232306:fdfd54f65b1f84a621899b21:headhunters-offer-identity-audit",
+  "createdAt": "2026-08-15",
+  "purpose": "Moonbreaker-side, build- and generation-pinned evidence for correcting player-facing mission offer identity without changing Scintel source truth, the aUEC solver, blueprint pools, reputation prerequisites, or availability-branch ownership.",
+  "snapshot": {
+    "channel": "LIVE",
+    "buildId": "4.9.0-live.12232306",
+    "sourceContractVersion": 3,
+    "shapedContractVersion": 2,
+    "generationId": "fdfd54f65b1f84a621899b21",
+    "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
+    "sourceMissionContractSha256": "d63acb5c4f475930011a590c5da28dc652b96f76281b553bf72bc2ae2d4aea8e",
+    "missionBrowserIndexSha256": "fc39e186fbaa842eafa6c2328b21c3ec44e2e0dfb5763681af0bc88e2c2e0845",
+    "englishGlobalIniSha256": "e5574df1178a980c4b8cfa1fb812d813b527cbc65bc613631eb0abbfecbdd1a5",
+    "evidenceStatus": "source_and_generation_pinned"
+  },
+  "targetSourceV4": {
+    "status": "source_v4_shaped_v3_offer_v1_published_and_verified",
+    "channel": "LIVE",
+    "buildId": "4.9.0-live.12232306",
+    "sourceContractVersion": 4,
+    "sourceRoot": "D:/Moonbreaker/server-data/missions/source",
+    "scintelReceipt": "D:/scintel/docs/contracts/mission-offer-source-audit-v1.json",
+    "artifacts": [
+      {
+        "name": "mission_contracts.json",
+        "schemaVersion": 4,
+        "bytes": 109328596,
+        "sha256": "761b960fb61a80fda0808f348d24ffb260861c02338d7b852da5c18624a8c40d"
+      },
+      {
+        "name": "mission_objective_templates.json",
+        "schemaVersion": 2,
+        "bytes": 13966789,
+        "sha256": "fdb64d86595aa4eafbccdabe3436fdd65c41f6b4317dc09362c079ee007c8abb"
+      },
+      {
+        "name": "mission_extraction_report.json",
+        "schemaVersion": 4,
+        "bytes": 87300,
+        "sha256": "69411b524210140b9e56005f525cdc98984863547acb59498db4e641bedc19b2"
+      },
+      {
+        "name": "mission_reward_lookups.json",
+        "bytes": 718045,
+        "sha256": "023f656a014eebcdfafbc366723140e062936bea7b273e0b6755a219417cf589"
+      },
+      {
+        "name": "mission_blueprint_rewards.json",
+        "bytes": 39388864,
+        "sha256": "bb3a4febcf1ac0e0accf59b725477757118c457a8afb474c6cfa12fd1d8defcc"
+      },
+      {
+        "name": "blueprint_reward_sources.json",
+        "bytes": 5016049,
+        "sha256": "34109a74185b9e2e2e4599125e9bb47a08f75681af26359fbfa6736d8f98ee29"
+      }
+    ],
+    "counts": {
+      "exactVariants": 2501,
+      "families": 259,
+      "objectiveTemplates": 335,
+      "resolvedObjectiveTemplates": 333,
+      "objectiveTokens": 462,
+      "objectiveTemplatesWithFlow": 253
+    },
+    "readerSupport": {
+      "acceptedSourceContractVersions": [
+        3,
+        4
+      ],
+      "canonicalVariantVersion": 2,
+      "sourceV4OfferEvidencePreserved": true,
+      "sourceV3RollbackReadable": true,
+      "implementationFiles": [
+        "scripts/missions/schema/source-v4.mts",
+        "scripts/missions/schema/canonical-v2.mts",
+        "scripts/missions/mission-schema.test.ts",
+        "server/routes/missions.routes.ts"
+      ]
+    },
+    "readerTestResult": {
+      "command": "npm run missions:test",
+      "tests": 51,
+      "passed": 51,
+      "failed": 0,
+      "result": "pass"
+    },
+    "invariantResults": {
+      "sharedExactVariantCount": 2501,
+      "protectedFieldMismatchCount": 0,
+      "auditedHeadhuntersTupleCount": 25,
+      "auditedHeadhuntersCanonicalSha256": "07d755ad1c18de3fae843d5055e6fac0b5b6896ff1a9ae4ddbc873d210938311",
+      "blueprintReverseLinkTupleCount": 8313,
+      "blueprintReverseLinkCanonicalSha256": "45b3ef8560b87cccacf7e782b8c3e16f5d3f6aae153add65096258befabc12e6",
+      "result": "pass"
+    },
+    "targetShapedGeneration": {
+      "missionSchemaVersion": 3,
+      "sourceContractVersion": 4,
+      "offerSchemaVersion": 1,
+      "shaperVersion": "moonbreaker_mission_shaper_v3_2_offer1",
+      "generationId": "2cc966f1ae3dbd6e7db858a2",
+      "counts": {
+        "missionSeries": 259,
+        "missionOffers": 1012,
+        "exactVariants": 2501,
+        "goldenOffers": 10,
+        "goldenVariants": 25
+      },
+      "artifacts": [
+        {
+          "name": "mission_browser_index.json",
+          "bytes": 9345191,
+          "sha256": "ca94095b7d79d2b40926129ff439df17881eb1a482aad4af61462716b4e9ea24"
+        },
+        {
+          "name": "mission_offers.json",
+          "bytes": 2951314,
+          "sha256": "b6272bfb792d8e76676b069ebe2965d509083945638288cb8b279d27dfb69d12"
+        },
+        {
+          "name": "mission_shard_manifest.json",
+          "bytes": 3204458,
+          "sha256": "e5b1ed7cfcbd36d6697df6b6050fc55448745c830b49cc311213d51c03a7aa71"
+        }
+      ],
+      "goldenReport": {
+        "status": "passed",
+        "exactTitleSearchChecks": 10,
+        "runtimeGhostPlaceholderPreserved": true,
+        "protectedInvariantGatePassed": true
+      },
+      "validation": {
+        "sourceVerifier": "pass",
+        "shapedVerifier": "pass",
+        "missionTests": "51/51 pass",
+        "offerUiPlaywright": "3/3 pass",
+        "blueprintSourceRoutes": "6/6 pass",
+        "apiBoundary": "pass",
+        "lint": "pass",
+        "build": "pass"
+      },
+      "evidenceStatus": "published_and_verified"
+    },
+    "publicationState": {
+      "sourcePublished": true,
+      "currentPointerChanged": true,
+      "currentMissionSchemaVersion": 3,
+      "currentSourceContractVersion": 4,
+      "currentOfferSchemaVersion": 1,
+      "currentGenerationId": "2cc966f1ae3dbd6e7db858a2",
+      "rollbackGenerationId": "fdfd54f65b1f84a621899b21",
+      "nextRequiredStep": "none_publication_complete"
+    },
+    "evidenceStatus": "source_backed_published_generation_receipt"
+  },
+  "authorityBoundary": {
+    "owner": "Moonbreaker",
+    "scope": "Browse identity, search, shaped projection, API compatibility, and acceptance gates for this exact source build and shaped generation.",
+    "notAuthorityFor": [
+      "Scintel extraction truth",
+      "CIG runtime mission-instance substitutions",
+      "aUEC calculation formulas",
+      "blueprint pool contents",
+      "reputation prerequisite or reward semantics"
+    ],
+    "evidenceStatus": "decision"
+  },
+  "evidenceStatusVocabulary": {
+    "source_backed": "Present directly in the accepted Scintel mission source contract.",
+    "source_calculated": "Calculated by the accepted, versioned Scintel model and persisted as source evidence.",
+    "moonbreaker_derived": "Produced by the pinned Moonbreaker shaped generation and subject to projection repair.",
+    "cig_localization_backed": "Present in the accepted build localization file.",
+    "observed_example": "Reported in the user-provided example or screenshot but not yet reconciled with the accepted build.",
+    "unresolved": "The available evidence does not prove an effective value.",
+    "decision": "Required domain or implementation terminology for the repair.",
+    "acceptance_requirement": "A gate that must pass before publication."
+  },
+  "terminology": [
+    {
+      "term": "Mission Series",
+      "definition": "A structural generator, family, or shared activity relationship. It is not the primary searchable player-facing identity.",
+      "evidenceStatus": "decision"
+    },
+    {
+      "term": "Mission Offer",
+      "definition": "A player-facing searchable identity anchored to the localized title key or runtime title template and provider.",
+      "evidenceStatus": "decision"
+    },
+    {
+      "term": "Exact Variant",
+      "definition": "One contract UUID with its exact release flags, payout, eligibility, rewards, objective template, and source provenance.",
+      "evidenceStatus": "decision"
+    },
+    {
+      "term": "Availability Branch",
+      "definition": "A subcontract-owned locality or eligibility alternative that must remain attached to its owning branch.",
+      "evidenceStatus": "decision"
+    }
+  ],
+  "domainDecisions": {
+    "verification": {
+      "playerFacingField": "Contract Verification",
+      "allowedValues": [
+        "Verified",
+        "Unverified",
+        "Unknown"
+      ],
+      "mapping": {
+        "effectiveIllegalFalse": "Verified",
+        "effectiveIllegalTrue": "Unverified",
+        "effectiveIllegalNullOrUnresolved": "Unknown"
+      },
+      "localizationEvidence": {
+        "path": "D:/scintel/out/LIVE/4.9.0-live.12232306/Data/Localization/english/global.ini",
+        "lines": {
+          "mG_ContractsMgr_ToggleIllegal": "Unverified",
+          "mG_ContractsMgr_ToggleLegal": "Verified"
+        }
+      },
+      "currentAuditResult": "Every audited Headhunters variant remains Unknown because effective Illegal precedence is unresolved.",
+      "prohibitedProjection": "Do not infer Verified or Unverified from provider, title, activity words, CrimeStat, handler override alone, or a lawful/unlawful keyword classifier.",
+      "evidenceStatus": "cig_localization_backed_and_source_unresolved"
+    },
+    "provider": {
+      "rule": "Provider organization identity is separate from reputation faction identity. Use the explicit Contractor string parameter when factionName is absent.",
+      "auditedMissingFactionNameVariants": [
+        "f5f5ba5c-4205-4362-91b2-cf5296963ed1",
+        "4acddde8-0e8f-4ea7-9124-cccc2a2e2f48",
+        "3965842d-8aa3-4725-b53b-54cfcfc04047",
+        "d6defd29-bd2a-4dcc-92e6-1e681bcf1b83"
+      ],
+      "contractorTextForAuditedVariants": "Headhunters",
+      "evidenceStatus": "source_backed"
+    },
+    "runtimeTitle": {
+      "rule": "Preserve unresolved runtime substitutions as templates. Do not create a static title or search alias from a concrete runtime value without mission-instance evidence.",
+      "sourceTitle": "Ghost ~mission(TargetName)",
+      "safeDisplayTitle": "Ghost [TargetName]",
+      "unsupportedStaticExample": "GHOST BUD \"PHANTOM\" STEWART",
+      "evidenceStatus": "source_backed_with_observed_example_unresolved"
+    },
+    "releaseState": {
+      "rule": "notForRelease and workInProgress remain independent from Contract Verification.",
+      "evidenceStatus": "source_backed"
+    }
+  },
+  "sharedIdentifiers": {
+    "headhuntersFactionGuid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+    "citizensForProsperityFactionGuid": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+    "genericReputationScopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+    "pyroCareerScopeGuid": "3792e4c6-665e-44e9-9410-40389182f918",
+    "stantonBranchLocalities": {
+      "Stanton2": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+      "Stanton3": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+      "Stanton4": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+    },
+    "evidenceStatus": "source_backed"
+  },
+  "offerKeyNormalizationContract": {
+    "mappingVersion": "scintel-evidence-to-moonbreaker-offer-v1",
+    "sourceManifest": {
+      "manifestId": "mission-offer-source-audit-v1",
+      "path": "D:/scintel/docs/contracts/mission-offer-source-audit-v1.json",
+      "schemaVersion": 1
+    },
+    "sourceKeyContract": {
+      "semanticName": "evidenceKey",
+      "dictionaryLocation": "evidenceDictionaries.offers.<evidenceKey>",
+      "tupleFieldCompatibility": "Scintel auditedExactVariantTuples[].offerKey is the v1 evidenceKey field and must be normalized before it is compared with Moonbreaker goldenMissionOffers[].offerKey.",
+      "identityTuple": [
+        "providerKey",
+        "titleRaw"
+      ]
+    },
+    "normalization": {
+      "providerSegment": "Lowercase providerKey; replace every maximal run outside [a-z0-9] with '-'; trim leading and trailing '-'.",
+      "offerSegment": "Lowercase evidenceKey; replace every maximal run outside [a-z0-9] with '-'; trim leading and trailing '-'.",
+      "targetFormat": "<providerSegment>:<offerSegment>",
+      "runtimeSubstitutionPolicy": "Do not use resolved TargetName, Location, or any other mission-instance substitution. Stable evidenceKey and titleRaw are the identity evidence.",
+      "collisionPolicy": "Reject a mapping when distinct [providerKey,titleRaw] tuples produce the same Moonbreaker offerKey. Never merge or auto-suffix colliding identities.",
+      "identityMergePolicy": "Exact variants may share one offerKey only when providerKey and titleRaw are identical. Family, series, objective template, runtime value, and display-title similarity are not merge keys.",
+      "versionPolicy": "Version 1 is immutable. Rule changes require a new mappingVersion and explicit compatibility aliases; an existing offerKey cannot be silently reassigned."
+    },
+    "mappings": [
+      {
+        "evidenceKey": "deep_space_hit",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_EliminateSpecific_Asteroid_Generic_VE_title_001",
+        "offerKey": "headhunters:deep-space-hit"
+      },
+      {
+        "evidenceKey": "primo_target",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_killship_cfp_vhrt_title_001",
+        "offerKey": "headhunters:primo-target"
+      },
+      {
+        "evidenceKey": "plug_a_traitor",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_EliminateSpecific_Defector_title_001",
+        "offerKey": "headhunters:plug-a-traitor"
+      },
+      {
+        "evidenceKey": "looking_for_trouble",
+        "providerKey": "headhunters",
+        "titleRaw": "@Headhunters_SecurityPatrol_H_Title_001",
+        "offerKey": "headhunters:looking-for-trouble"
+      },
+      {
+        "evidenceKey": "ghost_target_name",
+        "providerKey": "headhunters",
+        "titleRaw": "@Headhunters_EliminateSpecific_PAF_title_001",
+        "offerKey": "headhunters:ghost-target-name"
+      },
+      {
+        "evidenceKey": "show_them_whos_boss",
+        "providerKey": "headhunters",
+        "titleRaw": "@Headhunters_EliminateAll_PAF_H_title_001",
+        "offerKey": "headhunters:show-them-whos-boss"
+      },
+      {
+        "evidenceKey": "no_fly_zone",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_bombingrun_E_title_001",
+        "offerKey": "headhunters:no-fly-zone"
+      },
+      {
+        "evidenceKey": "ground_the_upstarts",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_bombingrun_VE_title_001",
+        "offerKey": "headhunters:ground-the-upstarts"
+      },
+      {
+        "evidenceKey": "wasting_their_stockpile",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_bombingrun_H_title_001",
+        "offerKey": "headhunters:wasting-their-stockpile"
+      },
+      {
+        "evidenceKey": "stopping_the_competition",
+        "providerKey": "headhunters",
+        "titleRaw": "@headhunters_bombingrun_M_title_001",
+        "offerKey": "headhunters:stopping-the-competition"
+      }
+    ],
+    "acceptance": {
+      "sourceMappingCount": 10,
+      "targetOfferCount": 10,
+      "requireBijection": true,
+      "requireIdentityTupleMatch": true,
+      "requireRuntimeValuesExcluded": true
+    },
+    "evidenceStatus": "decision"
+  },
+  "goldenMissionOffers": [
+    {
+      "offerKey": "headhunters:deep-space-hit",
+      "displayTitle": "Deep space hit",
+      "titleKey": "@headhunters_EliminateSpecific_Asteroid_Generic_VE_title_001",
+      "missionSeries": [
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateSpecific_Pyro"
+      ],
+      "objectiveTemplate": "contracts/contracttemplates/eliminatespecific.xml",
+      "provider": "Headhunters",
+      "sharedTuple": {
+        "payout": {
+          "baseSoloAmount": 27250,
+          "currency": "aUEC",
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "status": "resolved"
+        },
+        "reputationReward": {
+          "amount": 50,
+          "sourceScopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "moonbreakerScopeLabel": "Ship Combat",
+          "moonbreakerScopeConfidence": "partial"
+        },
+        "availability": "Pyro system",
+        "verificationEvidence": {
+          "handlerOverride": true,
+          "contractOverride": false,
+          "templateIllegal": false,
+          "effectiveStatus": "unresolved_precedence",
+          "contractVerification": "Unknown"
+        }
+      },
+      "exactVariants": [
+        {
+          "variantId": "004f6931-271f-4774-8db1-ce7b86de6837",
+          "minimumStanding": 0,
+          "blueprintPoolGuid": "9cf3799c-2347-46a6-bd65-203f8a426f79",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region CD",
+          "poolItemChanceLabel": "12.5% chance - 1 of 8"
+        },
+        {
+          "variantId": "31181b9a-540a-43f7-97dd-e5f3bcc9f230",
+          "minimumStanding": 0,
+          "blueprintPoolGuid": "f05fa898-1580-4ce3-95e2-8f5c4a1d1891",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region AB",
+          "poolItemChanceLabel": "10% chance - 1 of 10"
+        },
+        {
+          "variantId": "367e655b-1dc6-4f14-b54c-4dc3bed30ff0",
+          "minimumStanding": 800,
+          "blueprintPoolGuid": "9cf3799c-2347-46a6-bd65-203f8a426f79",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region CD",
+          "poolItemChanceLabel": "12.5% chance - 1 of 8"
+        },
+        {
+          "variantId": "67d02bb9-d556-49d6-82f5-218b8c572b95",
+          "minimumStanding": 0,
+          "blueprintPoolGuid": "f05fa898-1580-4ce3-95e2-8f5c4a1d1891",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region AB",
+          "poolItemChanceLabel": "10% chance - 1 of 10"
+        },
+        {
+          "variantId": "6928a6e1-2e9a-49ae-87f4-29dcde3b1e1f",
+          "minimumStanding": 0,
+          "blueprintPoolGuid": "9cf3799c-2347-46a6-bd65-203f8a426f79",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region CD",
+          "poolItemChanceLabel": "12.5% chance - 1 of 8"
+        },
+        {
+          "variantId": "86e9ad4a-f15c-4414-b1f6-a804a5dd119a",
+          "minimumStanding": 800,
+          "blueprintPoolGuid": "f05fa898-1580-4ce3-95e2-8f5c4a1d1891",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region AB",
+          "poolItemChanceLabel": "10% chance - 1 of 10"
+        },
+        {
+          "variantId": "909c2dc6-b738-4aeb-b8ce-783b88c6a097",
+          "minimumStanding": 800,
+          "blueprintPoolGuid": "9cf3799c-2347-46a6-bd65-203f8a426f79",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region CD",
+          "poolItemChanceLabel": "12.5% chance - 1 of 8"
+        },
+        {
+          "variantId": "b3f28ef3-3c70-4cac-a044-9a5dcb3930f9",
+          "minimumStanding": 800,
+          "blueprintPoolGuid": "f05fa898-1580-4ce3-95e2-8f5c4a1d1891",
+          "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region AB",
+          "poolItemChanceLabel": "10% chance - 1 of 10"
+        }
+      ],
+      "currentProjection": {
+        "conceptKey": "53d174fed535c0a8c4bc",
+        "conceptDisplayName": "Deep space hit",
+        "exactTitleSearchConcepts": [
+          "Deep space hit"
+        ]
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "blueprintPools": "source_backed_with_moonbreaker_lookup",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:primo-target",
+      "displayTitle": "Primo Target",
+      "titleKey": "@headhunters_killship_cfp_vhrt_title_001",
+      "missionSeries": [
+        "57d7286e-1786-4a4c-9ec4-37bf8c54eb61|HH_KillShip"
+      ],
+      "objectiveTemplate": "contracts/contracttemplates/bounty_nearlocation.xml",
+      "provider": "Headhunters",
+      "sharedTuple": {
+        "payout": {
+          "baseSoloAmount": 149750,
+          "currency": "aUEC",
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "status": "resolved"
+        },
+        "standingBand": {
+          "minimumDisplay": "Head Contractor",
+          "minimumReputation": 38000,
+          "maximumDisplay": "Elite Contractor",
+          "maximumReputation": 95250
+        },
+        "reputationPrerequisite": {
+          "polarity": "excluded",
+          "factionGuid": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "scopeGuid": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "minimumStandingGuid": "cf6f6a08-b8a0-4b13-9e20-2b74cd783059",
+          "maximumStandingGuid": "bcd1f776-9a6e-4ffd-85c4-6df64f4cf2ed"
+        },
+        "reputationReward": {
+          "amount": 1200,
+          "sourceScopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "moonbreakerScopeLabel": "Ship Combat",
+          "moonbreakerScopeConfidence": "partial"
+        },
+        "verificationEvidence": {
+          "handlerOverride": true,
+          "contractOverride": null,
+          "templateIllegal": false,
+          "effectiveStatus": "unresolved_precedence",
+          "contractVerification": "Unknown"
+        }
+      },
+      "exactVariants": [
+        {
+          "variantId": "927f4e62-c90e-4366-a31d-9183c377806e",
+          "region": "Region A",
+          "blueprintPoolGuid": "0e810eae-7b66-45aa-a18f-ffc1aae15585",
+          "blueprintPoolName": "Head Hunters Mercenary Ship Region A",
+          "poolItemChanceLabel": "14.29% chance - 1 of 7"
+        },
+        {
+          "variantId": "da6f602d-fc21-4d2e-9b82-efc6f92d6521",
+          "region": "Region B",
+          "blueprintPoolGuid": "4b340951-c7f6-49af-bcc7-9fadcecf6c8c",
+          "blueprintPoolName": "Head Hunters Mercenary Ship Region B",
+          "poolItemChanceLabel": "20% chance - 1 of 5"
+        },
+        {
+          "variantId": "dcf7e7cf-e117-44ed-a1dc-97b4010a2da2",
+          "region": "Region C",
+          "blueprintPoolGuid": "de417e15-2936-497a-8f90-7a52eb2eb12a",
+          "blueprintPoolName": "Head Hunters Mercenary Ship Region C",
+          "poolItemChanceLabel": "20% chance - 1 of 5"
+        },
+        {
+          "variantId": "5222f94d-4fa0-437d-9a05-b59c16215007",
+          "region": "Region D",
+          "blueprintPoolGuid": "14ac943a-df05-4bd8-9596-b268d7e7748b",
+          "blueprintPoolName": "Head Hunters Mercenary Ship Region D",
+          "poolItemChanceLabel": "12.5% chance - 1 of 8"
+        }
+      ],
+      "currentProjection": {
+        "conceptKey": "53d174fed535c0a8c4bc",
+        "conceptDisplayName": "Deep space hit",
+        "exactTitleSearchConcepts": [
+          "Crash some ships",
+          "Deep space hit"
+        ]
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "blueprintPools": "source_backed_with_moonbreaker_lookup",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:plug-a-traitor",
+      "displayTitle": "Plug a traitor",
+      "titleKey": "@headhunters_EliminateSpecific_Defector_title_001",
+      "missionSeries": [
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateSpecific_Pyro"
+      ],
+      "objectiveTemplate": "contracts/contracttemplates/eliminatespecific.xml",
+      "provider": "Headhunters",
+      "sharedTuple": {
+        "payout": {
+          "baseSoloAmount": 72000,
+          "currency": "aUEC",
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "status": "resolved"
+        },
+        "standingBand": {
+          "minimumDisplay": "Jr. Contractor",
+          "minimumReputation": 800,
+          "maximumDisplay": "Elite Contractor",
+          "maximumReputation": 95250
+        },
+        "reputationPrerequisite": {
+          "polarity": "excluded",
+          "factionGuid": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "scopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "minimumStandingGuid": "a8f635c5-7fc0-4d27-8a08-27bb3476bfb8",
+          "maximumStandingGuid": "426da095-27b1-4ac3-8722-af57a973c79c"
+        },
+        "reputationReward": {
+          "amount": 100,
+          "moonbreakerScopeLabel": "Ship Combat",
+          "moonbreakerScopeConfidence": "partial"
+        },
+        "availability": "Pyro system",
+        "blueprintPoolGuid": "9cf3799c-2347-46a6-bd65-203f8a426f79",
+        "blueprintPoolName": "Head Hunters Mercenary FPS Eliminate Specific Region CD",
+        "verificationEvidence": {
+          "handlerOverride": true,
+          "contractOverride": false,
+          "templateIllegal": false,
+          "effectiveStatus": "unresolved_precedence",
+          "contractVerification": "Unknown"
+        }
+      },
+      "exactVariants": [
+        {
+          "variantId": "4441b61a-1b72-4b64-ba2a-6816336e354d",
+          "notForRelease": true,
+          "workInProgress": false
+        },
+        {
+          "variantId": "60826e88-0e47-4527-a92f-da99b70240e0",
+          "notForRelease": false,
+          "workInProgress": false
+        }
+      ],
+      "currentProjection": {
+        "conceptKey": "53d174fed535c0a8c4bc",
+        "conceptDisplayName": "Deep space hit",
+        "exactTitleSearchConcepts": [
+          "Deep space hit"
+        ]
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "blueprintPools": "source_backed_with_moonbreaker_lookup",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:looking-for-trouble",
+      "displayTitle": "Looking For Trouble",
+      "titleKey": "@Headhunters_SecurityPatrol_H_Title_001",
+      "missionSeries": [
+        "18f50b34-8b12-42b4-b4d0-eaf22e8ae028|HeadHunters_Patrol_Nyx",
+        "18f50b34-8b12-42b4-b4d0-eaf22e8ae028|HeadHunters_Patrol_Pyro",
+        "18f50b34-8b12-42b4-b4d0-eaf22e8ae028|HeadHunters_Patrol_Stanton"
+      ],
+      "objectiveTemplate": "contracts/contracttemplates/securitypatrol.xml",
+      "provider": "Headhunters",
+      "exactVariants": [
+        {
+          "variantId": "c980057a-d5da-4c8e-8f12-1d53394d4d35",
+          "system": "Nyx",
+          "payout": 158750,
+          "standingMinimum": 5800,
+          "reputationReward": 200,
+          "reputationScopeLabel": "Ship Combat",
+          "blueprintPools": []
+        },
+        {
+          "variantId": "e6a1a6e9-f890-4ec0-a8a8-7cc70e1262c9",
+          "system": "Nyx",
+          "payout": 158750,
+          "standingMinimum": 5800,
+          "reputationReward": 200,
+          "reputationScopeLabel": "Ship Combat",
+          "blueprintPools": []
+        },
+        {
+          "variantId": "f5f5ba5c-4205-4362-91b2-cf5296963ed1",
+          "system": "Pyro",
+          "payout": 153000,
+          "standingMinimum": null,
+          "reputationReward": 2000,
+          "reputationScopeLabel": "Ship Combat Head Hunters",
+          "blueprintPools": [],
+          "reputationPrerequisite": {
+            "polarity": "required",
+            "factionGuid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "scopeGuid": "3792e4c6-665e-44e9-9410-40389182f918",
+            "minimumStandingGuid": "9158e288-69a3-4260-9b11-62986c1b1fee",
+            "maximumStandingGuid": "6b12e48e-3e11-443d-bcc2-e0b85229936f",
+            "displayRange": "Rank III through Rank VI",
+            "parentOwned": true,
+            "branchOwners": [
+              "a3590cda-0f5b-4d66-be6b-ebce8c5809f3",
+              "d5bf328a-f7dc-4abe-ad61-09297fe59dce",
+              "a9d9a336-99a5-4275-b1b8-8533c6d99e6b"
+            ]
+          },
+          "availabilityBranches": [
+            {
+              "subContractId": "a3590cda-0f5b-4d66-be6b-ebce8c5809f3",
+              "locality": "Region B",
+              "localityGuid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            {
+              "subContractId": "d5bf328a-f7dc-4abe-ad61-09297fe59dce",
+              "locality": "Region C",
+              "localityGuid": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            {
+              "subContractId": "a9d9a336-99a5-4275-b1b8-8533c6d99e6b",
+              "locality": "Region D",
+              "localityGuid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            }
+          ]
+        },
+        {
+          "variantId": "4acddde8-0e8f-4ea7-9124-cccc2a2e2f48",
+          "system": "Stanton",
+          "pickupStatus": "unknown",
+          "payout": 153000,
+          "standingMinimum": null,
+          "reputationReward": 2000,
+          "reputationScopeLabel": "Ship Combat Head Hunters",
+          "blueprintPools": [],
+          "reputationPrerequisite": {
+            "polarity": "required",
+            "factionGuid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "scopeGuid": "3792e4c6-665e-44e9-9410-40389182f918",
+            "minimumStandingGuid": "9158e288-69a3-4260-9b11-62986c1b1fee",
+            "maximumStandingGuid": "6b12e48e-3e11-443d-bcc2-e0b85229936f",
+            "displayRange": "Rank III through Rank VI",
+            "parentOwned": true,
+            "branchOwners": [
+              "a2528e0a-ca9d-40f0-b058-b44858e71f6e",
+              "925149cf-8552-4e50-9af6-85e5007c7ec4",
+              "0d09f2d8-b3f9-4225-b7ec-dc13758b3107"
+            ]
+          }
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptDisplayNames": [
+          "Hunt Some Heads"
+        ],
+        "exactTitleSearchFamilyCount": 3
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "availability": "source_backed_with_moonbreaker_resolution",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:ghost-target-name",
+      "displayTitle": "Ghost [TargetName]",
+      "sourceTitle": "Ghost ~mission(TargetName)",
+      "titleKey": "@Headhunters_EliminateSpecific_PAF_title_001",
+      "missionSeries": [
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_MercenaryStanton"
+      ],
+      "provider": "Headhunters",
+      "factionName": null,
+      "exactVariants": [
+        {
+          "variantId": "3965842d-8aa3-4725-b53b-54cfcfc04047",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 37250,
+          "availability": "Stanton Star",
+          "reputationRewards": [],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/eliminatespecific.xml"
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": true,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptKey": "5590228d7189a07acff4",
+        "conceptDisplayName": "Ghost [TargetName]",
+        "exactTitleSearchConcepts": [
+          "Deliver a Message",
+          "Ghost [TargetName]",
+          "Opportunity Knocks at [Location]",
+          "Settle a Grudge"
+        ]
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "runtimeConcreteName": "unresolved",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:show-them-whos-boss",
+      "displayTitle": "Show Them Who's Boss",
+      "titleKey": "@Headhunters_EliminateAll_PAF_H_title_001",
+      "missionSeries": [
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_MercenaryStanton"
+      ],
+      "provider": "Headhunters",
+      "factionName": null,
+      "exactVariants": [
+        {
+          "variantId": "d6defd29-bd2a-4dcc-92e6-1e681bcf1b83",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 49750,
+          "availability": "Stanton Star",
+          "reputationRewards": [],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/eliminateall.xml"
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": true,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptKey": "b94d3a21fe3f2fe6ab4e",
+        "conceptDisplayName": "Deliver a Message",
+        "exactTitleSearchConcepts": [
+          "Deliver a Message",
+          "Ghost [TargetName]",
+          "Opportunity Knocks at [Location]",
+          "Settle a Grudge"
+        ]
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:no-fly-zone",
+      "displayTitle": "No Fly Zone",
+      "titleKey": "@headhunters_bombingrun_E_title_001",
+      "missionSeries": [
+        "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|HH_Sabotage",
+        "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|Headhunters_BombingRun_Stanton_Career"
+      ],
+      "provider": "Headhunters",
+      "exactVariants": [
+        {
+          "variantId": "a326aaeb-7481-4511-a2e1-684c1143c264",
+          "notForRelease": true,
+          "workInProgress": false,
+          "payout": 17000,
+          "standingMinimum": 0,
+          "reputationReward": {
+            "scope": "Affinity",
+            "amount": 25
+          },
+          "availability": "Pyro system",
+          "availabilityBranches": [],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/destroyitems.xml",
+          "verificationEvidence": {
+            "handlerOverride": true,
+            "contractOverride": null,
+            "templateIllegal": true,
+            "effectiveStatus": "unresolved_precedence",
+            "contractVerification": "Unknown"
+          }
+        },
+        {
+          "variantId": "1c417c3a-03d3-40df-9950-fc5f150f3328",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 33250,
+          "standingMinimum": 800,
+          "reputationReward": {
+            "scope": "Standing",
+            "amount": 100
+          },
+          "availability": "Stanton",
+          "availabilityBranches": [
+            {
+              "subContractId": "07dda696-652d-439f-bfcd-97863a4bc6f8",
+              "localityGuid": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            {
+              "subContractId": "29c9128e-a3e1-4e58-b6a1-ef640d18f4ad",
+              "localityGuid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            {
+              "subContractId": "d7d59a77-1d69-4d72-b52c-3507af75de65",
+              "localityGuid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            }
+          ],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/destroyitems_bombingrun_shipcombatencounter.xml",
+          "verificationEvidence": {
+            "handlerOverride": true,
+            "contractOverride": null,
+            "templateIllegal": false,
+            "effectiveStatus": "unresolved_precedence",
+            "contractVerification": "Unknown"
+          }
+        }
+      ],
+      "currentProjection": {
+        "conceptKeys": [
+          "239ca69bd53c5d5db158",
+          "2d4b101cca3f486968d0"
+        ],
+        "exactTitleSearchConceptCount": 15
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "availability": "source_backed_with_moonbreaker_resolution",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:ground-the-upstarts",
+      "displayTitle": "Ground The Upstarts",
+      "titleKey": "@headhunters_bombingrun_VE_title_001",
+      "missionSeries": [
+        "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|Headhunters_BombingRun_Stanton_Career"
+      ],
+      "provider": "Headhunters",
+      "exactVariants": [
+        {
+          "variantId": "fc6b3de9-5178-4682-85da-1d872c552bbc",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 24750,
+          "standingMinimum": 0,
+          "reputationReward": {
+            "scope": "Standing",
+            "amount": 100
+          },
+          "availability": "Stanton",
+          "availabilityBranches": [
+            {
+              "subContractId": "0c297dda-db00-4426-aecd-61302a3c46c7",
+              "localityGuid": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            {
+              "subContractId": "52c962b3-b316-443b-9682-ff146076715f",
+              "localityGuid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            {
+              "subContractId": "ae851967-64d0-4d19-aead-ee55d1b427ef",
+              "localityGuid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            }
+          ],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/destroyitems_bombingrun_shipcombatencounter.xml"
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptKey": "2a1339f3d6181e2470ce",
+        "conceptDisplayName": "Ground The Upstarts",
+        "exactTitleSearchConceptCount": 6
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "availability": "source_backed_with_moonbreaker_resolution",
+        "blueprintPools": "source_backed",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:wasting-their-stockpile",
+      "displayTitle": "Wasting Their Stockpile",
+      "titleKey": "@headhunters_bombingrun_H_title_001",
+      "missionSeries": [
+        "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|Headhunters_BombingRun_Stanton_Career"
+      ],
+      "provider": "Headhunters",
+      "exactVariants": [
+        {
+          "variantId": "14335426-0b72-4819-bfcb-f43b735cd22e",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 53000,
+          "standingMinimum": 5800,
+          "reputationReward": {
+            "scope": "Standing",
+            "amount": 200
+          },
+          "availability": "Stanton",
+          "availabilityBranches": [
+            {
+              "subContractId": "eaa910ec-bdbb-4d8a-b3ac-30425806967c",
+              "localityGuid": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            {
+              "subContractId": "ba6e3040-c290-4884-a270-6ab1634c52b5",
+              "localityGuid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            {
+              "subContractId": "38f200f7-f9fd-453a-a537-13c6957fe9e6",
+              "localityGuid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            }
+          ],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/destroyitems_bombingrun_shipcombatencounter.xml"
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptKey": "49556ea33efee3c44720",
+        "conceptDisplayName": "Wasting Their Stockpile",
+        "exactTitleSearchConceptCount": 6
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "availability": "source_backed_with_moonbreaker_resolution",
+        "blueprintPools": "source_backed",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    },
+    {
+      "offerKey": "headhunters:stopping-the-competition",
+      "displayTitle": "Stopping the Competition",
+      "titleKey": "@headhunters_bombingrun_M_title_001",
+      "missionSeries": [
+        "2d5008d1-8e86-4a93-9dba-7db7bf5f37eb|Headhunters_BombingRun_Stanton_Career"
+      ],
+      "provider": "Headhunters",
+      "exactVariants": [
+        {
+          "variantId": "3786138a-edb9-4c03-922d-9e87674e3b5e",
+          "notForRelease": false,
+          "workInProgress": false,
+          "payout": 41500,
+          "standingMinimum": 2200,
+          "reputationReward": {
+            "scope": "Standing",
+            "amount": 150
+          },
+          "availability": "Stanton",
+          "availabilityBranches": [
+            {
+              "subContractId": "e098e17d-551b-4999-bcac-71e2d75a7b5d",
+              "localityGuid": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            {
+              "subContractId": "6c298634-c519-4a00-81a5-cb9cb8e0b256",
+              "localityGuid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            {
+              "subContractId": "d317eb8c-ab62-4c02-bdd3-974d9922cd03",
+              "localityGuid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            }
+          ],
+          "blueprintPools": [],
+          "objectiveTemplate": "contracts/contracttemplates/destroyitems_bombingrun_shipcombatencounter.xml"
+        }
+      ],
+      "verificationEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "templateIllegal": false,
+        "effectiveStatus": "unresolved_precedence",
+        "contractVerification": "Unknown"
+      },
+      "currentProjection": {
+        "conceptKey": "488bd15232ccfc3e434f",
+        "conceptDisplayName": "Stopping the Competition",
+        "exactTitleSearchConceptCount": 6
+      },
+      "evidenceStatusByFact": {
+        "identity": "source_backed",
+        "exactVariants": "source_backed",
+        "payout": "source_calculated",
+        "availability": "source_backed_with_moonbreaker_resolution",
+        "blueprintPools": "source_backed",
+        "reputation": "source_backed_with_moonbreaker_projection",
+        "currentProjection": "moonbreaker_derived",
+        "verification": "unresolved"
+      }
+    }
+  ],
+  "contradictionLedger": [
+    {
+      "id": "HH-001",
+      "reportedFact": "Looking For Trouble is a Pyro Region A offer at about 158k with 200 and 2000 reputation values.",
+      "acceptedBuildFact": "The two 158750/+200 variants are Nyx. The Pyro and Stanton variants are 153000/+2000. The Pyro parent is system-scoped with extracted branch localities B, C, and D.",
+      "resolutionStatus": "requires_build_matched_in_game_observation",
+      "prohibitedAction": "Do not synthesize one row by joining the Nyx payout, Pyro region, and Pyro reputation reward.",
+      "reportedEvidenceStatus": "observed_example",
+      "acceptedEvidenceStatus": "source_backed"
+    },
+    {
+      "id": "HH-002",
+      "reportedFact": "Ground The Upstarts is Pyro Region A and rewards Blueprint Pool B.",
+      "acceptedBuildFact": "The released record is Stanton-scoped with Stanton2, Stanton3, and Stanton4 branches and has no blueprint reward.",
+      "resolutionStatus": "requires_build_matched_in_game_observation",
+      "reportedEvidenceStatus": "observed_example",
+      "acceptedEvidenceStatus": "source_backed"
+    },
+    {
+      "id": "HH-003",
+      "reportedFact": "Stopping the Competition is Pyro Region A and rewards Blueprint Pool B.",
+      "acceptedBuildFact": "The accepted record is Stanton-scoped with Stanton2, Stanton3, and Stanton4 branches and has no blueprint reward.",
+      "resolutionStatus": "requires_build_matched_in_game_observation",
+      "reportedEvidenceStatus": "observed_example",
+      "acceptedEvidenceStatus": "source_backed"
+    },
+    {
+      "id": "HH-004",
+      "reportedFact": "GHOST BUD \"PHANTOM\" STEWART is a static searchable title.",
+      "acceptedBuildFact": "The static source contains Ghost ~mission(TargetName); the concrete target name is runtime-substituted and absent from this accepted source snapshot.",
+      "resolutionStatus": "runtime_instance_evidence_required",
+      "reportedEvidenceStatus": "observed_example",
+      "acceptedEvidenceStatus": "source_backed"
+    },
+    {
+      "id": "HH-005",
+      "reportedFact": "Displayed shorthand amounts are 158k, 37k, 49k, 33k, and 24k.",
+      "acceptedBuildFact": "Exact source-calculated amounts are 158750, 37250, 49750, 33250, and 24750 aUEC for the corresponding variants.",
+      "resolutionStatus": "presentation_rounding_may_be_separate_but_source_amounts_must_remain_exact",
+      "reportedEvidenceStatus": "observed_example",
+      "acceptedEvidenceStatus": "source_calculated"
+    }
+  ],
+  "invariantHashTargets": {
+    "algorithm": "sha256",
+    "canonicalization": "For each target, select the 25 audited source records, sort by contractId, retain the listed fields and matching outcome-edge types, then encode JSON with lexicographically sorted object keys, UTF-8, ensure_ascii=false, and separators ',' and ':'.",
+    "targets": [
+      {
+        "name": "auec_solver_projection",
+        "fields": [
+          "contractId",
+          "calculatedPayout",
+          "outcomeEdges[type in calculated_auec_base_solo,fixed_currency]"
+        ],
+        "baselineSha256": "0ee48e03d8bd2da76cb45054d067def3b09690e25e0f80e67939245460c6ff88",
+        "gate": "must_not_change"
+      },
+      {
+        "name": "blueprint_pool_rewards",
+        "fields": [
+          "contractId",
+          "blueprintRewards",
+          "outcomeEdges[type=blueprint_reward]"
+        ],
+        "baselineSha256": "945b992067d584731f5a9953ebc0a422c4e02b107583a5b755a489967905d2d7",
+        "gate": "must_not_change"
+      },
+      {
+        "name": "reputation_eligibility_and_rewards",
+        "fields": [
+          "contractId",
+          "minStanding",
+          "maxStanding",
+          "prerequisiteEdges[type=reputation]",
+          "subContractPrerequisiteEdges[type=reputation]",
+          "fixedReputationRewards",
+          "calculatedReputationRewards",
+          "outcomeEdges[type contains reputation]"
+        ],
+        "baselineSha256": "748d1b7bb06712c8dfde200137d3d36dafc3488617b6621c856c815253edbffb",
+        "gate": "must_not_change"
+      },
+      {
+        "name": "release_and_availability_branches",
+        "fields": [
+          "contractId",
+          "notForRelease",
+          "workInProgress",
+          "prerequisiteEdges[type in location,locality]",
+          "subContractPrerequisiteEdges[type in location,locality]"
+        ],
+        "baselineSha256": "055c6db4fa901316da116433aa1e7bf8b751d70a73ba1b619bf806ba68e94d8c",
+        "gate": "must_not_change"
+      }
+    ],
+    "evidenceStatus": "source_backed_baseline"
+  },
+  "acceptanceGates": [
+    {
+      "id": "offer-identity",
+      "requirement": "Every released localized title key in this manifest produces one first-class Mission Offer, and every audited Exact Variant is assigned to exactly one offer.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "exact-title-search",
+      "requirement": "Exact title search returns the matching Mission Offer and does not promote unrelated concepts that only share a Mission Series or family.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "runtime-title-safety",
+      "requirement": "Ghost [TargetName] remains templated unless runtime mission-instance evidence is available; no concrete target name is invented from static data.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "verification-precedence",
+      "requirement": "Verified and Unverified render only from a proven effective Illegal value. Null or unresolved precedence renders Unknown. Keyword inference is prohibited.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "provider-separation",
+      "requirement": "Contractor text resolves the provider when factionName is absent, while provider and reputation faction remain separate fields.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "reputation-availability",
+      "requirement": "Standing bands, required and excluded reputation prerequisites, share behavior, owner scope, branch ownership, and reward scope/amount remain available through the Moonbreaker API and Mission Offer detail.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "tuple-integrity",
+      "requirement": "No Mission Offer row combines payout, reputation, blueprint, region, or release facts from different Exact Variants or Availability Branches.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "immutable-gameplay-evidence",
+      "requirement": "All four invariant hash targets match their baselines after reshaping, route, search, or UI changes.",
+      "evidenceStatus": "acceptance_requirement"
+    },
+    {
+      "id": "contradiction-adjudication",
+      "requirement": "Contradictions remain open until a build-matched in-game observation or a newly accepted source build resolves them; they are never silently overwritten.",
+      "evidenceStatus": "acceptance_requirement"
+    }
+  ],
+  "agentContextContract": {
+    "requiredHandoffFields": [
+      "channel",
+      "buildId",
+      "sourceMissionContractSha256",
+      "generationId",
+      "missionBrowserIndexSha256",
+      "changedManifestSections",
+      "invariantHashResults",
+      "contradictionLedgerChanges",
+      "validationCommandsAndResults",
+      "factEvidenceStatus"
+    ],
+    "ownership": {
+      "apiGuardian": "Owns API compatibility, generation consistency, invariant-hash merge gates, and solver boundary enforcement.",
+      "scintelExtractionAgent": "Owns raw title/provider/Illegal/prerequisite/reward/branch evidence and may change source schemas only through a versioned source contract.",
+      "moonbreakerShapingAgent": "Owns Mission Series and Mission Offer projections without recalculating source gameplay values.",
+      "moonbreakerSearchAgent": "Owns offer-grain search and must not expand a title match to every concept in a family.",
+      "moonbreakerUiAgent": "Owns presentation and may not infer missing verification, provider, payout, blueprint, reputation, or branch semantics.",
+      "goldenSetAuditor": "Owns the exact tuple assertions, contradiction ledger, and build-matched observation reconciliation."
+    },
+    "evidenceStatus": "decision"
+  },
+  "evidenceFiles": [
+    {
+      "path": "D:/Moonbreaker/server-data/missions/generations/2cc966f1ae3dbd6e7db858a2/mission_offer_golden_report.json",
+      "role": "published offer identity, exact-title search, runtime placeholder, and protected-invariant acceptance receipt",
+      "evidenceStatus": "published_and_verified"
+    },
+    {
+      "path": "D:/Moonbreaker/server-data/missions/source/mission_contracts.json",
+      "role": "accepted Scintel source contract copy",
+      "evidenceStatus": "source_backed"
+    },
+    {
+      "path": "D:/Moonbreaker/server-data/missions/generations/fdfd54f65b1f84a621899b21/mission_browser_index.json",
+      "role": "pinned Moonbreaker browse index and current search projection",
+      "evidenceStatus": "moonbreaker_derived"
+    },
+    {
+      "path": "D:/Moonbreaker/server-data/missions/generations/fdfd54f65b1f84a621899b21/mission_concepts.json",
+      "role": "pinned concept assignments",
+      "evidenceStatus": "moonbreaker_derived"
+    },
+    {
+      "path": "D:/scintel/out/LIVE/4.9.0-live.12232306/datasets/ref_index.json",
+      "role": "source GUID and locality-name resolution",
+      "evidenceStatus": "source_backed"
+    },
+    {
+      "path": "D:/scintel/out/LIVE/4.9.0-live.12232306/Data/Localization/english/global.ini",
+      "role": "CIG Verified and Unverified player-facing terminology",
+      "evidenceStatus": "cig_localization_backed"
+    }
+  ]
+}

@@ -134,8 +134,9 @@ export type MissionGraphCycle = {
 };
 
 export type MissionSolverGraph = {
-  schemaVersion: 2;
-  sourceContractVersion: 3;
+  schemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId: string;
   nodeCount: number;
   dependencies: MissionGraphDependency[];
@@ -143,8 +144,9 @@ export type MissionSolverGraph = {
 };
 
 export type MissionGraphValidationReport = {
-  schemaVersion: 2;
-  sourceContractVersion: 3;
+  schemaVersion: 2 | 3;
+  sourceContractVersion: 3 | 4;
+  offerSchemaVersion?: 1;
   generationId: string;
   summary: {
     requiredTagCount: number;
