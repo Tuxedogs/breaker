@@ -15,37 +15,38 @@ type ConsolidatedStat =
 
 type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
 
-type CraftStatIconName =
-  | "damage"
-  | "penetration"
-  | "spread"
-  | "signature"
-  | "repair"
-  | "energy"
-  | "projectile"
-  | "thermal"
-  | "durability";
-
-const STAT_GROUP_ICONS = new Map<string, CraftStatIconName>([
-  ["ballisticsanddamage", "damage"],
-  ["damageoutput", "damage"],
-  ["penetration", "penetration"],
-  ["resistanceabsorption", "penetration"],
-  ["resistanceandabsorption", "penetration"],
-  ["shieldperformance", "penetration"],
-  ["spread", "spread"],
-  ["signatures", "signature"],
-  ["signaturedetection", "signature"],
-  ["signatureanddetection", "signature"],
-  ["repair", "repair"],
-  ["energy", "energy"],
-  ["projectile", "projectile"],
-  ["powerandthermal", "thermal"],
-  ["powerthermal", "thermal"],
-  ["thermalandpower", "thermal"],
-  ["thermalpower", "thermal"],
-  ["durabilityandphysical", "durability"],
-  ["durabilityphysical", "durability"],
+const STAT_GROUP_ICONS = new Map<string, number>([
+  ["ballisticsdamage", 1],
+  ["ballisticsanddamage", 1],
+  ["damageoutput", 2],
+  ["projectile", 3],
+  ["penetration", 4],
+  ["spread", 5],
+  ["handling", 6],
+  ["fireactions", 7],
+  ["thermalpower", 8],
+  ["thermalandpower", 8],
+  ["signaturedetection", 9],
+  ["signatureanddetection", 9],
+  ["shieldperformance", 10],
+  ["resistanceabsorption", 11],
+  ["resistanceandabsorption", 11],
+  ["output", 12],
+  ["quantumtravel", 13],
+  ["radarperformance", 14],
+  ["powerthermal", 15],
+  ["powerandthermal", 15],
+  ["signatures", 16],
+  ["repair", 17],
+  ["durabilityphysical", 18],
+  ["durabilityandphysical", 18],
+  ["tooloutput", 19],
+  ["beamrange", 20],
+  ["identity", 21],
+  ["damagetakenmultipliers", 22],
+  ["protection", 23],
+  ["environment", 24],
+  ["additional", 25],
 ]);
 
 const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
@@ -76,9 +77,9 @@ function formatStatLabel(value: string): string {
 }
 
 function getStatGroupIcon(title: string) {
-  const iconName = STAT_GROUP_ICONS.get(normalizeGroupKey(title));
-  if (!iconName) return undefined;
-  return <span className={`bq-stat-group-icon bq-stat-group-icon--${iconName}`} />;
+  const iconIndex = STAT_GROUP_ICONS.get(normalizeGroupKey(title));
+  if (!iconIndex) return undefined;
+  return <span className={`bq-stat-group-icon bq-stat-group-icon--${String(iconIndex).padStart(2, "0")}`} />;
 }
 
 function formatCompactStatLabel(value: string): { label: string; metadata?: string } {

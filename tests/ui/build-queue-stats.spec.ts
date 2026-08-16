@@ -935,6 +935,7 @@ test.describe("Build Queue stats fixture", () => {
           const sharedStatLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
             const groups = Array.from(panel.querySelectorAll(".bq-stat-unmodified-group"));
             const traitColumns = panel.querySelectorAll(".bq-stat-unmodified-column > .bq-stat-trait-column");
+            const groupHeadings = Array.from(panel.querySelectorAll(".craft-stat-section-title"));
             const firstGroup = groups[0];
             const heading = firstGroup?.querySelector(":scope > .craft-stat-section-surface > .craft-stat-section-title");
             const card = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
@@ -943,6 +944,9 @@ test.describe("Build Queue stats fixture", () => {
             return {
               groupCount: groups.length,
               traitColumnCount: traitColumns.length,
+              missingIconTitles: groupHeadings
+                .filter((heading) => !heading.querySelector(".bq-stat-group-icon"))
+                .map((heading) => heading.textContent?.trim() ?? ""),
               headingInsideCard: Boolean(
                 heading
                 && card
@@ -960,6 +964,7 @@ test.describe("Build Queue stats fixture", () => {
             };
           });
           expect(sharedStatLayout.traitColumnCount).toBe(Math.min(3, sharedStatLayout.groupCount));
+          expect(sharedStatLayout.missingIconTitles).toEqual([]);
           expect(sharedStatLayout.headingInsideCard).toBe(true);
           expect(sharedStatLayout.clippedGroups).toBe(0);
         } else {
