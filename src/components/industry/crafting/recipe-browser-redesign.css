@@ -83,6 +83,22 @@
   box-shadow: -14px 0 30px rgba(0, 0, 0, 0.22);
 }
 
+.craft-detail-drawer-region--ready > .craft-detail-page {
+  animation: craft-detail-drawer-content-enter 180ms ease-out both;
+}
+
+@keyframes craft-detail-drawer-content-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .craft-detail-drawer-state {
   display: grid;
   height: 100%;
@@ -98,29 +114,35 @@
 }
 
 @media (min-width: 1600px) {
-  .craft-browser-workspace--preview {
+  .craft-browser-workspace--drawer {
     display: grid !important;
     grid-template-columns: minmax(720px, 1.06fr) minmax(700px, 0.94fr);
     gap: 10px;
   }
 
-  .craft-browser-workspace--preview > .crb2-results {
+  .craft-browser-workspace--drawer > .crb2-results {
     overflow: hidden;
   }
 
-  .craft-browser-workspace--preview .crb2-list {
+  .craft-browser-workspace--drawer .crb2-list {
     overflow-y: auto;
     padding-right: 2px;
     scrollbar-gutter: stable;
   }
 
-  .craft-browser-workspace--preview .crb2-table-scroll {
+  .craft-browser-workspace--drawer .crb2-table-scroll {
     overflow-x: auto;
     zoom: 1;
   }
 
-  .craft-browser-workspace--preview .crb2-table th:first-child {
+  .craft-browser-workspace--drawer .crb2-table th:first-child {
     width: clamp(240px, 14vw, 320px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craft-detail-drawer-region--ready > .craft-detail-page {
+    animation: none;
   }
 }
 

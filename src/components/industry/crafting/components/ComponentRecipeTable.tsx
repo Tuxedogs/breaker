@@ -2711,6 +2711,7 @@ function RecipeDrawer({
       <section
         className="craft-detail-stage craft-detail-shell craft-detail-drawer-shell"
         aria-label={`${displayName} component detail`}
+        aria-busy={quantizationLoading || fittingStatsLoading}
       >
         <header className="craft-detail-drawer-header">
           <div className="craft-detail-drawer-icon-wrap">
@@ -2847,9 +2848,6 @@ function RecipeDrawer({
                   />
                 )}
               >
-                {quantizationLoading && (
-                  <div className="craft-empty-card">Loading local quality quantization bands...</div>
-                )}
                 {detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
                   const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
                   return (

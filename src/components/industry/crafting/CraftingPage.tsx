@@ -252,6 +252,10 @@ export default function CraftingModule() {
   }, [setSearchParams]);
 
   const loadError = blueprintId ? detailError : cardsError;
+  const previewRecipeReady = previewId
+    ? recipes.some((recipe) => recipe.blueprint_id === previewId)
+    : false;
+  const previewLoading = Boolean(previewId) && (detailLoading || (!previewRecipeReady && !detailError));
 
   return (
     <>
@@ -262,7 +266,7 @@ export default function CraftingModule() {
       )}
 
       {tab === "recipes" && !blueprintId && (
-        <div className={`craft-browser-workspace${previewId ? " craft-browser-workspace--preview" : ""}`}>
+        <div className={`craft-browser-workspace${drawerCapable ? " craft-browser-workspace--drawer" : ""}`}>
           <ComponentResultsBrowser
             records={componentCards}
             loading={cardsLoading}
@@ -271,13 +275,15 @@ export default function CraftingModule() {
             previewId={previewId}
             onPreviewRecord={previewRecord}
           />
-          {previewId && (
-            <div className="craft-detail-drawer-region">
-              {detailLoading ? (
-                <div className="craft-detail-drawer-state">Loading component detail…</div>
-              ) : detailError ? (
+          {drawerCapable && (
+            <div
+              className={`craft-detail-drawer-region${previewRecipeReady ? " craft-detail-drawer-region--ready" : ""}`}
+              aria-label="Recipe detail preview"
+              aria-busy={previewLoading}
+            >
+              {previewId && detailError ? (
                 <div className="craft-detail-drawer-state craft-detail-drawer-state--error">{detailError}</div>
-              ) : (
+              ) : previewId && previewRecipeReady ? (
                 <ComponentRecipeTable
                   recipes={recipes}
                   inventoryEntries={inventoryEntries}
@@ -289,7 +295,7 @@ export default function CraftingModule() {
                   onAddToQueue={handleAddToQueue}
                   isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
                 />
-              )}
+              ) : null}
             </div>
           )}
         </div>
