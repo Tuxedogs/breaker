@@ -27,7 +27,7 @@
         "crafting:shape-reference": "node --import tsx scripts/shape-crafting-reference-data.mts",
         "crafting:shape": "npm run crafting:shape-blueprint-sources && npm run crafting:shape-component-cards && npm run crafting:shape-recipes && npm run crafting:shape-reference",
         "mining:publish": "node --import tsx scripts/publish-mining-data.mts",
-        "mining:test": "node --import tsx --test server/routes/mining.routes.test.ts",
+        "mining:test": "node --import tsx --test server/routes/mining.routes.test.ts server/recommender/pyroViTerminus.test.ts",
         "crafting:blueprint-sources:verify": "node --import tsx scripts/verify-crafting-blueprint-sources-api.mts",
         "crafting:component-cards:verify": "node --import tsx scripts/verify-component-card-data.mts",
         "refinery:import": "node --import tsx scripts/import-refinery-yields.mts",

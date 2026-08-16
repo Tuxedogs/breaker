@@ -2,6 +2,10 @@ import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import {
+  transformPyroDistributionRows,
+  transformPyroRows,
+} from "./update-pyro-location-indexes.mts";
 
 type Publication = {
   source: string;
@@ -10,7 +14,14 @@ type Publication = {
   optional?: boolean;
 };
 
-const sourceRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:/scintel/api");
+const configuredSourceRoot = process.env.SCINTEL_API_ROOT?.trim();
+if (!configuredSourceRoot) {
+  throw new Error(
+    "SCINTEL_API_ROOT is required and must point to an accepted Scintel datasets directory.",
+  );
+}
+
+const sourceRoot = path.resolve(configuredSourceRoot);
 const targetRoot = path.resolve(process.env.MINING_DATA_ROOT ?? "server-data/mining");
 
 const publications: Publication[] = [
@@ -67,6 +78,26 @@ async function resolveLagrangeRefIndex(): Promise<string> {
   return candidates[0].filePath;
 }
 
+async function resolveLagrangeGenerator(): Promise<string> {
+  let current = sourceRoot;
+  while (true) {
+    const candidate = path.join(current, "scripts", "locations", "generate-lagrange-children.mjs");
+    try {
+      if ((await stat(candidate)).isFile()) return candidate;
+    } catch {
+      // Continue toward the Scintel repository root.
+    }
+
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+
+  throw new Error(
+    `Could not locate scripts/locations/generate-lagrange-children.mjs above ${sourceRoot}.`,
+  );
+}
+
 for (const publication of publications) {
   const sourcePath = path.join(sourceRoot, publication.source);
   let parsed: unknown;
@@ -78,6 +109,18 @@ for (const publication of publications) {
     console.warn(`[mining:publish] Optional source is unavailable; publishing an empty object: ${publication.source}`);
   }
   validateShape(parsed, publication);
+
+  if (Array.isArray(parsed)) {
+    if (publication.source === "recommendations/location_distribution_index.json") {
+      parsed = transformPyroDistributionRows(parsed);
+    } else if (
+      publication.source === "recommendations/location_material_index.json" ||
+      publication.source === "recommendations/material_encounter_rankings.json" ||
+      publication.source === "recommendations/material_quality_index.json"
+    ) {
+      parsed = transformPyroRows(parsed);
+    }
+  }
 
   const serialized = stableJson(parsed);
   const targetPath = path.join(targetRoot, publication.target);
@@ -94,7 +137,7 @@ for (const publication of publications) {
 
 const lagrangeRefIndex = await resolveLagrangeRefIndex();
 const lagrangeChildrenTarget = path.join(targetRoot, "locations", "lagrange-children.json");
-const lagrangeGenerator = path.join(path.dirname(sourceRoot), "scripts", "locations", "generate-lagrange-children.mjs");
+const lagrangeGenerator = await resolveLagrangeGenerator();
 await mkdir(path.dirname(lagrangeChildrenTarget), { recursive: true });
 const generation = spawnSync(
   process.execPath,

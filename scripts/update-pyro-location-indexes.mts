@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 type IndexRow = Record<string, any>;
 
@@ -148,6 +149,12 @@ function buildProviderBackedPyroLocationMap(): Map<string, string> {
     }
   }
 
+  // Raw extracted provider keys must resolve even when the optional local
+  // Foundry record tree is unavailable during publication.
+  for (const [providerKey, canonical] of Object.entries(providerBackedCanonicalOverrides)) {
+    aliases.set(norm(providerKey), canonical);
+  }
+
   for (const [alias, canonical] of Object.entries(explicitAliases)) {
     aliases.set(norm(alias), canonical);
   }
@@ -194,7 +201,7 @@ function setLocation(row: IndexRow, locationName: string): IndexRow {
   return row;
 }
 
-function transformPyroRows(rows: IndexRow[]): IndexRow[] {
+export function transformPyroRows(rows: IndexRow[]): IndexRow[] {
   return rows.flatMap((row) => {
     if (!isPyro(row)) return [row];
     const locationName = canonicalPyroLocation(row);
@@ -218,8 +225,8 @@ function transformMaterialFile(name: string): void {
   writeRows(name, sortMaterialRows(rows));
 }
 
-function transformDistributionFile(): void {
-  const rows = readRows("location_distribution_index.json").flatMap((row) => {
+export function transformPyroDistributionRows(rows: IndexRow[]): IndexRow[] {
+  return rows.flatMap((row) => {
     if (!isPyro(row)) return [row];
     const locationName = canonicalPyroLocation(row);
     if (!locationName) return [];
@@ -258,19 +265,32 @@ function transformDistributionFile(): void {
     }
 
     return [next];
-  });
-
-  writeRows("location_distribution_index.json", rows.sort((left, right) =>
+  }).sort((left, right) =>
     String(left.systemKey).localeCompare(String(right.systemKey)) ||
     String(left.locationKey).localeCompare(String(right.locationKey))
-  ));
+  );
 }
 
-transformMaterialFile("location_material_index.json");
-transformMaterialFile("material_quality_index.json");
-transformMaterialFile("material_encounter_rankings.json");
-transformDistributionFile();
+function transformDistributionFile(): void {
+  writeRows(
+    "location_distribution_index.json",
+    transformPyroDistributionRows(readRows("location_distribution_index.json")),
+  );
+}
 
-if (unresolvedPyroLocationKeys.size > 0) {
-  console.warn("[mining] unresolved Pyro provider/location keys were dropped", [...unresolvedPyroLocationKeys].sort());
+export function updatePyroLocationIndexes(): void {
+  transformMaterialFile("location_material_index.json");
+  transformMaterialFile("material_quality_index.json");
+  transformMaterialFile("material_encounter_rankings.json");
+  transformDistributionFile();
+
+  if (unresolvedPyroLocationKeys.size > 0) {
+    console.warn("[mining] unresolved Pyro provider/location keys were dropped", [...unresolvedPyroLocationKeys].sort());
+  }
+}
+
+const isMainModule = Boolean(process.argv[1])
+  && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+if (isMainModule) {
+  updatePyroLocationIndexes();
 }
