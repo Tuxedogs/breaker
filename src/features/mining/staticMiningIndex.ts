@@ -560,6 +560,13 @@ export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry, i
 
 export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string {
   const extended = entry as PublicLocationEntry & { locationDisplayName?: string };
+  const canonicalLocationName = normalizeExact(entry.locationName);
+  if (
+    normalizeExact(entry.systemName) === "stanton" &&
+    ACTIVE_STANTON_LAGRANGE_LOCATION_KEYS.has(canonicalLocationName)
+  ) {
+    return entry.locationName;
+  }
   if (index) {
     const rows = getStaticResourcesForLocation(entry, index);
     const displayName = rows.find((row) => row.locationDisplayName)?.locationDisplayName;
@@ -810,6 +817,12 @@ const ACTIVE_STANTON_LAGRANGE_LOCATION_KEYS = new Set([
   "lagrange d",
   "lagrange e",
   "lagrange f",
+  "lagrange g",
+  "lagrange h",
+  "lagrange i",
+  "lagrange j",
+  "lagrange k",
+  "lagrange l",
 ]);
 
 function normalizePyroLocationKey(locationKey: string | null | undefined): string {

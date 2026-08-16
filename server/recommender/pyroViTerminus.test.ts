@@ -86,3 +86,24 @@ test("published mining index retains every extracted Pyro V moon material", asyn
     assert.deepEqual(actualMaterials, [...expectedMaterials].sort(), `${locationKey} should remain indexed`);
   }
 });
+
+test("published mining index preserves trace materials without refined primary aliases", async () => {
+  const rows = JSON.parse(await readFile("server-data/mining/indexes/location-material.json", "utf8")) as Array<{
+    systemKey?: string;
+    locationKey?: string;
+    materialName?: string;
+    traceMaterials?: string[];
+    traceMaterialDetails?: Array<{ materialName?: string }>;
+  }>;
+
+  const goldAtArcL5 = rows.find((row) =>
+    row.systemKey === "Stanton" && row.locationKey === "ARC-L5" && row.materialName === "Gold"
+  );
+  assert.deepEqual(goldAtArcL5?.traceMaterials, ["Borase"]);
+  assert.deepEqual(goldAtArcL5?.traceMaterialDetails?.map((trace) => trace.materialName), ["Borase"]);
+
+  const rawIceRows = rows.filter((row) => row.materialName === "Raw Ice");
+  assert.ok(rawIceRows.length > 0);
+  assert.ok(rawIceRows.every((row) => (row.traceMaterials?.length ?? 0) === 0));
+  assert.ok(rawIceRows.every((row) => (row.traceMaterialDetails?.length ?? 0) === 0));
+});

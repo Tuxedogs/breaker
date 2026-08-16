@@ -57,6 +57,34 @@ const manifestFiles: Array<{
   records: number | null;
 }> = [];
 
+function countEnrichedTraceDetails(value: unknown): number {
+  if (!Array.isArray(value)) return 0;
+  return value.reduce((total, material) => {
+    if (typeof material !== "object" || material === null) return total;
+    const sources = (material as { sources?: unknown }).sources;
+    if (!Array.isArray(sources)) return total;
+    return total + sources.reduce((sourceTotal, source) => {
+      if (typeof source !== "object" || source === null) return sourceTotal;
+      const details = (source as { traceMaterialDetails?: unknown }).traceMaterialDetails;
+      return sourceTotal + (Array.isArray(details) ? details.length : 0);
+    }, 0);
+  }, 0);
+}
+
+function countIndexTraceDetails(value: unknown): number {
+  if (!Array.isArray(value)) return 0;
+  return value.reduce((total, row) => {
+    if (typeof row !== "object" || row === null) return total;
+    const details = (row as { traceMaterialDetails?: unknown }).traceMaterialDetails;
+    return total + (Array.isArray(details) ? details.length : 0);
+  }, 0);
+}
+
+const enrichedSourcePreview = JSON.parse(
+  await readFile(path.join(sourceRoot, "mining", "material_sources_quality_enriched.json"), "utf8"),
+) as unknown;
+const enrichedTraceDetailCount = countEnrichedTraceDetails(enrichedSourcePreview);
+
 async function resolveLagrangeRefIndex(): Promise<string> {
   if (process.env.SCINTEL_REF_INDEX) return path.resolve(process.env.SCINTEL_REF_INDEX);
 
@@ -120,6 +148,16 @@ for (const publication of publications) {
     ) {
       parsed = transformPyroRows(parsed);
     }
+  }
+
+  if (
+    publication.source === "recommendations/location_material_index.json" &&
+    enrichedTraceDetailCount > 0 &&
+    countIndexTraceDetails(parsed) === 0
+  ) {
+    throw new Error(
+      `Refusing to publish a trace-empty location material index from an enriched source containing ${enrichedTraceDetailCount} trace details.`,
+    );
   }
 
   const serialized = stableJson(parsed);
