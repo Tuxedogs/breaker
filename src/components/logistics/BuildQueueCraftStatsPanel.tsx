@@ -3,12 +3,50 @@ import type {
   CraftStatComparisonRowView,
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
+import {
+  CompactCraftStatRow,
+  CraftStatComparisonRow,
+  CraftStatSection,
+} from "../shared/CraftStatisticsPresentation";
 
 type ConsolidatedStat =
   | { kind: "comparison"; row: CraftStatComparisonRowView }
   | { kind: "static"; label: string; value: string };
 
 type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
+
+type CraftStatIconName =
+  | "damage"
+  | "penetration"
+  | "spread"
+  | "signature"
+  | "repair"
+  | "energy"
+  | "projectile"
+  | "thermal"
+  | "durability";
+
+const STAT_GROUP_ICONS = new Map<string, CraftStatIconName>([
+  ["ballisticsanddamage", "damage"],
+  ["damageoutput", "damage"],
+  ["penetration", "penetration"],
+  ["resistanceabsorption", "penetration"],
+  ["resistanceandabsorption", "penetration"],
+  ["shieldperformance", "penetration"],
+  ["spread", "spread"],
+  ["signatures", "signature"],
+  ["signaturedetection", "signature"],
+  ["signatureanddetection", "signature"],
+  ["repair", "repair"],
+  ["energy", "energy"],
+  ["projectile", "projectile"],
+  ["powerandthermal", "thermal"],
+  ["powerthermal", "thermal"],
+  ["thermalandpower", "thermal"],
+  ["thermalpower", "thermal"],
+  ["durabilityandphysical", "durability"],
+  ["durabilityphysical", "durability"],
+]);
 
 const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
   "ballisticdamage",
@@ -35,6 +73,19 @@ function formatStatLabel(value: string): string {
   return value
     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
     .replace(/\s*\/\s*/g, " and ");
+}
+
+function getStatGroupIcon(title: string) {
+  const iconName = STAT_GROUP_ICONS.get(normalizeGroupKey(title));
+  if (!iconName) return undefined;
+  return <span className={`bq-stat-group-icon bq-stat-group-icon--${iconName}`} />;
+}
+
+function formatCompactStatLabel(value: string): { label: string; metadata?: string } {
+  const formatted = formatStatLabel(value);
+  const derivedMatch = formatted.match(/^(.*?)(\s*\(derived\))$/i);
+  if (!derivedMatch) return { label: formatted };
+  return { label: derivedMatch[1].trim(), metadata: derivedMatch[2].trim() };
 }
 
 function prioritizeAlphaDamage(stats: ConsolidatedStat[]): ConsolidatedStat[] {
@@ -193,27 +244,15 @@ function DirectionIndicator({ direction }: { direction: CraftStatComparisonRowVi
 
 function ComparisonStat({ row }: { row: CraftStatComparisonRowView }) {
   return (
-    <article className="bq-stat-compare-row" data-bq-benefit-direction={row.benefitDirection} aria-label={`${row.label} comparison`}>
-      <div className="bq-stat-compare-heading">
-        <strong className="bq-stat-compare-label">{formatStatLabel(row.label)}</strong>
-        {row.unit !== "-" ? <span className="bq-stat-compare-unit">{row.unit}</span> : null}
-      </div>
-      <div className="bq-stat-compare-values">
-        <span className="bq-stat-compare-slot bq-stat-compare-base">
-          <span className="bq-stat-compare-slot-label">Base</span>
-          <strong>{row.baseValue}</strong>
-        </span>
-        <span className="bq-stat-compare-slot bq-stat-compare-target">
-          <span className="bq-stat-compare-slot-label">Target</span>
-          <span className="bq-stat-compare-slot-content"><ComparisonColumn column={row.target} /></span>
-        </span>
-        <span className="bq-stat-compare-slot bq-stat-compare-allocation">
-          <span className="bq-stat-compare-slot-label">Allocation</span>
-          <span className="bq-stat-compare-slot-content"><ComparisonColumn column={row.allocation} /></span>
-        </span>
-      </div>
-      <div className="bq-stat-compare-direction"><DirectionIndicator direction={row.benefitDirection} /></div>
-    </article>
+    <CraftStatComparisonRow
+      label={formatStatLabel(row.label)}
+      unit={row.unit}
+      base={<strong>{row.baseValue}</strong>}
+      target={<ComparisonColumn column={row.target} />}
+      allocation={<ComparisonColumn column={row.allocation} />}
+      direction={<DirectionIndicator direction={row.benefitDirection} />}
+      benefitDirection={row.benefitDirection}
+    />
   );
 }
 
@@ -221,26 +260,6 @@ function getEndProductColumn(row: CraftStatComparisonRowView): CraftStatComparis
   if (row.allocation.state === "ready") return row.allocation;
   if (row.target.state === "ready") return row.target;
   return null;
-}
-
-function CompactStat({
-  label,
-  value,
-  unit,
-  impactClass,
-}: {
-  label: string;
-  value: string;
-  unit?: string;
-  impactClass?: string;
-}) {
-  return (
-    <div className="bq-stat-compact-row" role="listitem" aria-label={`${label}: ${value}${unit && unit !== "-" ? ` ${unit}` : ""}`}>
-      <span className="bq-stat-compact-label">{formatStatLabel(label)}</span>
-      <strong className={`bq-stat-compact-value ${impactClass ?? ""}`.trim()}>{value}</strong>
-      {unit && unit !== "-" ? <span className="bq-stat-compact-unit">{unit}</span> : null}
-    </div>
-  );
 }
 
 function getModifiedStats(group: ConsolidatedStatGroup) {
@@ -257,28 +276,38 @@ function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
   ));
   if (visibleStats.length === 0) return null;
   return (
-    <section className="bq-stat-unmodified-group" aria-label={`${formatStatLabel(group.title)} end product statistics`}>
-      <h4 className="bq-stat-compare-group-title">{formatStatLabel(group.title)}</h4>
-      <div className="bq-stat-unmodified-card">
-        <div className="bq-stat-compact-list" role="list">
-          {visibleStats.map((stat) => {
-            if (stat.kind === "static") {
-              return <CompactStat key={`${group.title}:${stat.label}`} label={stat.label} value={stat.value} />;
-            }
-            const endProduct = getEndProductColumn(stat.row);
-            return (
-              <CompactStat
-                key={stat.row.statId}
-                label={stat.row.label}
-                value={endProduct?.value ?? stat.row.baseValue}
-                unit={stat.row.unit}
-                impactClass={endProduct?.impactClass}
-              />
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <CraftStatSection
+      title={formatStatLabel(group.title)}
+      ariaLabel={`${formatStatLabel(group.title)} end product statistics`}
+      variant="compact"
+      icon={getStatGroupIcon(group.title)}
+    >
+      {visibleStats.map((stat) => {
+        if (stat.kind === "static") {
+          const displayLabel = formatCompactStatLabel(stat.label);
+          return (
+            <CompactCraftStatRow
+              key={`${group.title}:${stat.label}`}
+              label={displayLabel.label}
+              labelMetadata={displayLabel.metadata}
+              value={stat.value}
+            />
+          );
+        }
+        const endProduct = getEndProductColumn(stat.row);
+        const displayLabel = formatCompactStatLabel(stat.row.label);
+        return (
+          <CompactCraftStatRow
+            key={stat.row.statId}
+            label={displayLabel.label}
+            labelMetadata={displayLabel.metadata}
+            value={endProduct?.value ?? stat.row.baseValue}
+            unit={stat.row.unit}
+            valueClassName={endProduct?.impactClass}
+          />
+        );
+      })}
+    </CraftStatSection>
   );
 }
 
@@ -286,12 +315,14 @@ function ModifiedStatGroup({ group }: { group: ConsolidatedStatGroup }) {
   const modifiedStats = getModifiedStats(group);
   if (modifiedStats.length === 0) return null;
   return (
-    <section className="bq-stat-modified-group" aria-label={`${formatStatLabel(group.title)} modified statistics`}>
-      <h5>{formatStatLabel(group.title)}</h5>
-      <div className="bq-stat-compare bq-stat-modified-list" role="list">
-        {modifiedStats.map((stat) => <ComparisonStat key={stat.row.statId} row={stat.row} />)}
-      </div>
-    </section>
+    <CraftStatSection
+      title={formatStatLabel(group.title)}
+      ariaLabel={`${formatStatLabel(group.title)} modified statistics`}
+      variant="comparison"
+      icon={getStatGroupIcon(group.title)}
+    >
+      {modifiedStats.map((stat) => <ComparisonStat key={stat.row.statId} row={stat.row} />)}
+    </CraftStatSection>
   );
 }
 

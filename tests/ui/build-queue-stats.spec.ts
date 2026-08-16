@@ -112,30 +112,32 @@ test.describe("Build Queue stats fixture", () => {
         const statColumn = panel.querySelector(".bq-stat-unmodified-column");
         const firstRow = panel.querySelector(".bq-stat-compact-row");
         const firstGroup = panel.querySelector(".bq-stat-unmodified-group");
-        const firstGroupHeading = firstGroup?.querySelector(":scope > .bq-stat-compare-group-title");
+        const firstGroupHeading = firstGroup?.querySelector(":scope > .craft-stat-section-surface > .craft-stat-section-title");
         const firstGroupCard = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
         const label = firstRow?.querySelector(".bq-stat-compact-label");
         const value = firstRow?.querySelector(".bq-stat-compact-value");
         const headingRect = firstGroupHeading?.getBoundingClientRect();
         const cardRect = firstGroupCard?.getBoundingClientRect();
-        const labelRect = label?.getBoundingClientRect();
-        const valueRect = value?.getBoundingClientRect();
         return {
-          groupTitles: Array.from(panel.querySelectorAll(".bq-stat-unmodified-group > .bq-stat-compare-group-title"))
+          groupTitles: Array.from(panel.querySelectorAll(".bq-stat-unmodified-group .craft-stat-section-title"))
             .map((heading) => heading.textContent?.trim() ?? ""),
           columnCount: statColumn
             ? getComputedStyle(statColumn).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
             : 0,
-          labelValueGap: labelRect && valueRect ? valueRect.left - labelRect.right : Number.POSITIVE_INFINITY,
+          rowHeight: firstRow?.getBoundingClientRect().height ?? 0,
+          labelColor: label ? getComputedStyle(label).color : "",
+          valueColor: value ? getComputedStyle(value).color : "",
+          headingWeight: firstGroupHeading ? Number.parseInt(getComputedStyle(firstGroupHeading).fontWeight, 10) : 0,
           labelWeight: label ? Number.parseInt(getComputedStyle(label).fontWeight, 10) : Number.POSITIVE_INFINITY,
           valueWeight: value ? Number.parseInt(getComputedStyle(value).fontWeight, 10) : Number.POSITIVE_INFINITY,
-          headingOutsideCard: Boolean(
+          headingInsideCard: Boolean(
             firstGroupHeading
             && firstGroupCard
-            && !firstGroupCard.contains(firstGroupHeading)
+            && firstGroupCard.contains(firstGroupHeading)
             && headingRect
             && cardRect
-            && headingRect.bottom <= cardRect.top,
+            && headingRect.top >= cardRect.top
+            && headingRect.bottom <= cardRect.bottom,
           ),
         };
       });
@@ -147,11 +149,13 @@ test.describe("Build Queue stats fixture", () => {
         "Thermal and Power",
       ]));
       expect(traitLayout.columnCount).toBe(3);
-      expect(traitLayout.labelValueGap).toBeGreaterThanOrEqual(0);
-      expect(traitLayout.labelValueGap).toBeLessThanOrEqual(8);
+      expect(traitLayout.rowHeight).toBeGreaterThanOrEqual(28);
+      expect(traitLayout.rowHeight).toBeLessThanOrEqual(36);
       expect(traitLayout.labelWeight).toBeLessThanOrEqual(500);
-      expect(traitLayout.valueWeight).toBeLessThanOrEqual(600);
-      expect(traitLayout.headingOutsideCard).toBe(true);
+      expect(traitLayout.valueWeight).toBeGreaterThan(traitLayout.labelWeight);
+      expect(traitLayout.headingWeight).toBeGreaterThan(traitLayout.labelWeight);
+      expect(traitLayout.valueColor).not.toBe(traitLayout.labelColor);
+      expect(traitLayout.headingInsideCard).toBe(true);
 
       const geometry = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const panelRect = panel.getBoundingClientRect();
@@ -224,7 +228,8 @@ test.describe("Build Queue stats fixture", () => {
         const centerShell = craft.closest(".bq-center-shell");
         const pageRoot = craft.closest(".bq-page");
         const materialCard = craft.querySelector(".bq-mat-group");
-        const statCard = craft.querySelector(".bq-stat-trait-column");
+        const statColumn = craft.querySelector(".bq-stat-trait-column");
+        const statCard = craft.querySelector(".craft-stat-section-surface");
         const centerHighlight = centerShell ? getComputedStyle(centerShell, "::after") : null;
         return {
           gap: allocation && statistics ? statistics.top - allocation.bottom : Number.POSITIVE_INFINITY,
@@ -233,10 +238,10 @@ test.describe("Build Queue stats fixture", () => {
           centerHighlightImage: centerHighlight?.backgroundImage ?? "",
           materialBackgroundColor: materialCard ? getComputedStyle(materialCard).backgroundColor : "",
           materialBackgroundImage: materialCard ? getComputedStyle(materialCard).backgroundImage : "",
+          statColumnBackgroundColor: statColumn ? getComputedStyle(statColumn).backgroundColor : "",
           statBackgroundColor: statCard ? getComputedStyle(statCard).backgroundColor : "",
           statBackgroundImage: statCard ? getComputedStyle(statCard).backgroundImage : "",
           materialSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--bq-r-surface-row").trim() : "",
-          statSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--bq-r-stat-column").trim() : "",
         };
       });
       expect(sectionTransition.gap).toBeGreaterThanOrEqual(12);
@@ -246,7 +251,8 @@ test.describe("Build Queue stats fixture", () => {
       expect(sectionTransition.centerHighlightImage).toBe("none");
       expect(sectionTransition.materialBackgroundColor).toBe(sectionTransition.materialSurfaceToken);
       expect(sectionTransition.materialBackgroundImage).toBe("none");
-      expect(sectionTransition.statBackgroundColor).toBe(sectionTransition.statSurfaceToken);
+      expect(sectionTransition.statColumnBackgroundColor).toBe("rgba(0, 0, 0, 0)");
+      expect(sectionTransition.statBackgroundColor).not.toBe("rgba(0, 0, 0, 0)");
       expect(sectionTransition.statBackgroundImage).toBe("none");
       const materialActionOrder = await page.locator(".bq-materials-section-actions").evaluate((actions) => (
         Array.from(actions.children).map((child) => child.className)
@@ -393,8 +399,9 @@ test.describe("Build Queue stats fixture", () => {
         });
         expect(hierarchy.selectedCardHeight).toBeLessThanOrEqual(145);
         expect(hierarchy.materialHeaderHeight).toBeLessThanOrEqual(44);
-        expect(hierarchy.statisticsHeaderHeight).toBeLessThanOrEqual(38);
-        expect(hierarchy.statisticsTitleSize).toBeLessThanOrEqual(hierarchy.statLabelSize * 1.15);
+        expect(hierarchy.statisticsHeaderHeight).toBeLessThanOrEqual(50);
+        expect(hierarchy.statisticsTitleSize).toBeGreaterThanOrEqual(hierarchy.statLabelSize * 1.15);
+        expect(hierarchy.statisticsTitleSize).toBeLessThanOrEqual(hierarchy.statLabelSize * 1.4);
       }
 
       const horizontalOverflow = await page.evaluate(() => (
@@ -929,20 +936,21 @@ test.describe("Build Queue stats fixture", () => {
             const groups = Array.from(panel.querySelectorAll(".bq-stat-unmodified-group"));
             const traitColumns = panel.querySelectorAll(".bq-stat-unmodified-column > .bq-stat-trait-column");
             const firstGroup = groups[0];
-            const heading = firstGroup?.querySelector(":scope > .bq-stat-compare-group-title");
+            const heading = firstGroup?.querySelector(":scope > .craft-stat-section-surface > .craft-stat-section-title");
             const card = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
             const headingRect = heading?.getBoundingClientRect();
             const cardRect = card?.getBoundingClientRect();
             return {
               groupCount: groups.length,
               traitColumnCount: traitColumns.length,
-              headingOutsideCard: Boolean(
+              headingInsideCard: Boolean(
                 heading
                 && card
-                && !card.contains(heading)
+                && card.contains(heading)
                 && headingRect
                 && cardRect
-                && headingRect.bottom <= cardRect.top,
+                && headingRect.top >= cardRect.top
+                && headingRect.bottom <= cardRect.bottom,
               ),
               clippedGroups: groups.filter((group) => {
                 const groupRect = group.getBoundingClientRect();
@@ -952,7 +960,7 @@ test.describe("Build Queue stats fixture", () => {
             };
           });
           expect(sharedStatLayout.traitColumnCount).toBe(Math.min(3, sharedStatLayout.groupCount));
-          expect(sharedStatLayout.headingOutsideCard).toBe(true);
+          expect(sharedStatLayout.headingInsideCard).toBe(true);
           expect(sharedStatLayout.clippedGroups).toBe(0);
         } else {
           await expect(page.locator(".bq-component-statistics")).toBeVisible();
@@ -1017,7 +1025,7 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.fpsArmor) {
           const compactLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
-          const groupTitles = await page.locator(".bq-component-statistics .bq-stat-unmodified-group > .bq-stat-compare-group-title").allTextContents();
+          const groupTitles = await page.locator(".bq-component-statistics .bq-stat-unmodified-group .craft-stat-section-title").allTextContents();
           expect(compactLabels).toContain("Damage Mitigation");
           expect(compactLabels).not.toEqual(expect.arrayContaining([
             "Armor Temperature Min",

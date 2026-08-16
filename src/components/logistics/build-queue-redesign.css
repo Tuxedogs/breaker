@@ -882,3 +882,386 @@
 }
 
 .bq-page *, .bq-page *::before, .bq-page *::after { box-sizing: border-box; }
+
+/* Statistics refinement: stronger groups, aligned readings, and quiet row structure. */
+.bq-page .bq-component-statistics-header {
+  min-height: 46px;
+  padding: 9px 16px 8px;
+  border-bottom-color: rgba(111, 151, 180, 0.2);
+  background: rgba(10, 24, 37, 0.58);
+}
+
+.bq-page .bq-component-statistics-title {
+  color: #edf7ff;
+  font-size: 0.94rem;
+  font-weight: 760;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+}
+
+.bq-page .bq-stat-legend {
+  gap: 10px;
+}
+
+.bq-page .bq-stat-legend-item {
+  font-size: 0.64rem;
+  font-weight: 680;
+}
+
+.bq-page .bq-component-statistics-body {
+  gap: 14px;
+  padding: 14px 16px 16px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-unmodified-column {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-height: none;
+  padding-right: 0;
+  overflow: visible;
+}
+
+.bq-page .bq-component-statistics .bq-stat-trait-column {
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section {
+  gap: 0;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title,
+.bq-page .bq-component-statistics .bq-stat-modified-card > h4 {
+  margin: 0;
+  padding: 0 2px;
+  color: #78bdf0;
+  font-size: 0.76rem;
+  font-weight: 760;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 35px;
+  padding: 6px 10px 5px;
+  border-bottom: 1px solid rgba(111, 151, 180, 0.11);
+  background: rgba(15, 37, 54, 0.24);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-icon {
+  display: grid;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+  place-items: center;
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-image: url("../../assets/icons/build-queue-stat-icons.png");
+  background-repeat: no-repeat;
+  filter: saturate(0.72) brightness(1.08);
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon--damage,
+.bq-page .bq-component-statistics .bq-stat-group-icon--penetration,
+.bq-page .bq-component-statistics .bq-stat-group-icon--spread,
+.bq-page .bq-component-statistics .bq-stat-group-icon--signature,
+.bq-page .bq-component-statistics .bq-stat-group-icon--repair {
+  background-size: 110px 66px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon--damage { background-position: 0 -22.4px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--penetration { background-position: -22px -22.4px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--spread { background-position: -44px -22.4px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--signature { background-position: -66px -22.4px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--repair { background-position: -88px -22.4px; }
+
+.bq-page .bq-component-statistics .bq-stat-group-icon--energy,
+.bq-page .bq-component-statistics .bq-stat-group-icon--projectile,
+.bq-page .bq-component-statistics .bq-stat-group-icon--thermal,
+.bq-page .bq-component-statistics .bq-stat-group-icon--durability {
+  background-size: 88px 52.8px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon--energy { background-position: 0 -34.6px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--projectile { background-position: -22px -34.6px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--thermal { background-position: -44px -34.6px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--durability { background-position: -66px -34.6px; }
+
+.bq-page .bq-component-statistics .craft-stat-section-surface {
+  min-width: 0;
+  padding: 0;
+  border: 1px solid rgba(111, 151, 180, 0.15);
+  border-radius: 5px;
+  background: rgba(10, 25, 39, 0.62);
+  box-shadow: inset 0 1px 0 rgba(206, 233, 255, 0.025);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-list {
+  display: grid;
+  min-width: 0;
+  padding: 3px 10px 4px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-row {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 14px;
+  min-height: 29px;
+  padding: 5px 0;
+  border-bottom-color: rgba(111, 151, 180, 0.095);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-label {
+  overflow: visible;
+  color: #a9bad0;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  line-height: 1.2;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.bq-page .bq-component-statistics .craft-stat-label-metadata {
+  color: #71869b;
+  font-size: 0.66rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-reading {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 5px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-value {
+  color: #edf7ff;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.79rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-unit {
+  min-width: 0;
+  color: #8195a9;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 560;
+  letter-spacing: 0.015em;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-card {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(111, 151, 180, 0.16);
+  border-radius: 5px;
+  background: rgba(7, 19, 31, 0.5);
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-card > h4 {
+  grid-column: 1 / -1;
+  padding: 0;
+  color: #d7e8f6;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section--comparison {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-surface--comparison {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border-left: 1px solid rgba(111, 151, 180, 0.15);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-surface--comparison .craft-stat-section-list {
+  padding-block: 0 3px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-row,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row:first-child,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row:last-child {
+  gap: 6px;
+  padding: 7px 0 8px;
+  border: 0;
+  border-bottom: 1px solid rgba(111, 151, 180, 0.095);
+  border-radius: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-row:last-child {
+  border-bottom: 0;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-label {
+  color: #c4d5e5;
+  font-size: 0.78rem;
+  font-weight: 620;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-unit {
+  color: #71869b;
+  font-size: 0.63rem;
+  font-weight: 560;
+  letter-spacing: 0.025em;
+  text-transform: none;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-values {
+  gap: 10px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-slot {
+  gap: 3px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-slot-label {
+  color: #71869b;
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-base,
+.bq-page .bq-component-statistics .bq-stat-compare-base strong,
+.bq-page .bq-component-statistics .bq-stat-compare-value {
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.77rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-cell {
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-delta {
+  flex: 0 0 auto;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-allocation {
+  padding: 2px 4px 2px 8px;
+  border-left-width: 1px;
+  background: rgba(143, 168, 255, 0.035);
+}
+
+.bq-page .bq-component-statistics .bq-stat-direction {
+  gap: 4px;
+  color: #71869b;
+  font-size: 0.59rem;
+  font-weight: 560;
+}
+
+.bq-page .bq-component-statistics .bq-stat-direction::before {
+  width: 4px;
+  height: 4px;
+  opacity: 0.72;
+}
+
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .bq-page .bq-component-statistics-header {
+    min-height: 50px;
+    padding-inline: 18px;
+  }
+
+  .bq-page .bq-component-statistics-title {
+    font-size: 1rem;
+  }
+
+  .bq-page .bq-component-statistics-body {
+    gap: 16px;
+    padding: 16px 18px 18px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    gap: 16px;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-section-title {
+    font-size: 0.8rem;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-compact-row {
+    min-height: 32px;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-compact-label,
+  .bq-page .bq-component-statistics .craft-stat-compact-value,
+  .bq-page .bq-component-statistics .craft-stat-comparison-label,
+  .bq-page .bq-component-statistics .bq-stat-compare-base,
+  .bq-page .bq-component-statistics .bq-stat-compare-base strong,
+  .bq-page .bq-component-statistics .bq-stat-compare-value {
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-modified-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-component-statistics-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-trait-column {
+    display: contents;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-comparison-values {
+    gap: 6px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-compare-cell {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1px;
+  }
+}
