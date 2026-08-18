@@ -1284,6 +1284,162 @@
   }
 }
 
+/* Responsive normalization.
+   The Build Queue has a persistent queue rail, so viewport breakpoints do not
+   describe the width actually available to statistics. Keep the operational
+   type scale stable and let this workspace respond to its own inline size. */
+.bq-page .bq-selected-craft-body .bq-item-identity {
+  gap: 7px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name {
+  margin-top: 2px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual {
+  height: 84px;
+  min-height: 84px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual .bq-product-icon,
+.bq-page .bq-selected-craft-body .bq-item-visual .bq-product-icon--weapon {
+  width: 168px;
+  height: 50px;
+  max-width: 168px;
+  max-height: 50px;
+}
+
+.bq-page .bq-component-statistics-body {
+  container-name: bq-statistics;
+  container-type: inline-size;
+}
+
+.bq-page .bq-center-shell .bq-item-header.bq-selected-craft-card {
+  height: auto;
+  min-height: 0;
+}
+
+.bq-page .bq-selected-craft-body {
+  min-height: 137px;
+  padding: 14px 18px 12px;
+}
+
+.bq-page .bq-selected-craft-footer {
+  min-height: 48px;
+  padding-inline: 18px;
+}
+
+.bq-page .bq-queue-col-title,
+.bq-page .bq-queue-selector-trigger strong {
+  font-size: 14px;
+}
+
+.bq-page .bq-queue-selector-label {
+  font-size: 10px;
+}
+
+.bq-page .bq-queue-tab,
+.bq-page .bq-craft-card-index,
+.bq-page .bq-craft-card-cat,
+.bq-page .bq-center-shell .bq-item-blueprint,
+.bq-page .bq-materials-section-summary {
+  font-size: 12px;
+}
+
+.bq-page .bq-craft-card-name {
+  font-size: 16px;
+}
+
+.bq-page .bq-craft-card-status,
+.bq-page .bq-center-shell .bq-item-cat,
+.bq-page .bq-center-shell .bq-item-mission-label,
+.bq-page .bq-center-shell .bq-btn,
+.bq-page .bq-inventory-toggle,
+.bq-page .bq-auto-reserve-btn,
+.bq-page .bq-quality-chip,
+.bq-page .bq-quality-chip[class*="logi-rarity--"] {
+  font-size: 11px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name {
+  font-size: 20px;
+}
+
+.bq-page .bq-materials-section-header {
+  min-height: 46px;
+  padding-block: 8px;
+}
+
+.bq-page .bq-materials-section-title,
+.bq-page .bq-component-statistics-title {
+  font-size: 15px;
+}
+
+.bq-page .bq-quality-chip strong {
+  font-size: 13px;
+}
+
+.bq-page .bq-mat-card-head .bq-target-editor--slider > .bq-target-quality {
+  font-size: 13px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title,
+.bq-page .bq-component-statistics .craft-stat-compact-label,
+.bq-page .bq-component-statistics .craft-stat-comparison-label {
+  font-size: 12px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-base-value,
+.bq-page .bq-component-statistics .craft-stat-compact-value,
+.bq-page .bq-component-statistics .bq-stat-compare-base,
+.bq-page .bq-component-statistics .bq-stat-compare-base strong,
+.bq-page .bq-component-statistics .bq-stat-compare-value {
+  font-size: 13px;
+}
+
+.bq-page .bq-item > .bq-component-statistics.bq-workspace-card,
+.bq-page .bq-component-statistics-body,
+.bq-page .bq-component-statistics .bq-stat-unmodified-column {
+  max-height: none;
+  overflow: visible;
+}
+
+@container bq-statistics (max-width: 980px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-modified-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container bq-statistics (max-width: 640px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-trait-column {
+    display: contents;
+  }
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-selected-craft-body {
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .bq-page .bq-selected-craft-footer {
+    min-height: 42px;
+    padding-inline: 12px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 1100px) {
   .bq-page .bq-component-statistics .bq-stat-unmodified-column {
     grid-template-columns: repeat(2, minmax(0, 1fr));

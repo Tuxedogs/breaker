@@ -76,6 +76,71 @@ async function selectQueue(page: Page, queueName: string) {
 }
 
 test.describe("Build Queue stats fixture", () => {
+  test("keeps desktop typography and statistics stable across transition widths", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const samples = [];
+
+    for (const viewport of [
+      { width: 1099, expectedColumns: 2 },
+      { width: 1100, expectedColumns: 2 },
+      { width: 1101, expectedColumns: 2 },
+      { width: 1199, expectedColumns: 2 },
+      { width: 1200, expectedColumns: 2 },
+      { width: 1201, expectedColumns: 2 },
+      { width: 1280, expectedColumns: 2 },
+      { width: 1499, expectedColumns: 3 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: 900 });
+      await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+      const panel = page.locator('.bq-component-statistics[data-bq-stats-status="ready"]');
+      await expect(panel).toBeVisible({ timeout: 60_000 });
+
+      const sample = await page.locator(".bq-page").evaluate((root) => {
+        const query = (selector: string) => root.querySelector<HTMLElement>(selector);
+        const statColumn = query(".bq-stat-unmodified-column");
+        const selectedCraft = query(".bq-selected-craft-card");
+        const statistics = query(".bq-component-statistics");
+        const columns = statColumn
+          ? getComputedStyle(statColumn).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
+          : 0;
+        return {
+          columns,
+          headerHeight: selectedCraft?.getBoundingClientRect().height ?? 0,
+          documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          statsOverflow: (statistics?.scrollHeight ?? 0) - (statistics?.clientHeight ?? 0),
+          statsOverflowY: statistics ? getComputedStyle(statistics).overflowY : "",
+          fonts: {
+            queueTitle: query(".bq-queue-col-title") ? getComputedStyle(query(".bq-queue-col-title")!).fontSize : "",
+            selectedName: query(".bq-item-name") ? getComputedStyle(query(".bq-item-name")!).fontSize : "",
+            sectionTitle: query(".bq-component-statistics-title") ? getComputedStyle(query(".bq-component-statistics-title")!).fontSize : "",
+            statLabel: query(".craft-stat-compact-label") ? getComputedStyle(query(".craft-stat-compact-label")!).fontSize : "",
+            statValue: query(".craft-stat-compact-value") ? getComputedStyle(query(".craft-stat-compact-value")!).fontSize : "",
+          },
+        };
+      });
+
+      expect(sample.columns).toBe(viewport.expectedColumns);
+      expect(sample.documentOverflow).toBeLessThanOrEqual(0);
+      expect(sample.statsOverflow).toBeLessThanOrEqual(1);
+      expect(sample.statsOverflowY).toBe("visible");
+      samples.push({ width: viewport.width, ...sample });
+    }
+
+    const referenceFonts = samples[0].fonts;
+    expect(referenceFonts).toEqual({
+      queueTitle: "14px",
+      selectedName: "20px",
+      sectionTitle: "15px",
+      statLabel: "12px",
+      statValue: "13px",
+    });
+    expect(samples.every((sample) => JSON.stringify(sample.fonts) === JSON.stringify(referenceFonts))).toBe(true);
+    const before1200 = samples.find((sample) => sample.width === 1199);
+    const at1200 = samples.find((sample) => sample.width === 1200);
+    expect(Math.abs((before1200?.headerHeight ?? 0) - (at1200?.headerHeight ?? 0))).toBeLessThanOrEqual(1);
+    expect(failures).toEqual([]);
+  });
+
   test("renders CQ7 extracted statistics without clipping at desktop review sizes", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(cq7ScreenshotDir, { recursive: true });
