@@ -42,6 +42,8 @@ type CompactCraftStatRowProps = {
   label: string;
   labelMetadata?: string;
   value: string;
+  baseValue?: string;
+  delta?: string;
   unit?: string;
   valueClassName?: string;
 };
@@ -50,16 +52,19 @@ export function CompactCraftStatRow({
   label,
   labelMetadata,
   value,
+  baseValue,
+  delta,
   unit,
   valueClassName,
 }: CompactCraftStatRowProps) {
   const visibleUnit = unit && unit !== "-" ? unit : null;
+  const isModified = baseValue !== undefined;
 
   return (
     <div
       className="craft-stat-compact-row bq-stat-compact-row"
       role="listitem"
-      aria-label={`${label}${labelMetadata ? ` ${labelMetadata}` : ""}: ${value}${visibleUnit ? ` ${visibleUnit}` : ""}`}
+      aria-label={`${label}${labelMetadata ? ` ${labelMetadata}` : ""}: ${isModified ? `${baseValue}${visibleUnit ? ` ${visibleUnit}` : ""} changed to ` : ""}${value}${visibleUnit ? ` ${visibleUnit}` : ""}${delta ? `, ${delta}` : ""}`}
     >
       <span className="craft-stat-compact-label bq-stat-compact-label">
         {label}
@@ -68,11 +73,23 @@ export function CompactCraftStatRow({
         ) : null}
       </span>
       <span className="craft-stat-compact-reading">
-        <strong className={`craft-stat-compact-value bq-stat-compact-value ${valueClassName ?? ""}`.trim()}>
-          {value}
-        </strong>
-        {visibleUnit ? (
-          <span className="craft-stat-compact-unit bq-stat-compact-unit">{visibleUnit}</span>
+        {isModified ? (
+          <>
+            <span className="craft-stat-compact-reading-part craft-stat-compact-reading-part--base">
+              <strong className="craft-stat-compact-base-value">{baseValue}</strong>
+              {visibleUnit ? <span className="craft-stat-compact-unit bq-stat-compact-unit">{visibleUnit}</span> : null}
+            </span>
+            <span className="craft-stat-compact-arrow" aria-hidden="true">→</span>
+          </>
+        ) : null}
+        <span className="craft-stat-compact-reading-part craft-stat-compact-reading-part--current">
+          <strong className={`craft-stat-compact-value bq-stat-compact-value ${valueClassName ?? ""}`.trim()}>
+            {value}
+          </strong>
+          {visibleUnit ? <span className="craft-stat-compact-unit bq-stat-compact-unit">{visibleUnit}</span> : null}
+        </span>
+        {isModified && delta ? (
+          <span className={`craft-stat-compact-delta ${valueClassName ?? ""}`.trim()}>{delta}</span>
         ) : null}
       </span>
     </div>

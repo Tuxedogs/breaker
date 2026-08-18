@@ -280,7 +280,7 @@ function buildComparisonColumn(
 
   return {
     value,
-    absoluteDelta: deltas.absoluteDelta,
+    absoluteDelta: baseValue !== undefined ? display.modifier : deltas.absoluteDelta,
     percentDelta: deltas.percentDelta,
     impactClass,
     state,

@@ -296,15 +296,20 @@ function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
           );
         }
         const endProduct = getEndProductColumn(stat.row);
+        const isModified = endProduct
+          ? columnDiffersFromBase(endProduct, stat.row.baseValue)
+          : false;
         const displayLabel = formatCompactStatLabel(stat.row.label);
         return (
           <CompactCraftStatRow
             key={stat.row.statId}
             label={displayLabel.label}
             labelMetadata={displayLabel.metadata}
-            value={endProduct?.value ?? stat.row.baseValue}
+            value={isModified ? endProduct?.value ?? stat.row.baseValue : stat.row.baseValue}
+            baseValue={isModified ? stat.row.baseValue : undefined}
+            delta={isModified ? endProduct?.absoluteDelta ?? endProduct?.percentDelta : undefined}
             unit={stat.row.unit}
-            valueClassName={endProduct?.impactClass}
+            valueClassName={isModified ? endProduct?.impactClass : undefined}
           />
         );
       })}

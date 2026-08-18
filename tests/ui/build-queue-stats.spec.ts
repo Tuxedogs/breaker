@@ -369,18 +369,44 @@ test.describe("Build Queue stats fixture", () => {
         const compactRows = Array.from(panel.querySelectorAll(".bq-stat-compact-row"));
         const compact = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === label);
         const compactValue = compact?.querySelector(".bq-stat-compact-value");
+        const compactBase = compact?.querySelector(".craft-stat-compact-base-value");
+        const compactArrow = compact?.querySelector(".craft-stat-compact-arrow");
+        const compactDelta = compact?.querySelector(".craft-stat-compact-delta");
+        const unchanged = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Energy Cost Per Shot");
+        const unchangedValue = unchanged?.querySelector(".bq-stat-compact-value");
+        const defaultValue = compactRows
+          .find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Theoretical DPS")
+          ?.querySelector(".bq-stat-compact-value");
         const allocationValue = modified?.querySelector(".bq-stat-compare-allocation .bq-stat-compare-value");
         return {
           label,
           allocation,
           compact: compactValue?.textContent?.trim() ?? "",
+          compactBase: compactBase?.textContent?.trim() ?? "",
+          compactBaseOpacity: compactBase?.parentElement ? getComputedStyle(compactBase.parentElement).opacity : "",
+          compactArrow: compactArrow?.textContent?.trim() ?? "",
+          compactDelta: compactDelta?.textContent?.trim() ?? "",
+          compactFont: compactValue ? getComputedStyle(compactValue).fontFamily : "",
           compactColor: compactValue ? getComputedStyle(compactValue).color : "",
           allocationColor: allocationValue ? getComputedStyle(allocationValue).color : "",
+          unchangedHasTransition: Boolean(unchanged?.querySelector(".craft-stat-compact-arrow")),
+          unchangedColor: unchangedValue ? getComputedStyle(unchangedValue).color : "",
+          unchangedFont: unchangedValue ? getComputedStyle(unchangedValue).fontFamily : "",
+          defaultColor: defaultValue ? getComputedStyle(defaultValue).color : "",
         };
       });
       expect(statValues.label).not.toBe("");
       expect(statValues.compact).toBe(statValues.allocation);
+      expect(statValues.compactBase).not.toBe("");
+      expect(statValues.compactBase).not.toBe(statValues.compact);
+      expect(statValues.compactBaseOpacity).toBe("0.5");
+      expect(statValues.compactArrow).toBe("→");
+      expect(statValues.compactDelta).toMatch(/^[+-]/);
+      expect(statValues.compactFont).toMatch(/Roboto Mono|Courier New|monospace/i);
       expect(statValues.compactColor).toBe(statValues.allocationColor);
+      expect(statValues.unchangedHasTransition).toBe(false);
+      expect(statValues.unchangedColor).toBe(statValues.defaultColor);
+      expect(statValues.unchangedFont).toMatch(/Roboto Mono|Courier New|monospace/i);
 
       if (viewport.height <= 1100) {
         const hierarchy = await page.locator(".bq-item").evaluate((craft) => {

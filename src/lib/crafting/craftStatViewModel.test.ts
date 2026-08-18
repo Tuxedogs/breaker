@@ -147,6 +147,8 @@ test("buildCraftStatViewModel exposes base target allocation comparison rows", (
   assert.equal(row.allocation.state, "ready");
   assert.equal(row.target.value, "3,224.07");
   assert.equal(row.allocation.value, "3,205.07");
+  assert.equal(row.target.absoluteDelta, "+56.07");
+  assert.equal(row.allocation.absoluteDelta, "+37.07");
   assert.equal(row.target.percentDelta, "+1.8%");
   assert.equal(row.allocation.percentDelta, "+1.2%");
   assert.equal(row.target.impactClass, "craft-ok");
