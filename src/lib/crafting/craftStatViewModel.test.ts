@@ -320,6 +320,21 @@ test("buildCraftStatViewModel prefers loading over stale detail", () => {
   assert.equal(model.overviewGroups.length, 0);
 });
 
+test("buildCraftStatViewModel keeps missing and error states unavailable", () => {
+  const missingModel = buildCraftStatViewModel({ detail: null, missing: true });
+  assert.equal(missingModel.status, "unavailable");
+  assert.equal(missingModel.unavailableReason, "Stats unavailable");
+  assert.equal(missingModel.comparisonGroups.length, 0);
+
+  const errorModel = buildCraftStatViewModel({
+    detail: shieldDetail(),
+    error: "Fixture fitting response failed",
+  });
+  assert.equal(errorModel.status, "unavailable");
+  assert.equal(errorModel.unavailableReason, "Fixture fitting response failed");
+  assert.equal(errorModel.comparisonGroups.length, 0);
+});
+
 test("listAmbiguousBenefitDirectionProperties reports unknown GPP directions", () => {
   const recipe: ComponentRecipe = {
     ...shieldRecipe(),

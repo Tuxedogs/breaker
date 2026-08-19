@@ -203,13 +203,43 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     ? flagFixtureReadOnly
     : storeRemoveBuildQueueItem;
   const toggleBuildQueueAllocation = isFixture
-    ? flagFixtureReadOnly
+    ? ((buildQueueItemId: string, allocation: NonNullable<BuildQueueItem["reservedAllocations"]>[number]) => {
+        setFixtureBuildQueue((current) => current.map((item) => {
+          if (item.id !== buildQueueItemId) return item;
+          const allocations = item.reservedAllocations ?? [];
+          const exists = allocations.some((entry) => entry.id === allocation.id);
+          return {
+            ...item,
+            reservedAllocations: exists
+              ? allocations.filter((entry) => entry.id !== allocation.id)
+              : [...allocations, allocation],
+          };
+        }));
+      })
     : storeToggleBuildQueueAllocation;
   const updateBuildQueueAllocationQuantity = isFixture
-    ? flagFixtureReadOnly
+    ? ((buildQueueItemId: string, allocationId: string, quantity: number) => {
+        setFixtureBuildQueue((current) => current.map((item) => {
+          if (item.id !== buildQueueItemId) return item;
+          return {
+            ...item,
+            reservedAllocations: (item.reservedAllocations ?? []).flatMap((allocation) => (
+              allocation.id !== allocationId
+                ? [allocation]
+                : quantity > 0
+                  ? [{ ...allocation, quantityReserved: quantity }]
+                  : []
+            )),
+          };
+        }));
+      })
     : storeUpdateBuildQueueAllocationQuantity;
   const clearStaleBuildQueueItemAllocations = isFixture
-    ? flagFixtureReadOnly
+    ? ((buildQueueItemId: string) => {
+        setFixtureBuildQueue((current) => current.map((item) => item.id === buildQueueItemId
+          ? { ...item, reservedAllocations: [] }
+          : item));
+      })
     : storeClearStaleBuildQueueItemAllocations;
   const addInventoryEntriesAsync = isFixture
     ? (async (entries: Parameters<typeof storeAddInventoryEntriesAsync>[0]) => {

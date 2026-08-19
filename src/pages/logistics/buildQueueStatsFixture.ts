@@ -299,6 +299,9 @@ const buildQueue: BuildQueueItem[] = [
       allocation("bq-fix-alloc-ad5b-drive", "ouratite", "bq-fix-inv-ouratite", 0.37, "bq-fix-ad5b:drive", 780, rarityCatalog.uncommon),
       allocation("bq-fix-alloc-ad5b-barrels", "tungsten", "bq-fix-inv-tungsten", 2.24, "bq-fix-ad5b:barrels", 700, rarityCatalog.common),
     ],
+    blueprintSources: [
+      { displayName: "Pyro Headhunters Hard", poolGuid: "9cc0425d-5101-4f8a-a89d-6d483466829e", poolName: "BlueprintPoolRecord.BP_REWARDS_PyroHeadhuntersHard", sourceFolder: "48blueprints", weight: 1 },
+    ],
   },
   {
     id: FIXTURE_ITEM_IDS.fr66Completed,
@@ -502,6 +505,30 @@ export const buildQueueStatsFixture: BuildQueuePageFixture = {
   recipes,
   recipeInputsByRecipeId,
   selectedItemId: FIXTURE_ITEM_IDS.fr66,
+};
+
+const targetIronEntry = entry(
+  "bq-target-inv-iron-low",
+  "iron",
+  4,
+  350,
+  rarityCatalog.common,
+  "WPN-LOW-01",
+);
+
+export const buildQueueTargetFixture: BuildQueuePageFixture = {
+  ...buildQueueStatsFixture,
+  inventoryEntries: [...buildQueueStatsFixture.inventoryEntries, targetIronEntry],
+  buildQueue: buildQueueStatsFixture.buildQueue.map((item) => item.id === FIXTURE_ITEM_IDS.ad5b
+    ? {
+      ...item,
+      reservedAllocations: [
+        allocation("bq-target-alloc-ad5b-frame", "iron", targetIronEntry.id, 3.74, "bq-fix-ad5b:frame", 350, rarityCatalog.common),
+        allocation("bq-target-alloc-ad5b-drive", "ouratite", "bq-fix-inv-ouratite", 0.37, "bq-fix-ad5b:drive", 780, rarityCatalog.uncommon),
+      ],
+    }
+    : item),
+  selectedItemId: FIXTURE_ITEM_IDS.ad5b,
 };
 
 const mockupQueueId = "bq-fixture-queue-mockup";

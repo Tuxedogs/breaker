@@ -8,15 +8,20 @@ import { buildCraftStatViewModel, type CraftStatViewModel } from "@/lib/crafting
 import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
 import {
+  buildBuildQueueProductQualitySummary,
   buildAllocatedMaterialQualities,
   buildTargetMaterialQualities,
   hasConfiguredTargetQualities,
   hasMaterialAllocations,
+  type BuildQueueProductQualitySummary,
 } from "@/lib/logistics/buildQueueCraftStats";
 import {
+  BuildQueueCraftHeaderSummaryPanel,
   BuildQueueCraftIdentityPanel,
+  BuildQueueCraftOutcomePanel,
   BuildQueueCraftOverviewPanel,
   BuildQueueCraftStatisticsPanel,
+  BuildQueueCraftTargetQualityPanel,
 } from "./BuildQueueCraftStatsPanel";
 import type { BuildQueueItem } from "@/types/logistics";
 import type { RecipeInputTemplate } from "@/data/logistics/seed";
@@ -29,9 +34,14 @@ interface Props {
 
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
 
-const BuildQueueStatsContext = createContext<CraftStatViewModel | null>(null);
+type BuildQueueStatsContextValue = {
+  model: CraftStatViewModel;
+  productQuality: BuildQueueProductQualitySummary;
+};
 
-function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStatViewModel {
+const BuildQueueStatsContext = createContext<BuildQueueStatsContextValue | null>(null);
+
+function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueueStatsContextValue {
   const [componentCard, setComponentCard] = useState<ComponentCardIndexRecord | null>(null);
   const [recipe, setRecipe] = useState<ComponentRecipe | null>(null);
   const [bridgeLoading, setBridgeLoading] = useState(Boolean(blueprintId?.trim()));
@@ -139,17 +149,17 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStat
     [item, recipe, inputs],
   );
 
-  return useMemo(() => buildCraftStatViewModel({
-    detail: fittingDetail,
-    recipe,
-    targetModifiers,
-    allocationModifiers,
-    targetConfigured,
-    allocationConfigured,
-    loading: bridgeLoading || (isFpsItem ? fpsCardLoading : fittingStatsLoading),
-    missing: isFpsItem ? fpsCardMissing : fittingStatsMissing,
-    error: isFpsItem ? null : fittingStatsError,
-  }), [
+  const model = useMemo(() => buildCraftStatViewModel({
+      detail: fittingDetail,
+      recipe,
+      targetModifiers,
+      allocationModifiers,
+      targetConfigured,
+      allocationConfigured,
+      loading: bridgeLoading || (isFpsItem ? fpsCardLoading : fittingStatsLoading),
+      missing: isFpsItem ? fpsCardMissing : fittingStatsMissing,
+      error: isFpsItem ? null : fittingStatsError,
+    }), [
     allocationConfigured,
     allocationModifiers,
     bridgeLoading,
@@ -164,42 +174,77 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStat
     targetConfigured,
     targetModifiers,
   ]);
+
+  const productQuality = useMemo(
+    () => buildBuildQueueProductQualitySummary(item, recipe, inputs),
+    [inputs, item, recipe],
+  );
+
+  return useMemo(() => ({ model, productQuality }), [model, productQuality]);
 }
 
 export function BuildQueueStatsProvider({ blueprintId, item, inputs, children }: Props & { children: ReactNode }) {
-  const model = useBuildQueueStatModel({ blueprintId, item, inputs });
+  const value = useBuildQueueStatModel({ blueprintId, item, inputs });
   return (
-    <BuildQueueStatsContext.Provider value={model}>
+    <BuildQueueStatsContext.Provider value={value}>
       {children}
     </BuildQueueStatsContext.Provider>
   );
 }
 
-function useBuildQueueStatsContext(): CraftStatViewModel {
-  const model = useContext(BuildQueueStatsContext);
-  if (!model) {
+function useBuildQueueStatsContext(): BuildQueueStatsContextValue {
+  const value = useContext(BuildQueueStatsContext);
+  if (!value) {
     throw new Error("BuildQueue stats components must be used within BuildQueueStatsProvider");
   }
-  return model;
+  return value;
 }
 
 export function BuildQueueCraftOverview() {
-  const model = useBuildQueueStatsContext();
+  const { model } = useBuildQueueStatsContext();
   return <BuildQueueCraftOverviewPanel model={model} />;
 }
 
 export function BuildQueueCraftIdentity() {
-  const model = useBuildQueueStatsContext();
+  const { model } = useBuildQueueStatsContext();
   return <BuildQueueCraftIdentityPanel model={model} />;
 }
 
 export function BuildQueueCraftStatistics() {
-  const model = useBuildQueueStatsContext();
+  const { model } = useBuildQueueStatsContext();
   return <BuildQueueCraftStatisticsPanel model={model} />;
+}
+
+export function BuildQueueCraftTargetQuality() {
+  const { productQuality } = useBuildQueueStatsContext();
+  return <BuildQueueCraftTargetQualityPanel productQuality={productQuality} />;
+}
+
+export function BuildQueueCraftHeaderSummary({
+  materialsLabel,
+  allocationPercentage,
+}: {
+  materialsLabel: string;
+  allocationPercentage: number;
+}) {
+  const { model, productQuality } = useBuildQueueStatsContext();
+  return (
+    <BuildQueueCraftHeaderSummaryPanel
+      model={model}
+      productQuality={productQuality}
+      materialsLabel={materialsLabel}
+      allocationPercentage={allocationPercentage}
+    />
+  );
+}
+
+export function BuildQueueCraftOutcome() {
+  const { model, productQuality } = useBuildQueueStatsContext();
+  return <BuildQueueCraftOutcomePanel model={model} productQuality={productQuality} />;
 }
 
 /** @deprecated Use BuildQueueStatsProvider + BuildQueueCraftOverview/Statistics */
 export default function BuildQueueStatsBreakdown(props: Props) {
-  const model = useBuildQueueStatModel(props);
+  const { model } = useBuildQueueStatModel(props);
   return <BuildQueueCraftOverviewPanel model={model} />;
 }
