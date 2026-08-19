@@ -157,6 +157,9 @@ function buildIdentityBadges(detail: FittingComponentDetail): CraftStatIdentityB
     detail.type === "fps_weapon" && detail.subtype
       ? { label: "Weapon Class", value: titleCase(detail.subtype) }
       : null,
+    detail.type === "ship_weapon" && detail.subtype
+      ? { label: "Subtype", value: titleCase(detail.subtype) }
+      : null,
     detail.type === "fps_ammo" && detail.class
       ? { label: "Ammo Class", value: titleCase(detail.class) }
       : null,
@@ -280,7 +283,7 @@ function buildComparisonColumn(
 
   return {
     value,
-    absoluteDelta: deltas.absoluteDelta,
+    absoluteDelta: baseValue !== undefined ? display.modifier : deltas.absoluteDelta,
     percentDelta: deltas.percentDelta,
     impactClass,
     state,

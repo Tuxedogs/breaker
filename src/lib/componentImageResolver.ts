@@ -13,6 +13,7 @@ type ComponentImageEntry = {
 };
 
 export const COMPONENT_IMAGE_ENTRIES: readonly ComponentImageEntry[] = [
+  { filename: "ad5b.png", identifiers: ["ba842720-ad32-4d53-8f56-992bacb1fc45", "ad5b", "BP_CRAFT_BEHR_BallisticGatling_S5"] },
   { filename: "AD4B.png", identifiers: ["e4afc8b4-da61-4efb-af7e-f003d9900d96", "1727fc8f-e31c-4d66-9670-084aadb15955", "BP_CRAFT_BEHR_BallisticGatling_S4"] },
   { filename: "c788.png", identifiers: ["6635dc5f-dfcd-4b72-9d9d-8d3620820352", "6713db41-8231-4e71-b7a2-74073ddd4b50", "BP_CRAFT_BEHR_BallisticCannon_S4"] },
   { filename: "cit2cool.png", identifiers: ["59a37716-f4d3-4dcb-a41e-0f2c3064e169", "80f82e57-67d7-464e-a3f1-10770d31440e", "BP_CRAFT_COOL_JSPN_S02_FrostStarEX_SCItem"] },

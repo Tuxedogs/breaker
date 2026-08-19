@@ -4,11 +4,13 @@ import type { ComponentRecipe } from "@/components/industry/crafting/utils/craft
 import type { BuildQueueItem } from "@/types/logistics";
 import type { RecipeInputTemplate } from "@/data/logistics/seed";
 import {
+  buildBuildQueueProductQualitySummary,
   buildAllocatedMaterialQualities,
   buildTargetMaterialQualities,
   hasConfiguredTargetQualities,
   hasMaterialAllocations,
 } from "./buildQueueCraftStats.ts";
+import { getBuildQueueItemAllocationProgress } from "./buildQueueProgress.ts";
 
 const recipe: ComponentRecipe = {
   blueprint_id: "test-blueprint",
@@ -114,4 +116,35 @@ test("hasMaterialAllocations is false without reserved amounts", () => {
   const emptyItem = { ...item, reservedAllocations: [] };
   assert.equal(hasMaterialAllocations(emptyItem, recipe, inputs), false);
   assert.equal(hasMaterialAllocations(item, recipe, inputs), true);
+});
+
+test("getBuildQueueItemAllocationProgress reports reserved coverage rather than owned inventory", () => {
+  assert.equal(getBuildQueueItemAllocationProgress(item, { "recipe-test": inputs }), 50);
+});
+
+test("buildBuildQueueProductQualitySummary keeps incomplete allocation distinct from a prediction", () => {
+  const summary = buildBuildQueueProductQualitySummary(item, recipe, inputs);
+  assert.equal(summary.target?.averageBand, 3);
+  assert.equal(summary.predicted, null);
+});
+
+test("buildBuildQueueProductQualitySummary uses the shared final-quality calculation and preserves valid zero quality", () => {
+  const completedItem: BuildQueueItem = {
+    ...item,
+    reservedAllocations: [
+      ...(item.reservedAllocations ?? []),
+      {
+        id: "alloc-2",
+        materialId: "iron",
+        inventoryEntryId: "inv-2",
+        quantityReserved: 1,
+        requirementId: "req-liner",
+        quality: 0,
+        unitType: "scu",
+        locationId: "loc-1",
+      },
+    ],
+  };
+  const summary = buildBuildQueueProductQualitySummary(completedItem, recipe, inputs);
+  assert.equal(summary.predicted?.averageBand, 3);
 });

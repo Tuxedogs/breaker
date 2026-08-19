@@ -882,3 +882,1645 @@
 }
 
 .bq-page *, .bq-page *::before, .bq-page *::after { box-sizing: border-box; }
+
+/* Statistics refinement: stronger groups, aligned readings, and quiet row structure. */
+.bq-page .bq-component-statistics-header {
+  min-height: 46px;
+  padding: 9px 16px 8px;
+  border-bottom-color: rgba(111, 151, 180, 0.2);
+  background: rgba(10, 24, 37, 0.58);
+}
+
+.bq-page .bq-component-statistics-title {
+  color: #edf7ff;
+  font-size: 0.94rem;
+  font-weight: 760;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+}
+
+.bq-page .bq-stat-legend {
+  gap: 10px;
+}
+
+.bq-page .bq-stat-legend-item {
+  font-size: 0.64rem;
+  font-weight: 680;
+}
+
+.bq-page .bq-component-statistics-body {
+  gap: 14px;
+  padding: 14px 16px 16px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-unmodified-column {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-height: none;
+  padding-right: 0;
+  overflow: visible;
+}
+
+.bq-page .bq-component-statistics .bq-stat-trait-column {
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section {
+  gap: 0;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title,
+.bq-page .bq-component-statistics .bq-stat-modified-card > h4 {
+  margin: 0;
+  padding: 0 2px;
+  color: #78bdf0;
+  font-size: 0.76rem;
+  font-weight: 760;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 35px;
+  padding: 6px 10px 5px;
+  border-bottom: 1px solid rgba(111, 151, 180, 0.11);
+  background: rgba(15, 37, 54, 0.24);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-icon {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  place-items: center;
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  background-image: url("../../assets/icons/build-queue-stat-icons.png");
+  background-repeat: no-repeat;
+  background-size: 140px 140px;
+  filter: saturate(0.82) brightness(1.08);
+  mix-blend-mode: screen;
+}
+
+.bq-page .bq-component-statistics .bq-stat-group-icon--01 { background-position: 0 0; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--02 { background-position: -28px 0; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--03 { background-position: -56px 0; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--04 { background-position: -84px 0; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--05 { background-position: -112px 0; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--06 { background-position: 0 -28px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--07 { background-position: -28px -28px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--08 { background-position: -56px -28px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--09 { background-position: -84px -28px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--10 { background-position: -112px -28px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--11 { background-position: 0 -56px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--12 { background-position: -28px -56px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--13 { background-position: -56px -56px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--14 { background-position: -84px -56px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--15 { background-position: -112px -56px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--16 { background-position: 0 -84px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--17 { background-position: -28px -84px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--18 { background-position: -56px -84px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--19 { background-position: -84px -84px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--20 { background-position: -112px -84px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--21 { background-position: 0 -112px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--22 { background-position: -28px -112px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--23 { background-position: -56px -112px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--24 { background-position: -84px -112px; }
+.bq-page .bq-component-statistics .bq-stat-group-icon--25 { background-position: -112px -112px; }
+
+.bq-page .bq-component-statistics .craft-stat-section-surface {
+  min-width: 0;
+  padding: 0;
+  border: 1px solid rgba(111, 151, 180, 0.15);
+  border-radius: 5px;
+  background: rgba(10, 25, 39, 0.62);
+  box-shadow: inset 0 1px 0 rgba(206, 233, 255, 0.025);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-list {
+  display: grid;
+  min-width: 0;
+  padding: 3px 10px 4px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-row {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 14px;
+  min-height: 29px;
+  padding: 5px 0;
+  border-bottom-color: rgba(111, 151, 180, 0.095);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-label {
+  overflow: visible;
+  color: #a9bad0;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  line-height: 1.2;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.bq-page .bq-component-statistics .craft-stat-label-metadata {
+  color: #71869b;
+  font-size: 0.66rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-reading {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-reading-part {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-reading-part--base {
+  opacity: 0.5;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-base-value,
+.bq-page .bq-component-statistics .craft-stat-compact-value {
+  color: #edf7ff;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.79rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-arrow {
+  color: #73899d;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-value.craft-ok {
+  color: rgba(158, 239, 187, 0.92);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-value.craft-shortage {
+  color: rgba(253, 174, 184, 0.94);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-delta {
+  padding: 1px 4px;
+  border: 1px solid rgba(126, 153, 176, 0.18);
+  border-radius: 3px;
+  color: #9db0c2;
+  background: rgba(126, 153, 176, 0.07);
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.56rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-delta.craft-ok {
+  border-color: rgba(61, 204, 168, 0.22);
+  color: #42d6ad;
+  background: rgba(61, 204, 168, 0.09);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-delta.craft-shortage {
+  border-color: rgba(232, 106, 106, 0.22);
+  color: #ee7474;
+  background: rgba(232, 106, 106, 0.09);
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-unit {
+  min-width: 0;
+  color: #8195a9;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 560;
+  letter-spacing: 0.015em;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-card {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(111, 151, 180, 0.16);
+  border-radius: 5px;
+  background: rgba(7, 19, 31, 0.5);
+}
+
+.bq-page .bq-component-statistics .bq-stat-modified-card > h4 {
+  grid-column: 1 / -1;
+  padding: 0;
+  color: #d7e8f6;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section--comparison {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-surface--comparison {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border-left: 1px solid rgba(111, 151, 180, 0.15);
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-surface--comparison .craft-stat-section-list {
+  padding-block: 0 3px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-row,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row:first-child,
+.bq-page .bq-component-statistics .bq-stat-modified-list .bq-stat-compare-row:last-child {
+  gap: 6px;
+  padding: 7px 0 8px;
+  border: 0;
+  border-bottom: 1px solid rgba(111, 151, 180, 0.095);
+  border-radius: 0;
+  background: transparent;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-row:last-child {
+  border-bottom: 0;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-label {
+  color: #c4d5e5;
+  font-size: 0.78rem;
+  font-weight: 620;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-unit {
+  color: #71869b;
+  font-size: 0.63rem;
+  font-weight: 560;
+  letter-spacing: 0.025em;
+  text-transform: none;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-values {
+  gap: 10px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-slot {
+  gap: 3px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-comparison-slot-label {
+  color: #71869b;
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-base,
+.bq-page .bq-component-statistics .bq-stat-compare-base strong,
+.bq-page .bq-component-statistics .bq-stat-compare-value {
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 0.77rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-cell {
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-delta {
+  flex: 0 0 auto;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.bq-page .bq-component-statistics .bq-stat-compare-allocation {
+  padding: 2px 4px 2px 8px;
+  border-left-width: 1px;
+  background: rgba(143, 168, 255, 0.035);
+}
+
+.bq-page .bq-component-statistics .bq-stat-direction {
+  gap: 4px;
+  color: #71869b;
+  font-size: 0.59rem;
+  font-weight: 560;
+}
+
+.bq-page .bq-component-statistics .bq-stat-direction::before {
+  width: 4px;
+  height: 4px;
+  opacity: 0.72;
+}
+
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .bq-page .bq-component-statistics-header {
+    min-height: 50px;
+    padding-inline: 18px;
+  }
+
+  .bq-page .bq-component-statistics-title {
+    font-size: 1rem;
+  }
+
+  .bq-page .bq-component-statistics-body {
+    gap: 16px;
+    padding: 16px 18px 18px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    gap: 16px;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-section-title {
+    font-size: 0.8rem;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-compact-row {
+    min-height: 32px;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-compact-label,
+  .bq-page .bq-component-statistics .craft-stat-compact-value,
+  .bq-page .bq-component-statistics .craft-stat-comparison-label,
+  .bq-page .bq-component-statistics .bq-stat-compare-base,
+  .bq-page .bq-component-statistics .bq-stat-compare-base strong,
+  .bq-page .bq-component-statistics .bq-stat-compare-value {
+    font-size: 0.84rem;
+  }
+}
+
+/* Target workspace composition: allocation first, outcome second, statistics reference below. */
+.bq-page .bq-item--target-workspace {
+  container-name: bq-target-workspace;
+  container-type: inline-size;
+  --bq-target-surface: #071522;
+  --bq-target-surface-raised: #0a1b2b;
+  --bq-target-surface-deep: #06111c;
+  --bq-target-row: #0a1a28;
+  --bq-target-border: rgba(77, 151, 192, 0.24);
+  --bq-target-border-soft: rgba(77, 151, 192, 0.15);
+  --bq-target-cyan: #56c9f4;
+  --bq-target-text: #f1f8ff;
+  --bq-target-muted: #8ea4b8;
+  gap: 10px;
+}
+
+.bq-page .bq-item--target-workspace > .bq-workspace-card,
+.bq-page .bq-item--target-workspace .bq-primary-workspace-grid > .bq-workspace-card {
+  border-color: var(--bq-target-border);
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(7, 23, 37, 0.98), rgba(5, 17, 28, 0.98));
+  box-shadow: 0 10px 24px rgba(0, 3, 9, 0.2), inset 0 1px 0 rgba(137, 209, 244, 0.025);
+}
+
+.bq-page .bq-item--target-workspace .bq-selected-craft-card {
+  display: grid;
+  grid-template-rows: auto auto;
+  min-height: 158px;
+  overflow: hidden;
+}
+
+.bq-page .bq-item--target-workspace .bq-selected-craft-body {
+  display: grid;
+  grid-template-columns: 148px minmax(280px, 1fr) minmax(330px, auto);
+  gap: 16px;
+  align-items: stretch;
+  min-height: 106px;
+  padding: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-visual {
+  display: grid;
+  grid-column: 1;
+  width: 148px;
+  height: 106px;
+  min-height: 106px;
+  overflow: hidden;
+  place-items: center;
+  border: 0;
+  border-right: 1px solid var(--bq-target-border);
+  border-radius: 0;
+  background: #07131f;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-visual .bq-product-icon,
+.bq-page .bq-item--target-workspace .bq-item-visual .bq-product-icon--weapon,
+.bq-page .bq-item--target-workspace .bq-item-visual .bq-product-icon--component {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.8) brightness(0.8) contrast(1.08);
+}
+
+.bq-page .bq-item--target-workspace .bq-item-identity {
+  display: flex;
+  grid-column: 2;
+  align-self: center;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 12px 0 10px;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-name-block {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1px;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-name {
+  margin: 0;
+  color: var(--bq-target-text);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-cat {
+  color: #9bb2c6;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.045em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-item--target-workspace .bq-stats-meta--header {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-stats-meta-badge {
+  min-height: 20px;
+  padding: 2px 6px;
+  border-color: var(--bq-target-border-soft);
+  border-radius: 3px;
+  background: rgba(7, 20, 31, 0.52);
+  font-size: 10px;
+}
+
+.bq-page .bq-selected-craft-state-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 22px;
+}
+
+.bq-page .bq-selected-craft-state {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 104, 119, 0.35);
+  border-radius: 3px;
+  color: #ff7d8d;
+  background: rgba(109, 17, 34, 0.18);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-selected-craft-state--complete,
+.bq-page .bq-selected-craft-state--ready {
+  border-color: rgba(82, 214, 151, 0.34);
+  color: #72e0a8;
+  background: rgba(29, 107, 73, 0.16);
+}
+
+.bq-page .bq-selected-craft-state--partial {
+  border-color: rgba(239, 181, 74, 0.34);
+  color: #efbf65;
+  background: rgba(116, 77, 14, 0.16);
+}
+
+.bq-page .bq-selected-target-quality {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: #9dafc0;
+  font-size: 11px;
+}
+
+.bq-page .bq-selected-target-quality strong {
+  color: var(--bq-target-text);
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-mission {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  color: var(--bq-target-muted);
+  font-size: 11px;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-mission-label {
+  flex: 0 0 auto;
+  font-size: 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-blueprint,
+.bq-page .bq-item--target-workspace .bq-item-blueprint-links {
+  overflow: hidden;
+  color: #b5c5d4;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-selected-craft-actions {
+  display: grid;
+  grid-column: 3;
+  grid-template-columns: repeat(2, minmax(110px, auto));
+  align-content: center;
+  justify-content: end;
+  gap: 7px;
+  padding: 12px 14px 10px 0;
+}
+
+.bq-page .bq-selected-craft-actions .bq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 31px;
+  padding: 0 10px;
+  gap: 6px;
+  border-color: rgba(69, 174, 221, 0.44);
+  border-radius: 3px;
+  color: #69d1f6;
+  background: rgba(5, 23, 36, 0.66);
+  font-size: 10px;
+  font-weight: 730;
+  letter-spacing: 0.07em;
+}
+
+.bq-page .bq-selected-craft-actions .bq-btn:hover:not(:disabled),
+.bq-page .bq-selected-craft-actions .bq-btn:focus-visible {
+  border-color: rgba(93, 210, 255, 0.8);
+  background: rgba(12, 50, 70, 0.68);
+}
+
+.bq-page .bq-selected-craft-actions .bq-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.bq-page .bq-selected-craft-actions .bq-btn--confirm {
+  border-color: rgba(87, 205, 153, 0.35);
+  color: #76dba9;
+}
+
+.bq-page .bq-selected-craft-actions .bq-btn--danger {
+  border-color: rgba(238, 101, 118, 0.3);
+  color: #ff7a8a;
+}
+
+.bq-page .bq-item--target-workspace .bq-selected-craft-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 51px;
+  padding: 0;
+  border-top: 1px solid var(--bq-target-border-soft);
+  background: rgba(5, 17, 28, 0.62);
+}
+
+.bq-page .bq-selected-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-self: stretch;
+  min-width: 0;
+  margin-left: 148px;
+  border-left: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-selected-summary-strip > span {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-width: 0;
+  padding: 5px 10px;
+  border-right: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-selected-summary-strip small {
+  color: #8096ab;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.bq-page .bq-selected-summary-strip strong {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--bq-target-text);
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-item--target-workspace .bq-qty {
+  height: 31px;
+  min-height: 31px;
+  margin: 0 12px;
+  border-color: var(--bq-target-border-soft);
+  border-radius: 3px;
+  background: rgba(5, 18, 29, 0.72);
+}
+
+.bq-page .bq-primary-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(320px, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.bq-page .bq-item--target-workspace .bq-materials-card,
+.bq-page .bq-craft-outcome {
+  min-width: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-materials-section,
+.bq-page .bq-item--target-workspace .bq-materials-card {
+  height: 100% !important;
+}
+
+.bq-page .bq-item--target-workspace .bq-materials-section-header,
+.bq-page .bq-craft-outcome-header,
+.bq-page .bq-item--target-workspace .bq-component-statistics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 39px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--bq-target-border-soft);
+  background: rgba(8, 25, 39, 0.72);
+}
+
+.bq-page .bq-item--target-workspace .bq-materials-section-title,
+.bq-page .bq-craft-outcome-header h3,
+.bq-page .bq-item--target-workspace .bq-component-statistics-title {
+  margin: 0;
+  color: var(--bq-target-text);
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-item--target-workspace .bq-materials-section-actions {
+  gap: 6px;
+}
+
+.bq-page .bq-item--target-workspace .bq-inventory-toggle {
+  height: 26px;
+  min-height: 26px;
+  padding: 0 8px;
+  border-color: var(--bq-target-border);
+  border-radius: 3px;
+  color: #82bed9;
+  background: rgba(5, 18, 29, 0.52);
+  font-size: 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-table {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  padding: 7px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-table-head {
+  display: none;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-group,
+.bq-page .bq-item--target-workspace .bq-mat-table-head + .bq-mat-group {
+  margin: 0;
+  overflow: visible;
+  border: 1px solid var(--bq-target-border-soft);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(10, 28, 43, 0.88), rgba(7, 21, 33, 0.9));
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-group:nth-of-type(even) {
+  background: linear-gradient(180deg, rgba(11, 31, 47, 0.88), rgba(7, 22, 35, 0.9));
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-group:hover {
+  border-color: rgba(81, 181, 226, 0.34);
+  background: linear-gradient(180deg, rgba(13, 37, 55, 0.92), rgba(8, 26, 40, 0.92));
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-row,
+.bq-page .bq-item--target-workspace .bq-mat-row--mobile-card {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.9fr) minmax(250px, 1.4fr) minmax(172px, 0.8fr);
+  grid-template-rows: 38px 36px 38px;
+  gap: 0 12px;
+  align-items: center;
+  min-height: 112px;
+  padding: 7px 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-row > .bq-mat-card-head {
+  display: contents;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-name {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: stretch;
+  padding-right: 8px;
+  border-right: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-item--target-workspace .bq-material-name-cell {
+  align-items: center;
+  height: 100%;
+  gap: 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-material-name-cell > span:first-child,
+.bq-page .bq-item--target-workspace .bq-material-name-cell > svg,
+.bq-page .bq-item--target-workspace .bq-material-name-cell > img {
+  flex: 0 0 auto;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-name strong {
+  color: var(--bq-target-text);
+  font-size: 15px;
+  font-weight: 690;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-required {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  align-content: start;
+  color: var(--bq-target-text);
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-required::before {
+  content: "Required";
+  color: #8196aa;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-item--target-workspace .bq-target-cell {
+  display: contents;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-head .bq-target-editor {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  width: 100%;
+  max-width: 150px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics {
+  display: grid;
+  grid-column: 2 / 4;
+  grid-row: 2;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-self: stretch;
+  border-top: 1px solid var(--bq-target-border-soft);
+  border-bottom: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics > span {
+  display: grid;
+  align-content: center;
+  gap: 0;
+  min-width: 0;
+  padding: 2px 8px;
+  border-right: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics > span:last-child {
+  border-right: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics em {
+  display: block;
+  color: #7f94a8;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics strong,
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics .bq-avg-quality > span {
+  overflow: hidden;
+  color: var(--bq-target-text);
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 640;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-metrics small {
+  display: none;
+}
+
+.bq-page .bq-item--target-workspace .bq-balance--short strong {
+  color: #ff6f80;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-progress {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  width: 100%;
+  height: 5px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 4px;
+  background: #03101a;
+  appearance: none;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-progress::-webkit-progress-bar {
+  border-radius: 4px;
+  background: #03101a;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-progress::-webkit-progress-value {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2792bd, #54d1f6);
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-progress::-moz-progress-bar {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2792bd, #54d1f6);
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-quality-label {
+  display: flex;
+  grid-column: 1;
+  grid-row: 3;
+  align-items: center;
+  color: #7f96aa;
+  font-size: 9px;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-footer {
+  display: contents;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-card-quality {
+  display: flex;
+  grid-column: 2;
+  grid-row: 3;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: visible;
+}
+
+.bq-page .bq-item--target-workspace .bq-quality-chip,
+.bq-page .bq-item--target-workspace .bq-quality-chip[class*="logi-rarity--"] {
+  min-width: 86px;
+  max-width: 105px;
+  min-height: 28px;
+  padding: 3px 6px;
+  border-radius: 3px;
+}
+
+.bq-page .bq-item--target-workspace .bq-quality-add {
+  width: 34px;
+  height: 27px;
+  border-color: rgba(71, 157, 198, 0.35);
+  border-radius: 3px;
+  color: #71bddc;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions {
+  display: flex;
+  grid-column: 3;
+  grid-row: 3;
+  justify-content: end;
+  gap: 6px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action {
+  height: 28px;
+  min-width: 72px;
+  padding: 0 8px;
+  border-color: rgba(67, 165, 210, 0.44);
+  border-radius: 3px;
+  color: #65caf1;
+  background: rgba(5, 20, 32, 0.5);
+  font-size: 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--add {
+  min-width: 91px;
+}
+
+.bq-page .bq-craft-outcome {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.bq-page .bq-craft-outcome-quality-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.8fr;
+  margin: 7px;
+  border: 1px solid var(--bq-target-border-soft);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(9, 28, 44, 0.82), rgba(6, 20, 32, 0.82));
+}
+
+.bq-page .bq-craft-outcome-quality {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 66px;
+  padding: 7px;
+  border-right: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-craft-outcome-quality:last-child {
+  border-right: 0;
+}
+
+.bq-page .bq-craft-outcome-quality small {
+  color: #7f95aa;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-craft-outcome-quality strong {
+  color: #dceefa;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 16px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-page .bq-craft-outcome-quality--target strong {
+  color: var(--bq-target-text);
+  font-size: 25px;
+}
+
+.bq-page .bq-craft-outcome-stats {
+  min-height: 0;
+  margin: 0 7px 7px;
+  overflow: hidden;
+  border: 1px solid var(--bq-target-border-soft);
+  border-radius: 4px;
+  background: rgba(7, 21, 33, 0.64);
+}
+
+.bq-page .bq-craft-outcome-stats-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 33px;
+  padding: 6px 9px;
+  border-bottom: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-craft-outcome-stats-head h4 {
+  margin: 0;
+  color: #dfeef9;
+  font-size: 11px;
+  font-weight: 740;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-craft-outcome-stats-head span {
+  color: #67d69f;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.bq-page .bq-craft-outcome-stat-list {
+  display: grid;
+  padding: 3px 8px 5px;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--bq-target-border-soft);
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-row:last-of-type {
+  border-bottom: 0;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-label {
+  overflow: hidden;
+  color: #9fb2c5;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-reading {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #ddecf7;
+  font-family: "Roboto Mono", "Courier New", monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-reading-part {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-reading-part--base {
+  opacity: 0.62;
+}
+
+.bq-page .bq-craft-outcome .craft-stat-compact-delta {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(100, 216, 155, 0.08);
+  font-size: 9px;
+}
+
+.bq-page .bq-craft-outcome .craft-ok {
+  color: var(--stat-beneficial, #6ee7a0);
+}
+
+.bq-page .bq-craft-outcome .craft-shortage {
+  color: var(--stat-detrimental, #ff7185);
+  background: rgba(255, 113, 133, 0.08);
+}
+
+.bq-page .bq-craft-outcome-empty,
+.bq-page .bq-craft-outcome-more {
+  margin: 0;
+  padding: 13px 9px;
+  color: #8195a8;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.bq-page .bq-craft-outcome-more {
+  padding: 6px 0 2px;
+  color: #62bddd;
+  text-align: center;
+}
+
+.bq-page .bq-item--target-workspace > .bq-component-statistics {
+  min-width: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics-header {
+  gap: 14px;
+}
+
+.bq-page .bq-stat-view-tabs {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(71, 157, 198, 0.4);
+  border-radius: 3px;
+  background: #05111c;
+}
+
+.bq-page .bq-stat-view-tabs button {
+  min-height: 26px;
+  padding: 0 12px;
+  border: 0;
+  border-right: 1px solid var(--bq-target-border-soft);
+  color: #89a1b6;
+  background: transparent;
+  font: 650 10px/1 "Rajdhani", sans-serif;
+  cursor: pointer;
+}
+
+.bq-page .bq-stat-view-tabs button:last-child {
+  border-right: 0;
+}
+
+.bq-page .bq-stat-view-tabs button.is-active {
+  color: #e7f7ff;
+  background: linear-gradient(180deg, rgba(20, 75, 101, 0.72), rgba(8, 40, 59, 0.76));
+}
+
+.bq-page .bq-stat-view-tabs button:focus-visible {
+  position: relative;
+  outline: 2px solid var(--ops-focus-ring, #7dd3fc);
+  outline-offset: -2px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics-body {
+  display: block;
+  padding: 7px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-unmodified-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 7px;
+  align-items: start;
+  max-height: none;
+  overflow: visible;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-unmodified-group {
+  min-width: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-surface {
+  border-color: var(--bq-target-border-soft);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(10, 28, 43, 0.86), rgba(7, 21, 33, 0.88));
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-title {
+  min-height: 32px;
+  padding: 4px 8px;
+  color: #62c6ee;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-icon {
+  flex-basis: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-group-icon {
+  width: 28px;
+  height: 28px;
+  transform: scale(0.78);
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-list {
+  padding: 3px 8px 5px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-row {
+  min-height: 23px;
+  padding: 3px 0;
+  gap: 8px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-label {
+  color: #94a8ba;
+  font-size: 10px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-base-value,
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-value {
+  font-size: 10px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-delta {
+  font-size: 8px;
+}
+
+.bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-modified-card {
+  display: none;
+}
+
+/* Queue rail polish remains page-local and preserves interaction geometry. */
+.bq-page .bq-craft-card {
+  border-color: rgba(83, 126, 151, 0.2);
+  background: rgba(7, 20, 31, 0.76);
+}
+
+.bq-page .bq-craft-card.is-selected {
+  border-color: rgba(78, 197, 240, 0.62);
+  background: linear-gradient(90deg, rgba(18, 68, 91, 0.56), rgba(8, 26, 39, 0.88) 58%);
+  box-shadow: inset 3px 0 0 #55ccef, inset 0 0 0 1px rgba(85, 204, 239, 0.12);
+}
+
+.bq-page .bq-craft-card-status--missing {
+  border-color: transparent;
+  color: #c97883;
+  background: transparent;
+}
+
+.bq-page .bq-craft-card-drag-handle {
+  opacity: 0.28;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+
+.bq-page .bq-craft-card-shell:hover .bq-craft-card-drag-handle,
+.bq-page .bq-craft-card-drag-handle:focus-visible {
+  opacity: 0.92;
+}
+
+@container bq-target-workspace (max-width: 980px) {
+  .bq-page .bq-primary-workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-item--target-workspace .bq-selected-craft-body {
+    grid-template-columns: 126px minmax(220px, 1fr);
+  }
+
+  .bq-page .bq-item--target-workspace .bq-item-visual {
+    width: 126px;
+  }
+
+  .bq-page .bq-selected-craft-actions {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0 10px 10px;
+  }
+
+  .bq-page .bq-selected-summary-strip {
+    margin-left: 0;
+    border-left: 0;
+  }
+
+  .bq-page .bq-selected-summary-strip strong {
+    font-size: 10px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-row,
+  .bq-page .bq-item--target-workspace .bq-mat-row--mobile-card {
+    grid-template-columns: minmax(145px, 0.8fr) minmax(220px, 1.2fr) minmax(155px, 0.8fr);
+  }
+}
+
+@container bq-target-workspace (max-width: 690px) {
+  .bq-page .bq-item--target-workspace .bq-selected-craft-body {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-item-visual {
+    width: 104px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-item-name {
+    font-size: 19px;
+  }
+
+  .bq-page .bq-selected-craft-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-item--target-workspace .bq-selected-craft-footer {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 6px;
+  }
+
+  .bq-page .bq-selected-summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-selected-summary-strip > span:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--bq-target-border-soft);
+  }
+
+  .bq-page .bq-item--target-workspace .bq-qty {
+    justify-self: end;
+    margin-top: 6px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-row,
+  .bq-page .bq-item--target-workspace .bq-mat-row--mobile-card {
+    grid-template-columns: minmax(0, 1fr) 132px;
+    grid-template-rows: auto auto auto auto auto;
+    gap: 8px 10px;
+    padding: 10px;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-name {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 48px;
+    border-right: 0;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-required {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-card-head .bq-target-editor {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+    max-width: none;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-progress {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-card-metrics {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-card-quality-label {
+    display: none;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-card-quality {
+    grid-column: 1;
+    grid-row: 5;
+  }
+
+  .bq-page .bq-item--target-workspace .bq-mat-actions {
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  .bq-page .bq-craft-outcome-quality-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Responsive normalization.
+   The Build Queue has a persistent queue rail, so viewport breakpoints do not
+   describe the width actually available to statistics. Keep the operational
+   type scale stable and let this workspace respond to its own inline size. */
+.bq-page .bq-selected-craft-body .bq-item-identity {
+  gap: 7px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name {
+  margin-top: 2px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual {
+  height: 84px;
+  min-height: 84px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-visual .bq-product-icon,
+.bq-page .bq-selected-craft-body .bq-item-visual .bq-product-icon--weapon {
+  width: 168px;
+  height: 50px;
+  max-width: 168px;
+  max-height: 50px;
+}
+
+.bq-page .bq-component-statistics-body {
+  container-name: bq-statistics;
+  container-type: inline-size;
+}
+
+.bq-page .bq-center-shell .bq-item-header.bq-selected-craft-card {
+  height: auto;
+  min-height: 0;
+}
+
+.bq-page .bq-selected-craft-body {
+  min-height: 137px;
+  padding: 14px 18px 12px;
+}
+
+.bq-page .bq-selected-craft-footer {
+  min-height: 48px;
+  padding-inline: 18px;
+}
+
+.bq-page .bq-queue-col-title,
+.bq-page .bq-queue-selector-trigger strong {
+  font-size: 14px;
+}
+
+.bq-page .bq-queue-selector-label {
+  font-size: 10px;
+}
+
+.bq-page .bq-queue-tab,
+.bq-page .bq-craft-card-index,
+.bq-page .bq-craft-card-cat,
+.bq-page .bq-center-shell .bq-item-blueprint,
+.bq-page .bq-materials-section-summary {
+  font-size: 12px;
+}
+
+.bq-page .bq-craft-card-name {
+  font-size: 16px;
+}
+
+.bq-page .bq-craft-card-status,
+.bq-page .bq-center-shell .bq-item-cat,
+.bq-page .bq-center-shell .bq-item-mission-label,
+.bq-page .bq-center-shell .bq-btn,
+.bq-page .bq-inventory-toggle,
+.bq-page .bq-auto-reserve-btn,
+.bq-page .bq-quality-chip,
+.bq-page .bq-quality-chip[class*="logi-rarity--"] {
+  font-size: 11px;
+}
+
+.bq-page .bq-selected-craft-body .bq-item-name {
+  font-size: 20px;
+}
+
+.bq-page .bq-materials-section-header {
+  min-height: 46px;
+  padding-block: 8px;
+}
+
+.bq-page .bq-materials-section-title,
+.bq-page .bq-component-statistics-title {
+  font-size: 15px;
+}
+
+.bq-page .bq-quality-chip strong {
+  font-size: 13px;
+}
+
+.bq-page .bq-mat-card-head .bq-target-editor--slider > .bq-target-quality {
+  font-size: 13px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-section-title,
+.bq-page .bq-component-statistics .craft-stat-compact-label,
+.bq-page .bq-component-statistics .craft-stat-comparison-label {
+  font-size: 12px;
+}
+
+.bq-page .bq-component-statistics .craft-stat-compact-base-value,
+.bq-page .bq-component-statistics .craft-stat-compact-value,
+.bq-page .bq-component-statistics .bq-stat-compare-base,
+.bq-page .bq-component-statistics .bq-stat-compare-base strong,
+.bq-page .bq-component-statistics .bq-stat-compare-value {
+  font-size: 13px;
+}
+
+.bq-page .bq-item > .bq-component-statistics.bq-workspace-card,
+.bq-page .bq-component-statistics-body,
+.bq-page .bq-component-statistics .bq-stat-unmodified-column {
+  max-height: none;
+  overflow: visible;
+}
+
+@container bq-statistics (max-width: 980px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-modified-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container bq-statistics (max-width: 640px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-trait-column {
+    display: contents;
+  }
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-selected-craft-body {
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .bq-page .bq-selected-craft-footer {
+    min-height: 42px;
+    padding-inline: 12px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-modified-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .bq-page .bq-component-statistics-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-unmodified-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-trait-column {
+    display: contents;
+  }
+
+  .bq-page .bq-component-statistics .craft-stat-comparison-values {
+    gap: 6px;
+  }
+
+  .bq-page .bq-component-statistics .bq-stat-compare-cell {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1px;
+  }
+}
+
+/* Final target-workspace geometry wins over the legacy responsive tail. */
+.bq-page .bq-item--target-workspace .bq-selected-craft-body {
+  min-height: 137px;
+  padding: 0;
+}
+
+.bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual {
+  height: 137px;
+  min-height: 137px;
+}
+
+.bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual .bq-product-icon,
+.bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual .bq-product-icon--weapon,
+.bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual .bq-product-icon--component {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}

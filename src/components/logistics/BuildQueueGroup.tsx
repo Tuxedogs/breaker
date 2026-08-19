@@ -31,6 +31,7 @@ import {
   getWeightedEffectiveQuality,
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
+import { getBuildQueueItemAllocationProgress } from '../../lib/logistics/buildQueueProgress';
 import { groupReservableStacksByLocation } from '../../lib/logistics/inventoryHierarchy';
 import {
   solveBuildQueueCraftAllocation,
@@ -47,7 +48,14 @@ import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
-import { BuildQueueCraftIdentity, BuildQueueCraftStatistics, BuildQueueStatsProvider } from './BuildQueueStatsBreakdown';
+import {
+  BuildQueueCraftHeaderSummary,
+  BuildQueueCraftIdentity,
+  BuildQueueCraftOutcome,
+  BuildQueueCraftStatistics,
+  BuildQueueCraftTargetQuality,
+  BuildQueueStatsProvider,
+} from './BuildQueueStatsBreakdown';
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 import { getCompletedPresentationItem } from '../../lib/logistics/buildQueueEntries';
@@ -1338,6 +1346,21 @@ export default function BuildQueueGroup({
           };
         });
 
+        const normalizeSummaryUnit = (unit: RecipeInputTemplate['unitType'] | undefined) => (
+          String(unit ?? 'unit').toLowerCase() === 'scu' || String(unit ?? '').toLowerCase() === 'cscu'
+            ? 'scu' as const
+            : 'unit' as const
+        );
+        const requirementUnits = new Set(materialRequirementRows.map((row) => normalizeSummaryUnit(row.input.unitType)));
+        const summaryUnit = normalizeSummaryUnit(materialRequirementRows[0]?.input.unitType);
+        const totalRequiredAmount = materialRequirementRows.reduce((sum, row) => sum + row.required, 0);
+        const totalAllocatedAmount = materialRequirementRows.reduce((sum, row) => sum + Math.min(row.allocatedAmount, row.required), 0);
+        const materialsAllocatedLabel = requirementUnits.size === 1
+          ? `${formatInventoryQuantity(totalAllocatedAmount, summaryUnit)} / ${formatInventoryQuantity(totalRequiredAmount, summaryUnit)}`
+          : `${materialRequirementRows.filter((row) => row.remainingRequired <= SCU_QUANTITY_EPSILON).length} / ${materialRequirementRows.length} requirements`;
+        const allocationPercentage = getBuildQueueItemAllocationProgress(item, recipeInputsByRecipeId) ?? 0;
+        const firstInventoryTarget = materialGroups.find((group) => group.needTotal > 0) ?? materialGroups[0];
+
         const craftSolverRequirementContexts = new Map(
           materialRequirementRows.map((row) => {
             const reserveContext: RequirementReserveContext = {
@@ -1406,11 +1429,6 @@ export default function BuildQueueGroup({
           !hasMaterialInputs ||
           isCompletedCraft ||
           allRequirementsComplete;
-        const autoReserveTitle = allRequirementsComplete
-          ? 'All material requirements are already fully allocated'
-          : isCompletedCraft
-            ? 'Completed crafts cannot be auto-reserved'
-            : 'Propose inventory lots for all underfilled materials';
 
         const runCraftSolver = () => {
           setSolverPlanning(true);
@@ -1451,6 +1469,7 @@ export default function BuildQueueGroup({
               pendingReassignment?.targetItemId === item.id ? 'bq-item--reassign-destination' : '',
               isMobileTouchLayout ? 'bq-item--mobile-touch' : '',
               inventoryEnabled ? 'bq-item--inventory-on' : 'bq-item--inventory-off',
+              'bq-item--target-workspace',
             ].filter(Boolean).join(' ')}
             data-bq-item-id={item.id}
           >
@@ -1459,21 +1478,7 @@ export default function BuildQueueGroup({
             {/* ── Selected craft command card ── */}
             <section className="bq-item-sidebar bq-item-header bq-workspace-card bq-selected-craft-card" aria-label={`Selected craft: ${itemName}`}>
               <div className="bq-selected-craft-body">
-                <div className="bq-item-identity">
-                  <div className="bq-item-name-block">
-                    <span className="bq-item-cat">{readableType}</span>
-                    <h2 className="bq-item-name">{itemName}</h2>
-                  </div>
-
-                  <BuildQueueCraftIdentity />
-
-                  <div className="bq-item-mission">
-                    <span className="bq-item-mission-label">Blueprint Source</span>
-                    <BlueprintSourceDisplay blueprintId={item.blueprint_id} fallbackLabel={blueprintLabel} />
-                  </div>
-                </div>
-
-                <div className="bq-item-visual" aria-hidden="true">
+                <div className="bq-item-visual">
                   <BuildQueueProductIcon
                     item={item}
                     recipe={recipe}
@@ -1482,23 +1487,66 @@ export default function BuildQueueGroup({
                     alt={itemName}
                   />
                 </div>
-              </div>
 
-              <footer className="bq-selected-craft-footer">
-                <div className="bq-item-actions">
-                  <div className="bq-btn-row">
-                    <button
-                      type="button"
-                      className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
-                      onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
-                      aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
-                    >
-                      {isCompletedCraft ? 'Reopen' : 'Complete'}
-                    </button>
-                    <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
+                <div className="bq-item-identity">
+                  <div className="bq-item-name-block">
+                    <span className="bq-item-cat">{readableType}</span>
+                    <h2 className="bq-item-name">{itemName}</h2>
+                  </div>
+
+                  <BuildQueueCraftIdentity />
+
+                  <div className="bq-selected-craft-state-line">
+                    <span className={`bq-selected-craft-state bq-selected-craft-state--${isCompletedCraft ? 'ready' : fulfillment}`}>
+                      {isCompletedCraft ? 'Completed' : fulfillment === 'complete' ? 'Ready' : fulfillment === 'partial' ? 'Partially Allocated' : 'Materials Missing'}
+                    </span>
+                    <BuildQueueCraftTargetQuality />
+                  </div>
+
+                  <div className="bq-item-mission">
+                    <span className="bq-item-mission-label">Blueprint Source</span>
+                    <BlueprintSourceDisplay blueprintId={item.blueprint_id} fallbackLabel={blueprintLabel} />
                   </div>
                 </div>
 
+                <div className="bq-selected-craft-actions">
+                  <button
+                    type="button"
+                    className="bq-btn bq-btn--header-action"
+                    disabled={isCompletedCraft || !firstInventoryTarget}
+                    onClick={() => firstInventoryTarget && openQuickAdd(
+                      firstInventoryTarget.material?.id ?? firstInventoryTarget.requirements[0]?.materialKey ?? '',
+                      firstInventoryTarget.displayName,
+                      firstInventoryTarget.material,
+                    )}
+                  >
+                    <PlusIcon />
+                    <span>Inventory</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="bq-btn bq-btn--header-action"
+                    disabled={autoReserveDisabled || solverPlanning || !inventoryEnabled}
+                    aria-label={`Auto reserve inventory for ${itemName}`}
+                    onClick={runCraftSolver}
+                  >
+                    <SolveIcon />
+                    <span>{solverPlanning ? 'Planning…' : 'Reserve Materials'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
+                    onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
+                    aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
+                  >
+                    {isCompletedCraft ? 'Reopen' : 'Complete'}
+                  </button>
+                  <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
+                </div>
+              </div>
+
+              <footer className="bq-selected-craft-footer">
+                <BuildQueueCraftHeaderSummary materialsLabel={materialsAllocatedLabel} allocationPercentage={allocationPercentage} />
                 <div className="bq-qty" aria-label="Craft quantity">
                   <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={isCompletedCraft || item.quantity <= 1} aria-label="Decrease quantity">-</button>
                   <span className="bq-qty-val">{item.quantity}x</span>
@@ -1507,24 +1555,14 @@ export default function BuildQueueGroup({
               </footer>
             </section>
 
-            {/* Right body */}
+            {/* Primary allocation and outcome workspace */}
+            <div className="bq-primary-workspace-grid">
             <div className="bq-item-body bq-workspace-card bq-materials-card">
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
                 <div className="bq-materials-section-header">
                   <h3 className="bq-materials-section-title">{inventoryEnabled ? 'Material Allocation' : 'Material Requirements'}</h3>
                   <div className="bq-materials-section-actions">
-                    {inventoryEnabled ? <button
-                      type="button"
-                      className="bq-auto-reserve-btn"
-                      disabled={autoReserveDisabled || solverPlanning}
-                      aria-label={`Auto reserve inventory for ${itemName}`}
-                      title={inventoryEnabled ? autoReserveTitle : 'Enable inventory to auto reserve materials.'}
-                      onClick={runCraftSolver}
-                    >
-                      <SolveIcon />
-                      <span>{solverPlanning ? 'Planning…' : 'Auto Reserve'}</span>
-                    </button> : null}
                     <button
                       type="button"
                       className={`bq-inventory-toggle${inventoryEnabled ? ' is-active' : ''}`}
@@ -1622,12 +1660,16 @@ export default function BuildQueueGroup({
                         </div>
                         <strong className="bq-mat-required">{totalNeedLabel}</strong>
                         {inventoryEnabled ? <div className="bq-mat-card-metrics">
+                          <span className="bq-mat-available">
+                            <em>Available</em>
+                            <strong>{formatQuantity(group.availableQuantity, group.material)}</strong>
+                          </span>
                           <span className="bq-mat-reserved">
-                            <em>Reserved</em>
+                            <em>Allocated</em>
                             <strong>{formatQuantity(group.allocatedTotal, group.material)}</strong>
                           </span>
                           <span className={`bq-mat-card-status bq-balance bq-balance--${hasShortfall ? 'short' : 'met'} ${materialTypeClass(group.material)}`}>
-                            <em>Shortfall</em>
+                            <em>Remaining</em>
                             <strong>{shortfallLabel}</strong>
                           </span>
                           <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
@@ -1636,6 +1678,14 @@ export default function BuildQueueGroup({
                             {averageBelowTarget ? <small>below target</small> : <small>avg</small>}
                           </span>
                         </div> : null}
+                        {inventoryEnabled ? (
+                          <progress
+                            className="bq-mat-progress"
+                            max={Math.max(group.requiredTotal, SCU_QUANTITY_EPSILON)}
+                            value={Math.min(group.allocatedTotal, group.requiredTotal)}
+                            aria-label={`${group.displayName} allocation progress`}
+                          />
+                        ) : null}
                         {inventoryEnabled ? <span className="bq-mat-card-quality-label">Quality Allocation</span> : null}
                         {inventoryEnabled ? <div className="bq-mat-card-footer">
                           <div className="bq-mat-card-quality">
@@ -1957,6 +2007,8 @@ export default function BuildQueueGroup({
             ) : null}
 
             </div>{/* bq-item-body */}
+            <BuildQueueCraftOutcome />
+            </div>{/* bq-primary-workspace-grid */}
 
             <BuildQueueCraftStatistics />
 
