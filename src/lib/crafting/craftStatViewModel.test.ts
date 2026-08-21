@@ -302,9 +302,31 @@ test("buildCraftStatViewModel preserves FPS weapon trait groups in its overview"
   const model = buildCraftStatViewModel({ detail });
 
   assert.deepEqual(
-    model.overviewGroups.slice(0, 5).map((group) => group.title),
-    ["Damage Output", "Projectile", "Penetration", "Spread", "Thermal / Power"],
+    model.overviewGroups.slice(0, 6).map((group) => group.title),
+    ["Damage Output", "Projectile", "Penetration", "Falloff", "Spread", "Thermal / Power"],
   );
+  assert.ok(!model.overviewGroups.some((group) => group.title === "Ammunition"));
+  const falloffLabels = model.overviewGroups
+    .find((group) => group.title === "Falloff")
+    ?.stats.map((stat) => stat.label) ?? [];
+  for (const label of [
+    "Impulse Falloff Start",
+    "Impulse Drop Falloff",
+    "Impulse Maximum Falloff",
+    "Damage Falloff Start",
+    "Damage Drop Per Meter",
+    "Minimum Damage After Falloff",
+  ]) {
+    assert.ok(falloffLabels.includes(label), `CQ7 Falloff missing ${label}`);
+  }
+  const projectileLabels = model.overviewGroups
+    .find((group) => group.title === "Projectile")
+    ?.stats.map((stat) => stat.label) ?? [];
+  const penetrationLabels = model.overviewGroups
+    .find((group) => group.title === "Penetration")
+    ?.stats.map((stat) => stat.label) ?? [];
+  assert.equal(projectileLabels.some((label) => label.includes("Falloff")), false);
+  assert.equal(penetrationLabels.some((label) => label.includes("Falloff")), false);
   assert.ok(model.overviewGroups
     .find((group) => group.title === "Spread")
     ?.stats.some((stat) => stat.label === "Spread Min–Max"));

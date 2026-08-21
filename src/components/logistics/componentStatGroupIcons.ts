@@ -1,10 +1,12 @@
 import additionalIcon from "@/assets/icons/component-stat-icons/25-additional.webp";
+import ammunitionIcon from "@/assets/icons/component-stat-icons/26-ammunition.webp";
 import ballisticsDamageIcon from "@/assets/icons/component-stat-icons/01-ballistics-damage.webp";
 import beamRangeIcon from "@/assets/icons/component-stat-icons/20-beam-range.webp";
 import damageOutputIcon from "@/assets/icons/component-stat-icons/02-damage-output.webp";
 import damageTakenMultipliersIcon from "@/assets/icons/component-stat-icons/22-damage-taken-multipliers.webp";
 import durabilityPhysicalIcon from "@/assets/icons/component-stat-icons/18-durability-physical.webp";
 import environmentIcon from "@/assets/icons/component-stat-icons/24-environment.webp";
+import falloffIcon from "@/assets/icons/component-stat-icons/27-falloff.webp";
 import fireActionsIcon from "@/assets/icons/component-stat-icons/07-fire-actions.webp";
 import handlingIcon from "@/assets/icons/component-stat-icons/06-handling.webp";
 import identityIcon from "@/assets/icons/component-stat-icons/21-identity.webp";
@@ -26,6 +28,7 @@ import toolOutputIcon from "@/assets/icons/component-stat-icons/19-tool-output.w
 
 const STAT_GROUP_ICONS: Record<string, string> = {
   additional: additionalIcon,
+  ammunition: ammunitionIcon,
   ballisticsanddamage: ballisticsDamageIcon,
   ballisticsdamage: ballisticsDamageIcon,
   beamrange: beamRangeIcon,
@@ -34,6 +37,7 @@ const STAT_GROUP_ICONS: Record<string, string> = {
   durabilityandphysical: durabilityPhysicalIcon,
   durabilityphysical: durabilityPhysicalIcon,
   environment: environmentIcon,
+  falloff: falloffIcon,
   fireactions: fireActionsIcon,
   handling: handlingIcon,
   identity: identityIcon,
