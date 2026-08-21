@@ -165,20 +165,20 @@ test.describe("Build Queue stats fixture", () => {
 
       const labels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
       expect(labels).toEqual(expect.arrayContaining([
-        "Alpha Damage",
+        "Alpha",
         "DPS",
         "Fire Rate",
         "Burst Size",
-        "Ballistic Reserve",
-        "Projectile Speed",
-        "Projectile Lifetime",
+        "Ammo Count",
+        "Speed",
+        "Lifetime",
         "Damage Falloff Start",
         "Damage Drop Per Meter",
         "Minimum Damage After Falloff",
-        "Spread Min–Max",
-        "Spread First Attack",
-        "Spread Per Attack",
-        "Spread Decay",
+        "Min–Max",
+        "First Attack",
+        "Per Attack",
+        "Decay",
       ]));
 
       const traitLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
@@ -294,7 +294,7 @@ test.describe("Build Queue stats fixture", () => {
       });
       expect(craftCardControls.progressRight).toBeLessThan(craftCardControls.dragHandleLeft);
       const damageLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
-      expect(damageLabels).toContain("Alpha Damage");
+      expect(damageLabels).toContain("Alpha");
       expect(damageLabels).not.toEqual(expect.arrayContaining([
         "Ballistic Damage",
         "Physical Damage",
@@ -446,10 +446,10 @@ test.describe("Build Queue stats fixture", () => {
         const compactBase = compact?.querySelector(".craft-stat-compact-base-value");
         const compactArrow = compact?.querySelector(".craft-stat-compact-arrow");
         const compactDelta = compact?.querySelector(".craft-stat-compact-delta");
-        const unchanged = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Energy Cost Per Shot");
+        const unchanged = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Ammo Per Shot");
         const unchangedValue = unchanged?.querySelector(".bq-stat-compact-value");
         const defaultValue = compactRows
-          .find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Theoretical DPS")
+          .find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "DPS")
           ?.querySelector(".bq-stat-compact-value");
         return {
           label,
@@ -1089,15 +1089,15 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = statContent.labels;
-          expect(compactLabels[0]).toBe("Alpha Damage");
+          expect(compactLabels[0]).toBe("Alpha");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Fire Rate",
-            "Projectile Speed",
-            "Alpha Damage",
+            "Speed",
+            "Alpha",
             "Heat Per Shot",
-            "Spread Min–Max",
-            "Penetration Near Radius",
-            "Penetration Far Radius",
+            "Min–Max",
+            "Near Radius",
+            "Far Radius",
             "Overheat Recovery",
             "Mass",
             "Health",
@@ -1108,7 +1108,7 @@ test.describe("Build Queue stats fixture", () => {
             "Energy Damage",
           ]));
           const modifiedLabels = await page.locator(".bq-craft-outcome .bq-stat-compact-label").allTextContents();
-          expect(modifiedLabels).toEqual(["Alpha Damage", "Health"]);
+          expect(modifiedLabels).toEqual(["Alpha", "Health"]);
           const compactValues = await page.locator(".bq-stat-compact-value").allTextContents();
           expect(compactValues).not.toContain("0%");
 
@@ -1124,18 +1124,18 @@ test.describe("Build Queue stats fixture", () => {
         if (item.id === FIXTURE_ITEM_IDS.cq7) {
           const compactLabels = statContent.labels;
           expect(compactLabels).toEqual(expect.arrayContaining([
-            "Alpha Damage",
+            "Alpha",
             "DPS",
             "Fire Rate",
             "Burst Size",
-            "Ballistic Reserve",
-            "Projectile Speed",
-            "Projectile Lifetime",
+            "Ammo Count",
+            "Speed",
+            "Lifetime",
             "Damage Falloff Start",
-            "Spread Min–Max",
-            "Spread First Attack",
-            "Spread Per Attack",
-            "Spread Decay",
+            "Min–Max",
+            "First Attack",
+            "Per Attack",
+            "Decay",
           ]));
         }
 
@@ -1196,12 +1196,13 @@ test.describe("Build Queue stats fixture", () => {
             "Energy Maximum Load",
             "Energy Recharge Rate",
             "Recharge Cooldown",
-            "Energy Cost Per Shot",
-            "Spread Min–Max",
-            "Penetration Near Radius",
-            "Penetration Far Radius",
+            "Ammo Per Shot",
+            "Min–Max",
+            "Near Radius",
+            "Far Radius",
           ]));
           expect(compactLabels).not.toContain("Ballistic Reserve");
+          expect(compactLabels).not.toContain("Ammo Count");
         }
 
         await page.screenshot({

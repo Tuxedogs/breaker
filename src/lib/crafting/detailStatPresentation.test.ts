@@ -17,7 +17,7 @@ test("nested weapon statistics remain distinct scan sections", () => {
     title: "Ballistics / Damage",
     kind: "nested",
     subclusters: [
-      { title: "Damage Output", stats: [stat("Alpha Damage", "0"), stat("Fire Rate", "750 rpm")] },
+      { title: "Damage Output", stats: [stat("Alpha Damage", "0"), stat("Damage Over 60s", "1,200"), stat("Fire Rate", "750 rpm")] },
       { title: "Projectile", stats: [stat("Projectile Speed", "1,500 m/s")] },
       { title: "Handling", stats: [stat("Recoil Kick", "-8.9%")] },
     ],
@@ -31,7 +31,10 @@ test("nested weapon statistics remain distinct scan sections", () => {
     "Handling",
   ]);
   assert.equal(sections[0]?.kind, "stats");
+  assert.equal(sections[0]?.kind === "stats" ? sections[0].stats[0]?.label : null, "Alpha");
+  assert.equal(sections[0]?.kind === "stats" ? sections[0].stats.map((entry) => entry.label).includes("Damage Over 60s") : true, false);
   assert.equal(sections[0]?.kind === "stats" ? sections[0].stats[0]?.value : null, "0");
+  assert.equal(sections[1]?.kind === "stats" ? sections[1].stats[0]?.label : null, "Speed");
 });
 
 test("flat groups and resistance matrices retain their source semantics", () => {

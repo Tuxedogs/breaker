@@ -206,6 +206,34 @@ export function normalizeDetailStatLabel(label: string): string {
   return label.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+const HIDDEN_CRAFT_STAT_LABELS = new Set(["damageover60s"]);
+
+const CRAFT_STAT_DISPLAY_LABELS: Record<string, string> = {
+  alphadamage: "Alpha",
+  theoreticaldps: "DPS",
+  ballisticreserve: "Ammo Count",
+  energycostpershot: "Ammo Per Shot",
+  projectilespeed: "Speed",
+  projectilelifetime: "Lifetime",
+  projectilemaxtravel: "Max Range",
+  projectilerangemaxtravel: "Max Range",
+  penetrationdistance: "Distance",
+  penetrationnearradius: "Near Radius",
+  penetrationfarradius: "Far Radius",
+  spreadminmax: "Min–Max",
+  spreadfirstattack: "First Attack",
+  spreadperattack: "Per Attack",
+  spreaddecay: "Decay",
+};
+
+export function isHiddenCraftStatLabel(label: string): boolean {
+  return HIDDEN_CRAFT_STAT_LABELS.has(normalizeDetailStatLabel(label));
+}
+
+export function toCraftStatDisplayLabel(label: string): string {
+  return CRAFT_STAT_DISPLAY_LABELS[normalizeDetailStatLabel(label)] ?? label;
+}
+
 function findDetailStatRowIndex(
   rowIndexByLabel: Map<string, number>,
   label: string,

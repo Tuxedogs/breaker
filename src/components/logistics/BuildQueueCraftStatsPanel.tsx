@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { toCraftStatDisplayLabel } from "../../lib/crafting/craftingDetailStats";
 import type { BuildQueueProductQualitySummary } from "../../lib/logistics/buildQueueCraftStats";
 import type {
   CraftStatComparisonColumnView,
@@ -39,7 +40,7 @@ function normalizeGroupKey(value: string): string {
 }
 
 function formatStatLabel(value: string): string {
-  return value
+  return toCraftStatDisplayLabel(value)
     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
     .replace(/\s*\/\s*/g, " and ");
 }

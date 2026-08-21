@@ -1,4 +1,8 @@
-import type { DetailStatRow } from "./craftingDetailStats";
+import {
+  isHiddenCraftStatLabel,
+  toCraftStatDisplayLabel,
+  type DetailStatRow,
+} from "./craftingDetailStats";
 import type { DetailStatGroup } from "./detailStatGroups";
 
 export type DetailStatScanSection =
@@ -15,6 +19,12 @@ export type DetailStatScanSection =
     columns: string[];
     rows: Array<{ label: string; values: string[] }>;
   };
+
+function visibleDisplayStats(stats: DetailStatRow[]): DetailStatRow[] {
+  return stats
+    .filter((stat) => !isHiddenCraftStatLabel(stat.label))
+    .map((stat) => ({ ...stat, label: toCraftStatDisplayLabel(stat.label) }));
+}
 
 function sectionWeight(section: DetailStatScanSection): number {
   return (section.kind === "stats" ? section.stats.length : section.rows.length) + 1;
@@ -33,7 +43,7 @@ export function buildDetailStatScanSections(
       key: "stats:core",
       kind: "stats",
       title: "Core Statistics",
-      stats: fallbackStats,
+      stats: visibleDisplayStats(fallbackStats),
     }];
   }
 
@@ -57,7 +67,7 @@ export function buildDetailStatScanSections(
           key: `${group.title}:${subcluster.title}`,
           kind: "stats",
           title: subcluster.title,
-          stats: subcluster.stats,
+          stats: visibleDisplayStats(subcluster.stats),
         });
       }
       continue;
@@ -67,7 +77,7 @@ export function buildDetailStatScanSections(
       key: `stats:${group.title}`,
       kind: "stats",
       title: group.title,
-      stats: group.stats,
+      stats: visibleDisplayStats(group.stats),
     });
   }
 
