@@ -967,38 +967,10 @@
   display: block;
   width: 28px;
   height: 28px;
-  background-image: url("../../assets/icons/build-queue-stat-icons.png");
-  background-repeat: no-repeat;
-  background-size: 140px 140px;
+  object-fit: contain;
   filter: saturate(0.82) brightness(1.08);
   mix-blend-mode: screen;
 }
-
-.bq-page .bq-component-statistics .bq-stat-group-icon--01 { background-position: 0 0; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--02 { background-position: -28px 0; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--03 { background-position: -56px 0; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--04 { background-position: -84px 0; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--05 { background-position: -112px 0; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--06 { background-position: 0 -28px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--07 { background-position: -28px -28px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--08 { background-position: -56px -28px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--09 { background-position: -84px -28px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--10 { background-position: -112px -28px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--11 { background-position: 0 -56px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--12 { background-position: -28px -56px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--13 { background-position: -56px -56px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--14 { background-position: -84px -56px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--15 { background-position: -112px -56px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--16 { background-position: 0 -84px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--17 { background-position: -28px -84px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--18 { background-position: -56px -84px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--19 { background-position: -84px -84px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--20 { background-position: -112px -84px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--21 { background-position: 0 -112px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--22 { background-position: -28px -112px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--23 { background-position: -56px -112px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--24 { background-position: -84px -112px; }
-.bq-page .bq-component-statistics .bq-stat-group-icon--25 { background-position: -112px -112px; }
 
 .bq-page .bq-component-statistics .craft-stat-section-surface {
   min-width: 0;
@@ -2032,7 +2004,7 @@
   margin: 0;
   padding: 13px 9px;
   color: #8195a8;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.35;
 }
 
@@ -2118,35 +2090,19 @@
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-icon {
-  flex-basis: 22px;
-  width: 22px;
-  height: 22px;
+  flex: 0 0 35px;
+  width: 35px;
+  height: 35px;
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-group-icon {
+  flex: 0 0 28px;
   width: 28px;
   height: 28px;
-  transform: scale(0.78);
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-list {
   padding: 3px 8px 5px;
-}
-
-.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-row {
-  min-height: 23px;
-  padding: 3px 0;
-  gap: 8px;
-}
-
-.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-label {
-  color: #94a8ba;
-  font-size: 10px;
-}
-
-.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-base-value,
-.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-value {
-  font-size: 10px;
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-delta {
@@ -2409,13 +2365,13 @@
 }
 
 .bq-page .bq-mat-card-head .bq-target-editor--slider > .bq-target-quality {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .bq-page .bq-component-statistics .craft-stat-section-title,
 .bq-page .bq-component-statistics .craft-stat-compact-label,
 .bq-page .bq-component-statistics .craft-stat-comparison-label {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .bq-page .bq-component-statistics .craft-stat-compact-base-value,
