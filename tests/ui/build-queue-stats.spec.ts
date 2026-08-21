@@ -1041,12 +1041,19 @@ test.describe("Build Queue stats fixture", () => {
             const card = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
             const headingRect = heading?.getBoundingClientRect();
             const cardRect = card?.getBoundingClientRect();
+            const icons = Array.from(panel.querySelectorAll(".bq-stat-group-icon"));
             return {
               groupCount: groups.length,
               traitColumnCount: traitColumns.length,
               missingIconTitles: groupHeadings
                 .filter((heading) => !heading.querySelector(".bq-stat-group-icon"))
                 .map((heading) => heading.textContent?.trim() ?? ""),
+              iconSources: icons.map((icon) => ({
+                tag: icon.tagName,
+                src: icon instanceof HTMLImageElement ? (icon.currentSrc || icon.getAttribute("src") || "") : "",
+                spriteClass: Array.from(icon.classList).some((className) => /^bq-stat-group-icon--\d{2}$/.test(className)),
+                backgroundImage: getComputedStyle(icon).backgroundImage,
+              })),
               headingInsideCard: Boolean(
                 heading
                 && card
@@ -1066,6 +1073,13 @@ test.describe("Build Queue stats fixture", () => {
           expect(sharedStatLayout.groupCount).toBeGreaterThan(0);
           expect(sharedStatLayout.traitColumnCount).toBe(0);
           expect(sharedStatLayout.missingIconTitles).toEqual([]);
+          expect(sharedStatLayout.iconSources.length).toBeGreaterThan(0);
+          expect(sharedStatLayout.iconSources.every((icon) => (
+            icon.tag === "IMG"
+            && /component-stat-icons\//.test(icon.src)
+            && icon.spriteClass === false
+            && (icon.backgroundImage === "none" || icon.backgroundImage === "")
+          ))).toBe(true);
           expect(sharedStatLayout.headingInsideCard).toBe(true);
           expect(sharedStatLayout.clippedGroups).toBe(0);
           await page.getByRole("tab", { name: "Performance" }).click();

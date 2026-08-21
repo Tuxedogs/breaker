@@ -9,46 +9,13 @@ import {
   CompactCraftStatRow,
   CraftStatSection,
 } from "../shared/CraftStatisticsPresentation";
+import { getStatGroupIconSrc } from "./componentStatGroupIcons";
 
 type ConsolidatedStat =
   | { kind: "comparison"; row: CraftStatComparisonRowView }
   | { kind: "static"; label: string; value: string };
 
 type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
-
-const STAT_GROUP_ICONS = new Map<string, number>([
-  ["ballisticsdamage", 1],
-  ["ballisticsanddamage", 1],
-  ["damageoutput", 2],
-  ["projectile", 3],
-  ["penetration", 4],
-  ["spread", 5],
-  ["handling", 6],
-  ["fireactions", 7],
-  ["thermalpower", 8],
-  ["thermalandpower", 8],
-  ["signaturedetection", 9],
-  ["signatureanddetection", 9],
-  ["shieldperformance", 10],
-  ["resistanceabsorption", 11],
-  ["resistanceandabsorption", 11],
-  ["output", 12],
-  ["quantumtravel", 13],
-  ["radarperformance", 14],
-  ["powerthermal", 15],
-  ["powerandthermal", 15],
-  ["signatures", 16],
-  ["repair", 17],
-  ["durabilityphysical", 18],
-  ["durabilityandphysical", 18],
-  ["tooloutput", 19],
-  ["beamrange", 20],
-  ["identity", 21],
-  ["damagetakenmultipliers", 22],
-  ["protection", 23],
-  ["environment", 24],
-  ["additional", 25],
-]);
 
 const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
   "ballisticdamage",
@@ -78,9 +45,9 @@ function formatStatLabel(value: string): string {
 }
 
 function getStatGroupIcon(title: string) {
-  const iconIndex = STAT_GROUP_ICONS.get(normalizeGroupKey(title));
-  if (!iconIndex) return undefined;
-  return <span className={`bq-stat-group-icon bq-stat-group-icon--${String(iconIndex).padStart(2, "0")}`} />;
+  const src = getStatGroupIconSrc(normalizeGroupKey(title));
+  if (!src) return undefined;
+  return <img className="bq-stat-group-icon" src={src} alt="" />;
 }
 
 function formatCompactStatLabel(value: string): { label: string; metadata?: string } {
