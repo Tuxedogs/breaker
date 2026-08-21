@@ -303,13 +303,13 @@ test.describe("Crafting browser and detail refactor", () => {
         slug: "fps-weapon-cq7",
         id: "1a85280e-7b8f-4486-a563-17cd2549d268",
         title: "CQ7",
-        groups: ["Damage Output", "Projectile", "Penetration", "Spread", "Handling"],
+        groups: ["Damage Output", "Projectile", "Penetration", "Falloff", "Spread", "Handling"],
       },
       {
         slug: "ship-weapon-ad5b",
         id: "ba842720-ad32-4d53-8f56-992bacb1fc45",
         title: "AD5B",
-        groups: ["Damage Output", "Projectile"],
+        groups: ["Damage Output", "Ammunition", "Projectile"],
       },
       {
         slug: "shield-fr66",

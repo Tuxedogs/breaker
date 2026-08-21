@@ -202,3 +202,86 @@ test("ship weapon and established component projections expose their current lab
     assert.ok(groups.length >= 1, `${detail.type} should keep grouped output`);
   }
 });
+
+function flattenGroupStats(groups: ReturnType<typeof buildDetailStatGroups>): Map<string, string[]> {
+  const byTitle = new Map<string, string[]>();
+  for (const group of groups) {
+    if (group.kind === "nested") {
+      for (const subcluster of group.subclusters) {
+        byTitle.set(subcluster.title, subcluster.stats.map((stat) => stat.label));
+      }
+      continue;
+    }
+    if (group.kind === "flat") {
+      byTitle.set(group.title, group.stats.map((stat) => stat.label));
+    }
+  }
+  return byTitle;
+}
+
+test("FPS weapons move falloff stats into Falloff and never receive Ammunition", () => {
+  const detail = buildFittingDetailFromFpsComponentCard(loadCard("1a85280e-7b8f-4486-a563-17cd2549d268"));
+  assert.ok(detail);
+  const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
+  const falloff = groups.get("Falloff") ?? [];
+  assert.deepEqual(falloff, [
+    "Impulse Falloff Start",
+    "Impulse Drop Falloff",
+    "Impulse Maximum Falloff",
+    "Damage Falloff Start",
+    "Damage Drop Per Meter",
+    "Minimum Damage After Falloff",
+  ]);
+  assert.equal(groups.has("Ammunition"), false);
+  assert.equal((groups.get("Projectile") ?? []).some((label) => label.includes("Falloff")), false);
+  assert.equal((groups.get("Penetration") ?? []).some((label) => label.includes("Falloff")), false);
+});
+
+test("ship energy weapons keep energy ammunition stats and omit ballistic-only ammunition", () => {
+  const detail = shipDetail("ship_weapon", {
+    alphaDamage: 90,
+    fireRateRpm: 200,
+    maxAmmoLoad: 120,
+    ammoCostPerShot: 4,
+    maxRegenPerSec: 12,
+    regenerationCooldown: 1.5,
+    maxAmmoCount: 80,
+    projectileSpeed: 1400,
+  });
+  const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
+  const ammunition = groups.get("Ammunition") ?? [];
+  assert.deepEqual(ammunition, [
+    "Energy Maximum Load",
+    "Energy Cost Per Shot",
+    "Energy Recharge Rate",
+    "Recharge Cooldown",
+  ]);
+  assert.equal(ammunition.includes("Ballistic Reserve"), false);
+  assert.equal(ammunition.includes("Ammo Count"), false);
+  assert.equal((groups.get("Damage Output") ?? []).includes("Energy Maximum Load"), false);
+  assert.equal(groups.has("Falloff"), false);
+});
+
+test("ship ballistic weapons keep ballistic ammunition stats and omit energy-only ammunition", () => {
+  const detail = shipDetail("ship_weapon", {
+    alphaDamage: 40,
+    fireRateRpm: 1200,
+    maxAmmoCount: 250,
+    ammoCostPerShot: 1,
+    maxAmmoLoad: null,
+    maxRegenPerSec: null,
+    regenerationCooldown: 2,
+    projectileSpeed: 900,
+  });
+  const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
+  const ammunition = groups.get("Ammunition") ?? [];
+  assert.deepEqual(ammunition, [
+    "Ballistic Reserve",
+    "Energy Cost Per Shot",
+  ]);
+  assert.equal(ammunition.includes("Energy Maximum Load"), false);
+  assert.equal(ammunition.includes("Energy Recharge Rate"), false);
+  assert.equal(ammunition.includes("Recharge Cooldown"), false);
+  assert.equal((groups.get("Damage Output") ?? []).includes("Ballistic Reserve"), false);
+  assert.equal(groups.has("Falloff"), false);
+});

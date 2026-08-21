@@ -40,88 +40,123 @@ export const DETAIL_META_LABELS = new Set(
   ].map(normalizeDetailStatLabel),
 );
 
-const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
-  {
-    title: "Ballistics / Damage",
-    kind: "nested",
-    subclusters: [
-      {
-        title: "Damage Output",
-        labels: [
-          "Alpha Damage",
-          "Theoretical DPS",
-          "60s Sustained DPS",
-          "Damage Over 60s",
-          "DPS",
-          "Physical Damage",
-          "Energy Damage",
-          "Distortion Damage",
-          "Thermal Damage",
-          "Biochemical Damage",
-          "Stun Damage",
-          "Fire Rate",
-          "Burst Size",
-          "Ammo Capacity",
-          "Loaded Rounds",
-          "Ballistic Reserve",
-          "Energy Maximum Load",
-          "Ammo Cost Per Shot",
-          "Energy Cost Per Shot",
-          "Energy Recharge Rate",
-          "Recharge Cooldown",
-          "Charge Time",
-        ],
-      },
-      {
-        title: "Projectile",
-        labels: [
-          "Projectile Speed",
-          "Projectile Lifetime",
-          "Projectile Range / Max Travel",
-          "Projectile Max Travel",
-          "Stated Range",
-          "Hard Range",
-          "Damage Falloff Start",
-          "Damage Drop Per Meter",
-          "Minimum Damage After Falloff",
-          "Damage Falloff Range",
-          "Damage Falloff Max",
-        ],
-      },
-      {
-        title: "Penetration",
-        labels: [
-          "Penetration",
-          "Penetration Distance",
-          "Penetration Near Radius",
-          "Penetration Far Radius",
-          "Impulse Falloff Start",
-          "Impulse Drop Falloff",
-          "Impulse Maximum Falloff",
-        ],
-      },
-      {
-        title: "Spread",
-        labels: [
-          "Spread Min–Max",
-          "Spread First Attack",
-          "Spread Per Attack",
-          "Spread Decay",
-        ],
-      },
-      {
-        title: "Handling",
-        labels: [
-          "Recoil Smoothness",
-          "Recoil Handling",
-          "Recoil Kick",
-          "Weapon Recoil Smoothness",
-          "Weapon Recoil Handling",
-          "Weapon Recoil Kick",
-        ],
-      },
-    ],
-  },
+const WEAPON_DAMAGE_OUTPUT_CORE_LABELS = [
+  "Alpha Damage",
+  "Theoretical DPS",
+  "60s Sustained DPS",
+  "Damage Over 60s",
+  "DPS",
+  "Physical Damage",
+  "Energy Damage",
+  "Distortion Damage",
+  "Thermal Damage",
+  "Biochemical Damage",
+  "Stun Damage",
+  "Fire Rate",
+  "Burst Size",
+  "Ammo Capacity",
+  "Loaded Rounds",
+];
+
+const FPS_DAMAGE_OUTPUT_LABELS = [
+  ...WEAPON_DAMAGE_OUTPUT_CORE_LABELS,
+  "Ballistic Reserve",
+  "Energy Maximum Load",
+  "Ammo Cost Per Shot",
+  "Energy Cost Per Shot",
+  "Energy Recharge Rate",
+  "Recharge Cooldown",
+  "Charge Time",
+];
+
+const SHIP_DAMAGE_OUTPUT_LABELS = [
+  ...WEAPON_DAMAGE_OUTPUT_CORE_LABELS,
+  "Charge Time",
+];
+
+const WEAPON_PROJECTILE_CORE_LABELS = [
+  "Projectile Speed",
+  "Projectile Lifetime",
+  "Projectile Range / Max Travel",
+  "Projectile Max Travel",
+  "Stated Range",
+  "Hard Range",
+];
+
+const FPS_FALLOFF_LABELS = [
+  "Impulse Falloff Start",
+  "Impulse Drop Falloff",
+  "Impulse Maximum Falloff",
+  "Damage Falloff Start",
+  "Damage Drop Per Meter",
+  "Minimum Damage After Falloff",
+];
+
+const FPS_PROJECTILE_LABELS = [
+  ...WEAPON_PROJECTILE_CORE_LABELS,
+  "Damage Falloff Range",
+  "Damage Falloff Max",
+];
+
+const SHIP_PROJECTILE_LABELS = [
+  ...WEAPON_PROJECTILE_CORE_LABELS,
+  "Damage Falloff Start",
+  "Damage Drop Per Meter",
+  "Minimum Damage After Falloff",
+  "Damage Falloff Range",
+  "Damage Falloff Max",
+];
+
+const WEAPON_PENETRATION_CORE_LABELS = [
+  "Penetration",
+  "Penetration Distance",
+  "Penetration Near Radius",
+  "Penetration Far Radius",
+];
+
+const FPS_PENETRATION_LABELS = WEAPON_PENETRATION_CORE_LABELS;
+
+const SHIP_PENETRATION_LABELS = [
+  ...WEAPON_PENETRATION_CORE_LABELS,
+  "Impulse Falloff Start",
+  "Impulse Drop Falloff",
+  "Impulse Maximum Falloff",
+];
+
+const WEAPON_SPREAD_LABELS = [
+  "Spread Min–Max",
+  "Spread First Attack",
+  "Spread Per Attack",
+  "Spread Decay",
+];
+
+const WEAPON_HANDLING_LABELS = [
+  "Recoil Smoothness",
+  "Recoil Handling",
+  "Recoil Kick",
+  "Weapon Recoil Smoothness",
+  "Weapon Recoil Handling",
+  "Weapon Recoil Kick",
+];
+
+const SHIP_ENERGY_AMMUNITION_LABELS = [
+  "Energy Maximum Load",
+  "Ammo Per Shot",
+  "Energy Cost Per Shot",
+  "Ammo Cost Per Shot",
+  "Energy Recharge Rate",
+  "Recharge Cooldown",
+];
+
+const SHIP_BALLISTIC_AMMUNITION_LABELS = [
+  "Ammo Count",
+  "Ballistic Reserve",
+  "Ammo Per Shot",
+  "Energy Cost Per Shot",
+  "Ammo Cost Per Shot",
+];
+
+const WEAPON_SUPPORT_STAT_GROUPS: DetailStatGroupDefinition[] = [
   {
     title: "Thermal / Power",
     kind: "flat",
@@ -177,6 +212,45 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: DetailStatGroupDefinition[] = [
     labels: ["Component HP", "Health", "Mass"],
   },
 ];
+
+function weaponUsesEnergyAmmunition(detail: FittingComponentDetail): boolean {
+  return detail.stats.maxAmmoLoad != null || detail.stats.maxRegenPerSec != null;
+}
+
+function shipAmmunitionLabels(detail: FittingComponentDetail): string[] {
+  return weaponUsesEnergyAmmunition(detail)
+    ? SHIP_ENERGY_AMMUNITION_LABELS
+    : SHIP_BALLISTIC_AMMUNITION_LABELS;
+}
+
+function weaponPerformanceStatGroups(detail: FittingComponentDetail): DetailStatGroupDefinition[] {
+  const combatSubclusters = detail.type === "ship_weapon"
+    ? [
+        { title: "Damage Output", labels: SHIP_DAMAGE_OUTPUT_LABELS },
+        { title: "Ammunition", labels: shipAmmunitionLabels(detail) },
+        { title: "Projectile", labels: SHIP_PROJECTILE_LABELS },
+        { title: "Penetration", labels: SHIP_PENETRATION_LABELS },
+        { title: "Spread", labels: WEAPON_SPREAD_LABELS },
+        { title: "Handling", labels: WEAPON_HANDLING_LABELS },
+      ]
+    : [
+        { title: "Damage Output", labels: FPS_DAMAGE_OUTPUT_LABELS },
+        { title: "Projectile", labels: FPS_PROJECTILE_LABELS },
+        { title: "Penetration", labels: FPS_PENETRATION_LABELS },
+        { title: "Falloff", labels: FPS_FALLOFF_LABELS },
+        { title: "Spread", labels: WEAPON_SPREAD_LABELS },
+        { title: "Handling", labels: WEAPON_HANDLING_LABELS },
+      ];
+
+  return [
+    {
+      title: "Ballistics / Damage",
+      kind: "nested",
+      subclusters: combatSubclusters,
+    },
+    ...WEAPON_SUPPORT_STAT_GROUPS,
+  ];
+}
 
 const SHIELD_STAT_GROUPS: DetailStatGroupDefinition[] = [
   {
@@ -494,7 +568,7 @@ function definitionsForDetail(detail: FittingComponentDetail): DetailStatGroupDe
     case "ship_weapon":
     case "fps_weapon":
     case "fps_ammo":
-      return WEAPON_PERFORMANCE_STAT_GROUPS;
+      return weaponPerformanceStatGroups(detail);
     case "fps_armor":
       return FPS_ARMOR_STAT_GROUPS;
     case "shield":
@@ -516,11 +590,26 @@ function definitionsForDetail(detail: FittingComponentDetail): DetailStatGroupDe
   }
 }
 
-export function groupWeaponPerformanceStats(stats: DetailStatRow[]): DetailStatGroup[] {
+function suppressOppositeShipAmmunitionStats(
+  detail: FittingComponentDetail,
+  used: Set<string>,
+): void {
+  if (detail.type !== "ship_weapon") return;
+  const excluded = weaponUsesEnergyAmmunition(detail)
+    ? SHIP_BALLISTIC_AMMUNITION_LABELS.filter((label) => !SHIP_ENERGY_AMMUNITION_LABELS.includes(label))
+    : SHIP_ENERGY_AMMUNITION_LABELS.filter((label) => !SHIP_BALLISTIC_AMMUNITION_LABELS.includes(label));
+  for (const label of excluded) used.add(normalizeDetailStatLabel(label));
+}
+
+export function groupWeaponPerformanceStats(
+  stats: DetailStatRow[],
+  detail: FittingComponentDetail,
+): DetailStatGroup[] {
   const displayStats = normalizeWeaponPerformanceDisplayStats(stats);
   const rowByLabel = new Map(displayStats.map((row) => [normalizeDetailStatLabel(row.label), row] as const));
   const used = new Set<string>();
-  const groups = groupsFromDefinitions(WEAPON_PERFORMANCE_STAT_GROUPS, rowByLabel, used);
+  const groups = groupsFromDefinitions(weaponPerformanceStatGroups(detail), rowByLabel, used);
+  suppressOppositeShipAmmunitionStats(detail, used);
 
   const actionSuffixes = [
     "pelletcount",
@@ -564,7 +653,7 @@ export function buildDetailStatGroups(
   stats: DetailStatRow[],
 ): DetailStatGroup[] {
   if (detail.type === "ship_weapon" || detail.type === "fps_weapon" || detail.type === "fps_ammo") {
-    return groupWeaponPerformanceStats(stats);
+    return groupWeaponPerformanceStats(stats, detail);
   }
 
   const displayStats = stats.filter((row) => !DETAIL_META_LABELS.has(normalizeDetailStatLabel(row.label)));

@@ -218,9 +218,11 @@ test.describe("Build Queue stats fixture", () => {
         "Damage Output",
         "Projectile",
         "Penetration",
+        "Falloff",
         "Spread",
         "Handling",
       ]));
+      expect(traitLayout.groupTitles).not.toContain("Ammunition");
       expect(traitLayout.columnCount).toBeGreaterThanOrEqual(4);
       expect(traitLayout.rowHeight).toBeGreaterThanOrEqual(20);
       expect(traitLayout.rowHeight).toBeLessThanOrEqual(30);
@@ -1089,6 +1091,8 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = statContent.labels;
+          expect(statContent.groups).toContain("Ammunition");
+          expect(statContent.groups).not.toContain("Falloff");
           expect(compactLabels[0]).toBe("Alpha");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Fire Rate",
@@ -1123,6 +1127,8 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.cq7) {
           const compactLabels = statContent.labels;
+          expect(statContent.groups).toContain("Falloff");
+          expect(statContent.groups).not.toContain("Ammunition");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Alpha",
             "DPS",
@@ -1192,6 +1198,8 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.m5a) {
           const compactLabels = statContent.labels;
+          expect(statContent.groups).toContain("Ammunition");
+          expect(statContent.groups).not.toContain("Falloff");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Energy Maximum Load",
             "Energy Recharge Rate",
