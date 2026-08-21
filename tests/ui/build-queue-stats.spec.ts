@@ -408,37 +408,41 @@ test.describe("Build Queue stats fixture", () => {
       await expect(page.locator(".bq-component-statistics > .bq-decorative-frame, .bq-materials-section > .bq-decorative-frame, .bq-mat-row > .bq-decorative-frame")).toHaveCount(0);
 
       const targetAverageGeometry = await page.locator(".bq-mat-group").nth(1).evaluate((card) => {
-        const target = card.querySelector(".bq-target-quality")?.getBoundingClientRect();
+        const identity = card.querySelector(".bq-mat-name")?.getBoundingClientRect();
+        const inventory = card.querySelector(".bq-mat-available")?.getBoundingClientRect();
+        const highest = card.querySelector(".bq-avg-quality")?.getBoundingClientRect();
+        const allocated = card.querySelector(".bq-mat-reserved")?.getBoundingClientRect();
+        const allocationBar = card.querySelector(".bq-mat-card-allocation-bar")?.getBoundingClientRect();
         const need = card.querySelector(".bq-mat-card-total-need")?.getBoundingClientRect();
-        const average = card.querySelector(".bq-avg-quality")?.getBoundingClientRect();
         return {
-          targetTop: target?.top ?? 0,
+          identityLeft: identity?.left ?? 0,
+          inventoryLeft: inventory?.left ?? 0,
+          highestLeft: highest?.left ?? 0,
+          allocatedLeft: allocated?.left ?? 0,
+          identityBottom: identity?.bottom ?? 0,
+          allocationBarTop: allocationBar?.top ?? 0,
+          allocationBarWidth: allocationBar?.width ?? 0,
+          cardWidth: card.getBoundingClientRect().width,
           needTop: need?.top ?? 0,
-          averageTop: average?.top ?? 0,
         };
       });
-      expect(targetAverageGeometry.targetTop).toBeLessThan(targetAverageGeometry.averageTop);
+      expect(targetAverageGeometry.identityLeft).toBeLessThan(targetAverageGeometry.inventoryLeft);
+      expect(targetAverageGeometry.inventoryLeft).toBeLessThan(targetAverageGeometry.highestLeft);
+      expect(targetAverageGeometry.highestLeft).toBeLessThan(targetAverageGeometry.allocatedLeft);
+      expect(targetAverageGeometry.allocationBarTop).toBeGreaterThanOrEqual(targetAverageGeometry.identityBottom - 1);
+      expect(targetAverageGeometry.allocationBarWidth / targetAverageGeometry.cardWidth).toBeGreaterThan(0.9);
       expect(targetAverageGeometry.needTop).toBe(0);
 
       const targetEditor = page.locator(".bq-mat-card-head .bq-target-editor").first();
-      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
-      await targetEditor.hover();
-      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "1");
-      const sliderGeometry = await targetEditor.evaluate((editor) => {
-        const card = editor.closest(".bq-mat-group")?.getBoundingClientRect();
-        const badge = editor.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
-        const slider = editor.querySelector(".bq-target-quality-slider")?.getBoundingClientRect();
-        return {
-          cardRight: card?.right ?? 0,
-          sliderRight: slider?.right ?? Number.POSITIVE_INFINITY,
-          badgeCenter: badge ? badge.left + badge.width / 2 : Number.NEGATIVE_INFINITY,
-          sliderCenter: slider ? slider.left + slider.width / 2 : Number.POSITIVE_INFINITY,
-        };
-      });
-      expect(sliderGeometry.sliderRight).toBeLessThanOrEqual(sliderGeometry.cardRight);
-      expect(Math.abs(sliderGeometry.badgeCenter - sliderGeometry.sliderCenter)).toBeLessThanOrEqual(1);
-      await page.mouse.move(0, 0);
-      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCSS("opacity", "0");
+      const targetInput = targetEditor.locator(".bq-target-quality-input");
+      await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCount(0);
+      await expect(targetInput).toBeVisible();
+      const originalTarget = await targetInput.inputValue();
+      expect(originalTarget).not.toBe("");
+      await targetInput.focus();
+      await expect(targetInput).toHaveValue("");
+      await page.locator(".bq-component-statistics-title").click();
+      await expect(targetInput).toHaveValue(originalTarget);
 
       const statValues = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const compactRows = Array.from(panel.querySelectorAll(".bq-stat-compact-row"));
@@ -893,94 +897,42 @@ test.describe("Build Queue stats fixture", () => {
         await expect(page.locator(".bq-component-statistics")).not.toContainText("Projectile Range / Max Travel");
         await expect(page.locator(".bq-craft-outcome .craft-stat-compact-row").first()).toBeVisible();
 
-        const slider = page.getByRole("slider", { name: "Target quality for Stileron" }).first();
-        const sliderEditor = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--slider')]");
-        const sliderShell = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-slider-shell')]");
-        const targetBadge = sliderEditor.locator(":scope > .bq-target-quality");
-        const sliderGeometry = await sliderEditor.evaluate((editor) => {
-          const badge = editor.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
-          const shell = editor.querySelector(".bq-target-slider-shell")?.getBoundingClientRect();
-          const input = editor.querySelector(".bq-target-quality-slider")?.getBoundingClientRect();
-          const card = editor.closest(".bq-center-shell")?.getBoundingClientRect();
+        const targetInput = page.getByRole("spinbutton", { name: "Target quality for Stileron" }).first();
+        const targetEditor = targetInput.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--input')]");
+        await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCount(0);
+        await expect(page.getByRole("slider", { name: "Target quality for Stileron" })).toHaveCount(0);
+        const inputGeometry = await targetEditor.evaluate((editor) => {
+          const input = editor.querySelector(".bq-target-quality-input")?.getBoundingClientRect();
           const header = editor.closest(".bq-mat-card-head")?.getBoundingClientRect();
-          const identity = editor.closest(".bq-mat-card-head")?.querySelector(".bq-mat-name")?.getBoundingClientRect();
+          const identity = editor.closest(".bq-mat-row")?.querySelector(".bq-mat-name")?.getBoundingClientRect();
           return {
-            badgeWidth: badge?.width ?? 0,
-            badgeCenter: badge ? badge.left + badge.width / 2 : 0,
-            shellWidth: shell?.width ?? 0,
-            shellCenter: shell ? shell.left + shell.width / 2 : 0,
             inputWidth: input?.width ?? 0,
-            inputCenter: input ? input.left + input.width / 2 : 0,
-            cardWidth: card?.width ?? 1,
             headerTop: header?.top ?? 0,
             identityTop: identity?.top ?? 0,
           };
         });
-        expect(sliderGeometry.badgeWidth).toBeLessThanOrEqual(90);
-        expect(sliderGeometry.shellWidth).toBeGreaterThan(sliderGeometry.badgeWidth);
-        expect(Math.abs(sliderGeometry.shellCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
-        expect(Math.abs(sliderGeometry.inputCenter - sliderGeometry.badgeCenter)).toBeLessThan(1);
-        expect(sliderGeometry.inputWidth).toBe(sliderGeometry.shellWidth);
-        expect(sliderGeometry.shellWidth / sliderGeometry.cardWidth).toBeLessThan(0.3);
-        expect(sliderGeometry.headerTop).toBe(0);
-        expect(sliderGeometry.identityTop).toBeGreaterThan(0);
+        expect(inputGeometry.inputWidth).toBeLessThanOrEqual(90);
+        expect(inputGeometry.headerTop).toBe(0);
+        expect(inputGeometry.identityTop).toBeGreaterThan(0);
 
-        await expect(sliderShell).toHaveCSS("opacity", "0");
-        await sliderEditor.hover();
-        await expect(sliderShell).toHaveCSS("opacity", "1");
+        const previousQuality = await targetInput.inputValue();
+        expect(previousQuality).not.toBe("");
+        await targetInput.focus();
+        await expect(targetInput).toHaveValue("");
+        await page.locator(".bq-component-statistics-title").click();
+        await expect(targetInput).toHaveValue(previousQuality);
+        await targetInput.focus();
+        await targetInput.fill("640");
+        await targetInput.blur();
+        await expect(targetInput).toHaveValue("640");
+        await targetInput.fill(previousQuality);
+        await targetInput.blur();
+        await expect(targetInput).toHaveValue(previousQuality);
+
         await page.screenshot({
           path: path.join(sharedStatsScreenshotDir, `bq-target-slider-hover-${viewport.name}.png`),
           fullPage: true,
         });
-        await slider.focus();
-        await expect(slider).toBeFocused();
-        await expect(sliderShell).toHaveCSS("opacity", "1");
-        await expect(targetBadge).toHaveCSS("opacity", "0");
-        await expect(targetBadge).toHaveCSS("pointer-events", "none");
-        await expect(slider).toHaveCSS("pointer-events", "auto");
-        const previousQuality = Number(await slider.inputValue());
-        const sliderBox = await slider.boundingBox();
-        expect(sliderBox).not.toBeNull();
-        if (!sliderBox) throw new Error("Target slider has no pointer geometry.");
-
-        // A real track click must update the existing controlled allocation-quality value.
-        await page.mouse.click(sliderBox.x + sliderBox.width * 0.28, sliderBox.y + sliderBox.height / 2);
-        await expect.poll(async () => Number(await slider.inputValue())).not.toBe(previousQuality);
-        const clickedQuality = Number(await slider.inputValue());
-        expect(clickedQuality).toBeGreaterThan(150);
-        expect(clickedQuality).toBeLessThan(450);
-        // Drag from the native thumb to the right using actual pointer events.
-        const thumbRadius = 7;
-        const usableWidth = sliderBox.width - thumbRadius * 2;
-        const dragStartX = sliderBox.x + thumbRadius + usableWidth * ((clickedQuality - 1) / 999);
-        const dragEndX = sliderBox.x + thumbRadius + usableWidth * 0.68;
-        const sliderY = sliderBox.y + sliderBox.height / 2;
-        await page.mouse.move(dragStartX, sliderY);
-        await page.mouse.down();
-        await page.mouse.move(dragEndX, sliderY, { steps: 10 });
-        await page.mouse.up();
-        await expect.poll(async () => Number(await slider.inputValue())).toBeGreaterThan(clickedQuality + 150);
-        const draggedQuality = Number(await slider.inputValue());
-
-        // Native keyboard control remains available.
-        await slider.focus();
-        await page.keyboard.press("ArrowRight");
-        await expect(slider).toHaveValue(String(Math.min(1000, draggedQuality + 1)));
-
-        // Restore the deterministic starting value for the remaining fixture screenshots.
-        await slider.evaluate((element, value) => {
-          const input = element as HTMLInputElement;
-          const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
-          setValue?.call(input, String(value));
-          input.dispatchEvent(new Event("input", { bubbles: true }));
-          input.dispatchEvent(new Event("change", { bubbles: true }));
-        }, previousQuality);
-        await expect(slider).toHaveValue(String(previousQuality));
-
-        await page.locator(".bq-component-statistics-title").click();
-        await page.mouse.move(10, 10);
-        await expect(slider).not.toBeFocused();
-        await expect(sliderShell).toHaveCSS("opacity", "0");
 
         await expect(page.locator(".bq-mat-head")).toHaveCount(0);
         const allocationLayout = await page.locator(".bq-item").evaluate((craft) => {
@@ -1249,7 +1201,7 @@ test.describe("Build Queue stats fixture", () => {
       await selectQueue(page, "Ground Team Loadout");
       await expect(page.locator(".bq-craft-card")).toHaveCount(2);
       await expect(page.locator(".bq-craft-card").first()).toContainText('P6-LR "Archangel" Sniper Rifle');
-      await expect(page.getByRole("slider", { name: "Target quality for Taranite" })).toHaveValue("820");
+      await expect(page.getByRole("spinbutton", { name: "Target quality for Taranite" })).toHaveValue("820");
       await expect(page.locator(".bq-quality-chip").first()).toContainText("820");
       await page.screenshot({ path: path.join(sharedStatsScreenshotDir, `bq-distinct-queues-${viewport.name}.png`), fullPage: true });
 

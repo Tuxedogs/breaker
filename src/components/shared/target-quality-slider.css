@@ -152,6 +152,34 @@
   justify-self: stretch;
 }
 
+.bq-target-editor--input {
+  display: grid;
+  justify-self: center;
+  width: min(126px, 100%);
+  min-width: 0;
+  min-height: 34px;
+  align-items: center;
+}
+
+.bq-target-editor--input > .bq-target-quality-input {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  justify-content: center;
+  width: 74px;
+  min-height: 34px;
+  padding-inline: 7px;
+  pointer-events: auto;
+  cursor: text;
+}
+
+.bq-target-editor--input > .bq-target-quality-input:focus,
+.bq-target-editor--input > .bq-target-quality-input:focus-visible {
+  opacity: 1;
+  outline: 1px solid rgba(125, 211, 252, 0.55);
+  outline-offset: 1px;
+}
+
 .bq-target-quality-input {
   appearance: textfield;
   text-align: center;
@@ -159,7 +187,9 @@
 
 .bq-target-quality-input::-webkit-inner-spin-button,
 .bq-target-quality-input::-webkit-outer-spin-button {
+  display: none;
   margin: 0;
+  appearance: none;
 }
 
 .bq-target-quality-slider {

@@ -64,7 +64,7 @@ export function CompactCraftStatRow({
     <div
       className="craft-stat-compact-row bq-stat-compact-row"
       role="listitem"
-      aria-label={`${label}${labelMetadata ? ` ${labelMetadata}` : ""}: ${isModified ? `${baseValue}${visibleUnit ? ` ${visibleUnit}` : ""} changed to ` : ""}${value}${visibleUnit ? ` ${visibleUnit}` : ""}${delta ? `, ${delta}` : ""}`}
+      aria-label={`${label}${labelMetadata ? ` ${labelMetadata}` : ""}: ${isModified ? `${baseValue} changed to ` : ""}${value}${visibleUnit ? ` ${visibleUnit}` : ""}${delta ? `, ${delta}` : ""}`}
     >
       <span className="craft-stat-compact-label bq-stat-compact-label">
         {label}
@@ -77,7 +77,6 @@ export function CompactCraftStatRow({
           <>
             <span className="craft-stat-compact-reading-part craft-stat-compact-reading-part--base">
               <strong className="craft-stat-compact-base-value">{baseValue}</strong>
-              {visibleUnit ? <span className="craft-stat-compact-unit bq-stat-compact-unit">{visibleUnit}</span> : null}
             </span>
             <span className="craft-stat-compact-arrow" aria-hidden="true">→</span>
           </>

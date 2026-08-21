@@ -92,6 +92,27 @@ export function getLotAvailableAmountAfterReservations(
   return Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByCurrentLine);
 }
 
+export function getHighestAvailableInventoryQuality(
+  stacks: Array<Pick<InventoryEntry, "id" | "quantity" | "quality">>,
+  buildQueue: BuildQueueItem[],
+  currentBuildQueueItemId: string,
+  currentLineAllocations: Pick<ReservedMaterialAllocation, "id" | "inventoryEntryId" | "quantityReserved">[] = [],
+): number | undefined {
+  let highest: number | undefined;
+  const seen = new Set<string>();
+  for (const stack of stacks) {
+    if (seen.has(stack.id)) continue;
+    seen.add(stack.id);
+    if (getLotAvailableAmountAfterReservations(stack, buildQueue, currentBuildQueueItemId, currentLineAllocations) <= 0) {
+      continue;
+    }
+    const quality = clampMaterialQuality(stack.quality);
+    if (quality === undefined) continue;
+    if (highest === undefined || quality > highest) highest = quality;
+  }
+  return highest;
+}
+
 export function getRequirementLineKey(
   item: Pick<BuildQueueItem, "id" | "recipeId" | "blueprint_id">,
   input: RecipeInputTemplate,
