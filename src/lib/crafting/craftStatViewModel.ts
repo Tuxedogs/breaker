@@ -6,6 +6,7 @@ import {
   getCraftingImpactClass,
   getCraftingModifierBaseValue,
   getModifierStatBindingLabel,
+  isHiddenCraftStatLabel,
   normalizeDetailStatLabel,
   type DetailStatRow,
 } from "./craftingDetailStats";
@@ -394,19 +395,23 @@ function buildOverviewGroups(
 
     if (group.kind === "nested") {
       for (const subcluster of group.subclusters) {
-        const stats = subcluster.stats.map((stat) => ({
-          label: stat.label,
-          value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
-        }));
+        const stats = subcluster.stats
+          .filter((stat) => !isHiddenCraftStatLabel(stat.label))
+          .map((stat) => ({
+            label: stat.label,
+            value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
+          }));
         if (stats.length > 0) overviewGroups.push({ title: subcluster.title, stats });
       }
       continue;
     }
 
-    const stats = group.stats.map((stat) => ({
-      label: stat.label,
-      value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
-    }));
+    const stats = group.stats
+      .filter((stat) => !isHiddenCraftStatLabel(stat.label))
+      .map((stat) => ({
+        label: stat.label,
+        value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
+      }));
     if (stats.length > 0) overviewGroups.push({ title: group.title, stats });
   }
 
