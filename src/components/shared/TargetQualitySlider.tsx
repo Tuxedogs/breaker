@@ -12,7 +12,7 @@ type TargetQualitySliderProps = {
   onChange: (value: number) => void;
   onCommit?: (value: number) => void;
   disabled?: boolean;
-  layout?: "overlay" | "stacked";
+  layout?: "overlay" | "stacked" | "input";
   markers?: number[];
 };
 
@@ -43,13 +43,61 @@ export default function TargetQualitySlider({
   const [isEditing, setIsEditing] = useState(false);
   const [draftValue, setDraftValue] = useState(String(normalizedValue));
 
-  const commitDraftValue = () => {
-    const nextValue = valueFromInput(draftValue);
-    setDraftValue(String(nextValue));
-    onChange(nextValue);
-    onCommit?.(nextValue);
+  const beginEditing = () => {
+    setIsEditing(true);
+    setDraftValue("");
+  };
+
+  const restoreDisplayedValue = () => {
+    setDraftValue(String(normalizedValue));
     setIsEditing(false);
   };
+
+  const commitDraftValue = () => {
+    if (draftValue.trim() === "") {
+      restoreDisplayedValue();
+      return;
+    }
+    const parsed = Number(draftValue);
+    if (!Number.isFinite(parsed)) {
+      restoreDisplayedValue();
+      return;
+    }
+    const nextValue = valueFromInput(draftValue);
+    setDraftValue(String(nextValue));
+    setIsEditing(false);
+    onChange(nextValue);
+    onCommit?.(nextValue);
+  };
+
+  if (layout === "input") {
+    return (
+      <span className="bq-target-editor bq-target-editor--input" data-bq-row-control="true">
+        <input
+          type="number"
+          min={lowerBound}
+          max={upperBound}
+          step={step}
+          className={`bq-target-quality bq-target-quality--${tone} bq-target-quality-input`}
+          value={isEditing ? draftValue : String(normalizedValue)}
+          aria-label={`Target quality for ${materialName}`}
+          data-bq-row-control="true"
+          disabled={disabled}
+          onFocus={() => {
+            if (!disabled) beginEditing();
+          }}
+          onChange={(event) => setDraftValue(event.target.value)}
+          onBlur={commitDraftValue}
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") event.currentTarget.blur();
+            if (event.key === "Escape") restoreDisplayedValue();
+          }}
+        />
+      </span>
+    );
+  }
 
   return (
     <span
