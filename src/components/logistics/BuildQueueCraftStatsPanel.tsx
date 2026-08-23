@@ -253,7 +253,7 @@ export function BuildQueueCraftHeaderSummaryPanel({
   return (
     <div className="bq-selected-summary-strip" aria-label="Selected craft summary">
       <span><small>Materials</small><strong>{materialsLabel}</strong></span>
-      <span><small>Allocated</small><strong>{Math.max(0, Math.min(100, Math.round(allocationPercentage)))}%</strong></span>
+      <span><small>Allocated</small><strong>{Math.max(0, Math.min(100, Math.round(allocationPercentage)))}<span className="bq-selected-summary-unit">%</span></strong></span>
       <span><small>Predicted Quality</small><strong>{formatProductQuality(productQuality.predicted?.averageBand)}</strong></span>
       <span><small>Modified Stats</small><strong>{modifiedCount}</strong></span>
     </div>
@@ -270,6 +270,7 @@ export function BuildQueueCraftOutcomePanel({
   const modifiedRows = model.status === "ready"
     ? getAllocationModifiedRows(buildConsolidatedGroups(model))
     : [];
+  const emptyIconSrc = getStatGroupIconSrc("output");
   return (
     <section className="bq-craft-outcome bq-workspace-card" aria-label="Craft outcome">
       <header className="bq-craft-outcome-header">
@@ -298,8 +299,16 @@ export function BuildQueueCraftOutcomePanel({
           <p className="bq-craft-outcome-empty" data-bq-outcome-state="loading">Loading affected statistics…</p>
         ) : model.status !== "ready" ? (
           <p className="bq-craft-outcome-empty" data-bq-outcome-state="unavailable">Affected statistics unavailable.</p>
+        ) : modifiedRows.length === 0 && !productQuality.predicted ? (
+          <div className="bq-craft-outcome-empty bq-craft-outcome-empty--centered" data-bq-outcome-state="unallocated">
+            {emptyIconSrc ? (
+              <img className="bq-craft-outcome-empty-icon" src={emptyIconSrc} alt="" />
+            ) : null}
+            <strong>No materials allocated</strong>
+            <span>Reserve material to preview the resulting quality and modified statistics.</span>
+          </div>
         ) : modifiedRows.length === 0 ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unallocated">Allocate materials to preview affected statistics.</p>
+          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unallocated">No modified statistics for the current allocation.</p>
         ) : (
           <div className="bq-craft-outcome-stat-list" role="list">
             {modifiedRows.slice(0, 4).map((row) => (
@@ -333,11 +342,20 @@ export function BuildQueueCraftOverviewPanel({ model }: { model: CraftStatViewMo
   return <div className="bq-stats-overview" data-bq-stats-status="ready" data-bq-stats-category={model.category}><BuildQueueCraftIdentityPanel model={model} /></div>;
 }
 
+function isPresentableIdentityBadge(badge: { label: string; value: string }): boolean {
+  const value = badge.value.trim();
+  if (!value || value === "-") return false;
+  if (/^invalid\b/i.test(value) || /^invalid\b/i.test(badge.label.trim())) return false;
+  return true;
+}
+
 export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewModel }) {
-  if (model.status !== "ready" || model.identity.length === 0) return null;
+  if (model.status !== "ready") return null;
+  const badges = model.identity.filter(isPresentableIdentityBadge);
+  if (badges.length === 0) return null;
   return (
     <div className="bq-stats-meta bq-stats-meta--header" aria-label="Component identity">
-      {model.identity.map((badge) => (
+      {badges.map((badge) => (
         <span key={`${badge.label}:${badge.value}`} className="bq-stats-meta-badge">
           <span>{badge.label}</span><strong>{badge.value}</strong>
         </span>

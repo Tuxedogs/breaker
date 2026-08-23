@@ -138,8 +138,8 @@ function BlueprintSourceDisplay({ blueprintId, fallbackLabel }: { blueprintId?: 
   return (
     <span className="bq-item-blueprint-links" title={missionLinks.map((mission) => mission.label).join(', ')}>
       {missionLinks.map((mission, index) => (
-        <span key={mission.id}>
-          {index > 0 ? ', ' : null}
+        <span key={mission.id} className="bq-item-blueprint-link-wrap">
+          {index > 0 ? ", " : null}
           <Link className="bq-item-blueprint-link" to={mission.href}>{mission.label}</Link>
         </span>
       ))}

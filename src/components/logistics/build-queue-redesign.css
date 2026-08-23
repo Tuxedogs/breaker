@@ -900,7 +900,6 @@
 .bq-page .bq-component-statistics-title {
   color: #edf7ff;
   font-size: 0.94rem;
-  font-weight: 760;
   letter-spacing: 0.12em;
   line-height: 1.1;
 }
@@ -944,7 +943,6 @@
   padding: 0 2px;
   color: #78bdf0;
   font-size: 0.76rem;
-  font-weight: 760;
   letter-spacing: 0.1em;
   line-height: 1.15;
   text-transform: uppercase;
@@ -962,17 +960,16 @@
 
 .bq-page .bq-component-statistics .craft-stat-section-icon {
   display: grid;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
+  width: 19px;
+  height: 29px;
   overflow: hidden;
   place-items: center;
 }
 
 .bq-page .bq-component-statistics .bq-stat-group-icon {
   display: block;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
   filter: saturate(0.82) brightness(1.08);
   mix-blend-mode: screen;
@@ -1041,7 +1038,7 @@
 .bq-page .bq-component-statistics .craft-stat-compact-base-value,
 .bq-page .bq-component-statistics .craft-stat-compact-value {
   color: #edf7ff;
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 0.79rem;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
@@ -1052,7 +1049,7 @@
 
 .bq-page .bq-component-statistics .craft-stat-compact-arrow {
   color: #73899d;
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 0.7rem;
   font-weight: 500;
   line-height: 1;
@@ -1072,7 +1069,7 @@
   border-radius: 3px;
   color: #9db0c2;
   background: rgba(126, 153, 176, 0.07);
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 0.56rem;
   font-weight: 650;
   letter-spacing: -0.025em;
@@ -1185,7 +1182,6 @@
 .bq-page .bq-component-statistics .bq-stat-compare-base,
 .bq-page .bq-component-statistics .bq-stat-compare-base strong,
 .bq-page .bq-component-statistics .bq-stat-compare-value {
-  font-family: "Roboto Mono", "Courier New", monospace;
   font-size: 0.77rem;
   font-weight: 650;
   letter-spacing: -0.02em;
@@ -1289,16 +1285,16 @@
 .bq-page .bq-item--target-workspace .bq-selected-craft-card {
   display: grid;
   grid-template-rows: auto auto;
-  min-height: 158px;
+  min-height: 0;
   overflow: hidden;
 }
 
 .bq-page .bq-item--target-workspace .bq-selected-craft-body {
   display: grid;
   grid-template-columns: 148px minmax(280px, 1fr) minmax(330px, auto);
-  gap: 16px;
+  gap: 12px;
   align-items: stretch;
-  min-height: 106px;
+  min-height: 110px;
   padding: 0;
 }
 
@@ -1306,8 +1302,8 @@
   display: grid;
   grid-column: 1;
   width: 148px;
-  height: 106px;
-  min-height: 106px;
+  height: 110px;
+  min-height: 110px;
   overflow: hidden;
   place-items: center;
   border: 0;
@@ -1333,9 +1329,10 @@
   grid-column: 2;
   align-self: center;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   min-width: 0;
-  padding: 12px 0 10px;
+  overflow: hidden;
+  padding: 8px 0 6px;
 }
 
 .bq-page .bq-item--target-workspace .bq-item-name-block {
@@ -1347,7 +1344,7 @@
 .bq-page .bq-item--target-workspace .bq-item-name {
   margin: 0;
   color: var(--bq-target-text);
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.05;
@@ -1422,7 +1419,7 @@
 
 .bq-page .bq-selected-target-quality strong {
   color: var(--bq-target-text);
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
@@ -1432,6 +1429,7 @@
   align-items: baseline;
   gap: 7px;
   min-width: 0;
+  max-width: 100%;
   color: var(--bq-target-muted);
   font-size: 11px;
 }
@@ -1444,10 +1442,15 @@
 .bq-page .bq-item--target-workspace .bq-item-blueprint,
 .bq-page .bq-item--target-workspace .bq-item-blueprint-links {
   overflow: hidden;
+  min-width: 0;
   color: #b5c5d4;
   font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-blueprint-link-wrap {
+  display: inline;
 }
 
 .bq-page .bq-selected-craft-actions {
@@ -1457,7 +1460,7 @@
   align-content: center;
   justify-content: end;
   gap: 7px;
-  padding: 12px 14px 10px 0;
+  padding: 8px 14px 8px 0;
 }
 
 .bq-page .bq-selected-craft-actions .bq-btn {
@@ -1502,7 +1505,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  min-height: 51px;
+  min-height: 42px;
   padding: 0;
   border-top: 1px solid var(--bq-target-border-soft);
   background: rgba(5, 17, 28, 0.62);
@@ -1522,27 +1525,34 @@
   align-content: center;
   justify-items: center;
   min-width: 0;
-  padding: 5px 10px;
+  padding: 3px 10px 4px;
   border-right: 1px solid var(--bq-target-border-soft);
 }
 
 .bq-page .bq-selected-summary-strip small {
-  color: #8096ab;
-  font-size: 9px;
+  color: #6d8298;
+  font-size: 8px;
   font-weight: 650;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .bq-page .bq-selected-summary-strip strong {
   overflow: hidden;
   max-width: 100%;
-  color: var(--bq-target-text);
-  font-family: "Roboto Mono", "Courier New", monospace;
-  font-size: 12px;
-  font-weight: 650;
+  color: #d8eefb;
+  font-family: Rajdhani, "Segoe UI", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bq-page .bq-selected-summary-unit {
+  font-family: Rajdhani, "Segoe UI", sans-serif;
 }
 
 .bq-page .bq-item--target-workspace .bq-qty {
@@ -1607,7 +1617,7 @@
   border-radius: 3px;
   color: #82bed9;
   background: rgba(5, 18, 29, 0.52);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-table {
@@ -1645,10 +1655,10 @@
   display: grid;
   grid-template-columns: minmax(220px, 0.9fr) minmax(240px, 1.4fr) 84px minmax(92px, 0.7fr);
   grid-template-rows: auto auto;
-  gap: 8px 12px;
+  gap: 6px 12px;
   align-items: center;
   min-height: 0;
-  padding: 10px 11px 8px;
+  padding: 7px 10px 5px;
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-row > .bq-mat-card-head {
@@ -1719,7 +1729,7 @@
 .bq-page .bq-item--target-workspace .bq-mat-allocation-summary em {
   display: block;
   color: #7f94a8;
-  font-size: 9px;
+  font-size: 11px;
   font-style: normal;
   font-weight: 600;
   letter-spacing: 0.025em;
@@ -1731,7 +1741,7 @@
 .bq-page .bq-item--target-workspace .bq-mat-allocation-summary strong {
   overflow: hidden;
   color: var(--bq-target-text);
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 13px;
   font-weight: 640;
   text-overflow: ellipsis;
@@ -1760,7 +1770,7 @@
   grid-row: 1;
   align-content: unset;
   color: var(--bq-target-text);
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 11px;
   line-height: 1.1;
 }
@@ -1772,7 +1782,7 @@
 .bq-page .bq-item--target-workspace .bq-mat-required-suffix {
   color: #8196aa;
   font-family: "Rajdhani", sans-serif;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 650;
   letter-spacing: 0.045em;
   text-transform: uppercase;
@@ -1791,6 +1801,11 @@
   max-width: 84px;
 }
 
+.bq-page .bq-item--target-workspace .bq-target-editor-label {
+  color: #7a90a5;
+  font-size: 8px;
+}
+
 .bq-page .bq-item--target-workspace .bq-balance--short strong {
   color: #ff6f80;
 }
@@ -1800,7 +1815,7 @@
   grid-row: 2;
   align-self: stretch;
   width: 100%;
-  height: 5px;
+  height: 7px;
   margin: 0;
   overflow: hidden;
   border: 0;
@@ -1816,12 +1831,13 @@
 
 .bq-page .bq-item--target-workspace .bq-mat-progress::-webkit-progress-value {
   border-radius: 4px;
-  background: linear-gradient(90deg, #2792bd, #54d1f6);
+  background: linear-gradient(90deg, #2aa3d4, #6ae0ff);
+  box-shadow: 0 0 8px rgba(84, 209, 246, 0.28);
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-progress::-moz-progress-bar {
   border-radius: 4px;
-  background: linear-gradient(90deg, #2792bd, #54d1f6);
+  background: linear-gradient(90deg, #2aa3d4, #6ae0ff);
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-reserved,
@@ -1851,8 +1867,8 @@
   grid-column: 1 / -1;
   grid-row: 2;
   align-items: center;
-  min-height: 34px;
-  padding: 4px 8px;
+  min-height: 22px;
+  padding: 1px 6px;
   border: 1px dashed rgba(71, 157, 198, 0.35);
   border-radius: 4px;
   background: rgba(5, 18, 29, 0.35);
@@ -1891,9 +1907,9 @@
 .bq-page .bq-item--target-workspace .bq-quality-add {
   display: inline-flex;
   width: auto;
-  min-width: 34px;
-  height: 27px;
-  padding: 0 8px;
+  min-width: 28px;
+  height: 22px;
+  padding: 0 6px;
   border-color: transparent;
   border-radius: 3px;
   background: transparent;
@@ -1915,11 +1931,11 @@
   grid-row: 1;
   align-self: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action {
-  height: 28px;
+  height: 26px;
   min-width: 91px;
   padding: 0 8px;
   border-color: rgba(67, 165, 210, 0.44);
@@ -1927,6 +1943,31 @@
   color: #65caf1;
   background: rgba(5, 20, 32, 0.5);
   font-size: 9px;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--add {
+  min-width: 0;
+  height: 22px;
+  padding: 0 4px;
+  border-color: transparent;
+  color: #6ea3bb;
+  background: transparent;
+  font-weight: 650;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--add:hover,
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--add:focus-visible {
+  border-color: transparent;
+  color: #8fd3ef;
+  background: transparent;
+}
+
+.bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--drawer {
+  min-width: 91px;
+  height: 28px;
+  border-color: rgba(82, 196, 236, 0.58);
+  color: #73d4f6;
+  background: rgba(8, 32, 48, 0.72);
 }
 
 .bq-page .bq-craft-outcome {
@@ -1967,7 +2008,7 @@
 
 .bq-page .bq-craft-outcome-quality strong {
   color: #dceefa;
-  font-family: "Roboto Mono", "Courier New", monospace;
+
   font-size: 16px;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
@@ -1979,6 +2020,8 @@
 }
 
 .bq-page .bq-craft-outcome-stats {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   min-height: 0;
   margin: 0 7px 7px;
   overflow: hidden;
@@ -2043,7 +2086,6 @@
   align-items: baseline;
   gap: 4px;
   color: #ddecf7;
-  font-family: "Roboto Mono", "Courier New", monospace;
   font-size: 10px;
   white-space: nowrap;
 }
@@ -2081,6 +2123,41 @@
   color: #8195a8;
   font-size: 14px;
   line-height: 1.35;
+}
+
+.bq-page .bq-craft-outcome-empty--centered {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 0;
+  height: 100%;
+  padding: 16px 18px;
+  gap: 6px;
+  text-align: center;
+}
+
+.bq-page .bq-craft-outcome-empty-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 4px;
+  opacity: 0.28;
+  filter: grayscale(0.35) saturate(0.45);
+}
+
+.bq-page .bq-craft-outcome-empty--centered strong {
+  color: var(--bq-r-cyan);
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bq-page .bq-craft-outcome-empty--centered span {
+  max-width: 28ch;
+  color: #7d91a5;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .bq-page .bq-craft-outcome-more {
@@ -2140,7 +2217,7 @@
 .bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-unmodified-column {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
-  gap: 7px;
+  gap: 4px;
   align-items: stretch;
   max-height: none;
   overflow: visible;
@@ -2160,22 +2237,18 @@
   min-height: 0;
   border-color: var(--bq-target-border-soft);
   border-radius: 4px;
-  background: linear-gradient(180deg, rgba(10, 28, 43, 0.86), rgba(7, 21, 33, 0.88));
+  background: linear-gradient(180deg, rgba(10, 28, 43, 0.295), rgba(7, 21, 33, 0.88));
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-title {
   min-height: 32px;
-  padding: 4px 8px;
-  color: #62c6ee;
-  font-size: 13px;
+  padding: 2px 4px;
+  color: #8ad8f6;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
-.bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-section-icon {
-  flex: 0 0 35px;
-  width: 35px;
-  height: 35px;
-}
+
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-group-icon {
   flex: 0 0 28px;
@@ -2197,11 +2270,17 @@
 
 /* Queue rail polish remains page-local and preserves interaction geometry. */
 .bq-page .bq-craft-card {
+  min-height: 60px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   border-color: rgba(83, 126, 151, 0.2);
   background: rgba(7, 20, 31, 0.76);
 }
 
 .bq-page .bq-craft-card.is-selected {
+  min-height: 72px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   border-color: rgba(78, 197, 240, 0.62);
   background: linear-gradient(90deg, rgba(18, 68, 91, 0.56), rgba(8, 26, 39, 0.88) 58%);
   box-shadow: inset 3px 0 0 #55ccef, inset 0 0 0 1px rgba(85, 204, 239, 0.12);
@@ -2535,13 +2614,13 @@
 
 /* Final target-workspace geometry wins over the legacy responsive tail. */
 .bq-page .bq-item--target-workspace .bq-selected-craft-body {
-  min-height: 137px;
+  min-height: 110px;
   padding: 0;
 }
 
 .bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual {
-  height: 137px;
-  min-height: 137px;
+  height: 110px;
+  min-height: 110px;
 }
 
 .bq-page .bq-item--target-workspace .bq-selected-craft-body .bq-item-visual .bq-product-icon,
@@ -2551,4 +2630,8 @@
   height: 100%;
   max-width: none;
   max-height: none;
+}
+
+.bq-page .bq-item--target-workspace .bq-item-name {
+  font-size: 21px;
 }

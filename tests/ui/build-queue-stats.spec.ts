@@ -899,12 +899,13 @@ test.describe("Build Queue stats fixture", () => {
 
         const targetInput = page.getByRole("spinbutton", { name: "Target quality for Stileron" }).first();
         const targetEditor = targetInput.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--input')]");
+        await expect(targetEditor.locator(".bq-target-editor-label")).toHaveText("Target");
         await expect(targetEditor.locator(".bq-target-slider-shell")).toHaveCount(0);
         await expect(page.getByRole("slider", { name: "Target quality for Stileron" })).toHaveCount(0);
         const inputGeometry = await targetEditor.evaluate((editor) => {
           const input = editor.querySelector(".bq-target-quality-input")?.getBoundingClientRect();
           const header = editor.closest(".bq-mat-card-head")?.getBoundingClientRect();
-          const identity = editor.closest(".bq-mat-row")?.querySelector(".bq-mat-name")?.getBoundingClientRect();
+          const identity = editor.closest(".bq-mat-row")?.querySelector(".bq-mat-identity")?.getBoundingClientRect();
           return {
             inputWidth: input?.width ?? 0,
             headerTop: header?.top ?? 0,
@@ -928,6 +929,12 @@ test.describe("Build Queue stats fixture", () => {
         await targetInput.fill(previousQuality);
         await targetInput.blur();
         await expect(targetInput).toHaveValue(previousQuality);
+
+        await page.locator(".bq-craft-card").filter({ hasText: "Missing" }).first().click();
+        await expect(page.locator('[data-bq-outcome-state="unallocated"]')).toContainText("No materials allocated");
+        await expect(page.locator(".bq-craft-outcome-empty--centered")).toBeVisible();
+        await page.locator(".bq-craft-card").nth(0).click();
+        await expect(page.locator(".bq-item-name")).toHaveText("FR-66");
 
         await page.screenshot({
           path: path.join(sharedStatsScreenshotDir, `bq-target-slider-hover-${viewport.name}.png`),
