@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { apiPaths } from "../config/apiPaths.js";
 import type { ApiSource, MaterialSourceGroup, RecommenderApiData, RecommenderWarning } from "./recommender.types.js";
 import { canonicalMaterialKey } from "./materialResolver.js";
+import { configureGeneratedLagrangeGroups, type GeneratedLagrangeGroups } from "./locationNormalization.js";
 import { addWarning } from "./recommenderWarnings.js";
 
 async function readJson<T>(filePath: string, warnings: RecommenderWarning[]): Promise<T | null> {
@@ -74,6 +75,8 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
   const sourceScores = await readJson<{ materials?: MaterialSourceGroup[] }>(apiPaths.materialSourceScores, warnings);
   const enrichedSources = await readJson<MaterialSourceGroup[]>(apiPaths.materialSourcesQualityEnriched, warnings);
   const locationMetadata = await readJson<RecommenderApiData["locationMetadata"]>(apiPaths.locationMetadata, warnings);
+  const lagrangeGroups = await readJson<GeneratedLagrangeGroups>(apiPaths.lagrangeGroups, warnings);
+  configureGeneratedLagrangeGroups(lagrangeGroups);
 
   const materialGroups = enrichedSources?.length
     ? mergeEnrichedWithSourceScores(enrichedSources, sourceScores?.materials)
@@ -94,6 +97,7 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
       "server-data/mining/recommender/material-source-scores.json",
       "server-data/mining/recommender/material-sources-quality-enriched.json",
       "server-data/mining/recommender/location-metadata.json",
+      "server-data/mining/locations/lagrange-groups.json",
     ],
   };
 }

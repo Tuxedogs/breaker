@@ -11,6 +11,7 @@ export const apiPaths = {
   materialSourceScores: path.join(miningDataRoot, "recommender", "material-source-scores.json"),
   materialSourcesQualityEnriched: path.join(miningDataRoot, "recommender", "material-sources-quality-enriched.json"),
   locationMetadata: path.join(miningDataRoot, "recommender", "location-metadata.json"),
+  lagrangeGroups: path.join(miningDataRoot, "locations", "lagrange-groups.json"),
 } as const;
 
 export const recommenderApiPath = "/api/mining/recommendations";

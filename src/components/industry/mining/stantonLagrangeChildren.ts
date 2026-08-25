@@ -6,5 +6,5 @@ export function hasStantonLagrangeChildren(entry: PublicLocationEntry): boolean 
   return resolveRecommenderStantonLagrangeChildren(
     entry.locationName,
     entry.matchedLocationCodes,
-  ).points.length > 0;
+  ).children.length > 0;
 }

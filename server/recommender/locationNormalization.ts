@@ -76,41 +76,18 @@ const CANONICAL_LOCATION_ALIASES: Record<string, Record<string, string>> = {
     stanton3b: "Wala",
     wala: "Wala",
   },
-  lagrange: {
-    lagrangea: "Lagrange A",
-    hurl3: "Lagrange A",
-    lagrangeb: "Lagrange B",
-    crul1: "Lagrange B",
-    crul2: "Lagrange B",
-    lagrangec: "Lagrange C",
-    crul5: "Lagrange C",
-    lagranged: "Lagrange D",
-    arcl5: "Lagrange D",
-    lagrangee: "Lagrange E",
-    crul3: "Lagrange E",
-    micl1: "Lagrange E",
-    micl2: "Lagrange E",
-    micl5: "Lagrange E",
-    lagrangef: "Lagrange F",
-    crul4: "Lagrange F",
-    lagrangeg: "Lagrange G",
-    arcl1: "Lagrange G",
-    arcl2: "Lagrange G",
-    hurl2: "Lagrange G",
-    lagrangeh: "Lagrange H",
-    hurl1: "Lagrange H",
-    hurl4: "Lagrange H",
-    hurl5: "Lagrange H",
-    lagrangei: "Lagrange I",
-    micl4: "Lagrange I",
-    lagrangej: "Lagrange J",
-    arcl3: "Lagrange J",
-    lagrangek: "Lagrange K",
-    arcl4: "Lagrange K",
-    lagrangel: "Lagrange L",
-    micl3: "Lagrange L",
-  },
 };
+
+export type GeneratedLagrangeGroups = {
+  groups?: Array<{
+    label?: string;
+    letter?: string;
+    locations?: string[];
+  }>;
+};
+
+let generatedLagrangeAliases: Record<string, string> = {};
+let activeStantonLagrangeLocationNames = new Set<string>();
 
 function comparisonKey(system: string, name: string): string {
   let normalized = name.trim().toLowerCase();
@@ -138,6 +115,28 @@ function normalizeSystemKey(system: string): string {
   return key;
 }
 
+export function configureGeneratedLagrangeGroups(data: GeneratedLagrangeGroups | null | undefined): void {
+  const aliases: Record<string, string> = {};
+  const activeNames = new Set<string>();
+
+  for (const group of data?.groups ?? []) {
+    const letter = group.letter?.trim().toUpperCase();
+    const label = group.label?.trim() || (letter ? `Lagrange ${letter}` : "");
+    if (!label) continue;
+
+    activeNames.add(label);
+    aliases[comparisonKey("lagrange", label)] = label;
+    if (letter) aliases[comparisonKey("lagrange", `Lagrange ${letter}`)] = label;
+    for (const location of group.locations ?? []) {
+      const trimmed = location.trim();
+      if (trimmed) aliases[comparisonKey("lagrange", trimmed)] = label;
+    }
+  }
+
+  generatedLagrangeAliases = aliases;
+  activeStantonLagrangeLocationNames = activeNames;
+}
+
 export function normalizeMiningLocationName(system: string, name: string): string {
   const trimmed = name.trim();
   if (!trimmed) return trimmed;
@@ -151,7 +150,7 @@ export function normalizeMiningLocationName(system: string, name: string): strin
     return "Pyro Deep Space Asteroids";
   }
 
-  const lagrange = CANONICAL_LOCATION_ALIASES.lagrange[key];
+  const lagrange = generatedLagrangeAliases[key];
   if (lagrange) return lagrange;
 
   return trimmed;
@@ -164,21 +163,6 @@ export function normalizedMiningSystemName(system: string): string {
 export function miningLocationMergeKey(systemName: string, locationName: string): string {
   return `${normalizedMiningSystemName(systemName).toLowerCase()}|${locationName}`;
 }
-
-const ACTIVE_STANTON_LAGRANGE_LOCATION_NAMES = new Set([
-  "Lagrange A",
-  "Lagrange B",
-  "Lagrange C",
-  "Lagrange D",
-  "Lagrange E",
-  "Lagrange F",
-  "Lagrange G",
-  "Lagrange H",
-  "Lagrange I",
-  "Lagrange J",
-  "Lagrange K",
-  "Lagrange L",
-]);
 
 const EXCLUDED_PYRO_LOCATION_NAMES = new Set([
   "Pyro Cool01",
@@ -197,7 +181,8 @@ export function isActiveStantonLagrangeMiningLocation(systemName: string, locati
   if (normalizeSystemKey(systemName) !== "stanton") return true;
   const normalizedName = normalizeMiningLocationName(systemName, locationName);
   return !normalizedName.toLowerCase().startsWith("lagrange ") ||
-    ACTIVE_STANTON_LAGRANGE_LOCATION_NAMES.has(normalizedName);
+    activeStantonLagrangeLocationNames.size === 0 ||
+    activeStantonLagrangeLocationNames.has(normalizedName);
 }
 
 export function isMaterialActiveAtPyroLocation(
