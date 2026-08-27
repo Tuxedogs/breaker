@@ -13,6 +13,10 @@ const forbiddenPublicMissionFiles = new Set([
   "blueprint_reward_sources.json",
   "mission_reward_lookups.json",
 ]);
+const retiredMissionSourceFiles = [
+  "mission_blueprint_rewards.json",
+  "blueprint_reward_sources.json",
+];
 const forbiddenFilePatterns = [
   /\.bak_/,
   /_audit\.json$/i,
@@ -237,6 +241,16 @@ await validatePublicApiIsEmpty();
 await validateNoPublicApiDependencies();
 await validatePublicMissionHygiene();
 await validateServerMissionOutputs();
+
+for (const fileName of retiredMissionSourceFiles) {
+  try {
+    await stat(path.join(missionSourceRoot, fileName));
+    console.error(`Retired parallel mission source is still published: ${fileName}`);
+    process.exit(1);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+}
 
 const missionCatalogPath = path.join(missionSourceRoot, "mission_contracts.json");
 const missionReportPath = path.join(missionSourceRoot, "mission_extraction_report.json");
