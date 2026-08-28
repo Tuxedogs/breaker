@@ -104,6 +104,12 @@ export function validateReservedAllocations(
   });
 }
 
+export function isInventoryEntrySupportedForBuildQueuePhysicalAvailability(
+  inventoryEntry: Pick<InventoryEntry, "itemKind" | "materialType">,
+): boolean {
+  return inventoryEntry.itemKind !== "ore" && inventoryEntry.materialType !== "ore";
+}
+
 /**
  * Canonical physical-lot reservation total.
  *

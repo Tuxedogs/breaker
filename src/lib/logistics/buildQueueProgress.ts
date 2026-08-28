@@ -1,8 +1,13 @@
 import type { BuildQueueItem, InventoryEntry } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import { getBuildQueueItemInputs } from "./inventory";
-import { getAllocationTotal, getRequirementLineKey } from "./buildQueueReservations";
-import { allocationMatchesRequirement, validateReservedAllocations } from "./selectors";
+import {
+  allocationMatchesRequirement,
+  getAllocationTotal,
+  getRequirementLineKey,
+  isInventoryEntrySupportedForBuildQueuePhysicalAvailability,
+  validateReservedAllocations,
+} from "./buildQueueReservations";
 
 export type BuildQueueItemFulfillmentState = "ready" | "partial" | "missing";
 
@@ -36,7 +41,11 @@ export function getBuildQueueItemAllocationSummary(
       allocationMatchesRequirement(allocation, materialId, { requirementId, unitType: input.unitType }),
     );
     const validAllocations = validateReservedAllocations(allocations, inventoryEntries)
-      .filter((validation) => !validation.isStale)
+      .filter((validation) =>
+        !validation.isStale &&
+        validation.inventoryEntry !== undefined &&
+        isInventoryEntrySupportedForBuildQueuePhysicalAvailability(validation.inventoryEntry),
+      )
       .map((validation) => validation.allocation);
     return Math.max(0, Math.min(1, getAllocationTotal(validAllocations) / required));
   });

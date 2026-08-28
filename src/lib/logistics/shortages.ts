@@ -6,6 +6,7 @@ import {
   clampMaterialQuality,
   getLotAvailableAmountAfterReservations,
   getRequirementLineKey,
+  isInventoryEntrySupportedForBuildQueuePhysicalAvailability,
   validateReservedAllocations,
 } from './buildQueueReservations';
 
@@ -41,6 +42,7 @@ function inventoryEntryIsEligible(
   allowLowerQuality: boolean,
 ): boolean {
   if (entry.materialId !== materialId || entry.quantity <= 0) return false;
+  if (!isInventoryEntrySupportedForBuildQueuePhysicalAvailability(entry)) return false;
   if (allowLowerQuality || selectedQuality === undefined) return true;
   const quality = clampMaterialQuality(entry.quality);
   return quality !== undefined && quality >= selectedQuality;
@@ -90,6 +92,8 @@ export function computePhysicalAvailabilityShortages(
       const allocated = validateReservedAllocations(matchingAllocations, inventory)
         .filter((validation) =>
           !validation.isStale &&
+          validation.inventoryEntry !== undefined &&
+          isInventoryEntrySupportedForBuildQueuePhysicalAvailability(validation.inventoryEntry) &&
           allocationSatisfiesRequirement(validation.allocation, input.selectedQuality, allowLowerQuality),
         )
         .reduce((sum, validation) => sum + Math.max(0, validation.allocation.quantityReserved), 0);

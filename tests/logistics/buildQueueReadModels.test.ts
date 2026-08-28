@@ -138,7 +138,7 @@ test('quality-limited stock is not treated as available unless lower quality is 
 
 test('raw/refined queue planning remains explicitly distinct from physical shortage availability', () => {
   const rawInventory = [inventoryLot('raw-lot', 10, 900, 'ore')];
-  const item = queueItem('planning-item');
+  const item = queueItem('planning-item', [allocation('raw-allocation', 'raw-lot', 10)]);
   const planning = getQueueLedgerModel({
     buildQueue: [item],
     inventoryEntries: rawInventory,
@@ -150,5 +150,8 @@ test('raw/refined queue planning remains explicitly distinct from physical short
   assert.equal(planning.basis, 'owned-stock-raw-refined-planning-equivalent');
   assert.equal(planning.lines[0]?.refinedEquivalentFromOre, 4);
   assert.equal(planning.lines[0]?.netMissingRefined, 6);
-  assert.deepEqual(physicalShortages, []);
+  assert.equal(getBuildQueueItemAllocationProgress(item, { 'same-recipe': inputs }, rawInventory), 0);
+  assert.equal(physicalShortages[0]?.allocated, 0);
+  assert.equal(physicalShortages[0]?.available, 0);
+  assert.equal(physicalShortages[0]?.shortfall, 10);
 });
