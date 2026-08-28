@@ -10,6 +10,10 @@ import type {
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import { computeShortages, type Shortage } from "./shortages";
 import { getInventoryStacks, type InventoryStack } from "./inventory";
+import {
+  getLotAvailableAmountAfterReservations,
+  getReservedAmountForInventoryLot,
+} from "./buildQueueReservations";
 
 export interface MaterialInventoryGroup {
   materialId: string;
@@ -106,16 +110,13 @@ export function getReservedQuantityByInventoryEntry(
   buildQueue: BuildQueueItem[],
   excludeBuildQueueItemId?: string,
 ): Map<string, number> {
+  const inventoryEntryIds = new Set(
+    buildQueue.flatMap((item) => (item.reservedAllocations ?? []).map((allocation) => allocation.inventoryEntryId)),
+  );
   const reservedByStack = new Map<string, number>();
-  for (const item of buildQueue) {
-    if (item.id === excludeBuildQueueItemId) continue;
-    for (const allocation of item.reservedAllocations ?? []) {
-      if (allocation.allowLowerQualityOverride && item.allowLowerQuality !== true) continue;
-      reservedByStack.set(
-        allocation.inventoryEntryId,
-        (reservedByStack.get(allocation.inventoryEntryId) ?? 0) + allocation.quantityReserved,
-      );
-    }
+  for (const inventoryEntryId of inventoryEntryIds) {
+    const reserved = getReservedAmountForInventoryLot(buildQueue, inventoryEntryId, { excludeBuildQueueItemId });
+    if (reserved > 0) reservedByStack.set(inventoryEntryId, reserved);
   }
   return reservedByStack;
 }
@@ -125,8 +126,7 @@ export function getAvailableQuantityForInventoryEntry(
   buildQueue: BuildQueueItem[],
   currentBuildQueueItemId?: string,
 ): number {
-  const reservedByOthers = getReservedQuantityByInventoryEntry(buildQueue, currentBuildQueueItemId);
-  return Math.max(0, inventoryEntry.quantity - (reservedByOthers.get(inventoryEntry.id) ?? 0));
+  return getLotAvailableAmountAfterReservations(inventoryEntry, buildQueue, currentBuildQueueItemId);
 }
 
 export function isInventoryEntryEligibleForRequirement(

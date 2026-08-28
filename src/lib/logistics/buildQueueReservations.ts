@@ -56,6 +56,13 @@ export function getRemainingRequiredAmount(requiredAmount: number, allocatedAmou
   return Math.max(0, requiredAmount - Math.max(0, allocatedAmount));
 }
 
+/**
+ * Canonical physical-lot reservation total.
+ *
+ * Every positive allocation on an active queue item consumes physical lot
+ * capacity. `allowLowerQualityOverride` is quality-policy metadata and does
+ * not change that physical reservation.
+ */
 export function getReservedAmountForInventoryLot(
   buildQueue: BuildQueueItem[],
   inventoryEntryId: string,
@@ -65,30 +72,37 @@ export function getReservedAmountForInventoryLot(
   },
 ): number {
   return buildQueue.reduce((sum, item) => {
-    if (item.id === options?.excludeBuildQueueItemId) return sum;
+    if (item.status === "complete" || item.id === options?.excludeBuildQueueItemId) return sum;
     return sum + (item.reservedAllocations ?? [])
       .filter((allocation) =>
         allocation.inventoryEntryId === inventoryEntryId &&
+        allocation.quantityReserved > 0 &&
         !options?.excludeAllocationIds?.has(allocation.id)
       )
-      .reduce((allocationSum, allocation) => allocationSum + allocation.quantityReserved, 0);
+      .reduce((allocationSum, allocation) => allocationSum + Math.max(0, allocation.quantityReserved), 0);
   }, 0);
 }
 
 export function getLotAvailableAmountAfterReservations(
   inventoryEntry: Pick<InventoryEntry, "id" | "quantity">,
   buildQueue: BuildQueueItem[],
-  currentBuildQueueItemId: string,
+  currentBuildQueueItemId?: string,
   currentLineAllocations: Pick<ReservedMaterialAllocation, "id" | "inventoryEntryId" | "quantityReserved">[] = [],
 ): number {
+  // With a current item ID, availability is the capacity that item may use:
+  // its persisted allocations are replaced by the supplied candidate set.
   const currentLineAllocationIds = new Set(currentLineAllocations.map((allocation) => allocation.id));
   const reservedByOthers = getReservedAmountForInventoryLot(buildQueue, inventoryEntry.id, {
     excludeBuildQueueItemId: currentBuildQueueItemId,
     excludeAllocationIds: currentLineAllocationIds,
   });
-  const reservedByCurrentLine = currentLineAllocations
-    .filter((allocation) => allocation.inventoryEntryId === inventoryEntry.id)
-    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+  const currentItemIsComplete = currentBuildQueueItemId !== undefined
+    && buildQueue.some((item) => item.id === currentBuildQueueItemId && item.status === "complete");
+  const reservedByCurrentLine = currentItemIsComplete
+    ? 0
+    : currentLineAllocations
+        .filter((allocation) => allocation.inventoryEntryId === inventoryEntry.id)
+        .reduce((sum, allocation) => sum + Math.max(0, allocation.quantityReserved), 0);
   return Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByCurrentLine);
 }
 

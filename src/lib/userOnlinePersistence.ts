@@ -10,6 +10,7 @@ const INVENTORY_SYNC_URL = "/api/user/inventory/sync";
 const INVENTORY_STACKS_URL = "/api/user/inventory/stacks";
 const INVENTORY_LOCATIONS_URL = "/api/user/inventory/locations";
 const BUILD_QUEUES_URL = "/api/user/inventory/build-queues";
+const BUILD_QUEUE_ITEMS_URL = "/api/user/inventory/build-queue-items";
 
 let onlineMutationCount = 0;
 let currentOnlineAccessToken: string | null = null;
@@ -198,6 +199,34 @@ export function upsertOnlineBuildQueueItem(accessToken: string, item: BuildQueue
   return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
     buildQueue: [item],
   }));
+}
+
+export function deleteOnlineBuildQueueItem(accessToken: string, itemId: string) {
+  return runOnlinePersistenceMutation(async () => {
+    const url = apiUrl(`${BUILD_QUEUE_ITEMS_URL}/${encodeURIComponent(itemId)}`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return parseUserJsonResponse<OnlinePersistenceState>(response, {
+      label: "delete build queue item",
+      url,
+    });
+  });
+}
+
+export function clearOnlineBuildQueue(accessToken: string, queueId: string) {
+  return runOnlinePersistenceMutation(async () => {
+    const url = apiUrl(`${BUILD_QUEUES_URL}/${encodeURIComponent(queueId)}/items`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return parseUserJsonResponse<OnlinePersistenceState>(response, {
+      label: "clear build queue",
+      url,
+    });
+  });
 }
 
 export function upsertOnlineBuildQueue(accessToken: string, queue: BuildQueue, activeBuildQueueId?: string) {

@@ -45,6 +45,7 @@ import {
 } from '../../lib/logistics/inventoryCsvImport';
 import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
 import { buildInventoryHierarchy } from '../../lib/logistics/inventoryHierarchy';
+import { getReservedAmountForInventoryLot } from '../../lib/logistics/buildQueueReservations';
 import QualityTierBadge from '../../components/shared/QualityTierBadge';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
@@ -507,19 +508,24 @@ function getCsvMaterialLocationPairs(rows: CsvPreviewRow[]): Set<string> {
 }
 
 function getReservedInventoryMap(buildQueue: BuildQueueItem[]): Map<string, { quantity: number; owners: Set<string> }> {
-  const reserved = new Map<string, { quantity: number; owners: Set<string> }>();
+  const ownersByInventoryEntryId = new Map<string, Set<string>>();
   for (const item of buildQueue) {
     if (item.status === 'complete') continue;
     const owner = item.itemName ?? item.recipeId;
     for (const allocation of item.reservedAllocations ?? []) {
       if (allocation.quantityReserved <= 0) continue;
-      const current = reserved.get(allocation.inventoryEntryId) ?? { quantity: 0, owners: new Set<string>() };
-      current.quantity += allocation.quantityReserved;
-      current.owners.add(owner);
-      reserved.set(allocation.inventoryEntryId, current);
+      const owners = ownersByInventoryEntryId.get(allocation.inventoryEntryId) ?? new Set<string>();
+      owners.add(owner);
+      ownersByInventoryEntryId.set(allocation.inventoryEntryId, owners);
     }
   }
-  return reserved;
+  return new Map(Array.from(ownersByInventoryEntryId, ([inventoryEntryId, owners]) => [
+    inventoryEntryId,
+    {
+      quantity: getReservedAmountForInventoryLot(buildQueue, inventoryEntryId),
+      owners,
+    },
+  ]));
 }
 
 function buildReplacementPreview(

@@ -4,7 +4,6 @@ import {
   logInventorySyncDev,
   SESSION_EXPIRED_SYNC_MESSAGE,
 } from "../logistics/inventorySyncLifecycle";
-import { setBuildQueueAccessToken } from "../userBuildQueuePersistence";
 import { setOnlinePersistenceAccessToken } from "../userOnlinePersistence";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import { getSupabaseAuthStorageKey, getSupabaseClient, hasSupabaseConfig } from "../supabaseClient";
@@ -41,7 +40,6 @@ export async function clearInvalidSupabaseSession(): Promise<void> {
 }
 
 export function applyAuthenticatedAuthClearedState(reason: "signed-out" | "session-expired"): void {
-  setBuildQueueAccessToken(null);
   setOnlinePersistenceAccessToken(null, null);
 
   const { inventorySync, clearAuthenticatedLogisticsData, setInventorySync } = useLogisticsStore.getState();

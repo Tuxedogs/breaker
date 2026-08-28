@@ -26,7 +26,6 @@ import {
   syncOnlinePersistenceState,
   type OnlinePersistenceState,
 } from "../../lib/userOnlinePersistence";
-import { setBuildQueueAccessToken } from "../../lib/userBuildQueuePersistence";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../../types/logistics";
 
@@ -104,7 +103,6 @@ export default function OnlinePersistenceCoordinator() {
     if (loading) return;
     if (!accessToken) {
       if (isAuthRecoveryFailed()) {
-        setBuildQueueAccessToken(null);
         setOnlinePersistenceAccessToken(null, null);
         return;
       }
@@ -117,7 +115,6 @@ export default function OnlinePersistenceCoordinator() {
     if (!userId) return;
     const authenticatedUserId = userId;
 
-    setBuildQueueAccessToken(accessToken);
     setOnlinePersistenceAccessToken(accessToken, authenticatedUserId);
 
     const store = useLogisticsStore.getState();
@@ -351,7 +348,6 @@ export default function OnlinePersistenceCoordinator() {
     return () => {
       cancelled = true;
       hydrated = false;
-      setBuildQueueAccessToken(null);
       setOnlinePersistenceAccessToken(null, null);
       window.removeEventListener("focus", handleWindowFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);

@@ -397,7 +397,7 @@ function getStackReservationAssignments(
   currentRequirementId: string,
 ): StackReservationAssignment[] {
   return buildQueue.flatMap((queueItem) =>
-    (queueItem.reservedAllocations ?? [])
+    queueItem.status === 'complete' ? [] : (queueItem.reservedAllocations ?? [])
       .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.quantityReserved > 0)
       .map((allocation) => {
         const itemName = getSourceOwnerLabel(queueItem, recipes, buildQueue);

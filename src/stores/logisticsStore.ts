@@ -42,7 +42,10 @@ import {
   mergeCanonicalInventoryLocations,
   remapInventoryEntryLocationIds,
 } from "../lib/logistics/inventoryLocationOptions";
-import { getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
+import {
+  getLotAvailableAmountAfterReservations,
+  getRequirementLineKey,
+} from "../lib/logistics/buildQueueReservations";
 import {
   createDefaultBuildQueue,
   createLocalBuildQueueId,
@@ -573,22 +576,6 @@ export function mergeInventoryEntries(
   }, existingEntries));
 }
 
-function getReservedQuantityForStack(
-  buildQueue: BuildQueueItem[],
-  inventoryEntryId: string,
-  excludeBuildQueueItemId?: string,
-): number {
-  return buildQueue.reduce((sum, item) => {
-    if (item.id === excludeBuildQueueItemId) return sum;
-    return (
-      sum +
-      (item.reservedAllocations ?? [])
-        .filter((allocation) => allocation.inventoryEntryId === inventoryEntryId)
-        .reduce((allocationSum, allocation) => allocationSum + allocation.quantityReserved, 0)
-    );
-  }, 0);
-}
-
 function getRequirementLineId(item: BuildQueueItem, input: RecipeInputTemplate, index: number): string {
   return getRequirementLineKey(item, input, index);
 }
@@ -633,24 +620,21 @@ function sanitizeReservedAllocationsForItem(
 ): ReservedMaterialAllocation[] {
   if (!state.buildQueue.some((item) => item.id === buildQueueItemId)) return [];
 
-  const usedByPayload = new Map<string, number>();
   const sanitized: ReservedMaterialAllocation[] = [];
 
   for (const allocation of allocations) {
     if (!allocation.inventoryEntryId || allocation.quantityReserved <= 0) continue;
     const inventoryEntry = state.inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
     if (!inventoryEntry?.materialId || inventoryEntry.materialId !== allocation.materialId) continue;
-    const reservedByOthers = getReservedQuantityForStack(
+    const availableQuantity = getLotAvailableAmountAfterReservations(
+      inventoryEntry,
       state.buildQueue,
-      allocation.inventoryEntryId,
       buildQueueItemId,
+      sanitized,
     );
-    const alreadyUsed = usedByPayload.get(allocation.inventoryEntryId) ?? 0;
-    const availableQuantity = Math.max(0, inventoryEntry.quantity - reservedByOthers - alreadyUsed);
     const quantityReserved = Math.min(allocation.quantityReserved, availableQuantity);
     if (quantityReserved <= 0) continue;
 
-    usedByPayload.set(allocation.inventoryEntryId, alreadyUsed + quantityReserved);
     sanitized.push(createValidatedAllocation(allocation, inventoryEntry, quantityReserved));
   }
 
@@ -1547,11 +1531,14 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             const inventoryEntry = state.inventoryEntries.find((e) => e.id === allocation.inventoryEntryId);
             if (!inventoryEntry) return item;
             if (!allocation || allocation.materialId !== inventoryEntry.materialId) return item;
-            const reservedByOthers = getReservedQuantityForStack(state.buildQueue, inventoryEntry.id, buildQueueItemId);
-            const reservedByThisStackOtherSlots = allocations
-              .filter((entry) => entry.id !== allocationId && entry.inventoryEntryId === inventoryEntry.id)
-              .reduce((sum, entry) => sum + entry.quantityReserved, 0);
-            const maxQuantity = Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByThisStackOtherSlots);
+            const currentItemAllocationsExceptTarget = allocations
+              .filter((entry) => entry.id !== allocationId);
+            const maxQuantity = getLotAvailableAmountAfterReservations(
+              inventoryEntry,
+              state.buildQueue,
+              buildQueueItemId,
+              currentItemAllocationsExceptTarget,
+            );
             const clamped = Math.max(0, Math.min(quantity, maxQuantity));
             if (clamped <= 0) {
               return { ...item, reservedAllocations: allocations.filter((a) => a.id !== allocationId) };
