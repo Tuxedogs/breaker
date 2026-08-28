@@ -1,18 +1,18 @@
 /* 2026 Build Queue redesign - loaded after the legacy stylesheet. */
 .bq-page {
-  --bq-r-surface: rgba(7, 18, 29, 0.94);
-  --bq-r-surface-raised: rgba(10, 24, 37, 0.97);
-  --bq-r-surface-row: rgba(9, 21, 33, 0.82);
-  --bq-r-surface-row-alt: rgba(13, 27, 40, 0.78);
-  --bq-r-surface-highlight: rgba(16, 44, 62, 0.78);
-  --bq-r-stat-column: rgba(8, 19, 30, 0.62);
-  --bq-r-border: rgba(111, 151, 180, 0.28);
-  --bq-r-border-soft: rgba(111, 151, 180, 0.16);
-  --bq-r-cyan: #52d7ff;
+  --bq-r-surface: var(--ops-surface-primary);
+  --bq-r-surface-raised: var(--ops-surface-row);
+  --bq-r-surface-row: var(--ops-surface-row);
+  --bq-r-surface-row-alt: var(--ops-surface-deep);
+  --bq-r-surface-highlight: var(--ops-surface-hover);
+  --bq-r-stat-column: var(--ops-surface-deep);
+  --bq-r-border: var(--ops-border-default);
+  --bq-r-border-soft: var(--ops-border-soft);
+  --bq-r-cyan: var(--ui-accent-cyan);
   --bq-r-blue: #7aa8ff;
-  --bq-r-warning: #f0b84b;
-  --bq-r-danger: #ff5f66;
-  --bq-r-success: #42df8b;
+  --bq-r-warning: var(--accent-gold);
+  --bq-r-danger: var(--stat-detrimental);
+  --bq-r-success: var(--stat-beneficial);
   background:
     linear-gradient(180deg, rgba(1, 7, 14, 0.94), rgba(1, 7, 14, 0.97)),
     url("../../assets/backgrounds/build-queue-hangar.webp") center / cover no-repeat;
@@ -20,14 +20,14 @@
 
 .bq-inv-quick-backdrop,
 .bq-solve-modal-backdrop {
-  --bq-r-surface: rgba(7, 18, 29, 0.96);
-  --bq-r-surface-raised: rgba(10, 24, 37, 0.98);
-  --bq-r-surface-row: rgba(9, 21, 33, 0.9);
-  --bq-r-border: rgba(111, 151, 180, 0.28);
-  --bq-r-border-soft: rgba(111, 151, 180, 0.16);
-  --bq-r-cyan: #52d7ff;
-  --bq-r-danger: #ff5f66;
-  --bq-r-success: #42df8b;
+  --bq-r-surface: var(--ops-surface-primary);
+  --bq-r-surface-raised: var(--ops-surface-row);
+  --bq-r-surface-row: var(--ops-surface-row);
+  --bq-r-border: var(--ops-border-default);
+  --bq-r-border-soft: var(--ops-border-soft);
+  --bq-r-cyan: var(--ui-accent-cyan);
+  --bq-r-danger: var(--stat-detrimental);
+  --bq-r-success: var(--stat-beneficial);
 }
 
 .bq-page .bq-layout--summary-collapsed {
@@ -254,7 +254,6 @@
 .bq-page .bq-quality-add:focus-visible {
   border-color: rgba(82, 215, 255, .58);
   color: var(--bq-r-cyan);
-  outline: 0;
 }
 .bq-page .bq-quality-add:disabled { cursor: default; opacity: .36; }
 .bq-page .bq-quality-add svg { width: 14px; height: 14px; }
@@ -909,7 +908,7 @@
 }
 
 .bq-page .bq-stat-legend-item {
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   font-weight: 680;
 }
 
@@ -1070,7 +1069,7 @@
   color: #9db0c2;
   background: rgba(126, 153, 176, 0.07);
 
-  font-size: 0.56rem;
+  font-size: var(--app-text-meta);
   font-weight: 650;
   letter-spacing: -0.025em;
   line-height: 1.15;
@@ -1158,7 +1157,7 @@
 
 .bq-page .bq-component-statistics .craft-stat-comparison-unit {
   color: #71869b;
-  font-size: 0.63rem;
+  font-size: var(--app-text-meta);
   font-weight: 560;
   letter-spacing: 0.025em;
   text-transform: none;
@@ -1174,7 +1173,7 @@
 
 .bq-page .bq-component-statistics .craft-stat-comparison-slot-label {
   color: #71869b;
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   font-weight: 650;
   letter-spacing: 0.07em;
 }
@@ -1196,7 +1195,7 @@
 .bq-page .bq-component-statistics .bq-stat-compare-delta {
   flex: 0 0 auto;
   font-family: "Rajdhani", sans-serif;
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   font-weight: 650;
   letter-spacing: 0;
   white-space: nowrap;
@@ -1211,7 +1210,7 @@
 .bq-page .bq-component-statistics .bq-stat-direction {
   gap: 4px;
   color: #71869b;
-  font-size: 0.59rem;
+  font-size: var(--app-text-meta);
   font-weight: 560;
 }
 
@@ -1371,7 +1370,7 @@
   border-color: var(--bq-target-border-soft);
   border-radius: 3px;
   background: rgba(7, 20, 31, 0.52);
-  font-size: 10px;
+  font-size: var(--app-text-chip);
 }
 
 .bq-page .bq-selected-craft-state-line {
@@ -1390,7 +1389,7 @@
   border-radius: 3px;
   color: #ff7d8d;
   background: rgba(109, 17, 34, 0.18);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1436,7 +1435,7 @@
 
 .bq-page .bq-item--target-workspace .bq-item-mission-label {
   flex: 0 0 auto;
-  font-size: 9px;
+  font-size: var(--app-text-label);
 }
 
 .bq-page .bq-item--target-workspace .bq-item-blueprint,
@@ -1475,7 +1474,7 @@
   border-radius: 3px;
   color: #69d1f6;
   background: rgba(5, 23, 36, 0.66);
-  font-size: 10px;
+  font-size: var(--app-text-chip);
   font-weight: 730;
   letter-spacing: 0.07em;
 }
@@ -1531,7 +1530,7 @@
 
 .bq-page .bq-selected-summary-strip small {
   color: #6d8298;
-  font-size: 8px;
+  font-size: var(--app-text-label);
   font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1782,7 +1781,7 @@
 .bq-page .bq-item--target-workspace .bq-mat-required-suffix {
   color: #8196aa;
   font-family: "Rajdhani", sans-serif;
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-weight: 650;
   letter-spacing: 0.045em;
   text-transform: uppercase;
@@ -1803,7 +1802,7 @@
 
 .bq-page .bq-item--target-workspace .bq-target-editor-label {
   color: #7a90a5;
-  font-size: 8px;
+  font-size: var(--app-text-label);
 }
 
 .bq-page .bq-item--target-workspace .bq-balance--short strong {
@@ -1942,7 +1941,7 @@
   border-radius: 3px;
   color: #65caf1;
   background: rgba(5, 20, 32, 0.5);
-  font-size: 9px;
+  font-size: var(--app-text-chip);
 }
 
 .bq-page .bq-item--target-workspace .bq-mat-actions .bq-icon-action--add {
@@ -2000,7 +1999,7 @@
 
 .bq-page .bq-craft-outcome-quality small {
   color: #7f95aa;
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 650;
   letter-spacing: 0.055em;
   text-transform: uppercase;
@@ -2050,7 +2049,7 @@
 
 .bq-page .bq-craft-outcome-stats-head span {
   color: #67d69f;
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 650;
 }
 
@@ -2076,7 +2075,7 @@
 .bq-page .bq-craft-outcome .craft-stat-compact-label {
   overflow: hidden;
   color: #9fb2c5;
-  font-size: 10px;
+  font-size: var(--app-text-label);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2086,7 +2085,7 @@
   align-items: baseline;
   gap: 4px;
   color: #ddecf7;
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   white-space: nowrap;
 }
 
@@ -2104,7 +2103,7 @@
   padding: 1px 4px;
   border-radius: 3px;
   background: rgba(100, 216, 155, 0.08);
-  font-size: 9px;
+  font-size: var(--app-text-meta);
 }
 
 .bq-page .bq-craft-outcome .craft-ok {
@@ -2261,7 +2260,7 @@
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .craft-stat-compact-delta {
-  font-size: 8px;
+  font-size: var(--app-text-meta);
 }
 
 .bq-page .bq-item--target-workspace .bq-component-statistics .bq-stat-modified-card {
@@ -2327,8 +2326,8 @@
     border-left: 0;
   }
 
-  .bq-page .bq-selected-summary-strip strong {
-    font-size: 10px;
+.bq-page .bq-selected-summary-strip strong {
+  font-size: var(--app-text-meta);
   }
 
   .bq-page .bq-item--target-workspace .bq-mat-row,
@@ -2470,7 +2469,7 @@
 }
 
 .bq-page .bq-queue-selector-label {
-  font-size: 10px;
+  font-size: var(--app-text-meta);
 }
 
 .bq-page .bq-queue-tab,

@@ -1,38 +1,38 @@
 
 .bq-page {
-  --bq-text: #edf7ff;
-  --bq-sub: rgba(169, 186, 208, 0.82);
-  --bq-dim: rgba(122, 143, 163, 0.78);
+  --bq-text: var(--ui-text-primary);
+  --bq-sub: var(--ui-text-secondary);
+  --bq-dim: var(--ui-text-muted);
   --bq-edge: var(--border-soft-color);
   --bq-edge-soft: var(--border-divider-color);
-  --bq-cyan: #4db8b0;
+  --bq-cyan: var(--ui-accent-cyan);
   --bq-green: var(--stat-beneficial);
   --bq-amber: #ff9d00;
   --bq-red: var(--stat-detrimental);
   --bq-violet: #a78bfa;
   --bq-panel: linear-gradient(180deg, #181d21 0%, #101417 100%);
   --mb-bg-gutter: #010A12;
-  --mb-bg-card: #03121C;
-  --mb-bg-row: #04131D;
-  --alloc-panel-bg: #04131D;
-  --alloc-panel-bg-deep: #03121C;
-  --alloc-row-bg: #051A28;
-  --alloc-row-hover: #081E2C;
-  --alloc-drawer-bg: #03121C;
-  --alloc-border: rgba(65, 132, 160, 0.16);
-  --alloc-border-soft: rgba(65, 132, 160, 0.14);
-  --alloc-cyan: #4db8b0;
+  --mb-bg-card: var(--ui-panel-bg-deep);
+  --mb-bg-row: var(--ui-panel-bg);
+  --alloc-panel-bg: var(--ui-panel-bg);
+  --alloc-panel-bg-deep: var(--ui-panel-bg-deep);
+  --alloc-row-bg: var(--ui-panel-row);
+  --alloc-row-hover: var(--ui-panel-row-hover);
+  --alloc-drawer-bg: var(--ui-panel-bg-deep);
+  --alloc-border: var(--ui-panel-border);
+  --alloc-border-soft: var(--ui-panel-border-soft);
+  --alloc-cyan: var(--ui-accent-cyan);
   --alloc-blue: #4DA3FF;
   --alloc-purple: #B85CF6;
   --alloc-danger: #FF5C5C;
   --alloc-success: #22D37A;
-  --alloc-text-primary: #edf7ff;
-  --alloc-text-secondary: #a9bad0;
-  --alloc-text-muted: #7a8fa3;
-  --panel-bg: #04131D;
-  --panel-bg-deep: #03121C;
-  --panel-row-bg: #051A28;
-  --panel-row-hover: #081E2C;
+  --alloc-text-primary: var(--ui-text-primary);
+  --alloc-text-secondary: var(--ui-text-secondary);
+  --alloc-text-muted: var(--ui-text-muted);
+  --panel-bg: var(--ui-panel-bg);
+  --panel-bg-deep: var(--ui-panel-bg-deep);
+  --panel-row-bg: var(--ui-panel-row);
+  --panel-row-hover: var(--ui-panel-row-hover);
   --panel-border: var(--ui-panel-border, rgba(65, 132, 160, 0.16));
   --panel-border-soft: var(--ui-panel-border-soft, rgba(65, 132, 160, 0.14));
   --accent-cyan: var(--ui-accent-cyan, #4db8b0);
@@ -211,7 +211,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-size: 10px;
+  font-size: var(--app-text-chip);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -248,7 +248,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   color: inherit;
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -433,7 +433,7 @@
 .bq-drag-destinations-title {
   padding: 2px 3px 5px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -454,7 +454,7 @@
 }
 
 .bq-drag-destination span { font-size: 13px; font-weight: 750; }
-.bq-drag-destination small { color: var(--text-muted); font-size: 10px; }
+.bq-drag-destination small { color: var(--text-muted); font-size: var(--app-text-meta); }
 .bq-drag-destination.is-over {
   border-color: #b9efff;
   background: rgba(40, 137, 179, 0.28);
@@ -525,7 +525,7 @@
 }
 
 .bq-craft-card-cat {
-  font-size: 10px;
+  font-size: var(--app-text-label);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -553,7 +553,7 @@
   padding: 2px 6px;
   border: 1px solid rgba(148, 163, 184, 0.14);
   background: rgba(3, 18, 28, 0.62);
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -606,7 +606,7 @@
 
 .bq-craft-card-ring > span {
   position: relative;
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-weight: 800;
   color: var(--accent-cyan);
 }
@@ -975,7 +975,7 @@
 }
 
 .bq-item-mission-label {
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1023,7 +1023,7 @@
 .bq-item-cat {
   display: block;
   margin-bottom: 4px;
-  font-size: 10px;
+  font-size: var(--app-text-label);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1157,7 +1157,7 @@
   min-height: 42px;
   border-bottom: 1px solid var(--alloc-border-soft);
   background: rgba(3, 18, 28, 0.82);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--alloc-text-secondary);
@@ -1547,7 +1547,7 @@
   background: rgba(255, 255, 255, 0.02);
   color: var(--bq-sub);
   font: inherit;
-  font-size: 0.62rem;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1670,7 +1670,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-size: 10px;
+  font-size: var(--app-text-chip);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -2084,7 +2084,7 @@
 .bq-solve-preview-lots-head {
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(65, 132, 160, 0.2);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2201,7 +2201,7 @@
 .bq-solve-material-status {
   display: inline-flex;
   margin-top: 4px;
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -2547,7 +2547,7 @@
   max-width: 100%;
   overflow: hidden;
   color: rgba(125, 211, 252, 0.78);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-style: normal;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -2583,7 +2583,7 @@
 
 .bq-reserve-assigned-display em {
   color: rgba(148, 163, 184, 0.82);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-style: normal;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -2851,7 +2851,7 @@
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--alloc-text-secondary);
-  font-size: 10px;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   line-height: 1.1;
 }
@@ -2900,7 +2900,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--alloc-text-muted);
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 900;
   letter-spacing: 0.06em;
   line-height: 1.1;
@@ -3022,7 +3022,7 @@
 
 .bq-stat-compare-group-title {
   color: var(--alloc-text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 900;
   letter-spacing: 0.07em;
   line-height: 1.1;
@@ -3068,7 +3068,7 @@
 
 .bq-component-statistics .bq-stat-compare-head {
   color: var(--alloc-text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 900;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -3201,7 +3201,7 @@
 
 .bq-stats-panel .bq-stat-compare-head {
   color: var(--alloc-text-muted);
-  font-size: 8px;
+  font-size: var(--app-text-label);
   font-weight: 900;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -3211,7 +3211,7 @@
   min-width: 0;
   overflow: hidden;
   color: var(--alloc-text-secondary);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   line-height: 1.15;
   text-overflow: ellipsis;
@@ -3245,7 +3245,7 @@
 }
 
 .bq-stats-panel .bq-stat-compare-delta {
-  font-size: 9px;
+  font-size: var(--app-text-meta);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
@@ -3266,7 +3266,7 @@
 
 .bq-stats-panel .bq-stat-compare-empty {
   color: var(--alloc-text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-style: italic;
   font-weight: 650;
   line-height: 1.15;
@@ -5265,7 +5265,7 @@
 .bq-component-statistics .bq-stat-compare-unit {
   flex: 0 0 auto;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-weight: 700;
   letter-spacing: 0.035em;
   text-transform: uppercase;
@@ -5289,7 +5289,7 @@
 
 .bq-stat-compare-slot-label {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 750;
   letter-spacing: 0.045em;
   line-height: 1.1;
@@ -5376,7 +5376,7 @@
   align-items: center;
   gap: 5px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-weight: 700;
   line-height: 1.15;
 }
@@ -6119,7 +6119,6 @@
 .bq-inv-quick-remove:hover,
 .bq-inv-quick-remove:focus-visible {
   color: #fda4af;
-  outline: none;
 }
 
 .bq-inv-quick-boxes {
@@ -6536,7 +6535,7 @@
 
 .bq-queue-selector-label {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 800;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -6609,7 +6608,7 @@
 
 .bq-queue-selector-option em {
   color: var(--text-muted);
-  font-size: 9px;
+  font-size: var(--app-text-meta);
   font-style: normal;
   font-weight: 750;
   letter-spacing: 0.05em;
@@ -6975,7 +6974,7 @@
 .bq-reserve-quality-body .bq-reserve-col-reserved small,
 .bq-reserve-quality-body .bq-reserve-col-assign > small {
   color: var(--alloc-text-secondary);
-  font-size: 8px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 1;
@@ -7270,7 +7269,7 @@
   border-radius: 8px;
   background: rgba(8, 18, 27, 0.72);
   color: var(--alloc-text-secondary);
-  font-size: 10px;
+  font-size: var(--app-text-chip);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -7318,7 +7317,7 @@
 
 .bq-mat-card-primary em {
   color: var(--alloc-text-secondary);
-  font-size: 10px;
+  font-size: var(--app-text-meta);
   font-style: normal;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -7401,7 +7400,7 @@
 
   .bq-center-shell .bq-item-cat {
     margin-bottom: 2px;
-    font-size: 9px;
+    font-size: var(--app-text-label);
     line-height: 1.1;
   }
 
@@ -7417,7 +7416,7 @@
 
   .bq-center-shell .bq-item-blueprint {
     max-width: 960px;
-    font-size: 10px;
+    font-size: var(--app-text-meta);
     line-height: 1.25;
     -webkit-line-clamp: 1;
   }
@@ -7430,7 +7429,7 @@
     min-height: 27px;
     padding-inline: 10px;
     border-radius: 5px;
-    font-size: 9px;
+    font-size: var(--app-text-chip);
   }
 
   .bq-center-shell .bq-qty {
@@ -7475,7 +7474,7 @@
   }
 
   .bq-materials-section-summary {
-    font-size: 10px;
+    font-size: var(--app-text-meta);
     line-height: 1.1;
   }
 
@@ -7490,7 +7489,7 @@
     height: 28px;
     padding: 4px 10px;
     border-radius: 5px;
-    font-size: 9px;
+    font-size: var(--app-text-chip);
   }
 
   .bq-mat-table {
@@ -7557,7 +7556,7 @@
     min-height: 27px;
     padding-inline: 5px;
     border-radius: 5px;
-    font-size: 10px;
+    font-size: var(--app-text-label);
   }
 
   .bq-mat-card-metrics {
@@ -7628,7 +7627,7 @@
     padding: 5px 7px;
     gap: 3px;
     border-radius: 5px;
-    font-size: 9px;
+    font-size: var(--app-text-chip);
   }
 
   .bq-page .bq-quality-chip strong {
@@ -7688,7 +7687,7 @@
 
   .bq-stat-compact-label,
   .bq-stat-compact-value {
-    font-size: 10px;
+    font-size: var(--app-text-meta);
   }
 
   .bq-stat-modified-card {
@@ -8819,7 +8818,7 @@
 .bq-page .bq-component-statistics .bq-stat-modified-group > h5 {
   padding-inline: 2px;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: var(--app-text-label);
   font-weight: 600;
   letter-spacing: 0.075em;
   line-height: 1.15;

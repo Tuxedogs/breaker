@@ -108,7 +108,7 @@
 
 .dash-sidebar-section-label {
   font-family: var(--font-primary);
-  font-size: 0.57rem;
+  font-size: var(--app-text-label);
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -214,7 +214,7 @@
 
 .dash-pro-label {
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255, 180, 80, 0.75);
@@ -246,7 +246,7 @@
   border: none;
   border-radius: 4px;
   font-family: var(--font-display);
-  font-size: 0.56rem;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -322,7 +322,7 @@
 }
 
 .discord-btn-status {
-  font-size: 0.56rem;
+  font-size: var(--app-text-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(88, 101, 242, 0.7);
@@ -345,7 +345,7 @@
   background: rgba(124, 92, 255, 0.16);
   border: 1px solid rgba(124, 92, 255, 0.35);
   color: rgba(235, 230, 255, 0.9);
-  font-size: 0.52rem;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   letter-spacing: 0.03em;
 }
@@ -711,7 +711,7 @@
 
 .dash-search-kbd {
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-chip);
   color: rgba(160, 180, 220, 0.3);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -751,7 +751,7 @@
   background: #ff9d00;
   border-radius: 8px;
   font-family: var(--font-primary);
-  font-size: 0.55rem;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   color: #fff;
   display: flex;
@@ -809,7 +809,7 @@
 
 .dash-user-level {
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-meta);
   color: rgba(255, 251, 0, 0.65);
 }
 
@@ -1140,7 +1140,7 @@
 
 .dash-hero-mini-value small {
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-meta);
   font-weight: 600;
   color: rgba(160, 180, 220, 0.48);
   margin-left: 0.12rem;
@@ -1186,7 +1186,7 @@
 
 .dash-stat-label {
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #9fb0c5;
@@ -1258,9 +1258,8 @@
 }
 
 .dash-stat-info-btn:hover,
-.dash-stat-info-btn:focus {
+.dash-stat-info-btn:focus-visible {
   color: rgba(160, 180, 220, 0.7);
-  outline: none;
 }
 
 .dash-stat-tooltip {
@@ -1279,7 +1278,7 @@
 
 .dash-stat-tooltip-title {
   font-family: var(--font-primary);
-  font-size: 0.53rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(160, 180, 220, 0.45);
@@ -1336,7 +1335,7 @@
 
 .dash-reserve-metric-label {
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(175, 194, 218, 0.78);
@@ -1393,7 +1392,7 @@
 
 .dash-reserve-preview-status {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1436,7 +1435,7 @@
 
 .dash-qinv-stat-label {
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(160, 180, 220, 0.44);
@@ -1503,7 +1502,7 @@
 
 .dash-mining-quality {
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   color: rgba(56, 189, 248, 0.82);
   padding: 0.08rem 0.28rem;
@@ -1521,7 +1520,7 @@
 
 .dash-mining-reason {
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   letter-spacing: 0.06em;
   color: rgba(255, 184, 77, 0.72);
   padding-left: 1.35rem;
@@ -1899,7 +1898,7 @@
   border: 1px solid rgba(56, 189, 248, 0.22);
   background: rgba(56, 189, 248, 0.08);
   color: rgba(151, 224, 255, 0.92);
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   font-weight: 800;
 }
 
@@ -1973,7 +1972,7 @@
   padding: 0.18rem 0.38rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2013,7 +2012,7 @@
 }
 
 .dash-next-run-box-quantity strong { color: rgba(228, 235, 250, 0.92); }
-.dash-next-run-box-quantity small { font-size: 0.62rem; color: rgba(180, 199, 226, 0.82); }
+.dash-next-run-box-quantity small { font-size: var(--app-text-meta); color: rgba(180, 199, 226, 0.82); }
 
 .dash-next-run-box-reservation {
   display: grid;
@@ -2024,7 +2023,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.61rem;
+  font-size: var(--app-text-meta);
   color: rgba(180, 199, 226, 0.8);
 }
 
@@ -2150,7 +2149,7 @@
 .dash-next-run-action-note {
   margin-top: 0.3rem;
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   line-height: 1.3;
   text-align: center;
   color: rgba(180, 199, 226, 0.78);
@@ -2232,7 +2231,7 @@
 
 .dash-card-title {
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(187, 204, 229, 0.84);
@@ -2246,7 +2245,7 @@
 
 .dash-card-meta {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-meta);
   color: rgba(169, 188, 214, 0.72);
   display: flex;
   align-items: center;
@@ -2478,7 +2477,7 @@
 }
 
 .dash-doctrine-field-label {
-  font-size: 0.56rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.16em;
   color: rgba(160, 180, 220, 0.45);
 }
@@ -2561,7 +2560,7 @@
 
 .dash-doctrine-status {
   flex-shrink: 0;
-  font-size: 0.56rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.14em;
 }
 
@@ -2576,7 +2575,7 @@
   border: 1px solid color-mix(in srgb, var(--module-card-accent) 30%, transparent);
   border-radius: 3px;
   padding: 0.18rem 0.42rem;
-  font-size: 0.52rem;
+  font-size: var(--app-text-chip);
   letter-spacing: 0.12em;
   color: color-mix(in srgb, var(--module-card-accent) 75%, #e7edff);
 }
@@ -2608,7 +2607,7 @@
   background: rgba(7, 11, 20, 0.78);
   padding: 0.2rem 0.5rem;
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-chip);
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgba(199, 210, 230, 0.7);
@@ -2630,7 +2629,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.56rem;
+  font-size: var(--app-text-meta);
   letter-spacing: 0.14em;
   color: rgba(160, 180, 220, 0.4);
 }
@@ -2770,7 +2769,7 @@
 
 .dash-donut-center-unit {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   color: rgba(160, 180, 220, 0.45);
   letter-spacing: 0.1em;
   margin-top: 0.12rem;
@@ -2823,7 +2822,7 @@
 
 .dash-shortages-table th {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(160, 180, 220, 0.42);
@@ -2934,20 +2933,20 @@
 
 .dash-bq-qty {
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-meta);
   color: rgba(160, 180, 220, 0.45);
 }
 
 .dash-bq-pct {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-meta);
   color: rgba(255, 180, 80, 0.65);
   margin-top: 0.12rem;
 }
 
 .dash-bq-queued {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-meta);
   color: rgba(160, 180, 220, 0.35);
   margin-top: 0.12rem;
 }
@@ -3049,7 +3048,7 @@
 
 .dash-fitting-count {
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: var(--app-text-meta);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -3149,7 +3148,7 @@
 .dash-fitting-option-meta {
   color: rgba(160, 180, 220, 0.48);
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-meta);
 }
 
 .dash-fitting-proto {
@@ -3158,7 +3157,7 @@
   padding: 0.1rem 0.28rem;
   color: rgba(160, 180, 220, 0.52);
   font-family: var(--font-primary);
-  font-size: 0.52rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -3187,7 +3186,7 @@
 .dash-fitting-summary-head span {
   color: rgba(167, 139, 250, 0.74);
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -3217,7 +3216,7 @@
   background: rgba(0, 0, 0, 0.12);
   color: rgba(199, 210, 230, 0.78);
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: var(--app-text-label);
   line-height: 1.2;
 }
 
@@ -3225,7 +3224,7 @@
   display: block;
   margin-bottom: 0.16rem;
   color: rgba(160, 180, 220, 0.45);
-  font-size: 0.52rem;
+  font-size: var(--app-text-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -3241,7 +3240,7 @@
   padding: 0.38rem 0.55rem;
   color: rgba(225, 219, 255, 0.9);
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: var(--app-text-chip);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-decoration: none;
@@ -3421,7 +3420,7 @@
 
 .dash-update-date {
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-meta);
   color: rgba(160, 180, 220, 0.3);
   margin-top: 0.15rem;
 }
@@ -3603,7 +3602,7 @@
     border-radius: 6px;
     color: rgba(156, 170, 202, 0.78);
     font-family: var(--font-primary);
-    font-size: 0.62rem;
+    font-size: var(--app-text-chip);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-decoration: none;
@@ -3634,7 +3633,7 @@
     border-radius: 999px;
     background: rgba(248, 113, 113, 0.92);
     color: rgba(255, 255, 255, 0.96);
-    font-size: 0.56rem;
+    font-size: var(--app-text-chip);
     line-height: 1;
   }
   .dash-content {
@@ -3699,7 +3698,7 @@
   .dash-hero-cta { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
   .dash-hero-workflow { gap: 0.45rem; }
   .dash-hero-mini { padding: 0.42rem 0.54rem; }
-  .dash-hero-mini-label { font-size: 0.64rem; }
+  .dash-hero-mini-label { font-size: var(--app-text-label); }
   .dash-hero-mini-value { font-size: 1.02rem; }
   .dash-hero-mini-value small { font-size: 0.66rem; }
   .dash-hero-mini-meta { font-size: 0.72rem; }
@@ -3737,7 +3736,7 @@
   .dash-bq-thumb { width: 29px; height: 29px; }
   .dash-bq-qty,
   .dash-bq-pct,
-  .dash-bq-queued { font-size: 0.63rem; }
+  .dash-bq-queued { font-size: var(--app-text-meta); }
 
   .dash-panel-header { padding: 0.48rem 0.75rem; }
   .dash-panel-title { font-size: 0.67rem; }
@@ -3745,7 +3744,7 @@
   .dash-panel-footer { padding: 0.34rem 0.75rem; }
   .dash-panel-link { font-size: 0.75rem; }
   .dash-panel-desc { margin-bottom: 0.62rem; font-size: 0.82rem; }
-  .dash-qinv-stat-label { font-size: 0.61rem; }
+  .dash-qinv-stat-label { font-size: var(--app-text-label); }
   .dash-qinv-stat-value { font-size: 1rem; }
   .dash-qinv-lead { margin-top: 0.42rem; font-size: 0.75rem; }
   .dash-qinv-btn { padding: 0.48rem 0.7rem; font-size: 0.69rem; }
@@ -3969,7 +3968,7 @@
 
 .dash-hero-sequence-step span {
   font-family: var(--font-primary);
-  font-size: 0.61rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -4132,7 +4131,7 @@
 }
 
 .dash-status-deck .dash-reserve-metric-label {
-  font-size: 0.54rem;
+  font-size: var(--app-text-label);
 }
 
 .dash-status-deck .dash-reserve-metric-value {
@@ -4140,7 +4139,7 @@
 }
 
 .dash-status-deck .dash-reserve-metric-hint {
-  font-size: 0.58rem;
+  font-size: var(--app-text-meta);
 }
 
 .dash-status-deck .dash-reserve-preview {
@@ -4152,7 +4151,7 @@
 }
 
 .dash-status-deck .dash-shortages-table th {
-  font-size: 0.56rem;
+  font-size: var(--app-text-label);
 }
 
 .dash-status-deck .dash-shortages-table td {
@@ -4166,7 +4165,7 @@
 
 .dash-status-deck .dash-shortage-badge {
   padding: 0.08rem 0.24rem;
-  font-size: 0.62rem;
+  font-size: var(--app-text-chip);
 }
 
 @media (max-width: 1280px) {
@@ -4453,7 +4452,7 @@
   padding: 0.22rem 0.45rem;
   border-bottom: 1px solid rgba(115, 143, 171, 0.13);
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.13em;
   text-align: left;
@@ -4556,7 +4555,7 @@
   background: rgba(8, 15, 22, 0.98);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   font-weight: 600;
   letter-spacing: 0;
   line-height: 1.35;
@@ -4597,7 +4596,7 @@
 }
 
 .dash-mining-amount-unit {
-  font-size: 0.64rem;
+  font-size: var(--app-text-meta);
   font-weight: 400;
   color: rgba(205, 218, 238, 0.86);
 }
@@ -4733,7 +4732,7 @@
 
 @media (min-width: 2200px) and (min-height: 1200px) {
   .dash-overview-tabs button { padding-inline: 1rem; font-size: 0.72rem; }
-  .dash-overview-table th { height: 31px; font-size: 0.62rem; }
+  .dash-overview-table th { height: 31px; font-size: var(--app-text-label); }
   .dash-overview-table td { height: 40px; font-size: 1rem; }
   .dash-required-by-value { font-size: 0.7rem; }
   .dash-overview-tooltip-content { font-size: 0.68rem; }
