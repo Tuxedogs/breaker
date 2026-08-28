@@ -2,9 +2,7 @@ import type { DragEvent, KeyboardEvent } from "react";
 import type { BuildQueueItem, InventoryEntry, RecipeTemplate } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import { getBuildQueueItemInputs, getRecipeForQueueItem } from "../../lib/logistics/inventory";
-import { getMaterialReservationCoverage } from "../../lib/logistics/selectors";
-import { getRequirementLineKey } from "../../lib/logistics/buildQueueReservations";
-import { getBuildQueueItemProgress } from "../../lib/logistics/buildQueueProgress";
+import { getBuildQueueItemAllocationSummary } from "../../lib/logistics/buildQueueProgress";
 import BuildQueueFrame from "./BuildQueueFrame";
 
 const FALLBACK_TYPE_LABELS: Record<string, string> = {
@@ -17,28 +15,10 @@ const FALLBACK_TYPE_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTemplate[], inventory: InventoryEntry[]): "complete" | "partial" | "missing" {
-  if (inputs.length === 0) return "missing";
-  let covered = 0;
-  let missing = 0;
-  for (const [inputIndex, input] of inputs.entries()) {
-    const materialKey = input.materialKey ?? input.materialId;
-    const coverage = getMaterialReservationCoverage(item, materialKey, input.quantity * item.quantity, inventory, {
-      requirementId: getRequirementLineKey(item, input, inputIndex),
-      unitType: input.unitType,
-    });
-    if (coverage.coverageState === "covered" || coverage.coverageState === "overReserved") covered += 1;
-    else missing += 1;
-  }
-  if (covered > 0 && missing > 0) return "partial";
-  if (covered > 0) return "complete";
-  return "missing";
-}
-
-function getStatusLabel(item: BuildQueueItem, fulfillment: "complete" | "partial" | "missing"): string {
+function getStatusLabel(item: BuildQueueItem, fulfillment: "ready" | "partial" | "missing"): string {
   if (item.status === "complete") return "Complete";
-  if (fulfillment === "complete") return "Ready";
-  if (fulfillment === "partial") return "In Progress";
+  if (fulfillment === "ready") return "Ready";
+  if (fulfillment === "partial") return "Partially Allocated";
   return "Missing";
 }
 
@@ -80,13 +60,14 @@ export default function BuildQueueCraftCard({
   const recipe = getRecipeForQueueItem(item.recipeId, recipes);
   const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
   const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
-  const fulfillment = getItemFulfillmentState(item, inputs, inventory);
-  const progress = getBuildQueueItemProgress(item, inventory, recipeInputsByRecipeId) ?? 0;
+  const allocationSummary = getBuildQueueItemAllocationSummary(item, inputs, inventory);
+  const fulfillment = allocationSummary.fulfillment;
+  const progress = allocationSummary.progressPercent ?? 0;
   const statusLabel = getStatusLabel(item, fulfillment);
   const isCraftComplete = item.status === "complete";
   const statusClass = isCraftComplete
     ? "ready"
-    : fulfillment === "complete"
+    : fulfillment === "ready"
       ? "ready"
       : fulfillment === "partial"
         ? "progress"
@@ -133,7 +114,7 @@ export default function BuildQueueCraftCard({
               </svg>
             </span>
           ) : (
-            <span className="bq-craft-card-ring" aria-label={`${progress}% progress`}>
+            <span className="bq-craft-card-ring" aria-label={`${progress}% allocation progress`}>
               <svg viewBox="0 0 36 36" aria-hidden="true">
                 <circle className="bq-craft-card-ring-track" cx="18" cy="18" r="15.5" />
                 <circle

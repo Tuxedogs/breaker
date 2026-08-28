@@ -2,49 +2,72 @@ import type { BuildQueueItem, InventoryEntry } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import { getBuildQueueItemInputs } from "./inventory";
 import { getAllocationTotal, getRequirementLineKey } from "./buildQueueReservations";
+import { allocationMatchesRequirement, validateReservedAllocations } from "./selectors";
 
-function getOwnedQuantityForRequirement(materialId: string, inventoryEntries: InventoryEntry[]) {
-  return inventoryEntries
-    .filter((entry) => (entry.materialId ?? entry.catalogItemId) === materialId && entry.quantity > 0)
-    .reduce((sum, entry) => sum + entry.quantity, 0);
+export type BuildQueueItemFulfillmentState = "ready" | "partial" | "missing";
+
+export interface BuildQueueItemAllocationSummary {
+  basis: "valid-physical-lot-allocation";
+  fulfillment: BuildQueueItemFulfillmentState;
+  progressPercent: number | null;
 }
 
-export function getBuildQueueItemProgress(
+/**
+ * Canonical Build Queue readiness/progress read model.
+ *
+ * Both values describe valid physical-lot allocation coverage. Owned but
+ * unallocated inventory is deliberately excluded, as are stale allocations.
+ */
+export function getBuildQueueItemAllocationSummary(
   item: BuildQueueItem,
+  inputs: RecipeInputTemplate[],
   inventoryEntries: InventoryEntry[],
-  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
-): number | null {
-  const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
-  const required = inputs.reduce((sum, input) => sum + input.quantity * item.quantity, 0);
-  if (required <= 0) return null;
-  const covered = inputs.reduce((sum, input) => {
-    const materialId = input.materialId ?? input.materialKey;
-    if (!materialId) return sum;
-    const lineRequired = input.quantity * item.quantity;
-    return sum + Math.min(lineRequired, getOwnedQuantityForRequirement(materialId, inventoryEntries));
-  }, 0);
-  return Math.max(0, Math.min(100, Math.round((covered / required) * 100)));
+): BuildQueueItemAllocationSummary {
+  if (inputs.length === 0) {
+    return { basis: "valid-physical-lot-allocation", fulfillment: "missing", progressPercent: null };
+  }
+
+  const ratios = inputs.map((input, inputIndex) => {
+    const required = input.quantity * item.quantity;
+    if (required <= 0) return 1;
+    const materialId = input.materialKey ?? input.materialId;
+    const requirementId = getRequirementLineKey(item, input, inputIndex);
+    const allocations = (item.reservedAllocations ?? []).filter((allocation) =>
+      allocationMatchesRequirement(allocation, materialId, { requirementId, unitType: input.unitType }),
+    );
+    const validAllocations = validateReservedAllocations(allocations, inventoryEntries)
+      .filter((validation) => !validation.isStale)
+      .map((validation) => validation.allocation);
+    return Math.max(0, Math.min(1, getAllocationTotal(validAllocations) / required));
+  });
+
+  const fulfillment: BuildQueueItemFulfillmentState = ratios.every((ratio) => ratio >= 1)
+    ? "ready"
+    : ratios.some((ratio) => ratio > 0)
+      ? "partial"
+      : "missing";
+  const averageRatio = ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
+
+  return {
+    basis: "valid-physical-lot-allocation",
+    fulfillment,
+    progressPercent: Math.round(averageRatio * 100),
+  };
+}
+
+export function getBuildQueueItemFulfillmentState(
+  item: BuildQueueItem,
+  inputs: RecipeInputTemplate[],
+  inventoryEntries: InventoryEntry[],
+): BuildQueueItemFulfillmentState {
+  return getBuildQueueItemAllocationSummary(item, inputs, inventoryEntries).fulfillment;
 }
 
 export function getBuildQueueItemAllocationProgress(
   item: BuildQueueItem,
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+  inventoryEntries: InventoryEntry[],
 ): number | null {
   const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
-  if (inputs.length === 0) return null;
-
-  const ratios = inputs.map((input, inputIndex) => {
-    const required = input.quantity * item.quantity;
-    if (required <= 0) return 1;
-    const requirementId = getRequirementLineKey(item, input, inputIndex);
-    const allocations = (item.reservedAllocations ?? []).filter((allocation) => (
-      allocation.requirementId
-        ? allocation.requirementId === requirementId
-        : allocation.materialId === (input.materialKey ?? input.materialId)
-    ));
-    return Math.max(0, Math.min(1, getAllocationTotal(allocations) / required));
-  });
-
-  const averageRatio = ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
-  return Math.round(averageRatio * 100);
+  return getBuildQueueItemAllocationSummary(item, inputs, inventoryEntries).progressPercent;
 }

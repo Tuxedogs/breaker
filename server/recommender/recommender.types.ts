@@ -1,4 +1,5 @@
 import type { ApiWarning } from "../shared/warnings.js";
+import type { MaterialIdentityResolver } from "../../src/lib/materialIdentity.js";
 
 export type MaterialUnitType = "unit" | "SCU" | "scu" | "cscu";
 
@@ -223,6 +224,7 @@ export interface MaterialSourceGroup {
 
 export interface RecommenderApiData {
   materialGroups: MaterialSourceGroup[];
+  materialIdentityResolver: MaterialIdentityResolver;
   locationMetadata: Record<string, {
     locationName?: string;
     locationKind?: string;

@@ -5,14 +5,24 @@ import type {
   MaterialTemplate,
   RarityTier,
   RecipeTemplate,
-  ReservedMaterialAllocation,
 } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
-import { computeShortages, type Shortage } from "./shortages";
+import { computePhysicalAvailabilityShortages, type Shortage } from "./shortages";
 import { getInventoryStacks, type InventoryStack } from "./inventory";
 import {
+  allocationMatchesRequirement,
   getLotAvailableAmountAfterReservations,
   getReservedAmountForInventoryLot,
+  validateReservedAllocations,
+  type BuildQueueRequirementIdentity,
+  type ReservedAllocationValidation,
+} from "./buildQueueReservations";
+
+export {
+  allocationMatchesRequirement,
+  validateReservedAllocations,
+  type BuildQueueRequirementIdentity,
+  type ReservedAllocationValidation,
 } from "./buildQueueReservations";
 
 export interface MaterialInventoryGroup {
@@ -56,6 +66,7 @@ export interface InventoryRaritySummary {
 }
 
 export interface BuildQueueShortageSummary {
+  basis: "reservation-and-quality-aware-physical-availability";
   shortages: Shortage[];
   totalShortageMaterials: number;
   totalShortfallQuantity: number;
@@ -64,13 +75,6 @@ export interface BuildQueueShortageSummary {
 }
 
 export type AllocationCoverageState = "covered" | "partial" | "missing" | "overReserved" | "stale";
-
-export interface ReservedAllocationValidation {
-  allocation: ReservedMaterialAllocation;
-  inventoryEntry: InventoryEntry | undefined;
-  isStale: boolean;
-  staleReason?: "missingStack" | "mismatchedMaterial" | "nonPositiveQuantity" | "exceedsStackQuantity";
-}
 
 export interface MaterialReservationCoverage {
   materialId: string;
@@ -89,13 +93,6 @@ export interface BuildQueueMaterialNeedSummary {
   reservedByOtherQueueItems: number;
   availableQuantity: number;
   stillNeeded: number;
-}
-
-export interface BuildQueueRequirementIdentity {
-  requirementId?: string;
-  selectedQuality?: number;
-  unitType?: RecipeInputTemplate["unitType"];
-  allowLowerQuality?: boolean;
 }
 
 function compareQualityDesc(a: InventoryEntry, b: InventoryEntry): number {
@@ -136,40 +133,6 @@ export function isInventoryEntryEligibleForRequirement(
   if (inventoryEntry.materialId !== materialId) return false;
   if (inventoryEntry.quantity <= 0) return false;
   return true;
-}
-
-export function allocationMatchesRequirement(
-  allocation: ReservedMaterialAllocation,
-  materialId: string,
-  identity?: BuildQueueRequirementIdentity,
-): boolean {
-  if (allocation.materialId !== materialId) return false;
-  if (!identity) return true;
-  if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
-  if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
-  return true;
-}
-
-export function validateReservedAllocations(
-  allocations: ReservedMaterialAllocation[],
-  inventoryEntries: InventoryEntry[],
-): ReservedAllocationValidation[] {
-  return allocations.map((allocation) => {
-    const inventoryEntry = inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
-    if (allocation.quantityReserved <= 0) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "nonPositiveQuantity" };
-    }
-    if (!inventoryEntry) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "missingStack" };
-    }
-    if (allocation.materialId !== inventoryEntry.materialId) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "mismatchedMaterial" };
-    }
-    if (allocation.quantityReserved > inventoryEntry.quantity) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "exceedsStackQuantity" };
-    }
-    return { allocation, inventoryEntry, isStale: false };
-  });
 }
 
 export function getMaterialReservationCoverage(
@@ -375,9 +338,10 @@ export function getBuildQueueShortageSummary(
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
 ): BuildQueueShortageSummary {
   const activeQueueItems = buildQueue.filter((item) => item.status !== "complete");
-  const shortages = computeShortages(inventoryEntries, buildQueue, recipeInputsByRecipeId);
+  const shortages = computePhysicalAvailabilityShortages(inventoryEntries, buildQueue, recipeInputsByRecipeId);
 
   return {
+    basis: "reservation-and-quality-aware-physical-availability",
     shortages,
     totalShortageMaterials: shortages.length,
     totalShortfallQuantity: shortages.reduce((sum, shortage) => sum + shortage.shortfall, 0),

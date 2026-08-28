@@ -6,6 +6,20 @@ import { getModifiersAtQuality } from "../../components/industry/crafting/utils/
 export const MIN_MATERIAL_QUALITY = 1;
 export const MAX_MATERIAL_QUALITY = 1000;
 
+export interface BuildQueueRequirementIdentity {
+  requirementId?: string;
+  selectedQuality?: number;
+  unitType?: RecipeInputTemplate["unitType"];
+  allowLowerQuality?: boolean;
+}
+
+export interface ReservedAllocationValidation {
+  allocation: ReservedMaterialAllocation;
+  inventoryEntry: InventoryEntry | undefined;
+  isStale: boolean;
+  staleReason?: "missingStack" | "mismatchedMaterial" | "nonPositiveQuantity" | "exceedsStackQuantity";
+}
+
 export function clampMaterialQuality(value: unknown): number | undefined {
   if (value === "" || value === null || value === undefined) return undefined;
   const parsed = typeof value === "number" ? value : Number(value);
@@ -54,6 +68,40 @@ export function getWeightedEffectiveQuality(
 
 export function getRemainingRequiredAmount(requiredAmount: number, allocatedAmount: number): number {
   return Math.max(0, requiredAmount - Math.max(0, allocatedAmount));
+}
+
+export function allocationMatchesRequirement(
+  allocation: ReservedMaterialAllocation,
+  materialId: string,
+  identity?: BuildQueueRequirementIdentity,
+): boolean {
+  if (allocation.materialId !== materialId) return false;
+  if (!identity) return true;
+  if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
+  if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
+  return true;
+}
+
+export function validateReservedAllocations(
+  allocations: ReservedMaterialAllocation[],
+  inventoryEntries: InventoryEntry[],
+): ReservedAllocationValidation[] {
+  return allocations.map((allocation) => {
+    const inventoryEntry = inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
+    if (allocation.quantityReserved <= 0) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "nonPositiveQuantity" };
+    }
+    if (!inventoryEntry) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "missingStack" };
+    }
+    if (allocation.materialId !== inventoryEntry.materialId) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "mismatchedMaterial" };
+    }
+    if (allocation.quantityReserved > inventoryEntry.quantity) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "exceedsStackQuantity" };
+    }
+    return { allocation, inventoryEntry, isStale: false };
+  });
 }
 
 /**

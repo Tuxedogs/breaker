@@ -22,11 +22,12 @@ export interface QueueLedgerLine {
 
 export interface QueueLedgerSummary {
   refinedShortfall: number;
-  reservableLines: number;
+  partiallyStockedLines: number;
   noStockLines: number;
 }
 
 export interface QueueLedgerModel {
+  basis: "owned-stock-raw-refined-planning-equivalent";
   lines: QueueLedgerLine[];
   refinedShortfallLines: QueueLedgerLine[];
   rawOreRequirementLines: QueueLedgerLine[];
@@ -170,12 +171,13 @@ export function getQueueLedgerModel(input: {
   const rawOreRequirementLines = refinedShortfallLines.filter((line) => line.rawOreNeeded > 0);
 
   return {
+    basis: "owned-stock-raw-refined-planning-equivalent",
     lines,
     refinedShortfallLines,
     rawOreRequirementLines,
     summary: {
       refinedShortfall: refinedShortfallLines.reduce((sum, line) => sum + line.netMissingRefined, 0),
-      reservableLines: refinedShortfallLines.filter((line) => line.totalAvailableEquivalent > 0).length,
+      partiallyStockedLines: refinedShortfallLines.filter((line) => line.totalAvailableEquivalent > 0).length,
       noStockLines: refinedShortfallLines.filter((line) => line.totalAvailableEquivalent <= 0).length,
     },
   };
