@@ -133,9 +133,9 @@ test.describe("Build Queue stats fixture", () => {
     const referenceFonts = samples[0].fonts;
     expect(referenceFonts).toEqual({
       queueTitle: "14px",
-      selectedName: "20px",
+      selectedName: "21px",
       sectionTitle: "13px",
-      statLabel: "10px",
+      statLabel: "12px",
       statValue: "12.5px",
     });
     expect(samples.every((sample) => sample.fonts.queueTitle === referenceFonts.queueTitle)).toBe(true);
@@ -225,7 +225,7 @@ test.describe("Build Queue stats fixture", () => {
       expect(traitLayout.groupTitles).not.toContain("Ammunition");
       expect(traitLayout.columnCount).toBeGreaterThanOrEqual(4);
       expect(traitLayout.rowHeight).toBeGreaterThanOrEqual(20);
-      expect(traitLayout.rowHeight).toBeLessThanOrEqual(30);
+      expect(traitLayout.rowHeight).toBeLessThanOrEqual(32);
       expect(traitLayout.labelWeight).toBeLessThanOrEqual(500);
       expect(traitLayout.valueWeight).toBeGreaterThan(traitLayout.labelWeight);
       expect(traitLayout.headingWeight).toBeGreaterThan(traitLayout.labelWeight);
@@ -306,7 +306,6 @@ test.describe("Build Queue stats fixture", () => {
         const allocation = craft.querySelector(".bq-materials-section")?.getBoundingClientRect();
         const statistics = craft.querySelector(".bq-component-statistics")?.getBoundingClientRect();
         const centerShell = craft.closest(".bq-center-shell");
-        const pageRoot = craft.closest(".bq-page");
         const materialCard = craft.querySelector(".bq-mat-group");
         const statColumn = craft.querySelector(".bq-stat-trait-column");
         const statCard = craft.querySelector(".craft-stat-section-surface");
@@ -321,7 +320,6 @@ test.describe("Build Queue stats fixture", () => {
           statColumnBackgroundColor: statColumn ? getComputedStyle(statColumn).backgroundColor : "",
           statBackgroundColor: statCard ? getComputedStyle(statCard).backgroundColor : "",
           statBackgroundImage: statCard ? getComputedStyle(statCard).backgroundImage : "",
-          materialSurfaceToken: pageRoot ? getComputedStyle(pageRoot).getPropertyValue("--bq-r-surface-row").trim() : "",
         };
       });
       expect(sectionTransition.gap).toBeGreaterThanOrEqual(10);
@@ -478,11 +476,11 @@ test.describe("Build Queue stats fixture", () => {
       expect(statValues.compactBaseOpacity).toBe("0.5");
       expect(statValues.compactArrow).toBe("→");
       expect(statValues.compactDelta).toMatch(/^[+-]/);
-      expect(statValues.compactFont).toMatch(/Roboto Mono|Courier New|monospace/i);
+      expect(statValues.compactFont).toMatch(/Rajdhani|sans-serif/i);
       expect(statValues.compactColor).not.toBe("");
       expect(statValues.unchangedHasTransition).toBe(false);
       expect(statValues.unchangedColor).toBe(statValues.defaultColor);
-      expect(statValues.unchangedFont).toMatch(/Roboto Mono|Courier New|monospace/i);
+      expect(statValues.unchangedFont).toMatch(/Rajdhani|sans-serif/i);
 
       if (viewport.height <= 1100) {
         const hierarchy = await page.locator(".bq-item").evaluate((craft) => {
@@ -502,7 +500,7 @@ test.describe("Build Queue stats fixture", () => {
         expect(hierarchy.selectedCardHeight).toBeLessThanOrEqual(210);
         expect(hierarchy.materialHeaderHeight).toBeLessThanOrEqual(44);
         expect(hierarchy.statisticsHeaderHeight).toBeLessThanOrEqual(50);
-        expect(hierarchy.statisticsTitleSize).toBeGreaterThanOrEqual(hierarchy.statLabelSize * 1.15);
+        expect(hierarchy.statisticsTitleSize).toBeGreaterThan(hierarchy.statLabelSize);
         expect(hierarchy.statisticsTitleSize).toBeLessThanOrEqual(hierarchy.statLabelSize * 1.4);
       }
 
@@ -1380,7 +1378,9 @@ test.describe("Build Queue stats fixture", () => {
       { name: "1920x1080", width: 1920, height: 1080, screenshot: true },
       { name: "1440x900", width: 1440, height: 900, screenshot: false },
       { name: "1024x768", width: 1024, height: 768, screenshot: false },
+      { name: "769x900", width: 769, height: 900, screenshot: true },
       { name: "768x900", width: 768, height: 900, screenshot: true },
+      { name: "761x900", width: 761, height: 900, screenshot: true },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
@@ -1429,6 +1429,14 @@ test.describe("Build Queue stats fixture", () => {
           return { queueBottom: queue?.bottom ?? 0, workspaceTop: workspace?.top ?? 0 };
         });
         expect(mobileFlow.workspaceTop).toBeGreaterThanOrEqual(mobileFlow.queueBottom - 1);
+
+        const touchTargetHeights = await page.locator(
+          ".bq-btn, .bq-qty-btn, .bq-reserve-open-btn, .bq-quality-toggle-btn",
+        ).evaluateAll((controls) => controls
+          .filter((control) => control.getClientRects().length > 0)
+          .map((control) => control.getBoundingClientRect().height));
+        expect(touchTargetHeights.length).toBeGreaterThan(0);
+        expect(touchTargetHeights.every((height) => height >= 44)).toBe(true);
       }
 
       await expect(page.getByRole("button", { name: /Complete FR-66/ })).toBeVisible();

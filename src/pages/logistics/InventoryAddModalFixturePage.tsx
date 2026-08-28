@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import InventoryAddModal from '../../components/logistics/InventoryAddModal';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/build-queue.css';
-import '../../components/logistics/build-queue-redesign.css';
 import { repairInventoryEntryIds } from '../../stores/logisticsStore';
 import type { InventoryEntry } from '../../types/logistics';
 import { buildQueueStatsFixture } from './buildQueueStatsFixture';
