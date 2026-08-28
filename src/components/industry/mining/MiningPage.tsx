@@ -7,8 +7,6 @@ import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { getStaticLocationMaterialKeys, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
-import "./mining-redesign.css";
-import "../crafting/recipe-browser.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
