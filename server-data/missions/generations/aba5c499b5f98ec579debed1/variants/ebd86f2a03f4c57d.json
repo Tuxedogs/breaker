@@ -1,0 +1,1252 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+  "variant": {
+    "variantKey": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+    "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+    "conceptKey": "53d174fed535c0a8c4bc",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|eliminate-specific|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "eliminate-specific",
+      "titleStem": "headhunters-eliminate-specific-asteroid-generic",
+      "descriptionStem": "headhunters-eliminate-specific-asteroid-generic",
+      "handlerStem": "hh-eliminate-boss",
+      "archetype": "Mercenary",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:eliminate-specific",
+        "activity-source:structural",
+        "title:headhunters-eliminate-specific-asteroid-generic",
+        "description:headhunters-eliminate-specific-asteroid-generic",
+        "handler:hh-eliminate-boss",
+        "contract:careercontract",
+        "archetype:mercenary",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Mercenary"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+        "HH_Pyro_RegionB_M_2AsteroidBase_Criminals_EliminateBoss"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "displayName": "Need a death at [Location]",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Need someone taken care of. They're holed up near [Location]. Not sure if you care who they are, but their name's [TargetName]. Not much to tell, local thug who killed someone who was connected.\n\nThey've been on the run, so they're gonna be skittish. I'd approach with caution.\n\nStows out.",
+    "rawName": "@headhunters_EliminateSpecific_Asteroid_Generic_M_title_001",
+    "internalName": "HH_Pyro_RegionB_M_2AsteroidBase_Criminals_EliminateBoss",
+    "missionType": "CareerContract",
+    "provider": "Headhunters",
+    "faction": "Headhunters",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+      "displayName": "Ship Combat",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
+      "trackType": "Ship Combat",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+        "HH_Pyro_RegionB_M_2AsteroidBase_Criminals_EliminateBoss"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Pyro Star; Region B",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Pyro Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "locality",
+        "label": "Region B",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "Procedural availability scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "a14bec87-5801-4440-8ca8-35597487ac9a"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "resolvedName": "Pyro Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "displayName": "Pyro Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+          "system": "Pyro"
+        },
+        {
+          "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "displayName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro Star",
+          "Region B"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro system",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "displayName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "displayName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Star",
+            "Region B"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "a14bec87-5801-4440-8ca8-35597487ac9a",
+        "resolvedName": "Pyro Star",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+        "resolvedName": "Region B",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro Star",
+      "Region B"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Head Hunters Mercenary FPS Eliminate Boss: Ravager-212 Twin Shotgun, Ripper \"Sunblock\" SMG, Dust Devil Armor Arms, Dust Devil Armor Core +4",
+        "Ship Combat +300",
+        "117,750 aUEC"
+      ],
+      "blueprintRewards": [
+        "Head Hunters Mercenary FPS Eliminate Boss: Ravager-212 Twin Shotgun, Ripper \"Sunblock\" SMG, Dust Devil Armor Arms, Dust Devil Armor Core +4"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "b81b328f-28a5-4d76-b06a-604cc7d5f2b0",
+          "poolName": "Head Hunters Mercenary FPS Eliminate Boss",
+          "rewardCount": 8,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "12.5% chance - 1 of 8",
+          "rewards": [
+            {
+              "blueprintGuid": "a98a8834-d924-468d-8d1b-8e4aba3e8291",
+              "displayName": "Ravager-212 Twin Shotgun",
+              "componentType": "weapons",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "ef686d26-24a4-4244-b55b-856d995a0ff2",
+              "displayName": "Ripper \"Sunblock\" SMG",
+              "componentType": "weapons",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "33468f8d-6272-41a8-8b43-16709772c1ef",
+              "displayName": "Dust Devil Armor Arms",
+              "componentType": "armor",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "deb590b5-426d-4737-869d-04458f209f3f",
+              "displayName": "Dust Devil Armor Core",
+              "componentType": "armor",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "51187178-413a-40b9-bc10-a42f25369aa8",
+              "displayName": "Dust Devil Armor Legs",
+              "componentType": "armor",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "bfb08c7d-88d3-486e-aa39-5bb97864c5c8",
+              "displayName": "Manticore Helmet",
+              "componentType": "armor",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "d3e96412-ae77-4b5a-8e80-bc7575563be7",
+              "displayName": "Ravager-212 Twin Shotgun Magazine (16 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "a10bfaff-76a7-47c9-8535-44e982442cbd",
+              "displayName": "Deadrig Shotgun Magazine (8 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "12.5% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Ship Combat +300"
+      ],
+      "credits": "117,750 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "117,750 aUEC",
+        "amount": 117750,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "scopeDisplayName": "Ship Combat",
+        "amount": 300,
+        "confidence": "partial",
+        "sourceRefs": [
+          "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+        ],
+        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+        "familyId": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateBoss",
+        "templateGuid": "bdbda794-2484-4727-af09-0cfa6b24e79d"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_564cb8bb710244cd84e0b8a8",
+          "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "a14bec87-5801-4440-8ca8-35597487ac9a"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "a14bec87-5801-4440-8ca8-35597487ac9a"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "HH_EliminateBoss"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_ad20112cbe1abaee9719fe58",
+          "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "cd54ceb7-9f64-4a66-b920-615dc91d3257"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_72cf3efe13624358eda0b48c",
+          "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "b81b328f-28a5-4d76-b06a-604cc7d5f2b0",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_dca5ab4f64ea1be9f7b818ba",
+          "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+            "reputationAmount": 300,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f90f4009d2ee89d14b8b6b60",
+          "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117750,
+              "amount": 117750,
+              "rawAmount": 117758.27296371578,
+              "integerRoundedAmount": 117758,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.560000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "24",
+                "value": 24,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "bdbda794-2484-4727-af09-0cfa6b24e79d",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/eliminateboss.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_EliminateBoss']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/eliminateboss.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@headhunters_from",
+          "displayText": "Headhunters",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_HeadHunters",
+          "recordType": null,
+          "displayName": "Headhunters",
+          "path": "factions/factionreputation/factionreputation_unlawful_headhunters.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@headhunters_EliminateSpecific_Asteroid_Generic_M_title_001",
+          "localizationKey": "headhunters_EliminateSpecific_Asteroid_Generic_M_title_001",
+          "template": "Need a death at ~mission(Location)",
+          "displayText": "Need a death at ~mission(Location)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Location)",
+              "expression": "Location",
+              "segments": [
+                "Location"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "conflict"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+            "requirements": [
+              {
+                "edgeId": "pre_564cb8bb710244cd84e0b8a8",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+                  "recordName": "StarMapObject.PyroStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "HH_EliminateBoss"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_ad20112cbe1abaee9719fe58",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+                  "recordName": "MissionLocality.RegionB",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "cd54ceb7-9f64-4a66-b920-615dc91d3257"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_72cf3efe13624358eda0b48c",
+            "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "b81b328f-28a5-4d76-b06a-604cc7d5f2b0",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_dca5ab4f64ea1be9f7b818ba",
+            "variantId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+              "reputationAmount": 300,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117750,
+              "amount": 117750,
+              "rawAmount": 117758.27296371578,
+              "integerRoundedAmount": 117758,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.560000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "24",
+                "value": 24,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+            "reputationAmount": 300,
+            "reward": {
+              "guid": "65e015b0-afb2-4316-9eb5-9b0652f221cd",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_300",
+              "editorName": "Undefined Name",
+              "reputationAmount": 300,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_300.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "cd54ceb7-9f64-4a66-b920-615dc91d3257",
+      "generatorGuid": "716fdae9-1d2c-4714-8bef-af636f35d8ca",
+      "generatorName": "ContractGenerator.HeadHunters_Mercenary_FPS",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@headhunters_EliminateSpecific_Asteroid_Generic_M_title_001",
+      "descriptionRaw": "@headhunters_EliminateSpecific_Asteroid_Generic_M_desc_001"
+    }
+  }
+}

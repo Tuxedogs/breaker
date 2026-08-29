@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "foxwell-enforcement:precision-strike-on-target-name",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@foxwell_from",
+      "titleIdentity": "@Foxwell_EliminateSpecific_NonHostiles_title_001",
+      "sourceTuple": [
+        "@foxwell_from",
+        "@Foxwell_EliminateSpecific_NonHostiles_title_001"
+      ]
+    },
+    "displayTitle": "Precision Strike on [TargetName]",
+    "displayTitleTemplate": "Precision Strike on [TargetName]",
+    "titleEvidence": {
+      "raw": "@Foxwell_EliminateSpecific_NonHostiles_title_001",
+      "localizationKey": "Foxwell_EliminateSpecific_NonHostiles_title_001",
+      "template": "Precision Strike on ~mission(TargetName)",
+      "displayText": "Precision Strike on ~mission(TargetName)",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(TargetName)",
+          "expression": "TargetName",
+          "segments": [
+            "TargetName"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@foxwell_from",
+      "displayText": "Foxwell Enforcement",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "foxwell-enforcement",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "94079b3a-b689-40ce-b8bf-f1371e4f6398"
+    ],
+    "familyKeys": [
+      "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_Mercenary_Career"
+    ],
+    "legacyConceptKeys": [
+      "c3c5e62c687c8fa5e158"
+    ],
+    "objectiveTemplateKeys": [
+      "4af5cfef-8b0c-4c35-b17c-c4c0685e7180",
+      "contracts/contracttemplates/eliminatespecific_lawful_ugf.xml"
+    ],
+    "missionTypes": [
+      "CareerContract"
+    ],
+    "rewardTypes": [
+      "blueprints",
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "016c2950-0292-468c-a408-a5283b52f158:d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "016c2950-0292-468c-a408-a5283b52f158:d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "confidence": "resolved",
+        "variantCount": 1,
+        "rewardPathCount": 1,
+        "amountSummary": {
+          "status": "exact",
+          "resolvedPathCount": 1,
+          "unresolvedPathCount": 0,
+          "minAmount": 100,
+          "maxAmount": 100
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "confidenceFlags": [],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown"
+    ],
+    "searchText": "foxwell-enforcement:precision-strike-on-target-name precision strike on [targetname] foxwell-enforcement @foxwell_from foxwell enforcement @foxwell_eliminatespecific_nonhostiles_title_001 foxwell_eliminatespecific_nonhostiles_title_001 standing 94079b3a-b689-40ce-b8bf-f1371e4f6398"
+  }
+}

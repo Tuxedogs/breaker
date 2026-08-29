@@ -1,0 +1,1566 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "d01e624b-9386-487f-b390-52f7736e5c1c|Vaughn_MissingPerson_Space_Stanton_Career",
+  "variant": {
+    "variantKey": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+    "familyKey": "d01e624b-9386-487f-b390-52f7736e5c1c|Vaughn_MissingPerson_Space_Stanton_Career",
+    "conceptKey": "c4d41592f0fd513accdd",
+    "objectiveSignature": {
+      "key": "a161c267-0253-48e5-be7a-dfa16c6cbebe|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|missing-person-investigation|activity-defined|standard|unlock:560f0465886e|unknown:unknown||||",
+      "activityKey": "missing-person-investigation",
+      "titleStem": "searchbodyspace",
+      "descriptionStem": "searchbodyspace",
+      "handlerStem": "vaughn-missing-person-space",
+      "archetype": "Investigation",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:560f0465886e",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:missing-person-investigation",
+        "activity-source:structural",
+        "title:searchbodyspace",
+        "description:searchbodyspace",
+        "handler:vaughn-missing-person-space",
+        "contract:careercontract",
+        "archetype:investigation",
+        "intro:standard",
+        "chain:unlock:560f0465886e",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "veryhard",
+    "tierLabel": "Very High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Investigation"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Vaughn Stanton Missing Person Space Very Hard",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "briefing": "[Contractor]",
+    "rawName": "@searchbodyspace_title_VH",
+    "internalName": "Vaughn_Stanton_MissingPersonSpace_VeryHard",
+    "missionType": "CareerContract",
+    "provider": "Vaughn",
+    "faction": "Vaughn",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+      "factionDisplayName": "Vaughn",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Investigation",
+    "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Stanton Star; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star, Stanton 1",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star, Stanton 1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Standing +250",
+        "81,250 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +250"
+      ],
+      "credits": "81,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "81,250 aUEC",
+        "amount": 81250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 81250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 81250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+        "factionDisplayName": "Vaughn",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 250,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7b82e00e-07eb-4b56-990c-b23399673504"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+        "familyId": "d01e624b-9386-487f-b390-52f7736e5c1c|Vaughn_MissingPerson_Space_Stanton_Career",
+        "templateGuid": "4dcab4bc-f7f5-4e03-9b15-95f850e172db"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_3e55cadca0f6283560247aac",
+          "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Vaughn_MissingPerson_Space_Stanton_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_068354ee6284ab3e8c3b5cdd",
+          "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_6c25c9ef1b606705d4aa7471",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "7256d4da-38a9-4d95-b420-acdf34c3bc44"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_ab548876755abe2423fd9e5d",
+          "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "7256d4da-38a9-4d95-b420-acdf34c3bc44"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "dc253483-7881-4d71-aaeb-cadcafdaad52": [
+          {
+            "edgeId": "pre_7dd3faf40c02896388d2ec80",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "dc253483-7881-4d71-aaeb-cadcafdaad52",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "dc253483-7881-4d71-aaeb-cadcafdaad52"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_aa28120ef712ffc62d98e860",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "dc253483-7881-4d71-aaeb-cadcafdaad52",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_da11e06707559eaae9933e1c",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "dc253483-7881-4d71-aaeb-cadcafdaad52"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "ba460335-27e0-4ef9-9697-eb535d617330": [
+          {
+            "edgeId": "pre_2edad76197f28b01390e3c3a",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "ba460335-27e0-4ef9-9697-eb535d617330",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ba460335-27e0-4ef9-9697-eb535d617330"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_c94f97845131666ec9f8b3ba",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "ba460335-27e0-4ef9-9697-eb535d617330",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_57236aa60b2abca6e90667f6",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ba460335-27e0-4ef9-9697-eb535d617330"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "4f694fb2-273f-4e2b-a00c-72c614e7d5bd": [
+          {
+            "edgeId": "pre_a0b4a9d0ce77d52d148f8629",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_28a5e097f9114d29860a529f",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "ownerScope": "subcontract",
+            "ownerId": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_22757cc5efddd4d30520312a",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "f4ed0b50-1a8c-4b8a-a718-01329a694549"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_6230ab37f01126f769b61831",
+          "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_b1acc327f8f9982cc984d939",
+          "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 81250,
+              "amount": 81250,
+              "rawAmount": 81338.57326164575,
+              "integerRoundedAmount": 81339,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.8900000000000015,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "15",
+                "value": 15,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "4dcab4bc-f7f5-4e03-9b15-95f850e172db",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/missingperson_space_shipdefence.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Vaughn_MissingPerson_Space_Stanton_Career']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/missingperson_space_shipdefence.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@vaughn_from",
+          "displayText": "Vaughn",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_Vaughn",
+          "recordType": null,
+          "displayName": "Vaughn",
+          "path": "factions/factionreputation/factionreputation_unlawful_vaughn.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@searchbodyspace_title_VH",
+          "localizationKey": "searchbodyspace_title_VH",
+          "template": "~mission(Contractor|SearchBodySpaceTitleVeryHard)",
+          "displayText": "~mission(Contractor|SearchBodySpaceTitleVeryHard)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Contractor|SearchBodySpaceTitleVeryHard)",
+              "expression": "Contractor|SearchBodySpaceTitleVeryHard",
+              "segments": [
+                "Contractor",
+                "SearchBodySpaceTitleVeryHard"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "conflict"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "requirements": [
+              {
+                "edgeId": "pre_3e55cadca0f6283560247aac",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Vaughn_MissingPerson_Space_Stanton_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_ab548876755abe2423fd9e5d",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "7256d4da-38a9-4d95-b420-acdf34c3bc44"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "dc253483-7881-4d71-aaeb-cadcafdaad52",
+            "requirements": [
+              {
+                "edgeId": "pre_7dd3faf40c02896388d2ec80",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "dc253483-7881-4d71-aaeb-cadcafdaad52"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "ba460335-27e0-4ef9-9697-eb535d617330",
+            "requirements": [
+              {
+                "edgeId": "pre_2edad76197f28b01390e3c3a",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "ba460335-27e0-4ef9-9697-eb535d617330"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd",
+            "requirements": [
+              {
+                "edgeId": "pre_a0b4a9d0ce77d52d148f8629",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "4f694fb2-273f-4e2b-a00c-72c614e7d5bd"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 81250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 81250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_6230ab37f01126f769b61831",
+            "variantId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "reputationAmount": 250,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 81250,
+              "amount": 81250,
+              "rawAmount": 81338.57326164575,
+              "integerRoundedAmount": 81339,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.8900000000000015,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "15",
+                "value": 15,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 81250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 81250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "a161c267-0253-48e5-be7a-dfa16c6cbebe",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "reward": {
+              "guid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_250",
+              "editorName": "Undefined Name",
+              "reputationAmount": 250,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_250.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "7256d4da-38a9-4d95-b420-acdf34c3bc44",
+      "generatorGuid": "d01e624b-9386-487f-b390-52f7736e5c1c",
+      "generatorName": "ContractGenerator.Vaughn_MissingPerson",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/vaughn/vaughn_missingperson.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@searchbodyspace_title_VH",
+      "descriptionRaw": "@searchbodyspace_desc_VH"
+    }
+  }
+}

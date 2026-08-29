@@ -1,0 +1,1563 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "e111cec8-ce28-45a5-b603-213054a30f35|Hockrow_MissingPerson_Space_Stanton_Career",
+  "variant": {
+    "variantKey": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+    "familyKey": "e111cec8-ce28-45a5-b603-213054a30f35|Hockrow_MissingPerson_Space_Stanton_Career",
+    "conceptKey": "989651891860e03cd0ac",
+    "objectiveSignature": {
+      "key": "88bac9c7-0986-4945-8b72-c83657a1c8b9|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|missing-person-investigation|activity-defined|standard|unlock:db54ad134840|unknown:unknown||||",
+      "activityKey": "missing-person-investigation",
+      "titleStem": "searchbodyspace",
+      "descriptionStem": "searchbodyspace",
+      "handlerStem": "hockrow-missing-person-space",
+      "archetype": "Investigation",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:db54ad134840",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:missing-person-investigation",
+        "activity-source:structural",
+        "title:searchbodyspace",
+        "description:searchbodyspace",
+        "handler:hockrow-missing-person-space",
+        "contract:careercontract",
+        "archetype:investigation",
+        "intro:standard",
+        "chain:unlock:db54ad134840",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "medium",
+    "tierLabel": "Medium Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Investigation"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Hockrow Stanton Missing Person Space Medium",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "briefing": "[Contractor]",
+    "rawName": "@searchbodyspace_title_M",
+    "internalName": "Hockrow_Stanton_MissingPersonSpace_Medium",
+    "missionType": "CareerContract",
+    "provider": "Hockrow Agency",
+    "faction": "Hockrow Agency",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+      "factionDisplayName": "Hockrow Agency",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Investigation",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Stanton Star; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star, Stanton 1",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star, Stanton 1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Standing +150",
+        "41,000 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +150"
+      ],
+      "credits": "41,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "41,000 aUEC",
+        "amount": 41000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 41000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 41000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+        "factionDisplayName": "Hockrow Agency",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 150,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+        "familyId": "e111cec8-ce28-45a5-b603-213054a30f35|Hockrow_MissingPerson_Space_Stanton_Career",
+        "templateGuid": "4dcab4bc-f7f5-4e03-9b15-95f850e172db"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_cddeccd661b9409729ea705c",
+          "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Hockrow_MissingPerson_Space_Stanton_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_780b576f67a79456cc20af70",
+          "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_e772b1955705a52e7d290f2e",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "70cbd904-4b3f-4d96-b964-34aab8bcde43"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_528af41d477e90ae65736bb6",
+          "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "70cbd904-4b3f-4d96-b964-34aab8bcde43"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "7a456db7-9abe-4823-be09-4834f505b20e": [
+          {
+            "edgeId": "pre_9f382f3bcd76c6e36c584bfc",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "7a456db7-9abe-4823-be09-4834f505b20e",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "7a456db7-9abe-4823-be09-4834f505b20e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_c0d8dede8012442d348eed74",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "7a456db7-9abe-4823-be09-4834f505b20e",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_96e345ddaa6fd19d7d4d614f",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "7a456db7-9abe-4823-be09-4834f505b20e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "d1ea5070-18f5-469b-9940-b46ca9bbf720": [
+          {
+            "edgeId": "pre_7331f851df44a59017326bff",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "d1ea5070-18f5-469b-9940-b46ca9bbf720",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d1ea5070-18f5-469b-9940-b46ca9bbf720"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_7d414e52292ebb233dd4f626",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "d1ea5070-18f5-469b-9940-b46ca9bbf720",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_e00e793395c533206595f336",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d1ea5070-18f5-469b-9940-b46ca9bbf720"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "29328a95-e9f9-4e45-854c-e9b1fe596b08": [
+          {
+            "edgeId": "pre_e7dc021e745bffca8a365e41",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "29328a95-e9f9-4e45-854c-e9b1fe596b08",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "29328a95-e9f9-4e45-854c-e9b1fe596b08"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_f4869831314352dfcdd051ea",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "ownerScope": "subcontract",
+            "ownerId": "29328a95-e9f9-4e45-854c-e9b1fe596b08",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_967e65016426f224ea0f7a87",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "29328a95-e9f9-4e45-854c-e9b1fe596b08"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_d989e183beba4a958640ef1f",
+          "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_9eac3fefbba558e03f7880a4",
+          "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 41000,
+              "amount": 41000,
+              "rawAmount": 41090.43755736396,
+              "integerRoundedAmount": 41090,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.6599999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.02
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "4dcab4bc-f7f5-4e03-9b15-95f850e172db",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/missingperson_space_shipdefence.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/missingperson_space_shipdefence.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Hockrow_from",
+          "displayText": "Hockrow Agency",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+          "recordName": "FactionReputation.FactionReputation_Lawful_HockrowAgency",
+          "recordType": null,
+          "displayName": "Hockrow Agency",
+          "path": "factions/factionreputation/factionreputation_lawful_hockrowagency.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@searchbodyspace_title_M",
+          "localizationKey": "searchbodyspace_title_M",
+          "template": "~mission(Contractor|SearchBodySpaceTitleMedium)",
+          "displayText": "~mission(Contractor|SearchBodySpaceTitleMedium)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Contractor|SearchBodySpaceTitleMedium)",
+              "expression": "Contractor|SearchBodySpaceTitleMedium",
+              "segments": [
+                "Contractor",
+                "SearchBodySpaceTitleMedium"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "requirements": [
+              {
+                "edgeId": "pre_cddeccd661b9409729ea705c",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Hockrow_MissingPerson_Space_Stanton_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_528af41d477e90ae65736bb6",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "70cbd904-4b3f-4d96-b964-34aab8bcde43"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "7a456db7-9abe-4823-be09-4834f505b20e",
+            "requirements": [
+              {
+                "edgeId": "pre_9f382f3bcd76c6e36c584bfc",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "7a456db7-9abe-4823-be09-4834f505b20e"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "d1ea5070-18f5-469b-9940-b46ca9bbf720",
+            "requirements": [
+              {
+                "edgeId": "pre_7331f851df44a59017326bff",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "d1ea5070-18f5-469b-9940-b46ca9bbf720"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "29328a95-e9f9-4e45-854c-e9b1fe596b08",
+            "requirements": [
+              {
+                "edgeId": "pre_e7dc021e745bffca8a365e41",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "29328a95-e9f9-4e45-854c-e9b1fe596b08"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 41000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 41000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_d989e183beba4a958640ef1f",
+            "variantId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 41000,
+              "amount": 41000,
+              "rawAmount": 41090.43755736396,
+              "integerRoundedAmount": 41090,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.6599999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.02
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 41000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 41000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "70cbd904-4b3f-4d96-b964-34aab8bcde43",
+      "generatorGuid": "e111cec8-ce28-45a5-b603-213054a30f35",
+      "generatorName": "ContractGenerator.HockrowAgency_MissingPerson",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@searchbodyspace_title_M",
+      "descriptionRaw": "@searchbodyspace_desc_M"
+    }
+  }
+}

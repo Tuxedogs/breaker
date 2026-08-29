@@ -1,0 +1,2045 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+  "variants": [
+    {
+      "variantKey": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Med. Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of materials. We appreciate your help in this matter.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank2_SmallQuantity_Beradom",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Pyro 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Pyro 1",
+        "system": "Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "displayName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 1"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Generated pickup pool (Pyro)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Pyro 1",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated pickup pool (Pyro)",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "de936c42-60ae-4dd7-9324-081a533139a6"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+              "displayName": "Pyro 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 1"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Generated pickup pool (Pyro)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "de936c42-60ae-4dd7-9324-081a533139a6",
+          "resolvedName": "Pyro 1",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "94,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "94,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "94,500 aUEC",
+          "amount": 94500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 94500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 94500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "4e940e8d-10d8-47a7-a9d4-0d29a91157eb",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "beacf88c-15e8-4d06-9c77-190b08fcf80e",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Med. Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of materials. We appreciate your help in this matter.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank2_SmallQuantity_Feynmaline",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Pyro 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Pyro 1",
+        "system": "Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "displayName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 1"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Generated pickup pool (Pyro)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Pyro 1",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated pickup pool (Pyro)",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "de936c42-60ae-4dd7-9324-081a533139a6"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+              "displayName": "Pyro 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 1"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Generated pickup pool (Pyro)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "de936c42-60ae-4dd7-9324-081a533139a6",
+          "resolvedName": "Pyro 1",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "144,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "144,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "144,750 aUEC",
+          "amount": 144750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 144750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 144750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "beacf88c-15e8-4d06-9c77-190b08fcf80e",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "fb904726-cc1a-410f-9311-fdf5731b05b4",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Med. Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nShubin Interstellar is currently looking to fulfil another purchase order for a variety of materials. We appreciate your help in this matter.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank2_SmallQuantity_Glacosite",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Pyro 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Pyro 1",
+        "system": "Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "displayName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 1"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Generated pickup pool (Pyro)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Pyro 1",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated pickup pool (Pyro)",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "de936c42-60ae-4dd7-9324-081a533139a6"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "de936c42-60ae-4dd7-9324-081a533139a6",
+              "displayName": "Pyro 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 1"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Generated pickup pool (Pyro)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "de936c42-60ae-4dd7-9324-081a533139a6",
+          "resolvedName": "Pyro 1",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "109,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "109,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "109,000 aUEC",
+          "amount": 109000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 109000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 109000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "fb904726-cc1a-410f-9311-fdf5731b05b4",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "42e57267-8d19-4577-8e18-feaa81e5fefc",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank2_SmallQuantity_Glacosite",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "90,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "90,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "90,750 aUEC",
+          "amount": 90750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 90750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 90750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "42e57267-8d19-4577-8e18-feaa81e5fefc",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "7305cc8f-113f-448a-985f-b24415404659",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank2_SmallQuantity_Feynmaline",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "120,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "120,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "120,250 aUEC",
+          "amount": 120250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 120250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 120250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "7305cc8f-113f-448a-985f-b24415404659",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9c38fbab-2adc-4029-ab34-fdfa75b073ad",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank2",
+      "conceptKey": "16370b92553a4f42bf58",
+      "objectiveSignature": {
+        "key": "e4527dd7-f0eb-4342-afe8-5ded1fe428df|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "resource-gathering",
+        "titleStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "descriptionStem": "shubin-industrial-ground-vehicle-planetary-system",
+        "handlerStem": "shubin-rg-ground-mining",
+        "archetype": "Ground Vehicle Mining",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:resource-gathering",
+          "activity-source:structural",
+          "title:shubin-industrial-ground-vehicle-planetary-system",
+          "description:shubin-industrial-ground-vehicle-planetary-system",
+          "handler:shubin-rg-ground-mining",
+          "contract:careercontract",
+          "archetype:ground-vehicle-mining",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "rank-2",
+      "tierLabel": "Rank 2",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ground Vehicle Mining",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank2_SmallQuantity_Beradom",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep; CrimeStat limited to 2 or below; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Sr. Contractor / 5,800 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Hint_Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Hint_Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Hint_Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "78,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "78,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "78,500 aUEC",
+          "amount": 78500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 78500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 78500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "9c38fbab-2adc-4029-ab34-fdfa75b073ad",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_M_PlanetarySystem_Desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

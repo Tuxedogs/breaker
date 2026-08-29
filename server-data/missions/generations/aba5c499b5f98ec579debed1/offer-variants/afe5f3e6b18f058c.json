@@ -1,0 +1,1025 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "eckhart-security:tricky-ambush",
+  "variants": [
+    {
+      "variantKey": "39b8b980-0092-46cf-83a5-0b68cd5e273f",
+      "familyKey": "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+      "conceptKey": "48179d85f11a135e1d62",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|ambush|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "ambush",
+        "titleStem": "eckhart-ship-ambush",
+        "descriptionStem": "eckhart-ship-ambush",
+        "handlerStem": "eckhart-security-ship-ambush",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:eckhart-ship-ambush",
+          "description:eckhart-ship-ambush",
+          "handler:eckhart-security-ship-ambush",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Tricky Ambush",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Ship Ambush\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nLooking for a competent contractor who can recruit a wingman to help execute an ambush. The target is a [AmbushTarget] which has been involved in several operations against one of our most important clients. By neutralizing it once and for all, it’ll make our client’s life a hell of a lot easier. While the [AmbushTarget] is our focus, they usually don’t fly anywhere without a sizable escort, including large craft. \n\nWe’ve gotten word that this group will be passing by [Location] soon. Any chance you could hurry and beat them there? That spot has an emission cloud that you can power down your ship and hide in. Then when they pass, you should have the upper hand.  \n\nPayment will be issued upon successful completion of contract. The client knows this one will be tough, so they threw in a bonus payment of [ScripAmount] MG Scrip that’ll go to the main contractor.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@Eckhart_ShipAmbush_H_title",
+      "internalName": "EckhartSecurity_ShipAmbush_Nyx_Hard",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1",
+          "Blueprint: Eckhart Security Ship Ambush Med: DeltaMax, GammaMax, FL-11 Cannon, FL-22 Cannon +1",
+          "Blueprint: Eckhart Security Ship Ambush Hard Plus: Slipstream, Eclipse, Lightstrike IV Cannon, Lightstrike V Cannon +1",
+          "Standing +200",
+          "90,500 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1",
+          "Eckhart Security Ship Ambush Med: DeltaMax, GammaMax, FL-11 Cannon, FL-22 Cannon +1",
+          "Eckhart Security Ship Ambush Hard Plus: Slipstream, Eclipse, Lightstrike IV Cannon, Lightstrike V Cannon +1"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "02642d19-8a53-481c-ab3e-f57a7f0dd7c7",
+            "poolName": "Eckhart Security Ship Ambush Easy",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "2a8d359b-08da-41e2-8809-92ffeef0dc6f",
+                "displayName": "SonicLite",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "02a12ac4-9436-4f03-9da4-043427bd5678",
+                "displayName": "Cirrus",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "78b1bf49-bdd8-48e9-9cbe-1faeb95f24d5",
+                "displayName": "Lightstrike I Cannon",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5907d8df-c6c0-4609-83d9-a6130a7b210a",
+                "displayName": "Lightstrike II Cannon",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5ef6986b-12eb-4e2d-93d3-a4def34584c0",
+                "displayName": "Lightstrike III Cannon",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "c3bc2b3e-b943-4194-911d-f70b66741103",
+            "poolName": "Eckhart Security Ship Ambush Med",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "8e3ac3f9-a7ed-4959-8527-6bf030a0293d",
+                "displayName": "DeltaMax",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "35f34597-906c-4cc6-b823-ab331fbb34b8",
+                "displayName": "GammaMax",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "f4a4939e-2d1c-40db-af6a-e29ec625fc7e",
+                "displayName": "FL-11 Cannon",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "721c2625-e684-4dfb-8a58-356fcf92022d",
+                "displayName": "FL-22 Cannon",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "323d25f0-7345-4a74-9c18-c29524eb0a6b",
+                "displayName": "FL-33 Cannon",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "125d96b9-5255-4443-b825-26c69064f08d",
+            "poolName": "Eckhart Security Ship Ambush Hard Plus",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "36a88bbc-555d-468f-b333-9a8759e60426",
+                "displayName": "Slipstream",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "30ec1d99-ec11-4f6d-bdeb-bffcb5a93cfb",
+                "displayName": "Eclipse",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "628ef015-246b-49b5-9943-253aace1263f",
+                "displayName": "Lightstrike IV Cannon",
+                "componentType": "weaponGun",
+                "size": "4",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "cecb97f4-200d-4ecf-b428-78c3d005dcea",
+                "displayName": "Lightstrike V Cannon",
+                "componentType": "weaponGun",
+                "size": "5",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "2483cc8f-f8b3-496e-8f77-9885d4751c1f",
+                "displayName": "Lightstrike VI Cannon",
+                "componentType": "weaponGun",
+                "size": "6",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "90,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "90,500 aUEC",
+          "amount": 90500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 90500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 90500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "8",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "39b8b980-0092-46cf-83a5-0b68cd5e273f",
+        "generatorGuid": "507345dc-e889-4694-a404-72b2506e3b80",
+        "generatorName": "ContractGenerator.EckhartSecurity_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Eckhart_ShipAmbush_H_title",
+        "descriptionRaw": "@Eckhart_ShipAmbush_H_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "b99ee889-f14d-4e1e-8143-205b2327fc50",
+      "familyKey": "507345dc-e889-4694-a404-72b2506e3b80|EckhartSecurity_ShipAmbush_Nyx",
+      "conceptKey": "48179d85f11a135e1d62",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|ambush|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "ambush",
+        "titleStem": "eckhart-ship-ambush",
+        "descriptionStem": "eckhart-ship-ambush",
+        "handlerStem": "eckhart-security-ship-ambush",
+        "archetype": "Ambush",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:ambush",
+          "activity-source:structural",
+          "title:eckhart-ship-ambush",
+          "description:eckhart-ship-ambush",
+          "handler:eckhart-security-ship-ambush",
+          "contract:careercontract",
+          "archetype:ambush",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Ambush",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Tricky Ambush",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Ship Ambush\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nLooking for a competent contractor who can recruit a wingman to help execute an ambush. The target is a [AmbushTarget] which has been involved in several operations against one of our most important clients. By neutralizing it once and for all, it’ll make our client’s life a hell of a lot easier. While the [AmbushTarget] is our focus, they usually don’t fly anywhere without a sizable escort, including large craft. \n\nWe’ve gotten word that this group will be passing by [Location] soon. Any chance you could hurry and beat them there? That spot has an emission cloud that you can power down your ship and hide in. Then when they pass, you should have the upper hand.  \n\nPayment will be issued upon successful completion of contract. The client knows this one will be tough, so they threw in a bonus payment of [ScripAmount] MG Scrip that’ll go to the main contractor.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@Eckhart_ShipAmbush_H_title",
+      "internalName": "EckhartSecurity_ShipAmbush_Nyx_Hard_V",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ambush",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1",
+          "Blueprint: Eckhart Security Ship Ambush Med: DeltaMax, GammaMax, FL-11 Cannon, FL-22 Cannon +1",
+          "Blueprint: Eckhart Security Ship Ambush Hard Plus: Slipstream, Eclipse, Lightstrike IV Cannon, Lightstrike V Cannon +1",
+          "Standing +200",
+          "90,500 aUEC",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Eckhart Security Ship Ambush Easy: SonicLite, Cirrus, Lightstrike I Cannon, Lightstrike II Cannon +1",
+          "Eckhart Security Ship Ambush Med: DeltaMax, GammaMax, FL-11 Cannon, FL-22 Cannon +1",
+          "Eckhart Security Ship Ambush Hard Plus: Slipstream, Eclipse, Lightstrike IV Cannon, Lightstrike V Cannon +1"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "02642d19-8a53-481c-ab3e-f57a7f0dd7c7",
+            "poolName": "Eckhart Security Ship Ambush Easy",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "2a8d359b-08da-41e2-8809-92ffeef0dc6f",
+                "displayName": "SonicLite",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "02a12ac4-9436-4f03-9da4-043427bd5678",
+                "displayName": "Cirrus",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "78b1bf49-bdd8-48e9-9cbe-1faeb95f24d5",
+                "displayName": "Lightstrike I Cannon",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5907d8df-c6c0-4609-83d9-a6130a7b210a",
+                "displayName": "Lightstrike II Cannon",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "5ef6986b-12eb-4e2d-93d3-a4def34584c0",
+                "displayName": "Lightstrike III Cannon",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "c3bc2b3e-b943-4194-911d-f70b66741103",
+            "poolName": "Eckhart Security Ship Ambush Med",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "8e3ac3f9-a7ed-4959-8527-6bf030a0293d",
+                "displayName": "DeltaMax",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "35f34597-906c-4cc6-b823-ab331fbb34b8",
+                "displayName": "GammaMax",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "f4a4939e-2d1c-40db-af6a-e29ec625fc7e",
+                "displayName": "FL-11 Cannon",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "721c2625-e684-4dfb-8a58-356fcf92022d",
+                "displayName": "FL-22 Cannon",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "323d25f0-7345-4a74-9c18-c29524eb0a6b",
+                "displayName": "FL-33 Cannon",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "125d96b9-5255-4443-b825-26c69064f08d",
+            "poolName": "Eckhart Security Ship Ambush Hard Plus",
+            "rewardCount": 5,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "20% chance - 1 of 5",
+            "rewards": [
+              {
+                "blueprintGuid": "36a88bbc-555d-468f-b333-9a8759e60426",
+                "displayName": "Slipstream",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "30ec1d99-ec11-4f6d-bdeb-bffcb5a93cfb",
+                "displayName": "Eclipse",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "628ef015-246b-49b5-9943-253aace1263f",
+                "displayName": "Lightstrike IV Cannon",
+                "componentType": "weaponGun",
+                "size": "4",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "cecb97f4-200d-4ecf-b428-78c3d005dcea",
+                "displayName": "Lightstrike V Cannon",
+                "componentType": "weaponGun",
+                "size": "5",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              },
+              {
+                "blueprintGuid": "2483cc8f-f8b3-496e-8f77-9885d4751c1f",
+                "displayName": "Lightstrike VI Cannon",
+                "componentType": "weaponGun",
+                "size": "6",
+                "grade": "A",
+                "chanceLabel": "20% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "90,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "90,500 aUEC",
+          "amount": 90500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 90500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 90500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "8",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b99ee889-f14d-4e1e-8143-205b2327fc50",
+        "generatorGuid": "507345dc-e889-4694-a404-72b2506e3b80",
+        "generatorName": "ContractGenerator.EckhartSecurity_ShipAmbush",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_shipambush.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Eckhart_ShipAmbush_H_title",
+        "descriptionRaw": "@Eckhart_ShipAmbush_H_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

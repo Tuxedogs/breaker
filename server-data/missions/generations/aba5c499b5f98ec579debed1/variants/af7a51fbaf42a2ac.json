@@ -1,0 +1,684 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+  "variant": {
+    "variantKey": "1464ed09-2099-4102-8672-25f764e278d2",
+    "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+    "conceptKey": "a62e6845efe8e5f27616",
+    "objectiveSignature": {
+      "key": "unknown-faction|unknown-faction:unknown-scope|repair|activity-defined|standard|open|unknown:required||||",
+      "activityKey": "repair",
+      "titleStem": "repair-oxygen-kiosk",
+      "descriptionStem": "repair-oxygen-kiosk-long",
+      "handlerStem": "klescher-prisoner-missions",
+      "archetype": "Contract",
+      "contractType": "Contract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:required",
+      "confidence": "strong",
+      "evidence": [
+        "activity:repair",
+        "activity-source:structural",
+        "title:repair-oxygen-kiosk",
+        "description:repair-oxygen-kiosk-long",
+        "handler:klescher-prisoner-missions",
+        "contract:contract",
+        "archetype:contract",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:required"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Contract",
+      "CrimeStat required"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+        "RepairO2Kiosk"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Inmate Maintenance Opportunity",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hello Guests,\n\nWe have recently been alerted that one of our Oxygen Dispensers has suffered a technical error. As you know these kiosks are vital to ensure that you have plenty of oxygen handy while participating in our Work Release Program.\n\nWe are looking for any available guest to reset the kiosk. That should reconnect the kiosk to the network and resolve the issue. The first guest who's able to complete this task will not only be compensated with merits, but also with the satisfaction that they're making the workplace safer for other guests.\n\nThank you.",
+    "rawName": "@RepairOxygenKiosk_Title",
+    "internalName": "RepairO2Kiosk",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+        "RepairO2Kiosk"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "Prison Mine Stanton 1b; CrimeStat 1-5 required",
+    "prerequisites": [
+      {
+        "type": "location",
+        "label": "Prison Mine Stanton 1b",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat 1-5 required",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 1,
+          "maxCrimeStat": 5
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Prison Mine Stanton 1b",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+      ],
+      "possibleLocations": [
+        "Prison Mine Stanton 1b"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+          "resolvedName": "Prison Mine Stanton 1b",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+          "displayName": "Prison Mine Stanton 1b",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Prison Mine Stanton 1b"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Prison Mine Stanton 1b",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Prison Mine Stanton 1b",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Prison Mine Stanton 1b",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+            "displayName": "Prison Mine Stanton 1b",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Prison Mine Stanton 1b"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Prison Mine Stanton 1b",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+        "resolvedName": "Prison Mine Stanton 1b",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Prison Mine Stanton 1b"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Affinity +100",
+        "3,000 MER"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Affinity +100"
+      ],
+      "credits": "3,000 MER",
+      "creditStatus": "fixed",
+      "creditsDetail": {
+        "status": "fixed",
+        "amount": 3000,
+        "currency": "MER",
+        "max": 5000,
+        "plusBonuses": 0,
+        "confidence": "extracted_fixed",
+        "sourceResultType": "ContractResult_Reward",
+        "sourceRefs": [
+          "contracts/contractgenerator/klescher_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "required",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+        "familyId": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+        "templateGuid": "a0a59f63-2c43-422e-a598-ec8be8ace918"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_b98a85a8f531c278dce699f0",
+          "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Klescher_Prisoner_Missions"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_75c9ea084a2e47f8e939e147",
+          "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "1",
+              "value": 1
+            },
+            "maxCrimeStat": {
+              "raw": "5",
+              "value": 5
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "1",
+            "maxCrimeStat": "5"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Klescher_Prisoner_Missions"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_f8f0c70d28d24b08e0c074ed",
+          "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_3d4527f7c3c543ede4293a93",
+          "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+          "type": "fixed_currency_reward",
+          "index": 0,
+          "payload": {
+            "fixedReward": {
+              "reward": 3000,
+              "max": 5000,
+              "plusBonuses": 0,
+              "currencyType": "MER"
+            },
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_Reward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+            "sourceElement": "ContractResult_Reward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "a0a59f63-2c43-422e-a598-ec8be8ace918",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/repairo2kiosk.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/repairo2kiosk.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Klescher_RepUI_Name",
+          "displayText": "Klescher Rehabilitation Facilities",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": null,
+          "resolution": "unresolved_missing_guid",
+          "provenance": "unresolved",
+          "displayName": null
+        },
+        "title": {
+          "raw": "@RepairOxygenKiosk_Title",
+          "localizationKey": "RepairOxygenKiosk_Title",
+          "template": "Inmate Maintenance Opportunity",
+          "displayText": "Inmate Maintenance Opportunity",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "1464ed09-2099-4102-8672-25f764e278d2",
+            "requirements": [
+              {
+                "edgeId": "pre_b98a85a8f531c278dce699f0",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+                  "recordName": "StarMapObject.PrisonMine_Stanton1b",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Klescher_Prisoner_Missions"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": null,
+        "fixedCurrency": [
+          {
+            "edgeId": "out_3d4527f7c3c543ede4293a93",
+            "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+            "type": "fixed_currency_reward",
+            "index": 0,
+            "payload": {
+              "fixedReward": {
+                "reward": 3000,
+                "max": 5000,
+                "plusBonuses": 0,
+                "currencyType": "MER"
+              },
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_Reward"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+              "sourceElement": "ContractResult_Reward"
+            }
+          }
+        ],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_f8f0c70d28d24b08e0c074ed",
+            "variantId": "1464ed09-2099-4102-8672-25f764e278d2",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/klescher_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_Reward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/klescher_generator.xml"
+            ],
+            "fixedReward": {
+              "reward": 3000,
+              "max": 5000,
+              "plusBonuses": 0,
+              "currencyType": "MER"
+            }
+          }
+        ],
+        "calculatedPayout": null,
+        "buyIns": []
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XXXS",
+              "editorName": "+T_02",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xxxs.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "1464ed09-2099-4102-8672-25f764e278d2",
+      "generatorGuid": "50835d56-5f0a-4581-a3db-404e50f7ff29",
+      "generatorName": "ContractGenerator.Klescher_Generator",
+      "generatorPath": "contracts/contractgenerator/klescher_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@RepairOxygenKiosk_Title",
+      "descriptionRaw": "@RepairOxygenKiosk_DescriptionLong"
+    }
+  }
+}

@@ -1,0 +1,974 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "headhunters:find-headhunter-crewmember-and-help-finish-the-job--77ddd5a639",
+  "variants": [
+    {
+      "variantKey": "2c337039-33dc-43fc-8e95-67fadaae0869",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "310d0b1cec1a2e8ba7f0",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|destroy-items+missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+missing-person-investigation",
+        "titleStem": "headhunters-missingperson-sabotage-xt",
+        "descriptionStem": "headhunters-missingperson-sabotage-xt",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+missing-person-investigation",
+          "activity-source:structural",
+          "title:headhunters-missingperson-sabotage-xt",
+          "description:headhunters-missingperson-sabotage-xt",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Find Headhunter Crewmember and Help Finish the Job",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "You ever get a bad feeling that you just can't shake? I had sent [TargetName] to take out the some XenoThreat servers at [Location] and I'm starting think they ran into some serious trouble.\n\nDo me a favor, huh? Go on over and see if you can figure out what happened to them and make sure that those servers are destroyed for good.\n\n-Stows out",
+      "rawName": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+      "internalName": "HH_Pyro_RegionA_VH_MissingPerson_DestroyItem_XT",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "168,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "168,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "168,250 aUEC",
+          "amount": 168250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 168250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 168250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "2c337039-33dc-43fc-8e95-67fadaae0869",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+        "descriptionRaw": "@headhunters_missingperson_sabotage_VH_XT_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "452bf03e-69a2-acb4-9a06-c50cb3c2d697",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "310d0b1cec1a2e8ba7f0",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|destroy-items+missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+missing-person-investigation",
+        "titleStem": "headhunters-missingperson-sabotage-xt",
+        "descriptionStem": "headhunters-missingperson-sabotage-xt",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+missing-person-investigation",
+          "activity-source:structural",
+          "title:headhunters-missingperson-sabotage-xt",
+          "description:headhunters-missingperson-sabotage-xt",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Find Headhunter Crewmember and Help Finish the Job",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "You ever get a bad feeling that you just can't shake? I had sent [TargetName] to take out the some XenoThreat servers at [Location] and I'm starting think they ran into some serious trouble.\n\nDo me a favor, huh? Go on over and see if you can figure out what happened to them and make sure that those servers are destroyed for good.\n\n-Stows out",
+      "rawName": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+      "internalName": "HH_Pyro_RegionB_VH_MissingPerson_DestroyItem_XT",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; Region B",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region B",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region B"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "possibleLocations": [
+          "Region B"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "resolvedName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "displayName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region B"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region B",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+              "displayName": "Region B",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region B"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region B"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "168,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "168,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "168,250 aUEC",
+          "amount": 168250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 168250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 168250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "452bf03e-69a2-acb4-9a06-c50cb3c2d697",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+        "descriptionRaw": "@headhunters_missingperson_sabotage_VH_XT_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "dc672732-e9c1-409f-ad15-3a883fc74a0a",
+      "familyKey": "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons",
+      "conceptKey": "310d0b1cec1a2e8ba7f0",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|destroy-items+missing-person-investigation|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "destroy-items+missing-person-investigation",
+        "titleStem": "headhunters-missingperson-sabotage-xt",
+        "descriptionStem": "headhunters-missingperson-sabotage-xt",
+        "handlerStem": "hh-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:destroy-items+missing-person-investigation",
+          "activity-source:structural",
+          "title:headhunters-missingperson-sabotage-xt",
+          "description:headhunters-missingperson-sabotage-xt",
+          "handler:hh-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Find Headhunter Crewmember and Help Finish the Job",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "You ever get a bad feeling that you just can't shake? I had sent [TargetName] to take out the some XenoThreat servers at [Location] and I'm starting think they ran into some serious trouble.\n\nDo me a favor, huh? Go on over and see if you can figure out what happened to them and make sure that those servers are destroyed for good.\n\n-Stows out",
+      "rawName": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+      "internalName": "HH_Pyro_RegionD_VH_MissingPerson_DestroyItem_XT",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; Region D",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region D",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region D"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [
+          "Region D"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "resolvedName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region D",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+              "displayName": "Region D",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region D"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region D"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "168,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "168,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "168,250 aUEC",
+          "amount": 168250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 168250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 168250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "dc672732-e9c1-409f-ad15-3a883fc74a0a",
+        "generatorGuid": "d8c52e38-f5d6-4a99-8531-326e3293d106",
+        "generatorName": "ContractGenerator.HeadHunters_Investigation",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_investigation.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_missingperson_sabotage_VH_XT_title_001",
+        "descriptionRaw": "@headhunters_missingperson_sabotage_VH_XT_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

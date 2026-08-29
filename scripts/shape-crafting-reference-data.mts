@@ -12,7 +12,7 @@ const sources = [
     target: "crafted-properties.json",
   },
   {
-    source: getScintelCraftingSourcePath("quality_quantization.json"),
+    source: getScintelCraftingSourcePath("material_quality_quantization_records.json"),
     target: "quality-quantization.json",
   },
   {

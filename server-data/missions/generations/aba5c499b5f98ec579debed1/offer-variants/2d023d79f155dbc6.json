@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "highpoint-wilderness-specialists:exact-d7cd01d3-edf4-468d-a4f3-f14c40f8a733",
+  "variants": [
+    {
+      "variantKey": "d7cd01d3-edf4-468d-a4f3-f14c40f8a733",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "conceptKey": "430a9bd271366555f258",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|eliminate-animals|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "eliminate-animals",
+        "titleStem": "highpoint-kill-animals-paf-valakkar-fangs-name",
+        "descriptionStem": "highpoint-kill-animals-paf-valakkar-fangs",
+        "handlerStem": "highpoint-wilderness-specialists-unique",
+        "archetype": "Contract",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-animals",
+          "activity-source:structural",
+          "title:highpoint-kill-animals-paf-valakkar-fangs-name",
+          "description:highpoint-kill-animals-paf-valakkar-fangs",
+          "handler:highpoint-wilderness-specialists-unique",
+          "contract:contract",
+          "archetype:contract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Contract",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HWS_PAF_KillWm"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "HWS PAF Kill Wm",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "rawName": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_name",
+      "internalName": "HWS_PAF_KillWm",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HWS_PAF_KillWm"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "58,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "58,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "58,000 aUEC",
+          "amount": 58000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 58000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 58000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "d7cd01d3-edf4-468d-a4f3-f14c40f8a733",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_name",
+        "descriptionRaw": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

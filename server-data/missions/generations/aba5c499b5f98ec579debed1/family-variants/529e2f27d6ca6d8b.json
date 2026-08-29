@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+  "variants": [
+    {
+      "variantKey": "1464ed09-2099-4102-8672-25f764e278d2",
+      "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+      "conceptKey": "a62e6845efe8e5f27616",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|repair|activity-defined|standard|open|unknown:required||||",
+        "activityKey": "repair",
+        "titleStem": "repair-oxygen-kiosk",
+        "descriptionStem": "repair-oxygen-kiosk-long",
+        "handlerStem": "klescher-prisoner-missions",
+        "archetype": "Contract",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:required",
+        "confidence": "strong",
+        "evidence": [
+          "activity:repair",
+          "activity-source:structural",
+          "title:repair-oxygen-kiosk",
+          "description:repair-oxygen-kiosk-long",
+          "handler:klescher-prisoner-missions",
+          "contract:contract",
+          "archetype:contract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:required"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Contract",
+        "CrimeStat required"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+          "RepairO2Kiosk"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Inmate Maintenance Opportunity",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hello Guests,\n\nWe have recently been alerted that one of our Oxygen Dispensers has suffered a technical error. As you know these kiosks are vital to ensure that you have plenty of oxygen handy while participating in our Work Release Program.\n\nWe are looking for any available guest to reset the kiosk. That should reconnect the kiosk to the network and resolve the issue. The first guest who's able to complete this task will not only be compensated with merits, but also with the satisfaction that they're making the workplace safer for other guests.\n\nThank you.",
+      "rawName": "@RepairOxygenKiosk_Title",
+      "internalName": "RepairO2Kiosk",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+          "RepairO2Kiosk"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Prison Mine Stanton 1b; CrimeStat 1-5 required",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Prison Mine Stanton 1b",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat 1-5 required",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 1,
+            "maxCrimeStat": 5
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Prison Mine Stanton 1b",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+        ],
+        "possibleLocations": [
+          "Prison Mine Stanton 1b"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+            "resolvedName": "Prison Mine Stanton 1b",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+            "displayName": "Prison Mine Stanton 1b",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Prison Mine Stanton 1b"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Prison Mine Stanton 1b",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Prison Mine Stanton 1b",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Prison Mine Stanton 1b",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+              "displayName": "Prison Mine Stanton 1b",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Prison Mine Stanton 1b"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Prison Mine Stanton 1b",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+          "resolvedName": "Prison Mine Stanton 1b",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Prison Mine Stanton 1b"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Affinity +100",
+          "3,000 MER"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Affinity +100"
+        ],
+        "credits": "3,000 MER",
+        "creditStatus": "fixed",
+        "creditsDetail": {
+          "status": "fixed",
+          "amount": 3000,
+          "currency": "MER",
+          "max": 5000,
+          "plusBonuses": 0,
+          "confidence": "extracted_fixed",
+          "sourceResultType": "ContractResult_Reward",
+          "sourceRefs": [
+            "contracts/contractgenerator/klescher_generator.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+          "factionDisplayName": "Unknown faction",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "required",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "1464ed09-2099-4102-8672-25f764e278d2",
+        "generatorGuid": "50835d56-5f0a-4581-a3db-404e50f7ff29",
+        "generatorName": "ContractGenerator.Klescher_Generator",
+        "generatorPath": "contracts/contractgenerator/klescher_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@RepairOxygenKiosk_Title",
+        "descriptionRaw": "@RepairOxygenKiosk_DescriptionLong"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

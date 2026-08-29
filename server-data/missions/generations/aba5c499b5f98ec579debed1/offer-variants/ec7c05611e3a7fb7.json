@@ -1,0 +1,441 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "headhunters:the-yards-under-attack",
+  "variants": [
+    {
+      "variantKey": "d4db3fcd-4691-4f6b-82af-081c2e48631b",
+      "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+      "conceptKey": "67dd254aca603b5b37dc",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|defend-location+eliminate-all|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "defend-location+eliminate-all",
+        "titleStem": "headhunters-defend-generic-the-yard",
+        "descriptionStem": "headhunters-defend-generic-the-yard",
+        "handlerStem": "hh-eliminate-all",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+eliminate-all",
+          "activity-source:structural",
+          "title:headhunters-defend-generic-the-yard",
+          "description:headhunters-defend-generic-the-yard",
+          "handler:hh-eliminate-all",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+          "HH_Pyro_RegionB_M_XSOutposts_TheYard_EliminateAll"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "The Yard's under attack",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Putting the word out. We got a Headhunter outpost near [Location] under attack and could use some backup. Haven't quite figured out who's doing the attacking but don't really care. You step to the Headhunters, get ready to get clapped back.\n\nGet over there pronto and take them down.\n\nStows out.",
+      "rawName": "@headhunters_defend_Generic_M_TheYard_title_001",
+      "internalName": "HH_Pyro_RegionB_M_XSOutposts_TheYard_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "displayName": "Ship Combat",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Ship Combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+          "HH_Pyro_RegionB_M_XSOutposts_TheYard_EliminateAll"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Pyro Star; pyro 3 outpost col s frm otlw 002",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "location",
+          "label": "pyro 3 outpost col s frm otlw 002",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "Procedural availability scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "72533bf5-9ceb-4317-8dc9-5577496fe997"
+        ],
+        "possibleLocations": [
+          "pyro 3 outpost col s frm otlw 002"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "resolvedName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "72533bf5-9ceb-4317-8dc9-5577496fe997",
+            "resolvedName": "pyro 3 outpost col s frm otlw 002",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_s_frm_otlw_002.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "displayName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "72533bf5-9ceb-4317-8dc9-5577496fe997",
+            "displayName": "pyro 3 outpost col s frm otlw 002",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_s_frm_otlw_002.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Star",
+            "pyro 3 outpost col s frm otlw 002"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro system",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "72533bf5-9ceb-4317-8dc9-5577496fe997"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+              "displayName": "Pyro Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+              "system": "Pyro"
+            },
+            {
+              "guid": "72533bf5-9ceb-4317-8dc9-5577496fe997",
+              "displayName": "pyro 3 outpost col s frm otlw 002",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_s_frm_otlw_002.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro Star",
+              "pyro 3 outpost col s frm otlw 002"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "resolvedName": "Pyro Star",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "72533bf5-9ceb-4317-8dc9-5577496fe997",
+          "resolvedName": "pyro 3 outpost col s frm otlw 002",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro Star",
+        "pyro 3 outpost col s frm otlw 002"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Head Hunters Mercenary FPS Eliminate ALL Region AB: Atzkav Sniper Rifle, Atzkav \"Igniter\" Sniper Rifle, Atzkav \"Mirage\" Sniper Rifle, Calico Arms Tactical +4",
+          "Ship Combat +150",
+          "70,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Head Hunters Mercenary FPS Eliminate ALL Region AB: Atzkav Sniper Rifle, Atzkav \"Igniter\" Sniper Rifle, Atzkav \"Mirage\" Sniper Rifle, Calico Arms Tactical +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "e9947de1-6160-4d62-a319-2f4693140c88",
+            "poolName": "Head Hunters Mercenary FPS Eliminate ALL Region AB",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "9eba6e0e-4ed7-457d-9fd7-4c450ada4be4",
+                "displayName": "Atzkav Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "e471e8d9-51d2-43cf-b94e-201e70a68a5b",
+                "displayName": "Atzkav \"Igniter\" Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "3eea6d43-d683-4ec7-9853-be654982f135",
+                "displayName": "Atzkav \"Mirage\" Sniper Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "c022fbee-2b9d-4bdb-9895-307812c30316",
+                "displayName": "Calico Arms Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "a37bc293-33fb-4689-b6fb-44e39b86a410",
+                "displayName": "Calico Core Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "e1910d29-d413-4d91-b618-9b7ae278e7f8",
+                "displayName": "Calico Legs Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "0e0a5872-3224-46be-baa7-1df604b70a41",
+                "displayName": "Calico Helmet Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d1da140e-b7ee-46ba-b76a-f5dd33c0348c",
+                "displayName": "Atzkav Sniper Rifle Battery (8 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Ship Combat +150"
+        ],
+        "credits": "70,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "70,750 aUEC",
+          "amount": 70750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 70750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 70750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
+          "amount": 150,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "d4db3fcd-4691-4f6b-82af-081c2e48631b",
+        "generatorGuid": "716fdae9-1d2c-4714-8bef-af636f35d8ca",
+        "generatorName": "ContractGenerator.HeadHunters_Mercenary_FPS",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_defend_Generic_M_TheYard_title_001",
+        "descriptionRaw": "@headhunters_defend_Generic_M_TheYard_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

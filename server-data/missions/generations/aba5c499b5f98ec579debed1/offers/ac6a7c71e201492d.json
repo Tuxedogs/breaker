@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "headhunters:find-target-name-n",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@headhunters_from",
+      "titleIdentity": "@hh_missingperson_inv_m_criminalbase_title_01",
+      "sourceTuple": [
+        "@headhunters_from",
+        "@hh_missingperson_inv_m_criminalbase_title_01"
+      ]
+    },
+    "displayTitle": "Find [TargetName]\\n",
+    "displayTitleTemplate": "Find [TargetName]\\n",
+    "titleEvidence": {
+      "raw": "@hh_missingperson_inv_m_criminalbase_title_01",
+      "localizationKey": "hh_missingperson_inv_m_criminalbase_title_01",
+      "template": "Find ~mission(TargetName|Last)\\n",
+      "displayText": "Find ~mission(TargetName|Last)\\n",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(TargetName|Last)",
+          "expression": "TargetName|Last",
+          "segments": [
+            "TargetName",
+            "Last"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@headhunters_from",
+      "displayText": "Headhunters",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "headhunters",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "432711e6-c6df-491a-d794-ed1b4515d6a2",
+      "489b0a04-ff7b-b964-4d4e-625751c74684",
+      "4d7cc297-44a8-9ec7-baa0-c30d20c8d58b",
+      "4e46cbb2-d899-fb1a-ca26-d5e66641778e",
+      "4e687607-3d73-3d57-ff5b-6ccf1ce628b5"
+    ],
+    "familyKeys": [
+      "d8c52e38-f5d6-4a99-8531-326e3293d106|HH_MissingPersons"
+    ],
+    "legacyConceptKeys": [
+      "710e98893f42938326b6"
+    ],
+    "objectiveTemplateKeys": [
+      "58d4b04f-557a-467f-a779-e4ef885714cc",
+      "bc4db0c2-0611-4d4a-a4f3-24f834e0ce17",
+      "contracts/contracttemplates/missingperson.xml",
+      "contracts/contracttemplates/missingperson_2locations.xml"
+    ],
+    "missionTypes": [
+      "CareerContract"
+    ],
+    "rewardTypes": [
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "09efeef4-c646-408d-a979-3ae56a3b1beb:d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "confidence": "resolved",
+        "variantCount": 5,
+        "rewardPathCount": 5,
+        "amountSummary": {
+          "status": "range",
+          "resolvedPathCount": 5,
+          "unresolvedPathCount": 0,
+          "minAmount": 200,
+          "maxAmount": 400
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "confidenceFlags": [],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown"
+    ],
+    "searchText": "headhunters:find-target-name-n find [targetname]\\n headhunters @headhunters_from headhunters @hh_missingperson_inv_m_criminalbase_title_01 hh_missingperson_inv_m_criminalbase_title_01 standing 432711e6-c6df-491a-d794-ed1b4515d6a2 489b0a04-ff7b-b964-4d4e-625751c74684 4d7cc297-44a8-9ec7-baa0-c30d20c8d58b 4e46cbb2-d899-fb1a-ca26-d5e66641778e 4e687607-3d73-3d57-ff5b-6ccf1ce628b5"
+  }
+}

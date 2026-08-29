@@ -98,7 +98,7 @@ test("current generation finds the proven one-mission Rayari unlock path", async
   );
 });
 
-test("current generation uses published standing thresholds for reputation eligibility", async () => {
+test("current generation uses published eligibility prerequisites", async () => {
   const state = goldenState();
   state.location = {
     status: "known",
@@ -112,6 +112,7 @@ test("current generation uses published standing thresholds for reputation eligi
     status: "known",
     reputationValue: 0,
   }];
+  state.crimeStat = { status: "known", value: 1 };
   const result = await evaluateCurrentMissionEligibility(
     "1464ed09-2099-4102-8672-25f764e278d2",
     state,

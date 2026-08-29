@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "manifestKind": "moonbreaker_mission_build_generation_audit",
   "manifestId": "LIVE:4.9.0-live.12232306:fdfd54f65b1f84a621899b21:headhunters-offer-identity-audit",
-  "createdAt": "2026-08-15",
+  "createdAt": "2026-08-29",
   "purpose": "Moonbreaker-side, build- and generation-pinned evidence for correcting player-facing mission offer identity without changing Scintel source truth, the aUEC solver, blueprint pools, reputation prerequisites, or availability-branch ownership.",
   "snapshot": {
     "channel": "LIVE",
@@ -17,54 +17,44 @@
     "evidenceStatus": "source_and_generation_pinned"
   },
   "targetSourceV4": {
-    "status": "source_v4_localization_repair_shaped_v3_offer_v1_published_and_verified",
+    "status": "source_v4_4_10_acceptance_refreshed_pending_moonbreaker_publication",
     "channel": "LIVE",
-    "buildId": "4.9.0-live.12232306",
+    "buildId": "4.10.191.2241-12519617-scintel.2",
     "sourceContractVersion": 4,
-    "sourceRoot": "D:/Moonbreaker/server-data/missions/source",
-    "scintelReceipt": "D:/scintel/docs/contracts/mission-offer-source-audit-v1.json",
+    "sourceRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/missions",
+    "scintelReceipt": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/scintel_api_validation.json",
     "artifacts": [
       {
         "name": "mission_contracts.json",
         "schemaVersion": 4,
-        "bytes": 109678214,
-        "sha256": "965000215032a267cd6d48bad514920273930b0011e5794348f4dcf803fbf5c5"
+        "bytes": 110500511,
+        "sha256": "c316aa90fe1749df830d391b71b3df74869b5570d56aee445eb44a2f39da2028"
       },
       {
         "name": "mission_objective_templates.json",
         "schemaVersion": 2,
-        "bytes": 13966789,
-        "sha256": "89aa2a7d46ac5f7b330070e96aa00f61c30cc47916c8af0cdf06e0668b477fc5"
+        "bytes": 14152271,
+        "sha256": "8f7358116a83b0f6a9aef56f5e988e643f2f7e7432b7f7227eb1a67eadd80104"
       },
       {
         "name": "mission_extraction_report.json",
         "schemaVersion": 4,
-        "bytes": 74556,
-        "sha256": "e753c4e5920156055ca2ef928ba735361ceffbb6173cffe253bff782abd234e4"
+        "bytes": 74006,
+        "sha256": "d9d0619c8a68c7a50d50ff15516f5b40bb87c690230045364cda4c1fd8821d79"
       },
       {
         "name": "mission_reward_lookups.json",
-        "bytes": 717929,
-        "sha256": "b28098010408c57862a1fd843a4092462f28498f833dd0669b46ad76fc4747d8"
-      },
-      {
-        "name": "mission_blueprint_rewards.json",
-        "bytes": 39596235,
-        "sha256": "768e41d2dd9f04fc96388b6d08f11c2b720f5122d94aba25a1bafb14f5e2ea19"
-      },
-      {
-        "name": "blueprint_reward_sources.json",
-        "bytes": 5023961,
-        "sha256": "41db2a38966a67528af82cb2778f11ca3e8d8d60715acf99ff01725157efc979"
+        "bytes": 725402,
+        "sha256": "17b297cf0cd3b5a82ad951c5123bb25e0b46286dfbc31ea49701e8c30ef75ed7"
       }
     ],
     "counts": {
-      "exactVariants": 2501,
-      "families": 259,
-      "objectiveTemplates": 335,
-      "resolvedObjectiveTemplates": 333,
-      "objectiveTokens": 462,
-      "objectiveTemplatesWithFlow": 253
+      "exactVariants": 2513,
+      "families": 261,
+      "objectiveTemplates": 334,
+      "resolvedObjectiveTemplates": 332,
+      "objectiveTokens": 455,
+      "objectiveTemplatesWithFlow": 250
     },
     "readerSupport": {
       "acceptedSourceContractVersions": [
@@ -89,7 +79,7 @@
       "result": "pass"
     },
     "invariantResults": {
-      "sharedExactVariantCount": 2501,
+      "sharedExactVariantCount": 2513,
       "protectedFieldMismatchCount": 0,
       "auditedHeadhuntersTupleCount": 25,
       "auditedHeadhuntersCanonicalSha256": "07d755ad1c18de3fae843d5055e6fac0b5b6896ff1a9ae4ddbc873d210938311",
@@ -158,19 +148,19 @@
         "lint": "pass",
         "build": "pass"
       },
-      "evidenceStatus": "published_and_verified"
+      "evidenceStatus": "historical_published_generation_pending_4_10_reshaping"
     },
     "publicationState": {
-      "sourcePublished": true,
-      "currentPointerChanged": true,
+      "sourcePublished": false,
+      "currentPointerChanged": false,
       "currentMissionSchemaVersion": 3,
       "currentSourceContractVersion": 4,
       "currentOfferSchemaVersion": 1,
       "currentGenerationId": "09845999a73432800e773946",
       "rollbackGenerationId": "fdfd54f65b1f84a621899b21",
-      "nextRequiredStep": "none_publication_complete"
+      "nextRequiredStep": "moonbreaker_mission_publication_unblocked_after_accepted_4_10_source_audit"
     },
-    "evidenceStatus": "source_backed_published_generation_receipt"
+    "evidenceStatus": "source_backed_accepted_prepublication_receipt"
   },
   "authorityBoundary": {
     "owner": "Moonbreaker",
@@ -678,15 +668,15 @@
           "system": "Pyro",
           "payout": 153000,
           "standingMinimum": null,
-          "reputationReward": 2000,
-          "reputationScopeLabel": "Ship Combat Head Hunters",
+          "reputationReward": 200,
+          "reputationScopeLabel": "Ship Combat",
           "blueprintPools": [],
           "reputationPrerequisite": {
             "polarity": "required",
             "factionGuid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-            "scopeGuid": "3792e4c6-665e-44e9-9410-40389182f918",
-            "minimumStandingGuid": "9158e288-69a3-4260-9b11-62986c1b1fee",
-            "maximumStandingGuid": "6b12e48e-3e11-443d-bcc2-e0b85229936f",
+            "scopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "minimumStandingGuid": "a1a5c737-52f1-4ee5-88e4-28b47b84938f",
+            "maximumStandingGuid": "426da095-27b1-4ac3-8722-af57a973c79c",
             "displayRange": "Rank III through Rank VI",
             "parentOwned": true,
             "branchOwners": [
@@ -719,15 +709,15 @@
           "pickupStatus": "unknown",
           "payout": 153000,
           "standingMinimum": null,
-          "reputationReward": 2000,
-          "reputationScopeLabel": "Ship Combat Head Hunters",
+          "reputationReward": 200,
+          "reputationScopeLabel": "Ship Combat",
           "blueprintPools": [],
           "reputationPrerequisite": {
             "polarity": "required",
             "factionGuid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
-            "scopeGuid": "3792e4c6-665e-44e9-9410-40389182f918",
-            "minimumStandingGuid": "9158e288-69a3-4260-9b11-62986c1b1fee",
-            "maximumStandingGuid": "6b12e48e-3e11-443d-bcc2-e0b85229936f",
+            "scopeGuid": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "minimumStandingGuid": "a1a5c737-52f1-4ee5-88e4-28b47b84938f",
+            "maximumStandingGuid": "426da095-27b1-4ac3-8722-af57a973c79c",
             "displayRange": "Rank III through Rank VI",
             "parentOwned": true,
             "branchOwners": [
@@ -735,7 +725,24 @@
               "925149cf-8552-4e50-9af6-85e5007c7ec4",
               "0d09f2d8-b3f9-4225-b7ec-dc13758b3107"
             ]
-          }
+          },
+          "availabilityBranches": [
+            {
+              "subContractId": "a2528e0a-ca9d-40f0-b058-b44858e71f6e",
+              "locality": "Stanton2",
+              "localityGuid": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            {
+              "subContractId": "925149cf-8552-4e50-9af6-85e5007c7ec4",
+              "locality": "Stanton3",
+              "localityGuid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            {
+              "subContractId": "0d09f2d8-b3f9-4225-b7ec-dc13758b3107",
+              "locality": "Stanton4",
+              "localityGuid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            }
+          ]
         }
       ],
       "verificationEvidence": {
@@ -1128,7 +1135,7 @@
     {
       "id": "HH-001",
       "reportedFact": "Looking For Trouble is a Pyro Region A offer at about 158k with 200 and 2000 reputation values.",
-      "acceptedBuildFact": "The two 158750/+200 variants are Nyx. The Pyro and Stanton variants are 153000/+2000. The Pyro parent is system-scoped with extracted branch localities B, C, and D.",
+      "acceptedBuildFact": "The two 158750/+200 variants are Nyx. The Pyro and Stanton variants are 153000/+200 with generic Ship Combat scope. The Pyro parent remains system-scoped with extracted branch localities B, C, and D; Stanton now has source-backed parent Stanton1 plus subcontract Stanton2, Stanton3, and Stanton4 localities.",
       "resolutionStatus": "requires_build_matched_in_game_observation",
       "prohibitedAction": "Do not synthesize one row by joining the Nyx payout, Pyro region, and Pyro reputation reward.",
       "reportedEvidenceStatus": "observed_example",
@@ -1178,7 +1185,7 @@
           "calculatedPayout",
           "outcomeEdges[type in calculated_auec_base_solo,fixed_currency]"
         ],
-        "baselineSha256": "0ee48e03d8bd2da76cb45054d067def3b09690e25e0f80e67939245460c6ff88",
+        "baselineSha256": "143f769a57cb6b0bb0e42ad00e9fe1b356f16d6ad247f2c081d9c7bf02f3f8af",
         "gate": "must_not_change"
       },
       {
@@ -1203,7 +1210,7 @@
           "calculatedReputationRewards",
           "outcomeEdges[type contains reputation]"
         ],
-        "baselineSha256": "748d1b7bb06712c8dfde200137d3d36dafc3488617b6621c856c815253edbffb",
+        "baselineSha256": "cbdb90b16bd32418a9e61a5a5dfad1807a6323bb668dbd663d1cf8a2ba5a058e",
         "gate": "must_not_change"
       },
       {
@@ -1215,7 +1222,7 @@
           "prerequisiteEdges[type in location,locality]",
           "subContractPrerequisiteEdges[type in location,locality]"
         ],
-        "baselineSha256": "055c6db4fa901316da116433aa1e7bf8b751d70a73ba1b619bf806ba68e94d8c",
+        "baselineSha256": "5df86951f16a9a9b2d57ea6365e088b4df347fd3da3ccd4b095db05ba5da7405",
         "gate": "must_not_change"
       }
     ],
@@ -1298,8 +1305,8 @@
       "evidenceStatus": "published_and_verified"
     },
     {
-      "path": "D:/Moonbreaker/server-data/missions/source/mission_contracts.json",
-      "role": "accepted Scintel source contract copy",
+      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/missions/mission_contracts.json",
+      "role": "accepted Scintel source contract before Moonbreaker publication",
       "evidenceStatus": "source_backed"
     },
     {
@@ -1313,7 +1320,7 @@
       "evidenceStatus": "moonbreaker_derived"
     },
     {
-      "path": "D:/scintel/out/LIVE/4.9.0-live.12232306/datasets/ref_index.json",
+      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/ref_index.json",
       "role": "source GUID and locality-name resolution",
       "evidenceStatus": "source_backed"
     },

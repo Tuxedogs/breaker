@@ -1,0 +1,2308 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+  "variant": {
+    "variantKey": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+    "familyKey": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+    "conceptKey": "33df6d3c6482adf11250",
+    "objectiveSignature": {
+      "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|unlock:0d013fcd5880|unknown:bounded||||",
+      "activityKey": "resource-gathering+salvage-ship",
+      "titleStem": "adagio-industrial-component-salvage",
+      "descriptionStem": "adagio-industrial-component-salvage",
+      "handlerStem": "adagio-rg-fpssalvage-notforrelease",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:0d013fcd5880",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering+salvage-ship",
+        "activity-source:structural",
+        "title:adagio-industrial-component-salvage",
+        "description:adagio-industrial-component-salvage",
+        "handler:adagio-rg-fpssalvage-notforrelease",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:standard",
+        "chain:unlock:0d013fcd5880",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Salvage",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Salvager Needed (Small Special Order of RMC / Components)",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. \n\nWe recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager. This request probably won't be as easy to satisfy as our normal contracts, even with the amount of ships buzzing through a system as populated as Stanton, so don't be surprised if you have to put a bit more effort into hunting down what's needed.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+    "rawName": "@Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+    "internalName": "Adagio_RG_FPSSalvage_Stanton_Canisters_S1Components_Unique",
+    "missionType": "Salvage",
+    "provider": "Adagio Holdings",
+    "faction": "Adagio Holdings",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+      "factionDisplayName": "Adagio Holdings",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+    "prerequisiteSummary": "Neutral / 0 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Neutral / 0 rep to Jr. Contractor / 800 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "48408311-629d-40ba-a2d6-40773d56b9b0"
+          ]
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Solar System",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Solar System",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+      ],
+      "possibleLocations": [
+        "Stanton Solar System"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "resolvedName": "Stanton Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+          "displayName": "Stanton Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Solar System"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Solar System",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Solar System",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Solar System",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+            "displayName": "Stanton Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Solar System"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Solar System",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+        "resolvedName": "Stanton Solar System",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Solar System"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Standing +100",
+        "0 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +100"
+      ],
+      "credits": "0 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "0 aUEC",
+        "amount": 0,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 0,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 0,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [
+            "non_positive_time_to_complete"
+          ],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release",
+      "Work in progress"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+        "familyId": "407c4e25-5e47-4460-9aed-67077c5e0f5e|Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": true
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_472a438d309a49e4b42e7554",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_93d5b17952fefac3f303a8c7",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "48408311-629d-40ba-a2d6-40773d56b9b0"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_2470f082418f2472189642b0",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "48408311-629d-40ba-a2d6-40773d56b9b0"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "1d4ce073-e4cb-446e-a68f-76044ee32def"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_195f765275536617cff48bc2",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "c9c137cf-c520-47ee-9e6d-5d653dfbe201"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "1d4ce073-e4cb-446e-a68f-76044ee32def"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_c3cf0f2965d305073034b8c6",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_8fa18ab838769a7c8d57e84e",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 0,
+              "amount": 0,
+              "rawAmount": 0,
+              "integerRoundedAmount": 0,
+              "unresolvedReasons": [],
+              "validationWarnings": [
+                "non_positive_time_to_complete"
+              ],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.036999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 2.295
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 2.3649999999999998
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "0",
+                "value": 0,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Adagio_from",
+          "displayText": "Adagio Holdings",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "recordName": "FactionReputation.FactionReputation_Lawful_AdagioHoldings",
+          "recordType": null,
+          "displayName": "Adagio Holdings",
+          "path": "factions/factionreputation/factionreputation_lawful_adagioholdings.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+          "localizationKey": "Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+          "template": "Salvager Needed (Small Special Order of RMC / Components)",
+          "displayText": "Salvager Needed (Small Special Order of RMC / Components)",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+            "requirements": [
+              {
+                "edgeId": "pre_195f765275536617cff48bc2",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "c9c137cf-c520-47ee-9e6d-5d653dfbe201",
+                  "recordName": "StarMapObject.StantonSolarSystem",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/stantonsolarsystem.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "1d4ce073-e4cb-446e-a68f-76044ee32def"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 0,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 0,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [
+            "non_positive_time_to_complete"
+          ],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_c3cf0f2965d305073034b8c6",
+            "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 0,
+              "amount": 0,
+              "rawAmount": 0,
+              "integerRoundedAmount": 0,
+              "unresolvedReasons": [],
+              "validationWarnings": [
+                "non_positive_time_to_complete"
+              ],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.036999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 2.295
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 2.3649999999999998
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "0",
+                "value": 0,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 0,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 0,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [
+            "non_positive_time_to_complete"
+          ],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_27a1f216a324458ec01b7678",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "sourceScope": "contract",
+          "sourceOwnerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                  "minAmount": "1",
+                  "maxAmount": "8"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageRepairMagazines",
+                  "displayNameRaw": "@Salvage_Ship_Component_SRT_Cannister_Name",
+                  "displayName": "SRT Cannister",
+                  "path": "entities/haulingentityclass/haulingentityclass_salvagerepairmagazines.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "5ea0d020-8e9c-4a33-8fad-757651e1088d",
+                      "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01",
+                      "displayName": "Cambio-Lite SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c1de56e1-e20f-4c8c-bbb8-c0584e38725d",
+                      "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01_filled",
+                      "displayName": "Cambio-Lite SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01_filled.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "891a1422-3980-4756-84b2-04dd07ad7177",
+                      "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01",
+                      "displayName": "Cambio SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "100037d0-d9c1-400d-a29a-c2ea3b621753",
+                      "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01_filled",
+                      "displayName": "Cambio SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01_filled.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "8",
+                    "value": 8
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                  "minAmount": "1",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_QuantumDrive_S01",
+                  "displayNameRaw": "@Salvage_Ship_Component_Quantum_Drive_S1_Name",
+                  "displayName": "Quantum Drive (S1)",
+                  "path": "entities/haulingentityclass/haulingentityclass_quantumdrive_s01.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
+                      "recordName": "EntityClassDefinition.QDRV_ACAS_S01_FoxFire_SCItem",
+                      "displayName": "FoxFire",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f3ceefa2-670f-47c5-8c13-a80c8cf93c52",
+                      "recordName": "EntityClassDefinition.QDRV_ACAS_S01_LightFire_SCItem",
+                      "displayName": "LightFire",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_lightfire_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4a8d0265-7476-401a-a50f-5780cd212656",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Burst_SCItem",
+                      "displayName": "Burst",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_burst_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "692899e0-b637-40a4-803d-88c43f40d746",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Flood_SCItem",
+                      "displayName": "Flood",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_flood_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4e256229-5224-40af-8806-72223f753da2",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Rush_SCItem",
+                      "displayName": "Rush",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_rush_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Colossus_SCItem",
+                      "displayName": "Colossus",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_colossus_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Goliath_SCItem",
+                      "displayName": "Goliath",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_goliath_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ead4350a-695e-4d5d-86c3-e33f99d08217",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Vulcan_SCItem",
+                      "displayName": "Vulcan",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_vulcan_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c933bab5-5eec-42fe-ae83-b2c5ff91502f",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Drift_SCItem",
+                      "displayName": "Drift",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_drift_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Spectre_SCItem",
+                      "displayName": "Spectre",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_spectre_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "94b56098-d5c0-4796-a502-790cbccf34c6",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Zephyr_SCItem",
+                      "displayName": "Zephyr",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_zephyr_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "934ac478-9c87-48d1-8fd3-e5359171983c",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Atlas_SCItem",
+                      "displayName": "Atlas",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_atlas_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "08a5bfdb-1972-421f-83fe-be03b7ac5222",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Eos_SCItem",
+                      "displayName": "Eos",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_eos_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aaf32974-612a-4287-a2ba-98f590b193a1",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Hyperion_SCItem",
+                      "displayName": "Hyperion",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_hyperion_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4702547f-fa0f-4f6c-b2ed-9782ee9f518b",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Expedition_SCItem",
+                      "displayName": "Expedition",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_expedition_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0d1169c1-65e4-4ee0-bb1a-f967ab0f3c45",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Voyage_SCItem",
+                      "displayName": "Voyage",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_voyage_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f942fa3b-d450-4c4d-a797-49f1a4685d16",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Wayfare_SCItem",
+                      "displayName": "Wayfare",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_wayfare_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_Beacon_SCItem",
+                      "displayName": "Beacon",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "95a43815-970e-4a70-87df-0658c32495d8",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_Siren_SCItem",
+                      "displayName": "Siren",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_siren_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "995c2de5-f7e6-4646-83e3-4627ba5a5865",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_VK00_SCItem",
+                      "displayName": "VK-00",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_vk00_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                  "minAmount": "1",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_JumpDrive_S01",
+                  "displayNameRaw": "@Salvage_Ship_Component_Jump_Drive_S1_Name",
+                  "displayName": "Jump Drive (S1)",
+                  "path": "entities/haulingentityclass/haulingentityclass_jumpdrive_s01.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "c8797bce-6220-4d1e-bc6d-23da4a366a6d",
+                      "recordName": "EntityClassDefinition.JDRV_TARS_S01_Explorer_SCItem",
+                      "displayName": "Explorer",
+                      "path": "entities/scitem/ships/jumpdrive/jdrv_tars_s01_explorer_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE']/contracts/CareerContract[@id='1d4ce073-e4cb-446e-a68f-76044ee32def']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                    "minAmount": "1",
+                    "maxAmount": "8"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageRepairMagazines",
+                    "displayNameRaw": "@Salvage_Ship_Component_SRT_Cannister_Name",
+                    "displayName": "SRT Cannister",
+                    "path": "entities/haulingentityclass/haulingentityclass_salvagerepairmagazines.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "5ea0d020-8e9c-4a33-8fad-757651e1088d",
+                        "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01",
+                        "displayName": "Cambio-Lite SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c1de56e1-e20f-4c8c-bbb8-c0584e38725d",
+                        "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01_filled",
+                        "displayName": "Cambio-Lite SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01_filled.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "891a1422-3980-4756-84b2-04dd07ad7177",
+                        "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01",
+                        "displayName": "Cambio SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "100037d0-d9c1-400d-a29a-c2ea3b621753",
+                        "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01_filled",
+                        "displayName": "Cambio SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01_filled.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "8",
+                      "value": 8
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                    "minAmount": "1",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_QuantumDrive_S01",
+                    "displayNameRaw": "@Salvage_Ship_Component_Quantum_Drive_S1_Name",
+                    "displayName": "Quantum Drive (S1)",
+                    "path": "entities/haulingentityclass/haulingentityclass_quantumdrive_s01.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
+                        "recordName": "EntityClassDefinition.QDRV_ACAS_S01_FoxFire_SCItem",
+                        "displayName": "FoxFire",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f3ceefa2-670f-47c5-8c13-a80c8cf93c52",
+                        "recordName": "EntityClassDefinition.QDRV_ACAS_S01_LightFire_SCItem",
+                        "displayName": "LightFire",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_lightfire_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4a8d0265-7476-401a-a50f-5780cd212656",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Burst_SCItem",
+                        "displayName": "Burst",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_burst_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "692899e0-b637-40a4-803d-88c43f40d746",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Flood_SCItem",
+                        "displayName": "Flood",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_flood_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4e256229-5224-40af-8806-72223f753da2",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Rush_SCItem",
+                        "displayName": "Rush",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_rush_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Colossus_SCItem",
+                        "displayName": "Colossus",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_colossus_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Goliath_SCItem",
+                        "displayName": "Goliath",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_goliath_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ead4350a-695e-4d5d-86c3-e33f99d08217",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Vulcan_SCItem",
+                        "displayName": "Vulcan",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_vulcan_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c933bab5-5eec-42fe-ae83-b2c5ff91502f",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Drift_SCItem",
+                        "displayName": "Drift",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_drift_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Spectre_SCItem",
+                        "displayName": "Spectre",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_spectre_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "94b56098-d5c0-4796-a502-790cbccf34c6",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Zephyr_SCItem",
+                        "displayName": "Zephyr",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_zephyr_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "934ac478-9c87-48d1-8fd3-e5359171983c",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Atlas_SCItem",
+                        "displayName": "Atlas",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_atlas_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "08a5bfdb-1972-421f-83fe-be03b7ac5222",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Eos_SCItem",
+                        "displayName": "Eos",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_eos_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aaf32974-612a-4287-a2ba-98f590b193a1",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Hyperion_SCItem",
+                        "displayName": "Hyperion",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_hyperion_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4702547f-fa0f-4f6c-b2ed-9782ee9f518b",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Expedition_SCItem",
+                        "displayName": "Expedition",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_expedition_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0d1169c1-65e4-4ee0-bb1a-f967ab0f3c45",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Voyage_SCItem",
+                        "displayName": "Voyage",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_voyage_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f942fa3b-d450-4c4d-a797-49f1a4685d16",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Wayfare_SCItem",
+                        "displayName": "Wayfare",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_wayfare_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_Beacon_SCItem",
+                        "displayName": "Beacon",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "95a43815-970e-4a70-87df-0658c32495d8",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_Siren_SCItem",
+                        "displayName": "Siren",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_siren_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "995c2de5-f7e6-4646-83e3-4627ba5a5865",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_VK00_SCItem",
+                        "displayName": "VK-00",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_vk00_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                    "minAmount": "1",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_JumpDrive_S01",
+                    "displayNameRaw": "@Salvage_Ship_Component_Jump_Drive_S1_Name",
+                    "displayName": "Jump Drive (S1)",
+                    "path": "entities/haulingentityclass/haulingentityclass_jumpdrive_s01.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "c8797bce-6220-4d1e-bc6d-23da4a366a6d",
+                        "recordName": "EntityClassDefinition.JDRV_TARS_S01_Explorer_SCItem",
+                        "displayName": "Explorer",
+                        "path": "entities/scitem/ships/jumpdrive/jdrv_tars_s01_explorer_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE']/contracts/CareerContract[@id='1d4ce073-e4cb-446e-a68f-76044ee32def']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_27a1f216a324458ec01b7678",
+          "variantId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "sourceScope": "contract",
+          "sourceOwnerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                  "minAmount": "1",
+                  "maxAmount": "8"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageRepairMagazines",
+                  "displayNameRaw": "@Salvage_Ship_Component_SRT_Cannister_Name",
+                  "displayName": "SRT Cannister",
+                  "path": "entities/haulingentityclass/haulingentityclass_salvagerepairmagazines.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "5ea0d020-8e9c-4a33-8fad-757651e1088d",
+                      "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01",
+                      "displayName": "Cambio-Lite SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c1de56e1-e20f-4c8c-bbb8-c0584e38725d",
+                      "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01_filled",
+                      "displayName": "Cambio-Lite SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01_filled.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "891a1422-3980-4756-84b2-04dd07ad7177",
+                      "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01",
+                      "displayName": "Cambio SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "100037d0-d9c1-400d-a29a-c2ea3b621753",
+                      "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01_filled",
+                      "displayName": "Cambio SRT Canister",
+                      "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01_filled.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "8",
+                    "value": 8
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                  "minAmount": "1",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_QuantumDrive_S01",
+                  "displayNameRaw": "@Salvage_Ship_Component_Quantum_Drive_S1_Name",
+                  "displayName": "Quantum Drive (S1)",
+                  "path": "entities/haulingentityclass/haulingentityclass_quantumdrive_s01.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
+                      "recordName": "EntityClassDefinition.QDRV_ACAS_S01_FoxFire_SCItem",
+                      "displayName": "FoxFire",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f3ceefa2-670f-47c5-8c13-a80c8cf93c52",
+                      "recordName": "EntityClassDefinition.QDRV_ACAS_S01_LightFire_SCItem",
+                      "displayName": "LightFire",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_lightfire_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4a8d0265-7476-401a-a50f-5780cd212656",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Burst_SCItem",
+                      "displayName": "Burst",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_burst_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "692899e0-b637-40a4-803d-88c43f40d746",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Flood_SCItem",
+                      "displayName": "Flood",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_flood_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4e256229-5224-40af-8806-72223f753da2",
+                      "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Rush_SCItem",
+                      "displayName": "Rush",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_rush_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Colossus_SCItem",
+                      "displayName": "Colossus",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_colossus_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Goliath_SCItem",
+                      "displayName": "Goliath",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_goliath_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ead4350a-695e-4d5d-86c3-e33f99d08217",
+                      "recordName": "EntityClassDefinition.QDRV_JUST_S01_Vulcan_SCItem",
+                      "displayName": "Vulcan",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_vulcan_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c933bab5-5eec-42fe-ae83-b2c5ff91502f",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Drift_SCItem",
+                      "displayName": "Drift",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_drift_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Spectre_SCItem",
+                      "displayName": "Spectre",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_spectre_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "94b56098-d5c0-4796-a502-790cbccf34c6",
+                      "recordName": "EntityClassDefinition.QDRV_RACO_S01_Zephyr_SCItem",
+                      "displayName": "Zephyr",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_zephyr_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "934ac478-9c87-48d1-8fd3-e5359171983c",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Atlas_SCItem",
+                      "displayName": "Atlas",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_atlas_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "08a5bfdb-1972-421f-83fe-be03b7ac5222",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Eos_SCItem",
+                      "displayName": "Eos",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_eos_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aaf32974-612a-4287-a2ba-98f590b193a1",
+                      "recordName": "EntityClassDefinition.QDRV_RSI_S01_Hyperion_SCItem",
+                      "displayName": "Hyperion",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_hyperion_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4702547f-fa0f-4f6c-b2ed-9782ee9f518b",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Expedition_SCItem",
+                      "displayName": "Expedition",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_expedition_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "0d1169c1-65e4-4ee0-bb1a-f967ab0f3c45",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Voyage_SCItem",
+                      "displayName": "Voyage",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_voyage_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f942fa3b-d450-4c4d-a797-49f1a4685d16",
+                      "recordName": "EntityClassDefinition.QDRV_TARS_S01_Wayfare_SCItem",
+                      "displayName": "Wayfare",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_wayfare_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_Beacon_SCItem",
+                      "displayName": "Beacon",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "95a43815-970e-4a70-87df-0658c32495d8",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_Siren_SCItem",
+                      "displayName": "Siren",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_siren_scitem.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "995c2de5-f7e6-4646-83e3-4627ba5a5865",
+                      "recordName": "EntityClassDefinition.QDRV_WETK_S01_VK00_SCItem",
+                      "displayName": "VK-00",
+                      "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_vk00_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                  "minAmount": "1",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_JumpDrive_S01",
+                  "displayNameRaw": "@Salvage_Ship_Component_Jump_Drive_S1_Name",
+                  "displayName": "Jump Drive (S1)",
+                  "path": "entities/haulingentityclass/haulingentityclass_jumpdrive_s01.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "c8797bce-6220-4d1e-bc6d-23da4a366a6d",
+                      "recordName": "EntityClassDefinition.JDRV_TARS_S01_Explorer_SCItem",
+                      "displayName": "Explorer",
+                      "path": "entities/scitem/ships/jumpdrive/jdrv_tars_s01_explorer_scitem.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE']/contracts/CareerContract[@id='1d4ce073-e4cb-446e-a68f-76044ee32def']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                    "minAmount": "1",
+                    "maxAmount": "8"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "8c07c513-0dee-4703-b9f8-2cf1ee507461",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_SalvageRepairMagazines",
+                    "displayNameRaw": "@Salvage_Ship_Component_SRT_Cannister_Name",
+                    "displayName": "SRT Cannister",
+                    "path": "entities/haulingentityclass/haulingentityclass_salvagerepairmagazines.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "5ea0d020-8e9c-4a33-8fad-757651e1088d",
+                        "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01",
+                        "displayName": "Cambio-Lite SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c1de56e1-e20f-4c8c-bbb8-c0584e38725d",
+                        "recordName": "EntityClassDefinition.grin_multitool_resource_salvage_repair_01_filled",
+                        "displayName": "Cambio-Lite SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_multitool_resource_salvage_repair_01_filled.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "891a1422-3980-4756-84b2-04dd07ad7177",
+                        "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01",
+                        "displayName": "Cambio SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "100037d0-d9c1-400d-a29a-c2ea3b621753",
+                        "recordName": "EntityClassDefinition.grin_tool_resource_salvage_repair_01_filled",
+                        "displayName": "Cambio SRT Canister",
+                        "path": "entities/scitem/weapons/magazines/grin_tool_resource_salvage_repair_01_filled.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "8",
+                      "value": 8
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                    "minAmount": "1",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "43c98b81-4bd0-4768-b1a8-785c5a4ea302",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_QuantumDrive_S01",
+                    "displayNameRaw": "@Salvage_Ship_Component_Quantum_Drive_S1_Name",
+                    "displayName": "Quantum Drive (S1)",
+                    "path": "entities/haulingentityclass/haulingentityclass_quantumdrive_s01.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "dadc9318-d0f2-48c2-aad4-f2dd0c5f7fd3",
+                        "recordName": "EntityClassDefinition.QDRV_ACAS_S01_FoxFire_SCItem",
+                        "displayName": "FoxFire",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_foxfire_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f3ceefa2-670f-47c5-8c13-a80c8cf93c52",
+                        "recordName": "EntityClassDefinition.QDRV_ACAS_S01_LightFire_SCItem",
+                        "displayName": "LightFire",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_acas_s01_lightfire_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4a8d0265-7476-401a-a50f-5780cd212656",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Burst_SCItem",
+                        "displayName": "Burst",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_burst_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "692899e0-b637-40a4-803d-88c43f40d746",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Flood_SCItem",
+                        "displayName": "Flood",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_flood_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4e256229-5224-40af-8806-72223f753da2",
+                        "recordName": "EntityClassDefinition.QDRV_ARCC_S01_Rush_SCItem",
+                        "displayName": "Rush",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_arcc_s01_rush_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Colossus_SCItem",
+                        "displayName": "Colossus",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_colossus_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "fc3fadaa-cd29-4ac5-a2f5-51d4988d3def",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Goliath_SCItem",
+                        "displayName": "Goliath",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_goliath_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ead4350a-695e-4d5d-86c3-e33f99d08217",
+                        "recordName": "EntityClassDefinition.QDRV_JUST_S01_Vulcan_SCItem",
+                        "displayName": "Vulcan",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_just_s01_vulcan_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c933bab5-5eec-42fe-ae83-b2c5ff91502f",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Drift_SCItem",
+                        "displayName": "Drift",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_drift_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Spectre_SCItem",
+                        "displayName": "Spectre",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_spectre_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "94b56098-d5c0-4796-a502-790cbccf34c6",
+                        "recordName": "EntityClassDefinition.QDRV_RACO_S01_Zephyr_SCItem",
+                        "displayName": "Zephyr",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_raco_s01_zephyr_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "934ac478-9c87-48d1-8fd3-e5359171983c",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Atlas_SCItem",
+                        "displayName": "Atlas",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_atlas_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "08a5bfdb-1972-421f-83fe-be03b7ac5222",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Eos_SCItem",
+                        "displayName": "Eos",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_eos_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aaf32974-612a-4287-a2ba-98f590b193a1",
+                        "recordName": "EntityClassDefinition.QDRV_RSI_S01_Hyperion_SCItem",
+                        "displayName": "Hyperion",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_rsi_s01_hyperion_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4702547f-fa0f-4f6c-b2ed-9782ee9f518b",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Expedition_SCItem",
+                        "displayName": "Expedition",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_expedition_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "0d1169c1-65e4-4ee0-bb1a-f967ab0f3c45",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Voyage_SCItem",
+                        "displayName": "Voyage",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_voyage_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f942fa3b-d450-4c4d-a797-49f1a4685d16",
+                        "recordName": "EntityClassDefinition.QDRV_TARS_S01_Wayfare_SCItem",
+                        "displayName": "Wayfare",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_tars_s01_wayfare_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b5cbef86-f37f-4e05-8aff-e0f61afe166e",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_Beacon_SCItem",
+                        "displayName": "Beacon",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_beacon_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "95a43815-970e-4a70-87df-0658c32495d8",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_Siren_SCItem",
+                        "displayName": "Siren",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_siren_scitem.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "995c2de5-f7e6-4646-83e3-4627ba5a5865",
+                        "recordName": "EntityClassDefinition.QDRV_WETK_S01_VK00_SCItem",
+                        "displayName": "VK-00",
+                        "path": "entities/scitem/ships/quantumdrive/qdrv_wetk_s01_vk00_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                    "minAmount": "1",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "dedf25b0-d491-4a68-98dc-b94b0ec5b0b5",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_JumpDrive_S01",
+                    "displayNameRaw": "@Salvage_Ship_Component_Jump_Drive_S1_Name",
+                    "displayName": "Jump Drive (S1)",
+                    "path": "entities/haulingentityclass/haulingentityclass_jumpdrive_s01.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "c8797bce-6220-4d1e-bc6d-23da4a366a6d",
+                        "recordName": "EntityClassDefinition.JDRV_TARS_S01_Explorer_SCItem",
+                        "displayName": "Explorer",
+                        "path": "entities/scitem/ships/jumpdrive/jdrv_tars_s01_explorer_scitem.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_FPSSalvage_Rank0_NOTFORRELEASE']/contracts/CareerContract[@id='1d4ce073-e4cb-446e-a68f-76044ee32def']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "1d4ce073-e4cb-446e-a68f-76044ee32def",
+      "generatorGuid": "407c4e25-5e47-4460-9aed-67077c5e0f5e",
+      "generatorName": "ContractGenerator.Adagio_ResourceGathering_FPSSalvage",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_fpssalvage.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Adagio_Industrial_Component_Salvage_Stanton_E_Title_001",
+      "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Stanton_E_Desc_001"
+    }
+  }
+}

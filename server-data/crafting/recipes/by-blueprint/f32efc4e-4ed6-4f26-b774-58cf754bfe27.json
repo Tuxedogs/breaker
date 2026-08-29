@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Stampede",
+    "nameSource": "blueprintGuid",
+    "componentType": "miningModifier",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "d1a1bf03-89d9-4eae-ac34-11eeb8e45d8f",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_active_stampede.xml",
+    "baseStats": {
+      "mass": 1.5,
+      "health": 200,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_active_stampede.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_active_stampede.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_active_stampede.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      }
+    },
+    "blueprintGuid": "f32efc4e-4ed6-4f26-b774-58cf754bfe27",
+    "blueprintName": "BP_CRAFT_Mining_Modules_Active_Stampede",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/bp_craft_mining_modules_active_stampede.xml",
+    "entityClass": "1bb6ee6d-3930-4c03-b6c6-38aad3a4703b",
+    "craftTimeSeconds": 95,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.2",
+        "unitType": "scu",
+        "minQuality": "0",
+        "inputKind": "material"
+      },
+      {
+        "slot": "WIRING",
+        "costType": "resource",
+        "materialKey": "copper",
+        "materialName": "Copper",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "0",
+        "inputKind": "material"
+      }
+    ],
+    "qualityModifiers": [],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_MISSIONREWARD_Mining_Modules_Active_Stampede",
+        "poolGuid": "23a2db12-4ef4-4221-9b3d-6f5d9dac6cec",
+        "sourceFolder": "blueprintmissionpools",
+        "weight": 1,
+        "displayName": "Mining Modules Active Stampede"
+      }
+    ]
+  }
+}

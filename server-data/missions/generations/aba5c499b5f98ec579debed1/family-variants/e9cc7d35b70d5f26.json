@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "91ce1ba9-9cc4-4bcc-9c20-ce62727cbd14|CDF_SandboxCriminalKills_List",
+  "variants": [
+    {
+      "variantKey": "4714f336-ac92-861b-8ec8-598c9b915f8b",
+      "familyKey": "91ce1ba9-9cc4-4bcc-9c20-ce62727cbd14|CDF_SandboxCriminalKills_List",
+      "conceptKey": "d51926b8f33a643c6d19",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|unknown|bounty|standard|open|unknown:bounded||||variant:4714f336-ac92-861b-8ec8-598c9b915f8b",
+        "activityKey": "unknown",
+        "titleStem": "openbounty",
+        "descriptionStem": "openbounty",
+        "handlerStem": "cdf-sandbox-criminal-kills-list",
+        "archetype": "Bounty",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:openbounty",
+          "description:openbounty",
+          "handler:cdf-sandbox-criminal-kills-list",
+          "contract:contract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "91ce1ba9-9cc4-4bcc-9c20-ce62727cbd14|CDF_SandboxCriminalKills_List",
+          "CDF_StantonStar_SandboxCriminalKills"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "CDF Stanton Star Sandbox Criminal Kills",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@openbounty_title",
+      "internalName": "CDF_StantonStar_SandboxCriminalKills",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "91ce1ba9-9cc4-4bcc-9c20-ce62727cbd14|CDF_SandboxCriminalKills_List",
+          "CDF_StantonStar_SandboxCriminalKills"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "No credit reward extracted"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "4714f336-ac92-861b-8ec8-598c9b915f8b",
+        "generatorGuid": "91ce1ba9-9cc4-4bcc-9c20-ce62727cbd14",
+        "generatorName": "ContractGenerator.CDF_Generator",
+        "generatorPath": "contracts/contractgenerator/cdf_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@openbounty_title",
+        "descriptionRaw": "@openbounty_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

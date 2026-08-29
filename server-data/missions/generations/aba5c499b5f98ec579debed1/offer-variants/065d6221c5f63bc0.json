@@ -1,0 +1,795 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "citizens-for-prosperity:defenders-needed-against-headhunters",
+  "variants": [
+    {
+      "variantKey": "1c5e4a84-749c-4747-9f37-e1ad310da801",
+      "familyKey": "baf9ec45-1e9d-4db3-9851-dfa44f150c96|CFP_EliminateAll_Pyro",
+      "conceptKey": "1178e6cfacdcf0dbe260",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-all|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "cfp-eliminateall-from-cfp-hh",
+        "descriptionStem": "cfp-eliminateall-from-cfp-hh",
+        "handlerStem": "cfp-eliminate-all",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:cfp-eliminateall-from-cfp-hh",
+          "description:cfp-eliminateall-from-cfp-hh",
+          "handler:cfp-eliminate-all",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Defenders needed against Headhunters",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We received an emergency comm from [Location] reporting that they are currently under attack by a group of Headhunters. We know our presence in the system has upset the Headhunters, but it hardly excuses this unprovoked attack.\n\nIf available, please gather your gear and head out. Just understand that Headhunters are experienced fighters and will not back down easily.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_eliminateall_fromCFP_hh_M_title_001",
+      "internalName": "CFP_Pyro_RegionC_CFPOutpost_HHEliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Headhunters: Neutral Elite Contractor",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Region C; Headhunters: Neutral Elite Contractor",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region C",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Headhunters: Neutral Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region C"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [
+          "Region C"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "resolvedName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region C"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region C",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+              "displayName": "Region C",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region C"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region C"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: CFP Outpost Region C: Karna \"Valor\" Rifle, Artimex Core, Artimex Arms Canuto, Artimex Legs Canuto +2",
+          "Standing +100",
+          "Affinity +50",
+          "65,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "CFP Outpost Region C: Karna \"Valor\" Rifle, Artimex Core, Artimex Arms Canuto, Artimex Legs Canuto +2"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "a2da9707-9859-4da0-9f4b-90e5afe45833",
+            "poolName": "CFP Outpost Region C",
+            "rewardCount": 6,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "16.67% chance - 1 of 6",
+            "rewards": [
+              {
+                "blueprintGuid": "c3b0d88f-ba3b-4ed2-b2de-a6f212fe1a65",
+                "displayName": "Karna \"Valor\" Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "e7da07a8-445c-4fdf-a854-a9acc29f29c1",
+                "displayName": "Artimex Core",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "1a8413f9-42db-4544-a6be-cecba29e7579",
+                "displayName": "Artimex Arms Canuto",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "46fc2ac8-47b3-4772-b0d4-6a3807f23fc2",
+                "displayName": "Artimex Legs Canuto",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "bc21018e-29fd-4397-80e8-214cf17252fe",
+                "displayName": "Artimex Helmet Canuto",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "e3596782-22aa-4d83-a50b-b70e7c4f418e",
+                "displayName": "Karna Rifle Battery (35 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "16.67% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100",
+          "Affinity +50"
+        ],
+        "credits": "65,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "65,750 aUEC",
+          "amount": 65750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_mercenary_fps.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 65750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 65750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "1c5e4a84-749c-4747-9f37-e1ad310da801",
+        "generatorGuid": "baf9ec45-1e9d-4db3-9851-dfa44f150c96",
+        "generatorName": "ContractGenerator.CitizensForProsperity_Mercenary_FPS",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_mercenary_fps.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_eliminateall_fromCFP_hh_M_title_001",
+        "descriptionRaw": "@cfp_eliminateall_fromCFP_hh_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "cbb0aa67-fb76-47d4-8a54-6864a241e70d",
+      "familyKey": "baf9ec45-1e9d-4db3-9851-dfa44f150c96|CFP_EliminateAll_Pyro",
+      "conceptKey": "1178e6cfacdcf0dbe260",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|eliminate-all|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "cfp-eliminateall-from-cfp-hh",
+        "descriptionStem": "cfp-eliminateall-from-cfp-hh",
+        "handlerStem": "cfp-eliminate-all",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:cfp-eliminateall-from-cfp-hh",
+          "description:cfp-eliminateall-from-cfp-hh",
+          "handler:cfp-eliminate-all",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Defenders needed against Headhunters",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We received an emergency comm from [Location] reporting that they are currently under attack by a group of Headhunters. We know our presence in the system has upset the Headhunters, but it hardly excuses this unprovoked attack.\n\nIf available, please gather your gear and head out. Just understand that Headhunters are experienced fighters and will not back down easily.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@cfp_eliminateall_fromCFP_hh_M_title_001",
+      "internalName": "CFP_Pyro_RegionD_CFPOutpost_HHEliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Headhunters: Neutral Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Region D; Headhunters: Neutral Elite Contractor",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region D",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Headhunters: Neutral Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region D"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [
+          "Region D"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "resolvedName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region D",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+              "displayName": "Region D",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region D"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region D"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: CFP Outpost Region D: Karna \"Rager\" Rifle, Artimex Core, Artimex Arms Wildwood, Artimex Legs Wildwood +2",
+          "Standing +200",
+          "Affinity +50",
+          "110,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "CFP Outpost Region D: Karna \"Rager\" Rifle, Artimex Core, Artimex Arms Wildwood, Artimex Legs Wildwood +2"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "e6bdf007-4469-46fd-88d7-8e139c59829a",
+            "poolName": "CFP Outpost Region D",
+            "rewardCount": 6,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "16.67% chance - 1 of 6",
+            "rewards": [
+              {
+                "blueprintGuid": "44503356-67a9-4063-8b51-7f76f23cacce",
+                "displayName": "Karna \"Rager\" Rifle",
+                "componentType": "weapons",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "b6a37cee-e3b1-4996-949e-6349d683eb62",
+                "displayName": "Artimex Core",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "cdd44ae4-e3db-472c-ac3b-1c51bc251a42",
+                "displayName": "Artimex Arms Wildwood",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "f8113e82-fe3c-48e8-9f23-92ae7a6ac219",
+                "displayName": "Artimex Legs Wildwood",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "2122ef02-ebdb-45a9-8bd7-bee31f97ae32",
+                "displayName": "Artimex Helmet Wildwood",
+                "componentType": "armor",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "e3596782-22aa-4d83-a50b-b70e7c4f418e",
+                "displayName": "Karna Rifle Battery (35 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "16.67% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200",
+          "Affinity +50"
+        ],
+        "credits": "110,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "110,750 aUEC",
+          "amount": 110750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_mercenary_fps.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 110750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 110750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        },
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "cbb0aa67-fb76-47d4-8a54-6864a241e70d",
+        "generatorGuid": "baf9ec45-1e9d-4db3-9851-dfa44f150c96",
+        "generatorName": "ContractGenerator.CitizensForProsperity_Mercenary_FPS",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_mercenary_fps.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@cfp_eliminateall_fromCFP_hh_M_title_001",
+        "descriptionRaw": "@cfp_eliminateall_fromCFP_hh_M_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

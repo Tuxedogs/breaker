@@ -10,6 +10,7 @@ import {
   filterInventoryRecipeInputs,
   stripNonInventoryRecipePartsFromSearchText,
 } from "./lib/componentCardRecipeSearch.mts";
+import { isNonInventoryRecipePart } from "../src/lib/crafting/recipeInputClassification.ts";
 import {
   getScintelComponentCardSourcePath,
   getScintelCraftingSourcePath,

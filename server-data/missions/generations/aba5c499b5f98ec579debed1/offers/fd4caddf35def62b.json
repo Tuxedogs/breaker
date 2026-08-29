@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "bounty-hunters-guild:verified-bounty-target-name-at-location--9f37e4f490",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@BHG_From",
+      "titleIdentity": "@bhg_bounty_title_ASD_Research_001",
+      "sourceTuple": [
+        "@BHG_From",
+        "@bhg_bounty_title_ASD_Research_001"
+      ]
+    },
+    "displayTitle": "Verified Bounty: [TargetName] at [Location]",
+    "displayTitleTemplate": "Verified Bounty: [TargetName] at [Location]",
+    "titleEvidence": {
+      "raw": "@bhg_bounty_title_ASD_Research_001",
+      "localizationKey": "bhg_bounty_title_ASD_Research_001",
+      "template": "Verified Bounty: ~mission(TargetName) at ~mission(Location)",
+      "displayText": "Verified Bounty: ~mission(TargetName) at ~mission(Location)",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(TargetName)",
+          "expression": "TargetName",
+          "segments": [
+            "TargetName"
+          ]
+        },
+        {
+          "raw": "~mission(Location)",
+          "expression": "Location",
+          "segments": [
+            "Location"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@BHG_From",
+      "displayText": "Bounty Hunters Guild",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "bounty-hunters-guild",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "811dbf1b-f021-4809-96ff-77fe8002b8e5"
+    ],
+    "familyKeys": [
+      "f52b6df3-4a40-418e-b32e-30ac6381d144|BountyHuntersGuild_FPS_Stanton"
+    ],
+    "legacyConceptKeys": [
+      "3c225253988c65e07a57"
+    ],
+    "objectiveTemplateKeys": [
+      "81b7debd-1d3c-4b50-8ec2-7c7544472150",
+      "contracts/contracttemplates/eliminatespecific_parentlocation.xml"
+    ],
+    "missionTypes": [
+      "Contract"
+    ],
+    "rewardTypes": [
+      "blueprints",
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "scopeDisplayName": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "variantCount": 1,
+        "rewardPathCount": 1,
+        "amountSummary": {
+          "status": "exact",
+          "resolvedPathCount": 1,
+          "unresolvedPathCount": 0,
+          "minAmount": 50,
+          "maxAmount": 50
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "confidenceFlags": [
+      "prerequisites",
+      "unresolved"
+    ],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown",
+      "offer_key_collision_disambiguated"
+    ],
+    "searchText": "bounty-hunters-guild:verified-bounty-target-name-at-location--9f37e4f490 verified bounty: [targetname] at [location] bounty-hunters-guild @bhg_from bounty hunters guild @bhg_bounty_title_asd_research_001 bhg_bounty_title_asd_research_001 unknown faction bounty bounty hunters guild 811dbf1b-f021-4809-96ff-77fe8002b8e5"
+  }
+}

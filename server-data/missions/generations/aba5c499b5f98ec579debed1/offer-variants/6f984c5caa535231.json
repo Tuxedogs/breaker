@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "covalex:alliance-aid-treatment-cargo-haul-large-scale",
+  "variants": [
+    {
+      "variantKey": "d6f3a5af-bf63-45b2-aff8-3d4892f86714",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Covalex",
+      "conceptKey": "41ad9af62479f0ba5af3",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|deliver|activity-defined|standard|unlock:d91c88b24f9f|unknown:bounded||||",
+        "activityKey": "deliver",
+        "titleStem": "clean-air-hauling-bulk-mold-treatment",
+        "descriptionStem": "clean-air-hauling-bulk-mold-treatment",
+        "handlerStem": "clean-air-covalex",
+        "archetype": "Cargo",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:d91c88b24f9f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:deliver",
+          "activity-source:structural",
+          "title:clean-air-hauling-bulk-mold-treatment",
+          "description:clean-air-hauling-bulk-mold-treatment",
+          "handler:clean-air-covalex",
+          "contract:contract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:d91c88b24f9f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Covalex",
+          "CleanAir_Bulk_MoldTreatment_System-To-System"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Alliance Aid: Treatment Cargo Haul - Large Scale",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hi,\n\nPeople are breathing a sigh of relief that a treatment for the People's Aliment has been found, but we're not out of the woods just yet. There's still plenty of folks suffering . We're hoping you can help the cause by handling a large scale haul of the stuff.  \n\nIf you're available, we need you to pick up from [Location] and then fly it over to [Destination]. Remember to bring a handheld tractor beam and a ship that can hold [MissionMaxSCUSize] cargo containers. \n \n\nSafe Hauling,  \nReyes Ling \nCargo Logistics Coordinator\nLing Family Hauling\n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@CleanAir_Hauling_Bulk_MoldTreatment_title",
+      "internalName": "CleanAir_Bulk_MoldTreatment_System-To-System",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Hauling",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Hauling",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Covalex",
+          "CleanAir_Bulk_MoldTreatment_System-To-System"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "92d14e87-a044-474a-807e-98a49f4ed49a"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "a335e8b0-e551-4126-a213-5634d7d23511"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "resolvedName": "Stanton",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "displayName": "Stanton",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "a335e8b0-e551-4126-a213-5634d7d23511"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
+              "displayName": "Stanton",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a335e8b0-e551-4126-a213-5634d7d23511",
+          "resolvedName": "Stanton",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "1,254,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "1,254,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "1,254,250 aUEC",
+          "amount": 1254250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 1254250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 1254250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d6f3a5af-bf63-45b2-aff8-3d4892f86714",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_Hauling_Bulk_MoldTreatment_title",
+        "descriptionRaw": "@CleanAir_Hauling_Bulk_MoldTreatment_desc"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

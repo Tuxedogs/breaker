@@ -1,0 +1,92 @@
+{
+  "buildId": "4.10.191.2241-12519617-scintel.2",
+  "channel": "LIVE",
+  "confidence": "medium",
+  "confidenceSummary": {
+    "high": 344,
+    "low": 15089,
+    "medium": 7628
+  },
+  "externalSourceUse": {
+    "communityData": false,
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "foundryNativePercent": 100,
+  "generatedAt": "2026-08-29T08:03:42Z",
+  "generator": "scripts/fitting/build_fitting_registries.py",
+  "generatorModule": "scripts/fitting/compatibility/port_validation.py",
+  "knownLimitations": [
+    "The model only covers component families rebuilt as Foundry-native fitting registries in Phase 1.",
+    "Resolved default records that are not present in component registries remain visible but are not forced into compatibility.",
+    "Thruster and bespoke ship-specific ports are not generalized unless their component registry exposes a compatible component key and type.",
+    "No fitting calculation, power budget, heat, ammo, or shaped API behavior is implemented in this phase."
+  ],
+  "recommendedNextPhase": "Build the practical fitting calculation engine on top of compatible_items_by_port.json without adding shaped APIs or UI.",
+  "ruleSummary": {
+    "defaultItemAttachSizeStatusCounts": {
+      "missing_default": 322,
+      "resolved_missing_attach_size": 22739
+    },
+    "defaultItemStatusCounts": {
+      "compatibility_unknown": 14749,
+      "missing_default": 322,
+      "resolved_and_compatible": 7932,
+      "resolved_but_incompatible": 58
+    },
+    "knownCompatibilityPorts": 7990,
+    "ruleSources": [
+      "SItemPortDef.allowedTypes",
+      "hardpoint.portType",
+      "hardpoint.requiredType"
+    ],
+    "totalCompatibleMappings": 682252,
+    "totalPorts": 23061,
+    "unknownCompatibilityPorts": 15071
+  },
+  "rulesUsed": {
+    "editability": "Locked, bespoke, or explicitly uneditable ports keep default resolution but are not counted as user-editable replacements.",
+    "size": "Component size must be within min/max, with exactSize reported when minSize equals maxSize.",
+    "subtype": "Meaningful port subtype values are matched against component subtype fields.",
+    "tags": "Port tags are enforced only when the port exposes tag restrictions.",
+    "type": "SItemPortDef allowedTypes first; requiredType/portType fallback when explicit allowedTypes are absent.",
+    "unknown": "Ports without a supported type restriction are classified as unknown instead of allowing all components."
+  },
+  "schemaVersion": 1,
+  "sourceClassification": "derived from another new semantic registry",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.10.191.2241-12519617\\foundry\\records",
+  "summary": {
+    "bespokePorts": 0,
+    "editablePorts": 21517,
+    "lockedOrBespokePorts": 0,
+    "lockedPorts": 0,
+    "portsWithMissingDefaults": 322,
+    "portsWithResolvedDefaults": 7990,
+    "portsWithUnknownCompatibility": 15071,
+    "portsWithUnresolvedDefaults": 0,
+    "portsWithZeroCompatibleReplacements": 15351,
+    "resolvedDefaultsCompatible": 7932,
+    "resolvedDefaultsIncompatible": 58,
+    "totalCompatibleMappings": 682252,
+    "totalCompatibleReplacementMappings": 681415,
+    "totalPorts": 23061,
+    "totalShips": 344
+  },
+  "unresolvedCategories": {
+    "byKind": {
+      "compatibility_rules_default_item_ref_unresolved": 16
+    },
+    "total": 16
+  },
+  "unresolvedRefsSummary": {
+    "byKind": {
+      "compatibility_rules_default_item_ref_unresolved": 16
+    },
+    "total": 16
+  }
+}

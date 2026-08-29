@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Overrun",
+    "nameSource": "blueprintGuid",
+    "componentType": "miningModifier",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "b28a5c61-63a4-478b-8047-5fba545d5b8a",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_overrun.xml",
+    "baseStats": {
+      "mass": 1.5,
+      "health": 200,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_overrun.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_overrun.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_overrun.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      }
+    },
+    "blueprintGuid": "8c60d61b-9c97-4f85-b41a-aa0d7960dfbf",
+    "blueprintName": "BP_CRAFT_Mining_Modules_Passive_Overrun",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/bp_craft_mining_modules_passive_overrun.xml",
+    "entityClass": "a69721a2-06e7-4fb3-93b4-c94e4faa6820",
+    "craftTimeSeconds": 95,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.2",
+        "unitType": "scu",
+        "minQuality": "800",
+        "inputKind": "material"
+      },
+      {
+        "slot": "WIRING",
+        "costType": "resource",
+        "materialKey": "copper",
+        "materialName": "Copper",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "800",
+        "inputKind": "material"
+      }
+    ],
+    "qualityModifiers": [],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_MISSIONREWARD_Mining_Modules_Passive_Overrun",
+        "poolGuid": "94f02c11-3748-4148-8396-0f3fd904da1c",
+        "sourceFolder": "blueprintmissionpools",
+        "weight": 1,
+        "displayName": "Mining Modules Passive Overrun"
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "headhunters:prisoner-break",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@headhunters_from",
+      "titleIdentity": "@prisonerbreak_title",
+      "sourceTuple": [
+        "@headhunters_from",
+        "@prisonerbreak_title"
+      ]
+    },
+    "displayTitle": "[Prisoner Break]",
+    "displayTitleTemplate": "[Prisoner Break]",
+    "titleEvidence": {
+      "raw": "@prisonerbreak_title",
+      "localizationKey": "prisonerbreak_title",
+      "template": "~mission(Contractor|PrisonerBreakTitle)",
+      "displayText": "~mission(Contractor|PrisonerBreakTitle)",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(Contractor|PrisonerBreakTitle)",
+          "expression": "Contractor|PrisonerBreakTitle",
+          "segments": [
+            "Contractor",
+            "PrisonerBreakTitle"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@headhunters_from",
+      "displayText": "Headhunters",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "headhunters",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "0044b7aa-70c2-4a53-a617-ea9d88ceb48e"
+    ],
+    "familyKeys": [
+      "fdb4f103-397e-44e8-b795-f941d41b4fd2|HeadHunters_HijackedShip_Caterpillar_Stanton"
+    ],
+    "legacyConceptKeys": [
+      "c010394a0f812bbbab18"
+    ],
+    "objectiveTemplateKeys": [
+      "25902890-8f5f-4a51-bde7-1933023a73b8",
+      "contracts/contracttemplates/hijackedship_caterpillar.xml"
+    ],
+    "missionTypes": [
+      "Contract"
+    ],
+    "rewardTypes": [
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "09efeef4-c646-408d-a979-3ae56a3b1beb:3792e4c6-665e-44e9-9410-40389182f918"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:3792e4c6-665e-44e9-9410-40389182f918",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "3792e4c6-665e-44e9-9410-40389182f918",
+        "scopeDisplayName": "Ship Combat Head Hunters",
+        "confidence": "resolved",
+        "variantCount": 1,
+        "rewardPathCount": 1,
+        "amountSummary": {
+          "status": "exact",
+          "resolvedPathCount": 1,
+          "unresolvedPathCount": 0,
+          "minAmount": 500,
+          "maxAmount": 500
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Not for release",
+      "Work in progress"
+    ],
+    "confidenceFlags": [],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown"
+    ],
+    "searchText": "headhunters:prisoner-break [prisoner break] headhunters @headhunters_from headhunters @prisonerbreak_title prisonerbreak_title unknown faction ship combat head hunters 0044b7aa-70c2-4a53-a617-ea9d88ceb48e"
+  }
+}

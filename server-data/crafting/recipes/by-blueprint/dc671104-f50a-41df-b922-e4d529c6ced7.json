@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "BTGL",
+    "nameSource": "blueprintGuid",
+    "componentType": "container",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "6116471c-891d-4830-8968-650b6deafc00",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_golem_btgl.xml",
+    "baseStats": {
+      "mass": 500,
+      "health": 5000,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_golem_btgl.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_golem_btgl.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_golem_btgl.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      }
+    },
+    "blueprintGuid": "dc671104-f50a-41df-b922-e4d529c6ced7",
+    "blueprintName": "BP_CRAFT_Cargo_ShipMining_Pod_Golem_BTGL",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/bp_craft_cargo_shipmining_pod_golem_btgl.xml",
+    "entityClass": "b0e33855-c5ae-4267-9aea-c64eee0897b6",
+    "craftTimeSeconds": 95,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.3",
+        "unitType": "scu",
+        "minQuality": "800",
+        "inputKind": "material"
+      }
+    ],
+    "qualityModifiers": [],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_MISSIONREWARD_Cargo_ShipMining_Pod_Golem_BTGL",
+        "poolGuid": "2e9312be-02bc-4bad-8f50-4d03cb8fc967",
+        "sourceFolder": "blueprintmissionpools",
+        "weight": 1,
+        "displayName": "Cargo Ship Mining Pod Golem BTGL"
+      }
+    ]
+  }
+}

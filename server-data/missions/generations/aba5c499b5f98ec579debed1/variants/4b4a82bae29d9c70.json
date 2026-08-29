@@ -1,0 +1,1814 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "866799d2-af62-4b03-9885-d9fcfd16c16b|FoxwellEnforcement_Patrol_Pyro",
+  "variant": {
+    "variantKey": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+    "familyKey": "866799d2-af62-4b03-9885-d9fcfd16c16b|FoxwellEnforcement_Patrol_Pyro",
+    "conceptKey": "400db606cba5b0651c0b",
+    "objectiveSignature": {
+      "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|patrol|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+      "activityKey": "patrol",
+      "titleStem": "foxwell-security-patrol",
+      "descriptionStem": "foxwell-security-patrol",
+      "handlerStem": "foxwell-enforcement-patrol",
+      "archetype": "Mercenary",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:3d81bc60eb17",
+      "legalState": "lawful:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:patrol",
+        "activity-source:structural",
+        "title:foxwell-security-patrol",
+        "description:foxwell-security-patrol",
+        "handler:foxwell-enforcement-patrol",
+        "contract:careercontract",
+        "archetype:mercenary",
+        "intro:standard",
+        "chain:unlock:3d81bc60eb17",
+        "legal:lawful:bounded"
+      ]
+    },
+    "tierKey": "veryhard",
+    "tierLabel": "Very High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Mercenary",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Red Level Contract: High-Risk Security Patrol",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "A client needs our help. Outlaws are roaming certain sectors where they do business and attacking anyone they come across. Our client has already lost several ships and can’t afford to lose anymore. \n\nWe need someone to patrol those areas and draw out any hostile forces. The job begins with you heading to the location marker on your HUD and scanning. Then we’ll share a handful of other patrol points for you to scan. \n\nFrom the sound of it, these packs of ships feature skilled and aggressive pilots. Best be ready to rumble if you run into any of them. Would be good to have at least two trusted pilots by your side for this one.\n\nAt the end of a successful patrol, the main contractor will get a bonus payment of [ScripAmount] MG Scrip.\n\nStay chilly,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+    "rawName": "@Foxwell_SecurityPatrol_VH_Title_001",
+    "internalName": "FoxwellEnforcement_Patrol_Pyro_VeryHard",
+    "missionType": "CareerContract",
+    "provider": "Foxwell Enforcement",
+    "faction": "Foxwell Enforcement",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+      "factionDisplayName": "Foxwell Enforcement",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Pyro Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Pyro Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "9d28902d-5467-456b-8e54-18834d204234"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Region A",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "Procedural availability scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "a14bec87-5801-4440-8ca8-35597487ac9a"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "resolvedName": "Pyro Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "displayName": "Pyro Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+          "system": "Pyro"
+        },
+        {
+          "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "displayName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro Star",
+          "Region A"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro system",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "displayName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Star",
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "a14bec87-5801-4440-8ca8-35597487ac9a",
+        "resolvedName": "Pyro Star",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+        "resolvedName": "Region A",
+        "system": "Pyro",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Pyro Star",
+      "Region A"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Foxwell Enforcement Patrol: Parallax \"Sanguine\" Energy Assault Rifle, Antium Arms Sand, Antium Core Sand, Antium Legs Sand +2",
+        "Standing +250",
+        "227,500 aUEC",
+        "Item reward: MG Scrip",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Foxwell Enforcement Patrol: Parallax \"Sanguine\" Energy Assault Rifle, Antium Arms Sand, Antium Core Sand, Antium Legs Sand +2"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "2fefd608-1c2c-4b0f-9c48-24b797f3ba3f",
+          "poolName": "Foxwell Enforcement Patrol",
+          "rewardCount": 6,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "16.67% chance - 1 of 6",
+          "rewards": [
+            {
+              "blueprintGuid": "7fdd7f0c-5c40-4073-980c-3ec27d6ed4de",
+              "displayName": "Parallax \"Sanguine\" Energy Assault Rifle",
+              "componentType": "weapons",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "3a8077f9-c66c-42b0-9a13-926edea06946",
+              "displayName": "Antium Arms Sand",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "36d48fa7-96de-458e-8aad-29886948bbe6",
+              "displayName": "Antium Core Sand",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "74c0a6b8-db57-4000-85c2-e263f4118f1f",
+              "displayName": "Antium Legs Sand",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "b9062a61-1475-4b15-9a24-a15351d5e689",
+              "displayName": "Antium Helmet Sand",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "c633e1c4-7d50-41ad-8411-fe924029eaa9",
+              "displayName": "Gallant Rifle Battery (45 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "16.67% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +250"
+      ],
+      "credits": "227,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "227,500 aUEC",
+        "amount": 227500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 227500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 227500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [
+        {
+          "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+          "amount": "18",
+          "displayName": "MG Scrip",
+          "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+          "deliveryTarget": "player_home_location",
+          "ownerOnly": true,
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml"
+          ],
+          "status": "resolved",
+          "confidence": "resolved_entityClass"
+        }
+      ],
+      "itemRewardStatus": "resolved",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 250,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "016c2950-0292-468c-a408-a5283b52f158",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7b82e00e-07eb-4b56-990c-b23399673504"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "lawful",
+    "lawfulConfidence": "inferred",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+        "familyId": "866799d2-af62-4b03-9885-d9fcfd16c16b|FoxwellEnforcement_Patrol_Pyro",
+        "templateGuid": "cf71eccb-e401-4f71-9ab0-dd2e13797457"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_e3bb8757cb592d95c2f84266",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_Patrol_Pyro"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_bd0542e0b259f59257a212b0",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "a14bec87-5801-4440-8ca8-35597487ac9a"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "a14bec87-5801-4440-8ca8-35597487ac9a"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_Patrol_Pyro"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_f2b106062339b7f0b237084d",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "9d28902d-5467-456b-8e54-18834d204234"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_7fc92c9e05a9c803b075f12e",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "9d28902d-5467-456b-8e54-18834d204234"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_Patrol_Pyro"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_2d77c654fbf531a6ab0d6b6a",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "696ffb18-5211-4e4d-bb67-5e31eb562a9d"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "c0e8457b-15e6-4e5f-8b54-82faf2c8e502": [
+          {
+            "edgeId": "pre_f271d1b3aff6c81f7cf4c58d",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_4cc0baf82ce667c91c6854e1",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "10",
+                "value": 10
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "10",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_552a065368d815249c0cfd1e",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "10",
+                  "value": 10
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "0166f2ba-48ad-4254-9870-2b896610c1aa": [
+          {
+            "edgeId": "pre_67fdec91aadb568e246f6a62",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "0166f2ba-48ad-4254-9870-2b896610c1aa",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "0166f2ba-48ad-4254-9870-2b896610c1aa"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_4c47bef14e3f58ca0d48cce6",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "0166f2ba-48ad-4254-9870-2b896610c1aa",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "10",
+                "value": 10
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "10",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_baa0e49a07bb22712b3427c8",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "10",
+                  "value": 10
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "0166f2ba-48ad-4254-9870-2b896610c1aa"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "ee822024-781e-4a8c-8d4f-3c46ad6750d3": [
+          {
+            "edgeId": "pre_15520e769b28604394009afc",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "ee822024-781e-4a8c-8d4f-3c46ad6750d3",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ee822024-781e-4a8c-8d4f-3c46ad6750d3"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_982720350284d12add40629b",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "ownerScope": "subcontract",
+            "ownerId": "ee822024-781e-4a8c-8d4f-3c46ad6750d3",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "10",
+                "value": 10
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "10",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_afbb52cdca05149beb24602f",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "1fd05a19-56da-40b3-97f7-04e9a1c32cba"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "10",
+                  "value": 10
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "ee822024-781e-4a8c-8d4f-3c46ad6750d3"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_c31c4ec68c4d0ebb62ade20b",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "4a39f38a-5a31-4436-9f28-785d87a68fad",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_8ff1d754c3d67df2a1eb0fce",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "2fefd608-1c2c-4b0f-9c48-24b797f3ba3f",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_2a07557cb6f95991625c30b1",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_e202f67fb91391f9dfbfe874",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 227500,
+              "amount": 227500,
+              "rawAmount": 227411.99251180227,
+              "integerRoundedAmount": 227412,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.04
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "29.96",
+                "value": 29.96,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        },
+        {
+          "edgeId": "out_b2f44a170114def367e2838d",
+          "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+          "type": "item_reward",
+          "index": 0,
+          "payload": {
+            "attributes": {
+              "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+              "amount": "18",
+              "sendToPlayerHomeLocation": "1",
+              "awardOnlyToMissionOwner": "1"
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_Item"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+            "sourceElement": "ContractResult_Item"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "cf71eccb-e401-4f71-9ab0-dd2e13797457",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/securitypatrol.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/securitypatrol.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@foxwell_from",
+          "displayText": "Foxwell Enforcement",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "016c2950-0292-468c-a408-a5283b52f158",
+          "recordName": "FactionReputation.FactionReputation_Lawful_FoxwellEnforcement",
+          "recordType": null,
+          "displayName": "Foxwell Enforcement",
+          "path": "factions/factionreputation/factionreputation_lawful_foxwellenforcement.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Foxwell_SecurityPatrol_VH_Title_001",
+          "localizationKey": "Foxwell_SecurityPatrol_VH_Title_001",
+          "template": "Red Level Contract: High-Risk Security Patrol",
+          "displayText": "Red Level Contract: High-Risk Security Patrol",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "requirements": [
+              {
+                "edgeId": "pre_bd0542e0b259f59257a212b0",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+                  "recordName": "StarMapObject.PyroStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "FoxwellEnforcement_Patrol_Pyro"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_2d77c654fbf531a6ab0d6b6a",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+                  "recordName": "MissionLocality.RegionA",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "696ffb18-5211-4e4d-bb67-5e31eb562a9d"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502",
+            "requirements": [
+              {
+                "edgeId": "pre_f271d1b3aff6c81f7cf4c58d",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+                  "recordName": "MissionLocality.RegionB",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "c0e8457b-15e6-4e5f-8b54-82faf2c8e502"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "0166f2ba-48ad-4254-9870-2b896610c1aa",
+            "requirements": [
+              {
+                "edgeId": "pre_67fdec91aadb568e246f6a62",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+                  "recordName": "MissionLocality.RegionC",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "0166f2ba-48ad-4254-9870-2b896610c1aa"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "ee822024-781e-4a8c-8d4f-3c46ad6750d3",
+            "requirements": [
+              {
+                "edgeId": "pre_15520e769b28604394009afc",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+                  "recordName": "MissionLocality.RegionD",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "ee822024-781e-4a8c-8d4f-3c46ad6750d3"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 227500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 227500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_8ff1d754c3d67df2a1eb0fce",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "2fefd608-1c2c-4b0f-9c48-24b797f3ba3f",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [
+          {
+            "edgeId": "out_b2f44a170114def367e2838d",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "type": "item_reward",
+            "index": 0,
+            "payload": {
+              "attributes": {
+                "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+                "amount": "18",
+                "sendToPlayerHomeLocation": "1",
+                "awardOnlyToMissionOwner": "1"
+              },
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_Item"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractResult_Item"
+            }
+          }
+        ],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_2a07557cb6f95991625c30b1",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "reputationAmount": 250,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_c31c4ec68c4d0ebb62ade20b",
+            "variantId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "4a39f38a-5a31-4436-9f28-785d87a68fad",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 227500,
+              "amount": 227500,
+              "rawAmount": 227411.99251180227,
+              "integerRoundedAmount": 227412,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                    "level": 6,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 2.04
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Extremely_hard_to_manage_alone_6",
+                    "level": 6,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.98
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Pro_understanding_of_optimal_tactics_6",
+                    "level": 6,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.66
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Multiplayer_PvE_or_Expert_PvP_action_6",
+                  "mentalLoad": "Extremely_hard_to_manage_alone_6",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Pro_understanding_of_optimal_tactics_6"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "29.96",
+                "value": 29.96,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 227500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 227500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7b82e00e-07eb-4b56-990c-b23399673504",
+            "reputationAmount": 250,
+            "reward": {
+              "guid": "7b82e00e-07eb-4b56-990c-b23399673504",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_250",
+              "editorName": "Undefined Name",
+              "reputationAmount": 250,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_250.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "696ffb18-5211-4e4d-bb67-5e31eb562a9d",
+      "generatorGuid": "866799d2-af62-4b03-9885-d9fcfd16c16b",
+      "generatorName": "ContractGenerator.FoxwellEnforcement_Patrol",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_patrol.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Foxwell_SecurityPatrol_VH_Title_001",
+      "descriptionRaw": "@Foxwell_SecurityPatrol_VH_Desc_001"
+    }
+  }
+}

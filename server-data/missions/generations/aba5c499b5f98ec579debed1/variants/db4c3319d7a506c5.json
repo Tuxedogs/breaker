@@ -1,0 +1,2356 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "a1604274-19b8-4f38-b69d-c3e1d9e911ff|FoxwellEnforcement_EscortShips_Stanton",
+  "variant": {
+    "variantKey": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+    "familyKey": "a1604274-19b8-4f38-b69d-c3e1d9e911ff|FoxwellEnforcement_EscortShips_Stanton",
+    "conceptKey": "ea87712ab03c79a1a298",
+    "objectiveSignature": {
+      "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:b67fbcec9db0|lawful:bounded||||",
+      "activityKey": "defend-location+escort-ship",
+      "titleStem": "foxwell-defend-location",
+      "descriptionStem": "foxwell-defend-location",
+      "handlerStem": "foxwell-enforcement-escort-ships",
+      "archetype": "Defend Ship",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:b67fbcec9db0",
+      "legalState": "lawful:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:defend-location+escort-ship",
+        "activity-source:structural",
+        "title:foxwell-defend-location",
+        "description:foxwell-defend-location",
+        "handler:foxwell-enforcement-escort-ships",
+        "contract:careercontract",
+        "archetype:defend-ship",
+        "intro:standard",
+        "chain:unlock:b67fbcec9db0",
+        "legal:lawful:bounded"
+      ]
+    },
+    "tierKey": "hard",
+    "tierLabel": "High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Defend Ship",
+      "CrimeStat limited",
+      "Generated pickup pool"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Orange Level Contract: Protect Our Client’s Interests",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "The folks at [DefendLocationWrapperLocation] are under attack and need our support. Their ships in the wider area are being targeted and there’s a growing concern that this is only a precursor to something bigger.  \n\nThe situation is evolving, but I’m being fed constant updates on what’s going on and will keep you informed as the contract progresses. \n\nAre you available to come to their aid? Would be smart to recruit some friends to help. These are important clients and we can’t afford to fail them. The main contractor will earn a bonus payment of [ScripAmount] MG Scrip if you get the job done.\n\nGood luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+    "rawName": "@Foxwell_DefendLocation_H_Title_001",
+    "internalName": "FoxwellEnforcement_EscortShips_Stanton_Hard",
+    "missionType": "CareerContract",
+    "provider": "Foxwell Enforcement",
+    "faction": "Foxwell Enforcement",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+      "factionDisplayName": "Foxwell Enforcement",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Defend Ship",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "9d28902d-5467-456b-8e54-18834d204234"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "920ce33d-3b0a-4100-9e48-36b624f3c167"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Stanton 1",
+      "system": "Stanton",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "939dad8b-a944-4baa-a6b7-163ec203adad"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Generated pickup pool (Stanton)",
+        "confidence": "generated_from_pool"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Generated pickup pool (Stanton)",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "DefendLocationWrapperLocation|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "DefendLocationWrapperLocation|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "DefendLocationWrapperLocation|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "DefendLocationWrapperLocation|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "DefendLocationWrapperLocation|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "DefendLocationWrapperLocation|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "DefendLocationWrapperLocation|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Foxwell Enforcement Escort Ships: Parallax \"Shock Trooper\" Energy Assault Rifle, Antium Arms Storm, Antium Core Storm, Antium Legs Storm +2",
+        "Standing +200",
+        "403,750 aUEC",
+        "Item reward: MG Scrip",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Foxwell Enforcement Escort Ships: Parallax \"Shock Trooper\" Energy Assault Rifle, Antium Arms Storm, Antium Core Storm, Antium Legs Storm +2"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "ad7ee842-5a39-4f35-a337-91b8e274179f",
+          "poolName": "Foxwell Enforcement Escort Ships",
+          "rewardCount": 6,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "16.67% chance - 1 of 6",
+          "rewards": [
+            {
+              "blueprintGuid": "f5f78868-8eed-4953-9859-ea405ff8fe91",
+              "displayName": "Parallax \"Shock Trooper\" Energy Assault Rifle",
+              "componentType": "weapons",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "261ce634-2bd0-4111-b535-f09473864e2b",
+              "displayName": "Antium Arms Storm",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "b8bcf4b0-b42a-4a9f-8547-bcf3110245c0",
+              "displayName": "Antium Core Storm",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "57931ddb-524a-4ed6-9a7d-d86d1627f792",
+              "displayName": "Antium Legs Storm",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "8ed18cbc-4d7c-4ea8-9f40-140cc6e4d35a",
+              "displayName": "Antium Helmet Storm",
+              "componentType": "armor",
+              "chanceLabel": "16.67% chance"
+            },
+            {
+              "blueprintGuid": "c633e1c4-7d50-41ad-8411-fe924029eaa9",
+              "displayName": "Gallant Rifle Battery (45 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "16.67% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +200"
+      ],
+      "credits": "403,750 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "403,750 aUEC",
+        "amount": 403750,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 403750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 403750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [
+        {
+          "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+          "amount": "7",
+          "displayName": "MG Scrip",
+          "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+          "deliveryTarget": "player_home_location",
+          "ownerOnly": true,
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml"
+          ],
+          "status": "resolved",
+          "confidence": "resolved_entityClass"
+        }
+      ],
+      "itemRewardStatus": "resolved",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "016c2950-0292-468c-a408-a5283b52f158",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "lawful",
+    "lawfulConfidence": "inferred",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+        "familyId": "a1604274-19b8-4f38-b69d-c3e1d9e911ff|FoxwellEnforcement_EscortShips_Stanton",
+        "templateGuid": "24dcd037-fa77-48f7-9be7-d8e7b53d9901"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_591dc58add250e731094c31d",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_EscortShips_Stanton"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_31f11b952872cc6be694d254",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "9d28902d-5467-456b-8e54-18834d204234"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_b33e25c51703b8ff68dca9b8",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "9d28902d-5467-456b-8e54-18834d204234"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler",
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "FoxwellEnforcement_EscortShips_Stanton"
+            },
+            {
+              "scope": "contract",
+              "id": "e5ac3362-5188-46cf-b931-79879e143b2b"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_c2b45e24e9951ce9a4fed285",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "76508013-bcb6-4bb1-9869-00c3ba42c30b"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_a743cd71a373010043b949b0",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "920ce33d-3b0a-4100-9e48-36b624f3c167"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_28bd69c82f852bfb5be74eb8",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "920ce33d-3b0a-4100-9e48-36b624f3c167"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "76508013-bcb6-4bb1-9869-00c3ba42c30b"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0": [
+          {
+            "edgeId": "pre_d0df41ef760f97450a5453df",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_43f743937cb4c215e8d64534",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9d28902d-5467-456b-8e54-18834d204234"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b164a7868eb44fb65d97f79e",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_d5c47e695a0ec8de2166acf9",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "fa6b5f88-04f1-456b-a57b-5ab7c45422ec"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b164a7868eb44fb65d97f79e",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_a488d99716315c3c42cf7f73",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "13ba51c4-86d4-4a98-9a42-1b79b80e4e08"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b164a7868eb44fb65d97f79e",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_ec8eb63af7f060a22a32faf1",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "920ce33d-3b0a-4100-9e48-36b624f3c167"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b164a7868eb44fb65d97f79e",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd": [
+          {
+            "edgeId": "pre_5baf792ca7e69512b1e2ed38",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_ecbd3eca2375df8cc2905874",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9d28902d-5467-456b-8e54-18834d204234"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_f930d64eef33b0ec81ddae39",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_934c6fcb34a4aea5b8f90b6e",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "fa6b5f88-04f1-456b-a57b-5ab7c45422ec"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_f930d64eef33b0ec81ddae39",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_4c8aa613e65ba0f71d511869",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "13ba51c4-86d4-4a98-9a42-1b79b80e4e08"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_f930d64eef33b0ec81ddae39",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_540ebf5c8961740072f5a093",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "920ce33d-3b0a-4100-9e48-36b624f3c167"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_f930d64eef33b0ec81ddae39",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "d3eb0ded-0960-4d4b-b017-d18e9cca310a": [
+          {
+            "edgeId": "pre_645fa58261a4c039c544e9a7",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_ed5ff994fada67f2abb20ccc",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "9d28902d-5467-456b-8e54-18834d204234"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_230e3bfc50e14d1dff53f6b4",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_66fbf79e41cf8d277294e31a",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "fa6b5f88-04f1-456b-a57b-5ab7c45422ec"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_230e3bfc50e14d1dff53f6b4",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_e146a5af32a4ddeb584a67d8",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "13ba51c4-86d4-4a98-9a42-1b79b80e4e08"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_230e3bfc50e14d1dff53f6b4",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          },
+          {
+            "edgeId": "pre_7f654c9e096e2c2cccaa3b69",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "920ce33d-3b0a-4100-9e48-36b624f3c167"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_230e3bfc50e14d1dff53f6b4",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "9d28902d-5467-456b-8e54-18834d204234",
+                  "fa6b5f88-04f1-456b-a57b-5ab7c45422ec",
+                  "13ba51c4-86d4-4a98-9a42-1b79b80e4e08",
+                  "920ce33d-3b0a-4100-9e48-36b624f3c167"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_8154214c197421ec4ce1b484",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "5c537389-9ea2-4346-b9dc-888a52c51762",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_638aeb300a0f6bcd17be7bf2",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "ad7ee842-5a39-4f35-a337-91b8e274179f",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_f9a06beec985903b7f6cb83b",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_34566ca745bb93b322c7ed4f",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 403750,
+              "amount": 403750,
+              "rawAmount": 403657.31096321804,
+              "integerRoundedAmount": 403657,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.000000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "72",
+                "value": 72,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        },
+        {
+          "edgeId": "out_9b65964b40861a1b4493ce96",
+          "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+          "type": "item_reward",
+          "index": 0,
+          "payload": {
+            "attributes": {
+              "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+              "amount": "7",
+              "sendToPlayerHomeLocation": "1",
+              "awardOnlyToMissionOwner": "1"
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_Item"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+            "sourceElement": "ContractResult_Item"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "24dcd037-fa77-48f7-9be7-d8e7b53d9901",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/defendlocationspace_hangar.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/defendlocationspace_hangar.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@foxwell_from",
+          "displayText": "Foxwell Enforcement",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "016c2950-0292-468c-a408-a5283b52f158",
+          "recordName": "FactionReputation.FactionReputation_Lawful_FoxwellEnforcement",
+          "recordType": null,
+          "displayName": "Foxwell Enforcement",
+          "path": "factions/factionreputation/factionreputation_lawful_foxwellenforcement.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Foxwell_DefendLocation_H_Title_001",
+          "localizationKey": "Foxwell_DefendLocation_H_Title_001",
+          "template": "Orange Level Contract: Protect Our Client’s Interests",
+          "displayText": "Orange Level Contract: Protect Our Client’s Interests",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "requirements": [
+              {
+                "edgeId": "pre_c2b45e24e9951ce9a4fed285",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "76508013-bcb6-4bb1-9869-00c3ba42c30b"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0",
+            "requirements": [
+              {
+                "edgeId": "pre_d0df41ef760f97450a5453df",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "9a3a1b56-69da-4f15-9ce2-aeb482b8b5e0"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd",
+            "requirements": [
+              {
+                "edgeId": "pre_5baf792ca7e69512b1e2ed38",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "3b6becf4-ddd6-402a-ab4f-7d9deae9f4bd"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "d3eb0ded-0960-4d4b-b017-d18e9cca310a",
+            "requirements": [
+              {
+                "edgeId": "pre_645fa58261a4c039c544e9a7",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "d3eb0ded-0960-4d4b-b017-d18e9cca310a"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 403750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 403750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_638aeb300a0f6bcd17be7bf2",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "ad7ee842-5a39-4f35-a337-91b8e274179f",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [
+          {
+            "edgeId": "out_9b65964b40861a1b4493ce96",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "type": "item_reward",
+            "index": 0,
+            "payload": {
+              "attributes": {
+                "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+                "amount": "7",
+                "sendToPlayerHomeLocation": "1",
+                "awardOnlyToMissionOwner": "1"
+              },
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_Item"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractResult_Item"
+            }
+          }
+        ],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_f9a06beec985903b7f6cb83b",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_8154214c197421ec4ce1b484",
+            "variantId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "5c537389-9ea2-4346-b9dc-888a52c51762",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 403750,
+              "amount": 403750,
+              "rawAmount": 403657.31096321804,
+              "integerRoundedAmount": 403657,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.000000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "72",
+                "value": 72,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 403750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 403750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "016c2950-0292-468c-a408-a5283b52f158",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "76508013-bcb6-4bb1-9869-00c3ba42c30b",
+      "generatorGuid": "a1604274-19b8-4f38-b69d-c3e1d9e911ff",
+      "generatorName": "ContractGenerator.FoxwellEnforcement_EscortShips",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwellenforcement_escortships.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Foxwell_DefendLocation_H_Title_001",
+      "descriptionRaw": "@Foxwell_DefendLocation_H_Desc_001"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Mole",
+    "nameSource": "blueprintGuid",
+    "componentType": "container",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "9e1f5a35-edcc-4d19-bede-08e2730043c5",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_mole.xml",
+    "baseStats": {
+      "mass": 200,
+      "health": 3500,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_mole.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_mole.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningpods/cargo_shipmining_pod_mole.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      }
+    },
+    "blueprintGuid": "8378085b-f334-4c8e-934f-dde839c8714b",
+    "blueprintName": "BP_CRAFT_Cargo_ShipMining_Pod_Mole",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/bp_craft_cargo_shipmining_pod_mole.xml",
+    "entityClass": "f4aebc6d-ab66-4b7a-93ce-69bdd928ca99",
+    "craftTimeSeconds": 95,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.7",
+        "unitType": "scu",
+        "minQuality": "0",
+        "inputKind": "material"
+      }
+    ],
+    "qualityModifiers": [],
+    "rewardPools": []
+  }
+}

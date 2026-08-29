@@ -2,44 +2,44 @@
   "schemaVersion": 1,
   "snapshot": {
     "channel": "LIVE",
-    "build": "4.9.0-live.12232306",
-    "sourceLatestModifiedAt": "2026-07-16T04:02:18.338181+00:00",
-    "variantCount": 2501
+    "build": "4.10.191.2241-12519617-scintel.2",
+    "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+    "variantCount": 2513
   },
   "sourceContractV3": {
     "schemaVersion": 3,
     "objectiveTemplateSchemaVersion": 2,
-    "familyCount": 259,
+    "familyCount": 261,
     "parentPrerequisiteRows": {
       "location": 664,
-      "locality": 1970,
-      "locationProperty": 157,
-      "crimeStat": 1012,
-      "reputation": 327,
-      "completedContractTags": 1106
+      "locality": 1994,
+      "locationProperty": 169,
+      "crimeStat": 1025,
+      "reputation": 326,
+      "completedContractTags": 1127
     },
     "objectiveTemplates": {
-      "referenced": 335,
-      "resolved": 333,
-      "objectiveTokens": 462,
-      "withMissionFlow": 253
+      "referenced": 334,
+      "resolved": 332,
+      "objectiveTokens": 455,
+      "withMissionFlow": 250
     },
     "legalityComparisons": {
-      "agree": 878,
-      "templateOnly": 1119,
-      "conflict": 502,
+      "agree": 879,
+      "templateOnly": 1091,
+      "conflict": 541,
       "overrideOnly": 0,
       "missing": 2
     },
     "creditResults": {
       "fixedRows": 8,
-      "calculatedRows": 2325,
-      "variantsWithCalculatedRows": 2321,
-      "resolvedVariants": 2320,
+      "calculatedRows": 2339,
+      "variantsWithCalculatedRows": 2335,
+      "resolvedVariants": 2334,
       "unresolvedVariants": 1,
-      "releasedVariants": 1623,
-      "releasedRows": 1627,
-      "releasedResolvedVariants": 1623,
+      "releasedVariants": 1673,
+      "releasedRows": 1677,
+      "releasedResolvedVariants": 1673,
       "releasedUnresolvedVariants": 0,
       "resolvedZeroVariants": 9,
       "multiResultVariants": 4,
@@ -47,23 +47,23 @@
       "calculatedReputationVariants": 4,
       "releasedCalculatedReputationVariants": 3,
       "releasedPayout": {
-        "min": 8000,
+        "min": 7750,
         "median": 93500,
         "max": 4708750,
         "currency": "aUEC"
       }
     },
     "requiredItemEvidence": {
-      "variants": 718,
-      "propertyRows": 1555,
-      "canonicalVariants": 1077,
-      "canonicalEvidenceRows": 2141,
-      "canonicalHaulingOrders": 1166,
-      "haulingOrders": 580,
-      "haulingOrderVariants": 492,
+      "variants": 717,
+      "propertyRows": 1554,
+      "canonicalVariants": 1075,
+      "canonicalEvidenceRows": 2139,
+      "canonicalHaulingOrders": 1164,
+      "haulingOrders": 579,
+      "haulingOrderVariants": 491,
       "missionItemSelectors": 975,
       "missionItemSelectorVariants": 384,
-      "entityClassOrders": 234,
+      "entityClassOrders": 230,
       "entityClassSetOrders": 73,
       "resourceOrders": 641,
       "missionItemReferences": 290,
@@ -73,11 +73,11 @@
       "missingMissionItemReferences": 1
     },
     "completionTagGraph": {
-      "producerContracts": 456,
-      "producedTags": 122,
-      "parentRequiredTags": 80,
-      "parentRequiredDanglingTags": 6,
-      "parentExcludedTags": 35,
+      "producerContracts": 454,
+      "producedTags": 123,
+      "parentRequiredTags": 83,
+      "parentRequiredDanglingTags": 8,
+      "parentExcludedTags": 36,
       "parentExcludedDanglingTags": 0
     }
   },
@@ -86,11 +86,11 @@
     "sourceContractVersion": 3,
     "shaperVersion": "moonbreaker_mission_shaper_v2_6",
     "graph": {
-      "parentRequiredTags": 80,
-      "parentRequiredDanglingTags": 6,
-      "parentExcludedTags": 35,
+      "parentRequiredTags": 83,
+      "parentRequiredDanglingTags": 8,
+      "parentExcludedTags": 36,
       "parentExcludedDanglingTags": 0,
-      "alternateProducerTags": 87,
+      "alternateProducerTags": 84,
       "branchRequiredTags": 55,
       "branchRequiredDanglingTags": 1,
       "cycleComponents": 4
@@ -366,7 +366,7 @@
       "objectiveIds": [
         "6f40e0c2-6c54-4ca9-b568-d5f682eec121",
         "bbef3deb-08a0-4e7f-a86b-55e7a3768d85",
-        "d855d88d-726b-459c-9ab6-ddec0b5b5b1e",
+        "2ccc9f7e-7ad0-4c11-bcce-8b8ea6bdcb84",
         "1dd8d8df-cc35-4295-9e11-e4c951d43b12",
         "d55e5a9f-26d6-455e-8096-d8e6f7140dac",
         "948515d2-aa92-44c5-bf50-65c4d92609a6"
@@ -374,7 +374,7 @@
       "debugNames": [
         "Meet And Talk Briefing",
         "Create Uplink",
-        "Create Uplink Beacon",
+        "Create Uplink Entrance",
         "Conversation",
         "Ambuscade",
         "Meet And Talk Debrief"
@@ -397,10 +397,10 @@
         "destination": "DropoffLocation_BP"
       },
       "roleHandles": {
-        "pickupDeclaration": "MissionProperty[7742]",
-        "destinationDeclaration": "MissionProperty[7743]",
-        "pickupHandler": "ObjectiveProperty_Referenced[11CC]",
-        "destinationHandler": "ObjectiveProperty_Referenced[11CD]"
+        "pickupDeclaration": "MissionProperty[78A9]",
+        "destinationDeclaration": "MissionProperty[78AA]",
+        "pickupHandler": "ObjectiveProperty_Referenced[126C]",
+        "destinationHandler": "ObjectiveProperty_Referenced[126D]"
       },
       "roleHandleResolution": "unresolved_internal_handles",
       "locationResolution": "generated_selectors_are_explicit_but_runtime_locations_are_not"
@@ -519,7 +519,7 @@
         "objective_turn_in"
       ],
       "expectedDisplayNames": [
-        "FPS Consumable Hard Drive Generic"
+        "Data Drive"
       ],
       "hasMissingSourceReference": false
     }
@@ -528,9 +528,9 @@
     {
       "variantId": "88bb3702-e20a-42e3-8ba3-328f2333e30c",
       "expectedRewardNames": [
-        "Cds Combat Superheavy Backpack 01 03 01",
-        "Cds Combat Superheavy Suit 01 03 01",
-        "Cds Combat Superheavy Helmet 01 03 01"
+        "H4-PBF Ammo Carrier Snow Camo",
+        "BUL-H4 Armor Snow Camo",
+        "BUL-H4 Helmet Snow Camo"
       ],
       "expectedMissionChanceLabel": "100% chance"
     },
@@ -627,7 +627,7 @@
   "releaseFlagAssertions": [
     {
       "variantId": "67cf0b4c-c894-4bb1-8409-4a14334abcd4",
-      "notForRelease": true,
+      "notForRelease": false,
       "workInProgress": false
     },
     {

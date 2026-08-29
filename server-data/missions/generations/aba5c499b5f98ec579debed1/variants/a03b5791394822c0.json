@@ -1,0 +1,520 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "812bb548-7802-4266-8031-48c03291b081|Clovus_InitialInvite_Career",
+  "variant": {
+    "variantKey": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+    "familyKey": "812bb548-7802-4266-8031-48c03291b081|Clovus_InitialInvite_Career",
+    "conceptKey": "f73fdae68d62960bcc4f",
+    "objectiveSignature": {
+      "key": "310b42d1-df0b-40fc-ae09-b7d7298a8480|f340b011-c40c-4229-b9c1-ce6a3eb1df77|salvage-ship|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "salvage-ship",
+      "titleStem": "mg-clovus-opensalvage",
+      "descriptionStem": "mg-clovus-opensalvage",
+      "handlerStem": "clovus-initial-invite",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:salvage-ship",
+        "activity-source:structural",
+        "title:mg-clovus-opensalvage",
+        "description:mg-clovus-opensalvage",
+        "handler:clovus-initial-invite",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Salvage",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+      ]
+    },
+    "displayName": "In the Wake of Disaster",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Fortune has shined upon us once again. I’ve just learned of a battle near [Location] that’s just transpired far from the prying eyes of any meddlesome comm arrays, and reinforcements from either of the forces involved have yet to be dispatched. This means that there is a window of opportunity for an enterprising soul to pick the graveyard clean.\n \nI’d like to extend this opportunity to all my trusted contacts. Any and all interested parties can have the location… for the right price. Coordinates will be provided once you accept the contract and will remain available until you choose to terminate it.\n\nOf course, speed will be of the essence as you will not only face potential competition from other salvagers, but also the looming possibility of reinforcements arriving to survey the battlefield. \n\nIf you’re still hesitating, just remember, fortune favors the bold.\n\n-cd",
+    "rawName": "@mgClovus_opensalvage_title_001",
+    "internalName": "LawlessSalvage_Clovus",
+    "missionType": "CareerContract",
+    "provider": "Clovus Darneely",
+    "faction": "Clovus Darneely",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+      "displayName": "Affinity",
+      "rawName": "SReputationScopeParams.ReputationScope_Affinity",
+      "factionKey": "310b42d1-df0b-40fc-ae09-b7d7298a8480",
+      "factionDisplayName": "Clovus Darneely",
+      "trackType": "Affinity",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Affinity Bad 005 / -500 rep to Exalted / 10,000 rep",
+    "prerequisiteSummary": "Affinity Bad 005 / -500 rep to Exalted / 10,000 rep; CrimeStat limited to 5 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Affinity Bad 005 / -500 rep to Exalted / 10,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 5 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 5
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "No credit reward extracted"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+        "familyId": "812bb548-7802-4266-8031-48c03291b081|Clovus_InitialInvite_Career",
+        "templateGuid": "831a5a3f-44c0-4298-8cfd-81940bc2a53f"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_d3de4ea39125d5d92b48b22d",
+          "variantId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "5",
+              "value": 5
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "5"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Clovus_InitialInvite_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/clovus_generator.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_27fd37a2bdfb4f27cbfc478b",
+          "variantId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Clovus_InitialInvite_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/clovus_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [],
+      "objectiveTemplate": {
+        "templateGuid": "831a5a3f-44c0-4298-8cfd-81940bc2a53f",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/salvage_unlawful_withqt.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": true,
+        "templateIllegalRaw": "1",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/missionproviders/clovus_generator.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/salvage_unlawful_withqt.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@mg_clovus_from",
+          "displayText": "Clovus Darneely",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "310b42d1-df0b-40fc-ae09-b7d7298a8480",
+          "recordName": "FactionReputation.FactionReputation_ClovusDarneely",
+          "recordType": null,
+          "displayName": "Clovus Darneely",
+          "path": "factions/factionreputation/factionreputation_clovusdarneely.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@mgClovus_opensalvage_title_001",
+          "localizationKey": "mgClovus_opensalvage_title_001",
+          "template": "In the Wake of Disaster",
+          "displayText": "In the Wake of Disaster",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": true,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+            "requirements": [
+              {
+                "edgeId": "pre_27fd37a2bdfb4f27cbfc478b",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Clovus_InitialInvite_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/missionproviders/clovus_generator.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": null,
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [],
+        "calculatedPayout": null,
+        "buyIns": []
+      },
+      "reputationOutcomes": {
+        "fixed": [],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "a849a011-5877-4248-b5be-a49b7fbd4f8a",
+      "generatorGuid": "812bb548-7802-4266-8031-48c03291b081",
+      "generatorName": "ContractGenerator.Clovus_Generator",
+      "generatorPath": "contracts/contractgenerator/missionproviders/clovus_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@mgClovus_opensalvage_title_001",
+      "descriptionRaw": "@mgClovus_opensalvage_desc_001"
+    }
+  }
+}

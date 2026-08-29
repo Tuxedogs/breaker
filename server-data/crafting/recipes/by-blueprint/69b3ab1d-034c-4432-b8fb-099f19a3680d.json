@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Deluge",
+    "nameSource": "blueprintGuid",
+    "componentType": "miningModifier",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "b28a5c61-63a4-478b-8047-5fba545d5b8a",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_deluge.xml",
+    "baseStats": {
+      "mass": 1.5,
+      "health": 200,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_deluge.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_deluge.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/mining/miningarm/mining_modules_passive_deluge.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      }
+    },
+    "blueprintGuid": "69b3ab1d-034c-4432-b8fb-099f19a3680d",
+    "blueprintName": "BP_CRAFT_Mining_Modules_Passive_Deluge",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/bp_craft_mining_modules_passive_deluge.xml",
+    "entityClass": "1f8f946d-7f09-453c-8b2b-f1fbeb8d11bf",
+    "craftTimeSeconds": 95,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.2",
+        "unitType": "scu",
+        "minQuality": "800",
+        "inputKind": "material"
+      },
+      {
+        "slot": "WIRING",
+        "costType": "resource",
+        "materialKey": "copper",
+        "materialName": "Copper",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "800",
+        "inputKind": "material"
+      }
+    ],
+    "qualityModifiers": [],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_MISSIONREWARD_Mining_Modules_Passive_Deluge",
+        "poolGuid": "4e2df774-f1d2-4197-abef-e634801ebcb7",
+        "sourceFolder": "blueprintmissionpools",
+        "weight": 1,
+        "displayName": "Mining Modules Passive Deluge"
+      }
+    ]
+  }
+}

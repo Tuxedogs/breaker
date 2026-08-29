@@ -1,0 +1,1347 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+  "variant": {
+    "variantKey": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+    "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+    "conceptKey": "47c24bb985df049bbeee",
+    "objectiveSignature": {
+      "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|e23f8034-3e76-49b3-bfc6-228bcb1381df|eliminate-specific|activity-defined|standard|open|lawful:bounded||||",
+      "activityKey": "eliminate-specific",
+      "titleStem": "eckhart-security-eliminate-specific-dc",
+      "descriptionStem": "eckhart-security-eliminate-specific-dc",
+      "handlerStem": "eckhart-security-kill-npc",
+      "archetype": "Bounty",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "lawful:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:eliminate-specific",
+        "activity-source:structural",
+        "title:eckhart-security-eliminate-specific-dc",
+        "description:eckhart-security-eliminate-specific-dc",
+        "handler:eckhart-security-kill-npc",
+        "contract:careercontract",
+        "archetype:bounty",
+        "intro:standard",
+        "chain:open",
+        "legal:lawful:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Bounty",
+      "CrimeStat limited",
+      "Generated pickup pool"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+      ]
+    },
+    "displayName": "Hunt Bounty: [TargetName]",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Bounty\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nWe’ve received a tip on the location of a high-profile bounty. Intel reports have tracked [TargetName] to [Location]. We need a contractor heading in that direction on the double before the target vanishes. According to the latest reports, they were last seen near the [Location].  \n\nCome prepared to use lethal force if [TargetName] resists apprehension.    \n\nPayment will be issued upon successful completion of contract.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+    "rawName": "@EckhartSecurity_EliminateSpecific_DC_Title_001",
+    "internalName": "EckhartSecurity_DC_Stanton4_FOB_CryAstro-3412_FOB_EliminateSpecific",
+    "missionType": "CareerContract",
+    "provider": "Eckhart Security",
+    "faction": "Eckhart Security",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+      "displayName": "Security",
+      "rawName": "SReputationScopeParams.ReputationScope_Security",
+      "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+      "factionDisplayName": "Eckhart Security",
+      "trackType": "Security",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+      ]
+    },
+    "missionArchetype": "Bounty",
+    "standingRequirement": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+    "prerequisiteSummary": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Stanton 4",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Jr. Security Contractor / 5,000 rep to Elite Security Contractor / 1,600,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 4",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Stanton 4",
+      "system": "Stanton",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "resolvedName": "Stanton 4",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "displayName": "Stanton 4",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton 4"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Generated pickup pool (Stanton)",
+        "confidence": "generated_from_pool"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 4",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Generated pickup pool (Stanton)",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "displayName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 4"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address",
+          "Location"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address",
+          "Location"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton 4"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Security +500",
+        "Affinity +250",
+        "Security +0",
+        "Affinity +0",
+        "73,500 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Security +500",
+        "Affinity +250",
+        "Security +0",
+        "Affinity +0"
+      ],
+      "credits": "73,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "73,500 aUEC",
+        "amount": 73500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 73500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 73500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "scopeDisplayName": "Security",
+        "amount": 500,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "36d5786c-5258-48ca-a3b8-fefb5838e143"
+        ]
+      },
+      {
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 250,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "ca6ddd8e-6995-4deb-9914-6e7020404028"
+        ]
+      },
+      {
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "scopeDisplayName": "Security",
+        "amount": 0,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7"
+        ]
+      },
+      {
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 0,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "lawful",
+    "lawfulConfidence": "inferred",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+        "familyId": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+        "templateGuid": "8d952809-3e21-409b-8862-3afd6a0480f3"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_85b090a3eb50414fb198f947",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "EckhartSecurity_KIllNPC"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_5921ac77f9f7b9941e8577ec",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_059196530aeac97536bf9a76",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_2597b8d07f8a091f88d65e77",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "ca6ddd8e-6995-4deb-9914-6e7020404028",
+            "reputationAmount": 250,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_b9a6c9f35107e11f3044cd76",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "fixed_reputation",
+          "index": 2,
+          "payload": {
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+            "reputationAmount": 0,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              true,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_bf7140beee8b8eaf7a5ed35b",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "fixed_reputation",
+          "index": 3,
+          "payload": {
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+            "reputationAmount": 0,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              true,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f5dc3ad34c8e94af70effd03",
+          "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 73500,
+              "amount": 73500,
+              "rawAmount": 73427.42389664412,
+              "integerRoundedAmount": 73427,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.78,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "14",
+                "value": 14,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "8d952809-3e21-409b-8862-3afd6a0480f3",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/eliminatespecific.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": false,
+        "contractOverride": null,
+        "overrideCandidate": false,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='EckhartSecurity_KIllNPC']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/eliminatespecific.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@EckhartSecurity_RepUI_Name",
+          "displayText": "Eckhart Security",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "recordName": "FactionReputation.FactionReputation_Lawful_EckhartSecurity",
+          "recordType": null,
+          "displayName": "Eckhart Security",
+          "path": "factions/factionreputation/factionreputation_lawful_eckhartsecurity.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@EckhartSecurity_EliminateSpecific_DC_Title_001",
+          "localizationKey": "EckhartSecurity_EliminateSpecific_DC_Title_001",
+          "template": "Hunt Bounty: ~mission(TargetName)",
+          "displayText": "Hunt Bounty: ~mission(TargetName)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(TargetName)",
+              "expression": "TargetName",
+              "segments": [
+                "TargetName"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": false,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "agree"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+            "requirements": [
+              {
+                "edgeId": "pre_5921ac77f9f7b9941e8577ec",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 73500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 73500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_059196530aeac97536bf9a76",
+            "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+              "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+              "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "reputationAmount": 500,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_2597b8d07f8a091f88d65e77",
+            "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "ca6ddd8e-6995-4deb-9914-6e7020404028",
+              "reputationAmount": 250,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_b9a6c9f35107e11f3044cd76",
+            "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+            "type": "fixed_reputation",
+            "index": 2,
+            "payload": {
+              "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+              "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+              "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+              "reputationAmount": 0,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                true,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_bf7140beee8b8eaf7a5ed35b",
+            "variantId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+            "type": "fixed_reputation",
+            "index": 3,
+            "payload": {
+              "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+              "reputationAmount": 0,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                true,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 73500,
+              "amount": 73500,
+              "rawAmount": 73427.42389664412,
+              "integerRoundedAmount": 73427,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.78,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "14",
+                "value": 14,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "buildId": "4.10.191.2241-12519617-scintel.2",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 73500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 73500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "buildId": "4.10.191.2241-12519617-scintel.2",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+            "reputationAmount": 500,
+            "reward": {
+              "guid": "36d5786c-5258-48ca-a3b8-fefb5838e143",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XS",
+              "editorName": "+T_04",
+              "reputationAmount": 500,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xs.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "ca6ddd8e-6995-4deb-9914-6e7020404028",
+            "reputationAmount": 250,
+            "reward": {
+              "guid": "ca6ddd8e-6995-4deb-9914-6e7020404028",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XXS",
+              "editorName": "+T_03",
+              "reputationAmount": 250,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xxs.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              true,
+              false
+            ],
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+            "reputationAmount": 0,
+            "reward": {
+              "guid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Zero",
+              "editorName": "Zero",
+              "reputationAmount": 0,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_zero.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              true,
+              false
+            ],
+            "factionReputation": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+            "reputationAmount": 0,
+            "reward": {
+              "guid": "506f39e7-7d9a-4ec7-a74e-c1f5b47e58d7",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Zero",
+              "editorName": "Zero",
+              "reputationAmount": 0,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_zero.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617-scintel.2",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4",
+      "generatorGuid": "95979a65-419a-4b7d-8dcf-34707187f99a",
+      "generatorName": "ContractGenerator.EckhartSecurity_KillNPC",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@EckhartSecurity_EliminateSpecific_DC_Title_001",
+      "descriptionRaw": "@EckhartSecurity_EliminateSpecific_DC_Desc_001"
+    }
+  }
+}

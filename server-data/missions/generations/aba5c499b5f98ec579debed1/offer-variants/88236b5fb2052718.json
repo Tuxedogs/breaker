@@ -1,0 +1,421 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "aba5c499b5f98ec579debed1",
+  "generatedAt": "2026-08-29T08:05:42.630782+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "eckhart-security:support-client-under-attack",
+  "variants": [
+    {
+      "variantKey": "6cda8854-d25d-4919-8d3e-c01a9c7009cb",
+      "familyKey": "d7a3a10d-4825-48aa-8ac8-7275addc35a5|EckhartSecurity_DefendShip_Nyx",
+      "conceptKey": "d5e084d871538dbffb62",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-ship|activity-defined|standard|unlock:5893304d8a20|lawful:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "eckhart-defendship",
+        "descriptionStem": "eckhart-defendship",
+        "handlerStem": "eckhart-security-defend-ship",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:5893304d8a20",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:eckhart-defendship",
+          "description:eckhart-defendship",
+          "handler:eckhart-security-defend-ship",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:5893304d8a20",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "lrt",
+      "tierLabel": "LRT",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Support Client Under Attack",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Defend Ship\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nOne of our clients got the brilliant idea to test their dogfighting skills in a real world scenario. Doesn’t sound like it’s going well, because they comm’d us asking for some support. \n\nHead to [Location] and help clean up the mess they created.\n\nPayment will be issued upon successful completion of contract.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@eckhart_defendship_LRT_title_001",
+      "internalName": "Eckhart_Nyx_LRT_DefendShip",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Nyx",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "d7402a2f-fa7b-4009-9354-6a6a98523365"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: RDC Generic: R97 Shotgun, Monde Arms, Monde Core, Monde Legs +6",
+          "Standing +100",
+          "62,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "RDC Generic: R97 Shotgun, Monde Arms, Monde Core, Monde Legs +6"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "e52bf354-8918-474d-987e-55c01bfecdd3",
+            "poolName": "RDC Generic",
+            "rewardCount": 10,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "10% chance - 1 of 10",
+            "rewards": [
+              {
+                "blueprintGuid": "b08ee11e-5e2c-4fe5-9a10-b99c2a105d9b",
+                "displayName": "R97 Shotgun",
+                "componentType": "weapons",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "2d5a4987-c430-4f28-9a74-7cb95d9020db",
+                "displayName": "Monde Arms",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "42dd7691-8119-4643-9477-512b31aaccc8",
+                "displayName": "Monde Core",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "81f972e5-634e-42e4-bcfd-37e0a72ee9c3",
+                "displayName": "Monde Legs",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "029d8838-3f83-4d3c-b44e-ba388cb5e347",
+                "displayName": "Monde Helmet",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "1db3e0db-610a-4a94-afec-9015335c574f",
+                "displayName": "Monde Arms Hiro",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "b362b3f8-5393-4c42-b083-ac38411f6ff5",
+                "displayName": "Monde Core Hiro",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "508d602d-f4e9-4e83-9fe5-c054d6ad3b58",
+                "displayName": "Monde Legs Hiro",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "93deb498-5eb4-42e4-ac0f-aa38791aee5f",
+                "displayName": "Monde Helmet Hiro",
+                "componentType": "armor",
+                "chanceLabel": "10% chance"
+              },
+              {
+                "blueprintGuid": "34b5ab94-a752-427a-8cc4-757c5797783c",
+                "displayName": "R97 Shotgun Magazine (18 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "10% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "62,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "62,000 aUEC",
+          "amount": 62000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_defendship.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 62000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 62000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6cda8854-d25d-4919-8d3e-c01a9c7009cb",
+        "generatorGuid": "d7a3a10d-4825-48aa-8ac8-7275addc35a5",
+        "generatorName": "ContractGenerator.EckhartSecurity_DefendShip",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_defendship.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@eckhart_defendship_LRT_title_001",
+        "descriptionRaw": "@eckhart_defendship_LRT_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -53,7 +53,7 @@ test("quantum drive catalog speed converts extracted m/s to km/s", () => {
   const metrics = buildComponentCatalogStatMetrics(loadCard("17b29a33-88fe-484f-bb9b-fbf780273ff5"));
   assert.deepEqual(
     metrics.find((metric) => metric.label === "Normal Speed"),
-    { label: "Normal Speed", value: "231,000 km/s" },
+    { label: "Normal Speed", value: "259,055 km/s" },
   );
 });
 
@@ -196,7 +196,7 @@ test("component card browse identities exactly match the current recipe index", 
       .filter((id): id is string => Boolean(id)),
   );
 
-  assert.equal(browseIds.size, 1_580);
+  assert.equal(browseIds.size, 1_590);
   assert.deepEqual(browseIds, recipeIds);
 });
 

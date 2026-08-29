@@ -27,7 +27,7 @@ The following are enforced publication rules:
 | FPS recipes | `${SCINTEL_DATASET_ROOT}/crafting/fps/fps_blueprints.json` -> `server-data/crafting/recipes` | `/api/crafting/recipes/*` |
 | Component cards | `${SCINTEL_COMPONENT_CARD_SOURCE:-${SCINTEL_DATASET_ROOT}/crafting/component_card_index.json}` -> `server-data/crafting/component-cards` | `/api/crafting/component-cards/*` |
 | Crafted properties | `server-data/crafting/reference/crafted-properties.json` | `/api/crafting/reference/crafted-properties` |
-| Quality quantization | `server-data/crafting/reference/quality-quantization.json` | `/api/crafting/reference/quality-quantization` |
+| Quality quantization | `${SCINTEL_DATASET_ROOT}/crafting/material_quality_quantization_records.json` -> `server-data/crafting/reference/quality-quantization.json` | `/api/crafting/reference/quality-quantization` |
 | Material quality quantization | `server-data/crafting/reference/material-quality-quantization.json` | `/api/crafting/reference/material-quality-quantization` |
 | Material identity | `server-data/crafting/reference/material-identity-index.json` | `/api/crafting/reference/material-identity` |
 | Refinery yields | `server-data/crafting/reference/refinery-yields.json` | `/api/crafting/reference/refinery-yields` |

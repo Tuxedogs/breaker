@@ -261,10 +261,10 @@ test("accepted source artifact is the exact externally audited invariant input",
     target.name,
     target.baselineSha256,
   ])), {
-    auec_solver_projection: "0ee48e03d8bd2da76cb45054d067def3b09690e25e0f80e67939245460c6ff88",
+    auec_solver_projection: "143f769a57cb6b0bb0e42ad00e9fe1b356f16d6ad247f2c081d9c7bf02f3f8af",
     blueprint_pool_rewards: "945b992067d584731f5a9953ebc0a422c4e02b107583a5b755a489967905d2d7",
-    reputation_eligibility_and_rewards: "748d1b7bb06712c8dfde200137d3d36dafc3488617b6621c856c815253edbffb",
-    release_and_availability_branches: "055c6db4fa901316da116433aa1e7bf8b751d70a73ba1b619bf806ba68e94d8c",
+    reputation_eligibility_and_rewards: "cbdb90b16bd32418a9e61a5a5dfad1807a6323bb668dbd663d1cf8a2ba5a058e",
+    release_and_availability_branches: "5df86951f16a9a9b2d57ea6365e088b4df347fd3da3ccd4b095db05ba5da7405",
   });
   const source = parseMissionSourceCatalogV4(JSON.parse(sourceText));
   const auditedVariantIds = manifest.goldenMissionOffers.flatMap((offer) =>
