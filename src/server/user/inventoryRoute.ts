@@ -1,5 +1,7 @@
 import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId.js";
 import {
+  clearBuildQueueItems,
+  deleteBuildQueueItem,
   deleteInventoryStack,
   deleteInventoryLocation,
   listOnlinePersistenceState,
@@ -33,7 +35,9 @@ export async function handleUserInventoryRoute(
   const stackMatch = path.match(/^\/api\/user\/inventory\/stacks(?:\/([^/]+))?$/);
   const locationMatch = path.match(/^\/api\/user\/inventory\/locations(?:\/([^/]+))?$/);
   const buildQueueMatch = path.match(/^\/api\/user\/inventory\/build-queues(?:\/([^/]+))?$/);
-  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch && !locationMatch && !buildQueueMatch) return null;
+  const buildQueueItemMatch = path.match(/^\/api\/user\/inventory\/build-queue-items\/([^/]+)$/);
+  const buildQueueClearMatch = path.match(/^\/api\/user\/inventory\/build-queues\/([^/]+)\/items$/);
+  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch && !locationMatch && !buildQueueMatch && !buildQueueItemMatch && !buildQueueClearMatch) return null;
 
   try {
     const { userId } = await requireAuthenticatedUser(headers);
@@ -84,6 +88,18 @@ export async function handleUserInventoryRoute(
       const locationId = locationMatch[1];
       if (!locationId) return safeError(400, "Location id is required.");
       return { status: 200, body: await deleteInventoryLocation(userId, locationId) };
+    }
+
+    if (buildQueueItemMatch && method === "DELETE") {
+      const itemId = buildQueueItemMatch[1];
+      if (!itemId) return safeError(400, "Build queue item id is required.");
+      return { status: 200, body: await deleteBuildQueueItem(userId, itemId) };
+    }
+
+    if (buildQueueClearMatch && method === "DELETE") {
+      const queueId = buildQueueClearMatch[1];
+      if (!queueId) return safeError(400, "Build queue id is required.");
+      return { status: 200, body: await clearBuildQueueItems(userId, queueId) };
     }
 
     if (buildQueueMatch && method === "DELETE") {

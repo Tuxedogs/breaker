@@ -609,7 +609,7 @@ export default function DashboardPage() {
     [inventoryEntries, materialTemplates]
   );
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
-  const reserveSummary = queueLedger.summary;
+  const planningSummary = queueLedger.summary;
   const qualityTargetCount = useMemo(
     () => activeQueueItems.filter((item) => item.finalProductQualityBand != null && item.allowLowerQuality !== true).length,
     [activeQueueItems],
@@ -799,7 +799,7 @@ export default function DashboardPage() {
               <Link to="/logistics/build-queue" className="dash-hero-sequence-step">
                 <span>02 / Reserve</span>
                 <strong className="dash-tabnum">
-                  {reserveSummary.reservableLines} ready · {queueLedger.refinedShortfallLines.length} short
+                  {planningSummary.partiallyStockedLines} partially stocked · {queueLedger.refinedShortfallLines.length} planning gaps
                 </strong>
               </Link>
               <ArrowRight size={14} />
@@ -1099,19 +1099,19 @@ export default function DashboardPage() {
           </article>
 
           <div className="dash-status-deck" aria-label="Operational status">
-          <article className="dash-card dash-card--reserve-status ops-primary-card" aria-label="Auto reserve readiness">
-            <div className="dash-card-header"><span className="dash-card-title">Auto Reserve</span></div>
+          <article className="dash-card dash-card--reserve-status ops-primary-card" aria-label="Raw and refined stock planning">
+            <div className="dash-card-header"><span className="dash-card-title">Raw / Refined Planning</span></div>
             <div className="dash-card-body dash-reserve-body">
               <div className="dash-reserve-metrics">
                 <div className="dash-reserve-metric dash-reserve-metric--ready">
-                  <span className="dash-reserve-metric-label">Ready to reserve</span>
-                  <span className="dash-reserve-metric-value dash-tabnum">{reserveSummary.reservableLines}</span>
-                  <span className="dash-reserve-metric-hint">materials with stock</span>
+                  <span className="dash-reserve-metric-label">Partially stocked</span>
+                  <span className="dash-reserve-metric-value dash-tabnum">{planningSummary.partiallyStockedLines}</span>
+                  <span className="dash-reserve-metric-hint">owned planning equivalent</span>
                 </div>
                 <div className="dash-reserve-metric dash-reserve-metric--short">
-                  <span className="dash-reserve-metric-label">Shortfalls</span>
+                  <span className="dash-reserve-metric-label">Planning gaps</span>
                   <span className="dash-reserve-metric-value dash-tabnum">{queueLedger.refinedShortfallLines.length}</span>
-                  <span className="dash-reserve-metric-hint">{reserveSummary.noStockLines} with no stock</span>
+                  <span className="dash-reserve-metric-hint">{planningSummary.noStockLines} with no stock</span>
                 </div>
                 <div className="dash-reserve-metric dash-reserve-metric--warn">
                   <span className="dash-reserve-metric-label">Quality targets</span>
@@ -1133,24 +1133,24 @@ export default function DashboardPage() {
                 </ul>
               )}
               {shortageRows.length === 0 && (
-                <div className="dash-empty-state">Queue materials are covered</div>
+                <div className="dash-empty-state">No raw/refined planning gaps</div>
               )}
             </div>
             <div className="dash-card-footer">
-              <Link to="/logistics/build-queue" className="dash-card-footer-link">Open Auto Reserve <ArrowRight /></Link>
+              <Link to="/logistics/build-queue" className="dash-card-footer-link">Open Queue Planning <ArrowRight /></Link>
             </div>
           </article>
 
-          <article className="dash-card dash-card--shortage-status ops-primary-card" aria-label="Material shortages">
-            <div className="dash-card-header"><span className="dash-card-title">Material Shortages</span></div>
+          <article className="dash-card dash-card--shortage-status ops-primary-card" aria-label="Raw and refined planning gaps">
+            <div className="dash-card-header"><span className="dash-card-title">Raw / Refined Plan</span></div>
             <div className="dash-card-body">
               <table className="dash-shortages-table">
                 <thead>
                   <tr>
                     <th>Material</th>
-                    <th>Owned</th>
-                    <th>Needed</th>
-                    <th>Shortage</th>
+                    <th>Planning Equivalent</th>
+                    <th>Gross Need</th>
+                    <th>Planning Gap</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1164,14 +1164,14 @@ export default function DashboardPage() {
                   ))}
                   {shortageRows.length === 0 && (
                     <tr>
-                      <td colSpan={4}><div className="dash-empty-state">No material shortages</div></td>
+                      <td colSpan={4}><div className="dash-empty-state">No raw/refined planning gaps</div></td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
             <div className="dash-card-footer">
-              <Link to="/logistics/build-queue" className="dash-card-footer-link">View All Shortages <ArrowRight /></Link>
+              <Link to="/logistics/build-queue" className="dash-card-footer-link">View Queue Planning <ArrowRight /></Link>
             </div>
           </article>
           </div>

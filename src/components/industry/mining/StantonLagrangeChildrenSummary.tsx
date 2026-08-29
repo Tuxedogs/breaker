@@ -15,16 +15,22 @@ export default function StantonLagrangeChildrenSummary({
     entry.matchedLocationCodes,
   );
 
-  if (resolved.points.length === 0) return null;
+  if (resolved.children.length === 0) return null;
 
   return (
-    <div className={`mloc-lagrange-children${compact ? " mloc-lagrange-children--compact" : ""}`}>
-      {resolved.points.map((point) => (
-        <div key={`${entry.locationKey}:lagrange:${point.code}`} className="mloc-lagrange-point">
-          <div className="mloc-lagrange-point-head">
-            <span>{point.code.toUpperCase()}</span>
-          </div>
-        </div>
+    <div
+      className={`mloc-lagrange-children${compact ? " mloc-lagrange-children--compact" : ""}`}
+      aria-label={`${entry.locationName} physical locations`}
+      role="list"
+    >
+      {resolved.children.map((child) => (
+        <span
+          key={`${entry.locationKey}:lagrange:${child.code}`}
+          className="mloc-lagrange-child-badge"
+          role="listitem"
+        >
+          {child.code}
+        </span>
       ))}
     </div>
   );

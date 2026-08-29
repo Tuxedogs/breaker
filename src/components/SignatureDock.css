@@ -3,7 +3,7 @@
 /* ---------- panel wrapper (open state) ---------- */
 .sdock-panel {
   position: fixed;
-  z-index: 9991;
+  z-index: 61;
   width: 540px;
   max-width: calc(100vw - 24px);
   display: flex;
@@ -91,7 +91,7 @@
 }
 
 .sdock-opacity-label {
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--void-text-dim);
@@ -204,7 +204,7 @@
   background: rgba(5, 13, 16, 0.98);
   padding: 5px 8px 4px;
   text-align: left;
-  font-size: 9px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -315,7 +315,7 @@
 /* ---------- pinned strip ---------- */
 .sdock-pinned-strip {
   position: fixed;
-  z-index: 9988;
+  z-index: 60;
   background:
    linear-gradient(180deg,#070e14,#070c11);
   border: 1px solid var(--void-border-panel);
@@ -325,6 +325,12 @@
   touch-action: none;
   width: max-content;
   overflow: visible;
+}
+
+body:has([aria-modal="true"]) .sdock-panel,
+body:has([aria-modal="true"]) .sdock-pinned-strip {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .sdock-pinned-strip:hover {
@@ -351,7 +357,7 @@
 }
 
 .sdock-pinned-header-label {
-  font-size: 8px;
+  font-size: var(--app-text-label);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -464,10 +470,11 @@
   appearance: none;
 }
 
-.sdock-preset-combobox-input:focus,
+.sdock-preset-trigger:focus-visible,
 .sdock-preset-combobox-input:focus-visible {
   border-color: rgba(255, 153, 0, 0.24);
-  outline: none;
+  outline: 2px solid var(--ops-focus-ring);
+  outline-offset: 2px;
   box-shadow: none;
 }
 
@@ -491,7 +498,7 @@
   position: absolute;
   left: 0;
   top: calc(100% + 6px);
-  z-index: 10000;
+  z-index: 62;
   min-width: 180px;
   max-height: 220px;
   overflow-y: auto;
@@ -542,7 +549,7 @@
 
 .sdock-preset-option-meta,
 .sdock-preset-menu-empty {
-  font-size: 9px;
+  font-size: var(--app-text-meta);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;

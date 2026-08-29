@@ -32,7 +32,7 @@ import {
   getWeightedEffectiveQuality,
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
-import { getBuildQueueItemAllocationProgress } from '../../lib/logistics/buildQueueProgress';
+import { getBuildQueueItemAllocationSummary } from '../../lib/logistics/buildQueueProgress';
 import { groupReservableStacksByLocation } from '../../lib/logistics/inventoryHierarchy';
 import {
   solveBuildQueueCraftAllocation,
@@ -138,8 +138,8 @@ function BlueprintSourceDisplay({ blueprintId, fallbackLabel }: { blueprintId?: 
   return (
     <span className="bq-item-blueprint-links" title={missionLinks.map((mission) => mission.label).join(', ')}>
       {missionLinks.map((mission, index) => (
-        <span key={mission.id}>
-          {index > 0 ? ', ' : null}
+        <span key={mission.id} className="bq-item-blueprint-link-wrap">
+          {index > 0 ? ", " : null}
           <Link className="bq-item-blueprint-link" to={mission.href}>{mission.label}</Link>
         </span>
       ))}
@@ -397,7 +397,7 @@ function getStackReservationAssignments(
   currentRequirementId: string,
 ): StackReservationAssignment[] {
   return buildQueue.flatMap((queueItem) =>
-    (queueItem.reservedAllocations ?? [])
+    queueItem.status === 'complete' ? [] : (queueItem.reservedAllocations ?? [])
       .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.quantityReserved > 0)
       .map((allocation) => {
         const itemName = getSourceOwnerLabel(queueItem, recipes, buildQueue);
@@ -443,24 +443,6 @@ function sortReservableStacks(
       formatInventoryLocationLabel(a).localeCompare(formatInventoryLocationLabel(b))
     );
   });
-}
-
-function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTemplate[], inventory: InventoryEntry[]): 'complete' | 'partial' | 'missing' {
-  if (inputs.length === 0) return 'missing';
-  let covered = 0;
-  let missing = 0;
-  for (const [inputIndex, input] of inputs.entries()) {
-    const materialKey = input.materialKey ?? input.materialId;
-    const coverage = getMaterialReservationCoverage(item, materialKey, input.quantity * item.quantity, inventory, {
-      requirementId: getRequirementId(item, input, inputIndex),
-      unitType: input.unitType,
-    });
-    if (coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved') covered += 1;
-    else missing += 1;
-  }
-  if (covered > 0 && missing > 0) return 'partial';
-  if (covered > 0) return 'complete';
-  return 'missing';
 }
 
 function getReserveStatusLabel(state: string, qualityState: string): string {
@@ -1225,7 +1207,8 @@ export default function BuildQueueGroup({
         const hasMaterialInputs = inputs.length > 0;
         const isCompletedCraft = item.status === 'complete';
         const blueprintSources = item.blueprintSources ?? [];
-        const fulfillment = getItemFulfillmentState(item, inputs, inventory);
+        const allocationSummary = getBuildQueueItemAllocationSummary(item, inputs, inventory);
+        const fulfillment = allocationSummary.fulfillment;
         const readableType = itemTypeLabel ?? CATEGORY_LABELS[category] ?? category;
 
         const recipeDefaultInputs = recipeInputsByRecipeId[item.recipeId] ?? [];
@@ -1365,7 +1348,7 @@ export default function BuildQueueGroup({
         const materialsAllocatedLabel = requirementUnits.size === 1
           ? `${formatInventoryQuantity(totalAllocatedAmount, summaryUnit)} / ${formatInventoryQuantity(totalRequiredAmount, summaryUnit)}`
           : `${materialRequirementRows.filter((row) => row.remainingRequired <= SCU_QUANTITY_EPSILON).length} / ${materialRequirementRows.length} requirements`;
-        const allocationPercentage = getBuildQueueItemAllocationProgress(item, recipeInputsByRecipeId) ?? 0;
+        const allocationPercentage = allocationSummary.progressPercent ?? 0;
         const firstInventoryTarget = materialGroups.find((group) => group.needTotal > 0) ?? materialGroups[0];
 
         const craftSolverRequirementContexts = new Map(
@@ -1505,7 +1488,7 @@ export default function BuildQueueGroup({
 
                   <div className="bq-selected-craft-state-line">
                     <span className={`bq-selected-craft-state bq-selected-craft-state--${isCompletedCraft ? 'ready' : fulfillment}`}>
-                      {isCompletedCraft ? 'Completed' : fulfillment === 'complete' ? 'Ready' : fulfillment === 'partial' ? 'Partially Allocated' : 'Materials Missing'}
+                      {isCompletedCraft ? 'Completed' : fulfillment === 'ready' ? 'Ready' : fulfillment === 'partial' ? 'Partially Allocated' : 'Materials Missing'}
                     </span>
                     <BuildQueueCraftTargetQuality />
                   </div>

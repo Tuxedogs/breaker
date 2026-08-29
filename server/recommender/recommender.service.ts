@@ -9,7 +9,11 @@ import { addWarning } from "./recommenderWarnings.js";
 export async function getRecommendations(request: RecommendRequest): Promise<RecommendResponse> {
   const warnings: RecommenderWarning[] = [];
   const apiData = await loadApiData(warnings);
-  const requirements = aggregateRequirements(buildRequirementInput(request), warnings);
+  const requirements = aggregateRequirements(
+    buildRequirementInput(request),
+    warnings,
+    apiData.materialIdentityResolver,
+  );
 
   if (requirements.length === 0) {
     addWarning(warnings, {

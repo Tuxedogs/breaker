@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 
 import type { InventoryUnitType } from "../../types/logistics";
+import type { MaterialIdentityRecord } from "../materialIdentity";
 import { getMaterialIdentityIndexFromApi } from "@/lib/craftingReferenceApi";
 
-export interface MaterialIdentity {
-  materialKey: string;
-  canonicalName?: string;
+export interface MaterialIdentity extends MaterialIdentityRecord {
   displayName: string;
-  rawName?: string;
-  refinedName?: string;
-  commodityName?: string;
   materialForm: string;
   unitType: InventoryUnitType;
-  isRefinable?: boolean;
-  refinesToMaterialKey?: string | null;
-  aliases?: Record<string, string[]> | string[];
 }
 
 let cachedMaterials: MaterialIdentity[] | null = null;

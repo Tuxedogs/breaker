@@ -1,5 +1,13 @@
 import { readFile } from "node:fs/promises";
+
 import { apiPaths } from "../config/apiPaths";
+import {
+  MATERIAL_IDENTITY_OVERRIDES,
+  createMaterialIdentityResolver,
+  normalizeMaterialIdentityToken,
+  type MaterialIdentityRecord,
+  type MaterialIdentityUnitType,
+} from "../../src/lib/materialIdentity";
 import type { ApiWarning } from "./warnings";
 import { addWarning } from "./warnings";
 
@@ -13,21 +21,8 @@ export interface MaterialIdentityInput {
   rawName?: string | null;
   sourceName?: string | null;
   sourceType?: string | null;
-  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  unitType?: MaterialIdentityUnitType;
 }
-
-type MaterialIdentityIndexEntry = {
-  materialKey?: string;
-  canonicalName?: string;
-  displayName?: string;
-  rawName?: string;
-  refinedName?: string;
-  commodityName?: string;
-  unitType?: "unit" | "SCU" | "scu" | "cscu";
-  isRefinable?: boolean;
-  refinesToMaterialKey?: string | null;
-  aliases?: Record<string, string[]> | string[];
-};
 
 export interface ResolvedApiMaterial {
   materialKey: string;
@@ -36,17 +31,7 @@ export interface ResolvedApiMaterial {
   displayName: string;
   normalizedName: string;
   slug: string;
-  unitType?: "unit" | "SCU" | "scu" | "cscu";
-}
-
-const GUID_ALIASES: Record<string, string> = {
-  "d7a21cac-3c2b-4695-95b7-2042d8f5755e": "feynmaline",
-  "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4": "stileron",
-  "f9f3251a-8e48-408a-b957-f1e3d5d3e213": "rawice",
-};
-
-function normalizeToken(value: string | null | undefined): string {
-  return (value ?? "").trim().toLowerCase().replace(/^entityclassdefinition\./, "").replace(/[^a-z0-9]/g, "");
+  unitType?: MaterialIdentityUnitType;
 }
 
 function slugify(value: string | null | undefined): string {
@@ -59,29 +44,79 @@ function slugify(value: string | null | undefined): string {
 }
 
 function resolvedMaterial(input: {
-  materialId?: string;
-  materialName?: string;
-  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  materialId: string;
+  materialName: string;
+  unitType?: MaterialIdentityUnitType;
 }): ResolvedApiMaterial {
-  const materialId = input.materialId ?? input.materialName ?? "";
-  const displayName = input.materialName ?? input.materialId ?? "";
-  const normalizedName = normalizeToken(displayName);
   return {
-    materialKey: materialId,
-    materialId,
-    materialName: displayName,
-    displayName,
-    normalizedName,
-    slug: slugify(displayName || materialId),
+    materialKey: input.materialId,
+    materialId: input.materialId,
+    materialName: input.materialName,
+    displayName: input.materialName,
+    normalizedName: normalizeMaterialIdentityToken(input.materialName),
+    slug: slugify(input.materialName || input.materialId),
     unitType: input.unitType,
   };
 }
 
 async function loadMaterialIndex(warnings: ApiWarning[]) {
-  const index = new Map<string, ResolvedApiMaterial>();
-  const add = (key: string | null | undefined, material: ResolvedApiMaterial) => {
-    const normalized = normalizeToken(key);
-    if (normalized && !index.has(normalized)) index.set(normalized, material);
+  let identities: MaterialIdentityRecord[] = [];
+  try {
+    const identityIndex = JSON.parse(await readFile(apiPaths.materialIdentityIndex, "utf8")) as {
+      materials?: MaterialIdentityRecord[];
+    };
+    identities = (identityIndex.materials ?? []).filter((identity) => Boolean(identity.materialKey));
+  } catch (error) {
+    addWarning(warnings, {
+      code: "api_material_index_unreadable",
+      message: `Unable to load crafting material identity index for material aliases: ${error instanceof Error ? error.message : String(error)}`,
+      path: "server-data/crafting/reference/material-identity-index.json",
+    });
+  }
+
+  const identityResolver = createMaterialIdentityResolver(identities);
+  const materialByKey = new Map<string, ResolvedApiMaterial>();
+  const supplementalAliases = new Map<string, ResolvedApiMaterial>();
+
+  const addSupplementalAlias = (value: string | null | undefined, material: ResolvedApiMaterial) => {
+    const token = normalizeMaterialIdentityToken(value);
+    if (token && !supplementalAliases.has(token)) supplementalAliases.set(token, material);
+  };
+
+  const addCanonicalMaterial = (materialKey: string, displayName: string, unitType?: MaterialIdentityUnitType) => {
+    const existing = materialByKey.get(materialKey);
+    const material = resolvedMaterial({
+      materialId: materialKey,
+      materialName: existing?.materialName ?? displayName,
+      unitType: existing?.unitType ?? unitType,
+    });
+    materialByKey.set(materialKey, material);
+    addSupplementalAlias(materialKey, material);
+    addSupplementalAlias(displayName, material);
+    return material;
+  };
+
+  for (const identity of identities) {
+    const canonical = identityResolver.resolve(identity.materialKey);
+    if (!canonical) continue;
+    addCanonicalMaterial(canonical.materialKey, canonical.displayName, canonical.unitType);
+  }
+  for (const override of MATERIAL_IDENTITY_OVERRIDES) {
+    addCanonicalMaterial(override.materialKey, override.displayName);
+  }
+
+  const addSourceMaterial = (input: {
+    materialId?: string;
+    materialName?: string;
+    unitType?: MaterialIdentityUnitType;
+  }) => {
+    if (!input.materialName && !input.materialId) return;
+    const canonical = identityResolver.resolve(input.materialId) ?? identityResolver.resolve(input.materialName);
+    const materialKey = canonical?.materialKey ?? input.materialId ?? input.materialName ?? "";
+    const displayName = canonical?.displayName ?? input.materialName ?? input.materialId ?? materialKey;
+    const material = addCanonicalMaterial(materialKey, displayName, input.unitType);
+    addSupplementalAlias(input.materialId, material);
+    addSupplementalAlias(input.materialName, material);
   };
 
   try {
@@ -91,17 +126,12 @@ async function loadMaterialIndex(warnings: ApiWarning[]) {
       sources?: Array<{ spawnType?: string }>;
     }>;
     for (const material of enriched) {
-      if (!material.materialName && !material.materialId) continue;
-      const hasOnlyShipSources = (material.sources ?? []).some((source) => source.spawnType?.toLowerCase().includes("ship"));
-      const resolved = resolvedMaterial({
-        materialId: material.materialId ?? material.materialName ?? "",
-        materialName: material.materialName ?? material.materialId ?? "",
-        unitType: hasOnlyShipSources ? "SCU" as const : undefined,
+      const hasShipSources = (material.sources ?? []).some((source) => source.spawnType?.toLowerCase().includes("ship"));
+      addSourceMaterial({
+        materialId: material.materialId,
+        materialName: material.materialName,
+        unitType: hasShipSources ? "SCU" : undefined,
       });
-      add(resolved.materialId, resolved);
-      add(resolved.materialName, resolved);
-      add(resolved.displayName, resolved);
-      add(resolved.slug, resolved);
     }
   } catch (error) {
     addWarning(warnings, {
@@ -115,17 +145,7 @@ async function loadMaterialIndex(warnings: ApiWarning[]) {
     const scores = JSON.parse(await readFile(apiPaths.materialSourceScores, "utf8")) as {
       materials?: Array<{ materialId?: string; materialName?: string }>;
     };
-    for (const material of scores.materials ?? []) {
-      if (!material.materialName && !material.materialId) continue;
-      const resolved = resolvedMaterial({
-        materialId: material.materialId ?? material.materialName ?? "",
-        materialName: material.materialName ?? material.materialId ?? "",
-      });
-      add(resolved.materialId, resolved);
-      add(resolved.materialName, resolved);
-      add(resolved.displayName, resolved);
-      add(resolved.slug, resolved);
-    }
+    for (const material of scores.materials ?? []) addSourceMaterial(material);
   } catch (error) {
     addWarning(warnings, {
       code: "api_material_index_unreadable",
@@ -134,68 +154,11 @@ async function loadMaterialIndex(warnings: ApiWarning[]) {
     });
   }
 
-  for (const [guid, id] of Object.entries(GUID_ALIASES)) {
-    const material = index.get(normalizeToken(id));
-    if (material) add(guid, material);
-  }
-
-  try {
-    const identityIndex = JSON.parse(await readFile(apiPaths.materialIdentityIndex, "utf8")) as {
-      materials?: MaterialIdentityIndexEntry[];
-    };
-    const sourceKeyByOutput = new Map<string, string>();
-    for (const identity of identityIndex.materials ?? []) {
-      if (identity.materialKey && identity.isRefinable && identity.refinesToMaterialKey) {
-        sourceKeyByOutput.set(identity.refinesToMaterialKey, identity.materialKey);
-      }
-    }
-    for (const identity of identityIndex.materials ?? []) {
-      if (!identity.materialKey) continue;
-      const sourceKey = sourceKeyByOutput.get(identity.materialKey);
-      const isRawSource = identity.materialKey.startsWith("raw");
-      if (sourceKey === "rawice" || (isRawSource && identity.materialKey !== "rawice")) continue;
-      const material = resolvedMaterial({
-        materialId: identity.materialKey,
-        materialName: identity.canonicalName ?? identity.rawName ?? identity.displayName ?? identity.materialKey,
-        unitType: identity.unitType === "unit" || identity.unitType === "SCU" || identity.unitType === "scu" || identity.unitType === "cscu"
-          ? identity.unitType
-          : undefined,
-      });
-      add(material.materialId, material);
-      add(material.materialName, material);
-    }
-    for (const identity of identityIndex.materials ?? []) {
-      const materialKey = identity.materialKey;
-      const material = index.get(normalizeToken(sourceKeyByOutput.get(materialKey ?? ""))) ??
-        index.get(normalizeToken(materialKey));
-      if (!material) continue;
-      add(identity.materialKey, material);
-      add(identity.canonicalName, material);
-      add(identity.displayName, material);
-      add(identity.rawName, material);
-      add(identity.refinedName, material);
-      add(identity.commodityName, material);
-      if (Array.isArray(identity.aliases)) {
-        for (const alias of identity.aliases) add(alias, material);
-      } else {
-        for (const values of Object.values(identity.aliases ?? {})) {
-          for (const alias of values) add(alias, material);
-        }
-      }
-    }
-  } catch (error) {
-    addWarning(warnings, {
-      code: "api_material_index_unreadable",
-      message: `Unable to load crafting material identity index for material aliases: ${error instanceof Error ? error.message : String(error)}`,
-      path: "server-data/crafting/reference/material-identity-index.json",
-    });
-  }
-
-  return index;
+  return { identityResolver, materialByKey, supplementalAliases };
 }
 
 export async function createApiMaterialResolver(warnings: ApiWarning[]) {
-  const index = await loadMaterialIndex(warnings);
+  const { identityResolver, materialByKey, supplementalAliases } = await loadMaterialIndex(warnings);
 
   return (input: MaterialIdentityInput): ResolvedApiMaterial | null => {
     const candidates = [
@@ -209,8 +172,9 @@ export async function createApiMaterialResolver(warnings: ApiWarning[]) {
       input.displayName,
     ];
     for (const candidate of candidates) {
-      const aliased = GUID_ALIASES[(candidate ?? "").toLowerCase()] ?? candidate;
-      const match = index.get(normalizeToken(aliased));
+      const canonical = identityResolver.resolve(candidate);
+      const match = materialByKey.get(canonical?.materialKey ?? "")
+        ?? supplementalAliases.get(normalizeMaterialIdentityToken(candidate));
       if (match) {
         return {
           ...match,

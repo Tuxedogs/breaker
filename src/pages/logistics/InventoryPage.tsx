@@ -36,6 +36,7 @@ import {
 } from '../../lib/logistics/inventoryLocationOptions';
 import { useAuthSession } from '../../lib/auth/useAuthSession';
 import { useMaterialIdentityIndex, type MaterialIdentity } from '../../lib/logistics/materialIdentityIndex';
+import { createMaterialIdentityResolver, type MaterialIdentityResolver } from '../../lib/materialIdentity';
 import { createMaterialResolver } from '../../lib/logistics/materialResolver';
 import {
   expectedInventoryCsvUnit,
@@ -45,6 +46,7 @@ import {
 } from '../../lib/logistics/inventoryCsvImport';
 import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
 import { buildInventoryHierarchy } from '../../lib/logistics/inventoryHierarchy';
+import { getReservedAmountForInventoryLot } from '../../lib/logistics/buildQueueReservations';
 import QualityTierBadge from '../../components/shared/QualityTierBadge';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
@@ -507,19 +509,24 @@ function getCsvMaterialLocationPairs(rows: CsvPreviewRow[]): Set<string> {
 }
 
 function getReservedInventoryMap(buildQueue: BuildQueueItem[]): Map<string, { quantity: number; owners: Set<string> }> {
-  const reserved = new Map<string, { quantity: number; owners: Set<string> }>();
+  const ownersByInventoryEntryId = new Map<string, Set<string>>();
   for (const item of buildQueue) {
     if (item.status === 'complete') continue;
     const owner = item.itemName ?? item.recipeId;
     for (const allocation of item.reservedAllocations ?? []) {
       if (allocation.quantityReserved <= 0) continue;
-      const current = reserved.get(allocation.inventoryEntryId) ?? { quantity: 0, owners: new Set<string>() };
-      current.quantity += allocation.quantityReserved;
-      current.owners.add(owner);
-      reserved.set(allocation.inventoryEntryId, current);
+      const owners = ownersByInventoryEntryId.get(allocation.inventoryEntryId) ?? new Set<string>();
+      owners.add(owner);
+      ownersByInventoryEntryId.set(allocation.inventoryEntryId, owners);
     }
   }
-  return reserved;
+  return new Map(Array.from(ownersByInventoryEntryId, ([inventoryEntryId, owners]) => [
+    inventoryEntryId,
+    {
+      quantity: getReservedAmountForInventoryLot(buildQueue, inventoryEntryId),
+      owners,
+    },
+  ]));
 }
 
 function buildReplacementPreview(
@@ -559,25 +566,15 @@ function buildLocationLookup(locations: InventoryLocation[]): Map<string, Invent
   return buildInventoryLocationLookup(locations);
 }
 
-function getIdentityMaterialId(identity: MaterialIdentity, sourceKeyByOutput: Map<string, string>): string {
-  return sourceKeyByOutput.get(identity.materialKey) ?? identity.materialKey;
-}
-
-function buildSourceKeyByOutput(materialIdentities: MaterialIdentity[], materials: MaterialTemplate[]): Map<string, string> {
-  const materialIds = new Set(materials.map((material) => material.id));
-  const sourceKeyByOutput = new Map<string, string>();
-  for (const identity of materialIdentities) {
-    if (identity.isRefinable && identity.refinesToMaterialKey && materialIds.has(identity.materialKey)) {
-      sourceKeyByOutput.set(identity.refinesToMaterialKey, identity.materialKey);
-    }
-  }
-  return sourceKeyByOutput;
-}
-
-function getMatchedRefinedName(input: string, material: MaterialTemplate, materialIdentities: MaterialIdentity[], sourceKeyByOutput: Map<string, string>): string | undefined {
+function getMatchedRefinedName(
+  input: string,
+  material: MaterialTemplate,
+  materialIdentities: MaterialIdentity[],
+  identityResolver: MaterialIdentityResolver,
+): string | undefined {
   const inputKey = normalizeLookup(input);
   for (const identity of materialIdentities) {
-    if (getIdentityMaterialId(identity, sourceKeyByOutput) !== material.id) continue;
+    if (identityResolver.canonicalKey(identity.materialKey) !== material.id) continue;
     const refinedNames = [identity.refinedName, identity.commodityName, identity.materialForm === 'refined' ? identity.displayName : undefined]
       .filter((value): value is string => Boolean(value));
     const matched = refinedNames.find((name) => normalizeLookup(name) === inputKey);
@@ -593,7 +590,7 @@ function validateCsvRows(
   locations: InventoryLocation[],
 ): CsvPreviewRow[] {
   const resolveMaterial = createMaterialResolver(materials, materialIdentities);
-  const sourceKeyByOutput = buildSourceKeyByOutput(materialIdentities, materials);
+  const identityResolver = createMaterialIdentityResolver(materialIdentities);
   const locationLookup = buildLocationLookup(locations);
   return rows.flatMap<CsvPreviewRow>((row) => {
     const errors: string[] = [];
@@ -602,7 +599,7 @@ function validateCsvRows(
     const locationNameInput = row.locationInput.trim();
     const resolvedMaterial = materialNameInput ? resolveMaterial({ materialName: materialNameInput, displayName: materialNameInput }) : null;
     const material = resolvedMaterial?.material;
-    const refinedName = material ? getMatchedRefinedName(materialNameInput, material, materialIdentities, sourceKeyByOutput) : undefined;
+    const refinedName = material ? getMatchedRefinedName(materialNameInput, material, materialIdentities, identityResolver) : undefined;
     const location = locationNameInput
       ? resolveInventoryLocationByInput(locationNameInput, locationLookup)
       : undefined;

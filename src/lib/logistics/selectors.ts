@@ -5,11 +5,25 @@ import type {
   MaterialTemplate,
   RarityTier,
   RecipeTemplate,
-  ReservedMaterialAllocation,
 } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
-import { computeShortages, type Shortage } from "./shortages";
+import { computePhysicalAvailabilityShortages, type Shortage } from "./shortages";
 import { getInventoryStacks, type InventoryStack } from "./inventory";
+import {
+  allocationMatchesRequirement,
+  getLotAvailableAmountAfterReservations,
+  getReservedAmountForInventoryLot,
+  validateReservedAllocations,
+  type BuildQueueRequirementIdentity,
+  type ReservedAllocationValidation,
+} from "./buildQueueReservations";
+
+export {
+  allocationMatchesRequirement,
+  validateReservedAllocations,
+  type BuildQueueRequirementIdentity,
+  type ReservedAllocationValidation,
+} from "./buildQueueReservations";
 
 export interface MaterialInventoryGroup {
   materialId: string;
@@ -52,6 +66,7 @@ export interface InventoryRaritySummary {
 }
 
 export interface BuildQueueShortageSummary {
+  basis: "reservation-and-quality-aware-physical-availability";
   shortages: Shortage[];
   totalShortageMaterials: number;
   totalShortfallQuantity: number;
@@ -60,13 +75,6 @@ export interface BuildQueueShortageSummary {
 }
 
 export type AllocationCoverageState = "covered" | "partial" | "missing" | "overReserved" | "stale";
-
-export interface ReservedAllocationValidation {
-  allocation: ReservedMaterialAllocation;
-  inventoryEntry: InventoryEntry | undefined;
-  isStale: boolean;
-  staleReason?: "missingStack" | "mismatchedMaterial" | "nonPositiveQuantity" | "exceedsStackQuantity";
-}
 
 export interface MaterialReservationCoverage {
   materialId: string;
@@ -87,13 +95,6 @@ export interface BuildQueueMaterialNeedSummary {
   stillNeeded: number;
 }
 
-export interface BuildQueueRequirementIdentity {
-  requirementId?: string;
-  selectedQuality?: number;
-  unitType?: RecipeInputTemplate["unitType"];
-  allowLowerQuality?: boolean;
-}
-
 function compareQualityDesc(a: InventoryEntry, b: InventoryEntry): number {
   return (b.quality ?? -1) - (a.quality ?? -1);
 }
@@ -106,16 +107,13 @@ export function getReservedQuantityByInventoryEntry(
   buildQueue: BuildQueueItem[],
   excludeBuildQueueItemId?: string,
 ): Map<string, number> {
+  const inventoryEntryIds = new Set(
+    buildQueue.flatMap((item) => (item.reservedAllocations ?? []).map((allocation) => allocation.inventoryEntryId)),
+  );
   const reservedByStack = new Map<string, number>();
-  for (const item of buildQueue) {
-    if (item.id === excludeBuildQueueItemId) continue;
-    for (const allocation of item.reservedAllocations ?? []) {
-      if (allocation.allowLowerQualityOverride && item.allowLowerQuality !== true) continue;
-      reservedByStack.set(
-        allocation.inventoryEntryId,
-        (reservedByStack.get(allocation.inventoryEntryId) ?? 0) + allocation.quantityReserved,
-      );
-    }
+  for (const inventoryEntryId of inventoryEntryIds) {
+    const reserved = getReservedAmountForInventoryLot(buildQueue, inventoryEntryId, { excludeBuildQueueItemId });
+    if (reserved > 0) reservedByStack.set(inventoryEntryId, reserved);
   }
   return reservedByStack;
 }
@@ -125,8 +123,7 @@ export function getAvailableQuantityForInventoryEntry(
   buildQueue: BuildQueueItem[],
   currentBuildQueueItemId?: string,
 ): number {
-  const reservedByOthers = getReservedQuantityByInventoryEntry(buildQueue, currentBuildQueueItemId);
-  return Math.max(0, inventoryEntry.quantity - (reservedByOthers.get(inventoryEntry.id) ?? 0));
+  return getLotAvailableAmountAfterReservations(inventoryEntry, buildQueue, currentBuildQueueItemId);
 }
 
 export function isInventoryEntryEligibleForRequirement(
@@ -136,40 +133,6 @@ export function isInventoryEntryEligibleForRequirement(
   if (inventoryEntry.materialId !== materialId) return false;
   if (inventoryEntry.quantity <= 0) return false;
   return true;
-}
-
-export function allocationMatchesRequirement(
-  allocation: ReservedMaterialAllocation,
-  materialId: string,
-  identity?: BuildQueueRequirementIdentity,
-): boolean {
-  if (allocation.materialId !== materialId) return false;
-  if (!identity) return true;
-  if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
-  if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
-  return true;
-}
-
-export function validateReservedAllocations(
-  allocations: ReservedMaterialAllocation[],
-  inventoryEntries: InventoryEntry[],
-): ReservedAllocationValidation[] {
-  return allocations.map((allocation) => {
-    const inventoryEntry = inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
-    if (allocation.quantityReserved <= 0) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "nonPositiveQuantity" };
-    }
-    if (!inventoryEntry) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "missingStack" };
-    }
-    if (allocation.materialId !== inventoryEntry.materialId) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "mismatchedMaterial" };
-    }
-    if (allocation.quantityReserved > inventoryEntry.quantity) {
-      return { allocation, inventoryEntry, isStale: true, staleReason: "exceedsStackQuantity" };
-    }
-    return { allocation, inventoryEntry, isStale: false };
-  });
 }
 
 export function getMaterialReservationCoverage(
@@ -375,9 +338,10 @@ export function getBuildQueueShortageSummary(
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
 ): BuildQueueShortageSummary {
   const activeQueueItems = buildQueue.filter((item) => item.status !== "complete");
-  const shortages = computeShortages(inventoryEntries, buildQueue, recipeInputsByRecipeId);
+  const shortages = computePhysicalAvailabilityShortages(inventoryEntries, buildQueue, recipeInputsByRecipeId);
 
   return {
+    basis: "reservation-and-quality-aware-physical-availability",
     shortages,
     totalShortageMaterials: shortages.length,
     totalShortfallQuantity: shortages.reduce((sum, shortage) => sum + shortage.shortfall, 0),

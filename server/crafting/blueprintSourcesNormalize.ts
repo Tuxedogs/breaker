@@ -45,6 +45,33 @@ export type MissionBlueprintReward = {
   generatorPath?: string;
 };
 
+export type MissionContractsCatalog = {
+  sourceLatestModifiedAt?: string;
+  records?: unknown[];
+};
+
+export type MissionRewardLookups = {
+  blueprintPools?: unknown[];
+};
+
+export type BlueprintSourceRecord = {
+  blueprintGuid: string;
+  displayName?: string;
+  componentType?: string;
+  missions: Array<{
+    contractId: string;
+    contractTitle?: string;
+    contractDebugName?: string;
+    generatorName?: string;
+    factionGuid?: string;
+    factionName?: string;
+    poolGuid?: string;
+    poolName?: string;
+    poolChance?: number;
+    rewardChance?: number;
+  }>;
+};
+
 function asRecord(value: unknown): JsonRecord | null {
   return typeof value === "object" && value !== null ? value as JsonRecord : null;
 }
@@ -58,6 +85,91 @@ function asNonEmptyString(value: unknown): string | undefined {
 function asFiniteNumber(value: unknown): number | undefined {
   const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
   return Number.isFinite(number) ? number : undefined;
+}
+
+function canonicalRewardMissions(
+  catalog: MissionContractsCatalog,
+  lookups: MissionRewardLookups,
+): JsonRecord[] {
+  const pools = new Map<string, JsonRecord>();
+  for (const rawPool of Array.isArray(lookups.blueprintPools) ? lookups.blueprintPools : []) {
+    const pool = asRecord(rawPool);
+    const poolGuid = pool ? asNonEmptyString(pool.poolGuid) : undefined;
+    if (pool && poolGuid) pools.set(poolGuid.toLowerCase(), pool);
+  }
+
+  const missions: JsonRecord[] = [];
+  for (const rawMission of Array.isArray(catalog.records) ? catalog.records : []) {
+    const mission = asRecord(rawMission);
+    if (!mission) continue;
+    const blueprintRewards = (Array.isArray(mission.blueprintRewards) ? mission.blueprintRewards : [])
+      .flatMap((rawReward) => {
+        const reward = asRecord(rawReward);
+        const poolGuid = reward ? asNonEmptyString(reward.blueprintPoolGuid) : undefined;
+        const pool = poolGuid ? pools.get(poolGuid.toLowerCase()) : undefined;
+        return reward && pool ? [{ ...reward, pool }] : [];
+      });
+    if (blueprintRewards.length > 0) missions.push({ ...mission, blueprintRewards });
+  }
+  return missions;
+}
+
+export function deriveMissionBlueprintRewards(
+  catalog: MissionContractsCatalog,
+  lookups: MissionRewardLookups,
+): unknown[] {
+  return canonicalRewardMissions(catalog, lookups);
+}
+
+export function deriveBlueprintSourceRecords(
+  catalog: MissionContractsCatalog,
+  lookups: MissionRewardLookups,
+): BlueprintSourceRecord[] {
+  const byBlueprint = new Map<string, BlueprintSourceRecord>();
+  for (const mission of canonicalRewardMissions(catalog, lookups)) {
+    const contractId = asNonEmptyString(mission.contractId);
+    if (!contractId) continue;
+    for (const rawMissionReward of Array.isArray(mission.blueprintRewards) ? mission.blueprintRewards : []) {
+      const missionReward = asRecord(rawMissionReward);
+      const pool = missionReward ? asRecord(missionReward.pool) : null;
+      if (!missionReward || !pool) continue;
+      const poolGuid = asNonEmptyString(pool.poolGuid) ?? asNonEmptyString(missionReward.blueprintPoolGuid);
+      const poolName = asNonEmptyString(pool.displayName) ?? formatRecordName(pool.poolName);
+      const rewardChance = asFiniteNumber(missionReward.chance);
+      for (const rawReward of Array.isArray(pool.rewards) ? pool.rewards : []) {
+        const reward = asRecord(rawReward);
+        const blueprintGuid = reward ? asNonEmptyString(reward.blueprintGuid) : undefined;
+        if (!reward || !blueprintGuid) continue;
+        const key = blueprintGuid.toLowerCase();
+        let source = byBlueprint.get(key);
+        if (!source) {
+          source = {
+            blueprintGuid,
+            displayName: asNonEmptyString(reward.displayName),
+            componentType: asNonEmptyString(reward.componentType),
+            missions: [],
+          };
+          byBlueprint.set(key, source);
+        }
+        source.missions.push({
+          contractId,
+          contractTitle: asNonEmptyString(mission.title),
+          contractDebugName: asNonEmptyString(mission.debugName),
+          generatorName: asNonEmptyString(mission.generatorName),
+          factionGuid: asNonEmptyString(mission.factionReputationGuid),
+          factionName: asNonEmptyString(mission.factionName),
+          poolGuid,
+          poolName,
+          poolChance: asFiniteNumber(reward.poolChance),
+          rewardChance,
+        });
+      }
+    }
+  }
+  return Array.from(byBlueprint.values()).sort((left, right) =>
+    (left.displayName ?? "zzzz").localeCompare(right.displayName ?? "zzzz") ||
+    left.blueprintGuid.localeCompare(right.blueprintGuid)
+  );
 }
 
 function normalizeKey(value: string | undefined, fallback = "unknown"): string {

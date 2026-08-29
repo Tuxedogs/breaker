@@ -13,6 +13,7 @@ import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
 import { clampQuality } from "./utils/qualityBands";
 import { getActiveInventoryEntries, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
+import { useMaterialIdentityIndex } from "../../../lib/logistics/materialIdentityIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
@@ -88,6 +89,7 @@ export default function CraftingModule() {
   const allInventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
+  const materialIdentities = useMaterialIdentityIndex();
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 
@@ -173,7 +175,7 @@ export default function CraftingModule() {
   ) => {
     const recipeId = `craft-${recipe.blueprint_id}`;
     const category = recipe.component_type ?? recipe.item_kind ?? "component";
-    const resolveMaterial = createMaterialResolver(materialTemplates);
+    const resolveMaterial = createMaterialResolver(materialTemplates, materialIdentities);
 
     const inputs = (recipe.materials ?? []).flatMap((mat, rowIndex) => {
       if (mat.input_kind === "part") return [];
@@ -227,7 +229,7 @@ export default function CraftingModule() {
       blueprintSources: getBlueprintSourcesForQueue(recipe),
       materialRequirements: inputs,
     });
-  }, [materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
+  }, [materialIdentities, materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
 
   const activeQueue = buildQueue.filter((item) => item.status !== "complete");
   const queuedRecipeIds = useMemo(

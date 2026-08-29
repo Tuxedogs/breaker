@@ -108,8 +108,7 @@ export function scoreToneClass(label?: string, score?: number | null): string {
 }
 
 export function isQuantaniumKey(key: string): boolean {
-  const k = canonicalMiningMaterialKey(key);
-  return k === "quantanium" || k === "quantainium";
+  return canonicalMiningMaterialKey(key) === "quantanium";
 }
 
 export function buildQualityDisplay(

@@ -33,6 +33,7 @@ For visual work, use `moonbreaker_design_canon.md` as the detailed design author
 * Do not expand a narrow task into a full-page or cross-system refactor.
 * Do not make unrelated cleanup changes.
 * Preserve existing behavior unless the task explicitly requests behavior changes.
+* Finish migrations by removing superseded ownership paths; do not add wrappers, compatibility layers, or override stacks unless a current external contract requires them.
 
 ## Scope Safety
 
@@ -73,6 +74,16 @@ Normalize gameplay units and source aliases at the shared schema, service, or pr
 Treat zero, missing, loading, and unavailable as distinct data states. A valid numeric zero must not be filtered out as absent.
 
 Build Queue component statistics must reuse the shared fitting/component-card delivery paths. Scalar rows, subtype-specific rows, and allocation curves must retain their source semantics; do not flatten an array or curve into an invented scalar.
+
+## Build Queue Ownership
+
+Build Queue mutations use the unified authenticated online persistence path. Do not recreate legacy `/api/user/build-queue` mutation behavior.
+
+`buildQueueReservations.ts` owns physical inventory-lot reservation and availability arithmetic. Selectors and store consumers must derive from that owner rather than duplicate the arithmetic.
+
+Material identity must use the generated material identity dataset through the shared canonicalizer. Do not add independent material alias dictionaries.
+
+Readiness, progress, physical shortage, and planning coverage are distinct derived read models. Reuse their established owners and do not create parallel sources of truth or collapse their meanings.
 
 ## Shared Fitting Data
 
@@ -200,6 +211,8 @@ For visual work:
 * Use existing shared tokens and components where appropriate.
 * Do not create a new global primitive for a single-page experiment.
 * Do not spread page-local styling into unrelated pages.
+* Keep Build Queue styling on its single canonical stylesheet path; do not restore redesign/legacy dual layers.
+* Keep Mining styling on its single canonical stylesheet path; do not import the full Recipe Browser stylesheet into Mining.
 * Check both populated and empty states.
 * Check long names, many rows, and overflow behavior.
 * Avoid hiding important data merely to simplify layout.

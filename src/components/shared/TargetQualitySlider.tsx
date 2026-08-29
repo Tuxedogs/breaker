@@ -73,6 +73,7 @@ export default function TargetQualitySlider({
   if (layout === "input") {
     return (
       <span className="bq-target-editor bq-target-editor--input" data-bq-row-control="true">
+        <span className="bq-target-editor-label">Target</span>
         <input
           type="number"
           min={lowerBound}

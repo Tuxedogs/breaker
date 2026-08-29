@@ -1,7 +1,12 @@
 import { apiUrl } from "../../lib/apiUrl";
+import { getMaterialIdentityIndexFromApi } from "../../lib/craftingReferenceApi";
 import { parseJsonResponse } from "../../lib/safeJson";
 import type { PublicLocationEntry } from "./types";
-import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "./materialIdentity";
+import {
+  canonicalMiningMaterial,
+  canonicalMiningMaterialKey,
+  configureMiningMaterialIdentities,
+} from "./materialIdentity";
 
 export type StaticLocationMaterialRow = {
   materialId: string;
@@ -1004,8 +1009,10 @@ export async function loadStaticMiningIndex(): Promise<StaticMiningIndex> {
       fetchRequiredJsonArray<StaticMaterialQualityRow>(MATERIAL_QUALITY_INDEX_URL),
       fetchRequiredJsonArray<StaticLocationDistributionRow>(LOCATION_DISTRIBUTION_INDEX_URL),
       fetchRequiredJsonObject<StaticLocationHierarchyIndex>(LOCATION_HIERARCHY_INDEX_URL),
+      getMaterialIdentityIndexFromApi(),
     ])
-      .then(([rows, rankings, qualityRows, distributionRows, locationHierarchy]) => {
+      .then(([rows, rankings, qualityRows, distributionRows, locationHierarchy, materialIdentityIndex]) => {
+        configureMiningMaterialIdentities(materialIdentityIndex.materials ?? []);
         resolvedCache = buildStaticMiningIndex(rows, rankings, qualityRows, distributionRows, locationHierarchy);
         return resolvedCache;
       })

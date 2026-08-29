@@ -96,7 +96,7 @@ export default function LogisticsPage() {
             <thead>
               <tr>
                 <th>Material</th>
-                <th>Have</th>
+                <th>Allocated + Available</th>
                 <th>Need</th>
                 <th>Shortfall</th>
               </tr>
@@ -107,7 +107,7 @@ export default function LogisticsPage() {
                 const unit = getInventoryUnitLabel(mat);
                 const fmt = (n: number) => unit === 'unit' ? `${n}` : `${n.toFixed(2)} ${unit}`;
                 return (
-                  <tr key={s.materialId}>
+                  <tr key={s.key}>
                     <td>{mat?.name ?? s.materialId}</td>
                     <td>{fmt(s.have)}</td>
                     <td>{fmt(s.needed)}</td>

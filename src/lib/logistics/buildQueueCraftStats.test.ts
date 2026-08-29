@@ -118,8 +118,17 @@ test("hasMaterialAllocations is false without reserved amounts", () => {
   assert.equal(hasMaterialAllocations(item, recipe, inputs), true);
 });
 
-test("getBuildQueueItemAllocationProgress reports reserved coverage rather than owned inventory", () => {
-  assert.equal(getBuildQueueItemAllocationProgress(item, { "recipe-test": inputs }), 50);
+test("getBuildQueueItemAllocationProgress reports valid reserved coverage rather than owned inventory", () => {
+  assert.equal(getBuildQueueItemAllocationProgress(item, { "recipe-test": inputs }, [{
+    id: "inv-1",
+    materialId: "stileron",
+    itemName: "Stileron",
+    quantity: 1,
+    quality: 860,
+    rarity: { tier: "common", label: "Common", colorHex: "#fff" },
+    createdAt: "2026-08-28T00:00:00.000Z",
+    updatedAt: "2026-08-28T00:00:00.000Z",
+  }]), 50);
 });
 
 test("buildBuildQueueProductQualitySummary keeps incomplete allocation distinct from a prediction", () => {

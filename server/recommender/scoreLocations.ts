@@ -211,9 +211,10 @@ export function scoreLocations(
   const diagnostics: MaterialCoverageDiagnostic[] = [];
   const scoreContributions: ScoreContributionDiagnostic[] = [];
   const indexedResourcesByLocation = buildIndexedResources(apiData, warnings);
+  const identityResolver = apiData.materialIdentityResolver;
 
   for (const requirement of requirements) {
-    const group = findMaterialGroup(requirement, apiData.materialGroups, warnings);
+    const group = findMaterialGroup(requirement, apiData.materialGroups, warnings, identityResolver);
     if (!group) {
       diagnostics.push({
         materialKey: requirement.materialKey,
@@ -307,12 +308,12 @@ export function scoreLocations(
         overrideFieldsApplied: source.overrideFieldsApplied ?? [],
         sourceLocationRawName: source.sourceLocationRawName ?? source.location ?? source.providerName,
         sourceLocationKey: source.sourceLocationKey,
-        materialKeyResolved: source.materialKeyResolved ?? canonicalMaterialKey(source.materialName ?? requirement.materialName),
-        materialAliasApplied: source.materialAliasApplied ?? canonicalMaterialKey(requirement.materialName) !== canonicalMaterialKey(source.originalMaterialName ?? source.materialName ?? requirement.materialName),
+        materialKeyResolved: source.materialKeyResolved ?? canonicalMaterialKey(source.materialName ?? requirement.materialName, identityResolver),
+        materialAliasApplied: source.materialAliasApplied ?? canonicalMaterialKey(requirement.materialName, identityResolver) !== canonicalMaterialKey(source.originalMaterialName ?? source.materialName ?? requirement.materialName, identityResolver),
         originalMaterialName: source.originalMaterialName ?? source.materialName,
         originalMaterialKey: source.originalMaterialKey ?? source.materialId,
-        canonicalMaterialName: source.canonicalMaterialName ?? canonicalMaterialDisplayName(requirement.materialName),
-        canonicalMaterialKey: source.canonicalMaterialKey ?? canonicalMaterialKey(requirement.materialName),
+        canonicalMaterialName: source.canonicalMaterialName ?? canonicalMaterialDisplayName(requirement.materialName, identityResolver),
+        canonicalMaterialKey: source.canonicalMaterialKey ?? canonicalMaterialKey(requirement.materialName, identityResolver),
       };
       scoreContributions.push(scoreDiagnostic);
       const existing = locations.get(key);

@@ -58,7 +58,9 @@ export async function aggregateBuildQueueRequirements(
 ): Promise<NormalizedRequirement[]> {
   const resolve = await createApiMaterialResolver(warnings);
   const byRequirement = new Map<string, NormalizedRequirement>();
-  const reservedByRequirement = new Map<string, number>();
+  // This is quality-eligible planning coverage, not physical inventory-lot reservation.
+  // Below-target override allocations still reserve their lots, but do not satisfy this metric.
+  const qualityEligibleReservedByRequirement = new Map<string, number>();
 
   for (const item of request.buildQueue ?? []) {
     if (item.status === "complete") continue;
@@ -70,7 +72,10 @@ export async function aggregateBuildQueueRequirements(
         allowLowerQuality: false,
         unitType: allocation.unitType,
       });
-      reservedByRequirement.set(key, (reservedByRequirement.get(key) ?? 0) + allocation.quantityReserved);
+      qualityEligibleReservedByRequirement.set(
+        key,
+        (qualityEligibleReservedByRequirement.get(key) ?? 0) + allocation.quantityReserved,
+      );
     }
   }
 
@@ -171,7 +176,7 @@ export async function aggregateBuildQueueRequirements(
         .reduce((sum, entry) => sum + entry.quantity, 0);
       remainingByRequirement.set(
         remainingKey,
-        Math.max(0, totalForMaterial - (reservedByRequirement.get(remainingKey) ?? 0) - eligibleInventory),
+        Math.max(0, totalForMaterial - (qualityEligibleReservedByRequirement.get(remainingKey) ?? 0) - eligibleInventory),
       );
     }
   }

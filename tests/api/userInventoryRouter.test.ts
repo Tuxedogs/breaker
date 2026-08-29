@@ -51,6 +51,8 @@ test("all explicitly routed inventory paths reach the shared authenticated dispa
     ["/api/user/inventory/stacks/stack%201", "DELETE", ""],
     ["/api/user/inventory/locations/location%201", "DELETE", ""],
     ["/api/user/inventory/build-queues/queue%201", "DELETE", ""],
+    ["/api/user/inventory/build-queue-items/item%201", "DELETE", ""],
+    ["/api/user/inventory/build-queues/queue%201/items", "DELETE", ""],
   ] as const;
 
   for (const [url, method, body] of routes) {

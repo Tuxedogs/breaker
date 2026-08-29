@@ -6,6 +6,7 @@ import {
   resolveInventoryLocationByInput,
 } from '../../lib/logistics/inventoryLocationOptions';
 import { type MaterialIdentity, useMaterialIdentityIndex } from '../../lib/logistics/materialIdentityIndex';
+import { createMaterialIdentityResolver } from '../../lib/materialIdentity';
 import type {
   InventoryCatalogSource,
   InventoryEntry,
@@ -374,15 +375,26 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   const [errorMessage, setErrorMessage] = useState('');
   const [hasTriedSave, setHasTriedSave] = useState(false);
 
+  const identityResolver = useMemo(
+    () => createMaterialIdentityResolver(materialIdentities),
+    [materialIdentities],
+  );
+
   const identityByLookup = useMemo(() => {
     const lookup = new Map<string, MaterialIdentity>();
+    const representativeByMaterialKey = new Map<string, MaterialIdentity>();
     for (const identity of materialIdentities) {
-      lookup.set(normalizeItemLookup(identity.displayName), identity);
-      lookup.set(normalizeItemLookup(identity.materialKey), identity);
-      if (identity.materialKey === 'pressurizedice') lookup.set('ice', identity);
+      const materialKey = identityResolver.canonicalKey(identity.materialKey);
+      const current = representativeByMaterialKey.get(materialKey);
+      if (!current || identity.materialForm === 'refined') {
+        representativeByMaterialKey.set(materialKey, identity);
+      }
+    }
+    for (const [materialKey, identity] of representativeByMaterialKey) {
+      for (const alias of identityResolver.aliasesFor(materialKey)) lookup.set(alias, identity);
     }
     return lookup;
-  }, [materialIdentities]);
+  }, [identityResolver, materialIdentities]);
 
   const materialByLookup = useMemo(() => {
     const lookup = new Map<string, MaterialTemplate>();
@@ -390,11 +402,10 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       if (!isKnownMineable(material)) continue;
       lookup.set(normalizeItemLookup(material.id), material);
       lookup.set(normalizeItemLookup(material.name), material);
-      if (material.id === 'jaclium') lookup.set('jacliumore', material);
-      if (material.id === 'carinite-pure') lookup.set('carinitepure', material);
+      for (const alias of identityResolver.aliasesFor(material.id)) lookup.set(alias, material);
     }
     return lookup;
-  }, [materials]);
+  }, [identityResolver, materials]);
 
   const mineableIdentities = useMemo(() => {
     const byMaterialId = new Map<string, MineableSuggestion>();

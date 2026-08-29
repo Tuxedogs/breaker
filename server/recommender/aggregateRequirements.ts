@@ -1,12 +1,17 @@
 import type { AggregatedRequirement, RequirementInput, RecommenderWarning } from "./recommender.types.js";
 import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver.js";
 import { addWarning } from "./recommenderWarnings.js";
+import {
+  DEFAULT_MATERIAL_IDENTITY_RESOLVER,
+  type MaterialIdentityResolver,
+} from "../../src/lib/materialIdentity.js";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function aggregateRequirements(
   requirements: RequirementInput[],
   warnings: RecommenderWarning[],
+  identityResolver: MaterialIdentityResolver = DEFAULT_MATERIAL_IDENTITY_RESOLVER,
 ): AggregatedRequirement[] {
   const byMaterial = new Map<string, AggregatedRequirement>();
 
@@ -20,11 +25,11 @@ export function aggregateRequirements(
     const rawMaterialIdResolved = UUID_PATTERN.test(rawMaterialId ?? "") && inputDisplayName && !UUID_PATTERN.test(inputDisplayName)
       ? inputDisplayName
       : rawMaterialId || rawMaterialKeyResolved;
-    const materialKey = canonicalMaterialKey(rawMaterialKeyResolved);
-    const materialId = canonicalMaterialKey(rawMaterialIdResolved);
-    const canonicalDisplayName = canonicalMaterialDisplayName(inputDisplayName);
+    const materialKey = canonicalMaterialKey(rawMaterialKeyResolved, identityResolver);
+    const materialId = canonicalMaterialKey(rawMaterialIdResolved, identityResolver);
+    const canonicalDisplayName = canonicalMaterialDisplayName(inputDisplayName, identityResolver);
     const displayName = canonicalDisplayName || inputDisplayName;
-    const materialName = canonicalMaterialDisplayName(requirement.materialName ?? displayName) || displayName;
+    const materialName = canonicalMaterialDisplayName(requirement.materialName ?? displayName, identityResolver) || displayName;
     if (UUID_PATTERN.test(rawMaterialKey ?? "") && materialKey === rawMaterialKey?.replace(/[^a-z0-9]/gi, "").toLowerCase()) {
       addWarning(warnings, {
         code: "requirement_material_uuid_unresolved",

@@ -26,7 +26,6 @@ import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
-import "../../components/logistics/build-queue-redesign.css";
 
 const MAX_QUEUE_SLOTS = 12;
 const FIXTURE_READ_ONLY_MESSAGE = "Build Queue fixture is read-only.";

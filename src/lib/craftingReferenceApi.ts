@@ -1,9 +1,10 @@
-import { apiUrl } from "@/lib/apiUrl";
-import { parseJsonResponse } from "@/lib/safeJson";
+import { apiUrl } from "./apiUrl";
+import { parseJsonResponse } from "./safeJson";
 import type {
   CraftedPropertyRecord,
   QualityQuantizationRecord,
-} from "@/lib/craftingData";
+} from "./craftingData";
+import type { MaterialIdentityRecord } from "./materialIdentity";
 
 const CRAFTED_PROPERTIES_URL = "/api/crafting/reference/crafted-properties";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/reference/quality-quantization";
@@ -61,7 +62,9 @@ export function getMaterialQualityQuantizationFromApi(): Promise<MaterialQuality
 }
 
 export type MaterialIdentityIndex = {
-  materials?: Array<{ materialKey?: string; sources?: unknown }>;
+  materials?: MaterialIdentityRecord[];
+  guidLookup?: Record<string, unknown>;
+  conflicts?: unknown[];
 };
 
 export function getMaterialIdentityIndexFromApi(): Promise<MaterialIdentityIndex> {

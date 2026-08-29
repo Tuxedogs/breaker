@@ -658,3 +658,31 @@ export async function deleteInventoryLocation(userId: string, locationId: string
     .where(and(eq(inventoryLocations.userId, userId), eq(inventoryLocations.id, match.id)));
   return listOnlinePersistenceState(userId);
 }
+
+export async function deleteBuildQueueItem(userId: string, itemId: string) {
+  const existingItems = await getDb()
+    .select()
+    .from(buildQueueItems)
+    .where(eq(buildQueueItems.userId, userId));
+  const match = existingItems.find((row) => row.id === itemId || getSnapshotLocalId(row.snapshot) === itemId);
+  if (!match) return listOnlinePersistenceState(userId);
+
+  await getDb()
+    .delete(buildQueueItems)
+    .where(and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.id, match.id)));
+  return listOnlinePersistenceState(userId);
+}
+
+export async function clearBuildQueueItems(userId: string, queueId: string) {
+  const existingQueues = await getDb()
+    .select()
+    .from(buildQueues)
+    .where(eq(buildQueues.userId, userId));
+  const match = existingQueues.find((row) => row.id === queueId || getSnapshotLocalId(row.metadata) === queueId);
+  if (!match) return listOnlinePersistenceState(userId);
+
+  await getDb()
+    .delete(buildQueueItems)
+    .where(and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.queueId, match.id)));
+  return listOnlinePersistenceState(userId);
+}

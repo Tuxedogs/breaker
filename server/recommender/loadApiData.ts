@@ -1,7 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { apiPaths } from "../config/apiPaths.js";
+import {
+  createMaterialIdentityResolver,
+  type MaterialIdentityRecord,
+  type MaterialIdentityResolver,
+} from "../../src/lib/materialIdentity.js";
 import type { ApiSource, MaterialSourceGroup, RecommenderApiData, RecommenderWarning } from "./recommender.types.js";
 import { canonicalMaterialKey } from "./materialResolver.js";
+import { configureGeneratedLagrangeGroups, type GeneratedLagrangeGroups } from "./locationNormalization.js";
 import { addWarning } from "./recommenderWarnings.js";
 
 async function readJson<T>(filePath: string, warnings: RecommenderWarning[]): Promise<T | null> {
@@ -46,16 +52,17 @@ function mergeSourceScoreFields(target: ApiSource, sourceScore: ApiSource): ApiS
 function mergeEnrichedWithSourceScores(
   enrichedSources: MaterialSourceGroup[],
   sourceScoreGroups: MaterialSourceGroup[] | undefined,
+  identityResolver: MaterialIdentityResolver,
 ): MaterialSourceGroup[] {
   if (!sourceScoreGroups?.length) return enrichedSources;
 
   const scoreGroupsByMaterial = new Map<string, MaterialSourceGroup>();
   for (const group of sourceScoreGroups) {
-    scoreGroupsByMaterial.set(canonicalMaterialKey(group.materialName ?? group.materialId), group);
+    scoreGroupsByMaterial.set(canonicalMaterialKey(group.materialName ?? group.materialId, identityResolver), group);
   }
 
   return enrichedSources.map((group) => {
-    const scoreGroup = scoreGroupsByMaterial.get(canonicalMaterialKey(group.materialName ?? group.materialId));
+    const scoreGroup = scoreGroupsByMaterial.get(canonicalMaterialKey(group.materialName ?? group.materialId, identityResolver));
     const scoreSources = scoreGroup?.bestSources ?? scoreGroup?.sources ?? [];
     if (!scoreSources.length || !group.sources?.length) return group;
 
@@ -71,12 +78,16 @@ function mergeEnrichedWithSourceScores(
 }
 
 export async function loadApiData(warnings: RecommenderWarning[]): Promise<RecommenderApiData> {
+  const identityIndex = await readJson<{ materials?: MaterialIdentityRecord[] }>(apiPaths.materialIdentityIndex, warnings);
+  const materialIdentityResolver = createMaterialIdentityResolver(identityIndex?.materials ?? []);
   const sourceScores = await readJson<{ materials?: MaterialSourceGroup[] }>(apiPaths.materialSourceScores, warnings);
   const enrichedSources = await readJson<MaterialSourceGroup[]>(apiPaths.materialSourcesQualityEnriched, warnings);
   const locationMetadata = await readJson<RecommenderApiData["locationMetadata"]>(apiPaths.locationMetadata, warnings);
+  const lagrangeGroups = await readJson<GeneratedLagrangeGroups>(apiPaths.lagrangeGroups, warnings);
+  configureGeneratedLagrangeGroups(lagrangeGroups);
 
   const materialGroups = enrichedSources?.length
-    ? mergeEnrichedWithSourceScores(enrichedSources, sourceScores?.materials)
+    ? mergeEnrichedWithSourceScores(enrichedSources, sourceScores?.materials, materialIdentityResolver)
     : sourceScores?.materials ?? [];
 
   if (!enrichedSources?.length) {
@@ -89,11 +100,14 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
 
   return {
     materialGroups,
+    materialIdentityResolver,
     locationMetadata: locationMetadata ?? {},
     consumedFiles: [
+      "server-data/crafting/reference/material-identity-index.json",
       "server-data/mining/recommender/material-source-scores.json",
       "server-data/mining/recommender/material-sources-quality-enriched.json",
       "server-data/mining/recommender/location-metadata.json",
+      "server-data/mining/locations/lagrange-groups.json",
     ],
   };
 }

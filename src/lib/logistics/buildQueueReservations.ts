@@ -6,6 +6,20 @@ import { getModifiersAtQuality } from "../../components/industry/crafting/utils/
 export const MIN_MATERIAL_QUALITY = 1;
 export const MAX_MATERIAL_QUALITY = 1000;
 
+export interface BuildQueueRequirementIdentity {
+  requirementId?: string;
+  selectedQuality?: number;
+  unitType?: RecipeInputTemplate["unitType"];
+  allowLowerQuality?: boolean;
+}
+
+export interface ReservedAllocationValidation {
+  allocation: ReservedMaterialAllocation;
+  inventoryEntry: InventoryEntry | undefined;
+  isStale: boolean;
+  staleReason?: "missingStack" | "mismatchedMaterial" | "nonPositiveQuantity" | "exceedsStackQuantity";
+}
+
 export function clampMaterialQuality(value: unknown): number | undefined {
   if (value === "" || value === null || value === undefined) return undefined;
   const parsed = typeof value === "number" ? value : Number(value);
@@ -56,6 +70,53 @@ export function getRemainingRequiredAmount(requiredAmount: number, allocatedAmou
   return Math.max(0, requiredAmount - Math.max(0, allocatedAmount));
 }
 
+export function allocationMatchesRequirement(
+  allocation: ReservedMaterialAllocation,
+  materialId: string,
+  identity?: BuildQueueRequirementIdentity,
+): boolean {
+  if (allocation.materialId !== materialId) return false;
+  if (!identity) return true;
+  if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
+  if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
+  return true;
+}
+
+export function validateReservedAllocations(
+  allocations: ReservedMaterialAllocation[],
+  inventoryEntries: InventoryEntry[],
+): ReservedAllocationValidation[] {
+  return allocations.map((allocation) => {
+    const inventoryEntry = inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
+    if (allocation.quantityReserved <= 0) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "nonPositiveQuantity" };
+    }
+    if (!inventoryEntry) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "missingStack" };
+    }
+    if (allocation.materialId !== inventoryEntry.materialId) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "mismatchedMaterial" };
+    }
+    if (allocation.quantityReserved > inventoryEntry.quantity) {
+      return { allocation, inventoryEntry, isStale: true, staleReason: "exceedsStackQuantity" };
+    }
+    return { allocation, inventoryEntry, isStale: false };
+  });
+}
+
+export function isInventoryEntrySupportedForBuildQueuePhysicalAvailability(
+  inventoryEntry: Pick<InventoryEntry, "itemKind" | "materialType">,
+): boolean {
+  return inventoryEntry.itemKind !== "ore" && inventoryEntry.materialType !== "ore";
+}
+
+/**
+ * Canonical physical-lot reservation total.
+ *
+ * Every positive allocation on an active queue item consumes physical lot
+ * capacity. `allowLowerQualityOverride` is quality-policy metadata and does
+ * not change that physical reservation.
+ */
 export function getReservedAmountForInventoryLot(
   buildQueue: BuildQueueItem[],
   inventoryEntryId: string,
@@ -65,30 +126,37 @@ export function getReservedAmountForInventoryLot(
   },
 ): number {
   return buildQueue.reduce((sum, item) => {
-    if (item.id === options?.excludeBuildQueueItemId) return sum;
+    if (item.status === "complete" || item.id === options?.excludeBuildQueueItemId) return sum;
     return sum + (item.reservedAllocations ?? [])
       .filter((allocation) =>
         allocation.inventoryEntryId === inventoryEntryId &&
+        allocation.quantityReserved > 0 &&
         !options?.excludeAllocationIds?.has(allocation.id)
       )
-      .reduce((allocationSum, allocation) => allocationSum + allocation.quantityReserved, 0);
+      .reduce((allocationSum, allocation) => allocationSum + Math.max(0, allocation.quantityReserved), 0);
   }, 0);
 }
 
 export function getLotAvailableAmountAfterReservations(
   inventoryEntry: Pick<InventoryEntry, "id" | "quantity">,
   buildQueue: BuildQueueItem[],
-  currentBuildQueueItemId: string,
+  currentBuildQueueItemId?: string,
   currentLineAllocations: Pick<ReservedMaterialAllocation, "id" | "inventoryEntryId" | "quantityReserved">[] = [],
 ): number {
+  // With a current item ID, availability is the capacity that item may use:
+  // its persisted allocations are replaced by the supplied candidate set.
   const currentLineAllocationIds = new Set(currentLineAllocations.map((allocation) => allocation.id));
   const reservedByOthers = getReservedAmountForInventoryLot(buildQueue, inventoryEntry.id, {
     excludeBuildQueueItemId: currentBuildQueueItemId,
     excludeAllocationIds: currentLineAllocationIds,
   });
-  const reservedByCurrentLine = currentLineAllocations
-    .filter((allocation) => allocation.inventoryEntryId === inventoryEntry.id)
-    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+  const currentItemIsComplete = currentBuildQueueItemId !== undefined
+    && buildQueue.some((item) => item.id === currentBuildQueueItemId && item.status === "complete");
+  const reservedByCurrentLine = currentItemIsComplete
+    ? 0
+    : currentLineAllocations
+        .filter((allocation) => allocation.inventoryEntryId === inventoryEntry.id)
+        .reduce((sum, allocation) => sum + Math.max(0, allocation.quantityReserved), 0);
   return Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByCurrentLine);
 }
 

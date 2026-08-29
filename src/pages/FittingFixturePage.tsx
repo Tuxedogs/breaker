@@ -197,7 +197,7 @@ const scenarios: Record<FixtureScenarioKey, FixtureScenario> = {
   },
   ballistic: {
     key: "ballistic",
-    label: "Ballistic Reserve",
+    label: "Ammo",
     simulation: simulationState({ capacity: 17, allocated: 12, coolingCapacity: 48, coolingDemand: 12, dps: 301.5, damage: 18_090, shieldRegen: 602 }),
     assignment: assignment({ weapons: 3, quantum: 2, radar: 1, shields: 3, cooler1: 1, cooler2: 1 }),
     fittingValid: true,

@@ -2,7 +2,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 
 import { handleUserInventoryRoute } from "../../src/server/user/inventoryRoute.js";
 
-type InventoryRouteKind = "sync" | "stacks" | "stack" | "location" | "build-queue";
+type InventoryRouteKind = "sync" | "stacks" | "stack" | "location" | "build-queue" | "build-queue-item" | "build-queue-clear";
 
 type InventoryRoute = {
   kind: InventoryRouteKind;
@@ -23,6 +23,12 @@ function matchRoute(request: IncomingMessage): InventoryRoute | null {
   const buildQueueMatch = pathname.match(/^\/api\/user\/inventory\/build-queues\/([^/]+)$/);
   if (buildQueueMatch) return { kind: "build-queue", rawId: buildQueueMatch[1] };
 
+  const buildQueueItemMatch = pathname.match(/^\/api\/user\/inventory\/build-queue-items\/([^/]+)$/);
+  if (buildQueueItemMatch) return { kind: "build-queue-item", rawId: buildQueueItemMatch[1] };
+
+  const buildQueueClearMatch = pathname.match(/^\/api\/user\/inventory\/build-queues\/([^/]+)\/items$/);
+  if (buildQueueClearMatch) return { kind: "build-queue-clear", rawId: buildQueueClearMatch[1] };
+
   return null;
 }
 
@@ -40,11 +46,13 @@ function dispatcherPath(route: InventoryRoute): string {
   const decodedId = decodeURIComponent(route.rawId ?? "");
   if (route.kind === "stack") return `/api/user/inventory/stacks/${decodedId}`;
   if (route.kind === "location") return `/api/user/inventory/locations/${decodedId}`;
+  if (route.kind === "build-queue-item") return `/api/user/inventory/build-queue-items/${encodeURIComponent(decodedId)}`;
+  if (route.kind === "build-queue-clear") return `/api/user/inventory/build-queues/${encodeURIComponent(decodedId)}/items`;
   return `/api/user/inventory/build-queues/${encodeURIComponent(decodedId)}`;
 }
 
 async function readBody(request: IncomingMessage, route: InventoryRoute): Promise<unknown> {
-  if (route.kind === "location" || route.kind === "build-queue") return {};
+  if (route.kind === "location" || route.kind === "build-queue" || route.kind === "build-queue-item" || route.kind === "build-queue-clear") return {};
   if (route.kind === "stack" && request.method === "DELETE") return {};
 
   const chunks: Buffer[] = [];
@@ -65,6 +73,8 @@ function routeLabel(route: InventoryRoute): string {
   if (route.kind === "stacks") return "api/user/inventory/stacks";
   if (route.kind === "stack") return "api/user/inventory/stacks/:id";
   if (route.kind === "location") return "api/user/inventory/locations/:id";
+  if (route.kind === "build-queue-item") return "api/user/inventory/build-queue-items/:id";
+  if (route.kind === "build-queue-clear") return "api/user/inventory/build-queues/:id/items";
   return "api/user/inventory/build-queues";
 }
 

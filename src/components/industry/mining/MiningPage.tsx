@@ -2,13 +2,11 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { buildRecommendationRequest, getMiningRecommendations } from "../../../features/mining/recommenderAdapter";
 import { type MiningCoverageMode } from "../../../features/mining/coveragePlan";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
-import { loadStantonLagrangeChildrenData } from "../../../features/locations/stantonLagrangeChildren";
+import { loadStantonLagrangeGroupData } from "../../../features/locations/stantonLagrangeChildren";
 import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { getStaticLocationMaterialKeys, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
-import "./mining-redesign.css";
-import "../crafting/recipe-browser.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
@@ -154,7 +152,7 @@ export default function MiningModule() {
   useEffect(() => {
     let cancelled = false;
     loadStaticMiningIndex().then((index) => { if (!cancelled) setStaticMiningIndex(index); }).catch((e) => { if (import.meta.env.DEV) console.warn("[mining] static index failed", e); });
-    loadStantonLagrangeChildrenData().then(() => { if (!cancelled) setLagrangeChildrenDataVersion((v) => v + 1); }).catch(() => {});
+    loadStantonLagrangeGroupData().then(() => { if (!cancelled) setLagrangeChildrenDataVersion((v) => v + 1); }).catch(() => {});
     loadManifest().then((map) => { if (!cancelled) setPlanetAssetMap(map); }).catch(() => {});
     return () => { cancelled = true; };
   }, []);

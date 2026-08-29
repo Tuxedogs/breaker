@@ -3,7 +3,11 @@ import path from "node:path";
 
 import {
   buildReleaseStateMap,
+  deriveBlueprintSourceRecords,
+  deriveMissionBlueprintRewards,
   normalizeMissionBlueprintReward,
+  type MissionContractsCatalog,
+  type MissionRewardLookups,
 } from "../server/crafting/blueprintSourcesNormalize.ts";
 import { getCraftingBlueprintSourcesRoot } from "../server/config/craftingBlueprintSourcesRoot.ts";
 import { getMissionDataRoot } from "../server/config/missionDataRoot.ts";
@@ -95,19 +99,19 @@ const missionSourceRoot = path.resolve("server-data", "missions", "source");
 const missionGenerationRoot = process.env.MISSION_GENERATION_ROOT
   ? path.resolve(process.env.MISSION_GENERATION_ROOT)
   : getMissionDataRoot();
-const [index, sourceBlueprints, sourceMissions, sourceCatalog, missionIndex, missionManifest] = await Promise.all([
+const [index, sourceCatalog, sourceLookups, missionIndex, missionManifest] = await Promise.all([
   readFile(path.join(root, "index.json"), "utf8").then((value) => JSON.parse(value) as BlueprintSourcesIndex),
-  readFile(path.join(missionSourceRoot, "blueprint_reward_sources.json"), "utf8")
-    .then((value) => JSON.parse(value) as Array<{ blueprintGuid?: string; missions?: unknown[] }>),
-  readFile(path.join(missionSourceRoot, "mission_blueprint_rewards.json"), "utf8")
-    .then((value) => JSON.parse(value) as Array<{ contractId?: string }>),
   readFile(path.join(missionSourceRoot, "mission_contracts.json"), "utf8")
-    .then((value) => JSON.parse(value) as { sourceLatestModifiedAt?: string }),
+    .then((value) => JSON.parse(value) as MissionContractsCatalog),
+  readFile(path.join(missionSourceRoot, "mission_reward_lookups.json"), "utf8")
+    .then((value) => JSON.parse(value) as MissionRewardLookups),
   readFile(path.join(missionGenerationRoot, "mission_browser_index.json"), "utf8")
     .then((value) => JSON.parse(value) as unknown),
   readFile(path.join(missionGenerationRoot, "mission_shard_manifest.json"), "utf8")
     .then((value) => JSON.parse(value) as unknown),
 ]);
+const sourceBlueprints = deriveBlueprintSourceRecords(sourceCatalog, sourceLookups);
+const sourceMissions = deriveMissionBlueprintRewards(sourceCatalog, sourceLookups);
 const missionJoin = parseMissionBlueprintOfferJoin(
   missionIndex,
   missionManifest,
