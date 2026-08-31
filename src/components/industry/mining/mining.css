@@ -1936,7 +1936,6 @@
   .mine-page--v2 .mine-body {
     height: calc(100vh - 96px);
     min-height: 620px;
-    padding: 8px 12px 14px;
   }
 
   .mine-page--v2 .mining-shell {
@@ -2171,10 +2170,6 @@
 
 /* Approved desktop composition. Higher root specificity isolates it from the legacy mining cascade. */
 @media (min-width: 901px) {
-  .mine-page.mine-page--v2 .mine-body {
-    padding: 0 12px 0 4px;
-  }
-
   .mine-page.mine-page--v2 .mining-shell {
     grid-template-columns: 450px minmax(0, 1fr);
     gap: 8px;
@@ -3468,6 +3463,10 @@
   color: var(--mine-intel-copy);
 }
 
+.mine-page.mine-page--v2 .mine-body {
+  padding: 8px;
+}
+
 @media (min-width: 1600px) {
   .mine-page.mine-page--v2 .mine-body {
     display: grid;
@@ -3475,7 +3474,6 @@
     gap: 8px;
     height: calc(100dvh - 16px);
     min-height: 640px;
-    padding: 8px 12px 8px 4px;
     overflow: hidden;
   }
 
@@ -3504,7 +3502,6 @@
     gap: 8px;
     height: calc(100dvh - 16px);
     min-height: 640px;
-    padding: 8px 12px 8px 4px;
     overflow: hidden;
   }
 
