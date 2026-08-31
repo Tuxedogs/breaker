@@ -3014,6 +3014,7 @@
 
 .mine-page.mine-page--v2 .mining-material-selection-summary {
   display: flex;
+  flex: 1 1 auto;
   min-width: 0;
   align-items: center;
   justify-content: flex-end;
@@ -3021,18 +3022,21 @@
 }
 
 .mine-page.mine-page--v2 .mining-material-selection-summary > span {
-  width: 91px;
+  flex: 1 1 91px;
+  min-width: 0;
+  overflow: hidden;
   color: var(--mine-intel-copy-muted);
   font-size: var(--app-text-meta);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .mine-page.mine-page--v2 .mining-material-clear-button {
-  width: 58px;
-  min-width: 58px;
+  flex: 0 0 auto;
+  min-width: max-content;
   height: 21px;
   padding: 0 6px;
   border: 1px solid rgba(251, 113, 133, 0.45);
@@ -3044,6 +3048,7 @@
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
   transition: border-color 150ms ease, background 150ms ease, color 150ms ease, opacity 150ms ease;
 }
 
