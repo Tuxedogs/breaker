@@ -50,11 +50,12 @@
   --recipe-text-kicker: clamp(var(--app-text-kicker), 0.34vw, 13px);
   max-width: none;
   margin: 0;
-  padding: var(--app-card-padding);
+  padding: 0;
   border: 0;
   border-radius: 0;
   background: var(--ops-canvas);
   box-shadow: none;
+  gap: 8px;
 }
 
 .component-browser-body > .craft-browser-workspace {
@@ -920,10 +921,6 @@
 }
 
 @media (min-width: 3200px) and (min-height: 1800px) {
-  .component-results-browser {
-    padding: 18px;
-  }
-
   .component-results-browser > .crb2-toolbar,
   .component-results-browser > .component-browser-body {
     width: min(3440px, calc(100vw - 160px));
@@ -1030,8 +1027,8 @@
 
 @media (max-width: 800px) {
   .component-results-browser {
-    gap: 7px;
-    padding: 7px;
+    gap: 8px;
+    padding: 0;
   }
 
   .crb2-search-row {
