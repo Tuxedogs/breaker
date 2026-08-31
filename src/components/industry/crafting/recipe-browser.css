@@ -6729,6 +6729,100 @@
   gap: 8px;
 }
 
+/* Recipe Browser follows Mining's page-level command rhythm. The browser
+   surface itself stays unpadded and borderless; this local body owns only the
+   application-chrome inset, command header, and header-to-content gap. */
+.component-results-browser .recipe-browser-page-body {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.component-results-browser .recipe-browser-page-body.is-browser {
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px 12px 8px 4px;
+}
+
+.component-results-browser .recipe-browser-command-header {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: 5px;
+  background: var(--ops-surface-primary);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+.component-results-browser .recipe-browser-command-icon {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  flex: 0 0 25px;
+  border: 1px solid rgba(125, 211, 252, 0.26);
+  border-radius: 3px;
+  color: var(--craft-highlight-focus);
+}
+
+.component-results-browser .recipe-browser-command-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.component-results-browser .recipe-browser-command-copy {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.component-results-browser .recipe-browser-command-copy h1 {
+  margin: 0;
+  color: var(--ui-text-primary);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.component-results-browser .recipe-browser-command-copy p {
+  margin: 0;
+  overflow: hidden;
+  color: var(--ui-text-muted);
+  font-size: 11px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.component-results-browser .recipe-browser-content-shell {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+  overflow: hidden;
+}
+
 .component-browser-body > .craft-browser-workspace {
   display: flex;
   flex: 1 1 0;
@@ -7389,8 +7483,8 @@
 }
 
 @media (min-width: 3200px) and (min-height: 1800px) {
-  .component-results-browser > .crb2-toolbar,
-  .component-results-browser > .component-browser-body {
+  .component-results-browser .recipe-browser-content-shell > .crb2-toolbar,
+  .component-results-browser .recipe-browser-content-shell > .component-browser-body {
     width: min(3440px, calc(100vw - 160px));
     margin-inline: auto;
   }
@@ -7591,6 +7685,31 @@
     background: var(--ops-surface-deep);
     width:clamp(90px, 27vw, 20px);
   }
+  }
+}
+
+@media (max-width: 900px) {
+  .component-results-browser .recipe-browser-page-body.is-browser {
+    grid-template-rows: minmax(52px, max-content) minmax(0, 1fr);
+    padding: 8px 10px 28px;
+  }
+
+  .component-results-browser .recipe-browser-command-header {
+    min-height: 52px;
+  }
+
+  .component-results-browser .recipe-browser-command-copy {
+    display: block;
+  }
+
+  .component-results-browser .recipe-browser-command-copy h1 {
+    font-size: 14px;
+  }
+
+  .component-results-browser .recipe-browser-command-copy p {
+    margin-top: 4px;
+    font-size: var(--app-text-meta);
+    white-space: normal;
   }
 }
 

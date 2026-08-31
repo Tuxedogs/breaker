@@ -72,11 +72,30 @@ export default function CraftingLayout() {
   return (
     <CraftingContext.Provider value={contextValue}>
       <div className="craft-page craft-planner-shell component-results-browser">
-        {isBrowserRoute ? (
-          <CraftingFilterBar records={componentCards} resultCount={resultCount} />
-        ) : null}
-        <div className="component-browser-body">
-          <Outlet />
+        <div className={`recipe-browser-page-body${isBrowserRoute ? " is-browser" : ""}`}>
+          {isBrowserRoute ? (
+            <header className="recipe-browser-command-header">
+              <span className="recipe-browser-command-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 4h14v16H5z" />
+                  <path d="m8 9 4-3 4 3-4 3-4-3Z" />
+                  <path d="M8 15h8" />
+                </svg>
+              </span>
+              <div className="recipe-browser-command-copy">
+                <h1>Crafting Intelligence</h1>
+                <p>Search components, compare recipes, materials, and crafting requirements.</p>
+              </div>
+            </header>
+          ) : null}
+          <div className="recipe-browser-content-shell">
+            {isBrowserRoute ? (
+              <CraftingFilterBar records={componentCards} resultCount={resultCount} />
+            ) : null}
+            <div className="component-browser-body">
+              <Outlet />
+            </div>
+          </div>
         </div>
       </div>
     </CraftingContext.Provider>

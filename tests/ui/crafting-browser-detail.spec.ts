@@ -50,11 +50,38 @@ test.describe("Crafting browser and detail refactor", () => {
       { name: "1920x1080", width: 1920, height: 1080 },
       { name: "2560x1440", width: 2560, height: 1440 },
       { name: "3840x2160", width: 3840, height: 2160 },
+      { name: "1180x900", width: 1180, height: 900 },
       { name: "768x900", width: 768, height: 900 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(browserPath, { waitUntil: "domcontentloaded" });
       await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
+      await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
+      await expect(page.locator(".recipe-browser-command-copy h1")).toHaveText("Crafting Intelligence");
+      await expect(page.locator(".recipe-browser-command-copy p")).toHaveText(
+        "Search components, compare recipes, materials, and crafting requirements.",
+      );
+
+      const shellGeometry = await page.evaluate(() => {
+        const pageBody = document.querySelector<HTMLElement>(".recipe-browser-page-body");
+        const header = document.querySelector<HTMLElement>(".recipe-browser-command-header");
+        const content = document.querySelector<HTMLElement>(".recipe-browser-content-shell");
+        const pageBodyRect = pageBody?.getBoundingClientRect();
+        const headerRect = header?.getBoundingClientRect();
+        const contentRect = content?.getBoundingClientRect();
+        return {
+          headerLeftInset: Math.round((headerRect?.left ?? 0) - (pageBodyRect?.left ?? 0)),
+          headerTopInset: Math.round((headerRect?.top ?? 0) - (pageBodyRect?.top ?? 0)),
+          contentLeftInset: Math.round((contentRect?.left ?? 0) - (pageBodyRect?.left ?? 0)),
+          headerToContentGap: Math.round((contentRect?.top ?? 0) - (headerRect?.bottom ?? 0)),
+        };
+      });
+      expect(shellGeometry).toEqual({
+        headerLeftInset: viewport.width <= 900 ? 10 : 4,
+        headerTopInset: 8,
+        contentLeftInset: viewport.width <= 900 ? 10 : 4,
+        headerToContentGap: 8,
+      });
       if (viewport.width >= 1600) {
         await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       }
@@ -169,6 +196,7 @@ test.describe("Crafting browser and detail refactor", () => {
       { name: "1920x1080", width: 1920, height: 1080 },
       { name: "2560x1440", width: 2560, height: 1440 },
       { name: "3840x2160", width: 3840, height: 2160 },
+      { name: "1180x900", width: 1180, height: 900 },
       { name: "768x900", width: 768, height: 900 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
