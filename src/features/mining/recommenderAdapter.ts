@@ -9,6 +9,10 @@ import { canonicalMiningMaterial } from "./materialIdentity";
 import { apiUrl } from "../../lib/apiUrl";
 import { JsonResponseError, parseJsonResponse } from "../../lib/safeJson";
 import {
+  getStantonLagrangeGroupForLocationCode,
+  loadStantonLagrangeGroupData,
+} from "../locations/stantonLagrangeChildren";
+import {
   displayMiningMethod,
   getStaticDensityScore,
   getStaticMaterialKey,
@@ -239,6 +243,47 @@ function getRankingMode(request: MiningRecommendationRequest): MiningRankingMode
   return request.rankingMode === "quantity" || request.rankingMode === "balanced" ? request.rankingMode : "quality";
 }
 
+type StaticLocationRowsGroup = {
+  rows: StaticLocationMaterialRow[];
+  locationKey: string;
+  locationName: string;
+  matchedLocationCodes?: string[];
+};
+
+export function groupStaticMiningBrowseRows(rows: StaticLocationMaterialRow[]): StaticLocationRowsGroup[] {
+  const groups = new Map<string, StaticLocationRowsGroup>();
+
+  for (const row of rows) {
+    const systemName = row.systemDisplayName ?? row.system ?? "";
+    const locationCode = row.locationKey ?? row.location ?? "";
+    const lagrangeGroup = systemName.toLowerCase() === "stanton"
+      ? getStantonLagrangeGroupForLocationCode(locationCode)
+      : null;
+    const locationKey = lagrangeGroup
+      ? `stanton|${lagrangeGroup.label}`
+      : row.locationKey;
+    const locationName = lagrangeGroup?.label ?? (row.locationDisplayName || row.location);
+    const groupKey = lagrangeGroup
+      ? locationKey
+      : `${row.systemKey}::${row.locationKey}`;
+    const group = groups.get(groupKey);
+
+    if (group) {
+      group.rows.push(row);
+      continue;
+    }
+
+    groups.set(groupKey, {
+      rows: [row],
+      locationKey,
+      locationName,
+      matchedLocationCodes: lagrangeGroup?.locations,
+    });
+  }
+
+  return [...groups.values()];
+}
+
 function buildStaticRouteScore(
   row: StaticLocationMaterialRow,
   demand: CanonicalDemand,
@@ -324,18 +369,13 @@ function buildStaticRecommendations(
   const hasDemand = demand.length > 0;
   const rankingMode = getRankingMode(request);
 
-  const groups = new Map<string, StaticLocationMaterialRow[]>();
-  for (const row of index.rows) {
-    const groupKey = `${row.systemKey}::${row.locationKey}`;
-    const rows = groups.get(groupKey) ?? [];
-    rows.push(row);
-    groups.set(groupKey, rows);
-  }
+  const groups = groupStaticMiningBrowseRows(index.rows);
 
   const recommendations: PublicLocationEntry[] = [];
   const diagnosticsCoverage = new Map<string, NonNullable<RecommendationResponse["diagnostics"]>["materialCoverage"][number]>();
 
-  for (const rows of groups.values()) {
+  for (const group of groups) {
+    const { rows } = group;
     const first = rows[0];
     if (!first) continue;
 
@@ -359,19 +399,22 @@ function buildStaticRecommendations(
     const routeTargetabilityScore = Math.round(locationFitScore);
 
     recommendations.push({
-      locationKey: first.locationKey,
-      locationName: first.locationDisplayName || first.location,
+      locationKey: group.locationKey,
+      locationName: group.locationName,
       systemName: first.systemDisplayName || first.system,
-      matchedLocationCodes: unique(rows.flatMap((row) => [row.locationKey, row.location]).filter(Boolean)),
+      matchedLocationCodes: group.matchedLocationCodes ?? unique(rows.flatMap((row) => [row.locationKey, row.location]).filter(Boolean)),
       locationKind: first.parents?.[0] ?? "location",
       spawnType: miningTypeFromRows(rows),
       nearbyStations: [],
       materials: unique(rows.map((row) => row.materialName).filter(Boolean)),
-      indexedResources: rows.map((row) => ({
+      indexedResources: unique(rows.map((row) => `${row.materialId ?? ""}|${row.materialName}|${row.resolvedMineableClass ?? ""}`)).map((identity) => {
+        const row = rows.find((candidate) => `${candidate.materialId ?? ""}|${candidate.materialName}|${candidate.resolvedMineableClass ?? ""}` === identity)!;
+        return {
         materialId: row.materialId,
         materialName: row.materialName,
         miningType: displayMiningMethod(row.resolvedMineableClass),
-      })),
+        };
+      }),
       score: routeTargetabilityScore,
       routeTargetabilityScore,
       routeTargetabilityLabel: targetabilityLabel(routeTargetabilityScore),
@@ -401,13 +444,13 @@ function buildStaticRecommendations(
       };
       coverage.sourceCount += 1;
       coverage.candidateLocations.push({
-        locationKey: first.locationKey,
-        locationName: first.locationDisplayName || first.location,
+        locationKey: group.locationKey,
+        locationName: group.locationName,
         systemName: first.systemDisplayName || first.system,
         spawnType: miningTypeFromRows(rows),
         miningType: miningTypeFromRows(rows),
       });
-      coverage.matchingResourceKeys.push(`${first.systemKey}::${first.locationKey}::${material.materialKey}`);
+      coverage.matchingResourceKeys.push(`${group.locationKey}::${material.materialKey}`);
       diagnosticsCoverage.set(material.materialKey, coverage);
     }
   }
@@ -432,7 +475,10 @@ function buildStaticRecommendations(
 }
 
 async function getStaticMiningRecommendations(request: MiningRecommendationRequest): Promise<RecommendationResponse> {
-  const index = await loadStaticMiningIndex();
+  const [index] = await Promise.all([
+    loadStaticMiningIndex(),
+    loadStantonLagrangeGroupData(),
+  ]);
   return buildStaticRecommendations(request, index);
 }
 

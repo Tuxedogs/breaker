@@ -1,7 +1,7 @@
 import { apiUrl } from "../../lib/apiUrl";
 import { parseJsonResponse } from "../../lib/safeJson";
 
-type GeneratedLagrangeGroup = {
+export type GeneratedLagrangeGroup = {
   label: string;
   letter: string;
   locations: string[];
@@ -66,6 +66,16 @@ function groupForLocationCode(code: string): GeneratedLagrangeGroup | null {
   return generatedGroups?.groups.find((group) =>
     group.locations.some((location) => normalizeLocationCode(location) === normalizedCode)
   ) ?? null;
+}
+
+export function getStantonLagrangeGroupForLocationCode(code: string): GeneratedLagrangeGroup | null {
+  const group = groupForLocationCode(code);
+  if (!group) return null;
+
+  return {
+    ...group,
+    locations: uniqueSortedCodes(group.locations),
+  };
 }
 
 export function configureStantonLagrangeGroupData(groups: GeneratedLagrangeGroups): void {
