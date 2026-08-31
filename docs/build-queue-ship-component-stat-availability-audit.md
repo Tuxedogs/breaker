@@ -4,7 +4,7 @@ Date audited: 2026-07-26
 
 Scope: ship weapons, power plants, quantum drives, coolers, and shields shown by the Build Queue component-statistics UI. The availability tables capture the pre-implementation data-path audit; the production implementation status is recorded below.
 
-The audit evaluates the current working tree. Existing uncommitted Build Queue and component-card work was left untouched.
+The audit evaluates the working tree as it existed on 2026-07-26. It is archival evidence; current ownership and runtime instructions are maintained in [the API and data-flow runbook](api-data-flow-runbook.md) and [the crafting handoff](crafting-browser-detail-handoff.md).
 
 ## Executive finding
 
@@ -70,7 +70,7 @@ All five registries identify themselves as high-confidence, Foundry-native outpu
 D:\scintel\out\LIVE\4.9.0-live.12232306\foundry\records
 ```
 
-Build Queue path:
+Historical Build Queue path:
 
 ```text
 crafting blueprint
@@ -82,6 +82,8 @@ crafting blueprint
   -> src/lib/crafting/detailStatGroups.ts
   -> BuildQueueCraftStatisticsPanel
 ```
+
+Current implementation note: fitting-detail reads now pass through the shared fitting component store, and the current Build Queue page uses the single canonical `build-queue.css` stylesheet. The field-availability findings and unresolved-source limitations below remain historical observations and must not be read as a request to change the data path.
 
 Coverage below means the field is non-null. A numeric zero is counted as populated because zero is often a valid resource, resistance, delay, or thermal value. Empty power-pip arrays are called out separately.
 

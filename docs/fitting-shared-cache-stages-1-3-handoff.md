@@ -14,14 +14,20 @@ Mainline equivalents:
 
 Stages 4, 4B, and 4C, patch-static persistence, readiness gating, and removal of the unnecessary full-catalog load also landed on `main`. Bounded batch/chunk loading was not implemented as a separate stage and should only be scheduled from measured need.
 
+## Current implementation summary
+
+The fitting cache and consumer migration described by this handoff are complete on the current `main` branch. Fitting-detail consumers use `src/lib/fitting/fittingComponentStore.ts`; its cache identity includes channel, build ID, source type, and normalized component identity. Vehicle fitting detail and FPS component-card data remain separate source types, and LIVE/PTU data is isolated by the cache namespace.
+
+The sections below retain the original stage evidence and historical implementation notes. The old `Required` and `Residual` lists are not outstanding work unless a new measured regression is found.
+
 ## Stage 1 — Pin static fitting reads to channel + buildId
 
-### Current state
+### Historical implementation state (completed)
 - `src/lib/fitting/fittingApi.ts`: `withFittingBuild()` only appends `channel=LIVE` — **no buildId**.
 - Response meta already includes `{ channel, buildId }`.
 - `useFittingComponentStats` cache keys are **entityClass only** — no channel/buildId/sourceType.
 
-### Required
+### Requirements that were implemented
 1. Resolve active fitting channel + buildId once per session (from fitting API meta / existing index endpoint if present). Do not invent; use existing meta.
 2. All **static** fitting GET reads must include both `channel` and `buildId` query params.
 3. Preserve LIVE/PTU isolation — channel must be part of every cache key and request.
