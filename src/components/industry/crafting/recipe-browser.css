@@ -1,3 +1,5 @@
+/* Recipe Browser canonical stylesheet: stable foundations plus approved current presentation. */
+/* Superseded legacy browser shell declarations were removed during stylesheet consolidation. */
 @import "../../../styles/scintel-filter-shell.css";
 
 /* ==========================================================================
@@ -1519,8 +1521,6 @@
   }
 
   .component-results-browser.craft-planner-shell {
-    padding: 0.5rem;
-    gap: 0.55rem;
     overflow: hidden;
   }
 
@@ -3667,39 +3667,6 @@
    Component Results Browser
    ========================================================================== */
 
-.component-results-browser {
-  --panel-bg: var(--ui-panel-bg, #04131d);
-  --panel-bg-deep: var(--ui-panel-bg-deep, #03121c);
-  --panel-row-bg: var(--ui-panel-row, #051a28);
-  --panel-row-hover: var(--ui-panel-row-hover, #081e2c);
-  --panel-border: var(--ui-panel-border, rgba(65, 132, 160, 0.16));
-  --panel-border-soft: var(--ui-panel-border-soft, rgba(65, 132, 160, 0.14));
-  --accent-cyan: var(--ui-accent-cyan, #4db8b0);
-  --accent-blue: #4DA3FF;
-  --accent-purple: #B85CF6;
-  --warning: #FFB84D;
-  --danger: #FF5C5C;
-  --success: #22D37A;
-  --text-primary: var(--ui-text-primary, #edf7ff);
-  --text-secondary: var(--ui-text-secondary, #a9bad0);
-  --text-muted: var(--ui-text-muted, #7a8fa3);
-
-  gap: 12px;
-  width: 100%;
-  max-width: 2320px;
-  margin: 0 auto;
-  padding: 12px;
-  border: 1px solid var(--panel-border);
-  border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(4, 19, 29, 0.98) 0%, rgba(3, 18, 28, 0.98) 100%);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.025);
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
 .component-browser-body {
   display: flex;
   flex: 1 1 0;
@@ -5033,12 +5000,6 @@
 
 }
 
-@media (min-width: 1800px) {
-  .component-results-browser {
-    padding: 20px 24px;
-  }
-}
-
 @media (min-width: 761px) and (max-width: 980px) {
   .component-browser-toolbar .scintel-filter-header.crb-row--search {
     flex-wrap: wrap;
@@ -5353,11 +5314,6 @@
 }
 
 @media (max-width: 760px) {
-  .component-results-browser {
-    gap: 8px;
-    padding: 8px 8px calc(5.25rem + env(safe-area-inset-bottom));
-  }
-
   .component-browser-body > .craft-detail-page {
     padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
   }
@@ -5506,10 +5462,6 @@
 }
 
 @media (max-width: 560px) {
-  .component-results-browser {
-    padding: 8px 8px calc(5.25rem + env(safe-area-inset-bottom));
-  }
-
   .component-results-grid {
     grid-template-columns: 1fr;
   }
@@ -5633,10 +5585,6 @@
 }
 
 @media (min-width: 2200px) {
-  .component-results-browser {
-    padding: clamp(12px, 1.25vw, 20px);
-  }
-
   :where(.craft-page, .craft-planner-shell).component-results-browser {
     --cd-grid-gap: clamp(10px, 0.05vw, 14px);
   }
@@ -5701,9 +5649,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
-.craft-page.component-results-browser {
-  background: var(--bg-app);
-}
 
 .component-browser-toolbar {
   box-shadow: none;
@@ -6721,4 +6666,931 @@
   text-shadow: none;
 }
 
+/* ==========================================================================
+   Current Recipe Browser presentation
+   ========================================================================== */
+/* Recipe browser redesign. Page-local layout on the shared operational system. */
+.component-results-browser {
+  /*
+   * Crafting-only surface and highlight system. Keep hue-bearing fills here so
+   * the browser/detail family can be retuned without editing component rules.
+   */
+  --craft-surface-canvas: #050b12;
+  --craft-surface-panel: #08121d;
+  --craft-surface-deep: #060e17;
+  --craft-surface-raised: #0b1824;
+  --craft-surface-row: #091520;
+  --craft-surface-row-alt: #0a1722;
+  --craft-surface-hover: #102231;
+  --craft-surface-selected: #102536;
+  --craft-surface-selected-strong: #153148;
+  --craft-surface-disabled: #080f17;
+  --craft-highlight-primary: #ffb21a;
+  --craft-highlight-primary-soft: rgba(255, 178, 26, 0.11);
+  --craft-highlight-primary-muted: rgba(255, 178, 26, 0.24);
+  --craft-highlight-focus: #67d2ff;
+  --craft-highlight-focus-soft: rgba(103, 210, 255, 0.11);
+  --craft-highlight-positive: #45d89d;
+  --craft-highlight-positive-soft: rgba(69, 216, 157, 0.09);
+  --craft-highlight-danger: #ff6b72;
+  --craft-highlight-danger-soft: rgba(255, 107, 114, 0.1);
+  --craft-border-soft: rgba(111, 148, 176, 0.13);
+  --craft-border-default: rgba(111, 148, 176, 0.22);
+  --craft-border-strong: rgba(132, 174, 205, 0.34);
+  --ops-canvas: var(--craft-surface-canvas);
+  --ops-surface-primary: var(--craft-surface-panel);
+  --ops-surface-deep: var(--craft-surface-deep);
+  --ops-surface-row: var(--craft-surface-row);
+  --ops-surface-hover: var(--craft-surface-hover);
+  --ops-surface-selected: var(--craft-surface-selected);
+  --ops-header-band: var(--craft-surface-raised);
+  --ops-border-soft: var(--craft-border-soft);
+  --ops-border-default: var(--craft-border-default);
+  --ops-focus-ring: var(--craft-highlight-focus);
+  --craft-orange: var(--craft-highlight-primary);
+  --craft-orange-border: var(--craft-highlight-primary-muted);
+  --stat-beneficial: var(--craft-highlight-positive);
+  --stat-detrimental: var(--craft-highlight-danger);
+  --recipe-text-body: clamp(var(--app-text-body), 0.48vw, 18px);
+  --recipe-text-meta: clamp(var(--app-text-meta), 0.42vw, 1rem);
+  --recipe-text-label: clamp(var(--app-text-label), 0.38vw, 14.5px);
+  --recipe-text-chip: clamp(var(--app-text-chip), 0.4vw, 15.5px);
+  --recipe-text-title: clamp(var(--app-text-title), 0.56vw, 21px);
+  --recipe-text-page-title: clamp(var(--app-text-page-title), 0.72vw, 28px);
+  --recipe-text-stat: clamp(var(--app-text-stat), 0.6vw, 0.75rem);
+  --recipe-text-kicker: clamp(var(--app-text-kicker), 0.34vw, 13px);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--ops-canvas);
+  box-shadow: none;
+  gap: 8px;
+}
+
+.component-browser-body > .craft-browser-workspace {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.craft-browser-workspace > .crb2-results {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.craft-detail-drawer-region {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-left: 1px solid var(--craft-highlight-primary);
+  background: var(--craft-surface-canvas);
+  box-shadow: -14px 0 30px rgba(0, 0, 0, 0.22);
+}
+
+.craft-detail-drawer-region--ready > .craft-detail-page {
+  animation: craft-detail-drawer-content-enter 180ms ease-out both;
+}
+
+@keyframes craft-detail-drawer-content-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.craft-detail-drawer-state {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  background: var(--craft-surface-panel);
+  font-size: var(--recipe-text-body);
+}
+
+.craft-detail-drawer-state--error {
+  color: var(--craft-highlight-danger);
+}
+
+@media (min-width: 1600px) {
+  .craft-browser-workspace--drawer {
+    display: grid !important;
+    grid-template-columns: minmax(720px, 1.06fr) minmax(700px, 0.94fr);
+    gap: 10px;
+  }
+
+  .craft-browser-workspace--drawer > .crb2-results {
+    overflow: hidden;
+  }
+
+  .craft-browser-workspace--drawer .crb2-list {
+    overflow-y: auto;
+    padding-right: 2px;
+    scrollbar-gutter: stable;
+  }
+
+  .craft-browser-workspace--drawer .crb2-table-scroll {
+    overflow-x: auto;
+    zoom: 1;
+  }
+
+  .craft-browser-workspace--drawer .crb2-table th:first-child {
+    width: clamp(240px, 14vw, 320px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craft-detail-drawer-region--ready > .craft-detail-page {
+    animation: none;
+  }
+}
+
+.component-results-browser .crb2-toolbar {
+  position: relative;
+  z-index: 40;
+  flex: 0 0 auto;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.crb2-search-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto auto auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--ops-border-soft);
+  background: var(--ops-header-band);
+}
+
+.crb2-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-deep);
+  color: var(--craft-orange, #ffb21a);
+}
+
+.crb2-search:focus-within {
+  border-color: var(--ops-focus-ring);
+  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.1);
+}
+
+.crb2-search input,
+.crb2-material-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--craft-text, #edf7ff);
+  font: 600 var(--recipe-text-body)/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.02em;
+}
+
+.crb2-search input::placeholder,
+.crb2-material-search input::placeholder {
+  color: var(--craft-faint, #7a8fa3);
+}
+
+.crb2-search kbd {
+  padding: 2px 5px;
+  border: 1px solid var(--craft-border, rgba(95, 125, 145, 0.25));
+  border-radius: 3px;
+  color: var(--craft-faint, #7a8fa3);
+  background: rgba(255, 255, 255, 0.025);
+  font: inherit;
+  font-size: var(--recipe-text-kicker);
+}
+
+.crb2-bookmark,
+.crb2-clear,
+.crb2-pager button {
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--craft-muted, #a9bad0);
+  font: 700 var(--recipe-text-chip)/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.crb2-bookmark:hover,
+.crb2-clear:hover,
+.crb2-pager button:not(:disabled):hover {
+  border-color: rgba(125, 211, 252, 0.38);
+  background: var(--ops-surface-hover);
+  color: var(--craft-text, #edf7ff);
+}
+
+.crb2-bookmark--active {
+  border-color: rgba(125, 211, 252, 0.44);
+  background: var(--ops-surface-selected);
+  color: var(--ops-focus-ring);
+}
+
+.crb2-result-count {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+  color: var(--craft-faint, #7a8fa3);
+  font-size: var(--recipe-text-meta);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.crb2-result-count strong {
+  color: var(--craft-text, #edf7ff);
+  font-size: var(--recipe-text-title);
+}
+
+.crb2-filter-viewport {
+  overflow: visible;
+  scrollbar-color: rgba(26, 118, 255, 0.28) transparent;
+  scrollbar-width: thin;
+}
+
+.crb2-filter-rail {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 43px;
+  padding: 5px 7px;
+}
+
+.crb2-filter-chip,
+.crb2-material-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 29px;
+  padding: 0 9px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--craft-muted, #a9bad0);
+  white-space: nowrap;
+  font: 700 var(--recipe-text-chip)/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.crb2-filter-chip:hover,
+.crb2-material-trigger:hover {
+  border-color: rgba(125, 211, 252, 0.32);
+  color: var(--craft-text, #edf7ff);
+}
+
+.crb2-filter-chip--active,
+.crb2-material-trigger.crb2-filter-chip--active {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: var(--ops-surface-selected);
+  color: var(--ops-focus-ring);
+  box-shadow: inset 0 -2px 0 rgba(125, 211, 252, 0.58);
+}
+
+.crb2-filter-chip:disabled {
+  border-style: dashed;
+  color: var(--craft-faint, #7a8fa3);
+  cursor: not-allowed;
+}
+
+.crb2-filter-zero,
+.crb2-material-trigger > span:not(:last-child) {
+  display: inline-grid;
+  place-items: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: currentColor;
+  font-size: var(--recipe-text-kicker);
+}
+
+.crb2-filter-label {
+  padding: 0 2px 0 5px;
+  color: var(--craft-faint, #7a8fa3);
+  white-space: nowrap;
+  font-size: var(--recipe-text-kicker);
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.crb2-filter-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 3px;
+  background: var(--craft-border, rgba(95, 125, 145, 0.2));
+}
+
+.crb2-material {
+  position: relative;
+}
+
+.crb2-material-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 70;
+  width: min(360px, calc(100vw - 44px));
+  overflow: hidden;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  box-shadow: var(--ops-shadow-primary);
+}
+
+.crb2-material-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  height: 39px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--craft-border, rgba(95, 125, 145, 0.2));
+  color: var(--craft-orange, #ffb21a);
+}
+
+.crb2-material-options {
+  max-height: min(430px, 55vh);
+  overflow-y: auto;
+  padding: 5px;
+}
+
+.crb2-material-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  width: 100%;
+  min-height: 31px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--craft-muted, #a9bad0);
+  text-align: left;
+  font: 600 var(--recipe-text-meta)/1.2 var(--font-primary, Rajdhani, sans-serif);
+  cursor: pointer;
+}
+
+.crb2-material-option > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crb2-material-option > span:last-child {
+  color: var(--craft-faint, #7a8fa3);
+  font-variant-numeric: tabular-nums;
+}
+
+.crb2-material-option--focused {
+  border-color: rgba(105, 132, 150, 0.26);
+  background: var(--ops-surface-hover);
+}
+
+.crb2-material-option--active {
+  border-color: rgba(125, 211, 252, 0.42);
+  background: var(--ops-surface-selected);
+  color: var(--ops-focus-ring);
+}
+
+.crb2-material-empty {
+  margin: 0;
+  padding: 14px 10px;
+  color: var(--craft-faint, #7a8fa3);
+  font-size: var(--recipe-text-meta);
+}
+
+.component-browser-body > .crb2-results {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 2px;
+  scrollbar-gutter: stable;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.crb2-list {
+  display: grid;
+  gap: 9px;
+}
+
+.crb2-table-section {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+}
+
+.crb2-table-section > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--craft-border, rgba(95, 125, 145, 0.2));
+  background: var(--ops-header-band);
+}
+
+.crb2-table-section h3 {
+  margin: 0;
+  color: var(--craft-text, #edf7ff);
+  font-size: var(--recipe-text-title);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 0.75rem;
+}
+
+.crb2-table-section > header > span {
+  color: var(--craft-faint, #7a8fa3);
+  font-size: var(--recipe-text-meta);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.crb2-table-scroll {
+  overflow-x: auto;
+  zoom:120%;
+}
+
+.crb2-table {
+  width: 100%;
+  min-width: 940px;
+  border-spacing: 0;
+  border-collapse: separate;
+  table-layout: fixed;
+}
+
+.crb2-table th,
+.crb2-table td {
+  overflow: hidden;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(105, 132, 150, 0.12);
+  color: var(--craft-muted, #a9bad0);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--app-table-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.crb2-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 29px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: var(--ops-surface-deep);
+  color: var(--craft-faint, #7a8fa3);
+  font-size: var(--app-table-header);
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.crb2-sort-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.crb2-sort-button > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crb2-table th:first-child .crb2-sort-button {
+  justify-content: flex-start;
+}
+
+.crb2-sort-button > span:last-child {
+  flex: 0 0 auto;
+  color: rgba(169, 186, 208, 0.48);
+  font-size: 0.9em;
+}
+
+.crb2-sort-button--active {
+  color: var(--craft-text, #edf7ff);
+}
+
+.crb2-sort-button--active > span:last-child {
+  color: var(--ops-focus-ring);
+}
+
+.crb2-sort-button:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ops-focus-ring);
+  outline-offset: 2px;
+}
+
+.crb2-table th:first-child {
+  width: clamp(260px, 22vw, 460px);
+  text-align: left;
+}
+
+.crb2-table th:last-child,
+.crb2-table td:last-child {
+  width: 64px;
+}
+
+.crb2-table tbody tr {
+  cursor: pointer;
+  transition: background 100ms ease, box-shadow 100ms ease;
+}
+
+.crb2-table tbody tr:hover,
+.crb2-table tbody tr:focus-visible {
+  background: var(--ops-surface-hover);
+}
+
+.crb2-table tbody .crb2-table-row--selected {
+  background: var(--ops-surface-selected);
+  box-shadow:
+    inset 3px 0 0 var(--craft-highlight-primary),
+    inset 0 1px 0 var(--craft-highlight-primary-muted),
+    inset 0 -1px 0 var(--craft-highlight-primary-muted);
+}
+
+.crb2-table tbody tr:last-child th,
+.crb2-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.crb2-row-name {
+  display: block;
+  overflow: hidden;
+  color: var(--craft-text, #edf7ff);
+  text-overflow: ellipsis;
+  font-weight:450;
+}
+
+.crb2-row-open {
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--ops-focus-ring);
+  font: 800 var(--recipe-text-kicker)/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.crb2-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-height: 45px;
+  padding: 5px 8px;
+  border: 0;
+  border-top: 1px solid var(--ops-border-soft);
+  border-radius: 0;
+  background: transparent;
+  color: var(--craft-faint, #7a8fa3);
+  font-size: var(--recipe-text-meta);
+}
+
+.crb2-pager > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.crb2-pager button {
+  height: 29px;
+}
+
+.crb2-pager button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.crb2-browser-state {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  flex: 0 0 auto;
+  height: 260px;
+  min-height: 260px;
+  border: 1px dashed var(--ops-border-default);
+  border-radius: var(--ops-radius-primary);
+  background: var(--ops-surface-primary);
+  text-align: center;
+}
+
+.crb2-browser-state > span {
+  color: var(--craft-orange, #ffb21a);
+  font-size: var(--recipe-text-kicker);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.crb2-browser-state p {
+  margin: 8px 0 0;
+  color: var(--craft-muted, #a9bad0);
+  font-size: var(--recipe-text-body);
+}
+
+@media (max-width: 1500px) {
+
+}
+
+@media (min-width: 1101px) {
+  .crb2-table-section {
+    overflow: clip;
+  }
+
+  .crb2-table-scroll {
+    overflow: visible;
+    zoom:120%
+  }
+}
+
+@media (min-width: 3200px) and (min-height: 1800px) {
+  .component-results-browser > .crb2-toolbar,
+  .component-results-browser > .component-browser-body {
+    width: min(3440px, calc(100vw - 160px));
+    margin-inline: auto;
+  }
+
+  .crb2-search-row {
+    min-height: 62px;
+    padding: 10px 12px;
+  }
+
+  .crb2-search,
+  .crb2-bookmark,
+  .crb2-clear,
+  .crb2-pager button {
+    height: 44px;
+  }
+
+  .crb2-filter-rail {
+    min-height: 58px;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .crb2-filter-chip,
+  .crb2-material-trigger {
+    min-height: 38px;
+    padding-inline: 12px;
+  }
+
+
+
+
+
+  .crb2-table-section > header {
+    min-height: 46px;
+    padding: 10px 14px;
+  }
+
+  .crb2-table th,
+  .crb2-table td {
+    padding: 10px 14px;
+    font-size: 17px;
+  }
+
+  .crb2-table thead th {
+    height: 38px;
+    font-size: 14px;
+  }
+
+  .crb2-pager {
+    min-height: 58px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .crb2-filter-viewport {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .crb2-filter-rail {
+    flex-wrap: nowrap;
+    width: max-content;
+  }
+
+
+
+
+}
+
+@media (max-width: 800px) {
+  .component-results-browser {
+    gap: 8px;
+    padding: 0;
+  }
+
+  .crb2-search-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    min-height: 44px;
+    padding: 5px;
+  }
+
+  .crb2-search {
+    height: 32px;
+  }
+
+  .crb2-bookmark {
+    width: 34px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .crb2-bookmark span {
+    font-size: 1rem;
+  }
+
+  .crb2-result-count {
+    padding-left: 4px;
+  }
+
+  .crb2-clear {
+    justify-self: end;
+    height: 27px;
+  }
+
+  .crb2-filter-rail {
+    min-height: 38px;
+    padding: 4px 5px;
+  }
+
+  .crb2-material-menu {
+    position: fixed;
+    top: 124px;
+    left: 60px;
+    width: min(360px, calc(100vw - 72px));
+    max-height: calc(100vh - 136px);
+  }
+
+  .crb2-filter-chip,
+  .crb2-material-trigger {
+    min-height: 27px;
+    padding: 0 8px;
+    font-size: var(--app-text-chip);
+  }
+
+
+
+
+
+
+
+
+
+
+  .crb2-table-section > header {
+    min-height: 30px;
+    padding: 5px 8px;
+  }
+
+  .crb2-table {
+    min-width: 820px;
+  }
+
+  .crb2-table-scroll {
+    scrollbar-gutter: stable;
+    border-bottom: 1px solid var(--ops-border-soft);
+  }
+
+  .crb2-table th:first-child,
+  .crb2-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--ops-surface-row);
+    box-shadow: 1px 0 0 var(--ops-border-soft);
+  }
+
+  .crb2-table thead th:first-child {
+    z-index: 3;
+    background: var(--ops-surface-deep);
+    width:clamp(90px, 27vw, 20px);
+  }
+
+  .crb2-table tbody tr:hover > :first-child,
+  .crb2-table tbody tr:focus-visible > :first-child {
+    background: var(--ops-surface-hover);
+  }
+
+  .crb2-table tbody .crb2-table-row--selected > :first-child {
+    background: var(--ops-surface-selected);
+  }
+
+  .crb2-table th,
+  .crb2-table td {
+    padding: 6px 8px;
+  }
+
+  .crb2-pager {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 7px;
+  }
+
+  .crb2-pager > div {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+     .crb2-table thead th:first-child {
+    z-index: 3;
+    background: var(--ops-surface-deep);
+    width:6%;
+  }
+   .crb2-table thead th:first-child {
+    z-index: 3;
+    background: var(--ops-surface-deep);
+    width:clamp(90px, 27vw, 20px);
+  }
+  }
+}
 

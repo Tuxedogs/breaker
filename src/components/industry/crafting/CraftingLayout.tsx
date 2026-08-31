@@ -10,7 +10,6 @@ import {
 } from "./utils/componentCardVariants";
 import { filterRecipeBrowserRecords } from "./utils/recipeBrowserFilters";
 import "./recipe-browser.css";
-import "./recipe-browser-redesign.css";
 
 export default function CraftingLayout() {
   const [componentCards, setComponentCards] = useState<ComponentCardIndexRecord[]>([]);
