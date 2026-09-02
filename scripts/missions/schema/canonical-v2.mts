@@ -79,6 +79,24 @@ function outcomesOfType(record: MissionSourceRecord, type: string): MissionSourc
   return record.outcomeEdges.filter((edge) => edge.type === type);
 }
 
+function portableSourceProvenance<T>(value: T): T {
+  if (Array.isArray(value)) {
+    const normalized = value.map(portableSourceProvenance);
+    return normalized.some((item, index) => item !== value[index]) ? normalized as T : value;
+  }
+  if (!value || typeof value !== "object") return value;
+  const record = value as Record<string, unknown>;
+  let changed = false;
+  const normalized = Object.fromEntries(Object.entries(record).map(([key, child]) => {
+    const next = key === "recordsRoot" && typeof child === "string" && /^(?:[A-Za-z]:[\\/]|\/)/.test(child)
+      ? "foundry/records"
+      : portableSourceProvenance(child);
+    changed ||= next !== child;
+    return [key, next];
+  }));
+  return (changed ? normalized : value) as T;
+}
+
 export function normalizeCanonicalMissionVariantV2(
   catalog: MissionSourceCatalog,
   record: MissionSourceRecord,
@@ -87,7 +105,7 @@ export function normalizeCanonicalMissionVariantV2(
   const calculatedContexts = creditResults.flatMap((reward) =>
     reward.calculatedContext ? [reward.calculatedContext] : []
   );
-  return {
+  return portableSourceProvenance({
     schemaVersion: MISSION_SHAPED_SCHEMA_VERSION,
     sourceSchemaVersion: catalog.schemaVersion,
     identity: {
@@ -144,5 +162,5 @@ export function normalizeCanonicalMissionVariantV2(
       sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
       calculationInputsDigestSha256: catalog.source.calculationInputsDigestSha256,
     },
-  };
+  });
 }

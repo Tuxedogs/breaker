@@ -26,12 +26,12 @@ function receipt(overrides: Partial<MissionPublicationGateReceiptV1> = {}): Miss
     sourceBuildId: buildId,
     refIndex: {
       status: "explicit",
-      path: refIndexPath,
+      path: "ref_index.json",
+      operationalPath: refIndexPath,
       sha256: "hash",
       buildId,
       recordCount: 1,
       auditedBuildId: buildId,
-      auditedPath: refIndexPath,
     },
     semantics: {
       variantCount: 2_501,
@@ -70,7 +70,7 @@ test("offer publication rejects missing ref-index evidence and semantic collapse
   );
 });
 
-test("offer publication rejects cross-build ref indexes", () => {
+test("offer publication rejects cross-build and non-portable ref-index evidence", () => {
   assert.throws(
     () => assertMissionPublicationGate(offerContract, {
       ...receipt(),
@@ -81,10 +81,33 @@ test("offer publication rejects cross-build ref indexes", () => {
   assert.throws(
     () => assertMissionPublicationGate(offerContract, {
       ...receipt(),
-      refIndex: { ...receipt().refIndex, auditedPath: path.resolve("other", "ref_index.json") },
+      refIndex: { ...receipt().refIndex, path: path.resolve("other", "ref_index.json") },
     }),
     /does not match the accepted mission source build/,
   );
+});
+
+test("published ref-index provenance is portable while operational roots vary", () => {
+  const first = receipt({
+    refIndex: {
+      ...receipt().refIndex,
+      operationalPath: "D:\\agent-a\\accepted\\ref_index.json",
+    },
+  });
+  const second = receipt({
+    refIndex: {
+      ...receipt().refIndex,
+      operationalPath: "/mnt/agent-b/accepted/ref_index.json",
+    },
+  });
+  assertMissionPublicationGate(offerContract, first);
+  assertMissionPublicationGate(offerContract, second);
+  assert.deepEqual(
+    { ...first.refIndex, operationalPath: undefined },
+    { ...second.refIndex, operationalPath: undefined },
+  );
+  assert.equal(first.refIndex.path, "ref_index.json");
+  assert.equal(/^[A-Za-z]:[\\/]|^\//.test(first.refIndex.path!), false);
 });
 
 test("offer verifier rejects not-configured and collapsed semantic receipts", async () => {
@@ -128,12 +151,12 @@ test("immutable offer publication re-reads the audited ref index before moving t
       sourceBuildId: buildId,
       refIndex: {
         status: "explicit",
-        path: refIndexPath,
+        path: "ref_index.json",
+        operationalPath: refIndexPath,
         sha256: createHash("sha256").update(refIndexContent).digest("hex"),
         buildId,
         recordCount: 1,
         auditedBuildId: buildId,
-        auditedPath: refIndexPath,
       },
     };
 
@@ -175,6 +198,28 @@ test("immutable offer publication fails before writing when the ref index is unr
       /Configured MISSION_REF_INDEX is not readable/,
     );
     await assert.rejects(readFile(path.join(missionRoot, "current.json"), "utf8"));
+  } finally {
+    await rm(testRoot, { recursive: true, force: true });
+  }
+});
+
+test("offer verifier rejects ref-index bytes that no longer match the audited receipt", async () => {
+  const testRoot = await mkdtemp(path.join(os.tmpdir(), "mission-publication-gate-mismatch-"));
+  const refIndexPath = path.join(testRoot, "ref_index.json");
+  try {
+    await writeFile(refIndexPath, "[]\n", "utf8");
+    await assert.rejects(
+      verifyMissionPublicationGate(offerContract, {
+        ...receipt(),
+        refIndex: {
+          ...receipt().refIndex,
+          operationalPath: refIndexPath,
+          sha256: createHash("sha256").update("[{}]\n").digest("hex"),
+          recordCount: 1,
+        },
+      }),
+      /changed after publication validation/,
+    );
   } finally {
     await rm(testRoot, { recursive: true, force: true });
   }

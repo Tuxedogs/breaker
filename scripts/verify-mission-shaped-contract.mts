@@ -96,6 +96,7 @@ const supportedOfferShaperVersions = [
   "moonbreaker_mission_shaper_v3_3_offer_reputation_facets",
   "moonbreaker_mission_shaper_v3_4_offer_reputation_runtime_titles",
   "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles",
+  "moonbreaker_mission_shaper_v3_6_portable_source_provenance",
 ];
 const expected = isOfferGeneration
   ? {
@@ -149,10 +150,6 @@ if (isOfferGeneration) {
   const acceptedGenerationId = typeof targetSourceV4.acceptedGenerationId === "string"
     ? targetSourceV4.acceptedGenerationId
     : undefined;
-  const auditedRefIndexPath = array(audit.evidenceFiles, "audit.evidenceFiles")
-    .map((value) => object(value, "audit.evidenceFile"))
-    .find((evidence) => evidence.role === "source GUID and locality-name resolution"
-      && evidence.evidenceStatus === "source_backed")?.path;
   const sourceInputs = object(index.sourceInputs, "index.sourceInputs");
   const refIndex = object(sourceInputs.refIndex, "index.sourceInputs.refIndex");
   await verifyMissionPublicationGate({
@@ -166,11 +163,13 @@ if (isOfferGeneration) {
     refIndex: {
       status: refIndex.status === "explicit" ? "explicit" : "not_configured",
       path: typeof refIndex.path === "string" ? refIndex.path : undefined,
+      operationalPath: process.env.MISSION_REF_INDEX
+        ? path.resolve(process.env.MISSION_REF_INDEX)
+        : undefined,
       sha256: typeof refIndex.sha256 === "string" ? refIndex.sha256 : undefined,
       buildId: typeof refIndex.buildId === "string" ? refIndex.buildId : undefined,
       recordCount: typeof refIndex.recordCount === "number" ? refIndex.recordCount : 0,
       auditedBuildId,
-      auditedPath: typeof auditedRefIndexPath === "string" ? auditedRefIndexPath : undefined,
     },
     semantics: {
       variantCount: typeof summary.variantCount === "number" ? summary.variantCount : 0,
