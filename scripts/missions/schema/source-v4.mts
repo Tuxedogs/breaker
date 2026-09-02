@@ -387,7 +387,16 @@ export function parseMissionSourceCatalogV4(value: unknown): MissionSourceCatalo
       `Unsupported mission source schema ${String(catalog.schemaVersion)}; expected 4.`,
     );
   }
-  const canonical = parseMissionSourceCatalogV3({ ...catalog, schemaVersion: 3 });
+  const source = object(catalog.source, "mission source catalog.source");
+  const sourceBuildId = string(
+    source.sourceBuildId ?? source.buildId,
+    "mission source catalog.source.sourceBuildId",
+  );
+  const canonical = parseMissionSourceCatalogV3({
+    ...catalog,
+    schemaVersion: 3,
+    source: { ...source, buildId: sourceBuildId },
+  });
   const records = canonical.records.map((record, index) => {
     validateOfferEvidence(
       record.offerEvidence,

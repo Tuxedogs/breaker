@@ -54,6 +54,11 @@ const dataRoot = path.resolve(
     ?? process.env.MISSION_DATA_ROOT
     ?? path.join("server-data", "missions"),
 );
+const sourceRoot = path.resolve(
+  option("--source-root")
+    ?? process.env.MISSION_SOURCE_ROOT
+    ?? path.join("server-data", "missions", "source"),
+);
 const goldenPath = path.resolve(
   option("--golden")
     ?? path.join("docs", "mission-golden-set-2026-07-29.json"),
@@ -82,7 +87,7 @@ const [index, manifest, graphReport, solverReference, golden, audit, sourceCatal
   readJson(path.join(generationRoot, "mission_solver_reference.json")),
   readJson(goldenPath),
   readJson(auditPath),
-  readJson(path.resolve("server-data", "missions", "source", "mission_contracts.json")),
+  readJson(path.join(sourceRoot, "mission_contracts.json")),
 ]);
 const legacyExpected = object(golden.shapedContractV2, "golden.shapedContractV2");
 const isOfferGeneration = pointer.missionSchemaVersion === 3;
@@ -135,9 +140,15 @@ assert(
 const summary = object(index.summary, "index.summary");
 if (isOfferGeneration) {
   const source = object(sourceCatalog.source, "mission source catalog.source");
-  const sourceBuildId = string(source.buildId, "mission source catalog.source.buildId");
+  const sourceBuildId = string(
+    source.sourceBuildId ?? source.buildId,
+    "mission source catalog.source.sourceBuildId",
+  );
   const targetSourceV4 = object(audit.targetSourceV4, "audit.targetSourceV4");
   const auditedBuildId = string(targetSourceV4.buildId, "audit.targetSourceV4.buildId");
+  const acceptedGenerationId = typeof targetSourceV4.acceptedGenerationId === "string"
+    ? targetSourceV4.acceptedGenerationId
+    : undefined;
   const auditedRefIndexPath = array(audit.evidenceFiles, "audit.evidenceFiles")
     .map((value) => object(value, "audit.evidenceFile"))
     .find((evidence) => evidence.role === "source GUID and locality-name resolution"
@@ -151,6 +162,7 @@ if (isOfferGeneration) {
   }, {
     schemaVersion: 1,
     sourceBuildId,
+    acceptedGenerationId,
     refIndex: {
       status: refIndex.status === "explicit" ? "explicit" : "not_configured",
       path: typeof refIndex.path === "string" ? refIndex.path : undefined,

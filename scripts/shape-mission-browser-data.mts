@@ -3147,6 +3147,7 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOffe
       };
       targetSourceV4?: {
         buildId?: string;
+        acceptedGenerationId?: string;
         artifacts?: Array<{ name?: string; sha256?: string }>;
         invariantResults?: {
           protectedFieldMismatchCount?: number;
@@ -3203,6 +3204,7 @@ if (
   throw new Error("Mission offer source-v4 preservation invariant receipt is missing or failed.");
 }
 const auditedBuildId = missionOfferManifestInput.manifest.targetSourceV4?.buildId;
+const auditedAcceptedGenerationId = missionOfferManifestInput.manifest.targetSourceV4?.acceptedGenerationId;
 const auditedRefIndexPath = missionOfferManifestInput.manifest.evidenceFiles?.find(
   (evidence) => evidence.role === "source GUID and locality-name resolution"
     && evidence.evidenceStatus === "source_backed",
@@ -3487,6 +3489,7 @@ const shardManifest: MissionShardManifest = {
 const publicationGate: MissionPublicationGateReceiptV1 = {
   schemaVersion: 1,
   sourceBuildId: catalog.source.buildId,
+  acceptedGenerationId: auditedAcceptedGenerationId,
   refIndex: {
     status: refIndexInput.status,
     path: "path" in refIndexInput ? refIndexInput.path : undefined,

@@ -11,6 +11,7 @@ export type MissionPublicationGenerationContract = {
 export type MissionPublicationGateReceiptV1 = {
   schemaVersion: 1;
   sourceBuildId: string;
+  acceptedGenerationId?: string;
   refIndex: {
     status: "explicit" | "not_configured";
     path?: string;
@@ -42,6 +43,7 @@ export function assertMissionPublicationGate(
   if (!receipt || receipt.schemaVersion !== 1) {
     throw new Error("Offer-capable mission publication is missing its publication gate receipt.");
   }
+  const refIndexPathIdentity = receipt.acceptedGenerationId ?? receipt.sourceBuildId;
   if (
     receipt.refIndex.status !== "explicit"
     || !receipt.refIndex.path
@@ -56,7 +58,7 @@ export function assertMissionPublicationGate(
     || receipt.refIndex.auditedBuildId !== receipt.sourceBuildId
     || !receipt.refIndex.auditedPath
     || normalizedFilePath(receipt.refIndex.path) !== normalizedFilePath(receipt.refIndex.auditedPath)
-    || !normalizedFilePath(receipt.refIndex.path).split("/").includes(receipt.sourceBuildId.toLowerCase())
+    || !normalizedFilePath(receipt.refIndex.path).split("/").includes(refIndexPathIdentity.toLowerCase())
   ) {
     throw new Error("MISSION_REF_INDEX does not match the accepted mission source build.");
   }
