@@ -1,0 +1,625 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_TimeTrial_Career",
+  "variant": {
+    "variantKey": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+    "familyKey": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_TimeTrial_Career",
+    "conceptKey": "45b6b59179444af6830d",
+    "objectiveSignature": {
+      "key": "73d4112a-156c-44d5-81c0-1788ec543768|913c0c6a-cc08-4e92-9d72-6c78172d71d3|unknown|careercontract|standard|open|unknown:bounded||||variant:4b81da93-cc6b-04f2-4557-d5417582ad90",
+      "activityKey": "unknown",
+      "titleStem": "wstr-time-trial-repeat",
+      "descriptionStem": "wstr-time-trial-repeat",
+      "handlerStem": "wildstar-racing-time-trial",
+      "archetype": "CareerContract",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:wstr-time-trial-repeat",
+        "description:wstr-time-trial-repeat",
+        "handler:wildstar-racing-time-trial",
+        "contract:careercontract",
+        "archetype:careercontract",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "CareerContract",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "913c0c6a-cc08-4e92-9d72-6c78172d71d3",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "913c0c6a-cc08-4e92-9d72-6c78172d71d3"
+      ]
+    },
+    "displayName": "[RaceType] Time Trial: [location]",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Ready to set a new personal best with Wildstar Racing Amateur League?\n\n[RaceDetails]\n\nDISCLAIMER\nWildstar Racing requires the contracted racer to be the vehicle pilot, no substitutes or stand-ins are allowed. Please be mindful that Wildstar Racing utilizes publicly accessible tracks and that other individuals may be present. Wildstar Racing is not responsible for any damage your ship may suffer while racing.",
+    "rawName": "@WSTR_TimeTrial_repeat_title_01",
+    "internalName": "WildstarRacing_Race1_LorvilleOutskirts_TimeTrial",
+    "missionType": "CareerContract",
+    "provider": "Wildstar Racing",
+    "faction": "Wildstar Racing",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "913c0c6a-cc08-4e92-9d72-6c78172d71d3",
+      "displayName": "Racing Ship Time Trial",
+      "rawName": "SReputationScopeParams.ReputationScope_Racing_ShipTimeTrial",
+      "factionKey": "73d4112a-156c-44d5-81c0-1788ec543768",
+      "factionDisplayName": "Wildstar Racing",
+      "trackType": "Racing Ship Time Trial",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "913c0c6a-cc08-4e92-9d72-6c78172d71d3"
+      ]
+    },
+    "missionArchetype": "CareerContract",
+    "standingRequirement": "Racing Enthusiast / 0 rep to Skilled Racer / 32,000 rep",
+    "prerequisiteSummary": "Racing Enthusiast / 0 rep to Skilled Racer / 32,000 rep; CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Racing Enthusiast / 0 rep to Skilled Racer / 32,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "location"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "location"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "location",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "0 UEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "0 UEC",
+      "creditStatus": "fixed",
+      "creditsDetail": {
+        "status": "fixed",
+        "amount": 0,
+        "currency": "UEC",
+        "max": 4500,
+        "plusBonuses": 1,
+        "confidence": "extracted_fixed",
+        "sourceResultType": "ContractResult_Reward",
+        "sourceRefs": [
+          "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+        "familyId": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_TimeTrial_Career",
+        "templateGuid": "561f08a6-1021-4427-a7b6-2efe9abfbefc"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_1d086358a1f2e2fd71997491",
+          "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "WildstarRacing_TimeTrial_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_78f836b279b6c15ef5d9b113",
+          "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "WildstarRacing_TimeTrial_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_1b7085ac25590d5264175303",
+          "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+          "type": "fixed_currency_reward",
+          "index": 0,
+          "payload": {
+            "fixedReward": {
+              "reward": 0,
+              "max": 4500,
+              "plusBonuses": 1,
+              "currencyType": "UEC"
+            },
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_Reward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+            "sourceElement": "ContractResult_Reward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "561f08a6-1021-4427-a7b6-2efe9abfbefc",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/timetrial.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/timetrial.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@RacingRep_Guild_DisplayName",
+          "displayText": "Wildstar Racing",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "73d4112a-156c-44d5-81c0-1788ec543768",
+          "recordName": "FactionReputation.FactionReputation_Lawful_WildstarRacing",
+          "recordType": null,
+          "displayName": "Wildstar Racing",
+          "path": "factions/factionreputation/factionreputation_lawful_wildstarracing.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@WSTR_TimeTrial_repeat_title_01",
+          "localizationKey": "WSTR_TimeTrial_repeat_title_01",
+          "template": "~mission(RaceType) Time Trial: ~mission(location)",
+          "displayText": "~mission(RaceType) Time Trial: ~mission(location)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(RaceType)",
+              "expression": "RaceType",
+              "segments": [
+                "RaceType"
+              ]
+            },
+            {
+              "raw": "~mission(location)",
+              "expression": "location",
+              "segments": [
+                "location"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+            "requirements": [
+              {
+                "edgeId": "pre_78f836b279b6c15ef5d9b113",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "WildstarRacing_TimeTrial_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": null,
+        "fixedCurrency": [
+          {
+            "edgeId": "out_1b7085ac25590d5264175303",
+            "variantId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+            "type": "fixed_currency_reward",
+            "index": 0,
+            "payload": {
+              "fixedReward": {
+                "reward": 0,
+                "max": 4500,
+                "plusBonuses": 1,
+                "currencyType": "UEC"
+              },
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_Reward"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+              "sourceElement": "ContractResult_Reward"
+            }
+          }
+        ],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_Reward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml"
+            ],
+            "fixedReward": {
+              "reward": 0,
+              "max": 4500,
+              "plusBonuses": 1,
+              "currencyType": "UEC"
+            }
+          }
+        ],
+        "calculatedPayout": null,
+        "buyIns": []
+      },
+      "reputationOutcomes": {
+        "fixed": [],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "4b81da93-cc6b-04f2-4557-d5417582ad90",
+      "generatorGuid": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5",
+      "generatorName": "ContractGenerator.WildstarRacing_Generator",
+      "generatorPath": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@WSTR_TimeTrial_repeat_title_01",
+      "descriptionRaw": "@WSTR_TimeTrial_repeat_desc_01"
+    }
+  }
+}

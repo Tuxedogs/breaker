@@ -1,0 +1,1348 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_EliminateAll_Career",
+  "variant": {
+    "variantKey": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+    "familyKey": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_EliminateAll_Career",
+    "conceptKey": "93e13e17a8e8fda4ff1b",
+    "objectiveSignature": {
+      "key": "1ff5f2d5-e169-444f-a87e-3eea50c44933|f340b011-c40c-4229-b9c1-ce6a3eb1df77|eliminate-all|activity-defined|standard|unlock:d608f20ae1ba|unknown:unknown||||",
+      "activityKey": "eliminate-all",
+      "titleStem": "mg-ruto-ugf-eliminateall-civsonly",
+      "descriptionStem": "mg-ruto-ugf-eliminateall-civsonly",
+      "handlerStem": "ruto-eliminate-all",
+      "archetype": "Mercenary",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:d608f20ae1ba",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:eliminate-all",
+        "activity-source:structural",
+        "title:mg-ruto-ugf-eliminateall-civsonly",
+        "description:mg-ruto-ugf-eliminateall-civsonly",
+        "handler:ruto-eliminate-all",
+        "contract:careercontract",
+        "archetype:mercenary",
+        "intro:standard",
+        "chain:unlock:d608f20ae1ba",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Mercenary"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+      ]
+    },
+    "displayName": "too many cooks",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "A client is getting out produced by a new competitor and is looking to throw a wrench into the works.\n\nYou’re going to head to [Location] and kill all the civies who work there. \n\nDo what you want with the gun-toting goons guarding the workers, but remember that they aren’t the priority.",
+    "rawName": "@mg_ruto_UGF_eliminateall_civsonly_title_001",
+    "internalName": "Ruto_Stanton1_Unlawful_EliminateAll_EliminateCompetitionWorkers",
+    "missionType": "CareerContract",
+    "provider": "Ruto",
+    "faction": "Ruto",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+      "displayName": "Affinity",
+      "rawName": "SReputationScopeParams.ReputationScope_Affinity",
+      "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+      "factionDisplayName": "Ruto",
+      "trackType": "Affinity",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+      ]
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "Affinity Good 010 / 1,000 rep to Exalted / 10,000 rep",
+    "prerequisiteSummary": "Affinity Good 010 / 1,000 rep to Exalted / 10,000 rep; Stanton Star; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Affinity Good 010 / 1,000 rep to Exalted / 10,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "db62b98e-9b7b-4f54-b62d-ee718d505a49"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Security +1,000",
+        "Security -1,000",
+        "Affinity +100",
+        "Affinity -50",
+        "71,500 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Security +1,000",
+        "Security -1,000",
+        "Affinity +100",
+        "Affinity -50"
+      ],
+      "credits": "71,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "71,500 aUEC",
+        "amount": 71500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/missionproviders/ruto_generator.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 71500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 71500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+        "factionDisplayName": "Ruto",
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "scopeDisplayName": "Security",
+        "amount": 1000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "1335b737-6188-4c21-8923-98a74bcd3071"
+        ]
+      },
+      {
+        "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+        "factionDisplayName": "Ruto",
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "scopeDisplayName": "Security",
+        "amount": -1000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "c8df2809-5dd3-452e-9d03-12ede43fa8f4"
+        ]
+      },
+      {
+        "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+        "factionDisplayName": "Ruto",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+        ]
+      },
+      {
+        "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+        "factionDisplayName": "Ruto",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": -50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "5a59f6f6-245f-4e43-a08b-8b67e38286a7"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+        "familyId": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_EliminateAll_Career",
+        "templateGuid": "26779610-8d99-4305-a334-3a0d6ad9e9f7"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_2482a7667a9dc9404fb318c5",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Ruto_EliminateAll_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_7c65746133739c698549e010",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "db62b98e-9b7b-4f54-b62d-ee718d505a49"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_5130e386f5469f2aa47071f2",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "db62b98e-9b7b-4f54-b62d-ee718d505a49"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Ruto_EliminateAll_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_12a970c8fa486f6159735452",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "rewardGuid": "1335b737-6188-4c21-8923-98a74bcd3071",
+            "reputationAmount": 1000,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_bc2e77feae2a4127b6f796c4",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "rewardGuid": "c8df2809-5dd3-452e-9d03-12ede43fa8f4",
+            "reputationAmount": -1000,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_1ca619b09f762be042cdcc1d",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "fixed_reputation",
+          "index": 2,
+          "payload": {
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_aca2d54674643c6db85842a6",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "fixed_reputation",
+          "index": 3,
+          "payload": {
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "5a59f6f6-245f-4e43-a08b-8b67e38286a7",
+            "reputationAmount": -50,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_f1ed06e7eacd3aaa04d9a913",
+          "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 71500,
+              "amount": 71500,
+              "rawAmount": 71392.92640927662,
+              "integerRoundedAmount": 71393,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.56,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "19.7",
+                "value": 19.7,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "26779610-8d99-4305-a334-3a0d6ad9e9f7",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/eliminateall_unlawful_ugf.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": true,
+        "templateIllegalRaw": "1",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Ruto_EliminateAll_Career']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/eliminateall_unlawful_ugf.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@mg_ruto_from_001",
+          "displayText": "Ruto",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "recordName": "FactionReputation.FactionReputation_Ruto",
+          "recordType": null,
+          "displayName": "Ruto",
+          "path": "factions/factionreputation/factionreputation_ruto.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@mg_ruto_UGF_eliminateall_civsonly_title_001",
+          "localizationKey": "mg_ruto_UGF_eliminateall_civsonly_title_001",
+          "template": "too many cooks",
+          "displayText": "too many cooks",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": null,
+            "templateIllegal": true,
+            "comparison": "agree"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+            "requirements": [
+              {
+                "edgeId": "pre_2482a7667a9dc9404fb318c5",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Ruto_EliminateAll_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 71500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 71500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_12a970c8fa486f6159735452",
+            "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+              "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+              "rewardGuid": "1335b737-6188-4c21-8923-98a74bcd3071",
+              "reputationAmount": 1000,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_bc2e77feae2a4127b6f796c4",
+            "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+              "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+              "rewardGuid": "c8df2809-5dd3-452e-9d03-12ede43fa8f4",
+              "reputationAmount": -1000,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_1ca619b09f762be042cdcc1d",
+            "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+            "type": "fixed_reputation",
+            "index": 2,
+            "payload": {
+              "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_aca2d54674643c6db85842a6",
+            "variantId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+            "type": "fixed_reputation",
+            "index": 3,
+            "payload": {
+              "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "5a59f6f6-245f-4e43-a08b-8b67e38286a7",
+              "reputationAmount": -50,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/missionproviders/ruto_generator.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 71500,
+              "amount": 71500,
+              "rawAmount": 71392.92640927662,
+              "integerRoundedAmount": 71393,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.56,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "19.7",
+                "value": 19.7,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 71500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 71500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "1335b737-6188-4c21-8923-98a74bcd3071",
+            "reputationAmount": 1000,
+            "reward": {
+              "guid": "1335b737-6188-4c21-8923-98a74bcd3071",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_S",
+              "editorName": "+T_05",
+              "reputationAmount": 1000,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_s.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "c8df2809-5dd3-452e-9d03-12ede43fa8f4",
+            "reputationAmount": -1000,
+            "reward": {
+              "guid": "c8df2809-5dd3-452e-9d03-12ede43fa8f4",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Negative_S",
+              "editorName": "-T_05",
+              "reputationAmount": -1000,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_negative_s.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "7bb38f6d-3d7a-458a-a430-fe55a64f7743",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XXXS",
+              "editorName": "+T_02",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xxxs.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "factionReputation": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "5a59f6f6-245f-4e43-a08b-8b67e38286a7",
+            "reputationAmount": -50,
+            "reward": {
+              "guid": "5a59f6f6-245f-4e43-a08b-8b67e38286a7",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Negative_XXXXS",
+              "editorName": "-T_01",
+              "reputationAmount": -50,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_negative_xxxxs.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "417db062-b1e4-7e50-ffbb-ac13f66f148f",
+      "generatorGuid": "3b90594c-ea63-454c-8cb4-b6d469b3f64b",
+      "generatorName": "ContractGenerator.Ruto_Generator",
+      "generatorPath": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@mg_ruto_UGF_eliminateall_civsonly_title_001",
+      "descriptionRaw": "@mg_ruto_UGF_eliminateall_civsonly_desc_001"
+    }
+  }
+}

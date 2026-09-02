@@ -1,0 +1,3893 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank1",
+  "variant": {
+    "variantKey": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+    "familyKey": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank1",
+    "conceptKey": "0d5449549b88cb76f6ef",
+    "objectiveSignature": {
+      "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resource-gathering+salvage-ship|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "resource-gathering+salvage-ship",
+      "titleStem": "adagio-industrial-component-salvage",
+      "descriptionStem": "adagio-industrial-component-salvage",
+      "handlerStem": "adagio-rg-ship-salvage",
+      "archetype": "Salvage",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resource-gathering+salvage-ship",
+        "activity-source:structural",
+        "title:adagio-industrial-component-salvage",
+        "description:adagio-industrial-component-salvage",
+        "handler:adagio-rg-ship-salvage",
+        "contract:careercontract",
+        "archetype:salvage",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "rank-1",
+    "tierLabel": "Rank 1",
+    "isIntro": false,
+    "specificityBadges": [
+      "Salvage",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Salvager Needed (Med. Special Order of RMC / UCM / Components)",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Adagio Holdings\nA Proud Equal Opportunity Employer\n\n> About the job tractor beam. \n\nWe recommend searching for wreckage at Lagrange points or you could purchase a salvage claim from us in your Contract Manager. This request probably won't be as easy to satisfy as our normal contracts, partly in thanks to how many outlaws are flying around in Pyro and partly because this request isn't for your average everyday component. But lucky for you, the extra effort will be rewarded.\n\nOnce acquired, deliver the materials to the freight elevator located at [Destination].\n\nFor advice on salvaging, consult A Salvager's Guide to Material Collection in your mobiGlas journal.\n\n> Requirements  Disclaimer <\nContractors are responsible for ensuring that they are collecting materials from vehicles that are considered fair salvage under the pursuant UEE laws. Adagio Holdings is in no way liable for any crimes or misdemeanors committed by contractors and will offer no compensation or reparation for any persons affected by these actions.",
+    "rawName": "@Adagio_Industrial_Component_Salvage_Pyro_M_Title_001",
+    "internalName": "Adagio_RG_ShipSalvage_Pyro_Rank1_RMC_CMats_Component_Unique",
+    "missionType": "Salvage",
+    "provider": "Adagio Holdings",
+    "faction": "Adagio Holdings",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+      "factionDisplayName": "Adagio Holdings",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Jr. Contractor / 800 rep to Jr. Contractor / 800 rep",
+    "prerequisiteSummary": "Jr. Contractor / 800 rep to Jr. Contractor / 800 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Jr. Contractor / 800 rep to Jr. Contractor / 800 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "DropoffLocation_BP",
+          "propertyExtendedTextToken": "Destination",
+          "locationLevelType": "LocalSystem"
+        }
+      },
+      {
+        "type": "location",
+        "label": "Pyro Solar System",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Pyro Solar System",
+      "system": "Pyro",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "286cb603-b4ae-4279-80a1-d4505fee1916"
+      ],
+      "possibleLocations": [
+        "Pyro Solar System"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "DropoffLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        },
+        {
+          "role": "availability / accepted-at",
+          "ref": "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "resolvedName": "Pyro Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+          "displayName": "Pyro Solar System",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro Solar System"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro Solar System",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Pyro Solar System",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro Solar System",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "286cb603-b4ae-4279-80a1-d4505fee1916"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+            "displayName": "Pyro Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Solar System"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro Solar System",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "DropoffLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "286cb603-b4ae-4279-80a1-d4505fee1916",
+        "resolvedName": "Pyro Solar System",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro Solar System"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Blueprint: Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Comer Scraper Module, Hart Scraper Module +1",
+        "Standing +100",
+        "267,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "Adagio Resource Gathering Ship Salvage: Trawler Scraper Module, Abrade Scraper Module, Comer Scraper Module, Hart Scraper Module +1"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+          "poolName": "Adagio Resource Gathering Ship Salvage",
+          "rewardCount": 5,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "20% chance - 1 of 5",
+          "rewards": [
+            {
+              "blueprintGuid": "4e834db6-9b0e-461a-8465-ec90847bd7e5",
+              "displayName": "Trawler Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "22782818-beab-4e09-90c4-306c17192c06",
+              "displayName": "Abrade Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+              "displayName": "Comer Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "b4160c11-75f9-4699-8aab-7b21abf75bc6",
+              "displayName": "Hart Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            },
+            {
+              "blueprintGuid": "57a536c1-cd88-4b2c-8fab-5b871fffa458",
+              "displayName": "Cinch Scraper Module",
+              "componentType": "salvageModifier",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "20% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +100"
+      ],
+      "credits": "267,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "267,250 aUEC",
+        "amount": 267250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 267250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 267250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+        "familyId": "e29eae76-5a8a-4577-8c6a-f943a46aae90|Adagio_RG_ShipSalvage_Rank1",
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_794362b2d0902627a25953fc",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_ShipSalvage_Rank1"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_d3626d59ab09d9fc4ddbb9be",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "DropoffLocation_BP",
+            "propertyExtendedTextToken": "Destination",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Adagio_RG_ShipSalvage_Rank1"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_396cb577ed40b32c93673e4d",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "286cb603-b4ae-4279-80a1-d4505fee1916"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "286cb603-b4ae-4279-80a1-d4505fee1916"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "28e535c8-740f-47cc-adcb-6238a0b5b724"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_060d1bcafa74267d3c0a7e54",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_d4485921270c5d2237fb05ba",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_064cd95994ea0a081e175190",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 267250,
+              "amount": 267250,
+              "rawAmount": 267363.29074101,
+              "integerRoundedAmount": 267363,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.105,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "46.196",
+                "value": 46.196,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "43756d77-6898-945d-52a2-0a1406f7e490",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_generic.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_generic.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@Adagio_from",
+          "displayText": "Adagio Holdings",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "recordName": "FactionReputation.FactionReputation_Lawful_AdagioHoldings",
+          "recordType": null,
+          "displayName": "Adagio Holdings",
+          "path": "factions/factionreputation/factionreputation_lawful_adagioholdings.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Adagio_Industrial_Component_Salvage_Pyro_M_Title_001",
+          "localizationKey": "Adagio_Industrial_Component_Salvage_Pyro_M_Title_001",
+          "template": "Salvager Needed (Med. Special Order of RMC / UCM / Components)",
+          "displayText": "Salvager Needed (Med. Special Order of RMC / UCM / Components)",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+            "requirements": [
+              {
+                "edgeId": "pre_396cb577ed40b32c93673e4d",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "286cb603-b4ae-4279-80a1-d4505fee1916",
+                  "recordName": "StarMapObject.PyroSolarSystem",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/pyrosolarsystem.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "28e535c8-740f-47cc-adcb-6238a0b5b724"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 267250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 267250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_060d1bcafa74267d3c0a7e54",
+            "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_d4485921270c5d2237fb05ba",
+            "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 267250,
+              "amount": 267250,
+              "rawAmount": 267363.29074101,
+              "integerRoundedAmount": 267363,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.105,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "status": "resolved",
+                  "name": "Discovery",
+                  "recordName": "ContractDifficultyProfile.Discovery",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.153",
+                    "mentalLoadWeight": "0.459",
+                    "riskOfLossWeight": "0.306",
+                    "gameKnowledgeWeight": "0.473"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.153,
+                    "mentalLoadWeight": 0.459,
+                    "riskOfLossWeight": 0.306,
+                    "gameKnowledgeWeight": 0.473
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                  "sourceElement": "ContractDifficultyProfile.Discovery"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.153",
+                    "weight": 0.153,
+                    "contribution": 0.45899999999999996
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.459",
+                    "weight": 0.459,
+                    "contribution": 1.836
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.306",
+                    "weight": 0.306,
+                    "contribution": 0.9179999999999999
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.473",
+                    "weight": 0.473,
+                    "contribution": 1.892
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "7a44a118-f6dc-41bd-baeb-da0764002cc8",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "46.196",
+                "value": 46.196,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 267250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 267250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/discovery.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_d9f34dfeb6bf920ec718b949",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "sourceScope": "contract",
+          "sourceOwnerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "98aa6a70-80e7-41d7-9128-9692053d57a2",
+                  "maxContainerSize": "-1",
+                  "minSCU": "6",
+                  "maxSCU": "6"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "98aa6a70-80e7-41d7-9128-9692053d57a2"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "6",
+                    "value": 6
+                  },
+                  "maxSCU": {
+                    "raw": "6",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S03_S04",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S3_S4_Name",
+                  "displayName": "Ship Weapon (S3 or S4)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipgun_s03_s04.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "95c85f25-ccd9-402e-b02a-522f5a97a654",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S3",
+                      "displayName": "Omnisky IX Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f15b742b-1457-4eb7-b7aa-078816297d29",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S3",
+                      "displayName": "Singe Cannon (S3)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f72ca643-b48c-4f6e-abb7-d5bc8eb261aa",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S3",
+                      "displayName": "M5A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4e2b431e-916b-479b-9617-86e7e53a431a",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S3",
+                      "displayName": "Lightstrike III Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e09590d1-13a0-4d25-ad89-3dfc18a61c4a",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S3",
+                      "displayName": "Suckerpunch-XL Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S3",
+                      "displayName": "Sledge III Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
+                      "recordName": "EntityClassDefinition.KRIG_LaserCannon_S3",
+                      "displayName": "Quarreler Cannon",
+                      "path": "entities/scitem/ships/weapons/krig_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S3",
+                      "displayName": "FL-33 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S3",
+                      "displayName": "NN-15 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2b261d0c-d208-4ab4-9217-ded64b8cb7cf",
+                      "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S3",
+                      "displayName": "'WARLORD' Cannon",
+                      "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2a787ee5-d720-4490-8823-65a0f8578f4b",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S3",
+                      "displayName": "DR Model-XJ3 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S3",
+                      "displayName": "Attrition-3 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aa7c924e-3f3b-4cea-a948-77753e2b387e",
+                      "recordName": "EntityClassDefinition.HRST_Storm_LaserRepeater_S3",
+                      "displayName": "Reign-3 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_storm_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bd13235d-1261-4b71-b32f-aed1a8beb526",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S3",
+                      "displayName": "CF-337 Panther Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S3",
+                      "displayName": "NDB-30 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "47f6c5d4-32f6-4813-9a34-a55d3c2d8aac",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S3",
+                      "displayName": "Ardor-3 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a9780953-9488-4644-9b56-61464e9dd6b9",
+                      "recordName": "EntityClassDefinition.TOAG_LaserRepeater_S3",
+                      "displayName": "Yeng’tu Repeater",
+                      "path": "entities/scitem/ships/weapons/toag_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "93b774da-e792-4648-bf79-acfd8b5d0f9d",
+                      "recordName": "EntityClassDefinition.AMRS_AAgun_CC_S3",
+                      "displayName": "PyroBurst Scattergun",
+                      "path": "entities/scitem/ships/weapons/amrs_aagun_cc_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
+                      "recordName": "EntityClassDefinition.AMRS_ScatterGun_S3",
+                      "displayName": "PyroBurst Scattergun",
+                      "path": "entities/scitem/ships/weapons/amrs_scattergun_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "52c1793e-5610-4daa-aafe-a8cf55e60283",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S4",
+                      "displayName": "M6A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "cf57c4df-0fed-40bb-9771-10fc7853d8f9",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S4",
+                      "displayName": "Omnisky XII Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "060aac99-514a-4689-b6f9-4a1461723427",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S4",
+                      "displayName": "Lightstrike IV Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8ddb6868-1ae3-4cad-a736-12ad739ead2b",
+                      "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S4",
+                      "displayName": "VNCL Gen 2 Plasma Cannon S4",
+                      "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8d868b78-eccd-4ba5-a4a5-57e2f20bdc35",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4",
+                      "displayName": "Attrition-4 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "7bd374e9-9d2f-4659-94cf-840e79d23b34",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4_Turret",
+                      "displayName": "Attrition-4 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4_turret.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ecac1df2-4f6f-49df-9cce-f188d118a789",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S4",
+                      "displayName": "CF-447 Rhino Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "76706adf-4687-4a7a-aaf1-c44af0a5d2ca",
+                      "recordName": "EntityClassDefinition.PRAR_DistortionScatterGun_S4",
+                      "displayName": "Salvation Distortion Scattergun",
+                      "path": "entities/scitem/ships/weapons/prar_distortionscattergun_s4.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                  "minAmount": "4",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipMissileTorpedo",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Missile_Name",
+                  "displayName": "Ship Missile",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipmissiletorpedo.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "b86bd2f2-1f5e-4731-a286-74faa8cde646",
+                      "recordName": "EntityClassDefinition.MISL_S01_CS_FSKI_Spark",
+                      "displayName": "Spark I Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s01_cs_fski_spark.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "082c2ffb-1c54-45e5-90bf-f411d9a06425",
+                      "recordName": "EntityClassDefinition.MISL_S01_IR_VNCL_Arrow",
+                      "displayName": "'Arrow' I Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s01_ir_vncl_arrow.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4317f2fc-4044-454e-8400-25c2e3c65136",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest",
+                      "displayName": "Tempest II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a655616b-772f-4760-b6a1-404497eb10ec",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest_CitCon",
+                      "displayName": "Tempest II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest_citcon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9b2c25cb-fc57-42b5-95cd-1ae89a622bd7",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_THCN_StrikeForce",
+                      "displayName": "StrikeForce II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_thcn_strikeforce.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "67d6efbd-6b65-49d9-b319-041dc6a2675a",
+                      "recordName": "EntityClassDefinition.MISL_S02_EM_TALN_Dominator",
+                      "displayName": "Dominator II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_em_taln_dominator.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d358cf84-9c78-4929-a2ad-b9caade81962",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_FSKI_Ignite",
+                      "displayName": "Ignite II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_fski_ignite.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8acc8f1f-47cb-46e4-bf58-bea2ac5ff52e",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_NOVP_Rattler",
+                      "displayName": "Rattler II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_novp_rattler.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1754a3d4-4aa9-469d-8fb7-d8611bd3e9a1",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_VNCL_Bullet",
+                      "displayName": "'Bullet' II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_vncl_bullet.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "dee6efca-71ef-438c-b762-624f9ce649f3",
+                      "recordName": "EntityClassDefinition.MISL_S03_CS_FSKI_Arrester",
+                      "displayName": "Arrester III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_cs_fski_arrester.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9a741b0a-200d-4f1a-92a8-f917510804e1",
+                      "recordName": "EntityClassDefinition.MISL_S03_EM_FSKI_Thunderbolt",
+                      "displayName": "Thunderbolt III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_em_fski_thunderbolt.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e5aa84b6-9b14-4eb3-949f-10e1cc8cd6cf",
+                      "recordName": "EntityClassDefinition.MISL_S03_IR_NOVP_Viper",
+                      "displayName": "Viper III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_novp_viper.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d4408421-e939-4e34-9902-0644fa6934be",
+                      "recordName": "EntityClassDefinition.MISL_S03_IR_VNCL_Chaos",
+                      "displayName": "'Chaos' III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_vncl_chaos.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ce8ef95e-edd9-45d7-8c21-5e644a8ba75e",
+                      "recordName": "EntityClassDefinition.MISL_S04_CS_TALN_Assailant",
+                      "displayName": "Assailant IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_cs_taln_assailant.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e1659bcf-0595-43ad-9376-386e4ca875e0",
+                      "recordName": "EntityClassDefinition.MISL_S04_EM_TALN_Raptor",
+                      "displayName": "Raptor IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_em_taln_raptor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "77dc28bf-0742-490f-ac49-1d430cb6b48f",
+                      "recordName": "EntityClassDefinition.MISL_S04_IR_BEHR_Pathfinder",
+                      "displayName": "Pathfinder IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_behr_pathfinder.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bc9adaf0-90a2-45e8-ba1d-5e0b56a76c92",
+                      "recordName": "EntityClassDefinition.MISL_S04_IR_VNCL_Dragon",
+                      "displayName": "'Dragon' IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_vncl_dragon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9d2d7b0d-9f54-4fe1-8bff-c6ea2a5af5d3",
+                      "recordName": "EntityClassDefinition.MISL_S05_CS_TALN_Stalker",
+                      "displayName": "Stalker V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_cs_taln_stalker.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "918ad61c-ea99-4040-b05a-a42cd5436aed",
+                      "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Reaper",
+                      "displayName": "Reaper V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_reaper.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ffcf3d55-bc12-4244-b3c9-ebd709c5cd2e",
+                      "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Scimitar",
+                      "displayName": "Scimitar V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_scimitar.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b74c05cb-0f60-403a-92cf-663a12268830",
+                      "recordName": "EntityClassDefinition.MISL_S05_IR_TALN_Valkyrie",
+                      "displayName": "Valkyrie V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_ir_taln_valkyrie.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "05f82726-6339-46e0-b8d4-c6b81a1db51c",
+                      "recordName": "EntityClassDefinition.MISL_S07_IR_TALN_Hellion",
+                      "displayName": "Hellion VII Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s07_ir_taln_hellion.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c01675d6-ad02-4c2d-b4a8-53b4a0b145dd",
+                      "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos",
+                      "displayName": "Argos IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5bdd509f-93eb-4638-83a9-dfcaae0c91ad",
+                      "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos_2",
+                      "displayName": "MISL S09 CS TALN Argos 2",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos_2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a53527ab-3c28-460d-bc96-dcfac76f1463",
+                      "recordName": "EntityClassDefinition.MISL_S09_EM_TALN_Seeker",
+                      "displayName": "Seeker IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_em_taln_seeker.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e26d0f6d-4ada-4eb0-9843-1b4d03178f90",
+                      "recordName": "EntityClassDefinition.MISL_S09_IR_TALN_Typhoon",
+                      "displayName": "Typhoon IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_ir_taln_typhoon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "7c23b548-bf60-42ca-a377-b8afa1a6763c",
+                      "recordName": "EntityClassDefinition.MISL_S10_CS_BEHR_Executor",
+                      "displayName": "EX-T10-CS \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3e1b8bfb-07d1-49b8-8f6a-834f0be6f320",
+                      "recordName": "EntityClassDefinition.MISL_S10_CS_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-CS Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2745623e-6ff5-4191-b95b-46c1dfbce795",
+                      "recordName": "EntityClassDefinition.MISL_S10_EM_BEHR_Executor",
+                      "displayName": "EX-T10-EM \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c9c196a4-f0ec-4400-912f-4682b87f6dd4",
+                      "recordName": "EntityClassDefinition.MISL_S10_EM_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-EM Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ad1356d1-384d-4368-916c-5af6b8ec91a3",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Executor",
+                      "displayName": "EX-T10-IR \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bcdd8022-c2f4-49d0-8528-e4a3a7a01a03",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Torpedo",
+                      "displayName": "VT-T10 \"Veritas\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_torpedo.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f513c4cc-964b-429f-b245-f89c6154ad79",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-IR Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3be04d51-971d-42e3-b741-a5b28e177e38",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_VNCL_Cleaver",
+                      "displayName": "Vanduul Cleaver",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_vncl_cleaver.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "39ac8279-45af-4f67-9156-169ff51b0e10",
+                      "recordName": "EntityClassDefinition.MISL_S12_CS_BEHR_Executor",
+                      "displayName": "EX-T12-CS \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "610b44d6-7ad5-4ea8-a1f3-f1f60d220588",
+                      "recordName": "EntityClassDefinition.MISL_S12_CS_TALN_Calamity",
+                      "displayName": "Calamity XII-CS Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_taln_calamity.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f3a369d7-b39a-4ab0-9265-224d994bb5bd",
+                      "recordName": "EntityClassDefinition.MISL_S12_EM_BEHR_Executor",
+                      "displayName": "EX-T12-EM \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f253a14d-26a1-4087-9b4a-2b2d96a179fc",
+                      "recordName": "EntityClassDefinition.MISL_S12_EM_TALN_Calamity",
+                      "displayName": "Calamity XII-EM Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_taln_calamity.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "eda2bcfa-58cf-4225-af77-bc2b1ba0a8d7",
+                      "recordName": "EntityClassDefinition.MISL_S12_IR_BEHR_Executor",
+                      "displayName": "EX-T12-IR \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6f012007-659b-4746-917f-e6effa713804",
+                      "recordName": "EntityClassDefinition.MISL_S12_IR_TALN_Calamity",
+                      "displayName": "Calamity XII-IR Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_taln_calamity.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipBombs",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Bomb_Name",
+                  "displayName": "Ship Bomb",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipbombs.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "3c3f79ae-acb2-4472-a08d-2ddb1afcc700",
+                      "recordName": "EntityClassDefinition.BOMB_S03_FSKI_Thunderball",
+                      "displayName": "Thunderball Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s03_fski_thunderball.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1b95523e-e2de-4de9-9b41-2cf79bfae59a",
+                      "recordName": "EntityClassDefinition.BOMB_S05_FSKI",
+                      "displayName": "Stormburst Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s05_fski.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2b8a744d-c0a0-4f92-b0e6-bf4ae077cc11",
+                      "recordName": "EntityClassDefinition.BOMB_S10_FSKI_Colossus",
+                      "displayName": "Colossus Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s10_fski_colossus.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank1']/contracts/CareerContract[@id='28e535c8-740f-47cc-adcb-6238a0b5b724']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "98aa6a70-80e7-41d7-9128-9692053d57a2",
+                    "maxContainerSize": "-1",
+                    "minSCU": "6",
+                    "maxSCU": "6"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "98aa6a70-80e7-41d7-9128-9692053d57a2"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "6",
+                      "value": 6
+                    },
+                    "maxSCU": {
+                      "raw": "6",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S03_S04",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S3_S4_Name",
+                    "displayName": "Ship Weapon (S3 or S4)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipgun_s03_s04.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "95c85f25-ccd9-402e-b02a-522f5a97a654",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S3",
+                        "displayName": "Omnisky IX Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f15b742b-1457-4eb7-b7aa-078816297d29",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S3",
+                        "displayName": "Singe Cannon (S3)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f72ca643-b48c-4f6e-abb7-d5bc8eb261aa",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S3",
+                        "displayName": "M5A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4e2b431e-916b-479b-9617-86e7e53a431a",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S3",
+                        "displayName": "Lightstrike III Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e09590d1-13a0-4d25-ad89-3dfc18a61c4a",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S3",
+                        "displayName": "Suckerpunch-XL Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S3",
+                        "displayName": "Sledge III Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
+                        "recordName": "EntityClassDefinition.KRIG_LaserCannon_S3",
+                        "displayName": "Quarreler Cannon",
+                        "path": "entities/scitem/ships/weapons/krig_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S3",
+                        "displayName": "FL-33 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S3",
+                        "displayName": "NN-15 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2b261d0c-d208-4ab4-9217-ded64b8cb7cf",
+                        "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S3",
+                        "displayName": "'WARLORD' Cannon",
+                        "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2a787ee5-d720-4490-8823-65a0f8578f4b",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S3",
+                        "displayName": "DR Model-XJ3 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S3",
+                        "displayName": "Attrition-3 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aa7c924e-3f3b-4cea-a948-77753e2b387e",
+                        "recordName": "EntityClassDefinition.HRST_Storm_LaserRepeater_S3",
+                        "displayName": "Reign-3 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_storm_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bd13235d-1261-4b71-b32f-aed1a8beb526",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S3",
+                        "displayName": "CF-337 Panther Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S3",
+                        "displayName": "NDB-30 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "47f6c5d4-32f6-4813-9a34-a55d3c2d8aac",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S3",
+                        "displayName": "Ardor-3 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a9780953-9488-4644-9b56-61464e9dd6b9",
+                        "recordName": "EntityClassDefinition.TOAG_LaserRepeater_S3",
+                        "displayName": "Yeng’tu Repeater",
+                        "path": "entities/scitem/ships/weapons/toag_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "93b774da-e792-4648-bf79-acfd8b5d0f9d",
+                        "recordName": "EntityClassDefinition.AMRS_AAgun_CC_S3",
+                        "displayName": "PyroBurst Scattergun",
+                        "path": "entities/scitem/ships/weapons/amrs_aagun_cc_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
+                        "recordName": "EntityClassDefinition.AMRS_ScatterGun_S3",
+                        "displayName": "PyroBurst Scattergun",
+                        "path": "entities/scitem/ships/weapons/amrs_scattergun_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "52c1793e-5610-4daa-aafe-a8cf55e60283",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S4",
+                        "displayName": "M6A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "cf57c4df-0fed-40bb-9771-10fc7853d8f9",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S4",
+                        "displayName": "Omnisky XII Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "060aac99-514a-4689-b6f9-4a1461723427",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S4",
+                        "displayName": "Lightstrike IV Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8ddb6868-1ae3-4cad-a736-12ad739ead2b",
+                        "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S4",
+                        "displayName": "VNCL Gen 2 Plasma Cannon S4",
+                        "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8d868b78-eccd-4ba5-a4a5-57e2f20bdc35",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4",
+                        "displayName": "Attrition-4 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "7bd374e9-9d2f-4659-94cf-840e79d23b34",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4_Turret",
+                        "displayName": "Attrition-4 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4_turret.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ecac1df2-4f6f-49df-9cce-f188d118a789",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S4",
+                        "displayName": "CF-447 Rhino Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "76706adf-4687-4a7a-aaf1-c44af0a5d2ca",
+                        "recordName": "EntityClassDefinition.PRAR_DistortionScatterGun_S4",
+                        "displayName": "Salvation Distortion Scattergun",
+                        "path": "entities/scitem/ships/weapons/prar_distortionscattergun_s4.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                    "minAmount": "4",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipMissileTorpedo",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Missile_Name",
+                    "displayName": "Ship Missile",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipmissiletorpedo.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "b86bd2f2-1f5e-4731-a286-74faa8cde646",
+                        "recordName": "EntityClassDefinition.MISL_S01_CS_FSKI_Spark",
+                        "displayName": "Spark I Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s01_cs_fski_spark.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "082c2ffb-1c54-45e5-90bf-f411d9a06425",
+                        "recordName": "EntityClassDefinition.MISL_S01_IR_VNCL_Arrow",
+                        "displayName": "'Arrow' I Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s01_ir_vncl_arrow.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4317f2fc-4044-454e-8400-25c2e3c65136",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest",
+                        "displayName": "Tempest II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a655616b-772f-4760-b6a1-404497eb10ec",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest_CitCon",
+                        "displayName": "Tempest II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest_citcon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9b2c25cb-fc57-42b5-95cd-1ae89a622bd7",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_THCN_StrikeForce",
+                        "displayName": "StrikeForce II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_thcn_strikeforce.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "67d6efbd-6b65-49d9-b319-041dc6a2675a",
+                        "recordName": "EntityClassDefinition.MISL_S02_EM_TALN_Dominator",
+                        "displayName": "Dominator II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_em_taln_dominator.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d358cf84-9c78-4929-a2ad-b9caade81962",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_FSKI_Ignite",
+                        "displayName": "Ignite II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_fski_ignite.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8acc8f1f-47cb-46e4-bf58-bea2ac5ff52e",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_NOVP_Rattler",
+                        "displayName": "Rattler II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_novp_rattler.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1754a3d4-4aa9-469d-8fb7-d8611bd3e9a1",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_VNCL_Bullet",
+                        "displayName": "'Bullet' II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_vncl_bullet.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "dee6efca-71ef-438c-b762-624f9ce649f3",
+                        "recordName": "EntityClassDefinition.MISL_S03_CS_FSKI_Arrester",
+                        "displayName": "Arrester III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_cs_fski_arrester.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9a741b0a-200d-4f1a-92a8-f917510804e1",
+                        "recordName": "EntityClassDefinition.MISL_S03_EM_FSKI_Thunderbolt",
+                        "displayName": "Thunderbolt III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_em_fski_thunderbolt.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e5aa84b6-9b14-4eb3-949f-10e1cc8cd6cf",
+                        "recordName": "EntityClassDefinition.MISL_S03_IR_NOVP_Viper",
+                        "displayName": "Viper III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_novp_viper.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d4408421-e939-4e34-9902-0644fa6934be",
+                        "recordName": "EntityClassDefinition.MISL_S03_IR_VNCL_Chaos",
+                        "displayName": "'Chaos' III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_vncl_chaos.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ce8ef95e-edd9-45d7-8c21-5e644a8ba75e",
+                        "recordName": "EntityClassDefinition.MISL_S04_CS_TALN_Assailant",
+                        "displayName": "Assailant IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_cs_taln_assailant.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e1659bcf-0595-43ad-9376-386e4ca875e0",
+                        "recordName": "EntityClassDefinition.MISL_S04_EM_TALN_Raptor",
+                        "displayName": "Raptor IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_em_taln_raptor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "77dc28bf-0742-490f-ac49-1d430cb6b48f",
+                        "recordName": "EntityClassDefinition.MISL_S04_IR_BEHR_Pathfinder",
+                        "displayName": "Pathfinder IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_behr_pathfinder.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bc9adaf0-90a2-45e8-ba1d-5e0b56a76c92",
+                        "recordName": "EntityClassDefinition.MISL_S04_IR_VNCL_Dragon",
+                        "displayName": "'Dragon' IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_vncl_dragon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9d2d7b0d-9f54-4fe1-8bff-c6ea2a5af5d3",
+                        "recordName": "EntityClassDefinition.MISL_S05_CS_TALN_Stalker",
+                        "displayName": "Stalker V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_cs_taln_stalker.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "918ad61c-ea99-4040-b05a-a42cd5436aed",
+                        "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Reaper",
+                        "displayName": "Reaper V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_reaper.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ffcf3d55-bc12-4244-b3c9-ebd709c5cd2e",
+                        "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Scimitar",
+                        "displayName": "Scimitar V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_scimitar.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b74c05cb-0f60-403a-92cf-663a12268830",
+                        "recordName": "EntityClassDefinition.MISL_S05_IR_TALN_Valkyrie",
+                        "displayName": "Valkyrie V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_ir_taln_valkyrie.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "05f82726-6339-46e0-b8d4-c6b81a1db51c",
+                        "recordName": "EntityClassDefinition.MISL_S07_IR_TALN_Hellion",
+                        "displayName": "Hellion VII Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s07_ir_taln_hellion.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c01675d6-ad02-4c2d-b4a8-53b4a0b145dd",
+                        "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos",
+                        "displayName": "Argos IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5bdd509f-93eb-4638-83a9-dfcaae0c91ad",
+                        "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos_2",
+                        "displayName": "MISL S09 CS TALN Argos 2",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos_2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a53527ab-3c28-460d-bc96-dcfac76f1463",
+                        "recordName": "EntityClassDefinition.MISL_S09_EM_TALN_Seeker",
+                        "displayName": "Seeker IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_em_taln_seeker.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e26d0f6d-4ada-4eb0-9843-1b4d03178f90",
+                        "recordName": "EntityClassDefinition.MISL_S09_IR_TALN_Typhoon",
+                        "displayName": "Typhoon IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_ir_taln_typhoon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "7c23b548-bf60-42ca-a377-b8afa1a6763c",
+                        "recordName": "EntityClassDefinition.MISL_S10_CS_BEHR_Executor",
+                        "displayName": "EX-T10-CS \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3e1b8bfb-07d1-49b8-8f6a-834f0be6f320",
+                        "recordName": "EntityClassDefinition.MISL_S10_CS_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-CS Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2745623e-6ff5-4191-b95b-46c1dfbce795",
+                        "recordName": "EntityClassDefinition.MISL_S10_EM_BEHR_Executor",
+                        "displayName": "EX-T10-EM \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c9c196a4-f0ec-4400-912f-4682b87f6dd4",
+                        "recordName": "EntityClassDefinition.MISL_S10_EM_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-EM Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ad1356d1-384d-4368-916c-5af6b8ec91a3",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Executor",
+                        "displayName": "EX-T10-IR \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bcdd8022-c2f4-49d0-8528-e4a3a7a01a03",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Torpedo",
+                        "displayName": "VT-T10 \"Veritas\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_torpedo.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f513c4cc-964b-429f-b245-f89c6154ad79",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-IR Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3be04d51-971d-42e3-b741-a5b28e177e38",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_VNCL_Cleaver",
+                        "displayName": "Vanduul Cleaver",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_vncl_cleaver.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "39ac8279-45af-4f67-9156-169ff51b0e10",
+                        "recordName": "EntityClassDefinition.MISL_S12_CS_BEHR_Executor",
+                        "displayName": "EX-T12-CS \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "610b44d6-7ad5-4ea8-a1f3-f1f60d220588",
+                        "recordName": "EntityClassDefinition.MISL_S12_CS_TALN_Calamity",
+                        "displayName": "Calamity XII-CS Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_taln_calamity.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f3a369d7-b39a-4ab0-9265-224d994bb5bd",
+                        "recordName": "EntityClassDefinition.MISL_S12_EM_BEHR_Executor",
+                        "displayName": "EX-T12-EM \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f253a14d-26a1-4087-9b4a-2b2d96a179fc",
+                        "recordName": "EntityClassDefinition.MISL_S12_EM_TALN_Calamity",
+                        "displayName": "Calamity XII-EM Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_taln_calamity.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "eda2bcfa-58cf-4225-af77-bc2b1ba0a8d7",
+                        "recordName": "EntityClassDefinition.MISL_S12_IR_BEHR_Executor",
+                        "displayName": "EX-T12-IR \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6f012007-659b-4746-917f-e6effa713804",
+                        "recordName": "EntityClassDefinition.MISL_S12_IR_TALN_Calamity",
+                        "displayName": "Calamity XII-IR Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_taln_calamity.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "4",
+                      "value": 4
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipBombs",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Bomb_Name",
+                    "displayName": "Ship Bomb",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipbombs.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "3c3f79ae-acb2-4472-a08d-2ddb1afcc700",
+                        "recordName": "EntityClassDefinition.BOMB_S03_FSKI_Thunderball",
+                        "displayName": "Thunderball Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s03_fski_thunderball.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1b95523e-e2de-4de9-9b41-2cf79bfae59a",
+                        "recordName": "EntityClassDefinition.BOMB_S05_FSKI",
+                        "displayName": "Stormburst Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s05_fski.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2b8a744d-c0a0-4f92-b0e6-bf4ae077cc11",
+                        "recordName": "EntityClassDefinition.BOMB_S10_FSKI_Colossus",
+                        "displayName": "Colossus Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s10_fski_colossus.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank1']/contracts/CareerContract[@id='28e535c8-740f-47cc-adcb-6238a0b5b724']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_d9f34dfeb6bf920ec718b949",
+          "variantId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "sourceScope": "contract",
+          "sourceOwnerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                  "maxContainerSize": "-1",
+                  "minSCU": "10",
+                  "maxSCU": "10"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "10",
+                    "value": 10
+                  },
+                  "maxSCU": {
+                    "raw": "10",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "98aa6a70-80e7-41d7-9128-9692053d57a2",
+                  "maxContainerSize": "-1",
+                  "minSCU": "6",
+                  "maxSCU": "6"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "98aa6a70-80e7-41d7-9128-9692053d57a2"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "-1",
+                    "value": -1
+                  },
+                  "minSCU": {
+                    "raw": "6",
+                    "value": 6
+                  },
+                  "maxSCU": {
+                    "raw": "6",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S03_S04",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S3_S4_Name",
+                  "displayName": "Ship Weapon (S3 or S4)",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipgun_s03_s04.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "95c85f25-ccd9-402e-b02a-522f5a97a654",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S3",
+                      "displayName": "Omnisky IX Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f15b742b-1457-4eb7-b7aa-078816297d29",
+                      "recordName": "EntityClassDefinition.BANU_TachyonCannon_S3",
+                      "displayName": "Singe Cannon (S3)",
+                      "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f72ca643-b48c-4f6e-abb7-d5bc8eb261aa",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S3",
+                      "displayName": "M5A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4e2b431e-916b-479b-9617-86e7e53a431a",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S3",
+                      "displayName": "Lightstrike III Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e09590d1-13a0-4d25-ad89-3dfc18a61c4a",
+                      "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S3",
+                      "displayName": "Suckerpunch-XL Cannon",
+                      "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
+                      "recordName": "EntityClassDefinition.KLWE_MassDriver_S3",
+                      "displayName": "Sledge III Mass Driver Cannon",
+                      "path": "entities/scitem/ships/weapons/klwe_massdriver_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
+                      "recordName": "EntityClassDefinition.KRIG_LaserCannon_S3",
+                      "displayName": "Quarreler Cannon",
+                      "path": "entities/scitem/ships/weapons/krig_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
+                      "recordName": "EntityClassDefinition.KRON_LaserCannon_S3",
+                      "displayName": "FL-33 Cannon",
+                      "path": "entities/scitem/ships/weapons/kron_lasercannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S3",
+                      "displayName": "NN-15 Cannon",
+                      "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2b261d0c-d208-4ab4-9217-ded64b8cb7cf",
+                      "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S3",
+                      "displayName": "'WARLORD' Cannon",
+                      "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2a787ee5-d720-4490-8823-65a0f8578f4b",
+                      "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S3",
+                      "displayName": "DR Model-XJ3 Repeater",
+                      "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S3",
+                      "displayName": "Attrition-3 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aa7c924e-3f3b-4cea-a948-77753e2b387e",
+                      "recordName": "EntityClassDefinition.HRST_Storm_LaserRepeater_S3",
+                      "displayName": "Reign-3 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_storm_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bd13235d-1261-4b71-b32f-aed1a8beb526",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S3",
+                      "displayName": "CF-337 Panther Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
+                      "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S3",
+                      "displayName": "NDB-30 Repeater",
+                      "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "47f6c5d4-32f6-4813-9a34-a55d3c2d8aac",
+                      "recordName": "EntityClassDefinition.NONE_LaserRepeater_S3",
+                      "displayName": "Ardor-3 Salvaged Repeater",
+                      "path": "entities/scitem/ships/weapons/none_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a9780953-9488-4644-9b56-61464e9dd6b9",
+                      "recordName": "EntityClassDefinition.TOAG_LaserRepeater_S3",
+                      "displayName": "Yeng’tu Repeater",
+                      "path": "entities/scitem/ships/weapons/toag_laserrepeater_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "93b774da-e792-4648-bf79-acfd8b5d0f9d",
+                      "recordName": "EntityClassDefinition.AMRS_AAgun_CC_S3",
+                      "displayName": "PyroBurst Scattergun",
+                      "path": "entities/scitem/ships/weapons/amrs_aagun_cc_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
+                      "recordName": "EntityClassDefinition.AMRS_ScatterGun_S3",
+                      "displayName": "PyroBurst Scattergun",
+                      "path": "entities/scitem/ships/weapons/amrs_scattergun_s3.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "52c1793e-5610-4daa-aafe-a8cf55e60283",
+                      "recordName": "EntityClassDefinition.BEHR_LaserCannon_S4",
+                      "displayName": "M6A Cannon",
+                      "path": "entities/scitem/ships/weapons/behr_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "cf57c4df-0fed-40bb-9771-10fc7853d8f9",
+                      "recordName": "EntityClassDefinition.AMRS_LaserCannon_S4",
+                      "displayName": "Omnisky XII Cannon",
+                      "path": "entities/scitem/ships/weapons/amrs_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "060aac99-514a-4689-b6f9-4a1461723427",
+                      "recordName": "EntityClassDefinition.ESPR_LaserCannon_S4",
+                      "displayName": "Lightstrike IV Cannon",
+                      "path": "entities/scitem/ships/weapons/espr_lasercannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8ddb6868-1ae3-4cad-a736-12ad739ead2b",
+                      "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S4",
+                      "displayName": "VNCL Gen 2 Plasma Cannon S4",
+                      "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8d868b78-eccd-4ba5-a4a5-57e2f20bdc35",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4",
+                      "displayName": "Attrition-4 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "7bd374e9-9d2f-4659-94cf-840e79d23b34",
+                      "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4_Turret",
+                      "displayName": "Attrition-4 Repeater",
+                      "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4_turret.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ecac1df2-4f6f-49df-9cce-f188d118a789",
+                      "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S4",
+                      "displayName": "CF-447 Rhino Repeater",
+                      "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s4.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "76706adf-4687-4a7a-aaf1-c44af0a5d2ca",
+                      "recordName": "EntityClassDefinition.PRAR_DistortionScatterGun_S4",
+                      "displayName": "Salvation Distortion Scattergun",
+                      "path": "entities/scitem/ships/weapons/prar_distortionscattergun_s4.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                  "minAmount": "4",
+                  "maxAmount": "4"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipMissileTorpedo",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Missile_Name",
+                  "displayName": "Ship Missile",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipmissiletorpedo.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "b86bd2f2-1f5e-4731-a286-74faa8cde646",
+                      "recordName": "EntityClassDefinition.MISL_S01_CS_FSKI_Spark",
+                      "displayName": "Spark I Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s01_cs_fski_spark.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "082c2ffb-1c54-45e5-90bf-f411d9a06425",
+                      "recordName": "EntityClassDefinition.MISL_S01_IR_VNCL_Arrow",
+                      "displayName": "'Arrow' I Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s01_ir_vncl_arrow.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "4317f2fc-4044-454e-8400-25c2e3c65136",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest",
+                      "displayName": "Tempest II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a655616b-772f-4760-b6a1-404497eb10ec",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest_CitCon",
+                      "displayName": "Tempest II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest_citcon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9b2c25cb-fc57-42b5-95cd-1ae89a622bd7",
+                      "recordName": "EntityClassDefinition.MISL_S02_CS_THCN_StrikeForce",
+                      "displayName": "StrikeForce II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_thcn_strikeforce.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "67d6efbd-6b65-49d9-b319-041dc6a2675a",
+                      "recordName": "EntityClassDefinition.MISL_S02_EM_TALN_Dominator",
+                      "displayName": "Dominator II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_em_taln_dominator.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d358cf84-9c78-4929-a2ad-b9caade81962",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_FSKI_Ignite",
+                      "displayName": "Ignite II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_fski_ignite.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "8acc8f1f-47cb-46e4-bf58-bea2ac5ff52e",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_NOVP_Rattler",
+                      "displayName": "Rattler II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_novp_rattler.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1754a3d4-4aa9-469d-8fb7-d8611bd3e9a1",
+                      "recordName": "EntityClassDefinition.MISL_S02_IR_VNCL_Bullet",
+                      "displayName": "'Bullet' II Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_vncl_bullet.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "dee6efca-71ef-438c-b762-624f9ce649f3",
+                      "recordName": "EntityClassDefinition.MISL_S03_CS_FSKI_Arrester",
+                      "displayName": "Arrester III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_cs_fski_arrester.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9a741b0a-200d-4f1a-92a8-f917510804e1",
+                      "recordName": "EntityClassDefinition.MISL_S03_EM_FSKI_Thunderbolt",
+                      "displayName": "Thunderbolt III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_em_fski_thunderbolt.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e5aa84b6-9b14-4eb3-949f-10e1cc8cd6cf",
+                      "recordName": "EntityClassDefinition.MISL_S03_IR_NOVP_Viper",
+                      "displayName": "Viper III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_novp_viper.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "d4408421-e939-4e34-9902-0644fa6934be",
+                      "recordName": "EntityClassDefinition.MISL_S03_IR_VNCL_Chaos",
+                      "displayName": "'Chaos' III Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_vncl_chaos.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ce8ef95e-edd9-45d7-8c21-5e644a8ba75e",
+                      "recordName": "EntityClassDefinition.MISL_S04_CS_TALN_Assailant",
+                      "displayName": "Assailant IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_cs_taln_assailant.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e1659bcf-0595-43ad-9376-386e4ca875e0",
+                      "recordName": "EntityClassDefinition.MISL_S04_EM_TALN_Raptor",
+                      "displayName": "Raptor IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_em_taln_raptor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "77dc28bf-0742-490f-ac49-1d430cb6b48f",
+                      "recordName": "EntityClassDefinition.MISL_S04_IR_BEHR_Pathfinder",
+                      "displayName": "Pathfinder IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_behr_pathfinder.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bc9adaf0-90a2-45e8-ba1d-5e0b56a76c92",
+                      "recordName": "EntityClassDefinition.MISL_S04_IR_VNCL_Dragon",
+                      "displayName": "'Dragon' IV Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_vncl_dragon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "9d2d7b0d-9f54-4fe1-8bff-c6ea2a5af5d3",
+                      "recordName": "EntityClassDefinition.MISL_S05_CS_TALN_Stalker",
+                      "displayName": "Stalker V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_cs_taln_stalker.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "918ad61c-ea99-4040-b05a-a42cd5436aed",
+                      "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Reaper",
+                      "displayName": "Reaper V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_reaper.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ffcf3d55-bc12-4244-b3c9-ebd709c5cd2e",
+                      "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Scimitar",
+                      "displayName": "Scimitar V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_scimitar.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "b74c05cb-0f60-403a-92cf-663a12268830",
+                      "recordName": "EntityClassDefinition.MISL_S05_IR_TALN_Valkyrie",
+                      "displayName": "Valkyrie V Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s05_ir_taln_valkyrie.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "05f82726-6339-46e0-b8d4-c6b81a1db51c",
+                      "recordName": "EntityClassDefinition.MISL_S07_IR_TALN_Hellion",
+                      "displayName": "Hellion VII Missile",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s07_ir_taln_hellion.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c01675d6-ad02-4c2d-b4a8-53b4a0b145dd",
+                      "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos",
+                      "displayName": "Argos IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "5bdd509f-93eb-4638-83a9-dfcaae0c91ad",
+                      "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos_2",
+                      "displayName": "MISL S09 CS TALN Argos 2",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos_2.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "a53527ab-3c28-460d-bc96-dcfac76f1463",
+                      "recordName": "EntityClassDefinition.MISL_S09_EM_TALN_Seeker",
+                      "displayName": "Seeker IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_em_taln_seeker.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "e26d0f6d-4ada-4eb0-9843-1b4d03178f90",
+                      "recordName": "EntityClassDefinition.MISL_S09_IR_TALN_Typhoon",
+                      "displayName": "Typhoon IX Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s09_ir_taln_typhoon.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "7c23b548-bf60-42ca-a377-b8afa1a6763c",
+                      "recordName": "EntityClassDefinition.MISL_S10_CS_BEHR_Executor",
+                      "displayName": "EX-T10-CS \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3e1b8bfb-07d1-49b8-8f6a-834f0be6f320",
+                      "recordName": "EntityClassDefinition.MISL_S10_CS_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-CS Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2745623e-6ff5-4191-b95b-46c1dfbce795",
+                      "recordName": "EntityClassDefinition.MISL_S10_EM_BEHR_Executor",
+                      "displayName": "EX-T10-EM \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "c9c196a4-f0ec-4400-912f-4682b87f6dd4",
+                      "recordName": "EntityClassDefinition.MISL_S10_EM_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-EM Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "ad1356d1-384d-4368-916c-5af6b8ec91a3",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Executor",
+                      "displayName": "EX-T10-IR \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "bcdd8022-c2f4-49d0-8528-e4a3a7a01a03",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Torpedo",
+                      "displayName": "VT-T10 \"Veritas\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_torpedo.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f513c4cc-964b-429f-b245-f89c6154ad79",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_TALN_Vanquisher",
+                      "displayName": "Vanquisher X-IR Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_taln_vanquisher.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "3be04d51-971d-42e3-b741-a5b28e177e38",
+                      "recordName": "EntityClassDefinition.MISL_S10_IR_VNCL_Cleaver",
+                      "displayName": "Vanduul Cleaver",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_vncl_cleaver.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "39ac8279-45af-4f67-9156-169ff51b0e10",
+                      "recordName": "EntityClassDefinition.MISL_S12_CS_BEHR_Executor",
+                      "displayName": "EX-T12-CS \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "610b44d6-7ad5-4ea8-a1f3-f1f60d220588",
+                      "recordName": "EntityClassDefinition.MISL_S12_CS_TALN_Calamity",
+                      "displayName": "Calamity XII-CS Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_taln_calamity.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f3a369d7-b39a-4ab0-9265-224d994bb5bd",
+                      "recordName": "EntityClassDefinition.MISL_S12_EM_BEHR_Executor",
+                      "displayName": "EX-T12-EM \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "f253a14d-26a1-4087-9b4a-2b2d96a179fc",
+                      "recordName": "EntityClassDefinition.MISL_S12_EM_TALN_Calamity",
+                      "displayName": "Calamity XII-EM Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_taln_calamity.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "eda2bcfa-58cf-4225-af77-bc2b1ba0a8d7",
+                      "recordName": "EntityClassDefinition.MISL_S12_IR_BEHR_Executor",
+                      "displayName": "EX-T12-IR \"Executor\" Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_behr_executor.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "6f012007-659b-4746-917f-e6effa713804",
+                      "recordName": "EntityClassDefinition.MISL_S12_IR_TALN_Calamity",
+                      "displayName": "Calamity XII-IR Torpedo",
+                      "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_taln_calamity.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxAmount": {
+                    "raw": "4",
+                    "value": 4
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrderContent_EntityClasses",
+                "rawAttributes": {
+                  "haulingEntityClasses": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                  "minAmount": "2",
+                  "maxAmount": "2"
+                },
+                "type": "entity_class_set",
+                "identity": {
+                  "status": "resolved_set",
+                  "guid": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                  "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipBombs",
+                  "displayNameRaw": "@Salvage_Ship_Component_Ship_Bomb_Name",
+                  "displayName": "Ship Bomb",
+                  "path": "entities/haulingentityclass/haulingentityclass_shipbombs.xml",
+                  "members": [
+                    {
+                      "status": "resolved",
+                      "guid": "3c3f79ae-acb2-4472-a08d-2ddb1afcc700",
+                      "recordName": "EntityClassDefinition.BOMB_S03_FSKI_Thunderball",
+                      "displayName": "Thunderball Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s03_fski_thunderball.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "1b95523e-e2de-4de9-9b41-2cf79bfae59a",
+                      "recordName": "EntityClassDefinition.BOMB_S05_FSKI",
+                      "displayName": "Stormburst Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s05_fski.xml"
+                    },
+                    {
+                      "status": "resolved",
+                      "guid": "2b8a744d-c0a0-4f92-b0e6-bf4ae077cc11",
+                      "recordName": "EntityClassDefinition.BOMB_S10_FSKI_Colossus",
+                      "displayName": "Colossus Bomb",
+                      "path": "entities/scitem/ships/weapons/missiles/bomb_s10_fski_colossus.xml"
+                    }
+                  ]
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxAmount": {
+                    "raw": "2",
+                    "value": 2
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank1']/contracts/CareerContract[@id='28e535c8-740f-47cc-adcb-6238a0b5b724']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "a0e6c4cf-face-4f52-a020-dfa869607901",
+                    "maxContainerSize": "-1",
+                    "minSCU": "10",
+                    "maxSCU": "10"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "a0e6c4cf-face-4f52-a020-dfa869607901"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "10",
+                      "value": 10
+                    },
+                    "maxSCU": {
+                      "raw": "10",
+                      "value": 10
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "98aa6a70-80e7-41d7-9128-9692053d57a2",
+                    "maxContainerSize": "-1",
+                    "minSCU": "6",
+                    "maxSCU": "6"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "98aa6a70-80e7-41d7-9128-9692053d57a2"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "-1",
+                      "value": -1
+                    },
+                    "minSCU": {
+                      "raw": "6",
+                      "value": 6
+                    },
+                    "maxSCU": {
+                      "raw": "6",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "ordinal": 2,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "cb4066db-cf7c-49d5-9e77-8229e0772188",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipGun_S03_S04",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Weapon_S3_S4_Name",
+                    "displayName": "Ship Weapon (S3 or S4)",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipgun_s03_s04.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "95c85f25-ccd9-402e-b02a-522f5a97a654",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S3",
+                        "displayName": "Omnisky IX Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f15b742b-1457-4eb7-b7aa-078816297d29",
+                        "recordName": "EntityClassDefinition.BANU_TachyonCannon_S3",
+                        "displayName": "Singe Cannon (S3)",
+                        "path": "entities/scitem/ships/weapons/banu_tachyoncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f72ca643-b48c-4f6e-abb7-d5bc8eb261aa",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S3",
+                        "displayName": "M5A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4e2b431e-916b-479b-9617-86e7e53a431a",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S3",
+                        "displayName": "Lightstrike III Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e09590d1-13a0-4d25-ad89-3dfc18a61c4a",
+                        "recordName": "EntityClassDefinition.JOKR_DistortionCannon_S3",
+                        "displayName": "Suckerpunch-XL Cannon",
+                        "path": "entities/scitem/ships/weapons/jokr_distortioncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
+                        "recordName": "EntityClassDefinition.KLWE_MassDriver_S3",
+                        "displayName": "Sledge III Mass Driver Cannon",
+                        "path": "entities/scitem/ships/weapons/klwe_massdriver_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
+                        "recordName": "EntityClassDefinition.KRIG_LaserCannon_S3",
+                        "displayName": "Quarreler Cannon",
+                        "path": "entities/scitem/ships/weapons/krig_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
+                        "recordName": "EntityClassDefinition.KRON_LaserCannon_S3",
+                        "displayName": "FL-33 Cannon",
+                        "path": "entities/scitem/ships/weapons/kron_lasercannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronCannon_S3",
+                        "displayName": "NN-15 Cannon",
+                        "path": "entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2b261d0c-d208-4ab4-9217-ded64b8cb7cf",
+                        "recordName": "EntityClassDefinition.VNCL_PlasmaCannon_S3",
+                        "displayName": "'WARLORD' Cannon",
+                        "path": "entities/scitem/ships/weapons/vncl_plasmacannon_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2a787ee5-d720-4490-8823-65a0f8578f4b",
+                        "recordName": "EntityClassDefinition.ASAD_DistortionRepeater_S3",
+                        "displayName": "DR Model-XJ3 Repeater",
+                        "path": "entities/scitem/ships/weapons/asad_distortionrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S3",
+                        "displayName": "Attrition-3 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aa7c924e-3f3b-4cea-a948-77753e2b387e",
+                        "recordName": "EntityClassDefinition.HRST_Storm_LaserRepeater_S3",
+                        "displayName": "Reign-3 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_storm_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bd13235d-1261-4b71-b32f-aed1a8beb526",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S3",
+                        "displayName": "CF-337 Panther Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
+                        "recordName": "EntityClassDefinition.MXOX_NeutronRepeater_S3",
+                        "displayName": "NDB-30 Repeater",
+                        "path": "entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "47f6c5d4-32f6-4813-9a34-a55d3c2d8aac",
+                        "recordName": "EntityClassDefinition.NONE_LaserRepeater_S3",
+                        "displayName": "Ardor-3 Salvaged Repeater",
+                        "path": "entities/scitem/ships/weapons/none_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a9780953-9488-4644-9b56-61464e9dd6b9",
+                        "recordName": "EntityClassDefinition.TOAG_LaserRepeater_S3",
+                        "displayName": "Yeng’tu Repeater",
+                        "path": "entities/scitem/ships/weapons/toag_laserrepeater_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "93b774da-e792-4648-bf79-acfd8b5d0f9d",
+                        "recordName": "EntityClassDefinition.AMRS_AAgun_CC_S3",
+                        "displayName": "PyroBurst Scattergun",
+                        "path": "entities/scitem/ships/weapons/amrs_aagun_cc_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
+                        "recordName": "EntityClassDefinition.AMRS_ScatterGun_S3",
+                        "displayName": "PyroBurst Scattergun",
+                        "path": "entities/scitem/ships/weapons/amrs_scattergun_s3.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "52c1793e-5610-4daa-aafe-a8cf55e60283",
+                        "recordName": "EntityClassDefinition.BEHR_LaserCannon_S4",
+                        "displayName": "M6A Cannon",
+                        "path": "entities/scitem/ships/weapons/behr_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "cf57c4df-0fed-40bb-9771-10fc7853d8f9",
+                        "recordName": "EntityClassDefinition.AMRS_LaserCannon_S4",
+                        "displayName": "Omnisky XII Cannon",
+                        "path": "entities/scitem/ships/weapons/amrs_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "060aac99-514a-4689-b6f9-4a1461723427",
+                        "recordName": "EntityClassDefinition.ESPR_LaserCannon_S4",
+                        "displayName": "Lightstrike IV Cannon",
+                        "path": "entities/scitem/ships/weapons/espr_lasercannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8ddb6868-1ae3-4cad-a736-12ad739ead2b",
+                        "recordName": "EntityClassDefinition.VNCL_Gen2_PlasmaCannon_S4",
+                        "displayName": "VNCL Gen 2 Plasma Cannon S4",
+                        "path": "entities/scitem/ships/weapons/vncl_gen2_plasmacannon_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8d868b78-eccd-4ba5-a4a5-57e2f20bdc35",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4",
+                        "displayName": "Attrition-4 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "7bd374e9-9d2f-4659-94cf-840e79d23b34",
+                        "recordName": "EntityClassDefinition.HRST_LaserRepeater_S4_Turret",
+                        "displayName": "Attrition-4 Repeater",
+                        "path": "entities/scitem/ships/weapons/hrst_laserrepeater_s4_turret.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ecac1df2-4f6f-49df-9cce-f188d118a789",
+                        "recordName": "EntityClassDefinition.KLWE_LaserRepeater_S4",
+                        "displayName": "CF-447 Rhino Repeater",
+                        "path": "entities/scitem/ships/weapons/klwe_laserrepeater_s4.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "76706adf-4687-4a7a-aaf1-c44af0a5d2ca",
+                        "recordName": "EntityClassDefinition.PRAR_DistortionScatterGun_S4",
+                        "displayName": "Salvation Distortion Scattergun",
+                        "path": "entities/scitem/ships/weapons/prar_distortionscattergun_s4.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                },
+                {
+                  "ordinal": 3,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                    "minAmount": "4",
+                    "maxAmount": "4"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "3d4eace5-2827-4437-84a7-b38322d9fc40",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipMissileTorpedo",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Missile_Name",
+                    "displayName": "Ship Missile",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipmissiletorpedo.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "b86bd2f2-1f5e-4731-a286-74faa8cde646",
+                        "recordName": "EntityClassDefinition.MISL_S01_CS_FSKI_Spark",
+                        "displayName": "Spark I Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s01_cs_fski_spark.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "082c2ffb-1c54-45e5-90bf-f411d9a06425",
+                        "recordName": "EntityClassDefinition.MISL_S01_IR_VNCL_Arrow",
+                        "displayName": "'Arrow' I Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s01_ir_vncl_arrow.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "4317f2fc-4044-454e-8400-25c2e3c65136",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest",
+                        "displayName": "Tempest II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a655616b-772f-4760-b6a1-404497eb10ec",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_FSKI_Tempest_CitCon",
+                        "displayName": "Tempest II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_fski_tempest_citcon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9b2c25cb-fc57-42b5-95cd-1ae89a622bd7",
+                        "recordName": "EntityClassDefinition.MISL_S02_CS_THCN_StrikeForce",
+                        "displayName": "StrikeForce II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_cs_thcn_strikeforce.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "67d6efbd-6b65-49d9-b319-041dc6a2675a",
+                        "recordName": "EntityClassDefinition.MISL_S02_EM_TALN_Dominator",
+                        "displayName": "Dominator II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_em_taln_dominator.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d358cf84-9c78-4929-a2ad-b9caade81962",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_FSKI_Ignite",
+                        "displayName": "Ignite II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_fski_ignite.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "8acc8f1f-47cb-46e4-bf58-bea2ac5ff52e",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_NOVP_Rattler",
+                        "displayName": "Rattler II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_novp_rattler.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1754a3d4-4aa9-469d-8fb7-d8611bd3e9a1",
+                        "recordName": "EntityClassDefinition.MISL_S02_IR_VNCL_Bullet",
+                        "displayName": "'Bullet' II Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s02_ir_vncl_bullet.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "dee6efca-71ef-438c-b762-624f9ce649f3",
+                        "recordName": "EntityClassDefinition.MISL_S03_CS_FSKI_Arrester",
+                        "displayName": "Arrester III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_cs_fski_arrester.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9a741b0a-200d-4f1a-92a8-f917510804e1",
+                        "recordName": "EntityClassDefinition.MISL_S03_EM_FSKI_Thunderbolt",
+                        "displayName": "Thunderbolt III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_em_fski_thunderbolt.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e5aa84b6-9b14-4eb3-949f-10e1cc8cd6cf",
+                        "recordName": "EntityClassDefinition.MISL_S03_IR_NOVP_Viper",
+                        "displayName": "Viper III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_novp_viper.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "d4408421-e939-4e34-9902-0644fa6934be",
+                        "recordName": "EntityClassDefinition.MISL_S03_IR_VNCL_Chaos",
+                        "displayName": "'Chaos' III Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s03_ir_vncl_chaos.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ce8ef95e-edd9-45d7-8c21-5e644a8ba75e",
+                        "recordName": "EntityClassDefinition.MISL_S04_CS_TALN_Assailant",
+                        "displayName": "Assailant IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_cs_taln_assailant.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e1659bcf-0595-43ad-9376-386e4ca875e0",
+                        "recordName": "EntityClassDefinition.MISL_S04_EM_TALN_Raptor",
+                        "displayName": "Raptor IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_em_taln_raptor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "77dc28bf-0742-490f-ac49-1d430cb6b48f",
+                        "recordName": "EntityClassDefinition.MISL_S04_IR_BEHR_Pathfinder",
+                        "displayName": "Pathfinder IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_behr_pathfinder.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bc9adaf0-90a2-45e8-ba1d-5e0b56a76c92",
+                        "recordName": "EntityClassDefinition.MISL_S04_IR_VNCL_Dragon",
+                        "displayName": "'Dragon' IV Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s04_ir_vncl_dragon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "9d2d7b0d-9f54-4fe1-8bff-c6ea2a5af5d3",
+                        "recordName": "EntityClassDefinition.MISL_S05_CS_TALN_Stalker",
+                        "displayName": "Stalker V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_cs_taln_stalker.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "918ad61c-ea99-4040-b05a-a42cd5436aed",
+                        "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Reaper",
+                        "displayName": "Reaper V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_reaper.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ffcf3d55-bc12-4244-b3c9-ebd709c5cd2e",
+                        "recordName": "EntityClassDefinition.MISL_S05_EM_TALN_Scimitar",
+                        "displayName": "Scimitar V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_em_taln_scimitar.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "b74c05cb-0f60-403a-92cf-663a12268830",
+                        "recordName": "EntityClassDefinition.MISL_S05_IR_TALN_Valkyrie",
+                        "displayName": "Valkyrie V Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s05_ir_taln_valkyrie.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "05f82726-6339-46e0-b8d4-c6b81a1db51c",
+                        "recordName": "EntityClassDefinition.MISL_S07_IR_TALN_Hellion",
+                        "displayName": "Hellion VII Missile",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s07_ir_taln_hellion.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c01675d6-ad02-4c2d-b4a8-53b4a0b145dd",
+                        "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos",
+                        "displayName": "Argos IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "5bdd509f-93eb-4638-83a9-dfcaae0c91ad",
+                        "recordName": "EntityClassDefinition.MISL_S09_CS_TALN_Argos_2",
+                        "displayName": "MISL S09 CS TALN Argos 2",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_cs_taln_argos_2.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "a53527ab-3c28-460d-bc96-dcfac76f1463",
+                        "recordName": "EntityClassDefinition.MISL_S09_EM_TALN_Seeker",
+                        "displayName": "Seeker IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_em_taln_seeker.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "e26d0f6d-4ada-4eb0-9843-1b4d03178f90",
+                        "recordName": "EntityClassDefinition.MISL_S09_IR_TALN_Typhoon",
+                        "displayName": "Typhoon IX Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s09_ir_taln_typhoon.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "7c23b548-bf60-42ca-a377-b8afa1a6763c",
+                        "recordName": "EntityClassDefinition.MISL_S10_CS_BEHR_Executor",
+                        "displayName": "EX-T10-CS \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3e1b8bfb-07d1-49b8-8f6a-834f0be6f320",
+                        "recordName": "EntityClassDefinition.MISL_S10_CS_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-CS Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_cs_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2745623e-6ff5-4191-b95b-46c1dfbce795",
+                        "recordName": "EntityClassDefinition.MISL_S10_EM_BEHR_Executor",
+                        "displayName": "EX-T10-EM \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "c9c196a4-f0ec-4400-912f-4682b87f6dd4",
+                        "recordName": "EntityClassDefinition.MISL_S10_EM_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-EM Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_em_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "ad1356d1-384d-4368-916c-5af6b8ec91a3",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Executor",
+                        "displayName": "EX-T10-IR \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "bcdd8022-c2f4-49d0-8528-e4a3a7a01a03",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_BEHR_Torpedo",
+                        "displayName": "VT-T10 \"Veritas\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_behr_torpedo.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f513c4cc-964b-429f-b245-f89c6154ad79",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_TALN_Vanquisher",
+                        "displayName": "Vanquisher X-IR Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_taln_vanquisher.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "3be04d51-971d-42e3-b741-a5b28e177e38",
+                        "recordName": "EntityClassDefinition.MISL_S10_IR_VNCL_Cleaver",
+                        "displayName": "Vanduul Cleaver",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s10_ir_vncl_cleaver.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "39ac8279-45af-4f67-9156-169ff51b0e10",
+                        "recordName": "EntityClassDefinition.MISL_S12_CS_BEHR_Executor",
+                        "displayName": "EX-T12-CS \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "610b44d6-7ad5-4ea8-a1f3-f1f60d220588",
+                        "recordName": "EntityClassDefinition.MISL_S12_CS_TALN_Calamity",
+                        "displayName": "Calamity XII-CS Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_cs_taln_calamity.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f3a369d7-b39a-4ab0-9265-224d994bb5bd",
+                        "recordName": "EntityClassDefinition.MISL_S12_EM_BEHR_Executor",
+                        "displayName": "EX-T12-EM \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "f253a14d-26a1-4087-9b4a-2b2d96a179fc",
+                        "recordName": "EntityClassDefinition.MISL_S12_EM_TALN_Calamity",
+                        "displayName": "Calamity XII-EM Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_em_taln_calamity.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "eda2bcfa-58cf-4225-af77-bc2b1ba0a8d7",
+                        "recordName": "EntityClassDefinition.MISL_S12_IR_BEHR_Executor",
+                        "displayName": "EX-T12-IR \"Executor\" Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_behr_executor.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "6f012007-659b-4746-917f-e6effa713804",
+                        "recordName": "EntityClassDefinition.MISL_S12_IR_TALN_Calamity",
+                        "displayName": "Calamity XII-IR Torpedo",
+                        "path": "entities/scitem/ships/weapons/missiles/misl_s12_ir_taln_calamity.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "4",
+                      "value": 4
+                    },
+                    "maxAmount": {
+                      "raw": "4",
+                      "value": 4
+                    }
+                  }
+                },
+                {
+                  "ordinal": 4,
+                  "sourceElement": "HaulingOrderContent_EntityClasses",
+                  "rawAttributes": {
+                    "haulingEntityClasses": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                    "minAmount": "2",
+                    "maxAmount": "2"
+                  },
+                  "type": "entity_class_set",
+                  "identity": {
+                    "status": "resolved_set",
+                    "guid": "53af88dc-5874-488f-b75f-15d06f5c7340",
+                    "recordName": "Hauling_EntityClasses.HaulingEntityClass_ShipBombs",
+                    "displayNameRaw": "@Salvage_Ship_Component_Ship_Bomb_Name",
+                    "displayName": "Ship Bomb",
+                    "path": "entities/haulingentityclass/haulingentityclass_shipbombs.xml",
+                    "members": [
+                      {
+                        "status": "resolved",
+                        "guid": "3c3f79ae-acb2-4472-a08d-2ddb1afcc700",
+                        "recordName": "EntityClassDefinition.BOMB_S03_FSKI_Thunderball",
+                        "displayName": "Thunderball Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s03_fski_thunderball.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "1b95523e-e2de-4de9-9b41-2cf79bfae59a",
+                        "recordName": "EntityClassDefinition.BOMB_S05_FSKI",
+                        "displayName": "Stormburst Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s05_fski.xml"
+                      },
+                      {
+                        "status": "resolved",
+                        "guid": "2b8a744d-c0a0-4f92-b0e6-bf4ae077cc11",
+                        "recordName": "EntityClassDefinition.BOMB_S10_FSKI_Colossus",
+                        "displayName": "Colossus Bomb",
+                        "path": "entities/scitem/ships/weapons/missiles/bomb_s10_fski_colossus.xml"
+                      }
+                    ]
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxAmount": {
+                      "raw": "2",
+                      "value": 2
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='Adagio_RG_ShipSalvage_Rank1']/contracts/CareerContract[@id='28e535c8-740f-47cc-adcb-6238a0b5b724']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "28e535c8-740f-47cc-adcb-6238a0b5b724",
+      "generatorGuid": "e29eae76-5a8a-4577-8c6a-f943a46aae90",
+      "generatorName": "ContractGenerator.Adagio_ResourceGathering_ShipSalvage",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_resourcegathering_shipsalvage.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Adagio_Industrial_Component_Salvage_Pyro_M_Title_001",
+      "descriptionRaw": "@Adagio_Industrial_Component_Salvage_Pyro_M_Desc_001"
+    }
+  }
+}

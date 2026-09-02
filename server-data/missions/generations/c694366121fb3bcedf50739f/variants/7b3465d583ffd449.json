@@ -1,0 +1,2250 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "1171e04a-0739-4bb0-8a10-b048aa7d4ebb|BitZeros_BlackBoxRecovery_Space_Stanton_Career",
+  "variant": {
+    "variantKey": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+    "familyKey": "1171e04a-0739-4bb0-8a10-b048aa7d4ebb|BitZeros_BlackBoxRecovery_Space_Stanton_Career",
+    "conceptKey": "2c66f370035271b9be8d",
+    "objectiveSignature": {
+      "key": "0ccbc88a-a578-460c-8a7f-9054fa84ee20|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:8fd403a737ad|unknown:unknown||||variant:e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+      "activityKey": "unknown",
+      "titleStem": "blackbox-recover",
+      "descriptionStem": "blackbox-recover",
+      "handlerStem": "bit-zeros-black-box-recovery-space",
+      "archetype": "Recovery",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:8fd403a737ad",
+      "legalState": "unknown:unknown",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:blackbox-recover",
+        "description:blackbox-recover",
+        "handler:bit-zeros-black-box-recovery-space",
+        "contract:careercontract",
+        "archetype:recovery",
+        "intro:standard",
+        "chain:unlock:8fd403a737ad",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "medium",
+    "tierLabel": "Medium Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Recovery"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Bit Zeros Black Box Recovery Stanton Medium",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "briefing": "[Contractor]",
+    "rawName": "@blackbox_recover_title_M_001",
+    "internalName": "BitZeros_BlackBoxRecovery_Stanton_Medium",
+    "missionType": "CareerContract",
+    "provider": "Bit Zeros",
+    "faction": "Bit Zeros",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+      "factionDisplayName": "Bit Zeros",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Recovery",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Stanton Star; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star, Stanton 1",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star, Stanton 1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Bit Zeros Black Box Recovery: Lumin V SMG, Arrowhead Sniper Rifle, Aves Arms, Aves Core +8",
+        "Standing +150",
+        "43,500 aUEC"
+      ],
+      "blueprintRewards": [
+        "Bit Zeros Black Box Recovery: Lumin V SMG, Arrowhead Sniper Rifle, Aves Arms, Aves Core +8"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "4937f5e9-f42e-4d8a-a6c4-96517028c548",
+          "poolName": "Bit Zeros Black Box Recovery",
+          "rewardCount": 12,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "8.33% chance - 1 of 12",
+          "rewards": [
+            {
+              "blueprintGuid": "65011209-ad59-4d41-99da-ffbc8f174863",
+              "displayName": "Lumin V SMG",
+              "componentType": "weapons",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "29c905e3-d7e3-413b-aa11-e739e370ec41",
+              "displayName": "Arrowhead Sniper Rifle",
+              "componentType": "weapons",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "87e05846-69fd-4328-a809-5fd78c31c86c",
+              "displayName": "Aves Arms",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "410c4762-383c-4d52-a8ee-89c38c13219f",
+              "displayName": "Aves Core",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "ead349bb-2dfb-47b9-b10c-f7dbff6fbb52",
+              "displayName": "Aves Legs",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "449cdf79-e7af-4ca3-b30e-db136056a079",
+              "displayName": "Aves Helmet",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "7a30e39c-bb49-492f-89cf-7d9711fbb54a",
+              "displayName": "Aves Shrike Core",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "e940e198-e2df-4e00-96d5-5a076e6e7a36",
+              "displayName": "Aves Shrike Arms",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "442c80ef-8e5e-411e-8364-737d5d17e4d7",
+              "displayName": "Aves Shrike Legs",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "045a6cb0-6231-46cb-97b5-fa980b95f4b2",
+              "displayName": "Aves Shrike Helmet",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "48acd0ca-9877-4218-9662-cb5b6f5a211a",
+              "displayName": "Lumin V SMG Battery (45 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "28b6825f-e1ae-4b4f-b8fe-ac31367679f0",
+              "displayName": "Arrowhead Sniper Rifle Battery (16 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "8.33% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +150"
+      ],
+      "credits": "43,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "43,500 aUEC",
+        "amount": 43500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 43500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 43500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+        "factionDisplayName": "Bit Zeros",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 150,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+        "familyId": "1171e04a-0739-4bb0-8a10-b048aa7d4ebb|BitZeros_BlackBoxRecovery_Space_Stanton_Career",
+        "templateGuid": "0500f5c6-4deb-4b0c-acd1-77b25841c0c4"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_8dec2ab8b75fc5673d83cf53",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "BitZeros_BlackBoxRecovery_Space_Stanton_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_2382f87498b3c628e3cb0380",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_3e9b53d8339da5944b0fad72",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "e0d17791-d049-4de2-b9b3-e1bc7e090b04"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_268779f3bae7ab44f6ba3fad",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "e0d17791-d049-4de2-b9b3-e1bc7e090b04"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "f4d66f6f-961a-4586-9e2a-207f61cdd912": [
+          {
+            "edgeId": "pre_81661d5ed8b76405160be717",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "f4d66f6f-961a-4586-9e2a-207f61cdd912",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "f4d66f6f-961a-4586-9e2a-207f61cdd912"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_96dacc4d8aedee3f76aeebaf",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "f4d66f6f-961a-4586-9e2a-207f61cdd912",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_5a845a53282a6957618df1cc",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "f4d66f6f-961a-4586-9e2a-207f61cdd912"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "928bfaa7-6861-40ea-b484-6cda85beeb84": [
+          {
+            "edgeId": "pre_d31689543cedebd4ef52d874",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "928bfaa7-6861-40ea-b484-6cda85beeb84",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "928bfaa7-6861-40ea-b484-6cda85beeb84"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_eb837dcf79c9cce002e3b8da",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "928bfaa7-6861-40ea-b484-6cda85beeb84",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_b9efcffcd93344c6819b35dc",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "928bfaa7-6861-40ea-b484-6cda85beeb84"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ],
+        "6946f527-9941-4378-b340-53c8d772a72e": [
+          {
+            "edgeId": "pre_e5587c15188d0890f7719f2a",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "6946f527-9941-4378-b340-53c8d772a72e",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "6946f527-9941-4378-b340-53c8d772a72e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_1f0a5c81ae35cdbada9f6281",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "ownerScope": "subcontract",
+            "ownerId": "6946f527-9941-4378-b340-53c8d772a72e",
+            "type": "completion_tag",
+            "polarity": "required",
+            "identifiers": {
+              "completionTag": "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_877cb11964f5a034d5ae8c10",
+                "polarity": "required",
+                "memberCompletionTags": [
+                  "34a1881d-c81e-4454-b1f9-1ac79e4cff97"
+                ],
+                "countField": "requiredCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "6946f527-9941-4378-b340-53c8d772a72e"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_eec291f477f6888d658bda2a",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "4937f5e9-f42e-4d8a-a6c4-96517028c548",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_caae78877b1205afe038fb8c",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_57441a57eb2232b8dd15479e",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 43500,
+              "amount": 43500,
+              "rawAmount": 43488.077000574594,
+              "integerRoundedAmount": 43488,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.56,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "12",
+                "value": 12,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "0500f5c6-4deb-4b0c-acd1-77b25841c0c4",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/courier_goto_shipcombatencounter_exclocker.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/courier_goto_shipcombatencounter_exclocker.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@BitZeros_RepUI_DisplayName",
+          "displayText": "Bit Zeros",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_BitZeros",
+          "recordType": null,
+          "displayName": "Bit Zeros",
+          "path": "factions/factionreputation/factionreputation_unlawful_bitzeros.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@blackbox_recover_title_M_001",
+          "localizationKey": "blackbox_recover_title_M_001",
+          "template": "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+          "displayText": "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Contractor|BlackBoxRecoverTitleMedium)",
+              "expression": "Contractor|BlackBoxRecoverTitleMedium",
+              "segments": [
+                "Contractor",
+                "BlackBoxRecoverTitleMedium"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "conflict"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "requirements": [
+              {
+                "edgeId": "pre_8dec2ab8b75fc5673d83cf53",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "BitZeros_BlackBoxRecovery_Space_Stanton_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_268779f3bae7ab44f6ba3fad",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "e0d17791-d049-4de2-b9b3-e1bc7e090b04"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "f4d66f6f-961a-4586-9e2a-207f61cdd912",
+            "requirements": [
+              {
+                "edgeId": "pre_81661d5ed8b76405160be717",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "f4d66f6f-961a-4586-9e2a-207f61cdd912"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "928bfaa7-6861-40ea-b484-6cda85beeb84",
+            "requirements": [
+              {
+                "edgeId": "pre_d31689543cedebd4ef52d874",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "928bfaa7-6861-40ea-b484-6cda85beeb84"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "6946f527-9941-4378-b340-53c8d772a72e",
+            "requirements": [
+              {
+                "edgeId": "pre_e5587c15188d0890f7719f2a",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "6946f527-9941-4378-b340-53c8d772a72e"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 43500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 43500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_eec291f477f6888d658bda2a",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "4937f5e9-f42e-4d8a-a6c4-96517028c548",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_caae78877b1205afe038fb8c",
+            "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 43500,
+              "amount": 43500,
+              "rawAmount": 43488.077000574594,
+              "integerRoundedAmount": 43488,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.56,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "12",
+                "value": 12,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 43500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 43500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "0ccbc88a-a578-460c-8a7f-9054fa84ee20",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_7a06cbf6c5358e955bdb0b9f",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceScope": "contract",
+          "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "bound_to_objective_order",
+          "requirementStatus": "source_backed_objective_selector",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "12b8210a-ba02-4794-abd1-c868d486c32d",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Blackbox",
+                    "path": "missiondata/pu_items/carryable_2h/blackbox.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                      "displayName": "Flight Recorder",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                    },
+                    "displayName": "Flight Recorder",
+                    "tags": [
+                      "f393a2eb-bd39-4536-83ef-560e8ea3b383",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0082"
+                      },
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0084"
+                      },
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0087"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_e516533cdc2abf9832cf8ff7",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceScope": "contract",
+          "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceOrdinal": 5,
+          "missionVariableName": "HaulingOrderContent",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "bound_to_unique_variant_selector",
+                  "reference": {
+                    "raw": "MissionProperty[42D9]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  },
+                  "resolutionMethod": "owner_scoped_unique_selector",
+                  "missionItemDefinitionGuid": "12b8210a-ba02-4794-abd1-c868d486c32d"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                },
+                "identity": {
+                  "status": "resolved",
+                  "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                  "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                  "displayName": "Flight Recorder",
+                  "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "12b8210a-ba02-4794-abd1-c868d486c32d",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Blackbox",
+                      "path": "missiondata/pu_items/carryable_2h/blackbox.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                        "displayName": "Flight Recorder",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                      },
+                      "displayName": "Flight Recorder",
+                      "tags": [
+                        "f393a2eb-bd39-4536-83ef-560e8ea3b383",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0082"
+                        },
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0084"
+                        },
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0087"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "sourceOrdinal": 5,
+            "missionVariableName": "HaulingOrderContent",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "bound_to_unique_variant_selector",
+                    "reference": {
+                      "raw": "MissionProperty[42D9]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    },
+                    "resolutionMethod": "owner_scoped_unique_selector",
+                    "missionItemDefinitionGuid": "12b8210a-ba02-4794-abd1-c868d486c32d"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  },
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                    "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                    "displayName": "Flight Recorder",
+                    "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_7a06cbf6c5358e955bdb0b9f",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceScope": "contract",
+          "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "bound_to_objective_order",
+          "requirementStatus": "source_backed_objective_selector",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "12b8210a-ba02-4794-abd1-c868d486c32d",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Blackbox",
+                    "path": "missiondata/pu_items/carryable_2h/blackbox.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                      "displayName": "Flight Recorder",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                    },
+                    "displayName": "Flight Recorder",
+                    "tags": [
+                      "f393a2eb-bd39-4536-83ef-560e8ea3b383",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0082"
+                      },
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0084"
+                      },
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0087"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_e516533cdc2abf9832cf8ff7",
+          "variantId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceScope": "contract",
+          "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+          "sourceOrdinal": 5,
+          "missionVariableName": "HaulingOrderContent",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "1"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "bound_to_unique_variant_selector",
+                  "reference": {
+                    "raw": "MissionProperty[42D9]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  },
+                  "resolutionMethod": "owner_scoped_unique_selector",
+                  "missionItemDefinitionGuid": "12b8210a-ba02-4794-abd1-c868d486c32d"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "1",
+                    "value": 1
+                  }
+                },
+                "identity": {
+                  "status": "resolved",
+                  "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                  "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                  "displayName": "Flight Recorder",
+                  "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "12b8210a-ba02-4794-abd1-c868d486c32d",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Blackbox",
+                      "path": "missiondata/pu_items/carryable_2h/blackbox.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                        "displayName": "Flight Recorder",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                      },
+                      "displayName": "Flight Recorder",
+                      "tags": [
+                        "f393a2eb-bd39-4536-83ef-560e8ea3b383",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0082"
+                        },
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0084"
+                        },
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0087"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+            "sourceOrdinal": 5,
+            "missionVariableName": "HaulingOrderContent",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "1"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "bound_to_unique_variant_selector",
+                    "reference": {
+                      "raw": "MissionProperty[42D9]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    },
+                    "resolutionMethod": "owner_scoped_unique_selector",
+                    "missionItemDefinitionGuid": "12b8210a-ba02-4794-abd1-c868d486c32d"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "1",
+                      "value": 1
+                    }
+                  },
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "dd3df180-9aa4-4ee8-adaf-29f934674505",
+                    "recordName": "EntityClassDefinition.Carryable_2H_FL_075x05x05_MissionItem_blackbox",
+                    "displayName": "Flight Recorder",
+                    "path": "entities/scitem/carryables/2h/carryable_2h_fl_075x05x05_missionitem_blackbox.xml"
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='BitZeros_BlackBoxRecovery_Space_Stanton_Career']/contracts/CareerContract[@id='e0d17791-d049-4de2-b9b3-e1bc7e090b04']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 1
+    },
+    "technical": {
+      "contractId": "e0d17791-d049-4de2-b9b3-e1bc7e090b04",
+      "generatorGuid": "1171e04a-0739-4bb0-8a10-b048aa7d4ebb",
+      "generatorName": "ContractGenerator.BitZeros_RecoverItem",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/bitzeros/bitzeros_recoveritem.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@blackbox_recover_title_M_001",
+      "descriptionRaw": "@blackbox_recover_desc_M_001"
+    }
+  }
+}

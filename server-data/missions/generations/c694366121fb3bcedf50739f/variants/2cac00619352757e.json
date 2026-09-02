@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Standard",
+  "variant": {
+    "variantKey": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+    "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Standard",
+    "conceptKey": "fc2c319c25f313cf8655",
+    "objectiveSignature": {
+      "key": "unknown-faction|unknown-faction:unknown-scope|collector-offer|activity-defined|standard|unlock:2b706998543b|unknown:bounded||collector-offer:the-collector-lunch||",
+      "activityKey": "collector-offer",
+      "titleStem": "the-collector-lunch",
+      "descriptionStem": "the-collector-lunch",
+      "handlerStem": "the-collector-standard",
+      "archetype": "Wikelo - Other Items",
+      "contractType": "Contract",
+      "introState": "standard",
+      "chainState": "unlock:2b706998543b",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:collector-offer",
+        "activity-source:structural",
+        "title:the-collector-lunch",
+        "description:the-collector-lunch",
+        "handler:the-collector-standard",
+        "contract:contract",
+        "archetype:wikelo-other-items",
+        "intro:standard",
+        "chain:unlock:2b706998543b",
+        "legal:unknown:bounded",
+        "collector-offer:the-collector-lunch"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Wikelo - Other Items",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Standard",
+        "TheCollector_FoodOrder"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "displayName": "Very Hungry",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "You humans keep Wikelo very busy. Work more than when I at old souli. But Wikelo very hungry now and can't get food.\n\nPlease help. Bring food and drink to Wikelo Emporium at [destination].\n\nVery appreciate your help. Will give thing in return.\n\nBye.",
+    "rawName": "@TheCollector_Lunch_Title",
+    "internalName": "TheCollector_FoodOrder",
+    "missionType": "Wikelo - Other Items",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Standard",
+        "TheCollector_FoodOrder"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Wikelo - Other Items",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Unknown pickup",
+        "detailLabel": "Unknown pickup",
+        "confidence": "unknown"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "displayLabel": "Unknown pickup",
+        "detailDisplay": "Unknown pickup",
+        "systems": [],
+        "confidence": "low",
+        "sourceRole": "unknown",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "destination|ListAll"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "destination|ListAll"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "destination|ListAll",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "destination|ListAll"
+    ],
+    "rewards": {
+      "summary": [
+        "No credit reward extracted",
+        "Item reward unresolved"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [
+        {
+          "status": "weighted_unresolved",
+          "confidence": "weighted_unresolved",
+          "unresolvedReason": "Weighted item reward extraction is audited but not resolved.",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecollector.xml"
+          ],
+          "weightedOptions": []
+        }
+      ],
+      "itemRewardStatus": "weighted_unresolved",
+      "unresolvedRewardTokens": [
+        "ContractResult_ItemsWeighting"
+      ]
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": true,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+        "familyId": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Standard",
+        "templateGuid": "40890a8a-f62e-bf2f-41f9-582262c9a4b9"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_4bfa151f50a7e8054e986a52",
+          "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "TheCollector_Standard"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecollector.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_af0248208f001399b1d0c870",
+          "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_ea47a6c4362ed503a46eeb03",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "2597ef18-f1d5-4d97-bba4-8b6f900ded50"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecollector.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_7d69f8c6b59d4abcb8e25c89",
+          "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "type": "weighted_item_reward",
+          "index": 0,
+          "payload": {
+            "items": [],
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_ItemsWeighting"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecollector.xml",
+            "sourceElement": "ContractResult_ItemsWeighting"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "40890a8a-f62e-bf2f-41f9-582262c9a4b9",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/itemresourcegathering_thecollector.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecollector.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/itemresourcegathering_thecollector.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@TheCollector_From",
+          "displayText": "Wikelo",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": null,
+          "resolution": "unresolved_missing_guid",
+          "provenance": "unresolved",
+          "displayName": null
+        },
+        "title": {
+          "raw": "@TheCollector_Lunch_Title",
+          "localizationKey": "TheCollector_Lunch_Title",
+          "template": "Very Hungry",
+          "displayText": "Very Hungry",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": null,
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [
+          {
+            "edgeId": "out_7d69f8c6b59d4abcb8e25c89",
+            "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+            "type": "weighted_item_reward",
+            "index": 0,
+            "payload": {
+              "items": [],
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_ItemsWeighting"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecollector.xml",
+              "sourceElement": "ContractResult_ItemsWeighting"
+            }
+          }
+        ],
+        "fixedReputation": [],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [],
+        "calculatedPayout": null,
+        "buyIns": []
+      },
+      "reputationOutcomes": {
+        "fixed": [],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_4794c96042f9648b76cb87c9",
+          "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                  "recordName": "EntityClassDefinition.Drink_bottle_smoothie_01_a",
+                  "displayName": "Berry Blend Smoothie",
+                  "path": "entities/scitem/carryables/1h/drink_bottle_smoothie_01_a.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                  "recordName": "EntityClassDefinition.Food_icecream_eff_01_fatfree_a",
+                  "displayName": "Ermer Family Farms Fat Free Ice Cream",
+                  "path": "entities/scitem/carryables/1h/food_icecream_eff_01_fatfree_a.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecollector.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='TheCollector_Standard']/contracts/Contract[@id='2597ef18-f1d5-4d97-bba4-8b6f900ded50']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                    "recordName": "EntityClassDefinition.Drink_bottle_smoothie_01_a",
+                    "displayName": "Berry Blend Smoothie",
+                    "path": "entities/scitem/carryables/1h/drink_bottle_smoothie_01_a.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                    "recordName": "EntityClassDefinition.Food_icecream_eff_01_fatfree_a",
+                    "displayName": "Ermer Family Farms Fat Free Ice Cream",
+                    "path": "entities/scitem/carryables/1h/food_icecream_eff_01_fatfree_a.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecollector.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='TheCollector_Standard']/contracts/Contract[@id='2597ef18-f1d5-4d97-bba4-8b6f900ded50']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_4794c96042f9648b76cb87c9",
+          "variantId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "sourceScope": "contract",
+          "sourceOwnerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+          "sourceOrdinal": 0,
+          "missionVariableName": "HaulingOverride",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                  "recordName": "EntityClassDefinition.Drink_bottle_smoothie_01_a",
+                  "displayName": "Berry Blend Smoothie",
+                  "path": "entities/scitem/carryables/1h/drink_bottle_smoothie_01_a.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_EntityClass",
+                "rawAttributes": {
+                  "entityClass": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "entity_class",
+                "identity": {
+                  "status": "resolved",
+                  "guid": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                  "recordName": "EntityClassDefinition.Food_icecream_eff_01_fatfree_a",
+                  "displayName": "Ermer Family Farms Fat Free Ice Cream",
+                  "path": "entities/scitem/carryables/1h/food_icecream_eff_01_fatfree_a.xml"
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecollector.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='TheCollector_Standard']/contracts/Contract[@id='2597ef18-f1d5-4d97-bba4-8b6f900ded50']/paramOverrides/propertyOverrides/MissionProperty[1]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+            "sourceOrdinal": 0,
+            "missionVariableName": "HaulingOverride",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOverride"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "0794d4f6-1e8b-4ad4-afea-df58458ef5e9",
+                    "recordName": "EntityClassDefinition.Drink_bottle_smoothie_01_a",
+                    "displayName": "Berry Blend Smoothie",
+                    "path": "entities/scitem/carryables/1h/drink_bottle_smoothie_01_a.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_EntityClass",
+                  "rawAttributes": {
+                    "entityClass": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "entity_class",
+                  "identity": {
+                    "status": "resolved",
+                    "guid": "7441f131-fa39-452c-89a7-ef23b41fee52",
+                    "recordName": "EntityClassDefinition.Food_icecream_eff_01_fatfree_a",
+                    "displayName": "Ermer Family Farms Fat Free Ice Cream",
+                    "path": "entities/scitem/carryables/1h/food_icecream_eff_01_fatfree_a.xml"
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecollector.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_List[@debugName='TheCollector_Standard']/contracts/Contract[@id='2597ef18-f1d5-4d97-bba4-8b6f900ded50']/paramOverrides/propertyOverrides/MissionProperty[1]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "2597ef18-f1d5-4d97-bba4-8b6f900ded50",
+      "generatorGuid": "4a6043af-de6a-8a9b-fd31-60db0855e697",
+      "generatorName": "ContractGenerator.TheCollector",
+      "generatorPath": "contracts/contractgenerator/thecollector.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@TheCollector_Lunch_Title",
+      "descriptionRaw": "@TheCollector_Lunch_Desc"
+    }
+  }
+}

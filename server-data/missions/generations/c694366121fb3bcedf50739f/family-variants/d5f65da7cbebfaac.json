@@ -1,0 +1,2904 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+  "variants": [
+    {
+      "variantKey": "5a3fb744-787c-460c-aecb-3ae0422d744d",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-high",
+        "descriptionStem": "uwc-refueling-high",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-high",
+          "description:uwc-refueling-high",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "CRITICAL REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hi,\n\nAnother day another beacon. There's a [Ship] looking to be topped up with [FuelType] at [Location].  The client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nI can't lie: it's a nasty place to get stuck and a worse place to get caught by surprise. We've lost good people out there - even the ones who got lucky made it home with pieces missing.\n\nIf you decide to take the job, do me a favor and keep everything peeled. If you've got a buddy with time to spare, maybe reach out for a little back-up.\n\nMaybe I'm being paranoid, but that doesn't mean they're not out to get you, as Momma Deloit used to say. \n\nActually she never said that - but I'm pretty sure she would if she did this for a living.\n\nJust do the job and get home safe, okay?\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_high_title_001",
+      "internalName": "Refueling_Pyro_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +200",
+          "391,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "391,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "391,000 aUEC",
+          "amount": 391000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 391000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 391000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5a3fb744-787c-460c-aecb-3ae0422d744d",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_high_title_001",
+        "descriptionRaw": "@UWC_Refueling_high_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "4b0ba86c-4796-4d32-8bab-7e39d0dd83cd",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_easy_title_001",
+      "internalName": "Refueling_Pyro_Easy",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +200",
+          "37,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "37,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "37,000 aUEC",
+          "amount": 37000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 37000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 37000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4b0ba86c-4796-4d32-8bab-7e39d0dd83cd",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_easy_title_001",
+        "descriptionRaw": "@UWC_Refueling_easy_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "9bbba062-857d-4d81-bc71-773eb8d2db41",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling",
+        "descriptionStem": "uwc-refueling",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling",
+          "description:uwc-refueling",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey there,\n\nIf you're fitted for refueling, you might like this one. \n\nA beacon has just gone live at [Location], from a client whose [Ship] is in need of [FuelType], so make sure your pods are topped off.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nLooks like a zero-drama one and done, but it never hurts to keep your scanners live.\nLet me know if you're interested and let's get these good people on their way.\n\nWaiting to hear from you,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_easy_title_001",
+      "internalName": "Refueling_Decoy_Pyro",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +200",
+          "45,750 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "45,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "45,750 aUEC",
+          "amount": 45750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 45750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 45750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9bbba062-857d-4d81-bc71-773eb8d2db41",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_easy_title_001",
+        "descriptionRaw": "@UWC_Refueling_easy_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "0d66c038-2136-4c36-8e77-e449eba8e493",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Pyro_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +150",
+          "145,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "145,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "145,250 aUEC",
+          "amount": 145250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 145250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 145250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0d66c038-2136-4c36-8e77-e449eba8e493",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "321e27a8-40ea-4b30-8811-153833aead14",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Pyro_Super",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +50",
+          "Standing +200",
+          "521,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +50",
+          "Standing +200"
+        ],
+        "credits": "521,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "521,250 aUEC",
+          "amount": 521250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 521250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 521250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        },
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "321e27a8-40ea-4b30-8811-153833aead14",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "b95ac811-ec6b-4027-9294-3e1f8d9107f5",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-multiple-med",
+        "descriptionStem": "uwc-refueling-multiple-med",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-multiple-med",
+          "description:uwc-refueling-multiple-med",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT CONVOY REFUEL",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey again,\n\nI've got a beacon at [Location] and this one's a bit more complicated than usual. Got small convoy of ships requesting [FuelType]. Impressive coordination and lack of planning to all need refueling at the same time. \n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nHopefully since the area they're in is pretty safe, there shouldn't be too much trouble lurking, but these days you never know. Wouldn't hurt to get them back flying again as quick as you're able.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_multiple_med_title_001",
+      "internalName": "Refueling_Multi_Pyro_Hard",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +50",
+          "Standing +200",
+          "333,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +50",
+          "Standing +200"
+        ],
+        "credits": "333,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "333,000 aUEC",
+          "amount": 333000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 333000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 333000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        },
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b95ac811-ec6b-4027-9294-3e1f8d9107f5",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_multiple_med_title_001",
+        "descriptionRaw": "@UWC_Refueling_multiple_med_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "16cb5fd9-18c9-4ff7-a4b1-e4433c13e7ad",
+      "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Pyro",
+      "conceptKey": "ca913a9266c740c378e0",
+      "objectiveSignature": {
+        "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+        "activityKey": "refuel",
+        "titleStem": "uwc-refueling-moderate",
+        "descriptionStem": "uwc-refueling-moderate",
+        "handlerStem": "refueling",
+        "archetype": "Refuel",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:18ca82bbd0b3",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:refuel",
+          "activity-source:structural",
+          "title:uwc-refueling-moderate",
+          "description:uwc-refueling-moderate",
+          "handler:refueling",
+          "contract:careercontract",
+          "archetype:refuel",
+          "intro:standard",
+          "chain:unlock:18ca82bbd0b3",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Refuel"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "URGENT REFUEL REQUEST: [Ship]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey, you!\n\nI've got a beacon at [Location]. They say their tanks are running dry and they could use [FuelType]. If you're interested, I get the feeling they'll be really pleased to see you.\n\nThe client vessel will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nThey're stuck out in an area with a bad reputation, though things have been a bit more quiet recently. Still worth staying alert I'd say, just in case there's still trouble lurking out there. \n\nEither way, the sooner everyone's able to get flying again - and that includes you - the better.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+      "rawName": "@UWC_Refueling_moderate_title_001",
+      "internalName": "Refueling_Pyro_Moderate",
+      "missionType": "CareerContract",
+      "provider": "United Wayfarers Club",
+      "faction": "United Wayfarers Club",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Refuel",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+          "Standing +150",
+          "93,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "poolName": "Fuel Nozzle",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+                "displayName": "Norfield",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+                "displayName": "Marlin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+                "displayName": "Lindstrom",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+                "displayName": "Harkin",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+                "displayName": "RN-7s",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+                "displayName": "Bendix",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+                "displayName": "Torrez",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+                "displayName": "Ezra",
+                "componentType": "dockingCollar",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "93,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "93,250 aUEC",
+          "amount": 93250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 93250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 93250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "factionDisplayName": "United Wayfarers Club",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "16cb5fd9-18c9-4ff7-a4b1-e4433c13e7ad",
+        "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+        "generatorName": "ContractGenerator.UnitedWayfarersClub",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@UWC_Refueling_moderate_title_001",
+        "descriptionRaw": "@UWC_Refueling_moderate_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}
