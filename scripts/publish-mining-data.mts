@@ -20,6 +20,10 @@ if (!configuredSourceRoot) {
     "SCINTEL_API_ROOT is required and must point to an accepted Scintel datasets directory.",
   );
 }
+const sourceBuildId = process.env.SCINTEL_SOURCE_BUILD_ID?.trim();
+if (!sourceBuildId) {
+  throw new Error("SCINTEL_SOURCE_BUILD_ID is required and must name the immutable accepted Scintel source build.");
+}
 
 const sourceRoot = path.resolve(configuredSourceRoot);
 const targetRoot = path.resolve(process.env.MINING_DATA_ROOT ?? "server-data/mining");
@@ -179,7 +183,12 @@ const lagrangeGenerator = await resolveLagrangeGenerator();
 await mkdir(path.dirname(lagrangeChildrenTarget), { recursive: true });
 const generation = spawnSync(
   process.execPath,
-  [lagrangeGenerator, "--input", lagrangeRefIndex, "--output", lagrangeChildrenTarget],
+  [
+    lagrangeGenerator,
+    "--input", lagrangeRefIndex,
+    "--output", lagrangeChildrenTarget,
+    "--source-build-id", sourceBuildId,
+  ],
   { encoding: "utf8", shell: false },
 );
 if (generation.status !== 0) {
