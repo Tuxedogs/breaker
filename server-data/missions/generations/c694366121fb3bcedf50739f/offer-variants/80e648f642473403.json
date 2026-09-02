@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "ruto:makin-a-mess",
+  "variants": [
+    {
+      "variantKey": "467ad4ca-e9a3-bcaa-5709-4b85ec6efa82",
+      "familyKey": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_EliminateAll_Career",
+      "conceptKey": "93e13e17a8e8fda4ff1b",
+      "objectiveSignature": {
+        "key": "1ff5f2d5-e169-444f-a87e-3eea50c44933|f340b011-c40c-4229-b9c1-ce6a3eb1df77|eliminate-all|activity-defined|standard|unlock:d608f20ae1ba|unknown:unknown||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "mg-ruto-ugf-eliminateall",
+        "descriptionStem": "mg-ruto-ugf-eliminateall",
+        "handlerStem": "ruto-eliminate-all",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:d608f20ae1ba",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:mg-ruto-ugf-eliminateall",
+          "description:mg-ruto-ugf-eliminateall",
+          "handler:ruto-eliminate-all",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:d608f20ae1ba",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+        ]
+      },
+      "displayName": "makin’ a mess",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "This is a bit aggressive for my taste, but credits are credits, right?\n\nGot a client who's looking for a highly motivated individual to head over to [Location] and kill everyone who’s there. \n\nBasically, start shooting and don’t stop. You'll get paid once the site's clear.",
+      "rawName": "@mg_ruto_UGF_eliminateall_title_001",
+      "internalName": "Ruto_Stanton1_Unlawful_EliminateAll_Standard",
+      "missionType": "CareerContract",
+      "provider": "Ruto",
+      "faction": "Ruto",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "displayName": "Affinity",
+        "rawName": "SReputationScopeParams.ReputationScope_Affinity",
+        "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+        "factionDisplayName": "Ruto",
+        "trackType": "Affinity",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Affinity Good 020 / 2,000 rep to Exalted / 10,000 rep",
+      "prerequisiteSummary": "Affinity Good 020 / 2,000 rep to Exalted / 10,000 rep; Stanton Star; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Affinity Good 020 / 2,000 rep to Exalted / 10,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "db62b98e-9b7b-4f54-b62d-ee718d505a49"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Security +1,000",
+          "Security -1,000",
+          "Affinity +100",
+          "Affinity -50",
+          "58,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Security +1,000",
+          "Security -1,000",
+          "Affinity +100",
+          "Affinity -50"
+        ],
+        "credits": "58,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "58,750 aUEC",
+          "amount": 58750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/missionproviders/ruto_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 58750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 58750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "factionDisplayName": "Ruto",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Security",
+          "amount": 1000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "1335b737-6188-4c21-8923-98a74bcd3071"
+          ]
+        },
+        {
+          "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "factionDisplayName": "Ruto",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Security",
+          "amount": -1000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "c8df2809-5dd3-452e-9d03-12ede43fa8f4"
+          ]
+        },
+        {
+          "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "factionDisplayName": "Ruto",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+          ]
+        },
+        {
+          "factionKey": "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+          "factionDisplayName": "Ruto",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": -50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "1ff5f2d5-e169-444f-a87e-3eea50c44933",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "5a59f6f6-245f-4e43-a08b-8b67e38286a7"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "467ad4ca-e9a3-bcaa-5709-4b85ec6efa82",
+        "generatorGuid": "3b90594c-ea63-454c-8cb4-b6d469b3f64b",
+        "generatorName": "ContractGenerator.Ruto_Generator",
+        "generatorPath": "contracts/contractgenerator/missionproviders/ruto_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@mg_ruto_UGF_eliminateall_title_001",
+        "descriptionRaw": "@mg_ruto_UGF_eliminateall_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

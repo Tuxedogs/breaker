@@ -11,14 +11,17 @@ export type MissionPublicationGenerationContract = {
 export type MissionPublicationGateReceiptV1 = {
   schemaVersion: 1;
   sourceBuildId: string;
+  acceptedGenerationId?: string;
   refIndex: {
     status: "explicit" | "not_configured";
+    /** Stable, serialized dataset identity; never an operational filesystem path. */
     path?: string;
+    /** Operational-only input location used to re-read the audited bytes before publication. */
+    operationalPath?: string;
     sha256?: string;
     buildId?: string;
     recordCount: number;
     auditedBuildId?: string;
-    auditedPath?: string;
   };
   semantics: {
     variantCount: number;
@@ -26,10 +29,6 @@ export type MissionPublicationGateReceiptV1 = {
     unresolvedLocationCount: number;
   };
 };
-
-function normalizedFilePath(value: string): string {
-  return path.resolve(value).replaceAll("\\", "/").toLowerCase();
-}
 
 export function assertMissionPublicationGate(
   contract: MissionPublicationGenerationContract,
@@ -45,6 +44,7 @@ export function assertMissionPublicationGate(
   if (
     receipt.refIndex.status !== "explicit"
     || !receipt.refIndex.path
+    || !receipt.refIndex.operationalPath
     || !receipt.refIndex.sha256
     || receipt.refIndex.recordCount <= 0
   ) {
@@ -54,9 +54,8 @@ export function assertMissionPublicationGate(
     !receipt.sourceBuildId
     || receipt.refIndex.buildId !== receipt.sourceBuildId
     || receipt.refIndex.auditedBuildId !== receipt.sourceBuildId
-    || !receipt.refIndex.auditedPath
-    || normalizedFilePath(receipt.refIndex.path) !== normalizedFilePath(receipt.refIndex.auditedPath)
-    || !normalizedFilePath(receipt.refIndex.path).split("/").includes(receipt.sourceBuildId.toLowerCase())
+    || receipt.refIndex.path !== "ref_index.json"
+    || path.basename(receipt.refIndex.operationalPath).toLowerCase() !== "ref_index.json"
   ) {
     throw new Error("MISSION_REF_INDEX does not match the accepted mission source build.");
   }
@@ -83,7 +82,7 @@ export async function verifyMissionPublicationGate(
     && contract.sourceContractVersion === 4
     && contract.offerSchemaVersion === 1
   )) return;
-  const content = await readFile(receipt.refIndex.path!, "utf8").catch((reason: unknown) => {
+  const content = await readFile(receipt.refIndex.operationalPath!, "utf8").catch((reason: unknown) => {
     throw new Error(
       `Configured MISSION_REF_INDEX is not readable: ${reason instanceof Error ? reason.message : String(reason)}`,
     );

@@ -399,6 +399,36 @@ test("canonical v2 keeps fixed and calculated reputation outcomes separate", () 
   assert.equal(normalized.financials.buyIns[0]?.contractBuyInAmount.value, 500);
 });
 
+test("canonical v2 publishes portable records-root provenance", () => {
+  const source = record("portable-provenance", {
+    outcomeEdges: [{
+      ...edge("portable-provenance", "calculated", "fixed_currency_reward"),
+      payload: {
+        calculatedContext: {
+          provenance: { recordsRoot: "D:/scintel/out/LIVE/test/foundry/records" },
+        },
+      },
+    }],
+    creditRewardTypes: [{
+      type: "ContractResult_CalculatedReward",
+      calculatedContext: {
+        provenance: { recordsRoot: "/mnt/scintel/out/LIVE/test/foundry/records" },
+      },
+    }],
+  });
+  const normalized = normalizeCanonicalMissionVariantV2(catalog([source]), source);
+  assert.equal(
+    (normalized.outcomes[0]!.payload as { calculatedContext: { provenance: { recordsRoot: string } } })
+      .calculatedContext.provenance.recordsRoot,
+    "foundry/records",
+  );
+  assert.equal(
+    (normalized.financials.creditResults[0]!.calculatedContext as { provenance: { recordsRoot: string } })
+      .provenance.recordsRoot,
+    "foundry/records",
+  );
+});
+
 test("graph validation separates required, excluded, branch, ambiguity, dangling, and cycles", () => {
   const producerA = record("producer-a", {
     prerequisiteEdges: [

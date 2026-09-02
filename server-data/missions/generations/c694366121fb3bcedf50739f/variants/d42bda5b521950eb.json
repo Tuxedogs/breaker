@@ -1,0 +1,1387 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "b287a372-55ae-4cfe-81d0-8701908856fd|NorthRock_EliminateBoss_Career",
+  "variant": {
+    "variantKey": "57333cdf-fae8-439b-9701-cc4dd1978412",
+    "familyKey": "b287a372-55ae-4cfe-81d0-8701908856fd|NorthRock_EliminateBoss_Career",
+    "conceptKey": "4162d27c61689fc2d3a6",
+    "objectiveSignature": {
+      "key": "d84f1767-e406-448a-a413-9a526350c83f|7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea|bounty-repeatable|activity-defined|standard|unlock:024770703e76|unknown:bounded||||",
+      "activityKey": "bounty-repeatable",
+      "titleStem": "northrock-bounty-fps",
+      "descriptionStem": "northrock-bounty-fps-ugf-boss-nocivs",
+      "handlerStem": "north-rock-eliminate-boss",
+      "archetype": "Bounty",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:024770703e76",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:bounty-repeatable",
+        "activity-source:structural",
+        "title:northrock-bounty-fps",
+        "description:northrock-bounty-fps-ugf-boss-nocivs",
+        "handler:north-rock-eliminate-boss",
+        "contract:careercontract",
+        "archetype:bounty",
+        "intro:standard",
+        "chain:unlock:024770703e76",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Bounty",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea"
+      ]
+    },
+    "displayName": "Bounty Assignment: [TargetName] (HRT)",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Hey, \n\nGot a contract for you that requires a bit more tactics than usual. A high-level criminal by the name [TargetName] is hiding with a large contingent of outlaws at [Location]. \n\nOur intel suggests that [TargetName]’s forces most likely will act as defensive line in order to protect their boss. My best guess is that you will have to deal with them before you gain access to [TargetName].\n\nThat said, I don’t want you shooting indiscriminately. Sometimes these outlaws keep civilians around and they should be treated like non-combatants.\n\nBest of luck,\n\nBraden Corchado\nLogistics Officer - Stanton Branch\nNorthrock Service Group",
+    "rawName": "@northrock_bounty_fps_title_001",
+    "internalName": "NorthRock_Stanton1_EliminateBoss_NoNonHostiles",
+    "missionType": "CareerContract",
+    "provider": "Northrock Service Group",
+    "faction": "Northrock Service Group",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+      "displayName": "Bounty",
+      "rawName": "SReputationScopeParams.ReputationScope_Bounty",
+      "factionKey": "d84f1767-e406-448a-a413-9a526350c83f",
+      "factionDisplayName": "Northrock Service Group",
+      "trackType": "Bounty",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea"
+      ]
+    },
+    "missionArchetype": "Bounty",
+    "standingRequirement": "Applicant / 0 rep to Master Tracker / 1,600,000 rep",
+    "prerequisiteSummary": "Applicant / 0 rep to Master Tracker / 1,600,000 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Applicant / 0 rep to Master Tracker / 1,600,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "MissionLocation_BP",
+          "propertyExtendedTextToken": "Location",
+          "locationLevelType": "LocalSystem"
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "2051ba65-b635-46af-8719-453c9c0f1fae"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "MissionLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        }
+      ],
+      "rawLocalities": [],
+      "grouping": {
+        "systems": [],
+        "localityNames": [],
+        "displayLabel": "Unknown pickup",
+        "detailLabel": "Unknown pickup",
+        "confidence": "unknown"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "displayLabel": "Unknown pickup",
+        "detailDisplay": "Unknown pickup",
+        "systems": [],
+        "confidence": "low",
+        "sourceRole": "unknown",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [],
+        "grouping": {
+          "systems": [],
+          "localityNames": [],
+          "displayLabel": "Unknown pickup",
+          "detailLabel": "Unknown pickup",
+          "confidence": "unknown"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "MissionLocation_BP",
+          "Location",
+          "LocalSystem",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "MissionLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Location",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: North Rock FPS Kill Eliminate Boss: F55 LMG, LH86 Pistol, Defiance Arms Tactical, Defiance Core Tactical +8",
+        "Blueprint: Combat Suit: Bellator Jacket, Bellator Shirt and Waistcoat, Bellator Trousers, Spettro Shoes",
+        "Bounty +8,000",
+        "Bounty -4,000",
+        "99,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "North Rock FPS Kill Eliminate Boss: F55 LMG, LH86 Pistol, Defiance Arms Tactical, Defiance Core Tactical +8",
+        "Combat Suit: Bellator Jacket, Bellator Shirt and Waistcoat, Bellator Trousers, Spettro Shoes"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "ce014e33-cfcb-45e9-a12f-06f9baff9db2",
+          "poolName": "North Rock FPS Kill Eliminate Boss",
+          "rewardCount": 12,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "8.33% chance - 1 of 12",
+          "rewards": [
+            {
+              "blueprintGuid": "87db0bbb-ff12-4a7e-8044-72dddb8ddf36",
+              "displayName": "F55 LMG",
+              "componentType": "weapons",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "efdfd631-c2c4-4a0c-9520-f12a7a2bffbc",
+              "displayName": "LH86 Pistol",
+              "componentType": "weapons",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "5c23d353-10be-45b5-a1c6-fb2c8eeb3ab6",
+              "displayName": "Defiance Arms Tactical",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "93421709-2065-4704-bd9a-44227a70f398",
+              "displayName": "Defiance Core Tactical",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "a6f3b249-a825-4a67-bc85-617e0976c9e8",
+              "displayName": "Defiance Legs Tactical",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "a9a3c7ee-70d9-4f55-b78f-1f87ada03829",
+              "displayName": "Defiance Helmet Tactical",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "fa136b5a-47c2-48ac-85ff-aec3c35d902c",
+              "displayName": "Lynx Arms",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "49913e31-a2e7-4286-a76e-01bddcf7f71d",
+              "displayName": "Lynx Legs",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "552c05db-d4ae-4988-afe0-a3166990e91e",
+              "displayName": "Lynx Core",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "11975675-5061-4feb-8087-a35c523cdbd6",
+              "displayName": "Oracle Helmet",
+              "componentType": "armor",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "9f11679b-027f-4a0b-903d-6655f2978e76",
+              "displayName": "F55 LMG Magazine (150 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "8.33% chance"
+            },
+            {
+              "blueprintGuid": "9f11679b-027f-4a0b-903d-6655f2978e76",
+              "displayName": "F55 LMG Magazine (150 cap)",
+              "componentType": "ammo",
+              "chanceLabel": "8.33% chance"
+            }
+          ]
+        },
+        {
+          "poolGuid": "ae39633d-ad06-451a-9330-50e309322102",
+          "poolName": "Combat Suit",
+          "rewardCount": 4,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "25% chance - 1 of 4",
+          "rewards": [
+            {
+              "blueprintGuid": "df70f106-b946-4f99-bc5d-811d0b964d5a",
+              "displayName": "Bellator Jacket",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "25% chance"
+            },
+            {
+              "blueprintGuid": "8913923b-e0db-4338-8bf6-b284a567db08",
+              "displayName": "Bellator Shirt and Waistcoat",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "25% chance"
+            },
+            {
+              "blueprintGuid": "0646d386-d907-482f-b1a6-1e832952297a",
+              "displayName": "Bellator Trousers",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "25% chance"
+            },
+            {
+              "blueprintGuid": "38dcf3fc-7141-4133-bae9-4dc6b02ed2df",
+              "displayName": "Spettro Shoes",
+              "componentType": "Crafting blueprint",
+              "chanceLabel": "25% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Bounty +8,000",
+        "Bounty -4,000"
+      ],
+      "credits": "99,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "99,250 aUEC",
+        "amount": 99250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 99250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 99250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "d84f1767-e406-448a-a413-9a526350c83f",
+        "factionDisplayName": "Northrock Service Group",
+        "scopeKey": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+        "scopeDisplayName": "Bounty",
+        "amount": 8000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d84f1767-e406-448a-a413-9a526350c83f",
+          "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+          "17f3cbd1-62d1-49e4-848c-623bbbb1f459"
+        ]
+      },
+      {
+        "factionKey": "d84f1767-e406-448a-a413-9a526350c83f",
+        "factionDisplayName": "Northrock Service Group",
+        "scopeKey": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+        "scopeDisplayName": "Bounty",
+        "amount": -4000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d84f1767-e406-448a-a413-9a526350c83f",
+          "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+          "7115b8ce-9897-40b2-9f63-df3d6e262801"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+        "familyId": "b287a372-55ae-4cfe-81d0-8701908856fd|NorthRock_EliminateBoss_Career",
+        "templateGuid": "31e07d0a-3b1c-421f-b81e-5ee221278f7a"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_bdb0e10e44b1044b8ea0c0cf",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "NorthRock_EliminateBoss_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_23545aa9666769665f8ba367",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "location_property",
+          "polarity": "required",
+          "identifiers": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "LocalSystem"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "LocalSystem"
+          },
+          "sourceElement": "ContractPrerequisite_LocationProperty",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "NorthRock_EliminateBoss_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractPrerequisite_LocationProperty",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_70f2003cafcbac2c574edf3d",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "2051ba65-b635-46af-8719-453c9c0f1fae"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_cdafeeb14146a1ac116ca44a",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "2051ba65-b635-46af-8719-453c9c0f1fae"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "57333cdf-fae8-439b-9701-cc4dd1978412"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_417a45c9ef63812120da5a52",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "ce014e33-cfcb-45e9-a12f-06f9baff9db2",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_51ee3fd1f525d7622004d190",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "blueprint_reward",
+          "index": 1,
+          "payload": {
+            "blueprintPoolGuid": "ae39633d-ad06-451a-9330-50e309322102",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_0b0b24af939787f20bd6c4e6",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+            "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+            "rewardGuid": "17f3cbd1-62d1-49e4-848c-623bbbb1f459",
+            "reputationAmount": 8000,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_3c1344fd1173ee52c5c10a92",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+            "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+            "rewardGuid": "7115b8ce-9897-40b2-9f63-df3d6e262801",
+            "reputationAmount": -4000,
+            "calculatedContext": null,
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_c8410454f7ee7dae5b22fd6d",
+          "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 99250,
+              "amount": 99250,
+              "rawAmount": 99186.24225888701,
+              "integerRoundedAmount": 99186,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.450000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "20.9",
+                "value": 20.9,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "31e07d0a-3b1c-421f-b81e-5ee221278f7a",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/eliminateboss_lawful_ugf.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/eliminateboss_lawful_ugf.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@northrock_from_001",
+          "displayText": "Northrock Service Group",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "d84f1767-e406-448a-a413-9a526350c83f",
+          "recordName": "FactionReputation.FactionReputation_Lawful_NorthrockServiceGroup",
+          "recordType": null,
+          "displayName": "Northrock Service Group",
+          "path": "factions/factionreputation/factionreputation_lawful_northrockservicegroup.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@northrock_bounty_fps_title_001",
+          "localizationKey": "northrock_bounty_fps_title_001",
+          "template": "Bounty Assignment: ~mission(TargetName) (HRT)",
+          "displayText": "Bounty Assignment: ~mission(TargetName) (HRT)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(TargetName)",
+              "expression": "TargetName",
+              "segments": [
+                "TargetName"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 99250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 99250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_417a45c9ef63812120da5a52",
+            "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "ce014e33-cfcb-45e9-a12f-06f9baff9db2",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          },
+          {
+            "edgeId": "out_51ee3fd1f525d7622004d190",
+            "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+            "type": "blueprint_reward",
+            "index": 1,
+            "payload": {
+              "blueprintPoolGuid": "ae39633d-ad06-451a-9330-50e309322102",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_0b0b24af939787f20bd6c4e6",
+            "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+              "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+              "rewardGuid": "17f3cbd1-62d1-49e4-848c-623bbbb1f459",
+              "reputationAmount": 8000,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_3c1344fd1173ee52c5c10a92",
+            "variantId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+              "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+              "rewardGuid": "7115b8ce-9897-40b2-9f63-df3d6e262801",
+              "reputationAmount": -4000,
+              "calculatedContext": null,
+              "missionResults": [
+                false,
+                false,
+                true,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 99250,
+              "amount": 99250,
+              "rawAmount": 99186.24225888701,
+              "integerRoundedAmount": 99186,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.450000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.32
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "20.9",
+                "value": 20.9,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 99250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 99250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+            "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "17f3cbd1-62d1-49e4-848c-623bbbb1f459",
+            "reputationAmount": 8000,
+            "reward": {
+              "guid": "17f3cbd1-62d1-49e4-848c-623bbbb1f459",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_XL",
+              "editorName": "+T_08",
+              "reputationAmount": 8000,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_xl.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "factionReputation": "d84f1767-e406-448a-a413-9a526350c83f",
+            "reputationScope": "7b4a8d50-31ca-4e53-8ab7-a9ccb0b84bea",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7115b8ce-9897-40b2-9f63-df3d6e262801",
+            "reputationAmount": -4000,
+            "reward": {
+              "guid": "7115b8ce-9897-40b2-9f63-df3d6e262801",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Negative_L",
+              "editorName": "-T_07",
+              "reputationAmount": -4000,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_negative_l.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "57333cdf-fae8-439b-9701-cc4dd1978412",
+      "generatorGuid": "b287a372-55ae-4cfe-81d0-8701908856fd",
+      "generatorName": "ContractGenerator.NorthRock_FPSKill",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/northrock service group/northrock_fpskill.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@northrock_bounty_fps_title_001",
+      "descriptionRaw": "@northrock_bounty_fps_UGF_boss_nocivs_desc_001"
+    }
+  }
+}

@@ -1,0 +1,2162 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+  "variants": [
+    {
+      "variantKey": "e04caa4e-cb8b-4889-830f-7422498ba8e4",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo",
+        "descriptionStem": "ling-family-recover-cargo",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo",
+          "description:ling-family-recover-cargo",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Complete Stranded Ling Shipment",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hello,\n\nSome sad news. Unfortunately our hauler ran into some trouble and had to abandoned the cargo they were due to deliver. We haven't heard anything back from them so we're assuming the worse.\n\nWe're in the process of contacting their family and are conscious this is a very sensitive time, but also can't afford to leave a job incomplete. Our trackers show the cargo is still intact over at [Location].\n\nIf you could finish the delivery we would be really grateful. We're not picking up on any nearby ships so it should be safe for you to collect. Bring a heavy-duty tractor beam and a ship that can carry [MissionMaxSCUSize] cargo containers.\n\nDeliver the cargo to the freight elevator at [Destination] and we'll take care of the rest.\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_Hard_Title",
+      "internalName": "Ling_Pyro_Hard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Member / 5,250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Member / 5,250 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Member / 5,250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "90,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "90,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "90,250 aUEC",
+          "amount": 90250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 90250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 90250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e04caa4e-cb8b-4889-830f-7422498ba8e4",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_Hard_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_Hard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d9b36826-3477-4b7a-ab09-2fe6a724e352",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo-very",
+        "descriptionStem": "ling-family-recover-cargo-very",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo-very",
+          "description:ling-family-recover-cargo-very",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Delivery of Abandoned Ling Cargo",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nNeed a reliable contractor to help us out with a bit of a situation.\n\nOur of our haulers has dropped out mid-contract and now our client's cargo is stuck in transit. Think they were trying to negotiate a better rate with us, but that's not how Ling does business. Anyway, they're done and we desperately need the shipment finished.\n\nPetra and I have been working with this client for years now and have built up a good rapport. Be a shame to throw that all a way because of an unreliable hauler. Can you head to [Location] and collect the shipment? You'll need a heavy-duty tractor beam and a ship that can carry [MissionMaxSCUSize] cargo containers.\n\nTake the shipment to the freight elevator over at [Destination] and we'll get you paid as soon as. We'd really appreciate your help with this and I'm sure our client would too.\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_VeryHard_Title",
+      "internalName": "Ling_Pyro_VeryHard_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Experienced / 27,750 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Experienced / 27,750 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Experienced / 27,750 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "Standing +50",
+          "132,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200",
+          "Standing +50"
+        ],
+        "credits": "132,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "132,250 aUEC",
+          "amount": 132250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 132250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 132250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        },
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d9b36826-3477-4b7a-ab09-2fe6a724e352",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_VeryHard_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_VeryHard_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "843ac0a1-1d08-46e9-b859-e70786505f6f",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo-very",
+        "descriptionStem": "ling-family-recover-cargo-very",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo-very",
+          "description:ling-family-recover-cargo-very",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Finish Interrupted Ling Delivery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nHere's the thing: one of our haulers has run into some trouble over at [Location] and had to ditch their ship. Could you head over there and help us finish the delivery?\n\nNot a huge job by any means, but you'll still need a heavy-duty tractor beam and a ship with enough space to store [MissionMaxSCUSize] cargo containers.\n \nDrop the cargo off at the freight elevator at [Destination] and we'll send you the creds.\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_VeryEasy_Title",
+      "internalName": "Ling_Pyro_VeryEasy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Trainee / 0 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Trainee / 0 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Trainee / 0 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "16,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "16,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "16,250 aUEC",
+          "amount": 16250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 16250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 16250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "843ac0a1-1d08-46e9-b859-e70786505f6f",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_VeryEasy_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_VeryEasy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "57aee6b8-ae24-4521-8769-15fc7c09d67a",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo",
+        "descriptionStem": "ling-family-recover-cargo",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Cargo",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo",
+          "description:ling-family-recover-cargo",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:cargo",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Cargo",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Ling Shipment Recovery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hello,\n\nLooking for a quick job? Got a client who's waiting on a shipment but our hauler ran into some engine trouble. Can't seem to get them up and running so we need someone to take over.\n\nFly out to [Location] and you'll spot their ship. You can't miss it - it's the one that's sitting still in the middle of space. Make sure you bring a heavy-duty tractor beam along with a decent ship that can carry [MissionMaxSCUSize] cargo containers.\n\nOnce you've picked up the goods take them to the freight elevator at [Destination].\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_Easy_Title",
+      "internalName": "Ling_Pyro_Easy_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Cargo",
+      "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Rookie / 50 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "29,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "29,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "29,500 aUEC",
+          "amount": 29500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 29500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 29500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "57aee6b8-ae24-4521-8769-15fc7c09d67a",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_Easy_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_Easy_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "fb51ec54-b2e8-4f3a-a9c9-7bce167a8b07",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo",
+        "descriptionStem": "ling-family-recover-cargo",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo",
+          "description:ling-family-recover-cargo",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Rescue Incomplete Ling Delivery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hi,\n\nGot a relatively straightforward one for you if you're interested.\n\nOne of our pilot ignored a maintenance warning and sure enough, a couple of hours later their ship broke down over at [Location]. They're on their way back to the office now but we could do with a reliable hauler whose got a ship big enough to transport [MissionMaxSCUSize] cargo containers to complete the haul for us.\n\nThink you could help us out? You just need to pick up the stranded shipment and deliver it to the freight elevator at [Destination].  And I probably don't have to say this, but a heavy-duty tractor beam would probably be handy to have along.\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_Medium_Title",
+      "internalName": "Ling_Pyro_Medium_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Junior / 250 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Junior / 250 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Junior / 250 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "55,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "55,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "55,500 aUEC",
+          "amount": 55500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 55500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 55500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "fb51ec54-b2e8-4f3a-a9c9-7bce167a8b07",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_Medium_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_Medium_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "8478826e-f06d-4f6a-b05e-9e522cca9765",
+      "familyKey": "8bd761ca-5992-4447-91cb-305d1ad2a8f5|LingFamilyHauling_RecoverCargo_Pyro",
+      "conceptKey": "ae59e1eb72de4cd08d7f",
+      "objectiveSignature": {
+        "key": "8ca58dc2-ecec-49ea-bb62-39a56bb28420|4c086729-2be5-4c08-870f-2bfe1f170083|recover-cargo|activity-defined|standard|unlock:099db6a845c6|unknown:bounded||||",
+        "activityKey": "recover-cargo",
+        "titleStem": "ling-family-recover-cargo",
+        "descriptionStem": "ling-family-recover-cargo",
+        "handlerStem": "ling-family-hauling-recover-cargo",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:099db6a845c6",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:recover-cargo",
+          "activity-source:structural",
+          "title:ling-family-recover-cargo",
+          "description:ling-family-recover-cargo",
+          "handler:ling-family-hauling-recover-cargo",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:unlock:099db6a845c6",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "displayName": "Stuck Ling Shipment Pending Delivery",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nJust our luck that we land one of the biggest contracts of our life and our hauler's engines seize up. They've tried their best to fix it but seems like it's just not happening.\n\nCan you fly out to [Location] and grab the cargo for us? It's really important that we show our client that we're just as reliable as the other big players out there.\n\nJust so you know this is a large shipment. You'll need a ship that can handle [MissionMaxSCUSize] cargo containers and a heavy-duty tractor beam to move it all. Once you've transferred it to your ship, deliver it to the freight elevator at [Destination] and we'll send confirmation to the client.\n\nConsidering the circumstances, we're paying above market rates to whoever can complete this.\n\nThanks,  \nReyes Ling \nCargo Logistics Coordinator \nLing Family Hauling \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+      "rawName": "@LingFamily_RecoverCargo_Super_Title",
+      "internalName": "Ling_Pyro_Super_RecoverCargo",
+      "missionType": "CareerContract",
+      "provider": "Ling Family Hauling",
+      "faction": "Ling Family Hauling",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "trackType": "Hauling",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "4c086729-2be5-4c08-870f-2bfe1f170083"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Senior / 77,750 rep to Master / 237,750 rep",
+      "prerequisiteSummary": "Senior / 77,750 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Senior / 77,750 rep to Master / 237,750 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1351a46c-2e40-40c5-98f9-70fe28942de9"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +300",
+          "136,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "136,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "136,750 aUEC",
+          "amount": 136750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 136750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 136750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "factionDisplayName": "Ling Family Hauling",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "8478826e-f06d-4f6a-b05e-9e522cca9765",
+        "generatorGuid": "8bd761ca-5992-4447-91cb-305d1ad2a8f5",
+        "generatorName": "ContractGenerator.LingFamilyHauling_RecoverCargo",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_recovercargo.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@LingFamily_RecoverCargo_Super_Title",
+        "descriptionRaw": "@LingFamily_RecoverCargo_Super_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

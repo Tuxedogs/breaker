@@ -1,0 +1,1234 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+  "variant": {
+    "variantKey": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+    "familyKey": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+    "conceptKey": "64d2e0e92f6a981cb84f",
+    "objectiveSignature": {
+      "key": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-ship|activity-defined|standard|unlock:3d819bf4d49f|unknown:bounded||||",
+      "activityKey": "defend-ship",
+      "titleStem": "intersec-defend-ship",
+      "descriptionStem": "intersec-defend-ship",
+      "handlerStem": "inter-sec-defense-solutions-defend-ship",
+      "archetype": "Defend Ship",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:3d819bf4d49f",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:defend-ship",
+        "activity-source:structural",
+        "title:intersec-defend-ship",
+        "description:intersec-defend-ship",
+        "handler:inter-sec-defense-solutions-defend-ship",
+        "contract:careercontract",
+        "archetype:defend-ship",
+        "intro:standard",
+        "chain:unlock:3d819bf4d49f",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "hard",
+    "tierLabel": "High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Defend Ship",
+      "CrimeStat limited",
+      "Generated pickup pool"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Protect Vital Asset",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System \nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: One of our pilots is under attack at [Location] and is in need of assistance.\n\nThis operative is carrying key information regarding a coordinated attack on key UEE infrastructure and it is vital that they are able to deliver it to us. You and any dependable pilots you can recruit are charged with protecting them from the outlaws in pursuit long enough for them to QT away.\n\nRespectfully,   \n\nDeacon Tobin \nOperations Manager \nInterSec Defense Solutions  \n\nThis communication consists of confidential information solely intended for the recipient. Please disregard if received in error and notify the sender. All operations are conducted at the contractor’s own personal risk and must adhere to UEE and system law where applicable.",
+    "rawName": "@Intersec_DefendShip_Title_Hard_001",
+    "internalName": "InterSec_DefendShip_Nyx_Hard",
+    "missionType": "CareerContract",
+    "provider": "InterSec Defense Solutions",
+    "faction": "InterSec Defense Solutions",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+      "factionDisplayName": "InterSec Defense Solutions",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Defend Ship",
+    "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Nyx",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Nyx",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Nyx",
+      "system": "Nyx",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "339a0c2f-18be-4a4b-9766-0b43763fb102"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "displayName": "Nyx",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+          "system": "Nyx"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Nyx"
+        ],
+        "localityNames": [
+          "Nyx"
+        ],
+        "displayLabel": "Nyx",
+        "detailLabel": "Generated pickup pool (Nyx)",
+        "confidence": "generated_from_pool"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Generated pickup pool (Nyx)",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Nyx"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3",
+        "Standing +200",
+        "168,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "Inter Sec Defend Ship: Pulse \"Rouge\" Pistol, Testudo Arms Combustion, Testudo Core Combustion, Testudo Legs Combustion +3"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+          "poolName": "Inter Sec Defend Ship",
+          "rewardCount": 7,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "14.29% chance - 1 of 7",
+          "rewards": [
+            {
+              "blueprintGuid": "24d23220-2d11-40b4-bf90-530ced383413",
+              "displayName": "Pulse \"Rouge\" Pistol",
+              "componentType": "weapons",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "db80f6c7-d423-43f9-8e1b-5479154a5446",
+              "displayName": "Testudo Arms Combustion",
+              "componentType": "armor",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "c1b8649b-0189-4b88-ac32-6c4f0ae90530",
+              "displayName": "Testudo Core Combustion",
+              "componentType": "armor",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "2bd88b63-f035-4d7d-992d-3bceafaacd29",
+              "displayName": "Testudo Legs Combustion",
+              "componentType": "armor",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "5e5eb75b-e32e-450e-9ac3-c2f659c063ee",
+              "displayName": "Testudo Helmet Combustion",
+              "componentType": "armor",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "58f2fe15-955e-4725-8b5f-7a5249186966",
+              "displayName": "Pulse Laser Pistol Battery (60 Cap)",
+              "componentType": "ammo",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "b60850f6-0aeb-4b3c-8104-49baa4a61aa7",
+              "displayName": "Testudo Backpack Combustion",
+              "componentType": "armor",
+              "chanceLabel": "14.29% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +200"
+      ],
+      "credits": "168,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "168,250 aUEC",
+        "amount": 168250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 168250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 168250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+        "familyId": "db5a5f97-89b3-4b33-804c-7f944587a6fc|InterSecDefenseSolutions_DefendShip_Nyx",
+        "templateGuid": "67b2a1b1-9cc0-4527-a367-d58577327d69"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_8e370ea65eaa77f1e620ed1b",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "InterSecDefenseSolutions_DefendShip_Nyx"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_fb79b00547b47be421bc5a38",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "InterSecDefenseSolutions_DefendShip_Nyx"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_0e78f0f2e120aa16c460f9fb",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_cdfaec8269e0d001766d53fb",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_b98f099b695ad23000da1e65",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_e332191f26d38bcb7668fce4",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_092bdfed5406d0d019ec666c",
+          "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 168250,
+              "amount": 168250,
+              "rawAmount": 168190.54623467417,
+              "integerRoundedAmount": 168191,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.000000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "67b2a1b1-9cc0-4527-a367-d58577327d69",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/supportattackedship.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/supportattackedship.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@InterSec_From",
+          "displayText": "InterSec Defense Solutions",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "recordName": "FactionReputation.FactionReputation_Lawful_InterSecDefenseSolutions",
+          "recordType": null,
+          "displayName": "InterSec Defense Solutions",
+          "path": "factions/factionreputation/factionreputation_lawful_intersecdefensesolutions.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Intersec_DefendShip_Title_Hard_001",
+          "localizationKey": "Intersec_DefendShip_Title_Hard_001",
+          "template": "Protect Vital Asset",
+          "displayText": "Protect Vital Asset",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+            "requirements": [
+              {
+                "edgeId": "pre_fb79b00547b47be421bc5a38",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+                  "recordName": "MissionLocality.Nyx",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "InterSecDefenseSolutions_DefendShip_Nyx"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 168250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 168250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_b98f099b695ad23000da1e65",
+            "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "efacefc7-916b-4cd1-9f03-43053f6ae867",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_e332191f26d38bcb7668fce4",
+            "variantId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 168250,
+              "amount": 168250,
+              "rawAmount": 168190.54623467417,
+              "integerRoundedAmount": 168191,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 5.000000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.7000000000000002
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Expert_understanding_FPS_flight_professions_5",
+                    "level": 5,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.55
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Expert_understanding_FPS_flight_professions_5"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 168250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 168250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "a945ab4e-ea8f-4e5b-886f-fd02a68f439c",
+      "generatorGuid": "db5a5f97-89b3-4b33-804c-7f944587a6fc",
+      "generatorName": "ContractGenerator.InterSec_DefendShip",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_defendship.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Intersec_DefendShip_Title_Hard_001",
+      "descriptionRaw": "@Intersec_DefendShip_Desc_Hard_001"
+    }
+  }
+}

@@ -1,0 +1,1047 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+  "variant": {
+    "variantKey": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+    "familyKey": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+    "conceptKey": "172223d9a4462cdac49d",
+    "objectiveSignature": {
+      "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|retrieve-cargo|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "retrieve-cargo",
+      "titleStem": "cfp-retrieve-cargo-crim-base",
+      "descriptionStem": "cfp-retrieve-cargo-crim-base",
+      "handlerStem": "cfp-retrieve-cargo",
+      "archetype": "Cargo",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:retrieve-cargo",
+        "activity-source:structural",
+        "title:cfp-retrieve-cargo-crim-base",
+        "description:cfp-retrieve-cargo-crim-base",
+        "handler:cfp-retrieve-cargo",
+        "contract:careercontract",
+        "archetype:cargo",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "mrt",
+    "tierLabel": "MRT",
+    "isIntro": false,
+    "specificityBadges": [
+      "Cargo"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Reclaim Stolen Cargo",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hey,\n\nOutlaws used a fake distress beacon to lure one of our cargo ships into a trap and steal the supplies onboard. Thankfully, we placed trackers in the cargo containers, because the stuff is valuable mining and construction materials needed at [Destination]. \n\nLooks like the goods ended up at [Location]. Need someone to head there, reclaim the supplies, and take them to [Destination]. Doubt they’ll make it easy for you, but if it helps, they didn’t show any mercy to our ship crew. Reclaiming those supplies will not only help the CFP but ensure that our crew didn’t die in vain.   \n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nThanks,\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+    "rawName": "@CFP_RetrieveCargo_CrimBase_M_title_001",
+    "internalName": "CFP_Pyro_RegionB_CrimBase_MRT_RetrieveCargo",
+    "missionType": "CareerContract",
+    "provider": "Citizens For Prosperity",
+    "faction": "Citizens For Prosperity",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+      "factionDisplayName": "Citizens For Prosperity",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Region B",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "locality",
+        "label": "Region B",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "MissionLocality procedural region scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [
+        "Region B"
+      ],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+      ],
+      "possibleLocations": [
+        "Region B"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "displayName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Region B"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Generated region pool: Region B",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "displayName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region B"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination",
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination",
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+        "resolvedName": "Region B",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "token_only"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Region B"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination",
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Standing +150",
+        "42,500 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +150"
+      ],
+      "credits": "42,500 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "42,500 aUEC",
+        "amount": 42500,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 42500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 42500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 150,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+        "familyId": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+        "templateGuid": "cf76d034-32fe-492c-b0bc-ca1dfc74919d"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_5bd6eba4cd48ae6fb12b53d9",
+          "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_5c46edd727414ac15a9a5b4b",
+          "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_132bf2fe9d75f79b0bf15f38",
+          "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 42500,
+              "amount": 42500,
+              "rawAmount": 42500.23121452336,
+              "integerRoundedAmount": 42500,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.2199999999999998,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.02
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "13",
+                "value": 13,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "cf76d034-32fe-492c-b0bc-ca1dfc74919d",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/recovercargo.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": false,
+        "contractOverride": null,
+        "overrideCandidate": false,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_RetrieveCargo']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/recovercargo.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@cfp_from",
+          "displayText": "Citizens for Prosperity",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "recordName": "FactionReputation.FactionReputation_Lawful_CitizensForProsperity",
+          "recordType": null,
+          "displayName": "Citizens For Prosperity",
+          "path": "factions/factionreputation/factionreputation_lawful_citizensforprosperity.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@CFP_RetrieveCargo_CrimBase_M_title_001",
+          "localizationKey": "CFP_RetrieveCargo_CrimBase_M_title_001",
+          "template": "Reclaim Stolen Cargo",
+          "displayText": "Reclaim Stolen Cargo",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": false,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "agree"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+            "requirements": [
+              {
+                "edgeId": "pre_5bd6eba4cd48ae6fb12b53d9",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+                  "recordName": "MissionLocality.RegionB",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 42500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 42500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_5c46edd727414ac15a9a5b4b",
+            "variantId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "reputationAmount": 150,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 42500,
+              "amount": 42500,
+              "rawAmount": 42500.23121452336,
+              "integerRoundedAmount": 42500,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.2199999999999998,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.02
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Routine_light_work_3",
+                    "level": 3,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.99
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Ship_could_get_damaged_Could_lose_cargo_4",
+                    "level": 4,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.88
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Routine_light_work_3",
+                  "riskOfLoss": "Ship_could_get_damaged_Could_lose_cargo_4",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "13",
+                "value": 13,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 42500,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 42500,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+            "reputationAmount": 150,
+            "reward": {
+              "guid": "7f8f04c4-92bd-48a0-8017-b922c2404849",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_150",
+              "editorName": "Undefined Name",
+              "reputationAmount": 150,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_150.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "c1a20c0f-0dd1-4fce-b9f3-cf25395fd11b",
+      "generatorGuid": "a1f72137-20f1-4d15-a15f-5ac6b97649a0",
+      "generatorName": "ContractGenerator.CitizensForProsperity_RecoverCargo",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@CFP_RetrieveCargo_CrimBase_M_title_001",
+      "descriptionRaw": "@CFP_RetrieveCargo_CrimBase_M_desc_001"
+    }
+  }
+}

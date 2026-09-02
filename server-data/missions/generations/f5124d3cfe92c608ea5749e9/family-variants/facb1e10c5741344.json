@@ -1,0 +1,1339 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+  "variants": [
+    {
+      "variantKey": "40a00ef8-0b53-9270-bc2c-ef38cda62eb2",
+      "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+      "conceptKey": "35aa5efcdc47bb6d817b",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|salvage-ship|activity-defined|standard|unlock:2231fc01e795|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "salvage-contractor",
+        "descriptionStem": "salvage-contractor",
+        "handlerStem": "adagio-lawful-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:2231fc01e795",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:salvage-contractor",
+          "description:salvage-contractor",
+          "handler:adagio-lawful-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:2231fc01e795",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adaigo Stanton 1 Lawful Salvage Medium",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@SalvageContractor_Title",
+      "internalName": "Adaigo_Stanton1_Lawful_Salvage_Medium",
+      "missionType": "CareerContract",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "651c0479-3acf-4966-9d5d-c92171b99dea"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "No credit reward extracted",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "40a00ef8-0b53-9270-bc2c-ef38cda62eb2",
+        "generatorGuid": "109b8662-1aa0-40dc-a44f-28248c518513",
+        "generatorName": "ContractGenerator.Adagio_Generator",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@SalvageContractor_Title",
+        "descriptionRaw": "@SalvageContractor_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "41127c2d-7685-fb1d-9f08-57bde4310aa7",
+      "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+      "conceptKey": "f8424af52a5f39dd7e71",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|salvage-ship|activity-defined|standard|unlock:24a5edca6a60|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "salvage-contractor",
+        "descriptionStem": "salvage-contractor",
+        "handlerStem": "adagio-lawful-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:24a5edca6a60",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:salvage-contractor",
+          "description:salvage-contractor",
+          "handler:adagio-lawful-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:24a5edca6a60",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adaigo Stanton 1 Lawful Salvage Easy",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@SalvageContractor_Title",
+      "internalName": "Adaigo_Stanton1_Lawful_Salvage_Easy",
+      "missionType": "CareerContract",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "464cf1ba-6dec-4bf9-899b-79243b697d28"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "No credit reward extracted",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "41127c2d-7685-fb1d-9f08-57bde4310aa7",
+        "generatorGuid": "109b8662-1aa0-40dc-a44f-28248c518513",
+        "generatorName": "ContractGenerator.Adagio_Generator",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@SalvageContractor_Title",
+        "descriptionRaw": "@SalvageContractor_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "4eebc223-b15f-9cba-d1b9-070816b6caa9",
+      "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+      "conceptKey": "5e34501e5161fb396fe1",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|salvage-ship|activity-defined|standard|unlock:e67e4c61c68f|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "salvage-contractor",
+        "descriptionStem": "salvage-contractor",
+        "handlerStem": "adagio-lawful-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e67e4c61c68f",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:salvage-contractor",
+          "description:salvage-contractor",
+          "handler:adagio-lawful-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:e67e4c61c68f",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adaigo Stanton 1 Lawful Salvage Very Easy",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@SalvageContractor_Title",
+      "internalName": "Adaigo_Stanton1_Lawful_Salvage_VeryEasy",
+      "missionType": "CareerContract",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "1836a0ee-2ab0-4a07-8773-f2d74da580f1"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "No credit reward extracted",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4eebc223-b15f-9cba-d1b9-070816b6caa9",
+        "generatorGuid": "109b8662-1aa0-40dc-a44f-28248c518513",
+        "generatorName": "ContractGenerator.Adagio_Generator",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@SalvageContractor_Title",
+        "descriptionRaw": "@SalvageContractor_Description"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "6948c2b9-b8b3-4358-8051-11ef761deebb",
+      "familyKey": "109b8662-1aa0-40dc-a44f-28248c518513|Adagio_Lawful_Salvage_Stanton_Career",
+      "conceptKey": "2ebeab9e43db2eac194e",
+      "objectiveSignature": {
+        "key": "5f6a61ef-e9a4-427d-9358-2b38efe43d11|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|salvage-ship|activity-defined|standard|unlock:172f312af869|unknown:bounded||||",
+        "activityKey": "salvage-ship",
+        "titleStem": "salvage-contractor",
+        "descriptionStem": "salvage-contractor-difficulty",
+        "handlerStem": "adagio-lawful-salvage",
+        "archetype": "Salvage",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:172f312af869",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:salvage-ship",
+          "activity-source:structural",
+          "title:salvage-contractor",
+          "description:salvage-contractor-difficulty",
+          "handler:adagio-lawful-salvage",
+          "contract:careercontract",
+          "archetype:salvage",
+          "intro:standard",
+          "chain:unlock:172f312af869",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Salvage",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Adaigo Stanton 1 Lawful Salvage Hard",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "Be aware that due to the size of the Claim, a Large Salvage Ship is recommended.",
+      "rawName": "@SalvageContractor_Title",
+      "internalName": "Adaigo_Stanton1_Lawful_Salvage_Hard",
+      "missionType": "CareerContract",
+      "provider": "Adagio Holdings",
+      "faction": "Adagio Holdings",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+        "factionDisplayName": "Adagio Holdings",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Salvage",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "MissionLocation_BP",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "SolarSystem"
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "e8a00ff0-3f47-48c7-b758-b40ef2d38f47"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyVariableName",
+          "guidOrToken": "MissionLocation_BP",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "propertyExtendedTextToken",
+          "guidOrToken": "Location",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "attr": "locationLevelType",
+          "guidOrToken": "SolarSystem",
+          "confidence": "unresolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "No credit reward extracted",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "No credit reward extracted",
+        "creditStatus": "provenAbsent",
+        "creditsDetail": {
+          "status": "provenAbsent",
+          "displayText": "No credit reward extracted",
+          "confidence": "proven_absent",
+          "sourceRefs": []
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+          "factionDisplayName": "Adagio Holdings",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5f6a61ef-e9a4-427d-9358-2b38efe43d11",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "6948c2b9-b8b3-4358-8051-11ef761deebb",
+        "generatorGuid": "109b8662-1aa0-40dc-a44f-28248c518513",
+        "generatorName": "ContractGenerator.Adagio_Generator",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/adagio holdings/adagio_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@SalvageContractor_Title",
+        "descriptionRaw": "@SalvageContractor_Difficulty_Hard"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

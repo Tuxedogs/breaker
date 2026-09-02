@@ -1,0 +1,1347 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "citizens-for-prosperity:rectify-delivery-error",
+  "variants": [
+    {
+      "variantKey": "786cc5d1-dc91-46ec-abc0-1db7d1eba035",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-to-station",
+        "descriptionStem": "cfp-delivery-outpost-to-station",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-to-station",
+          "description:cfp-delivery-outpost-to-station",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Rectify Delivery Error",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nGot word that folks are waiting for an important supply shipment that hasn’t arrived. We thought maybe it had been destroyed but turns out that it accidently got taken to the wrong place. While we look into how the mistake happened, we need someone to head over to [Location] to pick up package #[item1] and deliver it to the correct location at [Destination].\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nYou available for the run?\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_OutpostToStation_title_001",
+      "internalName": "CFP_Pyro_RegionC_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Region C",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region C",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region C"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [
+          "Region C"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "resolvedName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region C"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region C",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+              "displayName": "Region C",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region C"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region C"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "67,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "67,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "67,750 aUEC",
+          "amount": 67750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 67750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 67750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "786cc5d1-dc91-46ec-abc0-1db7d1eba035",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@CFP_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "e2c25ede-b9a2-4812-8511-3289e3dc90ae",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-to-station",
+        "descriptionStem": "cfp-delivery-outpost-to-station",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-to-station",
+          "description:cfp-delivery-outpost-to-station",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Rectify Delivery Error",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nGot word that folks are waiting for an important supply shipment that hasn’t arrived. We thought maybe it had been destroyed but turns out that it accidently got taken to the wrong place. While we look into how the mistake happened, we need someone to head over to [Location] to pick up package #[item1] and deliver it to the correct location at [Destination].\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nYou available for the run?\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_OutpostToStation_title_001",
+      "internalName": "CFP_Pyro_RegionB_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Region B",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region B",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region B"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "possibleLocations": [
+          "Region B"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "resolvedName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "displayName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region B"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region B",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+              "displayName": "Region B",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region B"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region B"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "67,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "67,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "67,750 aUEC",
+          "amount": 67750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 67750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 67750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "e2c25ede-b9a2-4812-8511-3289e3dc90ae",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@CFP_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "f610bec8-38cc-4cae-a2d5-902646ea47fb",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-to-station",
+        "descriptionStem": "cfp-delivery-outpost-to-station",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-to-station",
+          "description:cfp-delivery-outpost-to-station",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Rectify Delivery Error",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nGot word that folks are waiting for an important supply shipment that hasn’t arrived. We thought maybe it had been destroyed but turns out that it accidently got taken to the wrong place. While we look into how the mistake happened, we need someone to head over to [Location] to pick up package #[item1] and deliver it to the correct location at [Destination].\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nYou available for the run?\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_OutpostToStation_title_001",
+      "internalName": "CFP_Pyro_RegionA_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "67,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "67,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "67,750 aUEC",
+          "amount": 67750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 67750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 67750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "f610bec8-38cc-4cae-a2d5-902646ea47fb",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@CFP_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "f88707a6-0d02-46ee-b620-c7669657beb8",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-to-station",
+        "descriptionStem": "cfp-delivery-outpost-to-station",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-to-station",
+          "description:cfp-delivery-outpost-to-station",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Rectify Delivery Error",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hey,\n\nGot word that folks are waiting for an important supply shipment that hasn’t arrived. We thought maybe it had been destroyed but turns out that it accidently got taken to the wrong place. While we look into how the mistake happened, we need someone to head over to [Location] to pick up package #[item1] and deliver it to the correct location at [Destination].\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nYou available for the run?\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_OutpostToStation_title_001",
+      "internalName": "CFP_Pyro_RegionD_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Neutral / 0 rep; Region D",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Neutral / 0 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region D",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region D"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [
+          "Region D"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "resolvedName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region D",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+              "displayName": "Region D",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region D"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region D"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +50",
+          "67,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +50"
+        ],
+        "credits": "67,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "67,750 aUEC",
+          "amount": 67750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 67750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 67750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "f88707a6-0d02-46ee-b620-c7669657beb8",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@CFP_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    }
+  ]
+}

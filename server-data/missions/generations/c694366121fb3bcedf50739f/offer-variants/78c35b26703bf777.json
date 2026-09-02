@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "civilian-defense-force:happy-invictus",
+  "variants": [
+    {
+      "variantKey": "2b9e3935-df44-4d67-8418-59438e715b72",
+      "familyKey": "716f51c8-3d2f-460a-a127-52c7957be976|FleetWeek2025",
+      "conceptKey": "c5b49ad5b3897f86849f",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|unknown|contract|standard|open|unknown:bounded||||variant:2b9e3935-df44-4d67-8418-59438e715b72",
+        "activityKey": "unknown",
+        "titleStem": "uee-invictus-visit",
+        "descriptionStem": "uee-invictus-visit",
+        "handlerStem": "fleet-week2025",
+        "archetype": "Contract",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:uee-invictus-visit",
+          "description:uee-invictus-visit",
+          "handler:fleet-week2025",
+          "contract:contract",
+          "archetype:contract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Contract",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "716f51c8-3d2f-460a-a127-52c7957be976|FleetWeek2025",
+          "UEEVisitTheHalls_SimpleObjective"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Happy Invictus",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hello Citizens and Civilians,\n\nThe United Empire of Earth is proud to acknowledge the start of this year's Invictus ceremony. Originally started in 2542, the United Planets of Earth dispatched Naval ships to each of the settled planets to pick up the latest group of volunteers entering military service.\n\nNow, over four hundred years later, Invictus continues this proud tradition of celebrating those among us who are standing up for others and protecting the Empire as well as showcasing the latest additions to the Naval fleet.\n\nThis year's festivities can be found on ArcCorp in Stanton and feature a great hall with some of the newest ships on display as well as the new Idris Experience Tour where you can tour an active-duty Idris, accessible at the top of the IO-North tower.\n\nAccept this contract if you would like guidance to the festivities. As a special thank you, in partnership with the Mercenary Guild, attendees will be awarded [ScripAmount] scrip.\n\nThank you and enjoy your Invictus.",
+      "rawName": "@UEE_Invictus_Visit_Title",
+      "internalName": "UEEVisitTheHalls_SimpleObjective",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "716f51c8-3d2f-460a-a127-52c7957be976|FleetWeek2025",
+          "UEEVisitTheHalls_SimpleObjective"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "56,750 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "56,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "56,750 aUEC",
+          "amount": 56750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/2025content.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 56750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 56750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "10",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/yearspecificcontent/2025content.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "2b9e3935-df44-4d67-8418-59438e715b72",
+        "generatorGuid": "716f51c8-3d2f-460a-a127-52c7957be976",
+        "generatorName": "ContractGenerator.2025Content",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/2025content.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@UEE_Invictus_Visit_Title",
+        "descriptionRaw": "@UEE_Invictus_Visit_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

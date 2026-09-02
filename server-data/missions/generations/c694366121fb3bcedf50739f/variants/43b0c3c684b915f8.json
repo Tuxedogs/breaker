@@ -1,0 +1,1401 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "6eb86e29-817a-4463-b37e-5a719004b4dc|RedWind Hauling Pyro Solar",
+  "variant": {
+    "variantKey": "5e4ece98-9904-443f-ba51-4659a99b709a",
+    "familyKey": "6eb86e29-817a-4463-b37e-5a719004b4dc|RedWind Hauling Pyro Solar",
+    "conceptKey": "9cab64c0aa3664d21d3c",
+    "objectiveSignature": {
+      "key": "aa5f0bf8-f36f-423a-b9dd-73084139db23|4c086729-2be5-4c08-870f-2bfe1f170083|deliver|activity-defined|standard|open|unknown:bounded||||",
+      "activityKey": "deliver",
+      "titleStem": "red-wind-haul-cargo-single-to-multi",
+      "descriptionStem": "red-wind-haul-cargo-single-to-multi-waste",
+      "handlerStem": "red-wind-hauling-solar",
+      "archetype": "Cargo",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:deliver",
+        "activity-source:structural",
+        "title:red-wind-haul-cargo-single-to-multi",
+        "description:red-wind-haul-cargo-single-to-multi-waste",
+        "handler:red-wind-hauling-solar",
+        "contract:careercontract",
+        "archetype:cargo",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Cargo",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "displayName": "[ReputationRank] Hauler Needed for [CargoGradeToken] Shipment",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "RED WIND LINEHAUL\n'YOUR GOODS IN GOOD HANDS'\n----------------------------   \n\nThey're doing a clean out at [Location] and have a bunch of [MissionMaxSCUSize] or smaller waste containers that needs to be hauled out to a few different spots. (Don't ask me why. They're paying us is all I know.)\n\nDROP OFF LOCATIONS (ANY ORDER)  \n[SingleToMultiToken]\n\nAnd don't forget to pack a handheld tractor beam to bring along.",
+    "rawName": "@RedWind_HaulCargo_SingleToMulti_title_01",
+    "internalName": "RedWind_Pyro_BulkGrade_RegionD_HH_RuinToStation_Waste_CargoHauling_SingleToMulti3",
+    "missionType": "Hauling - Stellar",
+    "provider": "Red Wind Linehaul",
+    "faction": "Red Wind Linehaul",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+      "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+      "factionDisplayName": "Red Wind Linehaul",
+      "trackType": "Hauling",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Senior / 77,750 rep to Master / 237,750 rep",
+    "prerequisiteSummary": "Senior / 77,750 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Region D",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Senior / 77,750 rep to Master / 237,750 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Region D",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "MissionLocality procedural region scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [
+        "Region D"
+      ],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+      ],
+      "possibleLocations": [
+        "Region D"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "displayName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Region D"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Generated region pool: Region D",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+        "resolvedName": "Region D",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Region D"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Hauling +2,000",
+        "Affinity +50",
+        "1,691,000 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hauling +2,000",
+        "Affinity +50"
+      ],
+      "credits": "1,691,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "1,691,000 aUEC",
+        "amount": 1691000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 1691000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 1691000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "scopeDisplayName": "Hauling",
+        "amount": 2000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "aeda9081-30bd-4f3f-938b-1a5362905e25"
+        ]
+      },
+      {
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 50,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+        "familyId": "6eb86e29-817a-4463-b37e-5a719004b4dc|RedWind Hauling Pyro Solar",
+        "templateGuid": "dfca72ae-147f-45a0-8c54-82eb86bef675"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_27cba6c545b12622cc659e26",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "RedWind Hauling Pyro Solar"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_f596775a12ff7483bd1a269f",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "5e4ece98-9904-443f-ba51-4659a99b709a"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_094cf171ff663dfd45bac581",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "rewardGuid": "aeda9081-30bd-4f3f-938b-1a5362905e25",
+            "reputationAmount": 2000,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_7d100d6c30ed9d1a7af1158a",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "type": "fixed_reputation",
+          "index": 1,
+          "payload": {
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_7aaaf2e6b0f4669fb3fb51bc",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 1691000,
+              "amount": 1691000,
+              "rawAmount": 1690985.5328315534,
+              "integerRoundedAmount": 1690986,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 9.379999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Insane_complexity_NOT_soloable_7",
+                    "level": 7,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 4.914
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 3.09
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Insane_complexity_NOT_soloable_7",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "80",
+                "value": 80,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "dfca72ae-147f-45a0-8c54-82eb86bef675",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/haulcargo_singletomulti3_bulk_waste.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": false,
+        "contractOverride": null,
+        "overrideCandidate": false,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind Hauling Pyro Solar']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_singletomulti3_bulk_waste.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@mission_contractor_0012",
+          "displayText": "Red Wind Linehaul",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "recordName": "FactionReputation.FactionReputation_Lawful_RedWindLinehaul",
+          "recordType": null,
+          "displayName": "Red Wind Linehaul",
+          "path": "factions/factionreputation/factionreputation_lawful_redwindlinehaul.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@RedWind_HaulCargo_SingleToMulti_title_01",
+          "localizationKey": "RedWind_HaulCargo_SingleToMulti_title_01",
+          "template": "~mission(ReputationRank) Hauler Needed for ~mission(CargoGradeToken) Shipment",
+          "displayText": "~mission(ReputationRank) Hauler Needed for ~mission(CargoGradeToken) Shipment",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(ReputationRank)",
+              "expression": "ReputationRank",
+              "segments": [
+                "ReputationRank"
+              ]
+            },
+            {
+              "raw": "~mission(CargoGradeToken)",
+              "expression": "CargoGradeToken",
+              "segments": [
+                "CargoGradeToken"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": false,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "agree"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+            "requirements": [
+              {
+                "edgeId": "pre_f596775a12ff7483bd1a269f",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+                  "recordName": "MissionLocality.RegionD",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "5e4ece98-9904-443f-ba51-4659a99b709a"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 1691000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 1691000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_094cf171ff663dfd45bac581",
+            "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+              "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+              "rewardGuid": "aeda9081-30bd-4f3f-938b-1a5362905e25",
+              "reputationAmount": 2000,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          },
+          {
+            "edgeId": "out_7d100d6c30ed9d1a7af1158a",
+            "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+            "type": "fixed_reputation",
+            "index": 1,
+            "payload": {
+              "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+              "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+              "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "reputationAmount": 50,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 1691000,
+              "amount": 1691000,
+              "rawAmount": 1690985.5328315534,
+              "integerRoundedAmount": 1690986,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 9.379999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Insane_complexity_NOT_soloable_7",
+                    "level": 7,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 4.914
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_likely_to_die_Ship_too_6",
+                    "level": 6,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 3.09
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Insane_complexity_NOT_soloable_7",
+                  "riskOfLoss": "Player_likely_to_die_Ship_too_6",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "80",
+                "value": 80,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 1691000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 1691000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "aeda9081-30bd-4f3f-938b-1a5362905e25",
+            "reputationAmount": 2000,
+            "reward": {
+              "guid": "aeda9081-30bd-4f3f-938b-1a5362905e25",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_M",
+              "editorName": "+T_06",
+              "reputationAmount": 2000,
+              "path": "reputation/rewards/missionrewards_reputation/reputationrewardamount_positive_m.xml"
+            }
+          },
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+            "reputationAmount": 50,
+            "reward": {
+              "guid": "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_50",
+              "editorName": "Undefined Name",
+              "reputationAmount": 50,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_50.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_7171c9867d28c0951acb8253",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "dfca72ae-147f-45a0-8c54-82eb86bef675",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "1d922a11-8f85-45d4-b072-d472f4bf3597",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_singletomulti3_bulk_waste.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_7171c9867d28c0951acb8253",
+          "variantId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "dfca72ae-147f-45a0-8c54-82eb86bef675",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "b999ef65-35be-45bf-908a-5eac6e06ba12",
+                  "maxContainerSize": "32",
+                  "minSCU": "132",
+                  "maxSCU": "200"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "b999ef65-35be-45bf-908a-5eac6e06ba12"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "32",
+                    "value": 32
+                  },
+                  "minSCU": {
+                    "raw": "132",
+                    "value": 132
+                  },
+                  "maxSCU": {
+                    "raw": "200",
+                    "value": 200
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "1d922a11-8f85-45d4-b072-d472f4bf3597",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_singletomulti3_bulk_waste.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "5e4ece98-9904-443f-ba51-4659a99b709a",
+      "generatorGuid": "6eb86e29-817a-4463-b37e-5a719004b4dc",
+      "generatorName": "ContractGenerator.RedWind_Hauling",
+      "generatorPath": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_hauling.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@RedWind_HaulCargo_SingleToMulti_title_01",
+      "descriptionRaw": "@RedWind_HaulCargo_SingleToMulti_waste_desc_01"
+    }
+  }
+}

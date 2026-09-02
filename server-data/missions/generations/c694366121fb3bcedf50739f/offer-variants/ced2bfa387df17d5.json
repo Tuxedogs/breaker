@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "gillys-flight-school:combat-gauntlet-scenario-6",
+  "variants": [
+    {
+      "variantKey": "1673d9f9-6688-4710-b7fc-33b50fb1394a",
+      "familyKey": "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+      "conceptKey": "6f4a624f9d288369424c",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|eliminate-all|activity-defined|standard|unlock:14a1639cb2dd|unknown:bounded|||supporting-family:cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List|",
+        "activityKey": "eliminate-all",
+        "titleStem": "gfs-ship-wave-attack-mission06",
+        "descriptionStem": "gfs-ship-wave-attack-mission06",
+        "handlerStem": "unaffiliated-gillys-training-school-list",
+        "archetype": "Mercenary",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:14a1639cb2dd",
+        "legalState": "unknown:bounded",
+        "confidence": "partial",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:supporting",
+          "title:gfs-ship-wave-attack-mission06",
+          "description:gfs-ship-wave-attack-mission06",
+          "handler:unaffiliated-gillys-training-school-list",
+          "contract:contract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:unlock:14a1639cb2dd",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+          "GillysPilotSchool_Mission06"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Combat Gauntlet - Scenario #6",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Congrats on completing part five of this eight-part course.\n\nI’m bringing out the big guns for scenario six. Time for you to go up against larger, multi-crewed ships, which provide a few new challenges. Not only will you have to contend with their enhanced firepower but their multifaceted shields means you’ll have to target one shield face continually to do real damage. Easier said than done when both of y’all are moving at such fast speeds.      \n\nFind your way to [Location] whenever you're ready.\n\nAs a bonus, successful completion of the scenario will net the original contractor holder an award of [ScripAmount] MG Scrip. \n\nTRICKS OF THE TRADE:\n- Size Advantage – When going up against a larger ship, try to stay away from their front as typically this is where the majority of their offensive fire is located. \n\nGood luck out there, \nInstructor Gilly     \n\nABOUT GILLY’S FLIGHT SCHOOL   \nInstructor Lucas “Gilly” Baramsco has served in six squadrons and has over ten years of teaching experience. Whether a student with zero flight experience or a professional looking to polish their skills, Gilly Flight School offers a variety of courses to “Launch Your Piloting Career.”",
+      "rawName": "@GFS_ShipWaveAttack_Mission06_Title",
+      "internalName": "GillysPilotSchool_Mission06",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "cb1e6955-675a-4919-9c1c-07af70a2b3f4|Unaffiliated_GillysTrainingSchool_List",
+          "GillysPilotSchool_Mission06"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag; Stanton 1",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "273d805c-999c-45e1-b4a3-b326ac29d816"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 1",
+        "system": "Stanton",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Generated pickup pool (Stanton)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Stanton 1",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Generated pickup pool (Stanton)",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "939dad8b-a944-4baa-a6b7-163ec203adad"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Generated pickup pool (Stanton)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "171,250 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "171,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "171,250 aUEC",
+          "amount": 171250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/unaffiliated_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 171250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 171250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "14",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/unaffiliated_generator.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1673d9f9-6688-4710-b7fc-33b50fb1394a",
+        "generatorGuid": "cb1e6955-675a-4919-9c1c-07af70a2b3f4",
+        "generatorName": "ContractGenerator.Unaffiliated_Generator",
+        "generatorPath": "contracts/contractgenerator/unaffiliated_generator.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@GFS_ShipWaveAttack_Mission06_Title",
+        "descriptionRaw": "@GFS_ShipWaveAttack_Mission06_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

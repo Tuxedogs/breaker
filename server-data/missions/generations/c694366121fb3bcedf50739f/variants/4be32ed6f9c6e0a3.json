@@ -1,0 +1,1522 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Career_Pyro",
+  "variant": {
+    "variantKey": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+    "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Career_Pyro",
+    "conceptKey": "ca913a9266c740c378e0",
+    "objectiveSignature": {
+      "key": "f9a36b95-12b8-4fe3-a465-cec1d548c94b|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|refuel|activity-defined|standard|unlock:18ca82bbd0b3|unknown:unknown||||",
+      "activityKey": "refuel",
+      "titleStem": "uwc-refueling-multiple",
+      "descriptionStem": "uwc-refueling-multiple",
+      "handlerStem": "refueling",
+      "archetype": "Refuel",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:18ca82bbd0b3",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:refuel",
+        "activity-source:structural",
+        "title:uwc-refueling-multiple",
+        "description:uwc-refueling-multiple",
+        "handler:refueling",
+        "contract:careercontract",
+        "archetype:refuel",
+        "intro:standard",
+        "chain:unlock:18ca82bbd0b3",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "hard",
+    "tierLabel": "High Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Refuel"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "CRITICAL FLEET REFUEL",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Heyo,\n\nOver at [Location] we just got a refueling job for an entire small fleet of ships who all together need [FuelType]. Talk about when it rains it pours!\n\nThe client will pay you at the rate of [RefuelRequest], and as a United Wayfarers Club contractor, you will also qualify for the UWC service fee listed above upon completion.\n\nUnfortunately, where they're held up isn't the nicest of sectors so I'd be alert for any tomfoolery while you're doing the run. \n\nIt'll be best to try get them all back on their way as soon as you can.\n\nHappy trails,\n\nDina Deloit\nDispatch Hub\nUnited Wayfarers Club\n\"We’ve got your back\"",
+    "rawName": "@UWC_Refueling_multiple_hard_title_001",
+    "internalName": "Refueling_Pyro_Both_4M_Rank4",
+    "missionType": "CareerContract",
+    "provider": "United Wayfarers Club",
+    "faction": "United Wayfarers Club",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+      "factionDisplayName": "United Wayfarers Club",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Refuel",
+    "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Prerequisite mission or completion tag; Pyro",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Pyro",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Region A",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "MissionLocality procedural region scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [
+        "Region A"
+      ],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "9d323b1b-5805-4ddd-8641-563246d55279"
+      ],
+      "possibleLocations": [
+        "Pyro",
+        "Region A"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "resolvedName": "Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "displayName": "Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+          "system": "Pyro"
+        },
+        {
+          "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "displayName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Region A"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro system",
+        "confidence": "system_scope"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Generated region pool: Region A",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "partial",
+        "sourceRole": "system_scope",
+        "sourceRefs": [
+          "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": true,
+        "rawLocalities": [
+          {
+            "guid": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "displayName": "Pyro",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "resolvedName": "Pyro",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+        "resolvedName": "Region A",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro",
+      "Region A"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4",
+        "Standing +200",
+        "100,250 aUEC"
+      ],
+      "blueprintRewards": [
+        "Fuel Nozzle: Norfield, Marlin, Lindstrom, Harkin +4"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+          "poolName": "Fuel Nozzle",
+          "rewardCount": 8,
+          "missionChanceLabel": "100% chance",
+          "chanceLabel": "12.5% chance - 1 of 8",
+          "rewards": [
+            {
+              "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+              "displayName": "Norfield",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "990aa98f-0674-466f-9875-113d414d690b",
+              "displayName": "Marlin",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "dbe5c153-2149-4843-9b03-297f3e66d092",
+              "displayName": "Lindstrom",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "96566b51-4fed-4711-ae6e-9565f54a1ffa",
+              "displayName": "Harkin",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "6d1117b4-6bc0-4279-acfc-a675da2dad3d",
+              "displayName": "RN-7s",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "40e0d74b-2449-4102-a856-514c4c62400b",
+              "displayName": "Bendix",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "52d84acb-6817-4fed-8741-e85ddba302cc",
+              "displayName": "Torrez",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "ff1d331e-dfb1-4864-8755-cbf187be5ae3",
+              "displayName": "Ezra",
+              "componentType": "dockingCollar",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "12.5% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Standing +200"
+      ],
+      "credits": "100,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "100,250 aUEC",
+        "amount": 100250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 100250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 100250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+        "factionDisplayName": "United Wayfarers Club",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 200,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+        "familyId": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Career_Pyro",
+        "templateGuid": "41ec7c73-1418-4fae-858c-7d4004d0f992"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_feef062946b54ad7e32ae3da",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_e9eaa73943730eea77be844b",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "aa0afe9f-bf9e-4115-88b7-5057e2f4ba73"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Refueling_Career_Pyro"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_d917b251b56490b407716345",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "459badf3-af16-489e-9401-42b1ad5a1e9e"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "Refueling_Career_Pyro"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_98e18ef0f5d89e044e9e2f36",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "9d323b1b-5805-4ddd-8641-563246d55279"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "bd1e48f4-7d7a-4ec3-934c-2441842dc884"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "55c5185e-92d2-4bea-9cc9-1924b506ee03": [
+          {
+            "edgeId": "pre_c0a131dfeb20793d8b5d46be",
+            "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "ownerScope": "subcontract",
+            "ownerId": "55c5185e-92d2-4bea-9cc9-1924b506ee03",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "55c5185e-92d2-4bea-9cc9-1924b506ee03"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          }
+        ],
+        "65d25755-16f1-4a9d-9fe6-10b54420aed0": [
+          {
+            "edgeId": "pre_46d7d1c14ad1cc13d5b7ac3e",
+            "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "ownerScope": "subcontract",
+            "ownerId": "65d25755-16f1-4a9d-9fe6-10b54420aed0",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "65d25755-16f1-4a9d-9fe6-10b54420aed0"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          }
+        ],
+        "b6804653-20fe-4d38-b4c9-17cbebff158b": [
+          {
+            "edgeId": "pre_54129c0acb7014464ca3775d",
+            "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "ownerScope": "subcontract",
+            "ownerId": "b6804653-20fe-4d38-b4c9-17cbebff158b",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "b6804653-20fe-4d38-b4c9-17cbebff158b"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_93a0e745638d3916550b40d3",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "blueprint_reward",
+          "index": 0,
+          "payload": {
+            "blueprintPoolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+            "chance": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "BlueprintRewards"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "BlueprintRewards"
+          }
+        },
+        {
+          "edgeId": "out_4f25c41275a85df75895b64d",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_4b9b36d5bdb968417e9db887",
+          "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 100250,
+              "amount": 100250,
+              "rawAmount": 100280.87962492298,
+              "integerRoundedAmount": 100281,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.550000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "20.5",
+                "value": 20.5,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "41ec7c73-1418-4fae-858c-7d4004d0f992",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/shiprefueling.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/shiprefueling.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@UWC_From",
+          "displayText": "United Wayfarers Club",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+          "recordName": "FactionReputation.FactionReputation_Lawful_UnitedWayfarersClub",
+          "recordType": null,
+          "displayName": "United Wayfarers Club",
+          "path": "factions/factionreputation/factionreputation_lawful_unitedwayfarersclub.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@UWC_Refueling_multiple_hard_title_001",
+          "localizationKey": "UWC_Refueling_multiple_hard_title_001",
+          "template": "CRITICAL FLEET REFUEL",
+          "displayText": "CRITICAL FLEET REFUEL",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "requirements": [
+              {
+                "edgeId": "pre_d917b251b56490b407716345",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+                  "recordName": "MissionLocality.Pyro",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "Refueling_Career_Pyro"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_98e18ef0f5d89e044e9e2f36",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+                  "recordName": "MissionLocality.RegionA",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "bd1e48f4-7d7a-4ec3-934c-2441842dc884"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "55c5185e-92d2-4bea-9cc9-1924b506ee03",
+            "requirements": [
+              {
+                "edgeId": "pre_c0a131dfeb20793d8b5d46be",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+                  "recordName": "MissionLocality.RegionB",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "55c5185e-92d2-4bea-9cc9-1924b506ee03"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "65d25755-16f1-4a9d-9fe6-10b54420aed0",
+            "requirements": [
+              {
+                "edgeId": "pre_46d7d1c14ad1cc13d5b7ac3e",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+                  "recordName": "MissionLocality.RegionC",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "65d25755-16f1-4a9d-9fe6-10b54420aed0"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "b6804653-20fe-4d38-b4c9-17cbebff158b",
+            "requirements": [
+              {
+                "edgeId": "pre_54129c0acb7014464ca3775d",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+                  "recordName": "MissionLocality.RegionD",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "b6804653-20fe-4d38-b4c9-17cbebff158b"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 100250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 100250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [
+          {
+            "edgeId": "out_93a0e745638d3916550b40d3",
+            "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "type": "blueprint_reward",
+            "index": 0,
+            "payload": {
+              "blueprintPoolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+              "chance": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "BlueprintRewards"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "BlueprintRewards"
+            }
+          }
+        ],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_4f25c41275a85df75895b64d",
+            "variantId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 100250,
+              "amount": 100250,
+              "rawAmount": 100280.87962492298,
+              "integerRoundedAmount": 100281,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 4.550000000000001,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 1.36
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 1.6500000000000001
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 1.1
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.44
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "20.5",
+                "value": 20.5,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 100250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 100250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "f9a36b95-12b8-4fe3-a465-cec1d548c94b",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "proven_absent",
+      "evidence": [],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 0,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "bd1e48f4-7d7a-4ec3-934c-2441842dc884",
+      "generatorGuid": "9d045828-9b93-4cf3-bfb2-3e48c05fb539",
+      "generatorName": "ContractGenerator.UnitedWayfarersClub",
+      "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/united wayfarers club/unitedwayfarersclub.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@UWC_Refueling_multiple_hard_title_001",
+      "descriptionRaw": "@UWC_Refueling_multiple_hard_desc_001"
+    }
+  }
+}

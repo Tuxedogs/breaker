@@ -17,37 +17,93 @@
     "evidenceStatus": "source_and_generation_pinned"
   },
   "targetSourceV4": {
-    "status": "source_v4_4_10_acceptance_refreshed_pending_moonbreaker_publication",
+    "status": "source_v4_4_10_provenance_stable_audit_refreshed_pending_moonbreaker_publication",
     "channel": "LIVE",
-    "buildId": "4.10.191.2241-12519617-scintel.2",
+    "buildId": "4.10.191.2241-12519617",
+    "acceptedGenerationId": "4.10.191.2241-12519617-scintel.11",
+    "sourceBuildId": "4.10.191.2241-12519617",
     "sourceContractVersion": 4,
-    "sourceRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/missions",
-    "scintelReceipt": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/scintel_api_validation.json",
+    "sourceRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.11/datasets/missions",
+    "scintelReceipt": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.11/datasets/scintel_api_validation.json",
     "artifacts": [
       {
         "name": "mission_contracts.json",
         "schemaVersion": 4,
-        "bytes": 110500511,
-        "sha256": "c316aa90fe1749df830d391b71b3df74869b5570d56aee445eb44a2f39da2028"
+        "bytes": 110481747,
+        "sha256": "76f20061c9a387313dc7dc15157b1b2130def2130bf6812468e73de6e42e5aff"
       },
       {
         "name": "mission_objective_templates.json",
         "schemaVersion": 2,
-        "bytes": 14152271,
-        "sha256": "8f7358116a83b0f6a9aef56f5e988e643f2f7e7432b7f7227eb1a67eadd80104"
+        "bytes": 14152168,
+        "sha256": "118019b009bfe499114012e0147ed8811f1545dd600761fef35962e03a42083a"
       },
       {
         "name": "mission_extraction_report.json",
         "schemaVersion": 4,
-        "bytes": 74006,
-        "sha256": "d9d0619c8a68c7a50d50ff15516f5b40bb87c690230045364cda4c1fd8821d79"
+        "bytes": 74002,
+        "sha256": "67c2ba77e5c1079e1d1aedfaa9de3e7902affadb245cd6599a0e2d8f80511279"
       },
       {
         "name": "mission_reward_lookups.json",
-        "bytes": 725402,
-        "sha256": "17b297cf0cd3b5a82ad951c5123bb25e0b46286dfbc31ea49701e8c30ef75ed7"
+        "bytes": 725399,
+        "sha256": "5cce7eb798b27891999dfc0250f90523e1aeb83cf49b633dd88b9d42b24772af"
+      },
+      {
+        "name": "ref_index.json",
+        "bytes": 17607109,
+        "sha256": "4e96643edacd2df6b073b745bf91e5a1c321e2dabb4d41f4b35ff71b7a6d2d35"
       }
     ],
+    "transitionFromPriorAcceptedSource": {
+      "acceptedGenerationId": "4.10.191.2241-12519617-scintel.2",
+      "sourceRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/missions",
+      "artifacts": [
+        {
+          "name": "mission_contracts.json",
+          "bytes": 110500511,
+          "sha256": "c316aa90fe1749df830d391b71b3df74869b5570d56aee445eb44a2f39da2028"
+        },
+        {
+          "name": "mission_objective_templates.json",
+          "bytes": 14152271,
+          "sha256": "8f7358116a83b0f6a9aef56f5e988e643f2f7e7432b7f7227eb1a67eadd80104"
+        },
+        {
+          "name": "mission_extraction_report.json",
+          "bytes": 74006,
+          "sha256": "d9d0619c8a68c7a50d50ff15516f5b40bb87c690230045364cda4c1fd8821d79"
+        },
+        {
+          "name": "mission_reward_lookups.json",
+          "bytes": 725402,
+          "sha256": "17b297cf0cd3b5a82ad951c5123bb25e0b46286dfbc31ea49701e8c30ef75ed7"
+        },
+        {
+          "name": "ref_index.json",
+          "bytes": 17607109,
+          "sha256": "4e96643edacd2df6b073b745bf91e5a1c321e2dabb4d41f4b35ff71b7a6d2d35"
+        }
+      ],
+      "classification": {
+        "deterministicProvenanceMigration": [
+          "Semantic source provenance uses stable sourceBuildId 4.10.191.2241-12519617 instead of a candidate generation build ID.",
+          "Catalog and objective-template generatedAt values use the immutable source snapshot time; candidate wall-clock extraction time remains report-only."
+        ],
+        "derivedStableIdHashConsequences": [
+          "All 16319 edge IDs were re-keyed from the candidate-dependent source identity; the .7 edge set SHA-256 is ac1a59c37ec4667efb721c490d0eb89d066d72de04e7e9498187c5e831cd9ad3 and is identical in corrected successor generations .8, .9, and provenance-stable.1."
+        ],
+        "actualMissionContentChanges": [
+          "mission_reward_lookups corrects two source-localized blueprint display labels: Antium Helmet Jet to Antium Core Jet for blueprint 2487dc3a-6a2e-4071-a165-f140d0c8b20d, and Antium Arms Maroon to Antium Helmet Jet for blueprint cdd236fa-56b9-4913-90cf-be7f4e6ca5a7. Pool IDs, blueprint IDs and paths, membership, weights, and chances are unchanged; this is not a gameplay-semantic pool change."
+        ],
+        "unexpected": []
+      },
+      "semanticCanonicalSha256": {
+        "mission_contracts.json": "f4b37a2401e9b72ae11fedb71268774d6a7f264befbfc7cefbb2d358b738cd19",
+        "mission_objective_templates.json": "c23ecf2bd5e54d5c5176c5b6e6247b32b076c0e6233f983bfb71919f6a1bbadc",
+        "mission_extraction_report.json": "6485a2344bdb28d3988b30865d93b21f8e80a17e851c9543227834a265fec6a5"
+      }
+    },
     "counts": {
       "exactVariants": 2513,
       "families": 261,
@@ -85,6 +141,17 @@
       "auditedHeadhuntersCanonicalSha256": "07d755ad1c18de3fae843d5055e6fac0b5b6896ff1a9ae4ddbc873d210938311",
       "blueprintReverseLinkTupleCount": 8313,
       "blueprintReverseLinkCanonicalSha256": "45b3ef8560b87cccacf7e782b8c3e16f5d3f6aae153add65096258befabc12e6",
+      "result": "pass"
+    },
+    "auditRefreshValidation": {
+      "contractTuple": "3/4/1",
+      "sourceExactVariantCount": 2513,
+      "sourceFamilyCount": 261,
+      "protectedPayoutEvidenceSha256": "143f769a57cb6b0bb0e42ad00e9fe1b356f16d6ad247f2c081d9c7bf02f3f8af",
+      "protectedBlueprintPoolEvidenceSha256": "945b992067d584731f5a9953ebc0a422c4e02b107583a5b755a489967905d2d7",
+      "protectedReputationEvidenceSha256": "cbdb90b16bd32418a9e61a5a5dfad1807a6323bb668dbd663d1cf8a2ba5a058e",
+      "protectedAvailabilityEvidenceSha256": "5df86951f16a9a9b2d57ea6365e088b4df347fd3da3ccd4b095db05ba5da7405",
+      "contradictionLedgerReopened": false,
       "result": "pass"
     },
     "targetShapedGeneration": {
@@ -151,14 +218,15 @@
       "evidenceStatus": "historical_published_generation_pending_4_10_reshaping"
     },
     "publicationState": {
-      "sourcePublished": false,
-      "currentPointerChanged": false,
+      "sourcePublished": true,
+      "currentPointerChanged": true,
+      "acceptedGenerationId": "4.10.191.2241-12519617-scintel.11",
       "currentMissionSchemaVersion": 3,
       "currentSourceContractVersion": 4,
       "currentOfferSchemaVersion": 1,
-      "currentGenerationId": "09845999a73432800e773946",
+      "currentGenerationId": "c694366121fb3bcedf50739f",
       "rollbackGenerationId": "fdfd54f65b1f84a621899b21",
-      "nextRequiredStep": "moonbreaker_mission_publication_unblocked_after_accepted_4_10_source_audit"
+      "nextRequiredStep": "publication_complete"
     },
     "evidenceStatus": "source_backed_accepted_prepublication_receipt"
   },
@@ -1305,7 +1373,7 @@
       "evidenceStatus": "published_and_verified"
     },
     {
-      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/missions/mission_contracts.json",
+      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.11/datasets/missions/mission_contracts.json",
       "role": "accepted Scintel source contract before Moonbreaker publication",
       "evidenceStatus": "source_backed"
     },
@@ -1320,7 +1388,7 @@
       "evidenceStatus": "moonbreaker_derived"
     },
     {
-      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.2/datasets/ref_index.json",
+      "path": "D:/scintel/out/LIVE/4.10.191.2241-12519617-scintel.11/datasets/ref_index.json",
       "role": "source GUID and locality-name resolution",
       "evidenceStatus": "source_backed"
     },

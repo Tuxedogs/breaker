@@ -845,7 +845,7 @@ const legacyShapedRootFiles = [
   ...legacyMissionOutputFiles,
 ] as const;
 const legacyShardDirectories = ["families", "family-variants", "variants", "offers", "offer-variants"] as const;
-const missionShaperVersion = "moonbreaker_mission_shaper_v3_5_offer_reputation_runtime_titles";
+const missionShaperVersion = "moonbreaker_mission_shaper_v3_6_portable_source_provenance";
 const missionOfferGoldenManifestPath = path.resolve(
   "docs",
   "mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
@@ -871,6 +871,7 @@ const craftingBlueprintsPath = path.resolve(
 const refIndexPath = process.env.MISSION_REF_INDEX
   ? path.resolve(process.env.MISSION_REF_INDEX)
   : undefined;
+const refIndexLogicalIdentity = "ref_index.json";
 
 function truthy(value: unknown): boolean {
   return value === true || value === 1 || value === "1" || value === "true";
@@ -3121,7 +3122,7 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOffe
     ? readFile(refIndexPath, "utf8").then((content) => ({
       records: JSON.parse(content) as RefIndexEntry[],
       status: "explicit" as const,
-      path: refIndexPath,
+      operationalPath: refIndexPath,
       sha256: createHash("sha256").update(content).digest("hex"),
     }))
     : Promise.resolve({
@@ -3147,6 +3148,7 @@ const [catalogInput, lookups, craftingBlueprintInput, refIndexInput, missionOffe
       };
       targetSourceV4?: {
         buildId?: string;
+        acceptedGenerationId?: string;
         artifacts?: Array<{ name?: string; sha256?: string }>;
         invariantResults?: {
           protectedFieldMismatchCount?: number;
@@ -3203,10 +3205,7 @@ if (
   throw new Error("Mission offer source-v4 preservation invariant receipt is missing or failed.");
 }
 const auditedBuildId = missionOfferManifestInput.manifest.targetSourceV4?.buildId;
-const auditedRefIndexPath = missionOfferManifestInput.manifest.evidenceFiles?.find(
-  (evidence) => evidence.role === "source GUID and locality-name resolution"
-    && evidence.evidenceStatus === "source_backed",
-)?.path;
+const auditedAcceptedGenerationId = missionOfferManifestInput.manifest.targetSourceV4?.acceptedGenerationId;
 const protectedInvariantBaselines = Object.fromEntries(
   (missionOfferManifestInput.manifest.invariantHashTargets?.targets ?? []).flatMap((target) =>
     target.name && target.baselineSha256 ? [[target.name, target.baselineSha256]] : []
@@ -3395,13 +3394,13 @@ const shaped: ShapedCatalog = {
     "server-data/missions/source/mission_contracts.json",
     "server-data/missions/source/mission_reward_lookups.json",
     "server-data/crafting/component-cards/browse.json",
-    ...(refIndexPath ? [refIndexPath] : []),
+    ...(refIndexPath ? [refIndexLogicalIdentity] : []),
     "docs/mission-build-generation-audit-live-4.9.0-fdfd54f65b1f84a621899b21.json",
   ],
   sourceInputs: {
     refIndex: {
       status: refIndexInput.status,
-      path: "path" in refIndexInput ? refIndexInput.path : undefined,
+      path: "operationalPath" in refIndexInput ? refIndexLogicalIdentity : undefined,
       sha256: "sha256" in refIndexInput ? refIndexInput.sha256 : undefined,
       buildId: refIndexInput.status === "explicit" ? catalog.source.buildId : undefined,
       recordCount: refIndexInput.records.length,
@@ -3487,14 +3486,15 @@ const shardManifest: MissionShardManifest = {
 const publicationGate: MissionPublicationGateReceiptV1 = {
   schemaVersion: 1,
   sourceBuildId: catalog.source.buildId,
+  acceptedGenerationId: auditedAcceptedGenerationId,
   refIndex: {
     status: refIndexInput.status,
-    path: "path" in refIndexInput ? refIndexInput.path : undefined,
+    path: "operationalPath" in refIndexInput ? refIndexLogicalIdentity : undefined,
+    operationalPath: "operationalPath" in refIndexInput ? refIndexInput.operationalPath : undefined,
     sha256: "sha256" in refIndexInput ? refIndexInput.sha256 : undefined,
     buildId: refIndexInput.status === "explicit" ? catalog.source.buildId : undefined,
     recordCount: refIndexInput.records.length,
     auditedBuildId,
-    auditedPath: auditedRefIndexPath,
   },
   semantics: {
     variantCount: shaped.summary.variantCount,

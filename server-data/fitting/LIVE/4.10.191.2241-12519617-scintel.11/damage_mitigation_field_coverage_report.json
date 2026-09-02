@@ -1,0 +1,197 @@
+{
+  "buildId": "4.10.191.2241-12519617",
+  "channel": "LIVE",
+  "confidence": "high",
+  "coverage": {
+    "extracted": 10,
+    "missing": 0,
+    "missingFields": []
+  },
+  "externalSourceUse": {
+    "communityData": false,
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "foundryNativePercent": 100,
+  "generatedAt": "2026-09-01T12:01:56Z",
+  "generator": "scripts/fitting/build_fitting_registries.py",
+  "generatorModule": "scripts/fitting/reports/damage_mitigation_field_coverage.py",
+  "inputAudit": "docs/medusa-perseus-damage-mitigation-audit.md",
+  "notes": [
+    "This report proves field extraction only; it does not implement final damage or penetration distance simulation.",
+    "Final penetration distance after mitigation remains intentionally unresolved."
+  ],
+  "recordCount": 10,
+  "records": [
+    {
+      "confidence": "high",
+      "field": "ammo.damagePhysical",
+      "record": {
+        "componentKey": null,
+        "displayName": null,
+        "entityClass": null,
+        "name": null,
+        "shipKey": null
+      },
+      "registry": "vehicle_ammo",
+      "sourceFile": "ammoparams/vehicle/rsi_perseus_ballisticcannon_s8_ammo.xml",
+      "sourcePath": "AmmoParams/projectileParams/BulletProjectileParams/damage/DamageInfo@DamagePhysical",
+      "status": "extracted",
+      "value": 5400
+    },
+    {
+      "confidence": "high",
+      "field": "projectile.basePenetrationDistance",
+      "record": {
+        "componentKey": null,
+        "displayName": null,
+        "entityClass": null,
+        "name": null,
+        "shipKey": null
+      },
+      "registry": "vehicle_ammo",
+      "sourceFile": "ammoparams/vehicle/rsi_perseus_ballisticcannon_s8_ammo.xml",
+      "sourcePath": "AmmoParams/projectileParams/BulletProjectileParams/penetrationParams@basePenetrationDistance",
+      "status": "extracted",
+      "value": 17.85
+    },
+    {
+      "confidence": "high",
+      "field": "shipWeapon.alphaDamageTotal",
+      "record": {
+        "componentKey": "17417d27_af6d_40fc_af97_ab6db7ab313c",
+        "displayName": "RSI Medusa Cannon",
+        "entityClass": "17417d27-af6d-40fc-af97-ab6db7ab313c",
+        "name": "RSI_Perseus_BallisticCannon_B_S8",
+        "shipKey": null
+      },
+      "registry": "ship_weapons",
+      "sourceFile": "entities/scitem/ships/weapons/rsi_perseus_ballisticcannon_b_s8.xml",
+      "sourcePath": "joined vehicle_ammo.alphaDamageTotal",
+      "status": "extracted",
+      "value": 5400
+    },
+    {
+      "confidence": "high",
+      "field": "shield.physicalAbsorptionMin",
+      "record": {
+        "componentKey": "925ec9df_cd0d_4c40_a5ad_6d22bdbfdeaa",
+        "displayName": "SureStop",
+        "entityClass": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
+        "name": "SHLD_GODI_S03_SureStop_SCItem",
+        "shipKey": null
+      },
+      "registry": "shields",
+      "sourceFile": "entities/scitem/ships/shieldgenerator/shld_godi_s03_surestop_scitem.xml",
+      "sourcePath": "SHLD_GODI_S03_SureStop_SCItem/Components/SCItemShieldGeneratorParams/ShieldAbsorption/SShieldAbsorption",
+      "status": "extracted",
+      "value": 0
+    },
+    {
+      "confidence": "high",
+      "field": "shield.physicalAbsorptionMax",
+      "record": {
+        "componentKey": "925ec9df_cd0d_4c40_a5ad_6d22bdbfdeaa",
+        "displayName": "SureStop",
+        "entityClass": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
+        "name": "SHLD_GODI_S03_SureStop_SCItem",
+        "shipKey": null
+      },
+      "registry": "shields",
+      "sourceFile": "entities/scitem/ships/shieldgenerator/shld_godi_s03_surestop_scitem.xml",
+      "sourcePath": "SHLD_GODI_S03_SureStop_SCItem/Components/SCItemShieldGeneratorParams/ShieldAbsorption/SShieldAbsorption",
+      "status": "extracted",
+      "value": 0.45
+    },
+    {
+      "confidence": "high",
+      "field": "shield.physicalResistanceMax",
+      "record": {
+        "componentKey": "925ec9df_cd0d_4c40_a5ad_6d22bdbfdeaa",
+        "displayName": "SureStop",
+        "entityClass": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
+        "name": "SHLD_GODI_S03_SureStop_SCItem",
+        "shipKey": null
+      },
+      "registry": "shields",
+      "sourceFile": "entities/scitem/ships/shieldgenerator/shld_godi_s03_surestop_scitem.xml",
+      "sourcePath": "SHLD_GODI_S03_SureStop_SCItem/Components/SCItemShieldGeneratorParams/ShieldResistance/SShieldResistance",
+      "status": "extracted",
+      "value": 0.25
+    },
+    {
+      "confidence": "high",
+      "field": "armor.physicalDeflectionThreshold",
+      "record": {
+        "componentKey": "d2f24bb0_9825_455d_852a_302a3ee290a4",
+        "displayName": "Constellation Andromeda Ship Armor",
+        "entityClass": "d2f24bb0-9825-455d-852a-302a3ee290a4",
+        "name": "ARMR_RSI_Perseus",
+        "shipKey": null
+      },
+      "registry": "ship_armors",
+      "sourceFile": "entities/scitem/ships/armor/armr_rsi_perseus.xml",
+      "sourcePath": "ARMR_RSI_Perseus/Components/SCItemVehicleArmorParams/armorDeflection/deflectionValue@DamagePhysical",
+      "status": "extracted",
+      "value": 495
+    },
+    {
+      "confidence": "high",
+      "field": "armor.physicalResistanceMultiplier",
+      "record": {
+        "componentKey": "d2f24bb0_9825_455d_852a_302a3ee290a4",
+        "displayName": "Constellation Andromeda Ship Armor",
+        "entityClass": "d2f24bb0-9825-455d-852a-302a3ee290a4",
+        "name": "ARMR_RSI_Perseus",
+        "shipKey": null
+      },
+      "registry": "ship_armors",
+      "sourceFile": "entities/scitem/ships/armor/armr_rsi_perseus.xml",
+      "sourcePath": "ARMR_RSI_Perseus/Components/SHealthComponentParams/DamageResistances/DamageResistance/PhysicalResistance",
+      "status": "extracted",
+      "value": 0.81
+    },
+    {
+      "confidence": "high",
+      "field": "armor.physicalHullDamageMultiplier",
+      "record": {
+        "componentKey": "d2f24bb0_9825_455d_852a_302a3ee290a4",
+        "displayName": "Constellation Andromeda Ship Armor",
+        "entityClass": "d2f24bb0-9825-455d-852a-302a3ee290a4",
+        "name": "ARMR_RSI_Perseus",
+        "shipKey": null
+      },
+      "registry": "ship_armors",
+      "sourceFile": "entities/scitem/ships/armor/armr_rsi_perseus.xml",
+      "sourcePath": "ARMR_RSI_Perseus/Components/SCItemVehicleArmorParams/damageMultiplier/DamageInfo@DamagePhysical",
+      "status": "extracted",
+      "value": 0.7
+    },
+    {
+      "confidence": "high",
+      "field": "ship.componentPenetrationDamageMultiplier",
+      "record": {
+        "componentKey": null,
+        "displayName": "RSI Perseus",
+        "entityClass": "40a1f83b-3623-49e6-8168-ab8223998aa2",
+        "name": "RSI Perseus",
+        "shipKey": "40a1f83b-3623-49e6-8168-ab8223998aa2"
+      },
+      "registry": "ships",
+      "sourceFile": "entities/spaceships/rsi_perseus.xml",
+      "sourcePath": "RSI_Perseus/Components/VehicleComponentParams@componentPenetrationDamageMultiplier",
+      "status": "extracted",
+      "value": 0.8
+    }
+  ],
+  "registry": "damage_mitigation_field_coverage_report",
+  "schemaVersion": 1,
+  "sourceClassification": "derived from Foundry XML and generated fitting registries for confirmed damage mitigation fields",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.10.191.2241-12519617\\foundry\\records",
+  "unresolvedRefs": []
+}

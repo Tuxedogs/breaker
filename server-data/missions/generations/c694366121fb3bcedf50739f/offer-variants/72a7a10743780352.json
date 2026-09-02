@@ -1,0 +1,1415 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "headhunters:special-cargo-for-destination",
+  "variants": [
+    {
+      "variantKey": "5c693c72-693a-4378-b822-ae5e3ca5a674",
+      "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+      "conceptKey": "e467a87b43d90389ae0e",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "headhunters-delivery-outpost-to-station",
+        "descriptionStem": "headhunters-delivery-outpost-to-station",
+        "handlerStem": "hh-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:headhunters-delivery-outpost-to-station",
+          "description:headhunters-delivery-outpost-to-station",
+          "handler:hh-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionD_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Special Cargo for [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Looking for someone to hand deliver a cargo crate. The package has got to go from [Location] to [Destination]. \n\nBe fast and discreet about it, ok?  A handheld tractor beam would also be smart to bring along. \n\n- Stows",
+      "rawName": "@Headhunters_Delivery_OutpostToStation_title_001",
+      "internalName": "HH_Pyro_RegionD_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionD_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Region D",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region D",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region D"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+        ],
+        "possibleLocations": [
+          "Region D"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "resolvedName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region D",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+              "displayName": "Region D",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region D"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region D"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Hauling +50",
+          "48,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hauling +50"
+        ],
+        "credits": "48,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "48,250 aUEC",
+          "amount": 48250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 48250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 48250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+          "scopeDisplayName": "Hauling",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "5c693c72-693a-4378-b822-ae5e3ca5a674",
+        "generatorGuid": "c99e07ca-d1ba-4a90-a199-c66d69f22352",
+        "generatorName": "ContractGenerator.HH_Courier",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Headhunters_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@Headhunters_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "7e9f8e59-b76a-49ca-9744-3f251e4986df",
+      "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+      "conceptKey": "e467a87b43d90389ae0e",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "headhunters-delivery-outpost-to-station",
+        "descriptionStem": "headhunters-delivery-outpost-to-station",
+        "handlerStem": "hh-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:headhunters-delivery-outpost-to-station",
+          "description:headhunters-delivery-outpost-to-station",
+          "handler:hh-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionA_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Special Cargo for [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Looking for someone to hand deliver a cargo crate. The package has got to go from [Location] to [Destination]. \n\nBe fast and discreet about it, ok?  A handheld tractor beam would also be smart to bring along. \n\n- Stows",
+      "rawName": "@Headhunters_Delivery_OutpostToStation_title_001",
+      "internalName": "HH_Pyro_RegionA_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionA_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Region A",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Hauling +50",
+          "48,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hauling +50"
+        ],
+        "credits": "48,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "48,250 aUEC",
+          "amount": 48250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 48250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 48250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+          "scopeDisplayName": "Hauling",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "7e9f8e59-b76a-49ca-9744-3f251e4986df",
+        "generatorGuid": "c99e07ca-d1ba-4a90-a199-c66d69f22352",
+        "generatorName": "ContractGenerator.HH_Courier",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Headhunters_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@Headhunters_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "86d2ddfc-3996-4898-b803-24c4280dacb9",
+      "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+      "conceptKey": "e467a87b43d90389ae0e",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "headhunters-delivery-outpost-to-station",
+        "descriptionStem": "headhunters-delivery-outpost-to-station",
+        "handlerStem": "hh-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:headhunters-delivery-outpost-to-station",
+          "description:headhunters-delivery-outpost-to-station",
+          "handler:hh-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionB_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Special Cargo for [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Looking for someone to hand deliver a cargo crate. The package has got to go from [Location] to [Destination]. \n\nBe fast and discreet about it, ok?  A handheld tractor beam would also be smart to bring along. \n\n- Stows",
+      "rawName": "@Headhunters_Delivery_OutpostToStation_title_001",
+      "internalName": "HH_Pyro_RegionB_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionB_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Region B",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region B",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region B"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+        ],
+        "possibleLocations": [
+          "Region B"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "resolvedName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+            "displayName": "Region B",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region B"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region B",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "a3b085f5-9a4f-4681-b2d0-55b072dc0519"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+              "displayName": "Region B",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region B"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region B"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Hauling +50",
+          "48,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hauling +50"
+        ],
+        "credits": "48,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "48,250 aUEC",
+          "amount": 48250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 48250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 48250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+          "scopeDisplayName": "Hauling",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "86d2ddfc-3996-4898-b803-24c4280dacb9",
+        "generatorGuid": "c99e07ca-d1ba-4a90-a199-c66d69f22352",
+        "generatorName": "ContractGenerator.HH_Courier",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Headhunters_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@Headhunters_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "bd11b40c-0e52-4c0a-895e-b0494754b8f5",
+      "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+      "conceptKey": "e467a87b43d90389ae0e",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "headhunters-delivery-outpost-to-station",
+        "descriptionStem": "headhunters-delivery-outpost-to-station",
+        "handlerStem": "hh-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:headhunters-delivery-outpost-to-station",
+          "description:headhunters-delivery-outpost-to-station",
+          "handler:hh-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionC_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Special Cargo for [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Looking for someone to hand deliver a cargo crate. The package has got to go from [Location] to [Destination]. \n\nBe fast and discreet about it, ok?  A handheld tractor beam would also be smart to bring along. \n\n- Stows",
+      "rawName": "@Headhunters_Delivery_OutpostToStation_title_001",
+      "internalName": "HH_Pyro_RegionC_OutpostToStation_1box_Single_Courier",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "displayName": "Hauling",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Hauling",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+          "HH_Pyro_RegionC_OutpostToStation_1box_Single_Courier"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Region C",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Region C",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region C"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [
+          "Region C"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "resolvedName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region C"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region C",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+              "displayName": "Region C",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region C"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region C"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Hauling +50",
+          "48,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hauling +50"
+        ],
+        "credits": "48,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "48,250 aUEC",
+          "amount": 48250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 48250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 48250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+          "scopeDisplayName": "Hauling",
+          "amount": 50,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "bd11b40c-0e52-4c0a-895e-b0494754b8f5",
+        "generatorGuid": "c99e07ca-d1ba-4a90-a199-c66d69f22352",
+        "generatorName": "ContractGenerator.HH_Courier",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/hh_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Headhunters_Delivery_OutpostToStation_title_001",
+        "descriptionRaw": "@Headhunters_Delivery_OutpostToStation_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    }
+  ]
+}

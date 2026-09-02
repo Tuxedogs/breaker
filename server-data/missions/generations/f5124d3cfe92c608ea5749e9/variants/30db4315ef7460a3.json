@@ -1,0 +1,1150 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
+  "variant": {
+    "variantKey": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+    "familyKey": "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
+    "conceptKey": "4636c7f3cb30badf9bfa",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:hauling|deliver|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "deliver",
+      "titleStem": "headhunters-haul-cargo-ato-b-olp",
+      "descriptionStem": "headhunters-haul-cargo-ato-b-olp-illegal",
+      "handlerStem": "hh-hauling",
+      "archetype": "Cargo",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:deliver",
+        "activity-source:structural",
+        "title:headhunters-haul-cargo-ato-b-olp",
+        "description:headhunters-haul-cargo-ato-b-olp-illegal",
+        "handler:hh-hauling",
+        "contract:careercontract",
+        "archetype:cargo",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Cargo"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
+        "HH_OLP_AtoB_WTP_MedicalSupplies"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "displayName": "Cargo Retrieval",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Need someone to snag some cargo for us. We were using an old Hathor PAF for dead drops, but a local gang has dug in and we can’t get our shit.\n\nIf you feel like kicking some ass, grab the cargo from the freight elevator at [Location] and deliver it to the freight elevator at [Destination]. \n\nFrom what I’ve heard this place is full of all sorts. Won’t be easy getting out stuff back, but that’s what we’re paying you for.\n\nJust make sure you got a ship that can handle a [MissionMaxSCUSize] load, and try not to get shot in the process. A handheld tractor beam would also be smart to bring along. \n\nStows out.",
+    "rawName": "@Headhunters_HaulCargo_AToB_OLP_title_01",
+    "internalName": "HH_OLP_AtoB_WTP_MedicalSupplies",
+    "missionType": "CareerContract",
+    "provider": "Headhunters",
+    "faction": "Headhunters",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+      "factionDisplayName": "Headhunters",
+      "trackType": "Hauling",
+      "confidence": "partial",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
+        "HH_OLP_AtoB_WTP_MedicalSupplies"
+      ],
+      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Hauling +200",
+        "311,250 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hauling +200"
+      ],
+      "credits": "311,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "311,250 aUEC",
+        "amount": 311250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 311250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 311250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
+        "scopeDisplayName": "Hauling",
+        "amount": 200,
+        "confidence": "partial",
+        "sourceRefs": [
+          "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "51e63405-693e-4cdd-a140-9dd34de582ff"
+        ],
+        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+        "familyId": "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
+        "templateGuid": "aece763a-811a-4f88-9771-e12bdeb3c92a"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_85749e26d91f42bef3914662",
+          "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_c1549378c9acf05925b86377",
+          "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_5881134cffca8fb07ddb8719",
+          "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 311250,
+              "amount": 311250,
+              "rawAmount": 311243.3193659172,
+              "integerRoundedAmount": 311243,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.632999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.575
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "25",
+                "value": 25,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "aece763a-811a-4f88-9771-e12bdeb3c92a",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/haulcargo_atob_wtp_medicalsupplies.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": true,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Hauling']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='HH_Hauling']/contracts/CareerContract[@id='f56b2ee1-1729-4374-a2d5-f6a5607f3a5d']/paramOverrides/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_atob_wtp_medicalsupplies.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@headhunters_from",
+          "displayText": "Headhunters",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_HeadHunters",
+          "recordType": null,
+          "displayName": "Headhunters",
+          "path": "factions/factionreputation/factionreputation_unlawful_headhunters.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@Headhunters_HaulCargo_AToB_OLP_title_01",
+          "localizationKey": "Headhunters_HaulCargo_AToB_OLP_title_01",
+          "template": "Cargo Retrieval",
+          "displayText": "Cargo Retrieval",
+          "runtimeTokens": [],
+          "rendering": "static",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": true,
+            "templateIllegal": false,
+            "comparison": "conflict"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+            "requirements": [
+              {
+                "edgeId": "pre_85749e26d91f42bef3914662",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 311250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 311250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_c1549378c9acf05925b86377",
+            "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "reputationAmount": 200,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 311250,
+              "amount": 311250,
+              "rawAmount": 311243.3193659172,
+              "integerRoundedAmount": 311243,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 7.632999999999999,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Hard_PvE_or_Easy_PvP_action_5",
+                    "level": 5,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.8599999999999999
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Like_spinning_10_plates_at_once_5",
+                    "level": 5,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 3.51
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.575
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Hard_PvE_or_Easy_PvP_action_5",
+                  "mentalLoad": "Like_spinning_10_plates_at_once_5",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "25",
+                "value": 25,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 311250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 311250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "D:/scintel/out/LIVE/4.10.191.2241-12519617/foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+            "reputationAmount": 200,
+            "reward": {
+              "guid": "51e63405-693e-4cdd-a140-9dd34de582ff",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_200",
+              "editorName": "Undefined Name",
+              "reputationAmount": 200,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_200.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_4dddb522e2fb1b1d624bfe68",
+          "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "aece763a-811a-4f88-9771-e12bdeb3c92a",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "d5506a24-5729-4354-81fb-0959173357c4",
+                  "maxContainerSize": "1",
+                  "minSCU": "3",
+                  "maxSCU": "5"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "d5506a24-5729-4354-81fb-0959173357c4"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "3",
+                    "value": 3
+                  },
+                  "maxSCU": {
+                    "raw": "5",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "42419d87-c47d-4fda-8a84-f88924a80c39",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_atob_wtp_medicalsupplies.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_4dddb522e2fb1b1d624bfe68",
+          "variantId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "aece763a-811a-4f88-9771-e12bdeb3c92a",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_Resource",
+                "rawAttributes": {
+                  "resource": "d5506a24-5729-4354-81fb-0959173357c4",
+                  "maxContainerSize": "1",
+                  "minSCU": "3",
+                  "maxSCU": "5"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "d5506a24-5729-4354-81fb-0959173357c4"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "3",
+                    "value": 3
+                  },
+                  "maxSCU": {
+                    "raw": "5",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "42419d87-c47d-4fda-8a84-f88924a80c39",
+          "objectiveTokenDebugName": "Hauling",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_atob_wtp_medicalsupplies.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": []
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
+      "generatorGuid": "14aa6102-c23c-4c92-9b70-09c3fe765b86",
+      "generatorName": "ContractGenerator.HeadHunters_Generator",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Headhunters_HaulCargo_AToB_OLP_title_01",
+      "descriptionRaw": "@Headhunters_HaulCargo_AToB_OLP_Illegal_desc_01"
+    }
+  }
+}

@@ -1,0 +1,2589 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+  "variants": [
+    {
+      "variantKey": "bde44fdc-d522-4940-be16-5fbdef74c62e",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "7e290043996de755909f",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:bde44fdc-d522-4940-be16-5fbdef74c62e",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Easy",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_E_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_Easy",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "36,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "36,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "36,750 aUEC",
+          "amount": 36750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 36750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 36750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "bde44fdc-d522-4940-be16-5fbdef74c62e",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_E_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_E_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "22b7d6b3-4498-4085-b462-5da247fc923d",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "11f882bdf2aed58480ad",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:22b7d6b3-4498-4085-b462-5da247fc923d",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Hard",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_H_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_Hard",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "62,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "62,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "62,000 aUEC",
+          "amount": 62000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 62000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 62000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "22b7d6b3-4498-4085-b462-5da247fc923d",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_H_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_H_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "5c0092ae-d9b1-4425-a40b-a4d70c7b6968",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "e20f89e7c3ad9826f038",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|intro|unlock:e7e18b663bc2|unknown:bounded||||variant:5c0092ae-d9b1-4425-a40b-a4d70c7b6968",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "intro",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:intro",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": true,
+      "specificityBadges": [
+        "Recovery",
+        "Intro",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Intro",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_intro_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_Intro",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "33,750 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "33,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "33,750 aUEC",
+          "amount": 33750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 33750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 33750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5c0092ae-d9b1-4425-a40b-a4d70c7b6968",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_intro_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_intro_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "e644fa53-3673-4b96-acaf-c087907e1bcc",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "a7878060f9b51a2c7ea2",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:e644fa53-3673-4b96-acaf-c087907e1bcc",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Medium",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_M_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_Medium",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +150",
+          "43,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "43,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "43,500 aUEC",
+          "amount": 43500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 43500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 43500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e644fa53-3673-4b96-acaf-c087907e1bcc",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_M_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_M_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "3f65a29b-b988-4c22-96c4-6f54cf0f1ab3",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "a83c2f7b2a3a770c0e4d",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:3f65a29b-b988-4c22-96c4-6f54cf0f1ab3",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Super",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_S_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_Super",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +300",
+          "95,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "95,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "95,250 aUEC",
+          "amount": 95250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 95250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 95250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "3f65a29b-b988-4c22-96c4-6f54cf0f1ab3",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_S_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_S_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "382ba351-9809-458f-92ef-0de0615899c6",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "5494dcfac5c594a3ac9a",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:382ba351-9809-458f-92ef-0de0615899c6",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Very Easy",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_VE_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_VeryEasy",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "33,750 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "33,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "33,750 aUEC",
+          "amount": 33750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 33750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 33750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "382ba351-9809-458f-92ef-0de0615899c6",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_VE_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_VE_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    },
+    {
+      "variantKey": "4695f1d7-1246-4b71-b942-c41736f5c6cb",
+      "familyKey": "e6771808-7286-4a0d-8714-bc19e1918a25|FTL_RecoverItem_Space_Stanton_Career",
+      "conceptKey": "0f87da0b264b0dd7b63c",
+      "objectiveSignature": {
+        "key": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|standard|unlock:e7e18b663bc2|unknown:bounded||||variant:4695f1d7-1246-4b71-b942-c41736f5c6cb",
+        "activityKey": "unknown",
+        "titleStem": "spacecollect-cargo",
+        "descriptionStem": "spacecollect-cargo",
+        "handlerStem": "ftl-recover-item-space",
+        "archetype": "Recovery",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:e7e18b663bc2",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:spacecollect-cargo",
+          "description:spacecollect-cargo",
+          "handler:ftl-recover-item-space",
+          "contract:careercontract",
+          "archetype:recovery",
+          "intro:standard",
+          "chain:unlock:e7e18b663bc2",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Recovery",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "FTL Recover Item Space Stanton Very Hard",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@spacecollect_cargo_title_VH_01",
+      "internalName": "FTL_RecoverItem_Space_Stanton_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "FTL Courier",
+      "faction": "FTL Courier",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+        "factionDisplayName": "FTL Courier",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Recovery",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "3071acd0-7d8f-482e-95a5-aa78eff983b8"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star, Stanton 1",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+              "displayName": "Stanton 1",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star",
+              "Stanton 1"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star, Stanton 1",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "system": "Stanton",
+          "confidence": "resolved"
+        }
+      ],
+      "locations": [
+        "Stanton Star",
+        "Stanton 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +250",
+          "83,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +250"
+        ],
+        "credits": "83,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "83,500 aUEC",
+          "amount": 83500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 83500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 83500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+          "factionDisplayName": "FTL Courier",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 250,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "66179ed2-c685-4df1-a3a4-e2a7a2da2df0",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4695f1d7-1246-4b71-b942-c41736f5c6cb",
+        "generatorGuid": "e6771808-7286-4a0d-8714-bc19e1918a25",
+        "generatorName": "ContractGenerator.FTL_RecoverItem",
+        "generatorPath": "contracts/contractgenerator/interstellartransport_guild/ftl/ftl_recoveritem.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@spacecollect_cargo_title_VH_01",
+        "descriptionRaw": "@spacecollect_cargo_desc_VH_01"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 1
+      }
+    }
+  ]
+}

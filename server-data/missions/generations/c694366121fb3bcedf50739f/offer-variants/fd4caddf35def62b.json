@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "bounty-hunters-guild:verified-bounty-target-name-at-location--9f37e4f490",
+  "variants": [
+    {
+      "variantKey": "811dbf1b-f021-4809-96ff-77fe8002b8e5",
+      "familyKey": "f52b6df3-4a40-418e-b32e-30ac6381d144|BountyHuntersGuild_FPS_Stanton",
+      "conceptKey": "3c225253988c65e07a57",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|eliminate-specific|activity-defined|standard|unlock:d79a25a05287|unknown:bounded||||",
+        "activityKey": "eliminate-specific",
+        "titleStem": "bhg-bounty-asd-research",
+        "descriptionStem": "bhg-bounty-asd-research",
+        "handlerStem": "bounty-hunters-guild-fps",
+        "archetype": "Bounty",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "unlock:d79a25a05287",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-specific",
+          "activity-source:structural",
+          "title:bhg-bounty-asd-research",
+          "description:bhg-bounty-asd-research",
+          "handler:bounty-hunters-guild-fps",
+          "contract:contract",
+          "archetype:bounty",
+          "intro:standard",
+          "chain:unlock:d79a25a05287",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Bounty",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "f52b6df3-4a40-418e-b32e-30ac6381d144|BountyHuntersGuild_FPS_Stanton",
+          "BHG_ASDFacilityDelving_ResearchWing_EliminateSpecific"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Verified Bounty: [TargetName] at [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "--------------------------------------------------------\n----------------- BOUNTY CONTRACT -----------------\n--------------------------------------------------------\n\nBOUNTY HUNTERS GUILD\nPROCESSING & DISTRIBUTION\n\nThe Bounty Hunters Guild has authorized an official bounty.\n\nNAME: [TargetName] \nSYSTEM: Stanton\nRISK ASSESSMENT: Medium\nLAST KNOWN LOCATION:  [Location]\nKNOWN AFFILIATIONS: \nNOTES: We have tracked this bounty target to the Research wing of an abandoned Associated Science and Development facility. While shuttered, various scavengers and other unsavory types are known to frequent the area.\n\nThe facility itself might also pose a risk as the nature of the research being conducted there is unknown. Be on the lookout for potential environmental hazards while in pursuit of the target.\n\nBOUNTY HUNTERS GUILD\nIn Pursuit of Justice\n\nThe Bounty Hunters Guild is a security service sanctioned by the Mercenary Guild and authorized to operate in both the UEE and beyond in accordance with Xenotrade Authority Acts.",
+      "rawName": "@bhg_bounty_title_ASD_Research_001",
+      "internalName": "BHG_ASDFacilityDelving_ResearchWing_EliminateSpecific",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "f52b6df3-4a40-418e-b32e-30ac6381d144|BountyHuntersGuild_FPS_Stanton",
+          "BHG_ASDFacilityDelving_ResearchWing_EliminateSpecific"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Bounty",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton; Stanton 1a",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "location",
+          "label": "Stanton 1a",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "01e1ecb0-ee9e-4e1e-af35-bb6c44770320",
+              "a127e80a-4b3d-4ceb-87d2-d575b1cdf7b3"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton 1a",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728"
+        ],
+        "possibleLocations": [
+          "Stanton 1a"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "resolvedName": "Stanton",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728",
+            "resolvedName": "Stanton 1a",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton1a/starmapobject.stanton1a.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "displayName": "Stanton",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728",
+            "displayName": "Stanton 1a",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton1a/starmapobject.stanton1a.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton",
+            "Stanton 1a"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton, Stanton 1a",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton 1a",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton, Stanton 1a",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
+              "displayName": "Stanton",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+              "system": "Stanton"
+            },
+            {
+              "guid": "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728",
+              "displayName": "Stanton 1a",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stanton1a/starmapobject.stanton1a.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton",
+              "Stanton 1a"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton, Stanton 1a",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "a335e8b0-e551-4126-a213-5634d7d23511",
+          "resolvedName": "Stanton",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "f3fa9d13-3fdc-41f3-b5e5-25f0b74c0728",
+          "resolvedName": "Stanton 1a",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton",
+        "Stanton 1a"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: BHG ASD Facility Delving Research Wing Eliminate Specific: Palatino Arms Metropolis, Palatino Core Metropolis, Palatino Legs Metropolis, Palatino Helmet Metropolis +4",
+          "Bounty Bounty Hunters Guild +50",
+          "44,250 aUEC"
+        ],
+        "blueprintRewards": [
+          "BHG ASD Facility Delving Research Wing Eliminate Specific: Palatino Arms Metropolis, Palatino Core Metropolis, Palatino Legs Metropolis, Palatino Helmet Metropolis +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "6d549de3-21d6-4c46-ba89-2970a4cf7286",
+            "poolName": "BHG ASD Facility Delving Research Wing Eliminate Specific",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "cbdb6663-b54a-482f-a194-c6c2edccbbec",
+                "displayName": "Palatino Arms Metropolis",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "c12bbffd-b102-4ea2-81ff-f0bad777a3d3",
+                "displayName": "Palatino Core Metropolis",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "2d5c93b6-edb6-4203-a8b4-5fdff0bf19eb",
+                "displayName": "Palatino Legs Metropolis",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "75a5706c-6760-4601-ac90-252eaedeb20d",
+                "displayName": "Palatino Helmet Metropolis",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "72957b65-4ca6-415e-9aa1-b47fb054ff7c",
+                "displayName": "Palatino Arms Daystar",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "e0d76040-d679-4d1a-b525-a11c499965b5",
+                "displayName": "Palatino Core Daystar",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "d9bbf475-784f-432e-a018-63282c33f2ea",
+                "displayName": "Palatino Legs Daystar",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "b4c5011f-e993-4654-9fb2-c2f1b40d5e1a",
+                "displayName": "Palatino Helmet Daystar",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Bounty Bounty Hunters Guild +50"
+        ],
+        "credits": "44,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "44,250 aUEC",
+          "amount": 44250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_fps.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 44250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 44250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+          "factionDisplayName": "Unknown faction",
+          "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+          "scopeDisplayName": "Bounty Bounty Hunters Guild",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+            "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+            "21f73b65-3e45-4453-afba-d0713a239da0"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "811dbf1b-f021-4809-96ff-77fe8002b8e5",
+        "generatorGuid": "f52b6df3-4a40-418e-b32e-30ac6381d144",
+        "generatorName": "ContractGenerator.BountyHuntersGuild_FPS",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/bountyhunterguild/bountyhuntersguild_fps.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@bhg_bounty_title_ASD_Research_001",
+        "descriptionRaw": "@bhg_bounty_desc_ASD_Research_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

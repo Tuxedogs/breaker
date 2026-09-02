@@ -1,0 +1,352 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "hockrow-agency:locate-missing-contractors",
+  "variants": [
+    {
+      "variantKey": "e16d5c5c-7698-4afe-ae7b-ea487a095217",
+      "familyKey": "e111cec8-ce28-45a5-b603-213054a30f35|Hockrow_MissingPersons_Nyx",
+      "conceptKey": "10bfada7257a93176317",
+      "objectiveSignature": {
+        "key": "88bac9c7-0986-4945-8b72-c83657a1c8b9|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|missing-person-investigation+search-body|activity-defined|standard|unlock:db54ad134840|unknown:unknown||||",
+        "activityKey": "missing-person-investigation+search-body",
+        "titleStem": "hockcrow-search-body-very",
+        "descriptionStem": "hockcrow-search-body-very",
+        "handlerStem": "hockrow-missing-persons",
+        "archetype": "Investigation",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:db54ad134840",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:missing-person-investigation+search-body",
+          "activity-source:structural",
+          "title:hockcrow-search-body-very",
+          "description:hockcrow-search-body-very",
+          "handler:hockrow-missing-persons",
+          "contract:careercontract",
+          "archetype:investigation",
+          "intro:standard",
+          "chain:unlock:db54ad134840",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Investigation",
+        "Generated pickup pool"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Locate Missing Contractors",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Hockrow Agency \nCase File #MP12854\nLead Investigator: Arken Mallor\n\nCase Summary:\nWe have been asked to track down two contractors who work for a client of ours after they lost contact with them. They were last known to be traveling together in [System]. Until their exact situation can be assessed, our client is stuck in a waiting pattern. \n\nContract Investigator Actions:\nLocate [MissingPersonList] at [Location] and confirm their status. \n\nIf they are deceased, examine the body closely so we can verify their death via your mobiGlas.\n\nAdditional Notes:\nYou'll be heading into what is regarded as a particularly dangerous spot. Backup is highly recommended for this encounter.",
+      "rawName": "@Hockcrow_SearchBody_VeryHard_Title_001",
+      "internalName": "Hockrow_Nyx_VeryHard_MissingPersons",
+      "missionType": "CareerContract",
+      "provider": "Hockrow Agency",
+      "faction": "Hockrow Agency",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+        "factionDisplayName": "Hockrow Agency",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Investigation",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; Nyx; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "af205b64-b1c3-4b81-bdda-6fceb3a98c52"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Generated pickup pool (Nyx)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "generated_from_pool",
+          "displayName": "Nyx",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Generated pickup pool (Nyx)",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "medium",
+          "sourceRole": "locality_pool",
+          "sourceRefs": [
+            "339a0c2f-18be-4a4b-9766-0b43763fb102"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": true,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+              "displayName": "Nyx",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Generated pickup pool (Nyx)",
+            "confidence": "generated_from_pool"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +200",
+          "Standing +50",
+          "185,000 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +200",
+          "Standing +50"
+        ],
+        "credits": "185,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "185,000 aUEC",
+          "amount": 185000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 185000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 185000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+          "factionDisplayName": "Hockrow Agency",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        },
+        {
+          "factionKey": "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+          "factionDisplayName": "Hockrow Agency",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "88bac9c7-0986-4945-8b72-c83657a1c8b9",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "6ae50ed7-f0f3-4b73-b1b2-78cc5928266d"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "e16d5c5c-7698-4afe-ae7b-ea487a095217",
+        "generatorGuid": "e111cec8-ce28-45a5-b603-213054a30f35",
+        "generatorName": "ContractGenerator.HockrowAgency_MissingPerson",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_missingperson.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Hockcrow_SearchBody_VeryHard_Title_001",
+        "descriptionRaw": "@Hockcrow_SearchBody_VeryHard_Description_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

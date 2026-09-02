@@ -1,0 +1,1701 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+  "variant": {
+    "variantKey": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+    "familyKey": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+    "conceptKey": "71681d5ce693a7e34ae0",
+    "objectiveSignature": {
+      "key": "2da0657d-62dc-4f6c-8b25-fd88480d0834|4c086729-2be5-4c08-870f-2bfe1f170083|deliver|activity-defined|standard|unlock:f06ed729ffae|unknown:bounded||||",
+      "activityKey": "deliver",
+      "titleStem": "dead-saints-haul-cargo-multi-to-single",
+      "descriptionStem": "dead-saints-haul-cargo-multi-to-single-drugs-danger",
+      "handlerStem": "dead-saints-hauling-intersteller",
+      "archetype": "Cargo",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:f06ed729ffae",
+      "legalState": "unknown:bounded",
+      "confidence": "strong",
+      "evidence": [
+        "activity:deliver",
+        "activity-source:structural",
+        "title:dead-saints-haul-cargo-multi-to-single",
+        "description:dead-saints-haul-cargo-multi-to-single-drugs-danger",
+        "handler:dead-saints-hauling-intersteller",
+        "contract:careercontract",
+        "archetype:cargo",
+        "intro:standard",
+        "chain:unlock:f06ed729ffae",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "medium",
+    "tierLabel": "Medium Risk",
+    "isIntro": false,
+    "specificityBadges": [
+      "Cargo",
+      "CrimeStat limited",
+      "Generated pickup pool"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "displayName": "DEAD SAINTS - [ReputationRank] Rank - [CargoGradeToken] Cargo Haul",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "One of our best distributors got busted in Stanton so we need a replacement. The guy was an incredible salesman, but a shit smuggler. We need someone who won't run face-first into a security patrol or a pack of pirates to pick up some merchandise at these locations:\n\nPICK UP LOCATIONS (ANY ORDER) \n\n[MultiToSingleToken]\n\nAnd bring it all to [Destination] before security catches on to what's happening. You'll need enough space on your ship for size [MissionMaxSCUSize] containers, and a handheld tractor beam should make loading and unloading nice and easy. \n\n-Twitch",
+    "rawName": "@DeadSaints_HaulCargo_MultiToSingle_title",
+    "internalName": "HaulCargo_SingleToMulti_Interstellar_Medium_Etam_Slam_Neon",
+    "missionType": "Hauling - Interstellar",
+    "provider": "Dead Saints",
+    "faction": "Dead Saints",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+      "factionKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+      "factionDisplayName": "Dead Saints",
+      "trackType": "Hauling",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Rookie / 50 rep to Master / 237,750 rep",
+    "prerequisiteSummary": "Rookie / 50 rep to Master / 237,750 rep; CrimeStat limited to 2 or below; Stanton And Pyro",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Rookie / 50 rep to Master / 237,750 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton And Pyro",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "b75c4f61-c0db-41d6-a405-c846ab11857d"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Stanton And Pyro",
+      "system": "Stanton, Pyro",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "a90b76e0-edff-4999-9760-9dd703208318"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "a90b76e0-edff-4999-9760-9dd703208318",
+          "resolvedName": "Stanton And Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stantonandpyro.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "a90b76e0-edff-4999-9760-9dd703208318",
+          "displayName": "Stanton And Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stantonandpyro.xml",
+          "system": "Stanton, Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton",
+          "Pyro"
+        ],
+        "localityNames": [
+          "Stanton And Pyro"
+        ],
+        "displayLabel": "Stanton, Pyro",
+        "detailLabel": "Generated pickup pool (Stanton, Pyro)",
+        "confidence": "generated_from_pool"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton And Pyro",
+        "displayLabel": "Stanton, Pyro",
+        "detailDisplay": "Generated pickup pool (Stanton, Pyro)",
+        "systems": [
+          "Stanton",
+          "Pyro"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "a90b76e0-edff-4999-9760-9dd703208318"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "a90b76e0-edff-4999-9760-9dd703208318",
+            "displayName": "Stanton And Pyro",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stantonandpyro.xml",
+            "system": "Stanton, Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton",
+            "Pyro"
+          ],
+          "localityNames": [
+            "Stanton And Pyro"
+          ],
+          "displayLabel": "Stanton, Pyro",
+          "detailLabel": "Generated pickup pool (Stanton, Pyro)",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "a90b76e0-edff-4999-9760-9dd703208318",
+        "resolvedName": "Stanton And Pyro",
+        "system": "Stanton, Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Stanton And Pyro"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Hauling +100",
+        "535,000 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hauling +100"
+      ],
+      "credits": "535,000 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "535,000 aUEC",
+        "amount": 535000,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 535000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 535000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+        "factionDisplayName": "Dead Saints",
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "scopeDisplayName": "Hauling",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+          "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+        "familyId": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4|DeadSaints_Hauling_Intersteller",
+        "templateGuid": "abcfce7e-65a6-4674-a761-19fe7ff64d5f"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_68db05d73e76297443fb5358",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "1",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "DeadSaints_Hauling_Intersteller"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_a44571884d266cc33eeb4af4",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "a90b76e0-edff-4999-9760-9dd703208318"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "a90b76e0-edff-4999-9760-9dd703208318"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_30109b19d33c7d712b83128e",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "type": "completion_tag",
+          "polarity": "required",
+          "identifiers": {
+            "completionTag": "b75c4f61-c0db-41d6-a405-c846ab11857d"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_2963e8c4789d39107edfd62a",
+              "polarity": "required",
+              "memberCompletionTags": [
+                "b75c4f61-c0db-41d6-a405-c846ab11857d"
+              ],
+              "countField": "requiredCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/requiredCompletedContractTags/tags"
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_aa4bf18c2727f72138605376",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+            "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_6a326f801a30e92aecfed3a5",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 535000,
+              "amount": 535000,
+              "rawAmount": 534979.7252938554,
+              "integerRoundedAmount": 534980,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.7589999999999995,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 2.808
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.575
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "56",
+                "value": 56,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "abcfce7e-65a6-4674-a761-19fe7ff64d5f",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/haulcargo_multitosingle_2to1_combatencounter.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": true,
+        "contractOverride": null,
+        "overrideCandidate": true,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "conflict",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/haulcargo_multitosingle_2to1_combatencounter.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@deadsaints_from",
+          "displayText": "Dead Saints",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+          "recordName": "FactionReputation.FactionReputation_Unlawful_DeadSaints",
+          "recordType": null,
+          "displayName": "Dead Saints",
+          "path": "factions/factionreputation/factionreputation_unlawful_deadsaints.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@DeadSaints_HaulCargo_MultiToSingle_title",
+          "localizationKey": "DeadSaints_HaulCargo_MultiToSingle_title",
+          "template": "DEAD SAINTS - ~mission(ReputationRank) Rank - ~mission(CargoGradeToken) Cargo Haul",
+          "displayText": "DEAD SAINTS - ~mission(ReputationRank) Rank - ~mission(CargoGradeToken) Cargo Haul",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(ReputationRank)",
+              "expression": "ReputationRank",
+              "segments": [
+                "ReputationRank"
+              ]
+            },
+            {
+              "raw": "~mission(CargoGradeToken)",
+              "expression": "CargoGradeToken",
+              "segments": [
+                "CargoGradeToken"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": true,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "conflict"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "requirements": [
+              {
+                "edgeId": "pre_a44571884d266cc33eeb4af4",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "a90b76e0-edff-4999-9760-9dd703208318",
+                  "recordName": "MissionLocality.StantonAndPyro",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stantonandpyro.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 535000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 535000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_aa4bf18c2727f72138605376",
+            "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+              "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 535000,
+              "amount": 535000,
+              "rawAmount": 534979.7252938554,
+              "integerRoundedAmount": 534980,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 6.7589999999999995,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Normal_PvE_only_action_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Moments_of_concentration_required_4",
+                    "level": 4,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 2.808
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Player_might_die_Ship_could_explode_5",
+                    "level": 5,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 2.575
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Standard_understanding_FPS_flight_professions_4",
+                    "level": 4,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.688
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Normal_PvE_only_action_4",
+                  "mentalLoad": "Moments_of_concentration_required_4",
+                  "riskOfLoss": "Player_might_die_Ship_could_explode_5",
+                  "gameKnowledge": "Standard_understanding_FPS_flight_professions_4"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "56",
+                "value": 56,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 535000,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 535000,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "2da0657d-62dc-4f6c-8b25-fd88480d0834",
+            "reputationScope": "4c086729-2be5-4c08-870f-2bfe1f170083",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_dfdd2716843c012fc5fe3b6e",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceScope": "contract",
+          "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceOrdinal": 8,
+          "missionVariableName": "HaulingOrderForPickup1",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "ba11589f-a278-44e9-9bd9-79552832fc94",
+                  "maxContainerSize": "2",
+                  "minSCU": "4",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "ba11589f-a278-44e9-9bd9-79552832fc94"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_b7c4a131a936a64c5a5c8601",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceScope": "contract",
+          "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceOrdinal": 9,
+          "missionVariableName": "HaulingOrderForPickup2",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c",
+                  "maxContainerSize": "1",
+                  "minSCU": "2",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5",
+                  "maxContainerSize": "1",
+                  "minSCU": "2",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[10]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "sourceOrdinal": 8,
+            "missionVariableName": "HaulingOrderForPickup1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderForPickup1"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "ba11589f-a278-44e9-9bd9-79552832fc94",
+                    "maxContainerSize": "2",
+                    "minSCU": "4",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "ba11589f-a278-44e9-9bd9-79552832fc94"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "minSCU": {
+                      "raw": "4",
+                      "value": 4
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "sourceOrdinal": 9,
+            "missionVariableName": "HaulingOrderForPickup2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderForPickup2"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c",
+                    "maxContainerSize": "1",
+                    "minSCU": "2",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "minSCU": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5",
+                    "maxContainerSize": "1",
+                    "minSCU": "2",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "minSCU": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[10]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_dfdd2716843c012fc5fe3b6e",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceScope": "contract",
+          "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceOrdinal": 8,
+          "missionVariableName": "HaulingOrderForPickup1",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "ba11589f-a278-44e9-9bd9-79552832fc94",
+                  "maxContainerSize": "2",
+                  "minSCU": "4",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "ba11589f-a278-44e9-9bd9-79552832fc94"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "minSCU": {
+                    "raw": "4",
+                    "value": 4
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[9]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        },
+        {
+          "evidenceId": "reqitem_b7c4a131a936a64c5a5c8601",
+          "variantId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceScope": "contract",
+          "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+          "sourceOrdinal": 9,
+          "missionVariableName": "HaulingOrderForPickup2",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c",
+                  "maxContainerSize": "1",
+                  "minSCU": "2",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrderContent_Resource",
+                "rawAttributes": {
+                  "resource": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5",
+                  "maxContainerSize": "1",
+                  "minSCU": "2",
+                  "maxSCU": "0"
+                },
+                "type": "resource",
+                "identity": {
+                  "status": "unresolved_resource",
+                  "guid": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5"
+                },
+                "quantity": {
+                  "maxContainerSize": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "minSCU": {
+                    "raw": "2",
+                    "value": 2
+                  },
+                  "maxSCU": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[10]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "sourceOrdinal": 8,
+            "missionVariableName": "HaulingOrderForPickup1",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderForPickup1"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "ba11589f-a278-44e9-9bd9-79552832fc94",
+                    "maxContainerSize": "2",
+                    "minSCU": "4",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "ba11589f-a278-44e9-9bd9-79552832fc94"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "minSCU": {
+                      "raw": "4",
+                      "value": 4
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[9]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+            "sourceOrdinal": 9,
+            "missionVariableName": "HaulingOrderForPickup2",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderForPickup2"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c",
+                    "maxContainerSize": "1",
+                    "minSCU": "2",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "8950d9c5-8a54-4e2c-87a2-c56c1b9edd3c"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "minSCU": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "HaulingOrderContent_Resource",
+                  "rawAttributes": {
+                    "resource": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5",
+                    "maxContainerSize": "1",
+                    "minSCU": "2",
+                    "maxSCU": "0"
+                  },
+                  "type": "resource",
+                  "identity": {
+                    "status": "unresolved_resource",
+                    "guid": "d3c3ec68-b4ac-4504-85b3-e860a70eb9a5"
+                  },
+                  "quantity": {
+                    "maxContainerSize": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "minSCU": {
+                      "raw": "2",
+                      "value": 2
+                    },
+                    "maxSCU": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='DeadSaints_Hauling_Intersteller']/contracts/CareerContract[@id='0366d1ca-40fc-41af-a6bf-a335fe4b51e4']/paramOverrides/propertyOverrides/MissionProperty[10]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 2,
+      "selectorCount": 0
+    },
+    "technical": {
+      "contractId": "0366d1ca-40fc-41af-a6bf-a335fe4b51e4",
+      "generatorGuid": "faf0842c-f897-47f8-bb5a-a129fc8e9ea4",
+      "generatorName": "ContractGenerator.DeadSaints_Hauling",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/deadsaints/deadsaints_hauling.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@DeadSaints_HaulCargo_MultiToSingle_title",
+      "descriptionRaw": "@DeadSaints_HaulCargo_MultiToSingle_desc_Drugs_Danger"
+    }
+  }
+}

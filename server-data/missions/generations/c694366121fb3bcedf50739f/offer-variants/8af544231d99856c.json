@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "citizens-for-prosperity:alliance-aid-ship-in-trouble",
+  "variants": [
+    {
+      "variantKey": "53400464-c0f6-4a27-8095-c8ce288b372e",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "conceptKey": "97d0d1094edf9404ab0f",
+      "objectiveSignature": {
+        "key": "unknown-faction|unknown-faction:unknown-scope|defend-ship|activity-defined|standard|open|unknown:bounded||||",
+        "activityKey": "defend-ship",
+        "titleStem": "clean-air-defend-ship",
+        "descriptionStem": "clean-air-defend-ship",
+        "handlerStem": "clean-air-cfp",
+        "archetype": "Defend Ship",
+        "contractType": "Contract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-ship",
+          "activity-source:structural",
+          "title:clean-air-defend-ship",
+          "description:clean-air-defend-ship",
+          "handler:clean-air-cfp",
+          "contract:contract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_DefendShip_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "displayName": "Alliance Aid: Ship in Trouble",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve lost contact with an Alliance Aid supply convoy and are concerned it might be under attack from outlaws. We need you to hurry to [Location] and support them. Any delays to the ongoing relief efforts could cost lives in Levski.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_DefendShip_Easy_title",
+      "internalName": "CleanAir_DefendShip_Easy",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_DefendShip_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Nyx Solar System",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "displayName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Solar System"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Solar System",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Nyx Solar System",
+          "displayLabel": "Nyx",
+          "detailDisplay": "Nyx Solar System",
+          "systems": [
+            "Nyx"
+          ],
+          "primarySystem": "Nyx",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+              "displayName": "Nyx Solar System",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+              "system": "Nyx"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Nyx"
+            ],
+            "localityNames": [
+              "Nyx Solar System"
+            ],
+            "displayLabel": "Nyx",
+            "detailLabel": "Nyx Solar System",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+          "resolvedName": "Nyx Solar System",
+          "system": "Nyx",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "36,250 aUEC",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "36,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "36,250 aUEC",
+          "amount": 36250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 36250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 36250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "53400464-c0f6-4a27-8095-c8ce288b372e",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_DefendShip_Easy_title",
+        "descriptionRaw": "@CleanAir_DefendShip_Easy_desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

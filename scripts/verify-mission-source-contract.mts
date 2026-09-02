@@ -124,7 +124,7 @@ equal(objectives.sourceLatestModifiedAt, catalog.sourceLatestModifiedAt, "object
 equal(report.sourceLatestModifiedAt, catalog.sourceLatestModifiedAt, "report/catalog snapshot");
 const source = object(catalog.source, "catalog.source");
 equal(source.channel, object(golden.snapshot, "golden.snapshot").channel, "source channel");
-equal(source.buildId, object(golden.snapshot, "golden.snapshot").build, "source build");
+equal(source.sourceBuildId ?? source.buildId, object(golden.snapshot, "golden.snapshot").build, "source build");
 assert(text(source.calculationInputsDigestSha256), "Calculation-input digest is missing.");
 assert(
   array(source.calculationInputFiles, "catalog.source.calculationInputFiles").length > 0,
@@ -354,7 +354,11 @@ for (const value of array(golden.calculatedCreditAssertions, "calculatedCreditAs
   equal(context.unresolvedReasons, fixture.unresolvedReasons, `${id} payout unresolved reasons`);
   equal(context.validationWarnings, fixture.validationWarnings, `${id} payout warnings`);
   assert(object(context.curve, `${id}.curve`).sourceSha256, `${id} curve provenance hash is missing.`);
-  assert(object(context.provenance, `${id}.provenance`).buildId, `${id} build provenance is missing.`);
+  const provenance = object(context.provenance, `${id}.provenance`);
+  assert(
+    provenance.sourceBuildId ?? provenance.buildId,
+    `${id} build provenance is missing.`,
+  );
   const variantPayout = object(record.calculatedPayout, `${id}.calculatedPayout`);
   equal(variantPayout.baseSoloAmount ?? null, fixture.amount, `${id} variant payout amount`);
   equal(variantPayout.aggregationStatus, "not_aggregated", `${id} aggregation status`);

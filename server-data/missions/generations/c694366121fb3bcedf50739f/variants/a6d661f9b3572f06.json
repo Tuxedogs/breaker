@@ -1,0 +1,3071 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+  "variant": {
+    "variantKey": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+    "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+    "conceptKey": "8b2c4713d9dc56496b99",
+    "objectiveSignature": {
+      "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+      "activityKey": "courier-delivery",
+      "titleStem": "cfp-delivery-outpost-single-to-multi",
+      "descriptionStem": "cfp-delivery-outpost-single-to-multi",
+      "handlerStem": "cfp-courier",
+      "archetype": "Courier",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:courier-delivery",
+        "activity-source:structural",
+        "title:cfp-delivery-outpost-single-to-multi",
+        "description:cfp-delivery-outpost-single-to-multi",
+        "handler:cfp-courier",
+        "contract:careercontract",
+        "archetype:courier",
+        "intro:standard",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "Courier"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Distribute Supplies Across [Destination]",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Hey,\n\nWe need someone to make a couple runs if you’re interested. Some important supplies need to be distributed across [Location]. Here are the details. \n\nEverything needs to be picked up from [Location] then distributed to the following spots: \n\nPackage #[Item1] to [Destination].\nPackage #[Item4] to [Destination].\nPackage #[Item5] to [Destination1].\nPackage #[Item2] to [Destination1].\nPackage #[Item3] to [Destination2].\n\nShouldn’t be too difficult. Plus, it’ll give you the chance to familiarize yourself with the outpost and see all the good work the CFP is doing.\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+    "rawName": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+    "internalName": "CFP_Pyro_CanardView_Local_5boxes_SingleToMulti_Courier",
+    "missionType": "CareerContract",
+    "provider": "Citizens For Prosperity",
+    "faction": "Citizens For Prosperity",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+      "factionDisplayName": "Citizens For Prosperity",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Courier",
+    "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 6 Outpost col m trdpst indy 001",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "location",
+        "label": "Pyro 6 Outpost col m trdpst indy 001",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+      "system": "Pyro",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+      ],
+      "possibleLocations": [
+        "Pyro 6 Outpost col m trdpst indy 001"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+          "resolvedName": "Pyro 6 Outpost col m trdpst indy 001",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+          "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro 6 Outpost col m trdpst indy 001"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro 6 Outpost col m trdpst indy 001",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro 6 Outpost col m trdpst indy 001",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+            "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 6 Outpost col m trdpst indy 001"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 6 Outpost col m trdpst indy 001",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination",
+          "Destination|Address",
+          "Destination1|Address",
+          "Destination2|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination",
+          "Destination|Address",
+          "Destination1|Address",
+          "Destination2|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+        "resolvedName": "Pyro 6 Outpost col m trdpst indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination",
+        "confidence": "token_only"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination1|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination2|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
+    "locations": [
+      "Pyro 6 Outpost col m trdpst indy 001"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination",
+      "Destination|Address",
+      "Destination1|Address",
+      "Destination2|Address"
+    ],
+    "rewards": {
+      "summary": [
+        "Standing +800",
+        "117,250 aUEC"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +800"
+      ],
+      "credits": "117,250 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "117,250 aUEC",
+        "amount": 117250,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 800,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+        "familyId": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+        "templateGuid": "d624de80-6f3f-47e7-959e-60bb5a0af168"
+      },
+      "availability": {
+        "notForRelease": true,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_9091f2a2a499131334d1b077",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "aa45a1bb-66dd-438c-8170-853c4d14cde3"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {},
+      "outcomes": [
+        {
+          "edgeId": "out_363f6439d7d026fbd680db4c",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+            "reputationAmount": 800,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_42f25815bd73069ba8cc46f6",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "amount": 117250,
+              "rawAmount": 117240.16702200798,
+              "integerRoundedAmount": 117240,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.8089999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 1.404
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "d624de80-6f3f-47e7-959e-60bb5a0af168",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/courier_singletomulti.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": false,
+        "contractOverride": null,
+        "overrideCandidate": false,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "agree",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+          "handlerOverride": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contractParams/boolParamOverrides/ContractBoolParam[@param='Illegal']"
+          },
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/courier_singletomulti.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@cfp_from",
+          "displayText": "Citizens for Prosperity",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "recordName": "FactionReputation.FactionReputation_Lawful_CitizensForProsperity",
+          "recordType": null,
+          "displayName": "Citizens For Prosperity",
+          "path": "factions/factionreputation/factionreputation_lawful_citizensforprosperity.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+          "localizationKey": "CFP_Delivery_Outpost_SingleToMulti_title_001",
+          "template": "Distribute Supplies Across ~mission(Destination)",
+          "displayText": "Distribute Supplies Across ~mission(Destination)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Destination)",
+              "expression": "Destination",
+              "segments": [
+                "Destination"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": false,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "agree"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "requirements": [
+              {
+                "edgeId": "pre_9091f2a2a499131334d1b077",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+                  "recordName": "StarMapObject.Pyro6_Outpost_col_m_trdpst_indy_001",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "aa45a1bb-66dd-438c-8170-853c4d14cde3"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_363f6439d7d026fbd680db4c",
+            "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+              "reputationAmount": 800,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": []
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "amount": 117250,
+              "rawAmount": 117240.16702200798,
+              "integerRoundedAmount": 117240,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 3.8089999999999997,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "status": "resolved",
+                  "name": "Logistics",
+                  "recordName": "ContractDifficultyProfile.Logistics",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.172",
+                    "mentalLoadWeight": "0.702",
+                    "riskOfLossWeight": "0.515",
+                    "gameKnowledgeWeight": "0.172"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.172,
+                    "mentalLoadWeight": 0.702,
+                    "riskOfLossWeight": 0.515,
+                    "gameKnowledgeWeight": 0.172
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                  "sourceElement": "ContractDifficultyProfile.Logistics"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Easy_PvE_only_action_3",
+                    "level": 3,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.516
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.702",
+                    "weight": 0.702,
+                    "contribution": 1.404
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Minimal_danger_FPS_NOT_ship_action_3",
+                    "level": 3,
+                    "weightRaw": "0.515",
+                    "weight": 0.515,
+                    "contribution": 1.545
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "FPS_mechanics_walk_shoot_mobiGlass_2",
+                    "level": 2,
+                    "weightRaw": "0.172",
+                    "weight": 0.172,
+                    "contribution": 0.344
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "51b36c81-75a2-4e5a-ba01-3e429a2fd916",
+                  "mechanicalSkill": "Easy_PvE_only_action_3",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Minimal_danger_FPS_NOT_ship_action_3",
+                  "gameKnowledge": "FPS_mechanics_walk_shoot_mobiGlass_2"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "30",
+                "value": 30,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 117250,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 117250,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/logistics.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+            "reputationAmount": 800,
+            "reward": {
+              "guid": "c1b58aae-a947-40d1-a4b1-26529d55b7f6",
+              "recordName": "SReputationRewardAmount.RepuationRewardAmount_Positive_800",
+              "editorName": "Undefined Name",
+              "reputationAmount": 800,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/repuationrewardamount_positive_800.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_75e57a592269d467ac2f4940",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402A]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_40729dff28fda5746cddf361",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 4,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402A]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[5]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_41a7e8e303cdfbd1181ac7b2",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 5,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_59c38e9b02d1fac11ccace50",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_95e13d9e459efbad37ee0623",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_6ff71d013a196c0c37b7b9c7",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "d624de80-6f3f-47e7-959e-60bb5a0af168",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B39]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3A]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3B]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3C]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3D]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "5b445179-222c-4e8a-b5ea-7d03491ff42d",
+          "objectiveTokenDebugName": "Courier",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/courier_singletomulti.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402A]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 4,
+            "missionVariableName": "Item2",
+            "extendedTextToken": "Item2",
+            "rawAttributes": {
+              "missionVariableName": "Item2",
+              "extendedTextToken": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402A]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[5]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 5,
+            "missionVariableName": "Item3",
+            "extendedTextToken": "Item3",
+            "rawAttributes": {
+              "missionVariableName": "Item3",
+              "extendedTextToken": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item4",
+            "extendedTextToken": "Item4",
+            "rawAttributes": {
+              "missionVariableName": "Item4",
+              "extendedTextToken": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item5",
+            "extendedTextToken": "Item5",
+            "rawAttributes": {
+              "missionVariableName": "Item5",
+              "extendedTextToken": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_75e57a592269d467ac2f4940",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402A]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_40729dff28fda5746cddf361",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 4,
+          "missionVariableName": "Item2",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402A]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[5]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_41a7e8e303cdfbd1181ac7b2",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 5,
+          "missionVariableName": "Item3",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_59c38e9b02d1fac11ccace50",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 6,
+          "missionVariableName": "Item4",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[7]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_95e13d9e459efbad37ee0623",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "contract",
+          "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceOrdinal": 7,
+          "missionVariableName": "Item5",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_TagSearch",
+                "rawAttributes": {
+                  "tagType": "General"
+                },
+                "type": "tag_search",
+                "terms": [
+                  {
+                    "ordinal": 0,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                      ]
+                    }
+                  },
+                  {
+                    "ordinal": 1,
+                    "sourceElement": "TagSearchTerm",
+                    "tagGroups": {
+                      "positiveTags": [
+                        "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "DataSetMatchCondition_PropertyTags",
+                "rawAttributes": {
+                  "propertyTagType": "Consumes",
+                  "targetTagType": "General",
+                  "searchForAnyTag": "1"
+                },
+                "type": "property_tags",
+                "searchProperty": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[402B]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[8]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_6ff71d013a196c0c37b7b9c7",
+          "variantId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+          "sourceScope": "objective_template",
+          "sourceOwnerId": "d624de80-6f3f-47e7-959e-60bb5a0af168",
+          "sourceOrdinal": 0,
+          "missionVariableName": null,
+          "requirementRole": "hauling_order",
+          "roleStatus": "objective_turn_in",
+          "requirementStatus": "source_backed_objective_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "ObjectiveHandler_Hauling",
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B39]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 1,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3A]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 2,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3B]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 3,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3C]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              },
+              {
+                "ordinal": 4,
+                "sourceElement": "HaulingOrder_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "ObjectiveProperty_Referenced[0B3D]",
+                    "kind": "ObjectiveProperty_Referenced",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "objectiveTokenId": "5b445179-222c-4e8a-b5ea-7d03491ff42d",
+          "objectiveTokenDebugName": "Courier",
+          "provenance": {
+            "sourceRef": "contracts/contracttemplates/courier_singletomulti.xml",
+            "sourceElement": "ObjectiveHandler_Hauling"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402A]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 4,
+            "missionVariableName": "Item2",
+            "extendedTextToken": "Item2",
+            "rawAttributes": {
+              "missionVariableName": "Item2",
+              "extendedTextToken": "Item2"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402A]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[5]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 5,
+            "missionVariableName": "Item3",
+            "extendedTextToken": "Item3",
+            "rawAttributes": {
+              "missionVariableName": "Item3",
+              "extendedTextToken": "Item3"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 6,
+            "missionVariableName": "Item4",
+            "extendedTextToken": "Item4",
+            "rawAttributes": {
+              "missionVariableName": "Item4",
+              "extendedTextToken": "Item4"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[7]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+            "sourceOrdinal": 7,
+            "missionVariableName": "Item5",
+            "extendedTextToken": "Item5",
+            "rawAttributes": {
+              "missionVariableName": "Item5",
+              "extendedTextToken": "Item5"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_TagSearch",
+                  "rawAttributes": {
+                    "tagType": "General"
+                  },
+                  "type": "tag_search",
+                  "terms": [
+                    {
+                      "ordinal": 0,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "sourceElement": "TagSearchTerm",
+                      "tagGroups": {
+                        "positiveTags": [
+                          "5e11a544-7fea-4160-b2bf-98c6cf9ee9df"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "ordinal": 1,
+                  "sourceElement": "DataSetMatchCondition_PropertyTags",
+                  "rawAttributes": {
+                    "propertyTagType": "Consumes",
+                    "targetTagType": "General",
+                    "searchForAnyTag": "1"
+                  },
+                  "type": "property_tags",
+                  "searchProperty": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[402B]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='CFP_Courier']/contracts/CareerContract[@id='aa45a1bb-66dd-438c-8170-853c4d14cde3']/paramOverrides/propertyOverrides/MissionProperty[8]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 5
+    },
+    "technical": {
+      "contractId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+      "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+      "generatorName": "ContractGenerator.CFP_Courier",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+      "descriptionRaw": "@CFP_Delivery_Outpost_SingleToMulti_desc_001"
+    }
+  }
+}

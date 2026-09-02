@@ -1,0 +1,1115 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "citizens-for-prosperity:distribute-supplies-across-destination",
+  "variants": [
+    {
+      "variantKey": "25f4d125-9d22-44d0-97ad-c53de5548698",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-single-to-multi",
+        "descriptionStem": "cfp-delivery-outpost-single-to-multi",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-single-to-multi",
+          "description:cfp-delivery-outpost-single-to-multi",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Distribute Supplies Across [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey,\n\nWe need someone to make a couple runs if you’re interested. Some important supplies need to be distributed across [Location]. Here are the details. \n\nEverything needs to be picked up from [Location] then distributed to the following spots: \n\nPackage #[Item1] to [Destination].\nPackage #[Item4] to [Destination].\nPackage #[Item5] to [Destination1].\nPackage #[Item2] to [Destination1].\nPackage #[Item3] to [Destination2].\n\nShouldn’t be too difficult. Plus, it’ll give you the chance to familiarize yourself with the outpost and see all the good work the CFP is doing.\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+      "internalName": "CFP_Pyro4_Med_Trdpst_Local_5boxes_SingleToMulti_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 4 Outpost col m trdpst indy 001",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro 4 Outpost col m trdpst indy 001",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro 4 Outpost col m trdpst indy 001",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "310f1f19-11f7-45b1-b897-0685b01ab570"
+        ],
+        "possibleLocations": [
+          "Pyro 4 Outpost col m trdpst indy 001"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "310f1f19-11f7-45b1-b897-0685b01ab570",
+            "resolvedName": "Pyro 4 Outpost col m trdpst indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro4_outpost_col_m_trdpst_indy_001.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "310f1f19-11f7-45b1-b897-0685b01ab570",
+            "displayName": "Pyro 4 Outpost col m trdpst indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro4_outpost_col_m_trdpst_indy_001.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 4 Outpost col m trdpst indy 001"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 4 Outpost col m trdpst indy 001",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro 4 Outpost col m trdpst indy 001",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro 4 Outpost col m trdpst indy 001",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "310f1f19-11f7-45b1-b897-0685b01ab570"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "310f1f19-11f7-45b1-b897-0685b01ab570",
+              "displayName": "Pyro 4 Outpost col m trdpst indy 001",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyro4_outpost_col_m_trdpst_indy_001.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 4 Outpost col m trdpst indy 001"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro 4 Outpost col m trdpst indy 001",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "310f1f19-11f7-45b1-b897-0685b01ab570",
+          "resolvedName": "Pyro 4 Outpost col m trdpst indy 001",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination1|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination2|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 4 Outpost col m trdpst indy 001"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address",
+        "Destination1|Address",
+        "Destination2|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "117,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "117,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "117,250 aUEC",
+          "amount": 117250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 117250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 117250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "25f4d125-9d22-44d0-97ad-c53de5548698",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+        "descriptionRaw": "@CFP_Delivery_Outpost_SingleToMulti_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 5
+      }
+    },
+    {
+      "variantKey": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-single-to-multi",
+        "descriptionStem": "cfp-delivery-outpost-single-to-multi",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-single-to-multi",
+          "description:cfp-delivery-outpost-single-to-multi",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Distribute Supplies Across [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey,\n\nWe need someone to make a couple runs if you’re interested. Some important supplies need to be distributed across [Location]. Here are the details. \n\nEverything needs to be picked up from [Location] then distributed to the following spots: \n\nPackage #[Item1] to [Destination].\nPackage #[Item4] to [Destination].\nPackage #[Item5] to [Destination1].\nPackage #[Item2] to [Destination1].\nPackage #[Item3] to [Destination2].\n\nShouldn’t be too difficult. Plus, it’ll give you the chance to familiarize yourself with the outpost and see all the good work the CFP is doing.\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+      "internalName": "CFP_Pyro_CanardView_Local_5boxes_SingleToMulti_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 6 Outpost col m trdpst indy 001",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro 6 Outpost col m trdpst indy 001",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+        ],
+        "possibleLocations": [
+          "Pyro 6 Outpost col m trdpst indy 001"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+            "resolvedName": "Pyro 6 Outpost col m trdpst indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+            "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 6 Outpost col m trdpst indy 001"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 6 Outpost col m trdpst indy 001",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro 6 Outpost col m trdpst indy 001",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "d2cccd21-41a2-43fc-bebb-9bce14f6c59b"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+              "displayName": "Pyro 6 Outpost col m trdpst indy 001",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyro6_outpost_col_m_trdpst_indy_001.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 6 Outpost col m trdpst indy 001"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro 6 Outpost col m trdpst indy 001",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "d2cccd21-41a2-43fc-bebb-9bce14f6c59b",
+          "resolvedName": "Pyro 6 Outpost col m trdpst indy 001",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination1|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination2|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 6 Outpost col m trdpst indy 001"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address",
+        "Destination1|Address",
+        "Destination2|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "117,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "117,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "117,250 aUEC",
+          "amount": 117250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 117250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 117250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "aa45a1bb-66dd-438c-8170-853c4d14cde3",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+        "descriptionRaw": "@CFP_Delivery_Outpost_SingleToMulti_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 5
+      }
+    },
+    {
+      "variantKey": "d607ab4a-0420-4f94-8b0a-97a537e56ec6",
+      "familyKey": "e409e463-b875-40ad-82f9-ba9f6c5e6591|CFP_Courier",
+      "conceptKey": "8b2c4713d9dc56496b99",
+      "objectiveSignature": {
+        "key": "5a6914c9-3d56-47e0-9fe2-b264ee17b992|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|courier-delivery|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "courier-delivery",
+        "titleStem": "cfp-delivery-outpost-single-to-multi",
+        "descriptionStem": "cfp-delivery-outpost-single-to-multi",
+        "handlerStem": "cfp-courier",
+        "archetype": "Courier",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:courier-delivery",
+          "activity-source:structural",
+          "title:cfp-delivery-outpost-single-to-multi",
+          "description:cfp-delivery-outpost-single-to-multi",
+          "handler:cfp-courier",
+          "contract:careercontract",
+          "archetype:courier",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Courier"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Distribute Supplies Across [Destination]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Hey,\n\nWe need someone to make a couple runs if you’re interested. Some important supplies need to be distributed across [Location]. Here are the details. \n\nEverything needs to be picked up from [Location] then distributed to the following spots: \n\nPackage #[Item1] to [Destination].\nPackage #[Item4] to [Destination].\nPackage #[Item5] to [Destination1].\nPackage #[Item2] to [Destination1].\nPackage #[Item3] to [Destination2].\n\nShouldn’t be too difficult. Plus, it’ll give you the chance to familiarize yourself with the outpost and see all the good work the CFP is doing.\n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+      "internalName": "CFP_Pyro_JacksonsSwap_Local_5boxes_SingleToMulti_Courier",
+      "missionType": "CareerContract",
+      "provider": "Citizens For Prosperity",
+      "faction": "Citizens For Prosperity",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Courier",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Pyro 2 Outpost col m trdp indy 001",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro 2 Outpost col m trdp indy 001",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Pyro 2 Outpost col m trdp indy 001",
+        "system": "Pyro",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "57a9e4e4-477a-40c8-971c-5b4129f6b73b"
+        ],
+        "possibleLocations": [
+          "Pyro 2 Outpost col m trdp indy 001"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "57a9e4e4-477a-40c8-971c-5b4129f6b73b",
+            "resolvedName": "Pyro 2 Outpost col m trdp indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro2_outpost_col_m_trdp_indy_001.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "57a9e4e4-477a-40c8-971c-5b4129f6b73b",
+            "displayName": "Pyro 2 Outpost col m trdp indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro2_outpost_col_m_trdp_indy_001.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 2 Outpost col m trdp indy 001"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 2 Outpost col m trdp indy 001",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Pyro 2 Outpost col m trdp indy 001",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro 2 Outpost col m trdp indy 001",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "57a9e4e4-477a-40c8-971c-5b4129f6b73b"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "57a9e4e4-477a-40c8-971c-5b4129f6b73b",
+              "displayName": "Pyro 2 Outpost col m trdp indy 001",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/pyro2_outpost_col_m_trdp_indy_001.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro 2 Outpost col m trdp indy 001"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro 2 Outpost col m trdp indy 001",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unresolved",
+          "displayName": "Destination unresolved",
+          "displayLabel": "Destination unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Destination",
+            "Destination|Address",
+            "Destination1|Address",
+            "Destination2|Address"
+          ],
+          "unresolved": true
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location",
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "57a9e4e4-477a-40c8-971c-5b4129f6b73b",
+          "resolvedName": "Pyro 2 Outpost col m trdp indy 001",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination1|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "destination",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Destination2|Address",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro 2 Outpost col m trdp indy 001"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [
+        "Destination",
+        "Destination|Address",
+        "Destination1|Address",
+        "Destination2|Address"
+      ],
+      "rewards": {
+        "summary": [
+          "Standing +800",
+          "117,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +800"
+        ],
+        "credits": "117,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "117,250 aUEC",
+          "amount": 117250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 117250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 117250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "factionDisplayName": "Citizens For Prosperity",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 800,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "d607ab4a-0420-4f94-8b0a-97a537e56ec6",
+        "generatorGuid": "e409e463-b875-40ad-82f9-ba9f6c5e6591",
+        "generatorName": "ContractGenerator.CFP_Courier",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/cfp_courier.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@CFP_Delivery_Outpost_SingleToMulti_title_001",
+        "descriptionRaw": "@CFP_Delivery_Outpost_SingleToMulti_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "present",
+        "haulingOrderCount": 1,
+        "selectorCount": 5
+      }
+    }
+  ]
+}

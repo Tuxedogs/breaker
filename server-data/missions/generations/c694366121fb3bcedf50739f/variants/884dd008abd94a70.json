@@ -1,0 +1,3127 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "f8ac69e0-b58b-4158-b22c-7e4535b80297|RedWind_RecoverItem_Space_Stanton_Career",
+  "variant": {
+    "variantKey": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+    "familyKey": "f8ac69e0-b58b-4158-b22c-7e4535b80297|RedWind_RecoverItem_Space_Stanton_Career",
+    "conceptKey": "90de71bfa59f30de2a6d",
+    "objectiveSignature": {
+      "key": "aa5f0bf8-f36f-423a-b9dd-73084139db23|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|unknown|recovery|intro|unlock:baf9c16dbaa4|unknown:bounded||||variant:d9afb170-cddf-415b-ac3c-62f0618af0c7",
+      "activityKey": "unknown",
+      "titleStem": "spacecollect-cargo",
+      "descriptionStem": "spacecollect-cargo",
+      "handlerStem": "red-wind-recover-item-space",
+      "archetype": "Recovery",
+      "contractType": "CareerContract",
+      "introState": "intro",
+      "chainState": "unlock:baf9c16dbaa4",
+      "legalState": "unknown:bounded",
+      "confidence": "unresolved",
+      "evidence": [
+        "activity:unknown",
+        "activity-source:unresolved",
+        "title:spacecollect-cargo",
+        "description:spacecollect-cargo",
+        "handler:red-wind-recover-item-space",
+        "contract:careercontract",
+        "archetype:recovery",
+        "intro:intro",
+        "chain:unlock:baf9c16dbaa4",
+        "legal:unknown:bounded"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": true,
+    "specificityBadges": [
+      "Recovery",
+      "Intro",
+      "CrimeStat limited"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "displayName": "Red Wind Recover Package Stanton 1Box Intro",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "briefing": "[Contractor]",
+    "rawName": "@spacecollect_cargo_title_intro_01",
+    "internalName": "RedWind_RecoverPackage_Stanton_1Box_Intro",
+    "missionType": "CareerContract",
+    "provider": "Red Wind Linehaul",
+    "faction": "Red Wind Linehaul",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+      "factionDisplayName": "Red Wind Linehaul",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Recovery",
+    "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ],
+      "rawLocalities": [
+        {
+          "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "displayName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "displayName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton Star",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton Star, Stanton 1",
+        "confidence": "exact"
+      }
+    },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton Star, Stanton 1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star, Stanton 1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+        "resolvedName": "Stanton Star",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "destinationTokens": [],
+    "rewards": {
+      "summary": [
+        "Standing +100",
+        "25,750 aUEC",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +100"
+      ],
+      "credits": "25,750 aUEC",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "25,750 aUEC",
+        "amount": 25750,
+        "currency": "aUEC",
+        "confidence": "source_calculated",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "sourceRefs": [
+          "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml"
+        ],
+        "payout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 25750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 25750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        }
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+        "factionDisplayName": "Red Wind Linehaul",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "canonical": {
+      "schemaVersion": 3,
+      "sourceSchemaVersion": 4,
+      "identity": {
+        "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+        "familyId": "f8ac69e0-b58b-4158-b22c-7e4535b80297|RedWind_RecoverItem_Space_Stanton_Career",
+        "templateGuid": "7dc55ea2-4463-4e4d-ad8c-24b3afad0581"
+      },
+      "availability": {
+        "notForRelease": false,
+        "workInProgress": false
+      },
+      "prerequisites": [
+        {
+          "edgeId": "pre_95016968d217eab3d55a7c65",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "crime_stat",
+          "polarity": "required",
+          "identifiers": {},
+          "bounds": {
+            "minCrimeStat": {
+              "raw": "0",
+              "value": 0
+            },
+            "maxCrimeStat": {
+              "raw": "2",
+              "value": 2
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "minCrimeStat": "0",
+            "maxCrimeStat": "2"
+          },
+          "sourceElement": "ContractPrerequisite_CrimeStat",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "RedWind_RecoverItem_Space_Stanton_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_CrimeStat",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_91679c2979a8d3811dc26045",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "location",
+          "polarity": "required",
+          "identifiers": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "locationAvailable": "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          },
+          "sourceElement": "ContractPrerequisite_Location",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "handler"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "handler",
+              "id": "RedWind_RecoverItem_Space_Stanton_Career"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_Location",
+            "referencePath": null
+          }
+        },
+        {
+          "edgeId": "pre_c6dccc502c7bcd3b8fafd204",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "completion_tag",
+          "polarity": "excluded",
+          "identifiers": {
+            "completionTag": "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+          },
+          "bounds": {
+            "requiredCountValue": {
+              "raw": "1",
+              "value": 1
+            },
+            "excludedCountValue": {
+              "raw": "1",
+              "value": 1
+            }
+          },
+          "rawAttributes": {
+            "includePrerequisiteWhenSharing": "0",
+            "requiredCountValue": "1",
+            "excludedCountValue": "1"
+          },
+          "sourceElement": "ContractPrerequisite_CompletedContractTags",
+          "payload": {
+            "completionTagConstraint": {
+              "schemaVersion": 1,
+              "groupId": "pregroup_5c2658abb3b6e622f541c6a3",
+              "polarity": "excluded",
+              "memberCompletionTags": [
+                "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+              ],
+              "countField": "excludedCountValue",
+              "threshold": {
+                "raw": "1",
+                "value": 1
+              }
+            }
+          },
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "d9afb170-cddf-415b-ac3c-62f0618af0c7"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "referencePath": "ContractPrerequisite_CompletedContractTags/excludedCompletedContractTags/tags"
+          }
+        },
+        {
+          "edgeId": "pre_c3e6008a942ad43f23fe89f1",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "ownerScope": "parent_eligibility",
+          "ownerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "locality",
+          "polarity": "required",
+          "identifiers": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "bounds": {},
+          "rawAttributes": {
+            "localityAvailable": "939dad8b-a944-4baa-a6b7-163ec203adad"
+          },
+          "sourceElement": "ContractPrerequisite_Locality",
+          "resolution": "source_backed",
+          "sourceScopes": [
+            "contract"
+          ],
+          "sourceOwners": [
+            {
+              "scope": "contract",
+              "id": "d9afb170-cddf-415b-ac3c-62f0618af0c7"
+            }
+          ],
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractPrerequisite_Locality",
+            "referencePath": null
+          }
+        }
+      ],
+      "subcontractPrerequisites": {
+        "d4dda4e4-9cba-4125-800e-fb68527eb5a6": [
+          {
+            "edgeId": "pre_71bc5e08006ec20686d9eb13",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "d4dda4e4-9cba-4125-800e-fb68527eb5a6",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "478b2577-85d8-47cb-ba67-503aa645ad3c"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d4dda4e4-9cba-4125-800e-fb68527eb5a6"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_33e32011e7bc48fdc800209a",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "d4dda4e4-9cba-4125-800e-fb68527eb5a6",
+            "type": "completion_tag",
+            "polarity": "excluded",
+            "identifiers": {
+              "completionTag": "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_69be53e4f5f10478a8857df2",
+                "polarity": "excluded",
+                "memberCompletionTags": [
+                  "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+                ],
+                "countField": "excludedCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "d4dda4e4-9cba-4125-800e-fb68527eb5a6"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/excludedCompletedContractTags/tags"
+            }
+          }
+        ],
+        "13f50747-b09a-48fd-9da9-958815f9797d": [
+          {
+            "edgeId": "pre_94410e987346cad9035714e3",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "13f50747-b09a-48fd-9da9-958815f9797d",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "e6fd3dce-03ce-4321-a104-ffa16fc206cc"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "13f50747-b09a-48fd-9da9-958815f9797d"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_99cd6c476fcce557f76531f6",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "13f50747-b09a-48fd-9da9-958815f9797d",
+            "type": "completion_tag",
+            "polarity": "excluded",
+            "identifiers": {
+              "completionTag": "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_daf1b9b10004e4118cc8609f",
+                "polarity": "excluded",
+                "memberCompletionTags": [
+                  "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+                ],
+                "countField": "excludedCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "13f50747-b09a-48fd-9da9-958815f9797d"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/excludedCompletedContractTags/tags"
+            }
+          }
+        ],
+        "50e94945-7f65-4a73-a3b2-af6136412710": [
+          {
+            "edgeId": "pre_5aa05bae986a914b824e1935",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "50e94945-7f65-4a73-a3b2-af6136412710",
+            "type": "locality",
+            "polarity": "required",
+            "identifiers": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "bounds": {},
+            "rawAttributes": {
+              "localityAvailable": "dbde2ad2-ef6c-420b-b30e-189a907fe94d"
+            },
+            "sourceElement": "ContractPrerequisite_Locality",
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "50e94945-7f65-4a73-a3b2-af6136412710"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_Locality",
+              "referencePath": null
+            }
+          },
+          {
+            "edgeId": "pre_d99d1db17ca71de48d59bade",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "ownerScope": "subcontract",
+            "ownerId": "50e94945-7f65-4a73-a3b2-af6136412710",
+            "type": "completion_tag",
+            "polarity": "excluded",
+            "identifiers": {
+              "completionTag": "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+            },
+            "bounds": {
+              "requiredCountValue": {
+                "raw": "1",
+                "value": 1
+              },
+              "excludedCountValue": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "rawAttributes": {
+              "includePrerequisiteWhenSharing": "0",
+              "requiredCountValue": "1",
+              "excludedCountValue": "1"
+            },
+            "sourceElement": "ContractPrerequisite_CompletedContractTags",
+            "payload": {
+              "completionTagConstraint": {
+                "schemaVersion": 1,
+                "groupId": "pregroup_e557db3f030e68399349800d",
+                "polarity": "excluded",
+                "memberCompletionTags": [
+                  "f488eb85-999d-4187-b3d4-dc1179aad5f7"
+                ],
+                "countField": "excludedCountValue",
+                "threshold": {
+                  "raw": "1",
+                  "value": 1
+                }
+              }
+            },
+            "resolution": "source_backed",
+            "sourceScopes": [
+              "subcontract"
+            ],
+            "sourceOwners": [
+              {
+                "scope": "subcontract",
+                "id": "50e94945-7f65-4a73-a3b2-af6136412710"
+              }
+            ],
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractPrerequisite_CompletedContractTags",
+              "referencePath": "ContractPrerequisite_CompletedContractTags/excludedCompletedContractTags/tags"
+            }
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "edgeId": "out_b61170661fbff3208823bfe3",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "completion_tag",
+          "index": 0,
+          "payload": {
+            "tag": "f488eb85-999d-4187-b3d4-dc1179aad5f7",
+            "count": 1,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CompletionTags"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractResult_CompletionTags"
+          }
+        },
+        {
+          "edgeId": "out_e3c0f8b20aeff85b5d17d487",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "fixed_reputation",
+          "index": 0,
+          "payload": {
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "calculatedContext": null,
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_LegacyReputation"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractResult_LegacyReputation"
+          }
+        },
+        {
+          "edgeId": "out_a58a5751b38bc82db5af85dd",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "type": "calculated_auec_base_solo",
+          "index": 0,
+          "payload": {
+            "fixedReward": null,
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 25750,
+              "amount": 25750,
+              "rawAmount": 25690.606817101045,
+              "integerRoundedAmount": 25691,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2.11,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 0.68
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.66
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.44
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            },
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "sourceElement": "ContractResult_CalculatedReward"
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "sourceElement": "ContractResult_CalculatedReward"
+          }
+        }
+      ],
+      "objectiveTemplate": {
+        "templateGuid": "7dc55ea2-4463-4e4d-ad8c-24b3afad0581",
+        "status": "resolved",
+        "path": "contracts/contracttemplates/courier_goto_exclocker.xml"
+      },
+      "legalityEvidence": {
+        "handlerOverride": null,
+        "contractOverride": null,
+        "overrideCandidate": null,
+        "templateIllegal": false,
+        "templateIllegalRaw": "0",
+        "comparison": "template_only",
+        "effective": {
+          "status": "unresolved_precedence",
+          "value": null
+        },
+        "provenance": {
+          "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+          "handlerOverride": null,
+          "contractOverride": null,
+          "templateIllegal": {
+            "sourceRef": "contracts/contracttemplates/courier_goto_exclocker.xml",
+            "xmlPath": "contractDisplayInfo/ContractDisplayInfo@illegal"
+          }
+        }
+      },
+      "offerEvidence": {
+        "schemaVersion": 1,
+        "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+        "provider": {
+          "sourceParam": "Contractor",
+          "displayRaw": "@mission_contractor_0012",
+          "displayText": "Red Wind Linehaul",
+          "organizationGuid": null,
+          "displayResolution": "source_backed",
+          "organizationResolution": "unresolved_no_explicit_organization_guid",
+          "provenance": "source_backed"
+        },
+        "reputationFaction": {
+          "guid": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+          "recordName": "FactionReputation.FactionReputation_Lawful_RedWindLinehaul",
+          "recordType": null,
+          "displayName": "Red Wind Linehaul",
+          "path": "factions/factionreputation/factionreputation_lawful_redwindlinehaul.xml",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "title": {
+          "raw": "@spacecollect_cargo_title_intro_01",
+          "localizationKey": "spacecollect_cargo_title_intro_01",
+          "template": "~mission(Contractor|RecoverSpaceTitleIntro)",
+          "displayText": "~mission(Contractor|RecoverSpaceTitleIntro)",
+          "runtimeTokens": [
+            {
+              "raw": "~mission(Contractor|RecoverSpaceTitleIntro)",
+              "expression": "Contractor|RecoverSpaceTitleIntro",
+              "segments": [
+                "Contractor",
+                "RecoverSpaceTitleIntro"
+              ]
+            }
+          ],
+          "rendering": "runtime_templated",
+          "resolution": "source_backed",
+          "provenance": "source_backed"
+        },
+        "verification": {
+          "vocabulary": "verified_unverified",
+          "status": "unknown",
+          "effectiveIllegal": null,
+          "effectiveResolution": "unresolved_precedence",
+          "rawEvidence": {
+            "handlerIllegal": null,
+            "contractIllegal": null,
+            "templateIllegal": false,
+            "comparison": "template_only"
+          },
+          "provenance": "unresolved"
+        },
+        "availabilityBranches": [
+          {
+            "ownerScope": "parent_eligibility",
+            "ownerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "requirements": [
+              {
+                "edgeId": "pre_91679c2979a8d3811dc26045",
+                "type": "location",
+                "polarity": "required",
+                "sourceAttribute": "locationAvailable",
+                "reference": {
+                  "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+                  "recordName": "StarMapObject.StantonStar",
+                  "recordType": "StarMapObject",
+                  "displayName": null,
+                  "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "handler"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "handler",
+                    "id": "RedWind_RecoverItem_Space_Stanton_Career"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Location",
+                  "referencePath": null
+                }
+              },
+              {
+                "edgeId": "pre_c3e6008a942ad43f23fe89f1",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+                  "recordName": "MissionLocality.Stanton1",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "contract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "contract",
+                    "id": "d9afb170-cddf-415b-ac3c-62f0618af0c7"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "d4dda4e4-9cba-4125-800e-fb68527eb5a6",
+            "requirements": [
+              {
+                "edgeId": "pre_71bc5e08006ec20686d9eb13",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+                  "recordName": "MissionLocality.Stanton2",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "d4dda4e4-9cba-4125-800e-fb68527eb5a6"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "13f50747-b09a-48fd-9da9-958815f9797d",
+            "requirements": [
+              {
+                "edgeId": "pre_94410e987346cad9035714e3",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+                  "recordName": "MissionLocality.Stanton3",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "13f50747-b09a-48fd-9da9-958815f9797d"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          },
+          {
+            "ownerScope": "subcontract",
+            "ownerId": "50e94945-7f65-4a73-a3b2-af6136412710",
+            "requirements": [
+              {
+                "edgeId": "pre_5aa05bae986a914b824e1935",
+                "type": "locality",
+                "polarity": "required",
+                "sourceAttribute": "localityAvailable",
+                "reference": {
+                  "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+                  "recordName": "MissionLocality.Stanton4",
+                  "recordType": "MissionLocality",
+                  "displayName": null,
+                  "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+                  "resolution": "source_backed",
+                  "provenance": "source_backed"
+                },
+                "resolution": "source_backed",
+                "sourceScopes": [
+                  "subcontract"
+                ],
+                "sourceOwners": [
+                  {
+                    "scope": "subcontract",
+                    "id": "50e94945-7f65-4a73-a3b2-af6136412710"
+                  }
+                ],
+                "provenance": {
+                  "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                  "sourceElement": "ContractPrerequisite_Locality",
+                  "referencePath": null
+                }
+              }
+            ]
+          }
+        ],
+        "reputationPrerequisites": []
+      },
+      "rewards": {
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 25750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 25750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "fixedCurrency": [],
+        "blueprint": [],
+        "item": [],
+        "weightedItem": [],
+        "fixedReputation": [
+          {
+            "edgeId": "out_e3c0f8b20aeff85b5d17d487",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "type": "fixed_reputation",
+            "index": 0,
+            "payload": {
+              "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+              "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+              "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "reputationAmount": 100,
+              "calculatedContext": null,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_LegacyReputation"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractResult_LegacyReputation"
+            }
+          }
+        ],
+        "calculatedReputation": [],
+        "completionTags": [
+          {
+            "edgeId": "out_b61170661fbff3208823bfe3",
+            "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "type": "completion_tag",
+            "index": 0,
+            "payload": {
+              "tag": "f488eb85-999d-4187-b3d4-dc1179aad5f7",
+              "count": 1,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "sourceElement": "ContractResult_CompletionTags"
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractResult_CompletionTags"
+            }
+          }
+        ]
+      },
+      "financials": {
+        "creditResults": [
+          {
+            "type": "ContractResult_CalculatedReward",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "missionResultsRaw": [
+              "1",
+              "0",
+              "0",
+              "0",
+              "0"
+            ],
+            "attributes": {},
+            "sourceRefs": [
+              "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml"
+            ],
+            "calculatedContext": {
+              "schemaVersion": 1,
+              "modelVersion": "sc_mission_calculated_payout_v1",
+              "calculationStatus": "resolved",
+              "formulaStatus": "resolved_source_backed",
+              "currency": "aUEC",
+              "baseSoloAmount": 25750,
+              "amount": 25750,
+              "rawAmount": 25690.606817101045,
+              "integerRoundedAmount": 25691,
+              "unresolvedReasons": [],
+              "validationWarnings": [],
+              "difficulty": {
+                "status": "resolved",
+                "value": 2.11,
+                "formula": "sum(rating.level * profile.weight)",
+                "profile": {
+                  "guid": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "status": "resolved",
+                  "name": "General",
+                  "recordName": "ContractDifficultyProfile.General",
+                  "weightsRaw": {
+                    "mechanicalSkillWeight": "0.34",
+                    "mentalLoadWeight": "0.33",
+                    "riskOfLossWeight": "0.22",
+                    "gameKnowledgeWeight": "0.11"
+                  },
+                  "weights": {
+                    "mechanicalSkillWeight": 0.34,
+                    "mentalLoadWeight": 0.33,
+                    "riskOfLossWeight": 0.22,
+                    "gameKnowledgeWeight": 0.11
+                  },
+                  "sourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                  "sourceElement": "ContractDifficultyProfile.General"
+                },
+                "ratings": [
+                  {
+                    "dimension": "mechanicalSkill",
+                    "raw": "Zero_risk_of_action_2",
+                    "level": 2,
+                    "weightRaw": "0.34",
+                    "weight": 0.34,
+                    "contribution": 0.68
+                  },
+                  {
+                    "dimension": "mentalLoad",
+                    "raw": "Requires_minimal_thought_2",
+                    "level": 2,
+                    "weightRaw": "0.33",
+                    "weight": 0.33,
+                    "contribution": 0.66
+                  },
+                  {
+                    "dimension": "riskOfLoss",
+                    "raw": "Barely_even_breaking_a_sweat_2",
+                    "level": 2,
+                    "weightRaw": "0.22",
+                    "weight": 0.22,
+                    "contribution": 0.44
+                  },
+                  {
+                    "dimension": "gameKnowledge",
+                    "raw": "Flight_mechanics_fly_dock_quantum_3",
+                    "level": 3,
+                    "weightRaw": "0.11",
+                    "weight": 0.11,
+                    "contribution": 0.33
+                  }
+                ],
+                "unresolvedReasons": [],
+                "rawAttributes": {
+                  "difficultyProfile": "27f773a1-7c17-4a1e-a91f-8fb3c53bae01",
+                  "mechanicalSkill": "Zero_risk_of_action_2",
+                  "mentalLoad": "Requires_minimal_thought_2",
+                  "riskOfLoss": "Barely_even_breaking_a_sweat_2",
+                  "gameKnowledge": "Flight_mechanics_fly_dock_quantum_3"
+                }
+              },
+              "curve": {
+                "sourceTag": "uecCurve",
+                "rawAttributes": {
+                  "i": "1",
+                  "k": "0.303",
+                  "m": "-37"
+                },
+                "normalized": {
+                  "i": 1,
+                  "k": 0.303,
+                  "m": -37,
+                  "formula": "i * exp(k * (difficulty - m)) * timeToComplete / 60"
+                },
+                "currency": "aUEC",
+                "sourceRef": "gamemode/sc_default.xml",
+                "sourceElement": "SSubsumptionMission/uecCurve",
+                "sourceModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "sourceSha256": "59d9635eb2c053d69c18ff4ff5253ad391793cf95deb2df820ee010cc3eae3cf"
+              },
+              "rounding": {
+                "integer": "half_away_from_zero",
+                "nearestIncrement": 250,
+                "nearestIncrementMode": "half_away_from_zero",
+                "order": "integer_then_nearest_increment"
+              },
+              "contractBuyInAmount": {
+                "raw": "0",
+                "value": 0,
+                "applicationStatus": "separate_not_applied_to_base_solo_payout",
+                "currency": null,
+                "currencyStatus": "not_declared_on_source_element"
+              },
+              "timeToComplete": {
+                "raw": "11",
+                "value": 11,
+                "unit": "minutes",
+                "unitStatus": "normalized_by_source_formula_divisor_60"
+              },
+              "resultIndex": 0,
+              "resultCount": 1,
+              "aggregationStatus": "not_aggregated",
+              "resultLoopVerificationRequired": false,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ],
+              "missionResultsRaw": [
+                "1",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "provenance": {
+                "channel": "LIVE",
+                "sourceBuildId": "4.10.191.2241-12519617",
+                "recordsRoot": "foundry/records",
+                "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+                "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+                "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+                "sourceElement": "ContractResult_CalculatedReward",
+                "contextElement": "contractResults",
+                "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+                "curveSourceRef": "gamemode/sc_default.xml"
+              }
+            }
+          }
+        ],
+        "calculatedPayout": {
+          "schemaVersion": 1,
+          "modelVersion": "sc_mission_calculated_payout_v1",
+          "calculationStatus": "resolved",
+          "formulaStatus": "resolved_source_backed",
+          "currency": "aUEC",
+          "baseSoloAmount": 25750,
+          "resultCount": 1,
+          "aggregationStatus": "not_aggregated",
+          "resultLoopVerificationRequired": false,
+          "resultAmounts": [
+            {
+              "resultIndex": 0,
+              "calculationStatus": "resolved",
+              "currency": "aUEC",
+              "baseSoloAmount": 25750,
+              "missionResults": [
+                true,
+                false,
+                false,
+                false,
+                false
+              ]
+            }
+          ],
+          "unresolvedReasons": [],
+          "validationWarnings": [],
+          "source": "creditRewardTypes[].calculatedContext"
+        },
+        "buyIns": [
+          {
+            "resultIndex": 0,
+            "contractBuyInAmount": {
+              "raw": "0",
+              "value": 0,
+              "applicationStatus": "separate_not_applied_to_base_solo_payout",
+              "currency": null,
+              "currencyStatus": "not_declared_on_source_element"
+            },
+            "provenance": {
+              "channel": "LIVE",
+              "sourceBuildId": "4.10.191.2241-12519617",
+              "recordsRoot": "foundry/records",
+              "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+              "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc",
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "sourceElement": "ContractResult_CalculatedReward",
+              "contextElement": "contractResults",
+              "profileSourceRef": "contracts/contractdifficultyprofiles/general.xml",
+              "curveSourceRef": "gamemode/sc_default.xml"
+            }
+          }
+        ]
+      },
+      "reputationOutcomes": {
+        "fixed": [
+          {
+            "type": "ContractResult_LegacyReputation",
+            "missionResults": [
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            "factionReputation": "aa5f0bf8-f36f-423a-b9dd-73084139db23",
+            "reputationScope": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "reputationScopeSourceAttribute": "reputationScope",
+            "rewardGuid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+            "reputationAmount": 100,
+            "reward": {
+              "guid": "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd",
+              "recordName": "SReputationRewardAmount.ReputationRewardAmount_Positive_100",
+              "editorName": "Undefined Name",
+              "reputationAmount": 100,
+              "path": "reputation/rewards/missionrewards_reputation/reputationawards_pyro/reputationrewardamount_positive_100.xml"
+            }
+          }
+        ],
+        "calculated": []
+      },
+      "requiredItems": [
+        {
+          "evidenceId": "reqitem_8f9e8946aaa184d7ed6c834e",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "96d3f782-9d63-4164-8fd8-592c92fff905",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.MedicalSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/medical/medicalsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "dc9ad624-c31f-4451-8046-7b6a1c871e3e",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_medical_supplies_a",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_medical_supplies_a.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0025"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "d5637512-c1b0-4876-a79f-48571845172f",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.AgriculturalSamples",
+                    "path": "missiondata/pu_items/carryable_2h/agriculturalmaterials/agriculturalsamples.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ae596ace-fb95-43b4-8ad7-e299a771c033",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_agricultural_supplies_a",
+                      "displayName": "Agricultural Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_agricultural_supplies_a.xml"
+                    },
+                    "displayName": "Agricultural Supplies",
+                    "tags": [
+                      "fcc7d03f-0d25-42d4-895d-4a7ab618ecd7",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "bd8c12b8-ef11-4cde-98b6-ce010e70f236",
+                      "c46e42b7-9f84-4e8e-a7ff-8457ce77c171"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0006"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "400162b5-4d0b-4dbf-9696-d844c9ea44c2",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Aluminum",
+                    "path": "missiondata/pu_items/carryable_2h/ore/aluminum.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "0de4154c-bda8-49f6-85c4-ab0bb60e0096",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_aluminium_a",
+                      "displayName": "Aluminum",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_aluminium_a.xml"
+                    },
+                    "displayName": "Aluminum",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "69169477-cb7a-4b2a-ae83-40de35124691",
+                      "c6f1e606-4845-4a4a-bfb6-9d1f1de6d587"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0013"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "b9ab1352-57ee-401f-b963-c97062578669",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Agricium",
+                    "path": "missiondata/pu_items/carryable_2h/ore/agricium.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ad671bda-e44f-44b5-b5a6-de0bacccd61e",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_agricium_a",
+                      "displayName": "Agricium",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_agricium_a.xml"
+                    },
+                    "displayName": "Agricium",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "1d5d6829-46eb-4a0a-9d4c-0b16ec099f63",
+                      "69169477-cb7a-4b2a-ae83-40de35124691"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0017"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "bfc398aa-a17e-4e55-92fd-2adcd6e85e38",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Corundum",
+                    "path": "missiondata/pu_items/carryable_2h/ore/corundum.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "0cbe992e-013a-48ba-b219-0c10c0478ff9",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_minerals_corundum_a",
+                      "displayName": "Corundum",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_minerals_corundum_a.xml"
+                    },
+                    "displayName": "Corundum",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "87b507e5-09f3-4b92-82d7-5e18ed474335",
+                      "f1935ca5-0cc5-40a0-8eca-c3d2823c220b"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0019"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "2af13d2a-5760-4a3c-9dab-47f8bcdaa56b",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.ResearchSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/research/researchsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "d2678727-91e0-470f-b640-a12b4ad909c1",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_MissionItem_medical_samples",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_missionitem_medical_samples.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "7ea3a24e-7572-47e1-b7f2-622c78c205c4",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0030"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "c7c130a5-0d6c-4bfe-81b3-8f237bc6bd41",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Hydrogen",
+                    "path": "missiondata/pu_items/carryable_2h/gas/hydrogen.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "4c9ab95b-cb2a-4145-aa22-12da28605aaf",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_flammable_hydrogen",
+                      "displayName": "Hydrogen",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_flammable_hydrogen.xml"
+                    },
+                    "displayName": "Hydrogen",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                      "7ef19e57-ffd2-4af2-859b-54d0bb4a4dc2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@items_commodities_hydrogen"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "ea717166-fe48-4240-a908-3c11743501e4",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.FoodSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/food/foodsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ef097ed9-9c1f-45e3-ae7b-eb2c12caff08",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_food_nonperishable_a",
+                      "displayName": "Processed Food",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_food_nonperishable_a.xml"
+                    },
+                    "displayName": "Processed Food",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                      "bf562061-790e-4bde-ac61-22ede98d87f6",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "d7accef0-1d5f-4766-a3b8-147c176391b1",
+                      "63049ea3-127c-4ad5-a099-f60e43260509"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0004"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "9e442964-699a-4d8c-8773-f589af5738eb",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Chlorine",
+                    "path": "missiondata/pu_items/carryable_2h/gas/chlorine.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "cdf7f324-6fcb-437e-b4fd-533f04a13c7f",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_inert_chlorine_a",
+                      "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_inert_chlorine_a.xml"
+                    },
+                    "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "88561c20-a0e4-4b2c-b688-75609ce717f2",
+                      "2b6247c0-17f3-4bf8-a001-6f3e7b65334c"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@items_commodities_chlorine"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "0dd2d520-94d3-4958-bed5-3f3cc9709a7f",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Tungsten",
+                    "path": "missiondata/pu_items/carryable_2h/ore/tungsten.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "71ee8b89-5a81-40c4-89db-03fdd9c5da5f",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_tungsten_a",
+                      "displayName": "Tungsten",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_tungsten_a.xml"
+                    },
+                    "displayName": "Tungsten",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "44598ecc-1b15-4f1d-a9ee-2b4d711a0534",
+                      "69169477-cb7a-4b2a-ae83-40de35124691"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0015"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_46e1b1020c64fa1656c6903d",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceOrdinal": 5,
+          "missionVariableName": "HaulingOrderContent",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1B10]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "96d3f782-9d63-4164-8fd8-592c92fff905",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.MedicalSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/medical/medicalsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "dc9ad624-c31f-4451-8046-7b6a1c871e3e",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_medical_supplies_a",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_medical_supplies_a.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0025"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "d5637512-c1b0-4876-a79f-48571845172f",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.AgriculturalSamples",
+                      "path": "missiondata/pu_items/carryable_2h/agriculturalmaterials/agriculturalsamples.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ae596ace-fb95-43b4-8ad7-e299a771c033",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_agricultural_supplies_a",
+                        "displayName": "Agricultural Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_agricultural_supplies_a.xml"
+                      },
+                      "displayName": "Agricultural Supplies",
+                      "tags": [
+                        "fcc7d03f-0d25-42d4-895d-4a7ab618ecd7",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "bd8c12b8-ef11-4cde-98b6-ce010e70f236",
+                        "c46e42b7-9f84-4e8e-a7ff-8457ce77c171"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0006"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "400162b5-4d0b-4dbf-9696-d844c9ea44c2",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Aluminum",
+                      "path": "missiondata/pu_items/carryable_2h/ore/aluminum.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "0de4154c-bda8-49f6-85c4-ab0bb60e0096",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_aluminium_a",
+                        "displayName": "Aluminum",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_aluminium_a.xml"
+                      },
+                      "displayName": "Aluminum",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "69169477-cb7a-4b2a-ae83-40de35124691",
+                        "c6f1e606-4845-4a4a-bfb6-9d1f1de6d587"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0013"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "b9ab1352-57ee-401f-b963-c97062578669",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Agricium",
+                      "path": "missiondata/pu_items/carryable_2h/ore/agricium.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ad671bda-e44f-44b5-b5a6-de0bacccd61e",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_agricium_a",
+                        "displayName": "Agricium",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_agricium_a.xml"
+                      },
+                      "displayName": "Agricium",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "1d5d6829-46eb-4a0a-9d4c-0b16ec099f63",
+                        "69169477-cb7a-4b2a-ae83-40de35124691"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0017"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "bfc398aa-a17e-4e55-92fd-2adcd6e85e38",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Corundum",
+                      "path": "missiondata/pu_items/carryable_2h/ore/corundum.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "0cbe992e-013a-48ba-b219-0c10c0478ff9",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_minerals_corundum_a",
+                        "displayName": "Corundum",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_minerals_corundum_a.xml"
+                      },
+                      "displayName": "Corundum",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "87b507e5-09f3-4b92-82d7-5e18ed474335",
+                        "f1935ca5-0cc5-40a0-8eca-c3d2823c220b"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0019"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "2af13d2a-5760-4a3c-9dab-47f8bcdaa56b",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.ResearchSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/research/researchsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "d2678727-91e0-470f-b640-a12b4ad909c1",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_MissionItem_medical_samples",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_missionitem_medical_samples.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "7ea3a24e-7572-47e1-b7f2-622c78c205c4",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0030"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "c7c130a5-0d6c-4bfe-81b3-8f237bc6bd41",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Hydrogen",
+                      "path": "missiondata/pu_items/carryable_2h/gas/hydrogen.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "4c9ab95b-cb2a-4145-aa22-12da28605aaf",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_flammable_hydrogen",
+                        "displayName": "Hydrogen",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_flammable_hydrogen.xml"
+                      },
+                      "displayName": "Hydrogen",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                        "7ef19e57-ffd2-4af2-859b-54d0bb4a4dc2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@items_commodities_hydrogen"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "ea717166-fe48-4240-a908-3c11743501e4",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.FoodSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/food/foodsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ef097ed9-9c1f-45e3-ae7b-eb2c12caff08",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_food_nonperishable_a",
+                        "displayName": "Processed Food",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_food_nonperishable_a.xml"
+                      },
+                      "displayName": "Processed Food",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                        "bf562061-790e-4bde-ac61-22ede98d87f6",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "d7accef0-1d5f-4766-a3b8-147c176391b1",
+                        "63049ea3-127c-4ad5-a099-f60e43260509"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0004"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "9e442964-699a-4d8c-8773-f589af5738eb",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Chlorine",
+                      "path": "missiondata/pu_items/carryable_2h/gas/chlorine.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "cdf7f324-6fcb-437e-b4fd-533f04a13c7f",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_inert_chlorine_a",
+                        "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_inert_chlorine_a.xml"
+                      },
+                      "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "88561c20-a0e4-4b2c-b688-75609ce717f2",
+                        "2b6247c0-17f3-4bf8-a001-6f3e7b65334c"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@items_commodities_chlorine"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "0dd2d520-94d3-4958-bed5-3f3cc9709a7f",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Tungsten",
+                      "path": "missiondata/pu_items/carryable_2h/ore/tungsten.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "71ee8b89-5a81-40c4-89db-03fdd9c5da5f",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_tungsten_a",
+                        "displayName": "Tungsten",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_tungsten_a.xml"
+                      },
+                      "displayName": "Tungsten",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "44598ecc-1b15-4f1d-a9ee-2b4d711a0534",
+                        "69169477-cb7a-4b2a-ae83-40de35124691"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0015"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "sourceOrdinal": 5,
+            "missionVariableName": "HaulingOrderContent",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1B10]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "channel": "LIVE",
+        "buildId": "4.10.191.2241-12519617",
+        "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+        "calculationInputsDigestSha256": "83791ed0f842744b63518027b91518d108acd126cf52aa0bf785f8bb10271ddc"
+      }
+    },
+    "requiredItems": {
+      "status": "present",
+      "evidence": [
+        {
+          "evidenceId": "reqitem_8f9e8946aaa184d7ed6c834e",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceOrdinal": 3,
+          "missionVariableName": "Item1",
+          "requirementRole": "mission_item_selector",
+          "roleStatus": "unbound",
+          "requirementStatus": "selector_not_proven_as_turn_in",
+          "content": {
+            "type": "mission_item_selector",
+            "sourceElement": "MissionPropertyValue_MissionItem",
+            "rawAttributes": {
+              "minItemsToFind": "1",
+              "maxItemsToFind": "1"
+            },
+            "selectionBounds": {
+              "minItemsToFind": {
+                "raw": "1",
+                "value": 1
+              },
+              "maxItemsToFind": {
+                "raw": "1",
+                "value": 1
+              }
+            },
+            "conditionCombinationStatus": "source_container_semantics_unresolved",
+            "conditions": [
+              {
+                "ordinal": 0,
+                "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                "rawAttributes": {},
+                "type": "specific_items",
+                "items": [
+                  {
+                    "guid": "96d3f782-9d63-4164-8fd8-592c92fff905",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.MedicalSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/medical/medicalsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "dc9ad624-c31f-4451-8046-7b6a1c871e3e",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_medical_supplies_a",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_medical_supplies_a.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "209d603a-11d7-4b67-a011-174ae0f77d59",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0025"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "d5637512-c1b0-4876-a79f-48571845172f",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.AgriculturalSamples",
+                    "path": "missiondata/pu_items/carryable_2h/agriculturalmaterials/agriculturalsamples.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ae596ace-fb95-43b4-8ad7-e299a771c033",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_agricultural_supplies_a",
+                      "displayName": "Agricultural Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_agricultural_supplies_a.xml"
+                    },
+                    "displayName": "Agricultural Supplies",
+                    "tags": [
+                      "fcc7d03f-0d25-42d4-895d-4a7ab618ecd7",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "bd8c12b8-ef11-4cde-98b6-ce010e70f236",
+                      "c46e42b7-9f84-4e8e-a7ff-8457ce77c171"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0006"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "400162b5-4d0b-4dbf-9696-d844c9ea44c2",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Aluminum",
+                    "path": "missiondata/pu_items/carryable_2h/ore/aluminum.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "0de4154c-bda8-49f6-85c4-ab0bb60e0096",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_aluminium_a",
+                      "displayName": "Aluminum",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_aluminium_a.xml"
+                    },
+                    "displayName": "Aluminum",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "69169477-cb7a-4b2a-ae83-40de35124691",
+                      "c6f1e606-4845-4a4a-bfb6-9d1f1de6d587"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0013"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "b9ab1352-57ee-401f-b963-c97062578669",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Agricium",
+                    "path": "missiondata/pu_items/carryable_2h/ore/agricium.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ad671bda-e44f-44b5-b5a6-de0bacccd61e",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_agricium_a",
+                      "displayName": "Agricium",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_agricium_a.xml"
+                    },
+                    "displayName": "Agricium",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "1d5d6829-46eb-4a0a-9d4c-0b16ec099f63",
+                      "69169477-cb7a-4b2a-ae83-40de35124691"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0017"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "bfc398aa-a17e-4e55-92fd-2adcd6e85e38",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Corundum",
+                    "path": "missiondata/pu_items/carryable_2h/ore/corundum.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "0cbe992e-013a-48ba-b219-0c10c0478ff9",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_minerals_corundum_a",
+                      "displayName": "Corundum",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_minerals_corundum_a.xml"
+                    },
+                    "displayName": "Corundum",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "87b507e5-09f3-4b92-82d7-5e18ed474335",
+                      "f1935ca5-0cc5-40a0-8eca-c3d2823c220b"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0019"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "2af13d2a-5760-4a3c-9dab-47f8bcdaa56b",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.ResearchSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/research/researchsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "d2678727-91e0-470f-b640-a12b4ad909c1",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_MissionItem_medical_samples",
+                      "displayName": "Medical Supplies",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_missionitem_medical_samples.xml"
+                    },
+                    "displayName": "Medical Supplies",
+                    "tags": [
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "7ea3a24e-7572-47e1-b7f2-622c78c205c4",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                      "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0030"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "c7c130a5-0d6c-4bfe-81b3-8f237bc6bd41",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Hydrogen",
+                    "path": "missiondata/pu_items/carryable_2h/gas/hydrogen.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "4c9ab95b-cb2a-4145-aa22-12da28605aaf",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_flammable_hydrogen",
+                      "displayName": "Hydrogen",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_flammable_hydrogen.xml"
+                    },
+                    "displayName": "Hydrogen",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                      "7ef19e57-ffd2-4af2-859b-54d0bb4a4dc2"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@items_commodities_hydrogen"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "ea717166-fe48-4240-a908-3c11743501e4",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.FoodSupplies",
+                    "path": "missiondata/pu_items/carryable_2h/food/foodsupplies.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "ef097ed9-9c1f-45e3-ae7b-eb2c12caff08",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_food_nonperishable_a",
+                      "displayName": "Processed Food",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_food_nonperishable_a.xml"
+                    },
+                    "displayName": "Processed Food",
+                    "tags": [
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                      "bf562061-790e-4bde-ac61-22ede98d87f6",
+                      "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "d7accef0-1d5f-4766-a3b8-147c176391b1",
+                      "63049ea3-127c-4ad5-a099-f60e43260509"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0004"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "9e442964-699a-4d8c-8773-f589af5738eb",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Chlorine",
+                    "path": "missiondata/pu_items/carryable_2h/gas/chlorine.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "cdf7f324-6fcb-437e-b4fd-533f04a13c7f",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_inert_chlorine_a",
+                      "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_inert_chlorine_a.xml"
+                    },
+                    "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "88561c20-a0e4-4b2c-b688-75609ce717f2",
+                      "2b6247c0-17f3-4bf8-a001-6f3e7b65334c"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@items_commodities_chlorine"
+                      }
+                    ]
+                  },
+                  {
+                    "guid": "0dd2d520-94d3-4958-bed5-3f3cc9709a7f",
+                    "resolution": "resolved_mission_item_definition",
+                    "recordName": "MissionItem.Tungsten",
+                    "path": "missiondata/pu_items/carryable_2h/ore/tungsten.xml",
+                    "entityClass": {
+                      "status": "resolved",
+                      "guid": "71ee8b89-5a81-40c4-89db-03fdd9c5da5f",
+                      "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_tungsten_a",
+                      "displayName": "Tungsten",
+                      "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_tungsten_a.xml"
+                    },
+                    "displayName": "Tungsten",
+                    "tags": [
+                      "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                      "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                      "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                      "44598ecc-1b15-4f1d-a9ee-2b4d711a0534",
+                      "69169477-cb7a-4b2a-ae83-40de35124691"
+                    ],
+                    "stringVariants": [
+                      {
+                        "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                        "string": "@mission_item_0015"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[4]",
+            "sourceElement": "MissionPropertyValue_MissionItem"
+          }
+        },
+        {
+          "evidenceId": "reqitem_46e1b1020c64fa1656c6903d",
+          "variantId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceScope": "contract",
+          "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+          "sourceOrdinal": 5,
+          "missionVariableName": "HaulingOrderContent",
+          "requirementRole": "hauling_order",
+          "roleStatus": "explicit_order",
+          "requirementStatus": "source_backed_order",
+          "content": {
+            "type": "hauling_orders",
+            "sourceElement": "MissionPropertyValue_HaulingOrders",
+            "rawAttributes": {},
+            "logic": "all_of",
+            "entries": [
+              {
+                "ordinal": 0,
+                "sourceElement": "HaulingOrderContent_MissionItem",
+                "rawAttributes": {
+                  "minAmount": "1",
+                  "maxAmount": "0"
+                },
+                "type": "mission_item_reference",
+                "itemReference": {
+                  "status": "unresolved_internal_handle",
+                  "reference": {
+                    "raw": "MissionProperty[1B10]",
+                    "kind": "MissionProperty",
+                    "resolution": "unresolved_internal_handle"
+                  }
+                },
+                "quantity": {
+                  "minAmount": {
+                    "raw": "1",
+                    "value": 1
+                  },
+                  "maxAmount": {
+                    "raw": "0",
+                    "value": 0
+                  }
+                }
+              }
+            ]
+          },
+          "provenance": {
+            "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+            "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[6]",
+            "sourceElement": "MissionPropertyValue_HaulingOrders"
+          }
+        }
+      ],
+      "propertyOverrides": {
+        "extractionScope": "mission_item_related",
+        "handler": [],
+        "contract": [
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "sourceOrdinal": 3,
+            "missionVariableName": "Item1",
+            "extendedTextToken": "Item1",
+            "rawAttributes": {
+              "missionVariableName": "Item1",
+              "extendedTextToken": "Item1"
+            },
+            "valueType": "MissionPropertyValue_MissionItem",
+            "value": {
+              "type": "mission_item_selector",
+              "sourceElement": "MissionPropertyValue_MissionItem",
+              "rawAttributes": {
+                "minItemsToFind": "1",
+                "maxItemsToFind": "1"
+              },
+              "selectionBounds": {
+                "minItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                },
+                "maxItemsToFind": {
+                  "raw": "1",
+                  "value": 1
+                }
+              },
+              "conditionCombinationStatus": "source_container_semantics_unresolved",
+              "conditions": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "DataSetMatchCondition_SpecificItemsDef",
+                  "rawAttributes": {},
+                  "type": "specific_items",
+                  "items": [
+                    {
+                      "guid": "96d3f782-9d63-4164-8fd8-592c92fff905",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.MedicalSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/medical/medicalsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "dc9ad624-c31f-4451-8046-7b6a1c871e3e",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_medical_supplies_a",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_medical_supplies_a.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "209d603a-11d7-4b67-a011-174ae0f77d59",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0025"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "d5637512-c1b0-4876-a79f-48571845172f",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.AgriculturalSamples",
+                      "path": "missiondata/pu_items/carryable_2h/agriculturalmaterials/agriculturalsamples.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ae596ace-fb95-43b4-8ad7-e299a771c033",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_agricultural_supplies_a",
+                        "displayName": "Agricultural Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_agricultural_supplies_a.xml"
+                      },
+                      "displayName": "Agricultural Supplies",
+                      "tags": [
+                        "fcc7d03f-0d25-42d4-895d-4a7ab618ecd7",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "bd8c12b8-ef11-4cde-98b6-ce010e70f236",
+                        "c46e42b7-9f84-4e8e-a7ff-8457ce77c171"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0006"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "400162b5-4d0b-4dbf-9696-d844c9ea44c2",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Aluminum",
+                      "path": "missiondata/pu_items/carryable_2h/ore/aluminum.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "0de4154c-bda8-49f6-85c4-ab0bb60e0096",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_aluminium_a",
+                        "displayName": "Aluminum",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_aluminium_a.xml"
+                      },
+                      "displayName": "Aluminum",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "69169477-cb7a-4b2a-ae83-40de35124691",
+                        "c6f1e606-4845-4a4a-bfb6-9d1f1de6d587"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0013"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "b9ab1352-57ee-401f-b963-c97062578669",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Agricium",
+                      "path": "missiondata/pu_items/carryable_2h/ore/agricium.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ad671bda-e44f-44b5-b5a6-de0bacccd61e",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_agricium_a",
+                        "displayName": "Agricium",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_agricium_a.xml"
+                      },
+                      "displayName": "Agricium",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "1d5d6829-46eb-4a0a-9d4c-0b16ec099f63",
+                        "69169477-cb7a-4b2a-ae83-40de35124691"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0017"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "bfc398aa-a17e-4e55-92fd-2adcd6e85e38",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Corundum",
+                      "path": "missiondata/pu_items/carryable_2h/ore/corundum.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "0cbe992e-013a-48ba-b219-0c10c0478ff9",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_minerals_corundum_a",
+                        "displayName": "Corundum",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_minerals_corundum_a.xml"
+                      },
+                      "displayName": "Corundum",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "87b507e5-09f3-4b92-82d7-5e18ed474335",
+                        "f1935ca5-0cc5-40a0-8eca-c3d2823c220b"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0019"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "2af13d2a-5760-4a3c-9dab-47f8bcdaa56b",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.ResearchSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/research/researchsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "d2678727-91e0-470f-b640-a12b4ad909c1",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_MissionItem_medical_samples",
+                        "displayName": "Medical Supplies",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_missionitem_medical_samples.xml"
+                      },
+                      "displayName": "Medical Supplies",
+                      "tags": [
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "7ea3a24e-7572-47e1-b7f2-622c78c205c4",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "a2b36b6b-2728-4edb-960f-693aa1e8bfde",
+                        "f122662b-9489-4b08-b533-51cdf2b6eca2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0030"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "c7c130a5-0d6c-4bfe-81b3-8f237bc6bd41",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Hydrogen",
+                      "path": "missiondata/pu_items/carryable_2h/gas/hydrogen.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "4c9ab95b-cb2a-4145-aa22-12da28605aaf",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_flammable_hydrogen",
+                        "displayName": "Hydrogen",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_flammable_hydrogen.xml"
+                      },
+                      "displayName": "Hydrogen",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "b2d2cd1b-ac25-4d3a-b0db-5f0fc288837a",
+                        "7ef19e57-ffd2-4af2-859b-54d0bb4a4dc2"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@items_commodities_hydrogen"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "ea717166-fe48-4240-a908-3c11743501e4",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.FoodSupplies",
+                      "path": "missiondata/pu_items/carryable_2h/food/foodsupplies.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "ef097ed9-9c1f-45e3-ae7b-eb2c12caff08",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_food_nonperishable_a",
+                        "displayName": "Processed Food",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_food_nonperishable_a.xml"
+                      },
+                      "displayName": "Processed Food",
+                      "tags": [
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "15f3217b-0a8b-4f2e-bfec-9bd58b92eb8b",
+                        "bf562061-790e-4bde-ac61-22ede98d87f6",
+                        "dc9f5bf0-bdee-4ec3-a41f-640ca61a7b92",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "d7accef0-1d5f-4766-a3b8-147c176391b1",
+                        "63049ea3-127c-4ad5-a099-f60e43260509"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0004"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "9e442964-699a-4d8c-8773-f589af5738eb",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Chlorine",
+                      "path": "missiondata/pu_items/carryable_2h/gas/chlorine.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "cdf7f324-6fcb-437e-b4fd-533f04a13c7f",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_gas_inert_chlorine_a",
+                        "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_gas_inert_chlorine_a.xml"
+                      },
+                      "displayName": "Carryable 2H FL 05x 05x 05 Commodity Gas Inert Chlorine A",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "88561c20-a0e4-4b2c-b688-75609ce717f2",
+                        "2b6247c0-17f3-4bf8-a001-6f3e7b65334c"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@items_commodities_chlorine"
+                        }
+                      ]
+                    },
+                    {
+                      "guid": "0dd2d520-94d3-4958-bed5-3f3cc9709a7f",
+                      "resolution": "resolved_mission_item_definition",
+                      "recordName": "MissionItem.Tungsten",
+                      "path": "missiondata/pu_items/carryable_2h/ore/tungsten.xml",
+                      "entityClass": {
+                        "status": "resolved",
+                        "guid": "71ee8b89-5a81-40c4-89db-03fdd9c5da5f",
+                        "recordName": "EntityClassDefinition.Carryable_2H_FL_05x05x05_Commodity_metal_tungsten_a",
+                        "displayName": "Tungsten",
+                        "path": "entities/scitem/carryables/2h/carryable_2h_fl_05x05x05_commodity_metal_tungsten_a.xml"
+                      },
+                      "displayName": "Tungsten",
+                      "tags": [
+                        "56b3cdd1-6eb5-4f52-b389-9726a5caea3c",
+                        "dce2bf6a-62fb-4923-a954-f3e9a77f08fe",
+                        "37ba7ad8-8553-45df-a84b-c49eb6ebb7a6",
+                        "44598ecc-1b15-4f1d-a9ee-2b4d711a0534",
+                        "69169477-cb7a-4b2a-ae83-40de35124691"
+                      ],
+                      "stringVariants": [
+                        {
+                          "tag": "0130de18-97e2-4d4c-9bb1-3e7ef5fd0490",
+                          "string": "@mission_item_0015"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[4]",
+              "sourceElement": "MissionPropertyValue_MissionItem"
+            }
+          },
+          {
+            "sourceScope": "contract",
+            "sourceOwnerId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+            "sourceOrdinal": 5,
+            "missionVariableName": "HaulingOrderContent",
+            "extendedTextToken": null,
+            "rawAttributes": {
+              "missionVariableName": "HaulingOrderContent"
+            },
+            "valueType": "MissionPropertyValue_HaulingOrders",
+            "value": {
+              "type": "hauling_orders",
+              "sourceElement": "MissionPropertyValue_HaulingOrders",
+              "rawAttributes": {},
+              "logic": "all_of",
+              "entries": [
+                {
+                  "ordinal": 0,
+                  "sourceElement": "HaulingOrderContent_MissionItem",
+                  "rawAttributes": {
+                    "minAmount": "1",
+                    "maxAmount": "0"
+                  },
+                  "type": "mission_item_reference",
+                  "itemReference": {
+                    "status": "unresolved_internal_handle",
+                    "reference": {
+                      "raw": "MissionProperty[1B10]",
+                      "kind": "MissionProperty",
+                      "resolution": "unresolved_internal_handle"
+                    }
+                  },
+                  "quantity": {
+                    "minAmount": {
+                      "raw": "1",
+                      "value": 1
+                    },
+                    "maxAmount": {
+                      "raw": "0",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "sourceRef": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+              "xmlPath": "generators/ContractGeneratorHandler_Career[@debugName='RedWind_RecoverItem_Space_Stanton_Career']/contracts/CareerContract[@id='d9afb170-cddf-415b-ac3c-62f0618af0c7']/paramOverrides/propertyOverrides/MissionProperty[6]",
+              "sourceElement": "MissionPropertyValue_HaulingOrders"
+            }
+          }
+        ]
+      },
+      "haulingOrderCount": 1,
+      "selectorCount": 1
+    },
+    "technical": {
+      "contractId": "d9afb170-cddf-415b-ac3c-62f0618af0c7",
+      "generatorGuid": "f8ac69e0-b58b-4158-b22c-7e4535b80297",
+      "generatorName": "ContractGenerator.RedWind_RecoverItem",
+      "generatorPath": "contracts/contractgenerator/interstellartransport_guild/redwind/redwind_recoveritem.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@spacecollect_cargo_title_intro_01",
+      "descriptionRaw": "@spacecollect_cargo_desc_intro_01"
+    }
+  }
+}

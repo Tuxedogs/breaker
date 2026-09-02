@@ -1,0 +1,437 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "headhunters:go-on-the-warpath",
+  "variants": [
+    {
+      "variantKey": "a45b3499-7f96-49a3-a909-717279e8bfa0",
+      "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+      "conceptKey": "b515b67bc27778eb23f8",
+      "objectiveSignature": {
+        "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat|eliminate-all|activity-defined|standard|open|unknown:unknown||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "headhunters-chain-elim-all-attack-gen",
+        "descriptionStem": "headhunters-chain-elim-all-attack-gen",
+        "handlerStem": "hh-eliminate-all",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:unknown",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:headhunters-chain-elim-all-attack-gen",
+          "description:headhunters-chain-elim-all-attack-gen",
+          "handler:hh-eliminate-all",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:unknown"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+          "HH_Pyro_RegionD_XTXSOutposts_ChainEliminateAll"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "displayName": "Go on the warpath",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Looking for some hitters to go drop some violence on some local dipshits who've been pulling jobs in the system against Headhunters. We tried reaching out to explain the error of their ways, but they shot our messenger, so now we go with option B.\n\nYou'll find them holed up near [Location]. Go there and repaint the walls with their blood.\n\nHave fun.\n\nStows out.",
+      "rawName": "@headhunters_ChainElimAll_AttackGen_E_title_001",
+      "internalName": "HH_Pyro_RegionD_XTXSOutposts_ChainEliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Headhunters",
+      "faction": "Headhunters",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+        "displayName": "Ship Combat",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+        "factionDisplayName": "Headhunters",
+        "trackType": "Ship Combat",
+        "confidence": "partial",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_EliminateAll",
+          "HH_Pyro_RegionD_XTXSOutposts_ChainEliminateAll"
+        ],
+        "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep; Pyro Star; Region D",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "location",
+          "label": "Pyro Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "locality",
+          "label": "Region D",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "Procedural availability scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "a14bec87-5801-4440-8ca8-35597487ac9a"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "resolvedName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "resolvedName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+            "displayName": "Pyro Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+            "displayName": "Region D",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro Star",
+            "Region D"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Pyro system",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "a14bec87-5801-4440-8ca8-35597487ac9a"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "a14bec87-5801-4440-8ca8-35597487ac9a",
+              "displayName": "Pyro Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/pyro/pyrostar/pyrostar.xml",
+              "system": "Pyro"
+            },
+            {
+              "guid": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+              "displayName": "Region D",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Pyro Star",
+              "Region D"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "a14bec87-5801-4440-8ca8-35597487ac9a",
+          "resolvedName": "Pyro Star",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Pyro Star",
+        "Region D"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Head Hunters Mercenary FPS Eliminate ALL Region CD: Yubarev Pistol, Yubarev \"Mirage\" Pistol, Yubarev \"Igniter\" Pistol, DustUp Arms Tactical +4",
+          "Ship Combat +400",
+          "174,000 aUEC"
+        ],
+        "blueprintRewards": [
+          "Head Hunters Mercenary FPS Eliminate ALL Region CD: Yubarev Pistol, Yubarev \"Mirage\" Pistol, Yubarev \"Igniter\" Pistol, DustUp Arms Tactical +4"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "d10c81ec-fc38-4f3e-bb2d-ccea0d10c889",
+            "poolName": "Head Hunters Mercenary FPS Eliminate ALL Region CD",
+            "rewardCount": 8,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "12.5% chance - 1 of 8",
+            "rewards": [
+              {
+                "blueprintGuid": "97847c70-ec56-4b59-b946-4416d8f38d1d",
+                "displayName": "Yubarev Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "7e51e245-9baa-4845-b9e5-7028f257adb9",
+                "displayName": "Yubarev \"Mirage\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "b7bf92c7-a3ee-4082-996b-46bc67b5929b",
+                "displayName": "Yubarev \"Igniter\" Pistol",
+                "componentType": "weapons",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "2946fc90-9ad7-4554-9bdd-940ed97538c5",
+                "displayName": "DustUp Arms Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "c391c68a-30cd-4a09-971f-a6f816906337",
+                "displayName": "DustUp Core Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "b19b4e92-2e22-4179-a647-0e13152a7302",
+                "displayName": "DustUp Legs Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "e277c982-f965-4c27-9377-1db753e1a8f6",
+                "displayName": "DustUp Helmet Tactical",
+                "componentType": "armor",
+                "chanceLabel": "12.5% chance"
+              },
+              {
+                "blueprintGuid": "9c6ca949-c28c-40db-9e32-e4abd23ef3de",
+                "displayName": "Yubarev Pistol Battery (10 cap)",
+                "componentType": "ammo",
+                "chanceLabel": "12.5% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Ship Combat +400"
+        ],
+        "credits": "174,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "174,000 aUEC",
+          "amount": 174000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 174000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 174000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
+          "factionDisplayName": "Headhunters",
+          "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:ship-combat",
+          "scopeDisplayName": "Ship Combat",
+          "amount": 400,
+          "confidence": "partial",
+          "sourceRefs": [
+            "09efeef4-c646-408d-a979-3ae56a3b1beb",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7c9b64e7-6528-4d64-8481-34c24e2af500"
+          ],
+          "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "unknown",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "a45b3499-7f96-49a3-a909-717279e8bfa0",
+        "generatorGuid": "716fdae9-1d2c-4714-8bef-af636f35d8ca",
+        "generatorName": "ContractGenerator.HeadHunters_Mercenary_FPS",
+        "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@headhunters_ChainElimAll_AttackGen_E_title_001",
+        "descriptionRaw": "@headhunters_ChainElimAll_AttackGen_E_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

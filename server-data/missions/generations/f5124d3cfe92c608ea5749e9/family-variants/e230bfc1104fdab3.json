@@ -1,0 +1,3608 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+  "variants": [
+    {
+      "variantKey": "9731c308-24e7-4f31-abe0-10f2078483ab",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "medium",
+      "tierLabel": "Medium Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Orange Lvl. Contract: Defend [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "We need a contractor to provide convoy and protection services at [Location]. One of our elite clients' are under attack from a band of outlaws targeting their [Objects] and ships. You'll need to keep the crew safe as they traverse the area, as well as make sure the assets stay as intact. These thugs look like they can do some real damage, so be sure you engage them with caution or the client might not be the only one to take heavy losses.\n\nIf you manage to nail this to the Foxwell standards, we’re offering [ScripAmount] MG Scrip as compensation to the main contractor. \n\nGood luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_M_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Medium",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Foxwell Enforcement: Contractor Elite Contractor",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Standing +150",
+          "207,000 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +150"
+        ],
+        "credits": "207,000 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "207,000 aUEC",
+          "amount": 207000,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 207000,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 207000,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "3",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 150,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7f8f04c4-92bd-48a0-8017-b922c2404849"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9731c308-24e7-4f31-abe0-10f2078483ab",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_M_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_M_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "8436bbb2-8057-4220-b75d-65cb9639389f",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "hard",
+      "tierLabel": "High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Orange Lvl. Contract: Protect [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Crew managing one of our client's operations at [Location] have reported that they're under attack from a criminal gang targeting the [Objects] and ships in the area. It will be your job to keep both safe at all costs. I don't have all the facts yet, but I reckon this will be a tough mission – these outlaws seem determined to do some real carnage. \n\nIf it were me, I would bring backup to deal with them. And if you manage to protect everyone, we’re offering a well-earned [ScripAmount] MG Scrip to the main contractor who deals with these lowlife's successfully. \n\nBest of luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_H_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Hard",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Foxwell Enforcement: Sr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Sr. Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Blueprint: Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2",
+          "Standing +200",
+          "336,500 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "f99fb032-c235-42c8-9e05-cb3443c26e55",
+            "poolName": "Pyro Foxwell Hard",
+            "rewardCount": 6,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "16.67% chance - 1 of 6",
+            "rewards": [
+              {
+                "blueprintGuid": "64c8213c-7149-4b91-94ed-1011d64f6a25",
+                "displayName": "Glacier",
+                "componentType": "cooler",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d9def0f6-9dc1-4267-b446-85a1ad9ce954",
+                "displayName": "Avalanche",
+                "componentType": "cooler",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "81bd2f26-f106-4273-aed7-a66f52b14978",
+                "displayName": "Blizzard",
+                "componentType": "cooler",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "9ead63a3-24a5-4338-8823-2343ccfb5a5d",
+                "displayName": "DR Model-XJ1 Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d72617b3-a862-4276-9cf9-653a59df1ae5",
+                "displayName": "DR Model-XJ2 Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "58d61445-870d-4a25-a42d-89792faac8e8",
+                "displayName": "DR Model-XJ3 Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "336,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "336,500 aUEC",
+          "amount": 336500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 336500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 336500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "4",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "8436bbb2-8057-4220-b75d-65cb9639389f",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_H_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_H_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "d838d03b-8b38-48c6-956e-2017daae0aca",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryhard",
+      "tierLabel": "Very High Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Red Lvl. Contract: Defend [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "Urgent ship aid needed at [Location]. A band of destructive criminal outlaws that have been trying to make a name for themselves recently has struck hard against one of our high priority clients, attacking their ships and targeting the client's [Objects]. It will be your job to keep everyone and everything safe – though it won't be an easy feat.\n\nI cannot stress enough how dangerous these attackers are, so be sure to bring backup to deal with them. If you, the crew, and the infrastructures make it out intact, we’re offering a generous sum of [ScripAmount]  MG Scrip to the main contractor. \n\nBest of luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_VH_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Foxwell Enforcement: Veteran Contractor Elite Contractor",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Veteran Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Blueprint: Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2",
+          "Standing +250",
+          "637,500 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "f99fb032-c235-42c8-9e05-cb3443c26e55",
+            "poolName": "Pyro Foxwell Hard",
+            "rewardCount": 6,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "16.67% chance - 1 of 6",
+            "rewards": [
+              {
+                "blueprintGuid": "64c8213c-7149-4b91-94ed-1011d64f6a25",
+                "displayName": "Glacier",
+                "componentType": "cooler",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d9def0f6-9dc1-4267-b446-85a1ad9ce954",
+                "displayName": "Avalanche",
+                "componentType": "cooler",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "81bd2f26-f106-4273-aed7-a66f52b14978",
+                "displayName": "Blizzard",
+                "componentType": "cooler",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "9ead63a3-24a5-4338-8823-2343ccfb5a5d",
+                "displayName": "DR Model-XJ1 Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d72617b3-a862-4276-9cf9-653a59df1ae5",
+                "displayName": "DR Model-XJ2 Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "58d61445-870d-4a25-a42d-89792faac8e8",
+                "displayName": "DR Model-XJ3 Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +250"
+        ],
+        "credits": "637,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "637,500 aUEC",
+          "amount": 637500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 637500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 637500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "6",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 250,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d838d03b-8b38-48c6-956e-2017daae0aca",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_VH_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VH_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "ece88c3a-492e-478e-b7f2-fa3c80d8b643",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "super",
+      "tierLabel": "Extreme Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Red Lvl. Contract: Protect [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "An emergency SOS just came through from a maintenance crew under the employ of one of Foxwell's VIP clients. If available, we urge you to get to [Location] as soon as possible. While engaging with the attackers, you'll be expected to protect the client’s  [Objects] and of their ships that may need assistance. \n\nThis is far from the first we've seen from these particular outlaws, so believe me when I say these pilots are not to be taken lightly. I strongly recommend that you arrange a highly competent backup force to fly with you to the site.\n\nIf you manage to successfully defend the client's interests, we’re offering [ScripAmount] MG Scrip as compensation to the main contractor brave enough to take this job on. \n\nStay safe, and good luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_S_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Super",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Foxwell Enforcement: Head Contractor Elite Contractor",
+      "prerequisiteSummary": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Head Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Blueprint: Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2",
+          "Standing +300",
+          "1,192,750 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Pyro Foxwell Hard: Glacier, Avalanche, Blizzard, DR Model-XJ1 Repeater +2"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          },
+          {
+            "poolGuid": "f99fb032-c235-42c8-9e05-cb3443c26e55",
+            "poolName": "Pyro Foxwell Hard",
+            "rewardCount": 6,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "16.67% chance - 1 of 6",
+            "rewards": [
+              {
+                "blueprintGuid": "64c8213c-7149-4b91-94ed-1011d64f6a25",
+                "displayName": "Glacier",
+                "componentType": "cooler",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d9def0f6-9dc1-4267-b446-85a1ad9ce954",
+                "displayName": "Avalanche",
+                "componentType": "cooler",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "81bd2f26-f106-4273-aed7-a66f52b14978",
+                "displayName": "Blizzard",
+                "componentType": "cooler",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "9ead63a3-24a5-4338-8823-2343ccfb5a5d",
+                "displayName": "DR Model-XJ1 Repeater",
+                "componentType": "weaponGun",
+                "size": "1",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "d72617b3-a862-4276-9cf9-653a59df1ae5",
+                "displayName": "DR Model-XJ2 Repeater",
+                "componentType": "weaponGun",
+                "size": "2",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              },
+              {
+                "blueprintGuid": "58d61445-870d-4a25-a42d-89792faac8e8",
+                "displayName": "DR Model-XJ3 Repeater",
+                "componentType": "weaponGun",
+                "size": "3",
+                "grade": "A",
+                "chanceLabel": "16.67% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "1,192,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "1,192,750 aUEC",
+          "amount": 1192750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 1192750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 1192750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "6",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "ece88c3a-492e-478e-b7f2-fa3c80d8b643",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_S_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_S_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "359ac395-ea43-4849-9efa-45c704b8fd1a",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Yellow Lvl. Contract: Defend [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "For any pilots in the area – a group of bandits is targeting one of our clients at [Location], specifically their [Objects] and the maintenance ships that manage them. From our intel, it's only a few outlaws trying to make some quick credits, but they're also the type to cause some real damage if you get in their way.\n\nIf you take care of them and relocate the client's ship and crew safely, we’re offering [ScripAmount] MG Scrip to the main contractor. \n\nGood luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_VE_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_To",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+      "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Neutral Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "61,250 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "2",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "359ac395-ea43-4849-9efa-45c704b8fd1a",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_VE_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VE_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "af3d21d8-c6a3-46c6-9f1b-fc1ceb5472c4",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "veryeasy",
+      "tierLabel": "Very Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Yellow Lvl. Contract: Defend [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "For any pilots in the area – a group of bandits is targeting one of our clients at [Location], specifically their [Objects] and the maintenance ships that manage them. From our intel, it's only a few outlaws trying to make some quick credits, but they're also the type to cause some real damage if you get in their way.\n\nIf you take care of them and relocate the client's ship and crew safely, we’re offering [ScripAmount] MG Scrip to the main contractor. \n\nGood luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_VE_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_VeryEasy_From",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+      "reputationRequirement": "Foxwell Enforcement: Neutral Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Veteran Contractor / 15,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Neutral Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Standing +100",
+          "61,250 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "2",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "af3d21d8-c6a3-46c6-9f1b-fc1ceb5472c4",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_VE_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_VE_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "f4054178-9d89-4963-a801-387a902d5dc7",
+      "familyKey": "d61ed4b0-6281-4561-a5d3-bde0f85eae06|Foxwell_DefendEntitiesAndEscort_Pyro",
+      "conceptKey": "70c7c4bef3688e7ef882",
+      "objectiveSignature": {
+        "key": "016c2950-0292-468c-a408-a5283b52f158|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|defend-location+escort-ship|activity-defined|standard|unlock:3d81bc60eb17|lawful:bounded||||",
+        "activityKey": "defend-location+escort-ship",
+        "titleStem": "foxwell-defend-entites-and-escort",
+        "descriptionStem": "foxwell-defend-entites-and-escort",
+        "handlerStem": "foxwell-defend-entities-and-escort",
+        "archetype": "Defend Ship",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "unlock:3d81bc60eb17",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:defend-location+escort-ship",
+          "activity-source:structural",
+          "title:foxwell-defend-entites-and-escort",
+          "description:foxwell-defend-entites-and-escort",
+          "handler:foxwell-defend-entities-and-escort",
+          "contract:careercontract",
+          "archetype:defend-ship",
+          "intro:standard",
+          "chain:unlock:3d81bc60eb17",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "easy",
+      "tierLabel": "Low Risk",
+      "isIntro": false,
+      "specificityBadges": [
+        "Defend Ship",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "displayName": "Yellow Lvl. Contract: Protect [Objects] and Escort Employees",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "We need a contractor to provide convoy and protection services at [Location]. One of our elite clients' are under attack from a band of outlaws targeting their [Objects] and ships. You'll need to keep the crew safe as they traverse the area, as well as make sure the assets stay as intact. These thugs look like they can do some real damage, so be sure you engage them with caution or the client might not be the only one to take heavy losses.\n\nIf you manage to nail this to the Foxwell standards, we’re offering [ScripAmount] MG Scrip as compensation to the main contractor. \n\nGood luck,\n\nEugene Walton\nDispatcher, Foxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+      "rawName": "@Foxwell_DefendEntitesAndEscort_E_Title",
+      "internalName": "Foxwell_DefendEntitiesAndEscort_Pyro_Easy",
+      "missionType": "CareerContract",
+      "provider": "Foxwell Enforcement",
+      "faction": "Foxwell Enforcement",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+        "factionDisplayName": "Foxwell Enforcement",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "reputationRequirement": "Foxwell Enforcement: Jr. Contractor Elite Contractor",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9d28902d-5467-456b-8e54-18834d204234"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "reputation",
+          "label": "Foxwell Enforcement: Jr. Contractor Elite Contractor",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Reputation"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region A"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "9d323b1b-5805-4ddd-8641-563246d55279"
+        ],
+        "possibleLocations": [
+          "Region A"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "displayName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region A"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region A",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "9d323b1b-5805-4ddd-8641-563246d55279"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "9d323b1b-5805-4ddd-8641-563246d55279",
+              "displayName": "Region A",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region A"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10",
+          "Standing +100",
+          "91,750 aUEC",
+          "Item reward: MG Scrip",
+          "Completion tag"
+        ],
+        "blueprintRewards": [
+          "Pyro Foxwell Easy: IonWave, Radix, IonBurst, PowerBolt +10"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "82426625-1081-4bc2-a72f-04f8e6c7d463",
+            "poolName": "Pyro Foxwell Easy",
+            "rewardCount": 14,
+            "missionChanceLabel": "100% chance",
+            "chanceLabel": "7.14% chance - 1 of 14",
+            "rewards": [
+              {
+                "blueprintGuid": "45d67f1d-42b4-41d0-83f5-7b712d3b17a2",
+                "displayName": "IonWave",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "6bb290c1-49d4-418c-a97e-4f6c0d09929e",
+                "displayName": "Radix",
+                "componentType": "powerplant",
+                "size": "0",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "85aca18f-43f2-475d-96d3-3c8e506b40a3",
+                "displayName": "IonBurst",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "76b86090-d310-4b66-8685-6cf7f3edddaf",
+                "displayName": "PowerBolt",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "489787a2-175f-4a26-9bdb-81b86acbf4c8",
+                "displayName": "LightBlossom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "91acb06c-7a01-489d-8927-5a841f4c15a6",
+                "displayName": "MagnaBloom",
+                "componentType": "powerplant",
+                "size": "1",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "8fe934b5-ac5a-448e-bc3c-cb22bd9cb3ab",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "892b74ea-9651-4b74-bc41-763714c96229",
+                "displayName": "IonSurge",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "fa5951a5-5063-49c8-8f4c-a6b341801aea",
+                "displayName": "FullForce",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "35b476f2-8c2f-4e09-aae4-20e4c754c6db",
+                "displayName": "Radiance",
+                "componentType": "powerplant",
+                "size": "2",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "cd9e8d71-16f5-473c-bbec-222c818e9443",
+                "displayName": "FullForce Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "c851e5ce-1f84-4ae1-a09e-a8f1338e5ef1",
+                "displayName": "IonSurge Pro",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "29ae5b0d-9fbd-4be5-89da-0b854f5065f8",
+                "displayName": "Celestial",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "B",
+                "chanceLabel": "7.14% chance"
+              },
+              {
+                "blueprintGuid": "d4ff44e3-ece8-48bb-bcec-9a6f9bf86610",
+                "displayName": "NewDawn",
+                "componentType": "powerplant",
+                "size": "3",
+                "grade": "C",
+                "chanceLabel": "7.14% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "91,750 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "91,750 aUEC",
+          "amount": 91750,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 91750,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 91750,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "3",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "016c2950-0292-468c-a408-a5283b52f158",
+          "factionDisplayName": "Foxwell Enforcement",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "016c2950-0292-468c-a408-a5283b52f158",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "f4054178-9d89-4963-a801-387a902d5dc7",
+        "generatorGuid": "d61ed4b0-6281-4561-a5d3-bde0f85eae06",
+        "generatorName": "ContractGenerator.Foxwell_DefendEntitiesAndEscort",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/shipbattles/foxwell_defendentitiesandescort.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Foxwell_DefendEntitesAndEscort_E_Title",
+        "descriptionRaw": "@Foxwell_DefendEntitesAndEscort_E_Desc"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

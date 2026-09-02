@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "c694366121fb3bcedf50739f",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "eckhart-security:combat-support-location",
+  "variants": [
+    {
+      "variantKey": "ca4f3b9d-d1ab-42d7-9790-2a05d7f22640",
+      "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
+      "conceptKey": "d6adeaa60c7b30db9443",
+      "objectiveSignature": {
+        "key": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d|e23f8034-3e76-49b3-bfc6-228bcb1381df|eliminate-all|activity-defined|standard|open|lawful:bounded||||",
+        "activityKey": "eliminate-all",
+        "titleStem": "eckhart-security-eliminate-all-storm-data",
+        "descriptionStem": "eckhart-security-eliminate-all-storm-data",
+        "handlerStem": "eckhart-security-kill-npc",
+        "archetype": "Mercenary",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "lawful:bounded",
+        "confidence": "strong",
+        "evidence": [
+          "activity:eliminate-all",
+          "activity-source:structural",
+          "title:eckhart-security-eliminate-all-storm-data",
+          "description:eckhart-security-eliminate-all-storm-data",
+          "handler:eckhart-security-kill-npc",
+          "contract:careercontract",
+          "archetype:mercenary",
+          "intro:standard",
+          "chain:open",
+          "legal:lawful:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "Mercenary",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+        ]
+      },
+      "displayName": "Combat Support: [Location]",
+      "titleSource": "token_template_cleaned",
+      "titleConfidence": "medium",
+      "briefing": "ECKHART SECURITY, LLC.\nCONTRACTS & DISPATCH\n\nCONTRACT TYPE: Clear Location\nAPPROVAL CODE = [ApprovalCode]\n\nFOR IMMEDIATE PROCESSING\n\nUrgent request came in from Associated Science & Development to provide combat support at [Location]. Apparently they have been attacked by outlaws and their security forces have been unable to handle it on their own. \n\nYou've been cleared to go on site and aide local security elements in taking out the outlaws, but ASD reserves the right to restrict you from certain areas.\n\nThis is a confirmed combat op, so prepare accordingly.\n\nThis contract is non-negotiable.\n\nThis message may contain confidential, proprietary, privileged and/or private information. The information is intended to be for the use of the individual or entity designated above.",
+      "rawName": "@EckhartSecurity_EliminateAll_storm_data_H_title_001",
+      "internalName": "EckhartSecurity_DataFacility_RegionC_EliminateAll",
+      "missionType": "CareerContract",
+      "provider": "Eckhart Security",
+      "faction": "Eckhart Security",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+        "displayName": "Security",
+        "rawName": "SReputationScopeParams.ReputationScope_Security",
+        "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+        "factionDisplayName": "Eckhart Security",
+        "trackType": "Security",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e23f8034-3e76-49b3-bfc6-228bcb1381df"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep; CrimeStat limited to 2 or below; Region C",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Elite Security Contractor / 1,600,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Region C",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "system_scope",
+        "displayName": "Pyro system",
+        "system": "Pyro",
+        "locationType": "MissionLocality procedural region scope",
+        "localityPool": "Pyro StarLocality",
+        "regions": [
+          "Region C"
+        ],
+        "specificPickup": null,
+        "sourceRole": "system_scope",
+        "confidence": "partial",
+        "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+        "sourceRefs": [
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+        ],
+        "possibleLocations": [
+          "Region C"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "resolvedName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Region C"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro system",
+          "confidence": "system_scope"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "system_scope",
+          "displayName": "Pyro system",
+          "displayLabel": "Pyro",
+          "detailDisplay": "Generated region pool: Region C",
+          "systems": [
+            "Pyro"
+          ],
+          "primarySystem": "Pyro",
+          "confidence": "partial",
+          "sourceRole": "system_scope",
+          "sourceRefs": [
+            "67cc750e-3e5f-47b2-9dd0-66662142c82f"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": true,
+          "rawLocalities": [
+            {
+              "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+              "displayName": "Region C",
+              "type": "MissionLocality",
+              "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+              "system": "Pyro"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Pyro"
+            ],
+            "localityNames": [
+              "Region C"
+            ],
+            "displayLabel": "Pyro",
+            "detailLabel": "Pyro system",
+            "confidence": "system_scope"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Locality",
+          "attr": "localityAvailable",
+          "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "system": "Pyro",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Region C"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Security +2,000",
+          "66,500 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Security +2,000"
+        ],
+        "credits": "66,500 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "66,500 aUEC",
+          "amount": 66500,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 66500,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 66500,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+          "factionDisplayName": "Eckhart Security",
+          "scopeKey": "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+          "scopeDisplayName": "Security",
+          "amount": 2000,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "2dc1b38c-cd5f-4d37-aea7-5453b609f61d",
+            "e23f8034-3e76-49b3-bfc6-228bcb1381df",
+            "aeda9081-30bd-4f3f-938b-1a5362905e25"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "ca4f3b9d-d1ab-42d7-9790-2a05d7f22640",
+        "generatorGuid": "95979a65-419a-4b7d-8dcf-34707187f99a",
+        "generatorName": "ContractGenerator.EckhartSecurity_KillNPC",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/eckhartsecurity/eckhartsecurity_killnpc.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@EckhartSecurity_EliminateAll_storm_data_H_title_001",
+        "descriptionRaw": "@EckhartSecurity_EliminateAll_storm_data_H_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}
