@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offer": {
+    "offerSchemaVersion": 1,
+    "offerKey": "bounty-hunters-guild:verified-bounty-target-name-xeno-threat-danger",
+    "identity": {
+      "version": "scintel-evidence-to-moonbreaker-offer-v1",
+      "strategy": "provider_and_raw_title",
+      "providerIdentity": "@BHG_From",
+      "titleIdentity": "@bhg_bounty_title_XT_001",
+      "sourceTuple": [
+        "@BHG_From",
+        "@bhg_bounty_title_XT_001"
+      ]
+    },
+    "displayTitle": "Verified Bounty: [TargetName] | XenoThreat | [Danger]",
+    "displayTitleTemplate": "Verified Bounty: [TargetName] | XenoThreat | [Danger]",
+    "titleEvidence": {
+      "raw": "@bhg_bounty_title_XT_001",
+      "localizationKey": "bhg_bounty_title_XT_001",
+      "template": "Verified Bounty: ~mission(TargetName) | XenoThreat | ~mission(Danger)",
+      "displayText": "Verified Bounty: ~mission(TargetName) | XenoThreat | ~mission(Danger)",
+      "runtimeTokens": [
+        {
+          "raw": "~mission(TargetName)",
+          "expression": "TargetName",
+          "segments": [
+            "TargetName"
+          ]
+        },
+        {
+          "raw": "~mission(Danger)",
+          "expression": "Danger",
+          "segments": [
+            "Danger"
+          ]
+        }
+      ],
+      "rendering": "runtime_templated",
+      "resolution": "source_backed",
+      "provenance": "source_backed"
+    },
+    "provider": {
+      "sourceParam": "Contractor",
+      "displayRaw": "@BHG_From",
+      "displayText": "Bounty Hunters Guild",
+      "organizationGuid": null,
+      "displayResolution": "source_backed",
+      "organizationResolution": "unresolved_no_explicit_organization_guid",
+      "provenance": "source_backed"
+    },
+    "providerKey": "bounty-hunters-guild",
+    "verificationStatus": "unknown",
+    "verificationStatuses": [
+      "unknown"
+    ],
+    "variantKeys": [
+      "764b9fb9-c2c1-4475-b76e-772011514542"
+    ],
+    "familyKeys": [
+      "501147b8-3e02-456f-bd89-b17f11b09383|BountyHuntersGuild_Bounties_Pyro_Career"
+    ],
+    "legacyConceptKeys": [
+      "776a430b13944eb087e3"
+    ],
+    "objectiveTemplateKeys": [
+      "68935ccd-25dd-44c7-85ad-d5d92ce948bb",
+      "contracts/contracttemplates/bounty.xml"
+    ],
+    "missionTypes": [
+      "Bounty Hunter"
+    ],
+    "rewardTypes": [
+      "credits-calculated",
+      "reputation"
+    ],
+    "reputationRewardKeys": [
+      "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:d1eb915e-95c8-43a7-b5c7-a612bb7a16c9"
+    ],
+    "reputationRewardFacets": [
+      {
+        "stableKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97:d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "factionKey": "6fe6526a-4ae0-44ec-a5b7-4a1a7f8bdc97",
+        "factionDisplayName": "Bounty Hunters Guild",
+        "scopeKey": "d1eb915e-95c8-43a7-b5c7-a612bb7a16c9",
+        "scopeDisplayName": "Bounty Bounty Hunters Guild",
+        "confidence": "resolved",
+        "variantCount": 1,
+        "rewardPathCount": 2,
+        "amountSummary": {
+          "status": "range",
+          "resolvedPathCount": 2,
+          "unresolvedPathCount": 0,
+          "minAmount": -8000,
+          "maxAmount": 16000
+        }
+      }
+    ],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "confidenceFlags": [
+      "prerequisites",
+      "unresolved"
+    ],
+    "auditFlags": [
+      "runtime_title_template",
+      "verification_unknown"
+    ],
+    "searchText": "bounty-hunters-guild:verified-bounty-target-name-xeno-threat-danger verified bounty: [targetname] | xenothreat | [danger] bounty-hunters-guild @bhg_from bounty hunters guild @bhg_bounty_title_xt_001 bhg_bounty_title_xt_001 bounty bounty hunters guild 764b9fb9-c2c1-4475-b76e-772011514542"
+  }
+}

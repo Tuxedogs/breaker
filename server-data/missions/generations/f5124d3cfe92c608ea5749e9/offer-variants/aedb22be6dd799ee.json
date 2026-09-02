@@ -1,0 +1,665 @@
+{
+  "schemaVersion": 3,
+  "sourceContractVersion": 4,
+  "offerSchemaVersion": 1,
+  "generationId": "f5124d3cfe92c608ea5749e9",
+  "generatedAt": "2026-08-28T08:37:16.792995+00:00",
+  "sourceLatestModifiedAt": "2026-08-28T08:37:16.792995+00:00",
+  "offerKey": "tar-pits:demolition-mission",
+  "variants": [
+    {
+      "variantKey": "46c2da38-761e-fd8d-4802-88fb52aacc8f",
+      "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+      "conceptKey": "e7fcef2ed54f627c2e10",
+      "objectiveSignature": {
+        "key": "5ebbd81d-82cb-4534-81fc-db7a2c386f70|e2d3fa61-2727-4f45-91c1-b345976fa22d|unknown|careercontract|standard|open|unknown:bounded||||variant:46c2da38-761e-fd8d-4802-88fb52aacc8f",
+        "activityKey": "unknown",
+        "titleStem": "tarpits-destroyitem-dc",
+        "descriptionStem": "tarpits-destroyitem-dc",
+        "handlerStem": "tar-pits-misc",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:tarpits-destroyitem-dc",
+          "description:tarpits-destroyitem-dc",
+          "handler:tar-pits-misc",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+        ]
+      },
+      "displayName": "Demolition Mission",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "I’m looking to send a strong message to the crew over at [Location] and know the perfect way to do it - property damage.\n\nAll you need to do is head on over, destroy a few things here and there, and really drive home an important lesson about respecting your betters. \n\nDo that for me and I’ll be feeling very happy. And generous.\n\nInterested?",
+      "rawName": "@Tarpits_destroyitem_dc_title_001",
+      "internalName": "TarPits_Stanton1_S1ComplexB_Storage_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Tar Pits",
+      "faction": "Tar Pits",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "displayName": "Hired Muscle",
+        "rawName": "SReputationScopeParams.ReputationScope_HiredMuscle",
+        "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+        "factionDisplayName": "Tar Pits",
+        "trackType": "Hired Muscle",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+        ]
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Applicant / 0 rep to Rank I / 1 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Rank I / 1 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Rank I / 1 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Hired Muscle +500",
+          "44,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hired Muscle +500"
+        ],
+        "credits": "44,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "44,250 aUEC",
+          "amount": 44250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/tarpits_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 44250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 44250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+          "factionDisplayName": "Tar Pits",
+          "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+          "scopeDisplayName": "Hired Muscle",
+          "amount": 500,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+            "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "46c2da38-761e-fd8d-4802-88fb52aacc8f",
+        "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+        "generatorName": "ContractGenerator.TarPits_Generator",
+        "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Tarpits_destroyitem_dc_title_001",
+        "descriptionRaw": "@Tarpits_destroyitem_dc_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    },
+    {
+      "variantKey": "47d2417c-04ad-2f2e-2012-4062b5478196",
+      "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+      "conceptKey": "8d6901b0aa338cb92c1c",
+      "objectiveSignature": {
+        "key": "5ebbd81d-82cb-4534-81fc-db7a2c386f70|e2d3fa61-2727-4f45-91c1-b345976fa22d|unknown|careercontract|standard|open|unknown:bounded||||variant:47d2417c-04ad-2f2e-2012-4062b5478196",
+        "activityKey": "unknown",
+        "titleStem": "tarpits-destroyitem-dc",
+        "descriptionStem": "tarpits-destroyitem-dc",
+        "handlerStem": "tar-pits-misc",
+        "archetype": "CareerContract",
+        "contractType": "CareerContract",
+        "introState": "standard",
+        "chainState": "open",
+        "legalState": "unknown:bounded",
+        "confidence": "unresolved",
+        "evidence": [
+          "activity:unknown",
+          "activity-source:unresolved",
+          "title:tarpits-destroyitem-dc",
+          "description:tarpits-destroyitem-dc",
+          "handler:tar-pits-misc",
+          "contract:careercontract",
+          "archetype:careercontract",
+          "intro:standard",
+          "chain:open",
+          "legal:unknown:bounded"
+        ]
+      },
+      "tierKey": "unclassified",
+      "tierLabel": "Unclassified tier",
+      "isIntro": false,
+      "specificityBadges": [
+        "CareerContract",
+        "CrimeStat limited"
+      ],
+      "owningScopeProvenance": {
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+        ]
+      },
+      "displayName": "Demolition Mission",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "I’m looking to send a strong message to the crew over at [Location] and know the perfect way to do it - property damage.\n\nAll you need to do is head on over, destroy a few things here and there, and really drive home an important lesson about respecting your betters. \n\nDo that for me and I’ll be feeling very happy. And generous.\n\nInterested?",
+      "rawName": "@Tarpits_destroyitem_dc_title_001",
+      "internalName": "TarPits_Stanton1_Dupree_SidePed_Sabotage",
+      "missionType": "CareerContract",
+      "provider": "Tar Pits",
+      "faction": "Tar Pits",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "displayName": "Hired Muscle",
+        "rawName": "SReputationScopeParams.ReputationScope_HiredMuscle",
+        "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+        "factionDisplayName": "Tar Pits",
+        "trackType": "Hired Muscle",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+        ]
+      },
+      "missionArchetype": "CareerContract",
+      "standingRequirement": "Applicant / 0 rep to Rank I / 1 rep",
+      "prerequisiteSummary": "Applicant / 0 rep to Rank I / 1 rep; CrimeStat limited to 2 or below; Stanton Star",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Applicant / 0 rep to Rank I / 1 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ],
+        "rawLocalities": [
+          {
+            "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "displayName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton Star"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton Star",
+          "confidence": "exact"
+        }
+      },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Stanton Star",
+          "displayLabel": "Stanton",
+          "detailDisplay": "Stanton Star",
+          "systems": [
+            "Stanton"
+          ],
+          "primarySystem": "Stanton",
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+              "displayName": "Stanton Star",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+              "system": "Stanton"
+            }
+          ],
+          "grouping": {
+            "systems": [
+              "Stanton"
+            ],
+            "localityNames": [
+              "Stanton Star"
+            ],
+            "displayLabel": "Stanton",
+            "detailLabel": "Stanton Star",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unresolved",
+          "displayName": "Objective location unresolved",
+          "displayLabel": "Objective location unresolved",
+          "systems": [],
+          "confidence": "unresolved",
+          "sourceRefs": [
+            "Location|Address"
+          ],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [
+            "Location|Address"
+          ],
+          "unresolved": true
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "system": "Stanton",
+          "confidence": "resolved"
+        },
+        {
+          "role": "objective",
+          "rawType": "mission_text_token",
+          "attr": "sourceTextToken",
+          "guidOrToken": "Location|Address",
+          "confidence": "token_only"
+        }
+      ],
+      "locations": [
+        "Stanton Star"
+      ],
+      "unresolvedLocationTokens": [],
+      "destinationTokens": [],
+      "rewards": {
+        "summary": [
+          "Hired Muscle +500",
+          "61,250 aUEC"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Hired Muscle +500"
+        ],
+        "credits": "61,250 aUEC",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "61,250 aUEC",
+          "amount": 61250,
+          "currency": "aUEC",
+          "confidence": "source_calculated",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "sourceRefs": [
+            "contracts/contractgenerator/tarpits_generator.xml"
+          ],
+          "payout": {
+            "schemaVersion": 1,
+            "modelVersion": "sc_mission_calculated_payout_v1",
+            "calculationStatus": "resolved",
+            "formulaStatus": "resolved_source_backed",
+            "currency": "aUEC",
+            "baseSoloAmount": 61250,
+            "resultCount": 1,
+            "aggregationStatus": "not_aggregated",
+            "resultLoopVerificationRequired": false,
+            "resultAmounts": [
+              {
+                "resultIndex": 0,
+                "calculationStatus": "resolved",
+                "currency": "aUEC",
+                "baseSoloAmount": 61250,
+                "missionResults": [
+                  true,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              }
+            ],
+            "unresolvedReasons": [],
+            "validationWarnings": [],
+            "source": "creditRewardTypes[].calculatedContext"
+          }
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+          "factionDisplayName": "Tar Pits",
+          "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+          "scopeDisplayName": "Hired Muscle",
+          "amount": 500,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+            "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+            "36d5786c-5258-48ca-a3b8-fefb5838e143"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": false
+      },
+      "technical": {
+        "contractId": "47d2417c-04ad-2f2e-2012-4062b5478196",
+        "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+        "generatorName": "ContractGenerator.TarPits_Generator",
+        "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Tarpits_destroyitem_dc_title_001",
+        "descriptionRaw": "@Tarpits_destroyitem_dc_desc_001"
+      },
+      "requiredItemSummary": {
+        "status": "proven_absent",
+        "haulingOrderCount": 0,
+        "selectorCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "buildId": "4.10.191.2241-12519617",
+  "calculationSummary": {
+    "componentCountsByType": {
+      "bomb": 89,
+      "bomb_rack": 12,
+      "cooler": 603,
+      "fuel_nozzle": 8,
+      "mining_laser": 16,
+      "missile": 2695,
+      "missile_rack": 729,
+      "power_plant": 450,
+      "quantum_drive": 305,
+      "radar": 344,
+      "salvage_head": 28,
+      "salvage_modifier": 54,
+      "shield": 637,
+      "ship_weapon": 2108
+    },
+    "totalMissingDefaultComponents": 322,
+    "totalResolvedDefaultComponents": 8078,
+    "totalShips": 344,
+    "totalUnresolvedDefaultComponents": 0
+  },
+  "channel": "LIVE",
+  "commonMissingFields": {
+    "missing_cooling_fields": {
+      "coolantUsage": 5749,
+      "coolingDraw": 5749,
+      "coolingRequired": 5749
+    },
+    "missing_performance_fields": {
+      "boostSpeedForward": 13,
+      "maxSpeed": 13,
+      "pitchRate": 13,
+      "rollRate": 13,
+      "scmSpeed": 13,
+      "yawRate": 13
+    },
+    "missing_power_fields": {
+      "minimumPowerRequired": 3601,
+      "powerDraw": 3601,
+      "powerInputMinimum": 3601,
+      "powerUsage": 3601
+    },
+    "missing_radar_fields": {
+      "detectionRange": 344,
+      "scanRate": 344
+    },
+    "missing_weapon_fields": {
+      "alphaDamageTotal": 5
+    }
+  },
+  "confidence": "medium",
+  "confidenceSummary": {
+    "low": 3,
+    "medium": 341
+  },
+  "externalSourceUse": {
+    "communityData": false,
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "foundryNativePercent": 100,
+  "generatedAt": "2026-09-01T12:01:56Z",
+  "generator": "scripts/fitting/build_fitting_registries.py",
+  "generatorModule": "scripts/fitting/calculations/calculation_validation.py",
+  "knownLimitations": [
+    "Calculations use stock/default resolved components only; custom fitting is not modeled.",
+    "Unknown compatibility ports are intentionally excluded and are not calculation errors.",
+    "Power and cooling balances are only emitted when both extracted supply and demand fields exist.",
+    "Power/cooling units are native Foundry resource units; exact public gameplay units are not asserted.",
+    "Power capacity, cooling capacity, radar detection range, and radar scan rate remain unavailable unless native source fields are found with stronger semantics.",
+    "Weapon totals aggregate extracted alpha damage only; DPS and fire rate are intentionally not modeled or inferred in Phase 3.5A.",
+    "No armor thresholds, ballistic shield passthrough, shield-state penetration, distortion disable, or component disable simulation is implemented.",
+    "No shaped API layer, UI, publishing, persistence, or Moonbreaker integration is implemented in this phase."
+  ],
+  "recommendedNextPhase": "Proceed to fitting-aware LIVE/PTU diff support after validating stock calculation coverage.",
+  "schemaVersion": 1,
+  "shipsWithCoolingCalculations": 338,
+  "shipsWithFullyResolvedModeledStockLoadouts": 258,
+  "shipsWithMissingDefaults": 83,
+  "shipsWithPerformanceSummaries": 331,
+  "shipsWithPowerCalculations": 338,
+  "shipsWithQuantumCalculations": 305,
+  "shipsWithRadarCalculations": 335,
+  "shipsWithShieldCalculations": 326,
+  "shipsWithUnresolvedDefaults": 0,
+  "shipsWithWeaponCalculations": 325,
+  "sourceClassification": "derived from another new semantic registry",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.10.191.2241-12519617\\foundry\\records",
+  "totalShipsProcessed": 344,
+  "unresolvedRefsSummary": {
+    "byKind": {
+      "calculation_missing_default": 322,
+      "calculation_performance_flight_controller_record_unresolved": 9,
+      "calculation_performance_flight_controller_ref_missing": 4,
+      "missing_cooling_fields": 5749,
+      "missing_performance_fields": 13,
+      "missing_power_fields": 3601,
+      "missing_radar_fields": 344,
+      "missing_weapon_fields": 5
+    },
+    "total": 10047
+  }
+}
