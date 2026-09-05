@@ -10,7 +10,7 @@ import "./mining.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
-import { getQueueLedgerModel } from "../../../lib/logistics/queueLedger";
+import { projectQueueMiningDemand } from "../../../features/mining/queueMiningDemand";
 import { buildResourceGroups } from "../shared/msbResourceGroups";
 import {
   EMPTY_MINING_SIDEBAR_STATE,
@@ -18,19 +18,15 @@ import {
   MINING_COVERAGE_MODE_STORAGE_KEY,
   MINING_FILTER_STORAGE_KEY,
   MINING_QUEUE_FOCUS_STORAGE_KEY,
-  MINING_QUEUE_SCOPE_STORAGE_KEY,
   MINING_RANKING_MODE_STORAGE_KEY,
   MINING_SYSTEM_FILTERS,
   readStoredCoverageMode,
   readStoredQueueFocus,
-  readStoredQueueScope,
   readStoredRankingMode,
   readStoredSidebarState,
   writeStoredSidebarState,
-  queueScopeMatches,
   type LoadState,
   type MiningEncounterTier,
-  type MiningQueueScope,
   type MiningRankingMode,
   type MiningSidebarState,
 } from "./miningTypes";
@@ -120,12 +116,9 @@ export default function MiningModule() {
   const planner = useMiningPlannerState();
   const [rankingMode] = useState<MiningRankingMode>(() => readStoredRankingMode());
   const [coverageMode, setCoverageMode] = useState<MiningCoverageMode>(() => readStoredCoverageMode());
-  const [queueScope, setQueueScope] = useState<MiningQueueScope>(() => readStoredQueueScope());
   const [queueFocusItemId, setQueueFocusItemId] = useState<string>(() => readStoredQueueFocus());
-  const previousQueueFocusItemIdRef = useRef(queueFocusItemId);
   const buildQueue = useLogisticsStore((store) => store.buildQueue);
   const recipeInputsByRecipeId = useLogisticsStore((store) => store.recipeInputTemplates);
-  const inventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
   const materials = useLogisticsStore((store) => store.materialTemplates);
 
   const initialSidebarState = useMemo(() => readStoredSidebarState(MINING_FILTER_STORAGE_KEY, EMPTY_MINING_SIDEBAR_STATE), []);
@@ -146,7 +139,6 @@ export default function MiningModule() {
   // Persist settings
   useEffect(() => { try { localStorage.setItem(MINING_RANKING_MODE_STORAGE_KEY, rankingMode); } catch { /* ignore */ } }, [rankingMode]);
   useEffect(() => { try { localStorage.setItem(MINING_COVERAGE_MODE_STORAGE_KEY, coverageMode); } catch { /* ignore */ } }, [coverageMode]);
-  useEffect(() => { try { localStorage.setItem(MINING_QUEUE_SCOPE_STORAGE_KEY, queueScope); } catch { /* ignore */ } }, [queueScope]);
   useEffect(() => { try { if (queueFocusItemId) localStorage.setItem(MINING_QUEUE_FOCUS_STORAGE_KEY, queueFocusItemId); else localStorage.removeItem(MINING_QUEUE_FOCUS_STORAGE_KEY); } catch { /* ignore */ } }, [queueFocusItemId]);
 
   useEffect(() => {
@@ -163,26 +155,16 @@ export default function MiningModule() {
     if (!queueFocusItemId || queueFocusOptions.some((item) => item.id === queueFocusItemId)) return;
     queueMicrotask(() => setQueueFocusItemId(""));
   }, [queueFocusItemId, queueFocusOptions]);
-  useEffect(() => {
-    if (!buildQueueSelectionActive) return;
-    if (previousQueueFocusItemIdRef.current === queueFocusItemId) return;
-    previousQueueFocusItemIdRef.current = queueFocusItemId;
-    queueMicrotask(() => setQueueScope("all-shortfalls"));
-  }, [buildQueueSelectionActive, queueFocusItemId]);
-
-  const focusedBuildQueue = useMemo(() => buildQueueSelectionActive && queueFocusItemId ? buildQueue.filter((item) => item.id === queueFocusItemId) : buildQueue, [buildQueue, buildQueueSelectionActive, queueFocusItemId]);
-  const queueLedger = useMemo(() => getQueueLedgerModel({ buildQueue: focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId }), [focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId]);
-  const scopedShortfallLines = useMemo(() => queueLedger.refinedShortfallLines.filter((line) => queueScopeMatches(line, queueScope)), [queueLedger.refinedShortfallLines, queueScope]);
-
   const miningRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
-    const requirements = scopedShortfallLines.map((line) => {
-      const miningTargetQuantity = line.isRefinable ? line.rawOreNeeded : line.netMissingRefined;
-      const canonical = canonicalMiningMaterial({ materialKey: line.materialKey, materialId: line.materialId, displayName: line.displayName, materialName: line.displayName });
-      return { materialKey: canonical.key, materialId: canonical.key, displayName: canonical.label, materialName: canonical.label, quantity: miningTargetQuantity, originalRequiredQuantity: line.grossRequired, requiredQuantity: miningTargetQuantity, estimatedRawOreNeeded: line.isRefinable ? line.rawOreNeeded : undefined, unitType: line.unitType, usedBy: [], slots: [] };
-    }).filter((r) => r.requiredQuantity > 0);
-    if (debugMiningIdentity) { console.groupCollapsed("[mining] build queue raw ore requirements"); console.debug("queue ledger", queueLedger); console.debug("mining targets", requirements); console.groupEnd(); }
+    const requirements = projectQueueMiningDemand({
+      buildQueue,
+      materials,
+      recipeInputsByRecipeId,
+      focusItemId: buildQueueSelectionActive ? queueFocusItemId : undefined,
+    });
+    if (debugMiningIdentity) { console.groupCollapsed("[mining] gross queue mining requirements"); console.debug("mining targets", requirements); console.groupEnd(); }
     return requirements;
-  }, [queueLedger, scopedShortfallLines]);
+  }, [buildQueue, buildQueueSelectionActive, materials, queueFocusItemId, recipeInputsByRecipeId]);
 
   const buildQueueMaterials = useMemo(() => new Set(miningRequiredMaterials.map(materialKeyOf)), [miningRequiredMaterials]);
   const buildQueueMaterialsKey = [...buildQueueMaterials].sort().join(",");
@@ -373,7 +355,7 @@ export default function MiningModule() {
     () => selectedSystemName ? locations.filter((entry) => entry.systemName === selectedSystemName) : locations,
     [locations, selectedSystemName],
   );
-  const mobileQueueDemandSatisfied = isMobileViewport && buildQueueSelectionActive && activeBuildQueueDemandMaterials.length === 0;
+  const mobileQueueDemandEmpty = isMobileViewport && buildQueueSelectionActive && activeBuildQueueDemandMaterials.length === 0;
   const mobileHiddenAlternateCount = useMemo(() => {
     if (!isMobileViewport || !buildQueueSelectionActive || !coveragePlan || showAllLocations) return 0;
     const neededCount = coveragePlan.locations.filter((location) => !location.isAfterCompletion).length;
@@ -402,19 +384,19 @@ export default function MiningModule() {
         ? "No locations match the current material filters."
         : "No locations match the current filters.";
 
-  const listLocations = mobileQueueDemandSatisfied ? [] : searchFilteredLocations;
+  const listLocations = mobileQueueDemandEmpty ? [] : searchFilteredLocations;
   const explicitSelectedEntry = useMemo(() => {
-    if (mobileQueueDemandSatisfied || !selectedLocationKey) return null;
+    if (mobileQueueDemandEmpty || !selectedLocationKey) return null;
     return searchFilteredLocations.find((entry) => entry.locationKey === selectedLocationKey) ?? null;
-  }, [mobileQueueDemandSatisfied, searchFilteredLocations, selectedLocationKey]);
+  }, [mobileQueueDemandEmpty, searchFilteredLocations, selectedLocationKey]);
   const effectiveSelectedEntry = useMemo(() => {
-    if (mobileQueueDemandSatisfied) return null;
+    if (mobileQueueDemandEmpty) return null;
     if (isMobileViewport) return explicitSelectedEntry;
     if (selectedLocationKey) {
       return explicitSelectedEntry ?? searchFilteredLocations[0] ?? null;
     }
     return searchFilteredLocations[0] ?? selectedEntry;
-  }, [explicitSelectedEntry, isMobileViewport, mobileQueueDemandSatisfied, searchFilteredLocations, selectedEntry, selectedLocationKey]);
+  }, [explicitSelectedEntry, isMobileViewport, mobileQueueDemandEmpty, searchFilteredLocations, selectedEntry, selectedLocationKey]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -442,7 +424,7 @@ export default function MiningModule() {
     });
   }
   function selectBuildQueueMaterials() {
-    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setQueueScope("all-shortfalls"); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
+    setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
   }
   function selectExploreMode() {
     setBuildQueueSelectionActive(false);
@@ -600,9 +582,9 @@ export default function MiningModule() {
                   )}
                 </div>
                 <div className="mlist-items">
-                  {mobileQueueDemandSatisfied ? (
+                  {mobileQueueDemandEmpty ? (
                     <div className="mine-empty-state mine-empty-state--queue-covered">
-                      <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
+                      <p className="mine-empty-text">No active Queue material requirements need a mining route.</p>
                     </div>
                   ) : listLocations.length === 0 ? (
                     <div className="mine-empty-state">
@@ -685,7 +667,7 @@ export default function MiningModule() {
                   }}
                 />
               ) : !isMobileViewport ? (
-                <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
+                <div className="mdet-empty"><span>{mobileQueueDemandEmpty ? "No active Queue material requirements need a mining route." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
               ) : null}
             </div>
           </div>

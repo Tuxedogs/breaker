@@ -13,7 +13,7 @@ export function aggregateRequirements(
   warnings: RecommenderWarning[],
   identityResolver: MaterialIdentityResolver = DEFAULT_MATERIAL_IDENTITY_RESOLVER,
 ): AggregatedRequirement[] {
-  const byMaterial = new Map<string, AggregatedRequirement>();
+  const byRequirementPolicy = new Map<string, AggregatedRequirement>();
 
   for (const requirement of requirements) {
     const rawMaterialKey = requirement.materialKey?.trim() || requirement.materialId?.trim() || requirement.slug?.trim() || requirement.materialName?.trim();
@@ -50,14 +50,13 @@ export function aggregateRequirements(
 
     const selectedQuality = requirement.selectedQuality ?? requirement.usedBy?.find((entry) => entry.selectedQuality !== undefined)?.selectedQuality;
     const unitType = requirement.unitType ?? requirement.usedBy?.find((entry) => entry.unitType)?.unitType;
-    const existing = byMaterial.get(materialKey);
+    const requirementPolicyKey = [materialKey, selectedQuality ?? "any-quality", unitType ?? "unit"].join("|");
+    const existing = byRequirementPolicy.get(requirementPolicyKey);
     if (existing) {
       existing.requiredQuantity += requirement.requiredQuantity;
-      if (selectedQuality !== undefined) existing.selectedQuality = selectedQuality;
-      if (unitType) existing.unitType = unitType;
       continue;
     }
-    byMaterial.set(materialKey, {
+    byRequirementPolicy.set(requirementPolicyKey, {
       materialKey,
       materialId,
       materialName,
@@ -70,5 +69,5 @@ export function aggregateRequirements(
     });
   }
 
-  return Array.from(byMaterial.values()).filter((entry) => entry.requiredQuantity > 0);
+  return Array.from(byRequirementPolicy.values()).filter((entry) => entry.requiredQuantity > 0);
 }

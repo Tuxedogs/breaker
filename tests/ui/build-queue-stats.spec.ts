@@ -527,7 +527,7 @@ test.describe("Build Queue stats fixture", () => {
     expect(failures).toEqual([]);
   });
 
-  test("overlays reservation drawers in their material column without reflowing the workspace", async ({ page }) => {
+  test("portals reservation drawers above material-card stacking contexts without reflowing the workspace", async ({ page }) => {
     const failures = installFailureGuards(page);
     const visualTargetDir = path.join(buildQueueArtifactRoot, "build-queue-visual-target");
     await mkdir(visualTargetDir, { recursive: true });
@@ -565,9 +565,11 @@ test.describe("Build Queue stats fixture", () => {
       expect(before.cardOverflow).toBe("visible");
 
       await expandButton.click();
-      await expect(materialCard.locator(".bq-reserve-panel")).toBeVisible();
+      const reserveOverlay = page.locator(".bq-reserve-overlay");
+      const reservePanel = reserveOverlay.locator(".bq-reserve-panel");
+      await expect(reservePanel).toBeVisible();
       await expect(materialCard.getByRole("button", { name: "Collapse reserve drawer for Hadanite", exact: true })).toBeVisible();
-      const locationFolder = materialCard.locator(".bq-reserve-location-folder").first();
+      const locationFolder = reservePanel.locator(".bq-reserve-location-folder").first();
       await expect(locationFolder).toHaveAttribute("open", "");
       await expect(locationFolder.locator(".bq-reserve-quality-folder")).toHaveCount(2);
       await expect(locationFolder.locator(".bq-reserve-stack-row")).toHaveCount(2);
@@ -578,7 +580,8 @@ test.describe("Build Queue stats fixture", () => {
       const after = await page.locator(".bq-item").evaluate((craft) => {
         const card = Array.from(craft.querySelectorAll(".bq-mat-group"))
           .find((candidate) => candidate.textContent?.includes("Hadanite"));
-        const drawer = card?.querySelector(".bq-reserve-panel");
+        const overlay = document.querySelector(".bq-reserve-overlay");
+        const drawer = overlay?.querySelector(".bq-reserve-panel");
         const allocation = craft.querySelector(".bq-materials-card");
         const section = craft.querySelector(".bq-materials-section");
         const table = craft.querySelector(".bq-mat-table");
@@ -603,6 +606,8 @@ test.describe("Build Queue stats fixture", () => {
           sectionOverflow: section ? getComputedStyle(section).overflow : "",
           tableOverflow: table ? getComputedStyle(table).overflow : "",
           cardOverflow: card ? getComputedStyle(card).overflow : "",
+          overlayParentIsBody: overlay?.parentElement === document.body,
+          backdropOwnsLeftWorkspace: document.elementFromPoint(24, 300)?.closest(".bq-reserve-backdrop") !== null,
         };
       });
 
@@ -613,9 +618,11 @@ test.describe("Build Queue stats fixture", () => {
       expect(Math.abs(after.statisticsTop - before.statisticsTop)).toBeLessThanOrEqual(1);
       expect(after.drawerBottom).toBeGreaterThanOrEqual(1080);
       expect(after.drawerBottom).toBeGreaterThan(after.statisticsTop);
+      expect(after.overlayParentIsBody).toBe(true);
+      expect(after.backdropOwnsLeftWorkspace).toBe(true);
       expect(after.allocationZIndex).toBeGreaterThanOrEqual(after.statisticsZIndex);
-      expect(after.allocationOverflow).toBe("visible");
-      expect(after.sectionOverflow).toBe("visible");
+      expect(after.allocationOverflow).toBe(before.allocationOverflow);
+      expect(after.sectionOverflow).toBe(before.sectionOverflow);
       expect(after.tableOverflow).toBe("visible");
       expect(after.cardOverflow).toBe("visible");
 
@@ -629,6 +636,53 @@ test.describe("Build Queue stats fixture", () => {
         fullPage: false,
       });
     }
+
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+    const mobileMaterialCard = page.locator(".bq-mat-group").filter({ hasText: "Hadanite" }).first();
+    await mobileMaterialCard.getByRole("button", { name: "Expand reserve drawer for Hadanite" }).click();
+    await expect(page.locator(".bq-reserve-panel")).toBeVisible();
+    const mobileOverlayIsTop = await page.locator(".bq-reserve-overlay").evaluate((overlay) => (
+      overlay.parentElement === document.body
+      && document.elementFromPoint(100, 80)?.closest(".bq-reserve-panel") !== null
+    ));
+    expect(mobileOverlayIsTop).toBe(true);
+    await page.screenshot({
+      path: path.join(visualTargetDir, "build-queue-drawer-expanded-768x900.png"),
+      fullPage: false,
+    });
+
+    expect(failures).toEqual([]);
+  });
+
+  test("keeps the Queue ledger discoverable and separates physical fulfillment from planning", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const visualTargetDir = path.join(buildQueueArtifactRoot, "build-queue-visual-target");
+    await mkdir(visualTargetDir, { recursive: true });
+
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+
+    const reopen = page.getByRole("button", { name: "Open queue ledger" });
+    await expect(reopen).toBeVisible();
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-collapsed-1920x1080.png"), fullPage: false });
+
+    await reopen.click();
+    const ledger = page.locator(".bq-summary-col").filter({ has: page.getByRole("heading", { name: "Queue Ledger" }) });
+    await expect(ledger).toBeVisible();
+    await expect(ledger.getByRole("heading", { name: "Physical fulfillment" })).toBeVisible();
+    await expect(ledger.getByRole("heading", { name: "Planning", exact: true })).toBeVisible();
+    await expect(ledger).toContainText("Valid reservations and quality-eligible physical boxes only.");
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-expanded-1920x1080.png"), fullPage: false });
+
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("button", { name: "Open queue ledger" })).toBeVisible();
+    await page.getByRole("button", { name: "Open queue ledger" }).click();
+    await expect(page.locator(".bq-summary-col--mobile-open")).toBeVisible();
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-mobile-open-768x900.png"), fullPage: false });
 
     expect(failures).toEqual([]);
   });

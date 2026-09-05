@@ -71,6 +71,23 @@ export function computePhysicalAvailabilityShortages(
   queue: BuildQueueItem[],
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
 ): Shortage[] {
+  return computePhysicalAvailabilityCoverage(inventory, queue, recipeInputsByRecipeId)
+    .filter((shortage) => shortage.shortfall > 0);
+}
+
+/**
+ * Canonical physical fulfillment coverage in queue order.
+ *
+ * This is intentionally the same reservation- and quality-aware allocation
+ * pass used by `computePhysicalAvailabilityShortages`. Consumers that need to
+ * show fulfilled rows (such as the Queue ledger) can use it without inventing
+ * a second owned-stock interpretation.
+ */
+export function computePhysicalAvailabilityCoverage(
+  inventory: InventoryEntry[],
+  queue: BuildQueueItem[],
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+): Shortage[] {
   const remainingByInventoryEntry = new Map(
     inventory.map((entry) => [entry.id, getLotAvailableAmountAfterReservations(entry, queue)]),
   );
@@ -134,6 +151,5 @@ export function computePhysicalAvailabilityShortages(
     .map((shortage) => {
       const have = shortage.allocated + shortage.available;
       return { ...shortage, have, shortfall: Math.max(0, shortage.needed - have) };
-    })
-    .filter((shortage) => shortage.shortfall > 0);
+    });
 }

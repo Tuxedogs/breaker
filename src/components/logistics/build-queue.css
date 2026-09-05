@@ -1737,6 +1737,50 @@
   border-top: 1px solid var(--panel-border-soft);
 }
 
+.bq-ledger-section--physical {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.bq-ledger-section--planning {
+  margin-top: 18px;
+}
+
+.bq-ledger-planning-subsection + .bq-ledger-planning-subsection {
+  margin-top: 14px;
+}
+
+.bq-ledger-description {
+  margin: -2px 0 9px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.bq-ledger-physical-line {
+  display: grid;
+  gap: 7px;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--panel-border-soft);
+  font-size: 12px;
+}
+
+.bq-ledger-physical-line .bq-material-name-cell { gap: 8px; font-weight: 800; }
+
+.bq-ledger-physical-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-ledger-physical-metrics > span { white-space: nowrap; }
+.bq-ledger-physical-metrics strong { color: var(--text-primary); }
+.bq-ledger-physical-metrics .is-missing strong { color: var(--danger); }
+.bq-ledger-physical-metrics .is-covered strong { color: var(--accent-cyan); }
+
 .bq-ledger-title {
   margin: 0 0 8px;
   font-size: 11px;
@@ -8437,23 +8481,6 @@
   min-width: 100%;
 }
 
-/* Reservation drawers stay constrained to their material card while the
-   expanded card overlays the lower workspace without reflowing its parent. */
-.bq-page .bq-center-shell .bq-item-body.bq-materials-card:has(.bq-reserve-panel),
-.bq-page .bq-center-shell .bq-materials-section:has(.bq-reserve-panel),
-.bq-page .bq-mat-table:has(.bq-reserve-panel),
-.bq-page .bq-mat-group:has(.bq-reserve-panel) {
-  overflow: visible;
-}
-
-.bq-page .bq-mat-group:has(.bq-reserve-panel) {
-  z-index: 12;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 26px 54px rgba(0, 0, 0, 0.78),
-    0 0 0 1px rgba(125, 211, 252, 0.08);
-}
-
 .bq-page .bq-mat-group .bq-reserve-stack-head {
   display: none;
 }
@@ -8811,10 +8838,8 @@
 /* Canonical Build Queue workspace refinements. */
 
 .bq-page .bq-layout--summary-collapsed {
-  grid-template-columns: clamp(300px, 19vw, 346px) minmax(0, 1fr);
+  grid-template-columns: clamp(300px, 19vw, 346px) minmax(0, 1fr) 48px;
 }
-
-.bq-page .bq-layout--summary-collapsed > .bq-summary-col--collapsed { display: none; }
 
 .bq-page .bq-center-shell .bq-item {
   gap: 12px;
@@ -9144,18 +9169,22 @@
 }
 .bq-page .bq-craft-card-status--queued { border-color: rgba(160, 177, 196, .28); color: #aebac9; background: rgba(160,177,196,.08); }
 
-/* Fixed reserve drawer: overlays the workspace without reflowing the page. */
-.bq-page .bq-reserve-backdrop {
+/* Body-level portal prevents material-card stacking contexts from covering the reservation flow. */
+.bq-reserve-overlay {
   position: fixed;
   z-index: 980;
+  inset: 0;
+}
+
+.bq-reserve-backdrop {
+  position: fixed;
   inset: 0;
   border: 0;
   background: rgba(0, 5, 11, .66);
 }
-.bq-page .bq-mat-group:has(.bq-reserve-panel) { z-index: auto; box-shadow: none; }
-.bq-page .bq-mat-group:has(.bq-reserve-panel) .bq-reserve-panel {
+.bq-reserve-panel {
   position: fixed;
-  z-index: 990;
+  z-index: 1;
   top: 0;
   right: 0;
   bottom: 0;
@@ -9193,12 +9222,12 @@
 .bq-reserve-material-strip { display: flex; align-items: center; justify-content: space-between; margin: 0 20px 12px; padding: 13px 14px; border: 1px solid var(--ops-border-soft); border-radius: 4px; background: var(--ops-surface-deep); }
 .bq-reserve-material-strip > strong { color: var(--stat-beneficial); }
 .bq-reserve-drawer-body { min-height: 0; padding: 0 20px 18px; overflow: auto; }
-.bq-page .bq-reserve-panel .bq-reserve-tree { gap: 10px; }
-.bq-page .bq-reserve-panel .bq-reserve-location-folder { border: 1px solid var(--ops-border-soft); border-radius: 5px; background: rgba(5,15,25,.48); }
-.bq-page .bq-reserve-panel .bq-reserve-location-folder > summary { padding: 13px 14px; }
-.bq-page .bq-reserve-panel .bq-reserve-quality-folder { border-top: 1px solid var(--ops-border-soft); }
-.bq-page .bq-reserve-panel .bq-reserve-quality-folder > summary { padding: 11px 14px; }
-.bq-page .bq-reserve-panel .bq-reserve-stack-row { padding: 12px 14px; border-top: 1px solid var(--ops-border-soft); }
+.bq-reserve-panel .bq-reserve-tree { gap: 10px; }
+.bq-reserve-panel .bq-reserve-location-folder { border: 1px solid var(--ops-border-soft); border-radius: 5px; background: rgba(5,15,25,.48); }
+.bq-reserve-panel .bq-reserve-location-folder > summary { padding: 13px 14px; }
+.bq-reserve-panel .bq-reserve-quality-folder { border-top: 1px solid var(--ops-border-soft); }
+.bq-reserve-panel .bq-reserve-quality-folder > summary { padding: 11px 14px; }
+.bq-reserve-panel .bq-reserve-stack-row { padding: 12px 14px; border-top: 1px solid var(--ops-border-soft); }
 .bq-reserve-drawer-foot { border-top: 1px solid var(--ops-border-default); background: rgba(4,13,22,.92); }
 .bq-reserve-drawer-foot > span { color: #b8c7d7; }
 .bq-reserve-drawer-foot > span strong { color: var(--stat-beneficial); }
@@ -9629,6 +9658,38 @@
 
 @media (max-width: 768px) {
   .bq-page .bq-layout--summary-collapsed { grid-template-columns: minmax(0,1fr); }
+  .bq-page .bq-summary-col--mobile {
+    position: fixed;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 70;
+    width: auto;
+    min-width: 0;
+    max-height: none;
+    display: block;
+  }
+  .bq-page .bq-summary-col--mobile.bq-summary-col--collapsed {
+    display: grid;
+    width: auto;
+    min-height: 42px;
+    border-radius: 999px;
+  }
+  .bq-page .bq-summary-col--mobile .bq-summary-reopen {
+    min-height: 42px;
+    grid-template-columns: 18px auto 10px;
+    grid-template-rows: 1fr;
+    padding: 0 14px;
+  }
+  .bq-page .bq-summary-col--mobile .bq-summary-reopen-label { writing-mode: horizontal-tb; }
+  .bq-page .bq-summary-col--mobile-open {
+    inset: auto 0 0;
+    width: 100%;
+    max-height: min(72vh, 620px);
+    padding: 16px;
+    border-radius: 14px 14px 0 0;
+    overflow: auto;
+    box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.48);
+  }
   .bq-page .bq-materials-section-actions { width: 100%; justify-content: space-between; }
   .bq-page .bq-mat-row,
   .bq-page .bq-mat-row--planning { grid-template-columns: minmax(0,1fr) 94px; grid-template-rows: auto auto auto; gap: 10px; min-height: 0; }

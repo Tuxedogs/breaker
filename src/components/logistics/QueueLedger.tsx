@@ -1,10 +1,14 @@
 import MaterialIcon from "./MaterialIcon";
 import type { QueueLedgerModel } from "../../lib/logistics/queueLedger";
+import type { Shortage } from "../../lib/logistics/shortages";
 
 interface QueueLedgerProps {
   ledger: QueueLedgerModel;
+  physicalCoverage: Shortage[];
+  materialNameById?: Record<string, string>;
   formatValue?: (value: number) => string;
   collapsed?: boolean;
+  mobile?: boolean;
   onToggleCollapse?: () => void;
 }
 
@@ -17,27 +21,37 @@ const LIST_LIMIT = 6;
 
 export default function QueueLedger({
   ledger,
+  physicalCoverage,
+  materialNameById = {},
   formatValue = defaultFormatValue,
   collapsed = false,
+  mobile = false,
   onToggleCollapse,
 }: QueueLedgerProps) {
-  const noStockLines = ledger.refinedShortfallLines.filter((line) => line.totalAvailableEquivalent <= 0);
+  const physicalLines = physicalCoverage.slice(0, LIST_LIMIT);
   const refinedLines = ledger.refinedShortfallLines.slice(0, LIST_LIMIT);
   const rawLines = ledger.rawOreRequirementLines.slice(0, LIST_LIMIT);
-  const noStockPreview = noStockLines.slice(0, LIST_LIMIT);
-  const hasShortfall = ledger.summary.refinedShortfall > 0 || ledger.summary.noStockLines > 0;
+  const hasShortfall = physicalCoverage.some((line) => line.shortfall > 0);
+  const panelClassName = [
+    "bq-summary-col",
+    "ops-primary-card",
+    collapsed ? "bq-summary-col--collapsed" : "",
+    mobile ? "bq-summary-col--mobile" : "",
+    mobile && !collapsed ? "bq-summary-col--mobile-open" : "",
+  ].filter(Boolean).join(" ");
 
   if (collapsed) {
     return (
-      <aside className="bq-summary-col bq-summary-col--collapsed ops-primary-card" aria-label="Raw and refined queue planning summary">
+      <aside className={panelClassName} aria-label="Queue fulfillment ledger">
         <button
           type="button"
           className="bq-summary-reopen"
           onClick={onToggleCollapse}
-          aria-label="Expand queue summary"
+          aria-label="Open queue ledger"
+          aria-expanded="false"
         >
           <span className="bq-summary-reopen-icon" aria-hidden="true" />
-          <span className="bq-summary-reopen-label">Queue Planning</span>
+          <span className="bq-summary-reopen-label">Queue Ledger</span>
           {hasShortfall ? <span className="bq-summary-reopen-alert" aria-label="Shortfall exists" /> : null}
         </button>
       </aside>
@@ -45,15 +59,39 @@ export default function QueueLedger({
   }
 
   return (
-    <aside className="bq-summary-col ops-primary-card" aria-label="Raw and refined queue planning summary">
+    <aside className={panelClassName} aria-label="Queue fulfillment ledger">
       <header className="bq-summary-head">
-        <h2>Queue Planning</h2>
-        <button type="button" className="bq-summary-collapse" onClick={onToggleCollapse} aria-label="Collapse queue summary">
+        <h2>Queue Ledger</h2>
+        <button type="button" className="bq-summary-collapse" onClick={onToggleCollapse} aria-label={mobile ? "Close queue ledger" : "Collapse queue ledger"} aria-expanded="true">
           <span className="bq-summary-collapse-icon" aria-hidden="true" />
           <span>Collapse</span>
         </button>
       </header>
 
+      <section className="bq-ledger-section bq-ledger-section--physical" aria-labelledby="bq-summary-physical-title">
+        <h3 className="bq-ledger-title" id="bq-summary-physical-title">Physical fulfillment</h3>
+        <p className="bq-ledger-description">Valid reservations and quality-eligible physical boxes only.</p>
+        {physicalLines.length > 0 ? physicalLines.map((line) => (
+          <div className="bq-ledger-physical-line" key={`physical:${line.key}`}>
+            <span className="bq-material-name-cell">
+              <MaterialIcon materialName={materialNameById[line.materialId] ?? line.materialId} materialState="refined" size={17} />
+              <span>{materialNameById[line.materialId] ?? line.materialId}</span>
+            </span>
+            <span className="bq-ledger-physical-metrics">
+              <span>Required <strong>{formatValue(line.needed)} {line.unitType?.toUpperCase()}</strong></span>
+              <span>Target <strong>{line.selectedQuality === undefined ? "Any" : `Quality ${line.selectedQuality}`}</strong></span>
+              <span>Valid reserved <strong>{formatValue(line.allocated)} {line.unitType?.toUpperCase()}</strong></span>
+              <span>Eligible available <strong>{formatValue(line.available)} {line.unitType?.toUpperCase()}</strong></span>
+              <span className={line.shortfall > 0 ? "is-missing" : "is-covered"}>Remaining <strong>{formatValue(line.shortfall)} {line.unitType?.toUpperCase()}</strong></span>
+            </span>
+          </div>
+        )) : <div className="bq-ledger-empty">No active material requirements.</div>}
+        {physicalCoverage.length > LIST_LIMIT ? <div className="bq-ledger-more">+ {physicalCoverage.length - LIST_LIMIT} more</div> : null}
+      </section>
+
+      <section className="bq-ledger-section bq-ledger-section--planning" aria-labelledby="bq-summary-planning-title">
+        <h3 className="bq-ledger-title" id="bq-summary-planning-title">Planning</h3>
+        <p className="bq-ledger-description">Owned stock and raw/refined conversion are planning equivalents, not physical fulfillment.</p>
       <div className="bq-ledger-stats">
         <div className="bq-ledger-stat bq-ledger-stat--danger">
           <span>Planning Shortfall</span>
@@ -69,7 +107,7 @@ export default function QueueLedger({
         </div>
       </div>
 
-      <section className="bq-ledger-section" aria-labelledby="bq-summary-refined-title">
+      <div className="bq-ledger-planning-subsection" aria-labelledby="bq-summary-refined-title">
         <h3 className="bq-ledger-title" id="bq-summary-refined-title">Refined-equivalent Planning Gap</h3>
         {refinedLines.length > 0 ? refinedLines.map((line) => (
           <div className="bq-ledger-line bq-ledger-line--danger" key={`refined:${line.materialKey}`}>
@@ -85,9 +123,9 @@ export default function QueueLedger({
         {ledger.refinedShortfallLines.length > LIST_LIMIT ? (
           <div className="bq-ledger-more">+ {ledger.refinedShortfallLines.length - LIST_LIMIT} more</div>
         ) : null}
-      </section>
+      </div>
 
-      <section className="bq-ledger-section bq-ledger-section--raw" aria-labelledby="bq-summary-raw-title">
+      <div className="bq-ledger-planning-subsection bq-ledger-section--raw" aria-labelledby="bq-summary-raw-title">
         <h3 className="bq-ledger-title bq-ledger-title--raw" id="bq-summary-raw-title">Raw Ore Planning Need</h3>
         {rawLines.length > 0 ? rawLines.map((line) => (
           <div className="bq-ledger-line bq-ledger-line--raw" key={`raw:${line.materialKey}`}>
@@ -103,24 +141,7 @@ export default function QueueLedger({
         {ledger.rawOreRequirementLines.length > LIST_LIMIT ? (
           <div className="bq-ledger-more">+ {ledger.rawOreRequirementLines.length - LIST_LIMIT} more</div>
         ) : null}
-      </section>
-
-      <section className="bq-ledger-section bq-ledger-section--nostock" aria-labelledby="bq-summary-nostock-title">
-        <h3 className="bq-ledger-title bq-ledger-title--nostock" id="bq-summary-nostock-title">No Owned Stock</h3>
-        {noStockPreview.length > 0 ? noStockPreview.map((line) => (
-          <div className="bq-ledger-line bq-ledger-line--danger" key={`nostock:${line.materialKey}`}>
-            <span className="bq-material-name-cell">
-              <MaterialIcon materialName={line.displayName} materialState={line.isRefinable ? "refined" : "raw"} size={17} />
-              <span>{line.displayName}</span>
-            </span>
-            <strong>{formatValue(line.netMissingRefined)}</strong>
-          </div>
-        )) : (
-          <div className="bq-ledger-empty">No zero-stock shortage lines.</div>
-        )}
-        {noStockLines.length > LIST_LIMIT ? (
-          <div className="bq-ledger-more">+ {noStockLines.length - LIST_LIMIT} more</div>
-        ) : null}
+      </div>
       </section>
     </aside>
   );

@@ -9,6 +9,7 @@ import {
 } from '../../src/lib/logistics/buildQueueProgress';
 import { getQueueLedgerModel } from '../../src/lib/logistics/queueLedger';
 import { computePhysicalAvailabilityShortages } from '../../src/lib/logistics/shortages';
+import { computePhysicalAvailabilityCoverage } from '../../src/lib/logistics/shortages';
 import type { BuildQueueItem, InventoryEntry, ReservedMaterialAllocation } from '../../src/types/logistics';
 
 const createdAt = '2026-08-28T00:00:00.000Z';
@@ -134,6 +135,42 @@ test('quality-limited stock is not treated as available unless lower quality is 
 
   const lowerQualityAllowed = { ...queueItem('lower-ok'), allowLowerQuality: true };
   assert.deepEqual(computePhysicalAvailabilityShortages(lowQualityInventory, [lowerQualityAllowed], { 'same-recipe': inputs }), []);
+});
+
+test('physical coverage retains fulfilled rows and keeps below-target owned stock out of fulfillment', () => {
+  const quality900Input = [{ ...inputs[0], quantity: 2, selectedQuality: 900 }];
+  const item = queueItem('quality-coverage');
+  const lowQualityCoverage = computePhysicalAvailabilityCoverage(
+    [inventoryLot('low-quality-lot', 2, 850)],
+    [item],
+    { 'same-recipe': quality900Input },
+  );
+  assert.deepEqual(lowQualityCoverage[0] && {
+    needed: lowQualityCoverage[0].needed,
+    allocated: lowQualityCoverage[0].allocated,
+    available: lowQualityCoverage[0].available,
+    shortfall: lowQualityCoverage[0].shortfall,
+    selectedQuality: lowQualityCoverage[0].selectedQuality,
+  }, {
+    needed: 2,
+    allocated: 0,
+    available: 0,
+    shortfall: 2,
+    selectedQuality: 900,
+  });
+
+  const eligibleCoverage = computePhysicalAvailabilityCoverage(
+    [inventoryLot('eligible-quality-lot', 2, 900)],
+    [item],
+    { 'same-recipe': quality900Input },
+  );
+  assert.equal(eligibleCoverage[0]?.available, 2);
+  assert.equal(eligibleCoverage[0]?.shortfall, 0);
+  assert.deepEqual(computePhysicalAvailabilityShortages(
+    [inventoryLot('eligible-quality-lot', 2, 900)],
+    [item],
+    { 'same-recipe': quality900Input },
+  ), []);
 });
 
 test('raw/refined queue planning remains explicitly distinct from physical shortage availability', () => {
