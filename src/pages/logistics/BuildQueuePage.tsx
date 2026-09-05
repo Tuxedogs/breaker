@@ -10,6 +10,7 @@ import {
 import { getInventoryFreshnessBlockReason } from "../../lib/logistics/inventoryFreshness";
 import { getActiveInventoryEntries, type SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
+import { computePhysicalAvailabilityCoverage } from "../../lib/logistics/shortages";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
@@ -257,6 +258,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     : storeMoveBuildQueueItem;
 
   const queueLedger = getQueueLedgerModel({ buildQueue: activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId });
+  const physicalCoverage = computePhysicalAvailabilityCoverage(inventoryEntries, activeBuildQueueItems, recipeInputsByRecipeId);
+  const materialNameById = useMemo(() => Object.fromEntries(materials.map((material) => [material.id, material.name])), [materials]);
   const freshnessBlockReason = isFixture
     ? FIXTURE_READ_ONLY_MESSAGE
     : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
@@ -767,8 +770,11 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
 
         <QueueLedger
           ledger={queueLedger}
+          physicalCoverage={physicalCoverage}
+          materialNameById={materialNameById}
           formatValue={formatSummaryNumber}
           collapsed={summaryCollapsed}
+          mobile={isMobileQueueLayout}
           onToggleCollapse={() => setSummaryCollapsed((value) => !value)}
         />
       </div>

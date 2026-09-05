@@ -1737,6 +1737,50 @@
   border-top: 1px solid var(--panel-border-soft);
 }
 
+.bq-ledger-section--physical {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.bq-ledger-section--planning {
+  margin-top: 18px;
+}
+
+.bq-ledger-planning-subsection + .bq-ledger-planning-subsection {
+  margin-top: 14px;
+}
+
+.bq-ledger-description {
+  margin: -2px 0 9px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.bq-ledger-physical-line {
+  display: grid;
+  gap: 7px;
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--panel-border-soft);
+  font-size: 12px;
+}
+
+.bq-ledger-physical-line .bq-material-name-cell { gap: 8px; font-weight: 800; }
+
+.bq-ledger-physical-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-ledger-physical-metrics > span { white-space: nowrap; }
+.bq-ledger-physical-metrics strong { color: var(--text-primary); }
+.bq-ledger-physical-metrics .is-missing strong { color: var(--danger); }
+.bq-ledger-physical-metrics .is-covered strong { color: var(--accent-cyan); }
+
 .bq-ledger-title {
   margin: 0 0 8px;
   font-size: 11px;
@@ -8811,10 +8855,8 @@
 /* Canonical Build Queue workspace refinements. */
 
 .bq-page .bq-layout--summary-collapsed {
-  grid-template-columns: clamp(300px, 19vw, 346px) minmax(0, 1fr);
+  grid-template-columns: clamp(300px, 19vw, 346px) minmax(0, 1fr) 48px;
 }
-
-.bq-page .bq-layout--summary-collapsed > .bq-summary-col--collapsed { display: none; }
 
 .bq-page .bq-center-shell .bq-item {
   gap: 12px;
@@ -9629,6 +9671,38 @@
 
 @media (max-width: 768px) {
   .bq-page .bq-layout--summary-collapsed { grid-template-columns: minmax(0,1fr); }
+  .bq-page .bq-summary-col--mobile {
+    position: fixed;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 70;
+    width: auto;
+    min-width: 0;
+    max-height: none;
+    display: block;
+  }
+  .bq-page .bq-summary-col--mobile.bq-summary-col--collapsed {
+    display: grid;
+    width: auto;
+    min-height: 42px;
+    border-radius: 999px;
+  }
+  .bq-page .bq-summary-col--mobile .bq-summary-reopen {
+    min-height: 42px;
+    grid-template-columns: 18px auto 10px;
+    grid-template-rows: 1fr;
+    padding: 0 14px;
+  }
+  .bq-page .bq-summary-col--mobile .bq-summary-reopen-label { writing-mode: horizontal-tb; }
+  .bq-page .bq-summary-col--mobile-open {
+    inset: auto 0 0;
+    width: 100%;
+    max-height: min(72vh, 620px);
+    padding: 16px;
+    border-radius: 14px 14px 0 0;
+    overflow: auto;
+    box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.48);
+  }
   .bq-page .bq-materials-section-actions { width: 100%; justify-content: space-between; }
   .bq-page .bq-mat-row,
   .bq-page .bq-mat-row--planning { grid-template-columns: minmax(0,1fr) 94px; grid-template-rows: auto auto auto; gap: 10px; min-height: 0; }
