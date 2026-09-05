@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
@@ -1758,9 +1759,10 @@ export default function BuildQueueGroup({
                       ))}
 
                       {inventoryEnabled && reserveExpanded && (
-                        <>
-                        <button type="button" className="bq-reserve-backdrop" aria-label="Close reserve drawer" onClick={openReserve} />
-                        <aside className="bq-reserve-panel" role="dialog" aria-modal="true" aria-label={`Reserve ${group.displayName}`}>
+                        createPortal(
+                          <div className="bq-reserve-overlay">
+                          <button type="button" className="bq-reserve-backdrop" aria-label="Close reserve drawer" onClick={openReserve} />
+                          <aside className="bq-reserve-panel" role="dialog" aria-modal="true" aria-label={`Reserve ${group.displayName}`}>
                           <header className="bq-reserve-drawer-head">
                             <div>
                               <h3>Reserve {group.displayName}</h3>
@@ -2001,8 +2003,10 @@ export default function BuildQueueGroup({
                             <span><strong>{formatQuantity(group.allocatedTotal, group.material)}</strong> reserved · {hasShortfall ? `${shortfallLabel} remaining` : 'Requirement filled'}</span>
                             <div><button type="button" className="bq-btn" onClick={openReserve}>Cancel</button><button type="button" className="bq-btn bq-btn--confirm" onClick={openReserve}>Reserve Selected</button></div>
                           </footer>
-                        </aside>
-                        </>
+                          </aside>
+                          </div>,
+                          document.body,
+                        )
                       )}
                     </section>
                   );

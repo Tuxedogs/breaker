@@ -8481,23 +8481,6 @@
   min-width: 100%;
 }
 
-/* Reservation drawers stay constrained to their material card while the
-   expanded card overlays the lower workspace without reflowing its parent. */
-.bq-page .bq-center-shell .bq-item-body.bq-materials-card:has(.bq-reserve-panel),
-.bq-page .bq-center-shell .bq-materials-section:has(.bq-reserve-panel),
-.bq-page .bq-mat-table:has(.bq-reserve-panel),
-.bq-page .bq-mat-group:has(.bq-reserve-panel) {
-  overflow: visible;
-}
-
-.bq-page .bq-mat-group:has(.bq-reserve-panel) {
-  z-index: 12;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 26px 54px rgba(0, 0, 0, 0.78),
-    0 0 0 1px rgba(125, 211, 252, 0.08);
-}
-
 .bq-page .bq-mat-group .bq-reserve-stack-head {
   display: none;
 }
@@ -9186,18 +9169,22 @@
 }
 .bq-page .bq-craft-card-status--queued { border-color: rgba(160, 177, 196, .28); color: #aebac9; background: rgba(160,177,196,.08); }
 
-/* Fixed reserve drawer: overlays the workspace without reflowing the page. */
-.bq-page .bq-reserve-backdrop {
+/* Body-level portal prevents material-card stacking contexts from covering the reservation flow. */
+.bq-reserve-overlay {
   position: fixed;
   z-index: 980;
+  inset: 0;
+}
+
+.bq-reserve-backdrop {
+  position: fixed;
   inset: 0;
   border: 0;
   background: rgba(0, 5, 11, .66);
 }
-.bq-page .bq-mat-group:has(.bq-reserve-panel) { z-index: auto; box-shadow: none; }
-.bq-page .bq-mat-group:has(.bq-reserve-panel) .bq-reserve-panel {
+.bq-reserve-panel {
   position: fixed;
-  z-index: 990;
+  z-index: 1;
   top: 0;
   right: 0;
   bottom: 0;
@@ -9235,12 +9222,12 @@
 .bq-reserve-material-strip { display: flex; align-items: center; justify-content: space-between; margin: 0 20px 12px; padding: 13px 14px; border: 1px solid var(--ops-border-soft); border-radius: 4px; background: var(--ops-surface-deep); }
 .bq-reserve-material-strip > strong { color: var(--stat-beneficial); }
 .bq-reserve-drawer-body { min-height: 0; padding: 0 20px 18px; overflow: auto; }
-.bq-page .bq-reserve-panel .bq-reserve-tree { gap: 10px; }
-.bq-page .bq-reserve-panel .bq-reserve-location-folder { border: 1px solid var(--ops-border-soft); border-radius: 5px; background: rgba(5,15,25,.48); }
-.bq-page .bq-reserve-panel .bq-reserve-location-folder > summary { padding: 13px 14px; }
-.bq-page .bq-reserve-panel .bq-reserve-quality-folder { border-top: 1px solid var(--ops-border-soft); }
-.bq-page .bq-reserve-panel .bq-reserve-quality-folder > summary { padding: 11px 14px; }
-.bq-page .bq-reserve-panel .bq-reserve-stack-row { padding: 12px 14px; border-top: 1px solid var(--ops-border-soft); }
+.bq-reserve-panel .bq-reserve-tree { gap: 10px; }
+.bq-reserve-panel .bq-reserve-location-folder { border: 1px solid var(--ops-border-soft); border-radius: 5px; background: rgba(5,15,25,.48); }
+.bq-reserve-panel .bq-reserve-location-folder > summary { padding: 13px 14px; }
+.bq-reserve-panel .bq-reserve-quality-folder { border-top: 1px solid var(--ops-border-soft); }
+.bq-reserve-panel .bq-reserve-quality-folder > summary { padding: 11px 14px; }
+.bq-reserve-panel .bq-reserve-stack-row { padding: 12px 14px; border-top: 1px solid var(--ops-border-soft); }
 .bq-reserve-drawer-foot { border-top: 1px solid var(--ops-border-default); background: rgba(4,13,22,.92); }
 .bq-reserve-drawer-foot > span { color: #b8c7d7; }
 .bq-reserve-drawer-foot > span strong { color: var(--stat-beneficial); }
