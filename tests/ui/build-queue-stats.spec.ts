@@ -656,6 +656,37 @@ test.describe("Build Queue stats fixture", () => {
     expect(failures).toEqual([]);
   });
 
+  test("keeps the Queue ledger discoverable and separates physical fulfillment from planning", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const visualTargetDir = path.join(buildQueueArtifactRoot, "build-queue-visual-target");
+    await mkdir(visualTargetDir, { recursive: true });
+
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+
+    const reopen = page.getByRole("button", { name: "Open queue ledger" });
+    await expect(reopen).toBeVisible();
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-collapsed-1920x1080.png"), fullPage: false });
+
+    await reopen.click();
+    const ledger = page.locator(".bq-summary-col").filter({ has: page.getByRole("heading", { name: "Queue Ledger" }) });
+    await expect(ledger).toBeVisible();
+    await expect(ledger.getByRole("heading", { name: "Physical fulfillment" })).toBeVisible();
+    await expect(ledger.getByRole("heading", { name: "Planning", exact: true })).toBeVisible();
+    await expect(ledger).toContainText("Valid reservations and quality-eligible physical boxes only.");
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-expanded-1920x1080.png"), fullPage: false });
+
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("button", { name: "Open queue ledger" })).toBeVisible();
+    await page.getByRole("button", { name: "Open queue ledger" }).click();
+    await expect(page.locator(".bq-summary-col--mobile-open")).toBeVisible();
+    await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-mobile-open-768x900.png"), fullPage: false });
+
+    expect(failures).toEqual([]);
+  });
+
   test("Crafting Detail uses the shared target slider and recalculates modifiers", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(craftingSliderScreenshotDir, { recursive: true });
