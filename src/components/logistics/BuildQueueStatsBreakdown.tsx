@@ -33,34 +33,39 @@ interface Props {
 }
 
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
+type BridgeState = {
+  blueprintId: string | null;
+  card: ComponentCardIndexRecord | null;
+  recipe: ComponentRecipe | null;
+  status: "loading" | "ready" | "error";
+};
 
 type BuildQueueStatsContextValue = {
   model: CraftStatViewModel;
   productQuality: BuildQueueProductQualitySummary;
+  selectionId: string;
+  hasError: boolean;
 };
 
 const BuildQueueStatsContext = createContext<BuildQueueStatsContextValue | null>(null);
 
 function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueueStatsContextValue {
-  const [componentCard, setComponentCard] = useState<ComponentCardIndexRecord | null>(null);
-  const [recipe, setRecipe] = useState<ComponentRecipe | null>(null);
-  const [bridgeLoading, setBridgeLoading] = useState(Boolean(blueprintId?.trim()));
+  const normalizedBlueprintId = blueprintId?.trim() || null;
+  const [bridge, setBridge] = useState<BridgeState>(() => ({
+    blueprintId: normalizedBlueprintId,
+    card: null,
+    recipe: null,
+    status: normalizedBlueprintId ? "loading" : "ready",
+  }));
 
   useEffect(() => {
-    const normalizedBlueprintId = blueprintId?.trim();
     if (!normalizedBlueprintId) {
-      queueMicrotask(() => {
-        setComponentCard(null);
-        setRecipe(null);
-        setBridgeLoading(false);
-      });
+      setBridge({ blueprintId: null, card: null, recipe: null, status: "ready" });
       return;
     }
 
     let cancelled = false;
-    queueMicrotask(() => {
-      if (!cancelled) setBridgeLoading(true);
-    });
+    setBridge({ blueprintId: normalizedBlueprintId, card: null, recipe: null, status: "loading" });
 
     Promise.all([
       fetchComponentCardById(normalizedBlueprintId).catch(() => null),
@@ -68,15 +73,19 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
     ])
       .then(([card, loadedRecipe]) => {
         if (cancelled) return;
-        setComponentCard(card);
-        setRecipe(loadedRecipe);
+        setBridge({ blueprintId: normalizedBlueprintId, card, recipe: loadedRecipe, status: "ready" });
       })
-      .finally(() => {
-        if (!cancelled) setBridgeLoading(false);
+      .catch(() => {
+        if (!cancelled) setBridge({ blueprintId: normalizedBlueprintId, card: null, recipe: null, status: "error" });
       });
 
     return () => { cancelled = true; };
-  }, [blueprintId]);
+  }, [normalizedBlueprintId]);
+
+  const bridgeMatchesSelection = bridge.blueprintId === normalizedBlueprintId;
+  const componentCard = bridgeMatchesSelection ? bridge.card : null;
+  const recipe = bridgeMatchesSelection ? bridge.recipe : null;
+  const bridgeLoading = Boolean(normalizedBlueprintId) && (!bridgeMatchesSelection || bridge.status === "loading");
 
   const recipeBridge = useMemo<RecipeBridge | null>(() => (
     recipe
@@ -158,7 +167,7 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
       allocationConfigured,
       loading: bridgeLoading || (isFpsItem ? fpsCardLoading : fittingStatsLoading),
       missing: isFpsItem ? fpsCardMissing : fittingStatsMissing,
-      error: isFpsItem ? null : fittingStatsError,
+      error: bridge.status === "error" ? "Component statistics could not be prepared." : (isFpsItem ? null : fittingStatsError),
     }), [
     allocationConfigured,
     allocationModifiers,
@@ -180,7 +189,12 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
     [inputs, item, recipe],
   );
 
-  return useMemo(() => ({ model, productQuality }), [model, productQuality]);
+  return useMemo(() => ({
+    model,
+    productQuality,
+    selectionId: item.id,
+    hasError: bridge.status === "error" || Boolean(fittingStatsError),
+  }), [bridge.status, fittingStatsError, item.id, model, productQuality]);
 }
 
 export function BuildQueueStatsProvider({ blueprintId, item, inputs, children }: Props & { children: ReactNode }) {
@@ -211,8 +225,8 @@ export function BuildQueueCraftIdentity() {
 }
 
 export function BuildQueueCraftStatistics() {
-  const { model } = useBuildQueueStatsContext();
-  return <BuildQueueCraftStatisticsPanel model={model} />;
+  const { model, selectionId, hasError } = useBuildQueueStatsContext();
+  return <BuildQueueCraftStatisticsPanel model={model} selectionId={selectionId} hasError={hasError} />;
 }
 
 export function BuildQueueCraftTargetQuality() {

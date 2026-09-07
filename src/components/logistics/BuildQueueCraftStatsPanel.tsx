@@ -203,6 +203,7 @@ const ENGINEERING_GROUP_KEYS = new Set([
   "durabilityandphysical",
   "durabilityphysical",
   "repair",
+  "fireactions",
 ]);
 
 function getAllocationModifiedRows(groups: ConsolidatedStatGroup[]) {
@@ -364,7 +365,7 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
   );
 }
 
-export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
+export function BuildQueueCraftStatisticsPanel({ model, selectionId = model.title, hasError = false }: { model: CraftStatViewModel; selectionId?: string; hasError?: boolean }) {
   const [activeView, setActiveView] = useState<"performance" | "engineering">("performance");
   const consolidatedGroups = useMemo(
     () => model.status === "ready" ? buildConsolidatedGroups(model) : [],
@@ -376,15 +377,11 @@ export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatView
       : !ENGINEERING_GROUP_KEYS.has(normalizeGroupKey(group.title))
   ));
 
-  if (model.status === "loading") {
-    return <section className="bq-component-statistics bq-component-statistics--empty bq-workspace-card" data-bq-stats-status="loading"><p className="bq-stats-breakdown-empty">Loading component statistics...</p></section>;
-  }
-  if (model.status !== "ready" || (model.comparisonGroups.length === 0 && model.overviewGroups.length === 0)) {
-    return <section className="bq-component-statistics bq-component-statistics--empty bq-workspace-card" data-bq-stats-status="unavailable"><p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p></section>;
-  }
+  const hasStatistics = model.comparisonGroups.length > 0 || model.overviewGroups.length > 0;
+  const phase = model.status === "loading" ? "loading" : model.status !== "ready" ? (hasError ? "error" : "unavailable") : hasStatistics ? "ready" : "empty";
 
   return (
-    <section className="bq-component-statistics bq-workspace-card" data-bq-stats-status="ready" data-bq-stats-category={model.category} aria-label="Component statistics">
+    <section className={`bq-component-statistics bq-component-statistics--${phase} bq-workspace-card`} data-bq-stats-status={phase} data-bq-stats-category={model.category} data-bq-stats-selection={selectionId} aria-label="Component statistics" aria-busy={phase === "loading"}>
       <header className="bq-component-statistics-header">
         <h3 className="bq-component-statistics-title">Component Statistics</h3>
         <div className="bq-stat-view-tabs" role="tablist" aria-label="Component statistic views">
@@ -393,23 +390,22 @@ export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatView
             role="tab"
             aria-selected={activeView === "performance"}
             className={activeView === "performance" ? "is-active" : ""}
-            onClick={() => setActiveView("performance")}
+            onClick={() => setActiveView("performance")} disabled={phase === "loading"}
           >Performance</button>
           <button
             type="button"
             role="tab"
             aria-selected={activeView === "engineering"}
             className={activeView === "engineering" ? "is-active" : ""}
-            onClick={() => setActiveView("engineering")}
+            onClick={() => setActiveView("engineering")} disabled={phase === "loading"}
           >Engineering</button>
         </div>
       </header>
-      <div className="bq-component-statistics-body">
-        <div className="bq-stat-unmodified-column" aria-label={`${activeView} end product statistics`}>
-          {visibleGroups.length > 0
-            ? visibleGroups.map((group) => <EndProductStatGroup key={group.title} group={group} />)
-            : <p className="bq-stats-breakdown-empty">No {activeView} statistics are available for this component.</p>}
-        </div>
+      <div key={`${selectionId}:${phase}:${activeView}`} className="bq-component-statistics-body bq-component-statistics-content">
+        {phase === "loading" ? <div className="bq-stat-loading-shell" aria-label="Loading component statistics"><span /><span /><span /></div>
+          : phase === "error" ? <p className="bq-stats-breakdown-empty" role="alert">{model.unavailableReason ?? "Component statistics could not be loaded."}</p>
+          : phase !== "ready" ? <p className="bq-stats-breakdown-empty">{phase === "empty" ? `No ${activeView} statistics are available for this component.` : model.unavailableReason ?? "Component statistics unavailable"}</p>
+          : <div className="bq-stat-unmodified-column" aria-label={`${activeView} end product statistics`}>{visibleGroups.length > 0 ? visibleGroups.map((group) => <EndProductStatGroup key={group.title} group={group} />) : <p className="bq-stats-breakdown-empty">No {activeView} statistics are available for this component.</p>}</div>}
       </div>
     </section>
   );

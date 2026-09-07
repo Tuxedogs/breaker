@@ -488,6 +488,8 @@ export type BuildQueuePageFixture = {
   recipes: RecipeTemplate[];
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>;
   selectedItemId: string;
+  /** Fixture-only display identity. Production reads the active fitting dataset metadata. */
+  datasetBuilds?: { live: string; ptu?: string | null };
 };
 
 export const buildQueueStatsFixture: BuildQueuePageFixture = {
@@ -505,6 +507,7 @@ export const buildQueueStatsFixture: BuildQueuePageFixture = {
   recipes,
   recipeInputsByRecipeId,
   selectedItemId: FIXTURE_ITEM_IDS.fr66,
+  datasetBuilds: { live: "4.9.0-live.12232306", ptu: null },
 };
 
 const targetIronEntry = entry(
