@@ -639,4 +639,5 @@ export const buildQueueMockupFixture: BuildQueuePageFixture = {
     "recipe-fixture-c788": mockupC788Requirements,
   },
   selectedItemId: mockupM5aId,
+  datasetBuilds: { live: "4.9.0-live.12232306", ptu: null },
 };

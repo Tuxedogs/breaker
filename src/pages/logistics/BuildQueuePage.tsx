@@ -591,7 +591,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
           <button type="button" className="is-active" disabled aria-current="true" aria-describedby="bq-channel-status-note" title="LIVE is the active dataset. Channel switching is not available yet.">
             LIVE: {datasetBuilds.live.status === "available" ? datasetBuilds.live.buildId : datasetBuilds.live.status === "loading" ? "Loading" : "Unavailable"}
           </button>
-          <button type="button" disabled aria-describedby="bq-channel-status-note" title="PTU dataset data is unavailable. Channel switching is not available yet.">
+          <button type="button" disabled aria-describedby="bq-channel-status-note" title={datasetBuilds.ptu.status === "available" ? "PTU dataset metadata is available. Channel switching is not available yet." : "PTU dataset data is unavailable. Channel switching is not available yet."}>
             PTU: {datasetBuilds.ptu.status === "available" ? datasetBuilds.ptu.buildId : datasetBuilds.ptu.status === "loading" ? "Loading" : "Unavailable"}
           </button>
         </div>
