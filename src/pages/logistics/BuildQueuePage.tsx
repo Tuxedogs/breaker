@@ -137,7 +137,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       if (!controller.signal.aborted) setDatasetBuilds({ live, ptu });
     });
     return () => controller.abort();
-  }, []);
+  }, [isFixture]);
 
   const allInventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const storeInventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);

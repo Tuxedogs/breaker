@@ -59,13 +59,18 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
   }));
 
   useEffect(() => {
+    let cancelled = false;
+
     if (!normalizedBlueprintId) {
-      setBridge({ blueprintId: null, card: null, recipe: null, status: "ready" });
-      return;
+      queueMicrotask(() => {
+        if (!cancelled) setBridge({ blueprintId: null, card: null, recipe: null, status: "ready" });
+      });
+      return () => { cancelled = true; };
     }
 
-    let cancelled = false;
-    setBridge({ blueprintId: normalizedBlueprintId, card: null, recipe: null, status: "loading" });
+    queueMicrotask(() => {
+      if (!cancelled) setBridge({ blueprintId: normalizedBlueprintId, card: null, recipe: null, status: "loading" });
+    });
 
     Promise.all([
       fetchComponentCardById(normalizedBlueprintId).catch(() => null),
@@ -180,6 +185,7 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
     fpsCardMissing,
     isFpsItem,
     recipe,
+    bridge.status,
     targetConfigured,
     targetModifiers,
   ]);
