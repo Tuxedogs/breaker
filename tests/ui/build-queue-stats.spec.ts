@@ -519,6 +519,25 @@ test.describe("Build Queue stats fixture", () => {
     await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
     await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
     await page.locator(".bq-inventory-toggle").click();
+    const mobilePlanningSlider = page.locator(".bq-item--inventory-off .bq-mat-group").first().getByRole("slider", { name: /Target quality for/ });
+    await expect(mobilePlanningSlider).toBeVisible();
+    const mobileSliderGeometry = await mobilePlanningSlider.evaluate((slider) => {
+      const rect = slider.getBoundingClientRect();
+      const materialCard = slider.closest(".bq-mat-group")?.getBoundingClientRect();
+      return {
+        width: rect.width,
+        left: rect.left,
+        right: rect.right,
+        materialLeft: materialCard?.left ?? 0,
+        materialRight: materialCard?.right ?? 0,
+        viewportWidth: window.innerWidth,
+        overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
+      };
+    });
+    expect(mobileSliderGeometry.width).toBeGreaterThanOrEqual(100);
+    expect(mobileSliderGeometry.left).toBeGreaterThanOrEqual(mobileSliderGeometry.materialLeft - 1);
+    expect(mobileSliderGeometry.right).toBeLessThanOrEqual(mobileSliderGeometry.materialRight + 1);
+    expect(mobileSliderGeometry.overflow).toBeLessThanOrEqual(1);
     await page.screenshot({
       path: path.join(visualTargetDir, "build-queue-inventory-off-768x900.png"),
       fullPage: false,
@@ -1017,6 +1036,17 @@ test.describe("Build Queue stats fixture", () => {
         await expect(inventoryToggle).toHaveAttribute("aria-pressed", "false");
         await expect(materialCards.locator(".bq-target-editor")).toHaveCount(allocationLayout.cardCount);
         await expect(materialCards.locator(".bq-mat-card-total-need")).toHaveCount(allocationLayout.cardCount);
+        const planningSliders = materialCards.getByRole("slider", { name: /Target quality for/ });
+        await expect(planningSliders).toHaveCount(allocationLayout.cardCount);
+        await expect(materialCards.getByRole("spinbutton", { name: /Target quality for/ })).toHaveCount(0);
+        expect(await materialCards.allTextContents()).not.toContain("Ready");
+        expect(await materialCards.allTextContents()).not.toContain("Partial");
+        expect(await materialCards.allTextContents()).not.toContain("Missing");
+        const secondTargetBefore = await planningSliders.nth(1).inputValue();
+        await planningSliders.first().focus();
+        await page.keyboard.press("End");
+        await expect(planningSliders.first()).toHaveValue("1000");
+        await expect(planningSliders.nth(1)).toHaveValue(secondTargetBefore);
         await expect(materialCards.locator(".bq-avg-quality")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-status")).toHaveCount(0);
         await expect(materialCards.locator(".bq-mat-card-quality")).toHaveCount(0);
@@ -1024,7 +1054,8 @@ test.describe("Build Queue stats fixture", () => {
         await expect(page.getByRole("button", { name: /Auto reserve inventory for/ })).toBeDisabled();
         await inventoryToggle.click();
         await expect(inventoryToggle).toHaveAttribute("aria-pressed", "true");
-        await expect(page.getByRole("button", { name: /Auto reserve inventory for/ })).toBeDisabled();
+        await expect(page.getByRole("spinbutton", { name: "Target quality for Stileron" }).first()).toHaveValue("1000");
+        await expect(page.getByRole("button", { name: /Auto reserve inventory for/ })).toBeEnabled();
       }
 
       for (const item of fixtureItems) {
