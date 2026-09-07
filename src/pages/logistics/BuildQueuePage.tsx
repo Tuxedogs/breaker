@@ -23,6 +23,7 @@ import {
 } from "../../lib/logistics/buildQueueEntries";
 import { getCraftingItemsByBlueprintGuids } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
+import { readFittingMetaForChannel } from "../../lib/fitting/fittingApi";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
@@ -85,6 +86,14 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [dragDestinationId, setDragDestinationId] = useState<DragDestinationId | null>(null);
   const [queueRenameRequestToken, setQueueRenameRequestToken] = useState(0);
   const [typeLabelByBlueprintId, setTypeLabelByBlueprintId] = useState<Record<string, string>>({});
+  const [datasetBuilds, setDatasetBuilds] = useState<Record<"live" | "ptu", { status: "loading" | "available" | "unavailable"; buildId?: string }>>(() => (
+    fixture?.datasetBuilds
+      ? {
+        live: { status: "available", buildId: fixture.datasetBuilds.live },
+        ptu: fixture.datasetBuilds.ptu ? { status: "available", buildId: fixture.datasetBuilds.ptu } : { status: "unavailable" },
+      }
+      : { live: { status: "loading" }, ptu: { status: "loading" } }
+  ));
   const fixturePersistenceKey = useMemo(() => {
     if (!isFixture || typeof window === "undefined") return null;
     const key = new URLSearchParams(window.location.search).get("persist");
@@ -117,6 +126,18 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const dragDestinationRef = useRef<DragDestinationId | null>(null);
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
   const suppressMobileSelectorTapRef = useRef(false);
+
+  useEffect(() => {
+    if (isFixture) return;
+    const controller = new AbortController();
+    void Promise.all([
+      readFittingMetaForChannel("LIVE", controller.signal).then((meta) => ({ status: "available" as const, buildId: meta.buildId })).catch(() => ({ status: "unavailable" as const })),
+      readFittingMetaForChannel("PTU", controller.signal).then((meta) => ({ status: "available" as const, buildId: meta.buildId })).catch(() => ({ status: "unavailable" as const })),
+    ]).then(([live, ptu]) => {
+      if (!controller.signal.aborted) setDatasetBuilds({ live, ptu });
+    });
+    return () => controller.abort();
+  }, []);
 
   const allInventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const storeInventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
@@ -561,6 +582,21 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       {inventoryGuardMessage ? (
         <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
       ) : null}
+      <header className="bq-command-header">
+        <span className="bq-command-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z" /><path d="m8 9 4-3 4 3-4 3-4-3Z" /><path d="M8 15h8" /></svg>
+        </span>
+        <div className="bq-command-copy"><h1>Build Queue</h1><p>Plan crafts, reserve physical materials, and review component outcomes.</p></div>
+        <div className="bq-channel-status" role="group" aria-label="Dataset channels">
+          <button type="button" className="is-active" disabled aria-current="true" aria-describedby="bq-channel-status-note" title="LIVE is the active dataset. Channel switching is not available yet.">
+            LIVE: {datasetBuilds.live.status === "available" ? datasetBuilds.live.buildId : datasetBuilds.live.status === "loading" ? "Loading" : "Unavailable"}
+          </button>
+          <button type="button" disabled aria-describedby="bq-channel-status-note" title={datasetBuilds.ptu.status === "available" ? "PTU dataset metadata is available. Channel switching is not available yet." : "PTU dataset data is unavailable. Channel switching is not available yet."}>
+            PTU: {datasetBuilds.ptu.status === "available" ? datasetBuilds.ptu.buildId : datasetBuilds.ptu.status === "loading" ? "Loading" : "Unavailable"}
+          </button>
+        </div>
+        <span id="bq-channel-status-note" className="sr-only">Channel switching is not available yet.</span>
+      </header>
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
         <aside className="bq-queue-col" aria-label="Build queue list">
           <header className="bq-queue-col-head">

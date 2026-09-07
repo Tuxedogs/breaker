@@ -664,6 +664,10 @@ test.describe("Build Queue stats fixture", () => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
     await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+    const commandHeader = page.locator(".bq-command-header");
+    await expect(commandHeader).toBeVisible();
+    await expect(commandHeader.getByRole("button", { name: /LIVE: 4\.9\.0-live\.12232306/ })).toBeVisible();
+    await expect(commandHeader.getByRole("button", { name: /PTU: Unavailable/ })).toBeVisible();
 
     const reopen = page.getByRole("button", { name: "Open queue ledger" });
     await expect(reopen).toBeVisible();
@@ -682,9 +686,43 @@ test.describe("Build Queue stats fixture", () => {
     await expect(page.getByRole("button", { name: "Open queue ledger" })).toBeVisible();
     await page.getByRole("button", { name: "Open queue ledger" }).click();
     await expect(page.locator(".bq-summary-col--mobile-open")).toBeVisible();
+    await expect(page.locator(".bq-command-header")).toBeVisible();
+    const mobileOverflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth);
+    expect(mobileOverflow).toBeLessThanOrEqual(1);
     await page.screenshot({ path: path.join(visualTargetDir, "build-queue-ledger-mobile-open-768x900.png"), fullPage: false });
 
     expect(failures).toEqual([]);
+  });
+
+  test("shows authoritative channel availability without offering channel switching", async ({ page }) => {
+    await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
+    const live = page.getByRole("button", { name: /LIVE: 4\.9\.0-live\.12232306/ });
+    const ptu = page.getByRole("button", { name: /PTU: Unavailable/ });
+    await expect(live).toBeDisabled();
+    await expect(live).toHaveAttribute("aria-current", "true");
+    await expect(ptu).toBeDisabled();
+  });
+
+  test("keeps the scrolled Queue Ledger header opaque over ledger content", async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?mockup=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("button", { name: "Open queue ledger" })).toBeVisible();
+    await page.getByRole("button", { name: "Open queue ledger" }).click();
+    const ledger = page.locator(".bq-summary-col").filter({ has: page.getByRole("heading", { name: "Queue Ledger" }) });
+    const header = ledger.locator(".bq-summary-head");
+    await ledger.evaluate((element) => { element.scrollTop = 180; });
+    const state = await header.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      return {
+        background: getComputedStyle(element).backgroundColor,
+        topMostIsHeader: document.elementsFromPoint(centerX, centerY).some((candidate) => candidate === element || element.contains(candidate)),
+      };
+    });
+    expect(state.background).toMatch(/^rgb\(/);
+    expect(state.topMostIsHeader).toBe(true);
+    await expect(page.getByRole("button", { name: "Collapse queue ledger" })).toBeEnabled();
   });
 
   test("Crafting Detail uses the shared target slider and recalculates modifiers", async ({ page }) => {
