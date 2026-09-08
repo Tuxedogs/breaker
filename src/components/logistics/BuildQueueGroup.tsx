@@ -1637,11 +1637,12 @@ export default function BuildQueueGroup({
                         </div>
                           <div className="bq-target-cell">
                           <TargetQualitySlider
-                            label={targetQualityLabel}
+                            label={inventoryEnabled ? targetQualityLabel : `Target ${targetQualityLabel}`}
                             tone={targetQualityTone}
                             materialName={group.displayName}
                             value={targetEditorQuality}
-                            layout="input"
+                            layout={inventoryEnabled ? "input" : "stacked"}
+                            markers={inventoryEnabled ? [] : targetEditorBands.map((_, bandIndex) => getBandEffectiveQuality(targetEditorBands, bandIndex))}
                             disabled={isCompletedCraft}
                             onChange={(value) => updateTargetQuality(
                               item,

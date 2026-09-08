@@ -11480,3 +11480,22 @@
 .bq-page .bq-item--target-workspace .bq-item-name {
   font-size: 21px;
 }
+
+@media (max-width: 768px) {
+  .bq-page .bq-item--inventory-off .bq-target-editor--stacked {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+    grid-template-columns: 118px minmax(0, 1fr) !important;
+    grid-template-rows: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .bq-page .bq-item--inventory-off .bq-target-editor--stacked > .bq-target-slider-shell {
+    min-width: 100px;
+    width: 100% !important;
+  }
+}
