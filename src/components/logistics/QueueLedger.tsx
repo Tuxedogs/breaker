@@ -73,16 +73,12 @@ export default function QueueLedger({
         <p className="bq-ledger-description">Valid reservations and quality-eligible physical boxes only.</p>
         {physicalLines.length > 0 ? physicalLines.map((line) => (
           <div className="bq-ledger-physical-line" key={`physical:${line.key}`}>
-            <span className="bq-material-name-cell">
-              <MaterialIcon materialName={materialNameById[line.materialId] ?? line.materialId} materialState="refined" size={17} />
-              <span>{materialNameById[line.materialId] ?? line.materialId}</span>
-            </span>
+            <div className="bq-ledger-physical-head"><span className="bq-material-name-cell"><MaterialIcon materialName={materialNameById[line.materialId] ?? line.materialId} materialState="refined" size={17} /><span>{materialNameById[line.materialId] ?? line.materialId}</span></span><span className="bq-ledger-target">Target <strong>{line.selectedQuality === undefined ? "Any" : `Quality ${line.selectedQuality}`}</strong></span></div>
             <span className="bq-ledger-physical-metrics">
-              <span>Required <strong>{formatValue(line.needed)} {line.unitType?.toUpperCase()}</strong></span>
-              <span>Target <strong>{line.selectedQuality === undefined ? "Any" : `Quality ${line.selectedQuality}`}</strong></span>
-              <span>Valid reserved <strong>{formatValue(line.allocated)} {line.unitType?.toUpperCase()}</strong></span>
-              <span>Eligible available <strong>{formatValue(line.available)} {line.unitType?.toUpperCase()}</strong></span>
-              <span className={line.shortfall > 0 ? "is-missing" : "is-covered"}>Remaining <strong>{formatValue(line.shortfall)} {line.unitType?.toUpperCase()}</strong></span>
+              <span><span>Required</span><strong>{formatValue(line.needed)} {line.unitType?.toUpperCase()}</strong></span>
+              <span className={line.shortfall > 0 ? "is-missing" : "is-covered"}><span>Remaining</span><strong>{formatValue(line.shortfall)} {line.unitType?.toUpperCase()}</strong></span>
+              <span><span>Valid reserved</span><strong>{formatValue(line.allocated)} {line.unitType?.toUpperCase()}</strong></span>
+              <span><span>Eligible available</span><strong>{formatValue(line.available)} {line.unitType?.toUpperCase()}</strong></span>
             </span>
           </div>
         )) : <div className="bq-ledger-empty">No active material requirements.</div>}

@@ -27,6 +27,21 @@ export type ResolvedFittingBuildContext = {
   buildId: string;
 };
 
+/** Reads a channel's published dataset identity without changing the active fitting context. */
+export async function readFittingMetaForChannel(
+  channel: FittingChannel,
+  signal?: AbortSignal,
+): Promise<FittingApiMeta> {
+  const response = await fetch(apiUrl(`/api/v1/fitting/meta?channel=${encodeURIComponent(channel)}`), {
+    signal,
+    cache: "default",
+  });
+  if (!response.ok) throw new Error(`Fitting meta unavailable: ${response.status}`);
+  const payload = await response.json() as DetailResponse<unknown>;
+  if (!payload.meta?.buildId) throw new Error("Fitting meta response omitted build identity");
+  return payload.meta;
+}
+
 type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
