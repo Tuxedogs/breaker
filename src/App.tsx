@@ -64,6 +64,11 @@ function RedirectToDashboard() {
   return <Navigate to={`/dashboard${location.search}`} replace />;
 }
 
+function RedirectToCrafting() {
+  const location = useLocation();
+  return <Navigate to={`/industry/crafting${location.search}`} replace />;
+}
+
 function RedirectToDashboardDoctrine() {
   const location = useLocation();
   return <Navigate to={`/dashboard/doctrine${location.search}`} replace />;
@@ -94,7 +99,7 @@ export default function App() {
       <SignatureDockProvider>
         <SignatureDock />
         <Routes>
-        <Route index element={<RedirectToDashboard />} />
+        <Route path="/" element={<RedirectToCrafting />} />
         <Route path="home" element={<RedirectToDashboard />} />
         <Route path="index" element={<RedirectToDashboard />} />
         <Route path="framework" element={<RedirectToDashboard />} />
