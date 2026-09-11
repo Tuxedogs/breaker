@@ -10,6 +10,7 @@ import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 import DashboardPage from "./pages/DashboardPage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
+import { loadBuildQueuePage } from "./pages/logistics/buildQueueRoute";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
 const DoctrineLibraryPage = lazy(() => import("./pages/DoctrineLibraryPage"));
@@ -18,7 +19,7 @@ const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const InventoryFixturePage = lazy(() => import("./pages/logistics/InventoryFixturePage"));
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
-const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
+const BuildQueuePage = lazy(loadBuildQueuePage);
 const BuildQueueFixturePage = lazy(() => import("./pages/logistics/BuildQueueFixturePage"));
 const InventoryAddModalFixturePage = lazy(() => import("./pages/logistics/InventoryAddModalFixturePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
