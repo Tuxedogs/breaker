@@ -196,7 +196,7 @@ test("component card browse identities exactly match the current recipe index", 
       .filter((id): id is string => Boolean(id)),
   );
 
-  assert.equal(browseIds.size, 1_590);
+  assert.equal(browseIds.size, 1_603);
   assert.deepEqual(browseIds, recipeIds);
 });
 
