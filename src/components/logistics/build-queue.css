@@ -9054,12 +9054,17 @@
 
 /* Canonical Build Queue workspace refinements. */
 
+.bq-page .bq-layout {
+  gap: 8px;
+  padding: 8px;
+}
+
 .bq-page .bq-layout--summary-collapsed {
   grid-template-columns: clamp(300px, 19vw, 346px) minmax(0, 1fr) 48px;
 }
 
 .bq-page .bq-center-shell .bq-item {
-  gap: 12px;
+  gap: 8px;
 }
 
 .bq-page .bq-workspace-card,
@@ -9683,7 +9688,6 @@
 .bq-solve-footer-summary strong { color: var(--ui-accent-cyan); }
 
 @media (min-width: 1800px) {
-  .bq-page .bq-layout { gap: 14px; padding: 12px; }
   .bq-page .bq-component-statistics-body { padding: 10px; }
 }
 

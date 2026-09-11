@@ -1452,7 +1452,7 @@ export default function BuildQueueGroup({
         };
         return (
           <article
-            key={item.id}
+            key="selected-workspace"
             className={[
               'bq-item',
               `bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`,
