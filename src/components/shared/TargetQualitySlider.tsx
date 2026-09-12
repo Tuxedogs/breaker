@@ -5,7 +5,7 @@ type TargetQualitySliderProps = {
   label: string;
   tone: string;
   materialName: string;
-  value: number;
+  value: number | undefined;
   min?: number;
   max?: number;
   step?: number;
@@ -38,11 +38,21 @@ export default function TargetQualitySlider({
 }: TargetQualitySliderProps) {
   const lowerBound = Math.min(min, max);
   const upperBound = Math.max(min, max);
-  const normalizedValue = clampToRange(value, lowerBound, upperBound);
+  const hasResolvedValue = Number.isFinite(value);
+  const normalizedValue = clampToRange(value ?? lowerBound, lowerBound, upperBound);
   const valueFromInput = (rawValue: string) => clampToRange(Number(rawValue), lowerBound, upperBound);
   const [isEditing, setIsEditing] = useState(false);
   const [draftValue, setDraftValue] = useState(String(normalizedValue));
 
+  if (!hasResolvedValue) {
+    return (
+      <span className={`bq-target-editor bq-target-editor--${layout}`} data-bq-row-control="true">
+        <span className={`bq-target-quality bq-target-quality--${tone}`} aria-label={`Target quality for ${materialName}: unavailable`}>
+          <span>{label}</span>
+        </span>
+      </span>
+    );
+  }
   const beginEditing = () => {
     setIsEditing(true);
     setDraftValue("");

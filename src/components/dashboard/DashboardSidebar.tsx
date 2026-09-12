@@ -13,6 +13,7 @@ import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.sv
 import BlueprintTrackerIcon from "@/assets/sidebar-icons/12-blueprint-tracker.svg?react";
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 import { useSignatureDock } from "@/lib/useSignatureDock";
+import { loadBuildQueuePage } from "@/pages/logistics/buildQueueRoute";
 
 // ── Inline icon primitives ─────────────────────────────────────────
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -200,6 +201,12 @@ const sections = [
 const STORAGE_KEY = "scintel-sidebar-collapsed";
 const HIGH_CONTRAST_STORAGE_KEY = "scintel-high-contrast";
 
+function preloadRoute(path: string) {
+  if (path === "/logistics/build-queue") {
+    void loadBuildQueuePage();
+  }
+}
+
 // ── Component ──────────────────────────────────────────────────────
 export default function DashboardSidebar() {
   const location = useLocation();
@@ -286,8 +293,13 @@ export default function DashboardSidebar() {
                     key={item.label + item.to}
                     to={item.to}
                     aria-label={collapsed ? item.label : undefined}
-                    onMouseEnter={(e) => show(e, item.label)}
+                    onMouseEnter={(e) => {
+                      preloadRoute(item.to);
+                      show(e, item.label);
+                    }}
                     onMouseLeave={hide}
+                    onFocus={() => preloadRoute(item.to)}
+                    onPointerDown={() => preloadRoute(item.to)}
                     className={[
                       "dash-sidebar-item",
                       active ? "active" : "",

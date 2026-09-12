@@ -38,7 +38,12 @@ export const handlers = [
     const blueprintGuid = new URL(request.url).searchParams.get("blueprintGuid")?.trim().toLowerCase() ?? "";
     return HttpResponse.json({ blueprintGuid, missions: blueprintSourceMissions.get(blueprintGuid) ?? [] });
   }),
-  http.get("*/api/v1/fitting/meta", () => HttpResponse.json({ meta: fittingMeta, data: {} })),
+  http.get("*/api/v1/fitting/meta", ({ request }) => {
+    const channel = new URL(request.url).searchParams.get("channel")?.toUpperCase();
+    return channel === "PTU"
+      ? HttpResponse.json({ error: "Fixture PTU dataset unavailable" }, { status: 404 })
+      : HttpResponse.json({ meta: fittingMeta, data: {} });
+  }),
   http.get("*/api/crafting/component-cards/:id", ({ params }) => {
     const record = componentCards.get(String(params.id).toLowerCase());
     return record ? HttpResponse.json(record) : HttpResponse.json({ error: "Unknown fixture component card" }, { status: 404 });
