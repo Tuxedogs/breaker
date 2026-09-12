@@ -1,3 +1,4 @@
+import { memo } from "react";
 import MaterialIcon from "./MaterialIcon";
 import type { QueueLedgerModel } from "../../lib/logistics/queueLedger";
 import type { Shortage } from "../../lib/logistics/shortages";
@@ -19,7 +20,7 @@ function defaultFormatValue(value: number): string {
 
 const LIST_LIMIT = 6;
 
-export default function QueueLedger({
+const QueueLedger = memo(function QueueLedger({
   ledger,
   physicalCoverage,
   materialNameById = {},
@@ -141,4 +142,6 @@ export default function QueueLedger({
       </section>
     </aside>
   );
-}
+});
+
+export default QueueLedger;
