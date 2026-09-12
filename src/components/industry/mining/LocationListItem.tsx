@@ -7,11 +7,16 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
+import MiningMethodIcon from "./MiningMethodIcon";
 import { miningMethodBadge } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+
+function miningSystemClassName(systemName: string) {
+  return `mining-system-name mining-system-name--${systemName.trim().toLowerCase()}`;
+}
 
 export function LocationListItem({
   rank,
@@ -68,8 +73,11 @@ export function LocationListItem({
   };
 
   const demandBar = totalRelevant > 0 ? coveragePct : null;
-  const methodLabel = methodMixItems.length > 0
-    ? methodMixItems.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
+  const methodLabels = methodMixItems
+    .map((item) => item.method)
+    .filter((method, index, methods) => methods.indexOf(method) === index);
+  const methodLabel = methodLabels.length > 0
+    ? methodLabels.map((method) => miningMethodBadge(method)?.label ?? method).join(", ")
     : entry.locationKind || entry.spawnType || "Unavailable";
 
   return (
@@ -103,10 +111,14 @@ export function LocationListItem({
         </div>
         <div className="mlist-item-sub">
           {!isLagrangeChildGroup && (
-            <span className="mlist-system-text">{entry.systemName}</span>
+            <span className={`mlist-system-text ${miningSystemClassName(entry.systemName)}`}>{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
-          <span className="mlist-method-text">{methodLabel}</span>
+          <span className="mlist-method-text" aria-label={methodLabel} title={methodLabel}>
+            {methodLabels.length > 0
+              ? methodLabels.map((method) => <MiningMethodIcon key={method} method={method} className="mlist-method-icon" />)
+              : methodLabel}
+          </span>
         </div>
       </div>
       {demandBar !== null && (

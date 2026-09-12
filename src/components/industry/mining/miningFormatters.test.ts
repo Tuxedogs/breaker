@@ -60,11 +60,11 @@ test("builds separate occurrence signals and trace material ranges", () => {
     spawnRollProbabilityLabel: "1.35%",
     locationRankLabel: "Not ranked",
     methodAvailabilityLabel: "36.6%",
-    traceMaterialsLabel: "Borase · 2–5% composition · Quality 395–789",
+    traceMaterialsLabel: "Borase · 2–5% composition · 395–789",
     traceMaterials: [{
       name: "Borase",
       compositionRangeLabel: "2–5% composition",
-      qualityRangeLabel: "Quality 395–789",
+      qualityRangeLabel: "395–789",
     }],
   });
 });

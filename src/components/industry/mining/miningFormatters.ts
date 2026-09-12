@@ -297,8 +297,8 @@ function formatTraceMaterials(row: Parameters<typeof getStaticEncounterRankingRo
         ? `${Number(min).toString()}–${Number(max).toString()}% composition`
         : "Composition range unknown",
       qualityRangeLabel: Number.isFinite(qualityFloor) && Number.isFinite(qualityCeiling)
-        ? `Quality ${Math.round(Number(qualityFloor))}–${Math.round(Number(qualityCeiling))}`
-        : "Quality range unknown",
+        ? `${Math.round(Number(qualityFloor))}–${Math.round(Number(qualityCeiling))}`
+        : "Range unknown",
     });
   }
   for (const name of row.traceMaterials ?? row.sources?.flatMap((source) => source.traceMaterials ?? []) ?? []) {
@@ -307,7 +307,7 @@ function formatTraceMaterials(row: Parameters<typeof getStaticEncounterRankingRo
       traces.set(trimmed.toLowerCase(), {
         name: trimmed,
         compositionRangeLabel: "Composition range unknown",
-        qualityRangeLabel: "Quality range unknown",
+        qualityRangeLabel: "Range unknown",
       });
     }
   }

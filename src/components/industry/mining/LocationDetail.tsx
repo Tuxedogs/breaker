@@ -25,12 +25,10 @@ import {
 import type { DemandRow, ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
+import MiningMethodIcon from "./MiningMethodIcon";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
-import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
-import surfaceShipMiningIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
-import vehicleMiningExosuitIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -144,6 +142,10 @@ function qualityProbabilityTooltip(qualityLabel: string) {
   return `Probability that when you find a material, it is over ${qualityThreshold} quality.`;
 }
 
+function miningSystemClassName(systemName: string) {
+  return `mining-system-name mining-system-name--${systemName.trim().toLowerCase()}`;
+}
+
 function MiningSourceBadge({
   status,
   densityLabel,
@@ -169,7 +171,13 @@ function MiningSourceBadge({
 }
 
 function MiningMethodDemandCell({ value }: { value: string | null | undefined }) {
-  return <span className="mdet-method-text">{value || "Unknown"}</span>;
+  const method = value || "Unknown";
+  return (
+    <span className="mdet-method-text" title={method} aria-label={method}>
+      <MiningMethodIcon method={method} className="mdet-method-icon mdet-method-icon--compact" />
+      <span>{method}</span>
+    </span>
+  );
 }
 
 function MiningOccurrenceCell({ row }: { row: DemandRow | ResourceRow }) {
@@ -221,24 +229,6 @@ function MiningMethodCell({ row, value }: { row: DemandRow | ResourceRow; value:
       )}
     </div>
   );
-}
-
-const MINING_METHOD_ICON_ASSETS = {
-  hand: handMiningMultitoolIcon,
-  ship: surfaceShipMiningIcon,
-  vehicle: vehicleMiningExosuitIcon,
-} as const;
-
-function miningMethodIconKey(method: string): keyof typeof MINING_METHOD_ICON_ASSETS {
-  const normalized = method.toLowerCase();
-  if (normalized.includes("hand")) return "hand";
-  if (normalized.includes("vehicle")) return "vehicle";
-  return "ship";
-}
-
-function MiningMethodIcon({ method }: { method: string }) {
-  const methodKey = miningMethodIconKey(method);
-  return <img className={`mdet-method-icon mdet-method-icon--${methodKey}`} src={MINING_METHOD_ICON_ASSETS[methodKey]} alt="" aria-hidden="true" />;
 }
 
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
@@ -501,7 +491,7 @@ export function LocationDetail({
             </div>
             <div className="mdet-meta">
               {!isLagrangeChildGroup && (
-                <span className="mdet-system-text">{entry.systemName} <span>system</span></span>
+                <span className={`mdet-system-text ${miningSystemClassName(entry.systemName)}`}>{entry.systemName} <span>system</span></span>
               )}
               <StantonLagrangeChildrenSummary entry={entry} compact />
             </div>
@@ -512,13 +502,15 @@ export function LocationDetail({
                 const displayMethod = miningMethodBadge(item.method)?.label ?? item.method;
                 return (
                   <div key={`method-mix:${item.method}`} className={`location-stat-chip location-method-stat-chip location-method-stat-chip--${displayMethod.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`}>
-                    <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location."><span className="mdet-method-label"><MiningMethodIcon method={item.method} />{displayMethod}</span></InfoTip></div>
-                    <div
-                      className={`location-stat-value ${methodBiasToneClass(item.share)}`}
-                      title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}
-                    >
-                      {formatPercent(item.share)}
-                    </div>
+                    <InfoTip text="Location-wide mining method distribution at this location.">
+                      <span className="mdet-method-label">
+                        <MiningMethodIcon method={item.method} />
+                        <span>{displayMethod}</span>
+                        <span className={`location-stat-value ${methodBiasToneClass(item.share)}`}>
+                          {formatPercent(item.share)}
+                        </span>
+                      </span>
+                    </InfoTip>
                   </div>
                 );
               })}
@@ -552,9 +544,9 @@ export function LocationDetail({
         </div>
       )}
 
-      {((!hasMultipleDemandMaterials && total > 0) || hasMultipleDemandMaterials || hasSingleDemandMaterial) && (
-        <div className={`location-stat-chip-grid${hasMultipleDemandMaterials ? " location-stat-chip-grid--coverage" : " location-stat-chip-grid--single"}${hasSingleDemandMaterial && selectedDemandRow?.occurrence.mode === "probability" ? " location-stat-chip-grid--probability" : ""}`}>
-          <div className="location-stat-ledger-label">{hasMultipleDemandMaterials ? "Queue Coverage" : "Material Fit"}</div>
+      {hasMultipleDemandMaterials && (
+        <div className="location-stat-chip-grid location-stat-chip-grid--coverage">
+          <div className="location-stat-ledger-label">Queue Coverage</div>
           {!hasMultipleDemandMaterials && total > 0 && (
             <div className="location-stat-chip">
               <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>

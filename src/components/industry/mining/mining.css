@@ -40,6 +40,10 @@
   --sc-amber-border: rgba(251, 191, 36, 0.32);
 
   --sc-red: #fb7185;
+
+  --mining-system-stanton: #15cdab;
+  --mining-system-nyx: #0accf9;
+  --mining-system-pyro: #f9420a;
 }
 
 .mine-page {
@@ -1920,6 +1924,10 @@
   color: var(--mine-text);
 }
 
+.mine-page .mining-system-name--stanton { color: var(--mining-system-stanton); }
+.mine-page .mining-system-name--nyx { color: var(--mining-system-nyx); }
+.mine-page .mining-system-name--pyro { color: var(--mining-system-pyro); }
+
 .mine-page--v2 .mining-material-index-head,
 .mine-page--v2 .mlist-route-strategy-head,
 .mine-page--v2 .location-stat-ledger-label {
@@ -2033,7 +2041,7 @@
     white-space: nowrap;
   }
   .mine-page--v2 .mining-filter-chip--material:hover { background: rgba(130, 160, 187, 0.11); color: #d1deea; }
-  .mine-page--v2 .mining-filter-chip--material.is-active { background: linear-gradient(90deg, rgba(50, 163, 214, 0.3), rgba(50, 163, 214, 0.08)); color: #e3f7ff; font-weight: 700; }
+  .mine-page--v2 .mining-filter-chip--material.is-active { border-color: rgba(17, 112, 214, 0.44); background: rgba(22, 138, 223, 0.09); color: #6ab0da; font-weight: 700; box-shadow: inset 2px 0 #2e70b6e0; }
   .mine-page--v2 .mining-filter-chip--material.is-active::before { position: absolute; inset: 2px auto 2px 0; width: 2px; background: var(--mine-cyan); content: ""; }
 
   .mine-page--v2 .mlist-browser-section { display: flex; flex: 1; min-height: 0; flex-direction: column; border-top: 1px solid var(--mine-border); }
@@ -2082,8 +2090,8 @@
   .mine-page--v2 .mlist-item-name { display: block; overflow: hidden; color: #e3edf5; font-size: 12px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
   .mine-page--v2 .mlist-item-sub { display: flex; min-width: 0; gap: 5px; margin-top: 3px; overflow: hidden; font-size: var(--app-text-meta); white-space: nowrap; }
   .mine-page--v2 .mlist-system-text { color: var(--mine-amber); }
-  .mine-page--v2 .mlist-method-text { overflow: hidden; color: var(--mine-muted); text-overflow: ellipsis; }
-  .mine-page--v2 .mlist-method-text::before { margin-right: 5px; color: #566a7d; content: "•"; }
+  .mine-page--v2 .mlist-method-text { display: inline-flex; align-items: center; gap: 4px; overflow: hidden; color: var(--mine-muted); text-overflow: ellipsis; }
+  .mine-page--v2 .mlist-method-icon { display: block; width: 15px; height: 12px; flex: 0 0 auto; object-fit: contain; }
   .mine-page--v2 .mlist-item-coverage { min-width: 0; }
   .mine-page--v2 .mlist-bar-label { display: block; margin-bottom: 4px; color: var(--mine-muted); font-size: var(--app-text-meta); text-align: right; white-space: nowrap; }
   .mine-page--v2 .mlist-bar-label strong { color: #d7e6f1; }
@@ -2112,16 +2120,18 @@
   .mine-page--v2 .mdet-name { margin-top: 4px; color: #edf6fc; font-size: 20px; font-weight: 700; line-height: 1.1; }
   .mine-page--v2 .mdet-meta { margin-top: 6px; color: var(--mine-amber); font-size: 12px; }
   .mine-page--v2 .mdet-system-text { color: var(--mine-amber); }
+  .mine-page--v2 .mdet-system-text.mining-system-name--stanton { color: var(--mining-system-stanton); }
+  .mine-page--v2 .mdet-system-text.mining-system-name--nyx { color: var(--mining-system-nyx); }
+  .mine-page--v2 .mdet-system-text.mining-system-name--pyro { color: var(--mining-system-pyro); }
   .mine-page.mine-page--v2 .location-method-stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: stretch; gap: 0; max-width: none; margin: 0; }
   .mine-page--v2 .location-stat-label { color: var(--mine-muted); font-size: var(--app-text-label); letter-spacing: 0.07em; text-transform: uppercase; }
   .mine-page--v2 .location-stat-value { margin-top: 5px; color: #dfedf7; font-size: 17px; font-weight: 700; }
   .mine-page--v2 .mdet-method-label { display: inline-flex; align-items: center; gap: 5px; color: #aebdca; font-size: var(--app-text-label); }
-  .mine-page--v2 .mdet-method-icon { display: block; width: 28px; height: 20px; flex: 0 0 auto; object-fit: contain; }
+  .mine-page--v2 .mdet-method-icon { display: block; width: 60px; height: 54px; flex: 0 0 auto; object-fit: contain; }
+  .mine-page--v2 .mdet-method-icon--compact { width: 18px; height: 14px; }
 
   .mine-page--v2 .location-stat-chip-grid { display: grid; align-items: center; gap: 0; min-height: 48px; padding: 0 13px; border: 1px solid var(--mine-border); border-radius: 6px; background: rgba(10, 21, 32, 0.9); }
   .mine-page--v2 .location-stat-chip-grid--coverage { grid-template-columns: 132px 82px 82px minmax(170px, 1fr); }
-  .mine-page--v2 .location-stat-chip-grid--single { grid-template-columns: 132px repeat(6, minmax(0, 1fr)); min-height: 56px; }
-  .mine-page--v2 .location-stat-chip-grid--single.location-stat-chip-grid--probability { grid-template-columns: 132px repeat(7, minmax(0, 1fr)); }
   .mine-page--v2 .location-stat-ledger-label { padding-right: 12px; }
   .mine-page--v2 .location-stat-chip-grid .location-stat-chip { min-width: 0; padding: 0 12px; border: 0; border-left: 1px solid var(--mine-border); background: transparent; }
   .mine-page--v2 .location-stat-chip-grid .location-stat-value { margin-top: 2px; font-size: 13px; }
@@ -2316,11 +2326,7 @@
     grid-column: span 2;
   }
 
-  .mine-page.mine-page--v2 .mining-filter-chip--material.is-active {
-    background: rgba(56, 189, 248, 0.075);
-    color: rgba(179, 236, 255, 0.98);
-    box-shadow: inset 2px 0 rgba(56, 189, 248, 0.82);
-  }
+  .mine-page.mine-page--v2 .mining-filter-chip--material.is-active { border-color: rgba(17, 112, 214, 0.44); background: rgba(22, 138, 223, 0.09); color: #6ab0da; box-shadow: inset 2px 0 #2e70b6e0; }
 
   .mine-page.mine-page--v2 .mining-filter-chip--material.is-active::before {
     display: none;
@@ -2536,7 +2542,8 @@
   }
 
   .mine-page.mine-page--v2 .location-method-stat-chip .location-stat-value {
-    margin-top: 3px;
+    margin-top: 0;
+    margin-left: 2px;
     font-size: 17px;
   }
 
@@ -3113,12 +3120,7 @@
   color: var(--mine-intel-copy);
 }
 
-.mine-page.mine-page--v2 .mining-filter-chip--material.is-active {
-  border-color: rgba(77, 184, 176, 0.44);
-  background: rgba(77, 184, 176, 0.1);
-  color: #bcece8;
-  box-shadow: inset 2px 0 var(--mine-intel-teal);
-}
+.mine-page.mine-page--v2 .mining-filter-chip--material.is-active { border-color: rgba(17, 112, 214, 0.44); background: rgba(22, 138, 223, 0.09); color: #6ab0da; box-shadow: inset 2px 0 #2e70b6e0; }
 
 .mine-page.mine-page--v2 .mining-location-panel {
   display: flex;
@@ -3307,14 +3309,18 @@
   color: var(--mine-intel-amber);
 }
 
+.mine-page.mine-page--v2 .mining-location-panel .mlist-system-text.mining-system-name--stanton { color: var(--mining-system-stanton); }
+.mine-page.mine-page--v2 .mining-location-panel .mlist-system-text.mining-system-name--nyx { color: var(--mining-system-nyx); }
+.mine-page.mine-page--v2 .mining-location-panel .mlist-system-text.mining-system-name--pyro { color: var(--mining-system-pyro); }
+
 .mine-page.mine-page--v2 .mining-location-panel .mlist-item-coverage {
   grid-column: 4;
 }
 
 .mine-page.mine-page--v2 .mining-location-panel .mloc-bookmark-btn {
   grid-column: 5;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
 }
 
 .mine-page.mine-page--v2 .mining-detail-column {
@@ -3751,11 +3757,36 @@
    at every breakpoint rather than relying on the desktop-only method styling. */
 .mine-page.mine-page--v2 .mdet-method-icon {
   display: block;
-  width: 28px;
-  height: 20px;
+  width: 60px;
+  height: 54px;
   flex: 0 0 auto;
   object-fit: contain;
 }
+
+.mine-page.mine-page--v2 .mdet-method-icon--compact { width: 18px; height: 14px; }
+
+.mine-page.mine-page--v2 .location-stat-chip.location-method-stat-chip { justify-self: center; }
+
+.mine-page.mine-page--v2 .mdet-material-cell { padding: 8px; }
+
+.mine-page.mine-page--v2 .mdet-mat-demand .mdet-method-text { display: inline-flex; align-items: center; gap: 6px; }
+
+.mine-page.mine-page--v2 .mloc-bookmark-btn {
+  width: 20px;
+  height: 20px;
+}
+
+.mine-page.mine-page--v2 .mloc-bookmark-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 150ms ease, fill 150ms ease;
+}
+
+.mine-page.mine-page--v2 .mloc-bookmark-btn.is-active .mining-bookmark-icon__path {
+  fill: currentColor;
+}
+
+.mine-page.mine-page--v2 .mloc-bookmark-btn.is-active svg { transform: scale(1.12); }
 
 .mine-page.mine-page--v2 .mdet-method-label {
   display: inline-flex;

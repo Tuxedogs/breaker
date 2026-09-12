@@ -10,7 +10,7 @@ export default function MiningBookmarkIcon({ className = "" }: { className?: str
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M7 4.75h10v14.5l-5-3.35-5 3.35V4.75Z" />
+      <path className="mining-bookmark-icon__path" d="M7 4.75h10v14.5l-5-3.35-5 3.35V4.75Z" />
     </svg>
   );
 }
