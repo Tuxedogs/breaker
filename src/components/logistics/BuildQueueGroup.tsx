@@ -44,9 +44,7 @@ import {
 } from '../../lib/logistics/buildQueueAllocationSolver';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
-import { apiUrl } from '../../lib/apiUrl';
 import { loadBlueprintSourceMissions } from '../../lib/craftingBlueprintSourcesApi';
-import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
@@ -164,7 +162,7 @@ function useIsMobileTouchLayout() {
 
 // ─── Quantization ────────────────────────────────────────────────────────────
 
-import { CRAFTING_REFERENCE_API_URLS } from '../../lib/craftingReferenceApi';
+import { getMaterialQualityQuantizationFromApi, readMaterialQualityQuantization } from '../../lib/craftingReferenceApi';
 
 type BQMaterialQuantization = {
   materialKey?: string;
@@ -187,26 +185,17 @@ function useBQQuantization() {
 
   useEffect(() => {
     let cancelled = false;
-    const url = apiUrl(CRAFTING_REFERENCE_API_URLS.materialQualityQuantization);
-    fetch(url)
-      .then(async (r) => {
-        const data = await parseJsonResponse<BQMaterialQuantization[]>(r, {
-          label: 'build queue material quantization',
-          url,
-        });
-        if (!r.ok) throw new Error(`${CRAFTING_REFERENCE_API_URLS.materialQualityQuantization} ${r.status}`);
-        return data;
-      })
+    const cached = readMaterialQualityQuantization();
+    const apply = (data: BQMaterialQuantization[]) => {
+      if (cancelled) return;
+      const map = new Map<string, BQMaterialQuantization>();
+      for (const item of Array.isArray(data) ? data : []) for (const key of [item.materialKey, item.materialName, item.materialId]) { const k = normalizeBQKey(key); if (k) map.set(k, item); }
+      setByKey(map);
+    };
+    if (cached) { apply(cached); return () => { cancelled = true; }; }
+    getMaterialQualityQuantizationFromApi()
       .then((data) => {
-        if (cancelled) return;
-        const map = new Map<string, BQMaterialQuantization>();
-        for (const item of Array.isArray(data) ? data : []) {
-          for (const key of [item.materialKey, item.materialName, item.materialId]) {
-            const k = normalizeBQKey(key);
-            if (k) map.set(k, item);
-          }
-        }
-        setByKey(map);
+        apply(data);
       })
       .catch((err) => {
         if (import.meta.env.DEV) console.warn('[quality] failed to load material quality quantization', err);
@@ -1238,7 +1227,7 @@ export default function BuildQueueGroup({
             : 0;
           const selectedQuality = qualityBands
             ? clampQualityForBands(input.selectedQuality ?? getBandEffectiveQuality(qualityBands, savedBandIndex), qualityBands)
-            : (input.selectedQuality ?? 0);
+            : input.selectedQuality;
           const recipeTargetQuality = recipeDefaultInput?.selectedQuality !== undefined
             ? clampTargetQuality(recipeDefaultInput.selectedQuality)
             : recipeDefaultInput && qualityBands
@@ -1452,7 +1441,7 @@ export default function BuildQueueGroup({
         };
         return (
           <article
-            key={item.id}
+            key="selected-workspace"
             className={[
               'bq-item',
               `bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`,
@@ -1579,7 +1568,10 @@ export default function BuildQueueGroup({
                     activeDrawer?.type === 'reserve' &&
                     activeDrawer.requirementKey === group.groupKey;
                   const qualityRequirement = group.requirements[0];
-                  const targetEditorQuality = clampTargetQuality(group.targetQuality ?? group.selectedQuality ?? 500);
+                  const unresolvedTargetQuality = group.targetQuality ?? group.selectedQuality;
+                  const targetEditorQuality = Number.isFinite(unresolvedTargetQuality)
+                    ? clampTargetQuality(unresolvedTargetQuality as number)
+                    : undefined;
                   const targetEditorBands = qualityRequirement.qualityBands ?? FALLBACK_QUALITY_BANDS;
                   const shortfallAmount = isCompletedCraft
                     ? 0
@@ -1594,6 +1586,7 @@ export default function BuildQueueGroup({
                   const highestAvailableQualityTone = getAverageQualityTone(group.highestAvailableQuality);
                   const highestAvailableBelowTarget =
                     !isCompletedCraft &&
+                    targetEditorQuality !== undefined &&
                     group.highestAvailableQuality !== undefined &&
                     Number.isFinite(group.highestAvailableQuality) &&
                     group.highestAvailableQuality < targetEditorQuality;
@@ -1643,7 +1636,7 @@ export default function BuildQueueGroup({
                             value={targetEditorQuality}
                             layout={inventoryEnabled ? "input" : "stacked"}
                             markers={inventoryEnabled ? [] : targetEditorBands.map((_, bandIndex) => getBandEffectiveQuality(targetEditorBands, bandIndex))}
-                            disabled={isCompletedCraft}
+                            disabled={isCompletedCraft || targetEditorQuality === undefined}
                             onChange={(value) => updateTargetQuality(
                               item,
                               qualityRequirement.input,

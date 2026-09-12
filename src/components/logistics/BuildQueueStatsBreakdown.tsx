@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { fetchComponentCardById } from "@/lib/componentCardIndexApi";
+import { fetchComponentCardById, readComponentCardById } from "@/lib/componentCardIndexApi";
 import type { ComponentRecipe } from "@/components/industry/crafting/utils/craftingTypes";
-import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
+import { getCraftingItemByBlueprintGuid, readCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import { buildCraftStatViewModel, type CraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
 import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
@@ -51,11 +51,13 @@ const BuildQueueStatsContext = createContext<BuildQueueStatsContextValue | null>
 
 function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueueStatsContextValue {
   const normalizedBlueprintId = blueprintId?.trim() || null;
+  const cachedRecipe = normalizedBlueprintId ? readCraftingItemByBlueprintGuid(normalizedBlueprintId) : null;
+  const cachedCard = normalizedBlueprintId ? readComponentCardById(normalizedBlueprintId) : null;
   const [bridge, setBridge] = useState<BridgeState>(() => ({
     blueprintId: normalizedBlueprintId,
-    card: null,
-    recipe: null,
-    status: normalizedBlueprintId ? "loading" : "ready",
+    card: cachedCard,
+    recipe: cachedRecipe ?? null,
+    status: normalizedBlueprintId && (!cachedRecipe || !cachedCard) ? "loading" : "ready",
   }));
 
   useEffect(() => {
@@ -68,8 +70,15 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): BuildQueu
       return () => { cancelled = true; };
     }
 
+    const preparedRecipe = readCraftingItemByBlueprintGuid(normalizedBlueprintId);
+    const preparedCard = readComponentCardById(normalizedBlueprintId);
+    if (preparedRecipe && preparedCard) {
+      queueMicrotask(() => { if (!cancelled) setBridge({ blueprintId: normalizedBlueprintId, card: preparedCard, recipe: preparedRecipe, status: "ready" }); });
+      return () => { cancelled = true; };
+    }
+
     queueMicrotask(() => {
-      if (!cancelled) setBridge({ blueprintId: normalizedBlueprintId, card: null, recipe: null, status: "loading" });
+      if (!cancelled) setBridge({ blueprintId: normalizedBlueprintId, card: preparedCard, recipe: preparedRecipe ?? null, status: "loading" });
     });
 
     Promise.all([

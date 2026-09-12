@@ -1637,4 +1637,28 @@ test.describe("Build Queue stats fixture", () => {
     expect(compactGeometry.outcomeTop).toBeGreaterThanOrEqual(compactGeometry.allocationBottom - 1);
     expect(failures).toEqual([]);
   });
+
+  test("keeps the selected workspace cards mounted when switching queue items", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await page.setViewportSize({ width: 1560, height: 1008 });
+    await page.goto(BUILD_QUEUE_STATS_FIXTURE_PATH, { waitUntil: "domcontentloaded" });
+
+    const workspace = page.locator(".bq-center-shell .bq-item");
+    await expect(workspace).toHaveAttribute("data-bq-item-id", FIXTURE_ITEM_IDS.fr66);
+    await workspace.evaluate((node) => {
+      (window as Window & { selectedWorkspace?: Element }).selectedWorkspace = node;
+    });
+
+    await selectFixtureItem(page, FIXTURE_ITEM_IDS.ad5b, "AD5B Ballistic Gatling");
+
+    await expect(workspace).toHaveAttribute("data-bq-item-id", FIXTURE_ITEM_IDS.ad5b);
+    expect(await workspace.evaluate((node) => (
+      node === (window as Window & { selectedWorkspace?: Element }).selectedWorkspace
+    ))).toBe(true);
+    await page.screenshot({
+      path: path.join(buildQueueArtifactRoot, "build-queue-stable-workspace-switch.png"),
+      fullPage: true,
+    });
+    expect(failures).toEqual([]);
+  });
 });
