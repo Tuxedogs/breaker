@@ -31,6 +31,7 @@ type ComponentCardsBrowseResponse = {
 };
 
 let componentCardIndexPromise: Promise<ComponentCardIndex> | null = null;
+const componentCardsById = new Map<string, ComponentCardIndexRecord>();
 
 async function fetchJson<T>(url: string, label: string): Promise<T> {
   const response = await fetch(apiUrl(url));
@@ -72,6 +73,7 @@ export async function getComponentCardIndexFromApi(): Promise<ComponentCardIndex
         );
       }
 
+      records.forEach((record) => componentCardsById.set(record.id.trim().toLowerCase(), record));
       return {
         schemaVersion: index.schemaVersion ?? 1,
         generatedAt: index.sourceGeneratedAt ?? index.generatedAt ?? new Date().toISOString(),
@@ -97,6 +99,8 @@ export async function fetchComponentCardById(id: string): Promise<ComponentCardI
   if (!normalizedId) {
     throw new Error("Component card id is required.");
   }
+  const cached = componentCardsById.get(normalizedId);
+  if (cached) return cached;
 
   const response = await fetch(apiUrl(`${COMPONENT_CARD_BY_ID_URL}/${encodeURIComponent(normalizedId)}`));
   const data = await parseJsonResponse<ComponentCardIndexRecord>(response, {
@@ -109,7 +113,17 @@ export async function fetchComponentCardById(id: string): Promise<ComponentCardI
       : `Component card not found: ${response.status}`;
     throw new Error(message);
   }
+  componentCardsById.set(normalizedId, data);
   return data;
+}
+
+export function readComponentCardById(id: string): ComponentCardIndexRecord | null {
+  return componentCardsById.get(id.trim().toLowerCase()) ?? null;
+}
+
+export async function prepareComponentCards(ids: string[]): Promise<void> {
+  const missing = ids.some((id) => !componentCardsById.has(id.trim().toLowerCase()));
+  if (missing) await getComponentCardIndexFromApi();
 }
 
 export async function resolveComponentCardById(
@@ -141,4 +155,5 @@ export async function getComponentCardIndex(): Promise<ComponentCardIndex> {
 
 export function clearComponentCardIndexCache(): void {
   componentCardIndexPromise = null;
+  componentCardsById.clear();
 }

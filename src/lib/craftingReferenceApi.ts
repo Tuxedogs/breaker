@@ -10,6 +10,8 @@ const CRAFTED_PROPERTIES_URL = "/api/crafting/reference/crafted-properties";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/reference/quality-quantization";
 const MATERIAL_QUALITY_QUANTIZATION_URL = "/api/crafting/reference/material-quality-quantization";
 const MATERIAL_IDENTITY_URL = "/api/crafting/reference/material-identity";
+let materialQualityQuantizationPromise: Promise<MaterialQualityQuantizationRecord[]> | null = null;
+let materialQualityQuantization: MaterialQualityQuantizationRecord[] | null = null;
 
 async function fetchJsonArray<T>(url: string, label: string): Promise<T[]> {
   const response = await fetch(apiUrl(url));
@@ -55,10 +57,21 @@ export type MaterialQualityQuantizationRecord = {
 };
 
 export function getMaterialQualityQuantizationFromApi(): Promise<MaterialQualityQuantizationRecord[]> {
-  return fetchJsonArray<MaterialQualityQuantizationRecord>(
+  materialQualityQuantizationPromise ??= fetchJsonArray<MaterialQualityQuantizationRecord>(
     MATERIAL_QUALITY_QUANTIZATION_URL,
     "material quality quantization",
-  );
+  ).then((records) => {
+    materialQualityQuantization = records;
+    return records;
+  }).catch((error) => {
+    materialQualityQuantizationPromise = null;
+    throw error;
+  });
+  return materialQualityQuantizationPromise;
+}
+
+export function readMaterialQualityQuantization(): MaterialQualityQuantizationRecord[] | null {
+  return materialQualityQuantization;
 }
 
 export type MaterialIdentityIndex = {

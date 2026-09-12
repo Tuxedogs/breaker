@@ -158,6 +158,12 @@ let craftedPropertiesPromise: Promise<CraftedPropertyRecord[]> | null = null;
 let qualityQuantizationPromise: Promise<QualityQuantizationRecord[]> | null = null;
 let craftingItemsPromise: Promise<ComponentRecipe[]> | null = null;
 const craftingItemPromisesByGuid = new Map<string, Promise<ComponentRecipe | null>>();
+const craftingItemsByGuid = new Map<string, ComponentRecipe | null>();
+
+/** Synchronous read of the same cache populated by recipe loading and batch prefetch. */
+export function readCraftingItemByBlueprintGuid(guid: string): ComponentRecipe | null | undefined {
+  return craftingItemsByGuid.get(guid.trim().toLowerCase());
+}
 
 function toStringOrFallback(value: unknown, fallback = "Unknown"): string {
   if (typeof value === "string" && value.trim()) return value.trim();
@@ -466,7 +472,9 @@ export async function getCraftingItemByBlueprintGuid(
   const request = (async () => {
     try {
       const shard = await getCraftingRecipeShardFromApi(normalizedGuid);
-      return normalizeRecipeShard(shard);
+      const recipe = normalizeRecipeShard(shard);
+      craftingItemsByGuid.set(normalizedGuid, recipe);
+      return recipe;
     } catch (error) {
       if (error instanceof Error && /:\s*404$/.test(error.message)) {
         return null;
@@ -501,7 +509,9 @@ export async function getCraftingItemsByBlueprintGuids(
       recipes.map((recipe) => [recipe.blueprint_id.toLowerCase(), recipe]),
     );
     for (const guid of normalizedGuids) {
-      craftingItemPromisesByGuid.set(guid, Promise.resolve(recipesById.get(guid) ?? null));
+      const recipe = recipesById.get(guid) ?? null;
+      craftingItemsByGuid.set(guid, recipe);
+      craftingItemPromisesByGuid.set(guid, Promise.resolve(recipe));
     }
     return normalizedGuids.flatMap((guid) => {
       const recipe = recipesById.get(guid);
@@ -552,4 +562,5 @@ export function clearCraftingDataCache(): void {
   qualityQuantizationPromise = null;
   craftingItemsPromise = null;
   craftingItemPromisesByGuid.clear();
+  craftingItemsByGuid.clear();
 }

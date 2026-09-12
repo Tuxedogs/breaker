@@ -8789,7 +8789,6 @@
 }
 
 .bq-component-statistics-content { animation: bq-stat-arrival 160ms ease-out; }
-.bq-page .bq-item--target-workspace { animation: bq-selected-craft-arrival 160ms ease-out; }
 
 @container bq-statistics (min-width: 641px) and (max-width: 1249px) {
   .bq-page .bq-component-statistics .bq-stat-unmodified-column:has(> :nth-child(6):last-child) {
@@ -8805,13 +8804,6 @@
 
 @keyframes bq-stat-shimmer { to { background-position: -200% 0; } }
 @keyframes bq-stat-arrival { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes bq-selected-craft-arrival { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .bq-stat-loading-shell span,
-  .bq-component-statistics-content,
-  .bq-page .bq-item--target-workspace { animation: none; }
-}
 
 .bq-page .bq-stat-unmodified-column {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

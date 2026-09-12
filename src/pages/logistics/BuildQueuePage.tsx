@@ -24,6 +24,8 @@ import {
 import { getCraftingItemsByBlueprintGuids } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
 import { readFittingMetaForChannel } from "../../lib/fitting/fittingApi";
+import { getMaterialQualityQuantizationFromApi } from "../../lib/craftingReferenceApi";
+import { prepareComponentCards } from "../../lib/componentCardIndexApi";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
@@ -299,6 +301,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       return () => { cancelled = true; };
     }
 
+    void getMaterialQualityQuantizationFromApi().catch(() => undefined);
+    void prepareComponentCards(blueprintIds).catch(() => undefined);
     getCraftingItemsByBlueprintGuids(blueprintIds).then((items) => {
       if (cancelled) return;
       const next: Record<string, string> = {};
