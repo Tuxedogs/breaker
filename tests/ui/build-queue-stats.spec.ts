@@ -14,6 +14,7 @@ const buildQueueArtifactRoot = process.env.BQ_UI_ARTIFACT_ROOT
 const cq7ScreenshotDir = path.join(buildQueueArtifactRoot, "bq-component-stats-cq7");
 const sharedStatsScreenshotDir = path.join(buildQueueArtifactRoot, "bq-component-stats-shared");
 const craftingSliderScreenshotDir = path.join(buildQueueArtifactRoot, "crafting-target-slider");
+const selectionPerformanceScreenshotDir = path.join(buildQueueArtifactRoot, "build-queue-selection-performance");
 const CRAFTING_TARGET_SLIDER_FIXTURE_PATH = "/industry/crafting/__fixture/target-slider";
 
 const fixtureItems = [
@@ -79,6 +80,33 @@ async function selectQueue(page: Page, queueName: string) {
 }
 
 test.describe("Build Queue stats fixture", () => {
+  test("updates the selected craft in the mounted detail workspace", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await page.setViewportSize({ width: 2560, height: 1440 });
+    await mkdir(selectionPerformanceScreenshotDir, { recursive: true });
+    await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?target=1`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+
+    const detail = page.locator(".bq-center-shell > .bq-category");
+    await detail.evaluate((element) => {
+      (element as HTMLElement & { selectionRegressionMarker?: string }).selectionRegressionMarker = "mounted";
+    });
+
+    const surfaceEffects = await detail.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { animationName: style.animationName, opacity: style.opacity, transform: style.transform };
+    });
+    expect(surfaceEffects).toEqual({ animationName: "none", opacity: "1", transform: "none" });
+
+    await page.locator(".bq-craft-card").filter({ hasText: "FR-66" }).first().click();
+    await expect(page.locator(".bq-item-name")).toHaveText("FR-66");
+
+    await expect(detail).toHaveJSProperty("selectionRegressionMarker", "mounted");
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+    await page.screenshot({ path: path.join(selectionPerformanceScreenshotDir, "selected-fr66-2560x1440.png"), fullPage: true });
+    expect(failures).toEqual([]);
+  });
+
   test("keeps desktop typography and statistics stable across transition widths", async ({ page }) => {
     const failures = installFailureGuards(page);
     const samples = [];

@@ -28,6 +28,9 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
+import surfaceShipMiningIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
+import vehicleMiningExosuitIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -220,15 +223,22 @@ function MiningMethodCell({ row, value }: { row: DemandRow | ResourceRow; value:
   );
 }
 
-function MiningMethodIcon({ method }: { method: string }) {
+const MINING_METHOD_ICON_ASSETS = {
+  hand: handMiningMultitoolIcon,
+  ship: surfaceShipMiningIcon,
+  vehicle: vehicleMiningExosuitIcon,
+} as const;
+
+function miningMethodIconKey(method: string): keyof typeof MINING_METHOD_ICON_ASSETS {
   const normalized = method.toLowerCase();
-  if (normalized.includes("vehicle")) {
-    return <svg className="mdet-method-icon mdet-method-icon--vehicle" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h16l-2-5H8l-4 5Z" /><path d="M6 14v3m12-3v3" /><circle cx="7" cy="18" r="1.5" /><circle cx="17" cy="18" r="1.5" /></svg>;
-  }
-  if (normalized.includes("hand")) {
-    return <svg className="mdet-method-icon mdet-method-icon--hand" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4 20 9.5 9 20.5 3.5 15 14.5 4Z" /><path d="m9 9 6 6" /></svg>;
-  }
-  return <svg className="mdet-method-icon mdet-method-icon--ship" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 14 8-9 8 9-8-2-8 2Z" /><path d="M12 12v7M8 19h8" /></svg>;
+  if (normalized.includes("hand")) return "hand";
+  if (normalized.includes("vehicle")) return "vehicle";
+  return "ship";
+}
+
+function MiningMethodIcon({ method }: { method: string }) {
+  const methodKey = miningMethodIconKey(method);
+  return <img className={`mdet-method-icon mdet-method-icon--${methodKey}`} src={MINING_METHOD_ICON_ASSETS[methodKey]} alt="" aria-hidden="true" />;
 }
 
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {

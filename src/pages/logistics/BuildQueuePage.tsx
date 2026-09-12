@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent as ReactDragEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
@@ -96,6 +96,9 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       }
       : { live: { status: "loading" }, ptu: { status: "loading" } }
   ));
+  const toggleSummaryCollapsed = useCallback(() => {
+    setSummaryCollapsed((value) => !value);
+  }, []);
   const fixturePersistenceKey = useMemo(() => {
     if (!isFixture || typeof window === "undefined") return null;
     const key = new URLSearchParams(window.location.search).get("persist");
@@ -280,8 +283,16 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
       ))
     : storeMoveBuildQueueItem;
 
-  const queueLedger = getQueueLedgerModel({ buildQueue: activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId });
-  const physicalCoverage = computePhysicalAvailabilityCoverage(inventoryEntries, activeBuildQueueItems, recipeInputsByRecipeId);
+  // Selecting a craft changes presentation only. Keep these queue-wide derived
+  // models stable so selection does not repeat their inventory traversal.
+  const queueLedger = useMemo(
+    () => getQueueLedgerModel({ buildQueue: activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId }),
+    [activeBuildQueueItems, inventoryEntries, materials, recipeInputsByRecipeId],
+  );
+  const physicalCoverage = useMemo(
+    () => computePhysicalAvailabilityCoverage(inventoryEntries, activeBuildQueueItems, recipeInputsByRecipeId),
+    [activeBuildQueueItems, inventoryEntries, recipeInputsByRecipeId],
+  );
   const materialNameById = useMemo(() => Object.fromEntries(materials.map((material) => [material.id, material.name])), [materials]);
   const freshnessBlockReason = isFixture
     ? FIXTURE_READ_ONLY_MESSAGE
@@ -778,7 +789,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
         <section className="bq-center-col" aria-label="Selected craft workspace">
           {selectedRow ? (
             <div className="bq-center-shell">
-            <BuildQueueGroup
+              <BuildQueueGroup
               category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
               itemTypeLabel={getItemTypeLabel(selectedRow.item)}
               items={[selectedRow.item]}              recipes={recipes}
@@ -801,7 +812,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               iconMode={iconMode}
               inventoryEnabled={inventoryEnabled}
               onInventoryEnabledChange={setInventoryEnabled}
-            />
+              />
             </div>
           ) : (
             <div className="bq-empty-state bq-empty-state--center">Select a craft from the queue to begin allocation.</div>
@@ -815,7 +826,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
           formatValue={formatSummaryNumber}
           collapsed={summaryCollapsed}
           mobile={isMobileQueueLayout}
-          onToggleCollapse={() => setSummaryCollapsed((value) => !value)}
+          onToggleCollapse={toggleSummaryCollapsed}
         />
       </div>
     </div>

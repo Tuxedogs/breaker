@@ -10323,7 +10323,8 @@
   --bq-target-cyan: #56c9f4;
   --bq-target-text: #f1f8ff;
   --bq-target-muted: #8ea4b8;
-  gap: 10px;
+  /* Match the operational card rhythm used by Mining and Crafting. */
+  gap: 12px;
 }
 
 .bq-page .bq-item--target-workspace > .bq-workspace-card,
@@ -10619,7 +10620,7 @@
 .bq-page .bq-primary-workspace-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.85fr) minmax(320px, 1fr);
-  gap: 10px;
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -11322,17 +11323,16 @@
 
 /* Queue rail polish remains page-local and preserves interaction geometry. */
 .bq-page .bq-craft-card {
-  min-height: 60px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  /* Keep the rail geometry fixed while selection changes. Previously the
+     outgoing card shrank as the incoming card grew, which reflowed every row. */
+  min-height: 72px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   border-color: rgba(83, 126, 151, 0.2);
   background: rgba(7, 20, 31, 0.76);
 }
 
 .bq-page .bq-craft-card.is-selected {
-  min-height: 72px;
-  padding-top: 9px;
-  padding-bottom: 9px;
   border-color: rgba(78, 197, 240, 0.62);
   background: linear-gradient(90deg, rgba(18, 68, 91, 0.56), rgba(8, 26, 39, 0.88) 58%);
   box-shadow: inset 3px 0 0 #55ccef, inset 0 0 0 1px rgba(85, 204, 239, 0.12);

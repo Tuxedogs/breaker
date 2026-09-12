@@ -2116,9 +2116,7 @@
   .mine-page--v2 .location-stat-label { color: var(--mine-muted); font-size: var(--app-text-label); letter-spacing: 0.07em; text-transform: uppercase; }
   .mine-page--v2 .location-stat-value { margin-top: 5px; color: #dfedf7; font-size: 17px; font-weight: 700; }
   .mine-page--v2 .mdet-method-label { display: inline-flex; align-items: center; gap: 5px; color: #aebdca; font-size: var(--app-text-label); }
-  .mine-page--v2 .mdet-method-icon { width: 20px; height: 20px; fill: none; stroke: #d9f4ff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-  .mine-page--v2 .mdet-method-icon--hand { stroke: var(--mine-green); }
-  .mine-page--v2 .mdet-method-icon--vehicle { stroke: var(--mine-amber); }
+  .mine-page--v2 .mdet-method-icon { display: block; width: 28px; height: 20px; flex: 0 0 auto; object-fit: contain; }
 
   .mine-page--v2 .location-stat-chip-grid { display: grid; align-items: center; gap: 0; min-height: 48px; padding: 0 13px; border: 1px solid var(--mine-border); border-radius: 6px; background: rgba(10, 21, 32, 0.9); }
   .mine-page--v2 .location-stat-chip-grid--coverage { grid-template-columns: 132px 82px 82px minmax(170px, 1fr); }
@@ -3747,4 +3745,20 @@
 
 @media (max-width: 900px) {
   .mine-page--v2 .mining-material-index-head { display: flex; justify-content: space-between; margin: 6px 0; }
+}
+
+/* The supplied raster method art has no intrinsic UI dimensions, so constrain it
+   at every breakpoint rather than relying on the desktop-only method styling. */
+.mine-page.mine-page--v2 .mdet-method-icon {
+  display: block;
+  width: 28px;
+  height: 20px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.mine-page.mine-page--v2 .mdet-method-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
