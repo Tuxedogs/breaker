@@ -13,6 +13,18 @@ async function expectNoDocumentOverflow(page: Page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
+async function expectActionsClearOfNavigation(page: Page) {
+  const actionBox = await page.locator(".craft-detail-actions").boundingBox();
+  const navigationBox = await page.locator(".dash-mobile-nav").boundingBox();
+  const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
+  expect(actionBox).not.toBeNull();
+  expect(navigationBox).not.toBeNull();
+  expect(fixtureBox).not.toBeNull();
+  if (!actionBox || !navigationBox || !fixtureBox) return;
+  expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(navigationBox.y + 1);
+  expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(fixtureBox.y + 1);
+}
+
 test("matches the approved phone browse, filter, material, art, and detail flow", async ({ page }) => {
   await mkdir(screenshotDir, { recursive: true });
 
@@ -76,22 +88,28 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     );
     await expect(page.getByRole("button", { name: /Save Atlas/ })).toBeVisible();
     await expect(page.locator(".craft-summary-queue-btn")).toBeVisible();
-    await expect(page.locator(".craft-detail-material-row").first()).toBeAttached();
-    await expect(page.locator(".detail-stat-groups--scannable")).toBeAttached();
-    await expect(page.locator(".craft-detail-sources-section")).toBeAttached();
-
-    const mobileOrder = await page.evaluate(() => {
-      const materials = document.querySelector(".craft-detail-crafting")?.getBoundingClientRect().top ?? 0;
-      const stats = document.querySelector(".craft-detail-summary-section")?.getBoundingClientRect().top ?? 0;
-      return { materials, stats };
-    });
-    expect(mobileOrder.materials).toBeLessThan(mobileOrder.stats);
+    await expectActionsClearOfNavigation(page);
+    const detailTabs = page.getByRole("tablist", { name: "Component detail sections" });
+    await expect(detailTabs.getByRole("tab", { name: "Overview" })).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator(".craft-detail-mobile-overview")).toBeVisible();
     await expectNoDocumentOverflow(page);
-    await page.screenshot({ path: path.join(screenshotDir, `detail-atlas-${viewport.name}.png`) });
+    await page.screenshot({ path: path.join(screenshotDir, `detail-overview-${viewport.name}.png`) });
+
+    await detailTabs.getByRole("tab", { name: "Materials" }).click();
+    await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, `detail-materials-${viewport.name}.png`) });
+
+    await detailTabs.getByRole("tab", { name: "Statistics" }).click();
+    await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, `detail-statistics-${viewport.name}.png`) });
 
     if (viewport.width === 393) {
-      await page.locator(".craft-detail-sources-section").scrollIntoViewIfNeeded();
-      await page.screenshot({ path: path.join(screenshotDir, "detail-sources-393x852.png") });
+      await detailTabs.getByRole("tab", { name: "Sources" }).click();
+      await expect(page.locator(".craft-detail-title")).toBeInViewport();
+      await expect(page.locator(".craft-detail-sources-section")).toBeVisible();
+      await page.screenshot({ path: path.join(screenshotDir, "detail-sources-refined-393x852.png") });
     }
   }
 });
@@ -109,5 +127,13 @@ test("keeps the table presentation at tablet and desktop widths", async ({ page 
     await expect(page.locator(".crb2-mobile-results").first()).toBeHidden();
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `stable-${viewport.name}.png`) });
+
+    await page.goto("/industry/crafting/17b29a33-88fe-484f-bb9b-fbf780273ff5", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".craft-detail-hero")).toBeVisible();
+    await expect(page.locator(".craft-detail-mobile-tabs")).toBeHidden();
+    await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
+    await expect(page.locator(".craft-detail-summary-section")).toBeVisible();
+    await expectNoDocumentOverflow(page);
+    await page.screenshot({ path: path.join(screenshotDir, `stable-detail-${viewport.name}.png`) });
   }
 });
