@@ -17,6 +17,7 @@ import {
   parseRecipeBrowserFilterSet,
 } from "../utils/recipeBrowserFilters";
 import { buildRecipeBrowserMaterialOptions } from "../utils/recipeBrowserMaterialOptions";
+import MobileFilterSheet from "../../../shared/MobileFilterSheet";
 
 type FilterOption = {
   value: string;
@@ -161,6 +162,7 @@ export default function CraftingFilterBar({
     [componentCardFacets?.materials, records],
   );
   const [materialOpen, setMaterialOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [materialQuery, setMaterialQuery] = useState("");
   const [activeMaterialIndex, setActiveMaterialIndex] = useState(0);
   const materialRootRef = useRef<HTMLDivElement>(null);
@@ -220,14 +222,14 @@ export default function CraftingFilterBar({
   const fpsUtilityAvailable = records.some(
     (record) => record.kind === "fps" && record.type === "utility",
   );
-  const activeCount = vehicleFilters.size
+  const filterCount = vehicleFilters.size
     + fpsFilters.size
     + sizeFilters.size
     + gradeFilters.size
     + classFilters.size
     + materialFilters.size
-    + (savedOnly ? 1 : 0)
-    + (search ? 1 : 0);
+    + (savedOnly ? 1 : 0);
+  const activeCount = filterCount + (search ? 1 : 0);
 
   const clearFilters = () => applySearchParams(() => new URLSearchParams());
 
@@ -263,6 +265,16 @@ export default function CraftingFilterBar({
             Clear all
           </button>
         ) : null}
+        <button
+          type="button"
+          className={`crb2-mobile-filter-trigger${filterCount ? " is-active" : ""}`}
+          aria-expanded={mobileFiltersOpen}
+          onClick={() => setMobileFiltersOpen(true)}
+        >
+          <span aria-hidden="true">▽</span>
+          Filters
+          {filterCount ? <strong>{filterCount}</strong> : null}
+        </button>
       </div>
 
       <div className="crb2-filter-viewport" aria-label="Recipe browser filters">
@@ -383,6 +395,79 @@ export default function CraftingFilterBar({
           ))}
         </div>
       </div>
+
+      <MobileFilterSheet
+        open={mobileFiltersOpen}
+        title="Recipe filters"
+        onClose={() => setMobileFiltersOpen(false)}
+        footer={(
+          <>
+            <button type="button" className="crb2-mobile-clear" disabled={!filterCount} onClick={clearFilters}>
+              Clear filters
+            </button>
+            <button type="button" className="crb2-mobile-apply" onClick={() => setMobileFiltersOpen(false)}>
+              Show {resultCount.toLocaleString()} results
+            </button>
+          </>
+        )}
+      >
+        <div className="crb2-mobile-filter-groups">
+          <section>
+            <h3>Category</h3>
+            <div className="crb2-mobile-filter-chips">
+              {VEHICLE_CATEGORY_OPTIONS.map((option) => (
+                <FilterChip
+                  key={`vehicle:${option.value}`}
+                  option={option}
+                  active={defaultVehicleWeapon ? option.value === "weaponGun" : vehicleFilters.has(option.value)}
+                  onClick={() => setValues("v", vehicleFilters, option.value)}
+                />
+              ))}
+              {FPS_CATEGORY_OPTIONS.map((option) => (
+                <FilterChip
+                  key={`fps:${option.value}`}
+                  option={{ ...option, unavailable: option.value === "__utility__" && !fpsUtilityAvailable }}
+                  active={fpsFilters.has(option.value)}
+                  onClick={() => setValues("f", fpsFilters, option.value)}
+                />
+              ))}
+            </div>
+          </section>
+          <section>
+            <h3>Size</h3>
+            <div className="crb2-mobile-filter-chips crb2-mobile-filter-chips--even">
+              {SIZE_OPTIONS.map((option) => <FilterChip key={option.value} option={option} active={sizeFilters.has(option.value)} onClick={() => setValues("sz", sizeFilters, option.value)} />)}
+            </div>
+          </section>
+          <section>
+            <h3>Grade</h3>
+            <div className="crb2-mobile-filter-chips crb2-mobile-filter-chips--even">
+              {GRADE_OPTIONS.map((option) => <FilterChip key={option.value} option={option} active={gradeFilters.has(option.value)} onClick={() => setValues("gr", gradeFilters, option.value)} />)}
+            </div>
+          </section>
+          <section>
+            <h3>Class</h3>
+            <div className="crb2-mobile-filter-chips">
+              {CLASS_OPTIONS.map((option) => <FilterChip key={option.value} option={option} active={classFilters.has(option.value)} onClick={() => setValues("cl", classFilters, option.value)} />)}
+            </div>
+          </section>
+          <section className="crb2-mobile-materials">
+            <h3>Materials</h3>
+            <label className="crb2-material-search">
+              <span aria-hidden="true">/</span>
+              <input type="search" aria-label="Search materials" value={materialQuery} onChange={(event) => setMaterialQuery(event.target.value)} placeholder="What can I make with this material?" />
+            </label>
+            <div className="crb2-mobile-material-options">
+              {filteredMaterialOptions.map((option) => (
+                <button key={option.value} type="button" aria-pressed={materialFilters.has(option.value)} className={`crb2-material-option${materialFilters.has(option.value) ? " crb2-material-option--active" : ""}`} onClick={() => setValues("mt", materialFilters, option.value)}>
+                  <span>{option.label}</span><span>{option.count?.toLocaleString()}</span>
+                </button>
+              ))}
+              {!filteredMaterialOptions.length ? <p className="crb2-material-empty">No materials match that search.</p> : null}
+            </div>
+          </section>
+        </div>
+      </MobileFilterSheet>
     </header>
   );
 }

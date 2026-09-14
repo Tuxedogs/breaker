@@ -5,6 +5,10 @@ export type ComponentImageIdentity = {
   componentId?: string | null;
   blueprintId?: string | null;
   canonicalKey?: string | null;
+  componentName?: string | null;
+  componentType?: string | null;
+  size?: number | string | null;
+  className?: string | null;
 };
 
 type ComponentImageEntry = {
@@ -39,6 +43,29 @@ export const COMPONENT_IMAGE_ENTRIES: readonly ComponentImageEntry[] = [
   { filename: "stealth1cool.png", identifiers: ["5f474dec-75e8-4626-9c0a-f5a48f841f33", "b4e72df7-8386-4a6b-8bd8-de629a830676", "BP_CRAFT_COOL_TYDT_S01_VaporBlock_SCItem"] },
 ] as const;
 
+type RepresentativeComponentArtEntry = {
+  url: string;
+  exactNames: readonly string[];
+  identifiers: readonly string[];
+  componentType: "quantumdrive" | "shield";
+  size: number;
+  className: "civilian" | "competition" | "industrial" | "military" | "stealth";
+};
+
+/** Exact item renders that also provide representative family/size/class art. */
+export const REPRESENTATIVE_COMPONENT_ART: readonly RepresentativeComponentArtEntry[] = [
+  { url: "/assets/fitting/components/representative/quantum-drives/s1/qdrv-acas-competition-s01-lightfire.webp", exactNames: ["LightFire"], identifiers: ["39c89487-3a74-442a-b3a9-b1e26213f0bb", "f3ceefa2-670f-47c5-8c13-a80c8cf93c52"], componentType: "quantumdrive", size: 1, className: "competition" },
+  { url: "/assets/fitting/components/representative/quantum-drives/s1/qdrv-just-industrial-s01-colossus.webp", exactNames: ["Colossus"], identifiers: ["6ba5fce8-fac4-42f3-8606-0185b2823ee2", "e61d58d6-3ffd-4d7b-ad19-64ae9d27efb1"], componentType: "quantumdrive", size: 1, className: "industrial" },
+  { url: "/assets/fitting/components/representative/quantum-drives/s1/qdrv-raco-stealth-s01-spectre.png", exactNames: ["Spectre"], identifiers: ["1f57b7a3-ae43-405f-b9cc-457efb01cbc8", "1f6908a2-80b0-48c1-ad76-d93a6afcbfd7"], componentType: "quantumdrive", size: 1, className: "stealth" },
+  { url: "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp", exactNames: ["Atlas"], identifiers: ["17b29a33-88fe-484f-bb9b-fbf780273ff5", "934ac478-9c87-48d1-8fd3-e5359171983c"], componentType: "quantumdrive", size: 1, className: "civilian" },
+  { url: "/assets/fitting/components/representative/quantum-drives/s1/qdrv-wetk-military-s01-vk00.webp", exactNames: ["VK-00", "VK00"], identifiers: ["33be7f1a-3f75-4627-bb8b-88e6d6b42f4e", "995c2de5-f7e6-4646-83e3-4627ba5a5865"], componentType: "quantumdrive", size: 1, className: "military" },
+  { url: "/assets/fitting/components/representative/shields/s1/hld-basl-industrial-s01-palisade.webp", exactNames: ["Palisade"], identifiers: ["effce782-5e32-4402-b399-28b63eb573a7", "15ebdff2-2724-4fb3-abbf-db20e150da77"], componentType: "shield", size: 1, className: "industrial" },
+  { url: "/assets/fitting/components/representative/shields/s1/shld-asas-stealth-s01-mirage.webp", exactNames: ["Mirage"], identifiers: ["84e8ce98-b46f-4b03-aec2-472a4e93bd97", "94807046-b89e-422d-8bbc-f914b1cbc08d"], componentType: "shield", size: 1, className: "stealth" },
+  { url: "/assets/fitting/components/representative/shields/s1/shld-behr-civilian-s01-7sa.webp", exactNames: ["7SA", "7SA 'Concord'"], identifiers: ["1b604dc8-0828-421d-844d-130c38aaf0d8", "b1e490ef-86d6-466a-afb1-3875028b7a8a"], componentType: "shield", size: 1, className: "civilian" },
+  { url: "/assets/fitting/components/representative/shields/s1/shld-godi-military-s01-fr66.webp", exactNames: ["FR-66", "FR66"], identifiers: ["db3f4c97-8d40-4b36-b397-452dea1594fc", "0baaf20a-460e-4668-84f2-d09f9d31b492", "BP_CRAFT_SHLD_GODI_S01_FR66_SCItem"], componentType: "shield", size: 1, className: "military" },
+  { url: "/assets/fitting/components/representative/shields/s1/shld-yorm-competition-s01-jaghte.webp", exactNames: ["Jaghte"], identifiers: ["08735a40-c8ec-46b0-b84b-4fe7e2c30473", "0eae2a8c-8bc9-4b32-af70-a06e667b0165"], componentType: "shield", size: 1, className: "competition" },
+] as const;
+
 function normalizeIdentifier(value: string | null | undefined): string {
   return value?.trim().toLowerCase() ?? "";
 }
@@ -48,6 +75,16 @@ for (const entry of COMPONENT_IMAGE_ENTRIES) {
   const imageUrl = `${COMPONENT_IMAGE_ROOT}/${entry.filename}`;
   for (const identifier of entry.identifiers) {
     componentImageByIdentifier.set(normalizeIdentifier(identifier), imageUrl);
+  }
+}
+
+const representativeArtByExactName = new Map<string, string>();
+for (const entry of REPRESENTATIVE_COMPONENT_ART) {
+  for (const identifier of entry.identifiers) {
+    componentImageByIdentifier.set(normalizeIdentifier(identifier), entry.url);
+  }
+  for (const name of entry.exactNames) {
+    representativeArtByExactName.set(normalizeIdentifier(name), entry.url);
   }
 }
 
@@ -63,6 +100,19 @@ export function resolveComponentImageUrl(identity: ComponentImageIdentity): stri
     const imageUrl = componentImageByIdentifier.get(normalizeIdentifier(identifier));
     if (imageUrl) return imageUrl;
   }
+
+  const exactNameUrl = representativeArtByExactName.get(normalizeIdentifier(identity.componentName));
+  if (exactNameUrl) return exactNameUrl;
+
+  const componentType = normalizeIdentifier(identity.componentType).replace(/[_\s-]+/g, "");
+  const size = typeof identity.size === "number" ? identity.size : Number(identity.size);
+  const className = normalizeIdentifier(identity.className);
+  const representative = REPRESENTATIVE_COMPONENT_ART.find((entry) => (
+    normalizeIdentifier(entry.componentType).replace(/[_\s-]+/g, "") === componentType
+    && entry.size === size
+    && normalizeIdentifier(entry.className) === className
+  ));
+  if (representative) return representative.url;
 
   return null;
 }
