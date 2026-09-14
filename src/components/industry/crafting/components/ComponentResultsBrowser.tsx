@@ -243,10 +243,11 @@ function RecipeResultsTable({
         <div className="crb2-mobile-card-list">
           {sortedRecords.map((record) => {
             const iconUrl = getComponentCategoryIconUrl(record);
-            const identityMeta = [record.typeLabel, record.size !== null ? `Size ${record.size}` : null]
-              .filter(Boolean)
-              .join(" · ");
-            const classification = [record.grade ? `Grade ${record.grade}` : null, record.class]
+            const classification = [
+              record.size !== null ? `S${record.size}` : null,
+              record.grade ? `Grade ${record.grade}` : null,
+              record.class,
+            ]
               .filter(Boolean)
               .join(" · ");
             const nonFilterMatch = Boolean(
@@ -257,21 +258,19 @@ function RecipeResultsTable({
               <button
                 key={record.id}
                 type="button"
-                className="crb2-mobile-card"
+                className="crb2-mobile-card crafting-catalog-card"
                 data-crafting-record-id={record.id}
                 onClick={() => onOpen(record)}
               >
-                <span className="crb2-mobile-card-art">
+                <span className="crb2-mobile-card-art crafting-component-art">
                   {iconUrl ? <img src={iconUrl} alt="" aria-hidden="true" /> : <span aria-hidden="true" />}
                 </span>
-                <span className="crb2-mobile-card-copy">
-                  <strong>{record.name}</strong>
-                  <span className="crb2-mobile-card-type">{record.typeLabel}</span>
-                  <span>{identityMeta}</span>
-                  {classification ? <small>{classification}</small> : null}
+                <span className="crb2-mobile-card-copy crafting-identity-copy">
+                  <strong className="crafting-item-name">{record.name}</strong>
+                  <span className="crb2-mobile-card-type crafting-family-label">{record.typeLabel}</span>
+                  {classification ? <small className="crafting-meta-line">{classification}</small> : null}
                   {nonFilterMatch ? <small className="crb2-mobile-card-override">Non-Filter Match</small> : null}
                 </span>
-                {record.size !== null ? <span className="crb2-mobile-card-size">S{record.size}</span> : null}
                 <span className="crb2-mobile-card-chevron" aria-hidden="true">›</span>
               </button>
             );

@@ -2490,6 +2490,7 @@ function RecipeDrawer({
     [selectedRecipe],
   );
   const [drawerTab, setDrawerTab] = useState<"overview" | "materials" | "stats">("materials");
+  const [mobileDetailTab, setMobileDetailTab] = useState<"overview" | "materials" | "stats" | "sources">("overview");
   const [expandedDescriptionRecipeId, setExpandedDescriptionRecipeId] = useState<string | null>(null);
   const descriptionExpanded = expandedDescriptionRecipeId === selectedRecipe.blueprint_id;
 
@@ -2499,6 +2500,7 @@ function RecipeDrawer({
 
   useEffect(() => {
     if (presentation === "drawer") setDrawerTab("materials");
+    else setMobileDetailTab("overview");
   }, [presentation, selectedRecipe.blueprint_id]);
 
   const buildDefaultMaterialQualities = useCallback(
@@ -2692,6 +2694,9 @@ function RecipeDrawer({
   );
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
   const heroIconUrl = selectedComponentCard ? getComponentCategoryIconUrl(selectedComponentCard) : null;
+  const heroFamily = selectedComponentCard?.typeLabel
+    ?? selectedRecipe.wiki_type
+    ?? selectedRecipe.component_type;
   const itemDescription = selectedComponentCard?.description
     ? trimItemDescription(selectedComponentCard.description)
     : "";
@@ -2910,13 +2915,13 @@ function RecipeDrawer({
   }
 
   return (
-    <div className="craft-detail-stage craft-detail-shell">
+    <div className="craft-detail-stage craft-detail-shell" data-mobile-tab={mobileDetailTab}>
       <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
         Back to Results
       </Link>
 
-      <header className="craft-detail-hero page-compact-header">
-        <div className="craft-detail-hero-card">
+      <header className="craft-detail-hero page-compact-header crafting-detail-identity">
+        <div className="craft-detail-hero-card crafting-component-art">
           {heroIconUrl ? (
             <img
               src={heroIconUrl}
@@ -2928,9 +2933,10 @@ function RecipeDrawer({
             <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
           )}
         </div>
-        <div className="craft-detail-title-block">
+        <div className="craft-detail-title-block crafting-identity-copy">
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-          <h1 className="craft-detail-title">{displayName}</h1>
+          <h1 className="craft-detail-title crafting-item-name">{displayName}</h1>
+          <div className="craft-detail-mobile-family crafting-family-label">{heroFamily}</div>
           <div className="craft-summary-chips craft-detail-hero-chips">
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
               Quality {formatCompactNumber(finalProductQuality.averageBand)}
@@ -3003,6 +3009,36 @@ function RecipeDrawer({
         </div>
       </header>
 
+      <nav className="craft-detail-mobile-tabs" aria-label="Component detail sections" role="tablist">
+        {(["overview", "materials", "stats", "sources"] as const).map((tabName) => (
+          <button
+            key={tabName}
+            type="button"
+            role="tab"
+            className={mobileDetailTab === tabName ? "is-active" : undefined}
+            aria-selected={mobileDetailTab === tabName}
+            onClick={() => setMobileDetailTab(tabName)}
+          >
+            {tabName === "stats" ? "Statistics" : `${tabName[0].toUpperCase()}${tabName.slice(1)}`}
+          </button>
+        ))}
+      </nav>
+
+      <section className="craft-detail-mobile-overview" aria-label="Component overview">
+        <div className="craft-detail-mobile-overview-facts">
+          <span className={`craft-detail-band-pill ${componentRarityClass}`}>
+            Quality {formatCompactNumber(finalProductQuality.averageBand)}
+          </span>
+          {heroMeta.map((value) => (
+            <span key={value} className="crafting-meta-line">{value}</span>
+          ))}
+          {heroCraftTime && (
+            <span><span>Craft time</span><strong>{heroCraftTime}</strong></span>
+          )}
+        </div>
+        {itemDescription && <p>{itemDescription}</p>}
+      </section>
+
       <div className="craft-detail-workspace craft-detail-grid">
         <ItemSummaryPanel
           recipe={selectedRecipe}
@@ -3014,7 +3050,7 @@ function RecipeDrawer({
           totalModifiers={totalModifiers}
         />
 
-        <aside className="craft-detail-crafting" aria-label="Crafting materials">
+        <aside className={`craft-detail-crafting${detailGraphData ? " has-chart" : ""}`} aria-label="Crafting materials">
         {showVariantSelector && (
           <div className="craft-variant-selector" aria-label="Select variant">
             <div className="craft-variant-selector-label">Select variant</div>
