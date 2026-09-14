@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useLogisticsStore } from "../../stores/logisticsStore";
+import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 
 const items = [
   { to: "/dashboard", label: "Home", icon: "M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10", exact: true, badge: null },
-  { to: "/industry/crafting", label: "Recipes", icon: "M14 4l6 6-9 9H5v-6l9-9zM13 5l6 6", exact: false, badge: null },
-  { to: "/logistics/build-queue", label: "Queue", icon: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01", exact: false, badge: "queue" },
+  { to: "/industry/crafting", label: "Crafting", icon: "M14 4l6 6-9 9H5v-6l9-9zM13 5l6 6", exact: false, badge: null },
   {
     to: "/industry/mining",
     label: "Mining",
@@ -13,8 +13,13 @@ const items = [
     exact: false,
     badge: null,
   },
+  { to: "/fitting", label: "Fitting", icon: "M12 3v18M3 12h18M6 6l12 12M18 6 6 18", exact: false, badge: null },
+  { to: "/logistics/build-queue", label: "Build Queue", icon: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01", exact: false, badge: "queue" },
   { to: "/logistics/inventory", label: "Inventory", icon: "M21 16V8l-9-5-9 5v8l9 5 9-5zM3.5 8.5 12 13l8.5-4.5M12 13v8", exact: false, badge: null },
+  { to: "/industry/blueprint-tracker", label: "Bookmarks", icon: "M6 3h12v18l-6-4-6 4V3", exact: false, badge: null },
 ] as const;
+
+const HIGH_CONTRAST_STORAGE_KEY = "scintel-high-contrast";
 
 function MobileNavIcon({ d }: { d: string | readonly string[] }) {
   const paths = Array.isArray(d) ? d : [d];
@@ -27,6 +32,7 @@ function MobileNavIcon({ d }: { d: string | readonly string[] }) {
 
 export default function MobileIndustryNav() {
   const [open, setOpen] = useState(false);
+  const [highContrast, setHighContrast] = useState(() => document.documentElement.classList.contains("sc-high-contrast"));
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const openQueueItems = useLogisticsStore((store) =>
@@ -69,6 +75,17 @@ export default function MobileIndustryNav() {
       trigger?.focus();
     };
   }, [open]);
+
+  function toggleHighContrast() {
+    const next = !highContrast;
+    setHighContrast(next);
+    document.documentElement.classList.toggle("sc-high-contrast", next);
+    try {
+      localStorage.setItem(HIGH_CONTRAST_STORAGE_KEY, String(next));
+    } catch {
+      // Keep the in-session setting when storage is unavailable.
+    }
+  }
 
   return (
     <>
@@ -116,6 +133,19 @@ export default function MobileIndustryNav() {
                 </NavLink>
               ))}
             </nav>
+            <div className="dash-mobile-menu-secondary" aria-label="Community and settings">
+              <LoginWithDiscordButton className="dash-mobile-menu-community" />
+              <button
+                type="button"
+                className="dash-mobile-menu-item dash-mobile-menu-setting"
+                aria-pressed={highContrast}
+                onClick={toggleHighContrast}
+              >
+                <span className="dash-mobile-menu-icon-wrap"><MobileNavIcon d="M12 15a3 3 0 100-6 3 3 0 000 6zM19 12a7 7 0 01-.1 1.2l2 1.6-2 3.5-2.5-1a8 8 0 01-2.1 1.2L14 21h-4l-.4-2.5a8 8 0 01-2.1-1.2l-2.4 1-2-3.5 2-1.6A7 7 0 015 12a7 7 0 01.1-1.2l-2-1.6 2-3.5 2.4 1a8 8 0 012.1-1.2L10 3h4l.4 2.5a8 8 0 012.1 1.2l2.5-1 2 3.5-2 1.6A7 7 0 0119 12z" /></span>
+                <span>Settings</span>
+                <span className="dash-mobile-menu-setting-state">{highContrast ? "High contrast" : "Standard"}</span>
+              </button>
+            </div>
           </aside>
         </div>
       )}

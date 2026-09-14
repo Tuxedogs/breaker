@@ -35,6 +35,9 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
     const menuTrigger = page.getByRole("button", { name: "Open primary navigation" });
     await expect(menuTrigger).toBeVisible();
+    await expect(page.locator(".dash-mobile-shell-brand")).toHaveText("BREAKER");
+    await expect(page.locator(".dash-mobile-auth-bar")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /Discord account|Sign in with Discord/ })).toHaveCount(0);
     await expect(page.locator(".dash-mobile-nav")).toHaveCount(0);
     await expect(page.locator(".crb2-mobile-card").first()).toBeVisible();
     await expect(page.locator(".crb2-table").first()).toBeHidden();
@@ -46,14 +49,19 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     const navigationDialog = page.getByRole("dialog", { name: "Primary navigation" });
     await expect(navigationDialog).toBeVisible();
     await expect(navigationDialog.getByRole("button", { name: "Close primary navigation" })).toBeFocused();
-    await expect(navigationDialog.getByRole("link")).toHaveCount(5);
+    await expect(navigationDialog.getByRole("link")).toHaveCount(7);
     expect(await navigationDialog.getByRole("link").evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual([
       "/dashboard",
       "/industry/crafting",
-      "/logistics/build-queue",
       "/industry/mining",
+      "/fitting",
+      "/logistics/build-queue",
       "/logistics/inventory",
+      "/industry/blueprint-tracker",
     ]);
+    await expect(navigationDialog.getByRole("link", { name: "Crafting" })).toHaveAttribute("aria-current", "page");
+    await expect(navigationDialog.getByRole("button", { name: /Sign in with Discord|Open Discord account details/ })).toBeVisible();
+    await expect(navigationDialog.getByRole("button", { name: "Settings" })).toBeVisible();
     await expect(navigationDialog.getByText("Thresholds", { exact: true })).toHaveCount(0);
     await expect(navigationDialog.getByText("Doctrine", { exact: true })).toHaveCount(0);
     await expect(navigationDialog.getByText("Component Viewer", { exact: true })).toHaveCount(0);
@@ -61,7 +69,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       await page.screenshot({ path: path.join(screenshotDir, "navigation-menu-open-393x852.png") });
     }
     await page.keyboard.press("Shift+Tab");
-    await expect(navigationDialog.getByRole("link", { name: "Inventory" })).toBeFocused();
+    await expect(navigationDialog.getByRole("button", { name: "Settings" })).toBeFocused();
     await page.keyboard.press("Tab");
     await expect(navigationDialog.getByRole("button", { name: "Close primary navigation" })).toBeFocused();
     await page.keyboard.press("Escape");
@@ -108,7 +116,9 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
     );
     if (viewport.width === 393) {
-      await page.screenshot({ path: path.join(screenshotDir, "representative-art-results-393x852.png") });
+      await atlasCard.focus();
+      await expect(atlasCard).toBeFocused();
+      await page.screenshot({ path: path.join(screenshotDir, "selected-result-card-393x852.png") });
     }
     await atlasCard.click();
     await expect(page).toHaveURL(/\/industry\/crafting\/17b29a33-88fe-484f-bb9b-fbf780273ff5/);

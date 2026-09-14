@@ -7715,10 +7715,13 @@
    reuse them without rebuilding the mobile design. */
 .component-results-browser {
   --crafting-presentation-font: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --crafting-presentation-surface: rgba(9, 26, 39, 0.9);
-  --crafting-presentation-surface-selected: rgba(12, 48, 72, 0.92);
-  --crafting-presentation-border: rgba(109, 166, 199, 0.22);
+  --crafting-presentation-canvas: #071620;
+  --crafting-presentation-surface: #0c2230;
+  --crafting-presentation-surface-selected: #123d56;
+  --crafting-presentation-border: rgba(109, 166, 199, 0.3);
   --crafting-presentation-accent: #25bdf4;
+  --crafting-presentation-text: #eef7fc;
+  --crafting-presentation-meta: #9fb6c8;
 }
 
 .crafting-identity-copy,
@@ -7780,6 +7783,7 @@
     gap: 10px;
     padding: 10px;
     overflow: hidden;
+    background: var(--crafting-presentation-canvas);
   }
 
   .component-results-browser .recipe-browser-command-header {
@@ -7807,7 +7811,7 @@
   }
   .component-results-browser .recipe-browser-command-copy p {
     margin-top: 5px;
-    color: var(--craft-muted, #a9bad0);
+    color: var(--crafting-presentation-meta);
     font-family: var(--crafting-presentation-font);
     font-size: 0;
     white-space: normal;
@@ -7911,21 +7915,27 @@
     border: 1px solid var(--crafting-presentation-border);
     border-radius: 7px;
     background: var(--crafting-presentation-surface);
-    color: var(--craft-text, #edf7ff);
+    color: var(--crafting-presentation-text);
     text-align: left;
     box-shadow: none;
     cursor: pointer;
   }
   .crb2-mobile-card:hover,
-  .crb2-mobile-card:focus-visible { border-color: rgba(103, 210, 255, 0.58); background: var(--craft-surface-selected); outline: 0; }
+  .crb2-mobile-card:focus,
+  .crb2-mobile-card:focus-visible {
+    border-color: rgba(37, 189, 244, 0.9);
+    background: var(--crafting-presentation-surface-selected);
+    box-shadow: inset 3px 0 0 rgba(37, 189, 244, 0.82);
+    outline: 0;
+  }
   .crb2-mobile-card:active { transform: translateY(1px); }
   .crb2-mobile-card-art { display: grid; width: 74px; height: 72px; place-items: center; overflow: visible; }
   .crb2-mobile-card-art img { width: 100%; height: 100%; }
   .crb2-mobile-card-art > span { width: 58px; height: 42px; border: 0; border-radius: 4px; background: var(--ops-surface-deep); }
   .crb2-mobile-card-copy { display: grid; min-width: 0; gap: 3px; align-content: center; }
-  .crb2-mobile-card-copy strong { overflow: hidden; color: var(--craft-text, #edf7ff); font-size: 0.94rem; line-height: 1.08; text-overflow: ellipsis; white-space: nowrap; }
-  .crb2-mobile-card-copy .crb2-mobile-card-type { overflow: hidden; font-size: 0.76rem; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
-  .crb2-mobile-card-copy small { overflow: hidden; font-size: 0.7rem; line-height: 1.2; text-overflow: ellipsis; text-transform: none; white-space: nowrap; }
+  .crb2-mobile-card-copy strong { overflow: hidden; color: var(--crafting-presentation-text); font-size: 0.94rem; line-height: 1.08; text-overflow: ellipsis; white-space: nowrap; }
+  .crb2-mobile-card-copy .crb2-mobile-card-type { overflow: hidden; color: var(--crafting-presentation-accent); font-size: 0.76rem; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; }
+  .crb2-mobile-card-copy small { overflow: hidden; color: var(--crafting-presentation-meta); font-size: 0.7rem; line-height: 1.2; text-overflow: ellipsis; text-transform: none; white-space: nowrap; }
   .crb2-mobile-card-copy .crb2-mobile-card-override { width: max-content; margin-top: 2px; padding: 2px 4px; border: 1px solid rgba(255, 107, 114, 0.38); border-radius: 3px; color: var(--craft-highlight-danger); font-size: 0.62rem; text-transform: uppercase; }
   .crb2-mobile-card-chevron { color: #a9d7eb; font: 300 1.55rem/1 var(--crafting-presentation-font); }
   .crb2-pager { gap: 6px; padding: 8px 0 0; }
