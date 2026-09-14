@@ -658,10 +658,6 @@
   position: relative;
 }
 
-.dash-mobile-auth-bar {
-  display: none;
-}
-
 .dash-mobile-shell-header,
 .dash-mobile-menu-layer {
   display: none;
@@ -3572,66 +3568,6 @@
     width: 42px;
     height: 42px;
   }
-  .dash-mobile-auth-bar {
-    position: absolute;
-    top: calc(env(safe-area-inset-top) + 8px);
-    right: max(10px, env(safe-area-inset-right));
-    z-index: 60;
-    display: flex;
-    width: auto;
-    padding: 0;
-    pointer-events: none;
-  }
-  .dash-mobile-auth-button.discord-btn {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    min-height: 42px;
-    padding: 0;
-    border-radius: 999px;
-    border-color: rgba(88, 101, 242, 0.42);
-    background:
-      linear-gradient(180deg, rgba(32, 37, 72, 0.98), rgba(17, 20, 43, 0.94));
-    box-shadow:
-      0 4px 14px rgba(0, 0, 0, 0.34),
-      0 0 0 1px rgba(88, 101, 242, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    pointer-events: auto;
-    justify-content: center;
-    color: rgba(200, 210, 255, 0.92);
-  }
-  .dash-mobile-auth-button.discord-btn:hover:not(:disabled) {
-    border-color: rgba(88, 101, 242, 0.62);
-    background:
-      linear-gradient(180deg, rgba(42, 48, 92, 0.98), rgba(22, 26, 54, 0.96));
-    color: #fff;
-  }
-  .dash-mobile-auth-button.discord-btn.discord-btn--signed-in {
-    border-color: rgba(74, 222, 128, 0.42);
-    background:
-      linear-gradient(180deg, rgba(12, 40, 28, 0.98), rgba(6, 22, 16, 0.96));
-    box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.42),
-      0 0 14px rgba(74, 222, 128, 0.16),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    color: rgba(187, 247, 208, 0.94);
-  }
-  .dash-mobile-auth-button.discord-btn.discord-btn--signed-in:hover:not(:disabled) {
-    border-color: rgba(74, 222, 128, 0.58);
-    background:
-      linear-gradient(180deg, rgba(16, 52, 36, 0.98), rgba(8, 30, 22, 0.96));
-    color: rgba(220, 252, 231, 0.98);
-  }
-  .dash-mobile-auth-button.discord-btn .discord-btn-avatar {
-    width: 1.35rem;
-    height: 1.35rem;
-    border-color: rgba(74, 222, 128, 0.35);
-    background: rgba(12, 40, 28, 0.42);
-  }
-  .dash-mobile-auth-button.discord-btn svg {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
   .dash-mobile-menu-layer {
     position: fixed;
     inset: 0;
@@ -3655,7 +3591,7 @@
     bottom: 0;
     left: 0;
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
     width: min(82vw, 320px);
     padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
     border-right: 1px solid rgba(109, 166, 199, 0.25);
@@ -3736,6 +3672,39 @@
     line-height: 1;
   }
   .dash-mobile-menu-chevron { color: rgba(143, 193, 220, 0.66); font-size: 1.3rem; font-weight: 300; }
+  .dash-mobile-menu-secondary {
+    display: grid;
+    gap: 6px;
+    padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    border-top: 1px solid rgba(109, 166, 199, 0.16);
+  }
+  .dash-mobile-menu-community.discord-btn {
+    width: 100%;
+    min-height: 46px;
+    border-color: transparent;
+    background: transparent;
+    color: rgba(174, 199, 218, 0.86);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.84rem;
+  }
+  .dash-mobile-menu-community.discord-btn:hover:not(:disabled) {
+    border-color: rgba(109, 166, 199, 0.2);
+    background: rgba(37, 189, 244, 0.055);
+    color: #e8f7ff;
+  }
+  .dash-mobile-menu-setting {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+  .dash-mobile-menu-setting-state {
+    color: rgba(143, 193, 220, 0.66);
+    font-size: 0.66rem;
+    text-align: right;
+  }
   .dash-content {
     padding-bottom: env(safe-area-inset-bottom);
   }
