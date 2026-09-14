@@ -2571,6 +2571,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           open={mobileFiltersOpen}
           title="Inventory filters"
           onClose={() => setMobileFiltersOpen(false)}
+          desktopContent
           footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setLocationFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
         >
 

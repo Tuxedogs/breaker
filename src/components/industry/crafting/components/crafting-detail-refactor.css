@@ -1035,3 +1035,13 @@
 .craft-detail-shell .craft-detail-effect-row:hover {
   background: var(--craft-surface-hover, var(--ops-surface-hover));
 }
+
+@media (max-width: 760px) {
+  .craft-detail-shell .craft-detail-hero {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .craft-detail-shell .craft-detail-title-block {
+    padding-left: 8px;
+  }
+}

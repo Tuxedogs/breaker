@@ -505,6 +505,7 @@ export default function MiningModule() {
               open={mobileFiltersOpen}
               title="Mining filters"
               onClose={() => setMobileFiltersOpen(false)}
+              desktopContent
               footer={<><button type="button" className="mining-sheet-clear" onClick={clearAllFilters}>Clear filters</button><button type="button" className="mining-sheet-apply" onClick={() => setMobileFiltersOpen(false)}>Show {searchFilteredLocations.length} locations</button></>}
             >
             <aside className="mining-filter-panel" aria-label="Mining filters and constraints">

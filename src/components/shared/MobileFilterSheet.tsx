@@ -6,18 +6,17 @@ type MobileFilterSheetProps = {
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
-  className?: string;
+  /** Keep filter content in its existing desktop layout while using the sheet on compact viewports. */
+  desktopContent?: boolean;
 };
 
-/** A responsive wrapper: ordinary in-flow content on desktop and an accessible
- * bottom sheet at the shared compact breakpoint. */
 export default function MobileFilterSheet({
   open,
   title,
   onClose,
   children,
   footer,
-  className = "",
+  desktopContent = false,
 }: MobileFilterSheetProps) {
   const titleId = useId();
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -43,16 +42,20 @@ export default function MobileFilterSheet({
       }
     };
     document.addEventListener("keydown", onKeyDown);
+    document.body.classList.add("mobile-filter-sheet-open");
     const frame = requestAnimationFrame(() => sheetRef.current?.querySelector<HTMLElement>("button, input, select")?.focus());
     return () => {
       cancelAnimationFrame(frame);
       document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("mobile-filter-sheet-open");
       previousFocus?.focus();
     };
   }, [onClose, open]);
 
+  if (!open && !desktopContent) return null;
+
   return (
-    <div className={`mobile-filter-shell${open ? " is-open" : ""}${className ? ` ${className}` : ""}`}>
+    <div className={`mobile-filter-shell${open ? " is-open" : ""}${desktopContent ? " mobile-filter-shell--desktop-content" : ""}`}>
       <button type="button" className="mobile-filter-backdrop" aria-label={`Close ${title}`} onClick={onClose} />
       <div
         ref={sheetRef}
@@ -64,7 +67,7 @@ export default function MobileFilterSheet({
         <header className="mobile-filter-sheet__header">
           <span className="mobile-filter-sheet__handle" aria-hidden="true" />
           <h2 id={titleId}>{title}</h2>
-          <button type="button" onClick={onClose} aria-label={`Close ${title}`}>Close</button>
+          <button type="button" onClick={onClose} aria-label={`Close ${title}`}>×</button>
         </header>
         <div className="mobile-filter-sheet__body">{children}</div>
         {footer ? <footer className="mobile-filter-sheet__footer">{footer}</footer> : null}

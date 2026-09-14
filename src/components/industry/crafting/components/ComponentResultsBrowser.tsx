@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -12,6 +13,7 @@ import {
   compareRecipeBrowserRecords,
   compareRecipeBrowserSearchRecords,
   getRecipeBrowserSearchParam,
+  matchesRecipeBrowserAppliedFilters,
   pickPreferredRecipeBrowserSearchRecord,
 } from "../utils/recipeBrowserFilters";
 import {
@@ -126,6 +128,7 @@ function RecipeResultsTable({
       return compared * direction;
     });
   }, [family.columns, records, sort]);
+  const [searchParams] = useSearchParams();
 
   const toggleSort = (key: string) => {
     setSort((current) => {
@@ -229,6 +232,51 @@ function RecipeResultsTable({
             })}
           </tbody>
         </table>
+      </div>
+      <div className="crb2-mobile-results">
+        <div className="crb2-mobile-results-head">
+          <span>{records.length} components</span>
+          <button type="button" onClick={() => toggleSort("component")}>
+            Sort: Name <span aria-hidden="true">{sort?.key === "component" && sort.direction === "descending" ? "↑" : "↓"}</span>
+          </button>
+        </div>
+        <div className="crb2-mobile-card-list">
+          {sortedRecords.map((record) => {
+            const iconUrl = getComponentCategoryIconUrl(record);
+            const identityMeta = [record.typeLabel, record.size !== null ? `Size ${record.size}` : null]
+              .filter(Boolean)
+              .join(" · ");
+            const classification = [record.grade ? `Grade ${record.grade}` : null, record.class]
+              .filter(Boolean)
+              .join(" · ");
+            const nonFilterMatch = Boolean(
+              getRecipeBrowserSearchParam(searchParams)
+              && !matchesRecipeBrowserAppliedFilters(record, searchParams),
+            );
+            return (
+              <button
+                key={record.id}
+                type="button"
+                className="crb2-mobile-card"
+                data-crafting-record-id={record.id}
+                onClick={() => onOpen(record)}
+              >
+                <span className="crb2-mobile-card-art">
+                  {iconUrl ? <img src={iconUrl} alt="" aria-hidden="true" /> : <span aria-hidden="true" />}
+                </span>
+                <span className="crb2-mobile-card-copy">
+                  <strong>{record.name}</strong>
+                  <span className="crb2-mobile-card-type">{record.typeLabel}</span>
+                  <span>{identityMeta}</span>
+                  {classification ? <small>{classification}</small> : null}
+                  {nonFilterMatch ? <small className="crb2-mobile-card-override">Non-Filter Match</small> : null}
+                </span>
+                {record.size !== null ? <span className="crb2-mobile-card-size">S{record.size}</span> : null}
+                <span className="crb2-mobile-card-chevron" aria-hidden="true">›</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
