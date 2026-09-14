@@ -15,13 +15,10 @@ async function expectNoDocumentOverflow(page: Page) {
 
 async function expectActionsClearOfNavigation(page: Page) {
   const actionBox = await page.locator(".craft-detail-actions").boundingBox();
-  const navigationBox = await page.locator(".dash-mobile-nav").boundingBox();
   const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
   expect(actionBox).not.toBeNull();
-  expect(navigationBox).not.toBeNull();
   expect(fixtureBox).not.toBeNull();
-  if (!actionBox || !navigationBox || !fixtureBox) return;
-  expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(navigationBox.y + 1);
+  if (!actionBox || !fixtureBox) return;
   expect(actionBox.y + actionBox.height).toBeLessThanOrEqual(fixtureBox.y + 1);
 }
 
@@ -36,11 +33,45 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(browserPath, { waitUntil: "domcontentloaded" });
     await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
+    const menuTrigger = page.getByRole("button", { name: "Open primary navigation" });
+    await expect(menuTrigger).toBeVisible();
+    await expect(page.locator(".dash-mobile-nav")).toHaveCount(0);
     await expect(page.locator(".crb2-mobile-card").first()).toBeVisible();
     await expect(page.locator(".crb2-table").first()).toBeHidden();
     await expect(page.getByRole("button", { name: /^Filters/ })).toBeVisible();
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `browse-${viewport.name}.png`) });
+
+    await menuTrigger.click();
+    const navigationDialog = page.getByRole("dialog", { name: "Primary navigation" });
+    await expect(navigationDialog).toBeVisible();
+    await expect(navigationDialog.getByRole("button", { name: "Close primary navigation" })).toBeFocused();
+    await expect(navigationDialog.getByRole("link")).toHaveCount(5);
+    expect(await navigationDialog.getByRole("link").evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual([
+      "/dashboard",
+      "/industry/crafting",
+      "/logistics/build-queue",
+      "/industry/mining",
+      "/logistics/inventory",
+    ]);
+    await expect(navigationDialog.getByText("Thresholds", { exact: true })).toHaveCount(0);
+    await expect(navigationDialog.getByText("Doctrine", { exact: true })).toHaveCount(0);
+    await expect(navigationDialog.getByText("Component Viewer", { exact: true })).toHaveCount(0);
+    if (viewport.width === 393) {
+      await page.screenshot({ path: path.join(screenshotDir, "navigation-menu-open-393x852.png") });
+    }
+    await page.keyboard.press("Shift+Tab");
+    await expect(navigationDialog.getByRole("link", { name: "Inventory" })).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(navigationDialog.getByRole("button", { name: "Close primary navigation" })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(navigationDialog).toBeHidden();
+    await expect(menuTrigger).toBeFocused();
+
+    await menuTrigger.click();
+    await page.mouse.click(viewport.width - 8, Math.round(viewport.height / 2));
+    await expect(navigationDialog).toBeHidden();
+    await expect(menuTrigger).toBeFocused();
 
     const filterTrigger = page.getByRole("button", { name: /^Filters/ });
     await filterTrigger.click();
@@ -109,7 +140,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       await detailTabs.getByRole("tab", { name: "Sources" }).click();
       await expect(page.locator(".craft-detail-title")).toBeInViewport();
       await expect(page.locator(".craft-detail-sources-section")).toBeVisible();
-      await page.screenshot({ path: path.join(screenshotDir, "detail-sources-refined-393x852.png") });
+      await page.screenshot({ path: path.join(screenshotDir, "detail-sources-mobile-nav-393x852.png") });
     }
   }
 });
@@ -123,6 +154,7 @@ test("keeps the table presentation at tablet and desktop widths", async ({ page 
   ]) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto(browserPath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".dash-mobile-shell-header")).toBeHidden();
     await expect(page.locator(".crb2-table").first()).toBeVisible();
     await expect(page.locator(".crb2-mobile-results").first()).toBeHidden();
     await expectNoDocumentOverflow(page);

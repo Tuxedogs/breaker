@@ -8,6 +8,7 @@ export default function DashboardShell() {
     <div className="dash-page">
       <DashboardSidebar />
       <div className="dash-body">
+        <MobileIndustryNav />
         <div className="dash-mobile-auth-bar" aria-label="Account sync">
           <LoginWithDiscordButton className="dash-mobile-auth-button" collapsed />
         </div>
@@ -16,7 +17,6 @@ export default function DashboardShell() {
             <Outlet />
           </div>
         </div>
-        <MobileIndustryNav />
       </div>
     </div>
   );
