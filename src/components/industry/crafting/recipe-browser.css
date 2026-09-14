@@ -7711,4 +7711,19 @@
     white-space: normal;
   }
 }
+ .crb2-mobile-filter-trigger { display: none; }
 
+@media (max-width: 760px) {
+  .crb2-mobile-filter-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 1px solid var(--ops-border-default); border-radius: 5px; background: var(--ops-surface-raised); color: var(--text-secondary); font-weight: 800; }
+  .crb2-mobile-filter-trigger.is-active { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  .crb2-mobile-filter-trigger span { min-width: 18px; padding: 1px 5px; border-radius: 9px; background: rgba(10, 204, 249, .16); }
+  .crb2-toolbar > .mobile-filter-shell .crb2-filter-viewport { display: block; overflow: visible; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-filter-rail { display: flex; flex-wrap: wrap; gap: 7px; width: 100%; overflow: visible; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-material { width: 100%; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-material-trigger { width: 100%; min-height: 44px; justify-content: space-between; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-material-menu { position: static; width: 100%; max-height: 260px; margin-top: 6px; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-filter-divider { display: none; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-filter-label { flex-basis: 100%; margin-top: 7px; }
+  .crb2-toolbar > .mobile-filter-shell .crb2-filter-chip { min-height: 40px; }
+  .crb2-mobile-apply { border: 1px solid rgba(10, 204, 249, .55); border-radius: 5px; background: rgba(10, 204, 249, .14); color: #dffaff; font-weight: 800; }
+}

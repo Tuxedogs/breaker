@@ -17,6 +17,7 @@ import {
   parseRecipeBrowserFilterSet,
 } from "../utils/recipeBrowserFilters";
 import { buildRecipeBrowserMaterialOptions } from "../utils/recipeBrowserMaterialOptions";
+import MobileFilterSheet from "../../../shared/MobileFilterSheet";
 
 type FilterOption = {
   value: string;
@@ -161,6 +162,7 @@ export default function CraftingFilterBar({
     [componentCardFacets?.materials, records],
   );
   const [materialOpen, setMaterialOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [materialQuery, setMaterialQuery] = useState("");
   const [activeMaterialIndex, setActiveMaterialIndex] = useState(0);
   const materialRootRef = useRef<HTMLDivElement>(null);
@@ -263,8 +265,22 @@ export default function CraftingFilterBar({
             Clear all
           </button>
         ) : null}
+        <button
+          type="button"
+          className={`crb2-mobile-filter-trigger${activeCount ? " is-active" : ""}`}
+          aria-expanded={mobileFiltersOpen}
+          onClick={() => setMobileFiltersOpen(true)}
+        >
+          Filters{activeCount ? <span>{activeCount}</span> : null}
+        </button>
       </div>
 
+      <MobileFilterSheet
+        open={mobileFiltersOpen}
+        title="Recipe filters"
+        onClose={() => setMobileFiltersOpen(false)}
+        footer={<><button type="button" className="crb2-clear" disabled={!activeCount} onClick={clearFilters}>Clear filters</button><button type="button" className="crb2-mobile-apply" onClick={() => setMobileFiltersOpen(false)}>Show {resultCount.toLocaleString()} results</button></>}
+      >
       <div className="crb2-filter-viewport" aria-label="Recipe browser filters">
         <div className="crb2-filter-rail">
           <div className="crb2-material" ref={materialRootRef}>
@@ -383,6 +399,7 @@ export default function CraftingFilterBar({
           ))}
         </div>
       </div>
+      </MobileFilterSheet>
     </header>
   );
 }

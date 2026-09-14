@@ -49,7 +49,6 @@ import { loadBlueprintSourceMissions } from '../../lib/craftingBlueprintSourcesA
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
 import {
-  BuildQueueCraftHeaderSummary,
   BuildQueueCraftIdentity,
   BuildQueueCraftOutcome,
   BuildQueueCraftStatistics,
@@ -816,7 +815,7 @@ function BuildQueueReserveHierarchy({
   );
 }
 
-function SolveIcon() {
+function _SolveIcon() {
   return (
     <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="M12 3 9.5 8.5 4 11l5.5 2.5L12 19l2.5-5.5L20 11l-5.5-2.5L12 3Z" />
@@ -824,6 +823,8 @@ function SolveIcon() {
     </svg>
   );
 }
+
+void _SolveIcon;
 
 function getMaterialPlanStatusLabel(status: CraftAllocationSolverPlan['materials'][number]['status']): string {
   switch (status) {
@@ -993,15 +994,6 @@ function CraftAllocationSolverPreview({
 
 // ─── Group ───────────────────────────────────────────────────────────────────
 
-const CATEGORY_LABELS: Record<string, string> = {
-  component: 'Component',
-  weapon: 'Weapon',
-  armor: 'Armor',
-  consumable: 'Consumable',
-  ship_part: 'Ship Part',
-  other: 'Other',
-};
-
 const STALE_REASON_LABELS: Record<string, string> = {
   missingStack: 'missing stack',
   mismatchedMaterial: 'material changed',
@@ -1020,7 +1012,6 @@ interface Props {
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
   strategy: SourceStrategy;
-  onQuantityChange: (id: string, quantity: number) => void;
   onAllowLowerQualityChange: (id: string, allowLowerQuality: boolean) => void;
   onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   onStatusChange: (id: string, status: NonNullable<BuildQueueItem['status']>) => void;
@@ -1040,8 +1031,8 @@ interface Props {
 // ─── Group ───────────────────────────────────────────────────────────────────
 
 export default function BuildQueueGroup({
-  category, itemTypeLabel, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
-  materials, locations, strategy, onQuantityChange,
+  items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
+  materials, locations, strategy,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity,   onClearStaleAllocations,
   onAllocationOwnerHighlightChange,
   onQuickAddInventory,
@@ -1056,7 +1047,8 @@ export default function BuildQueueGroup({
     itemId: string;
     plan: CraftAllocationSolverPlan;
   } | null>(null);
-  const [solverPlanning, setSolverPlanning] = useState(false);
+  const [_solverPlanning, setSolverPlanning] = useState(false);
+  void _solverPlanning;
   const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
   const [reserveSearch, setReserveSearch] = useState('');
   const [reserveEligibleOnly, setReserveEligibleOnly] = useState(true);
@@ -1199,7 +1191,6 @@ export default function BuildQueueGroup({
         const blueprintSources = item.blueprintSources ?? [];
         const allocationSummary = getBuildQueueItemAllocationSummary(item, inputs, inventory);
         const fulfillment = allocationSummary.fulfillment;
-        const readableType = itemTypeLabel ?? CATEGORY_LABELS[category] ?? category;
 
         const recipeDefaultInputs = recipeInputsByRecipeId[item.recipeId] ?? [];
         const materialRequirementRows = inputs.map((input, inputIndex) => {
@@ -1326,20 +1317,6 @@ export default function BuildQueueGroup({
           };
         });
 
-        const normalizeSummaryUnit = (unit: RecipeInputTemplate['unitType'] | undefined) => (
-          String(unit ?? 'unit').toLowerCase() === 'scu' || String(unit ?? '').toLowerCase() === 'cscu'
-            ? 'scu' as const
-            : 'unit' as const
-        );
-        const requirementUnits = new Set(materialRequirementRows.map((row) => normalizeSummaryUnit(row.input.unitType)));
-        const summaryUnit = normalizeSummaryUnit(materialRequirementRows[0]?.input.unitType);
-        const totalRequiredAmount = materialRequirementRows.reduce((sum, row) => sum + row.required, 0);
-        const totalAllocatedAmount = materialRequirementRows.reduce((sum, row) => sum + Math.min(row.allocatedAmount, row.required), 0);
-        const materialsAllocatedLabel = requirementUnits.size === 1
-          ? `${formatInventoryQuantity(totalAllocatedAmount, summaryUnit)} / ${formatInventoryQuantity(totalRequiredAmount, summaryUnit)}`
-          : `${materialRequirementRows.filter((row) => row.remainingRequired <= SCU_QUANTITY_EPSILON).length} / ${materialRequirementRows.length} requirements`;
-        const allocationPercentage = allocationSummary.progressPercent ?? 0;
-        const firstInventoryTarget = materialGroups.find((group) => group.needTotal > 0) ?? materialGroups[0];
 
         const craftSolverRequirementContexts = new Map(
           materialRequirementRows.map((row) => {
@@ -1405,12 +1382,12 @@ export default function BuildQueueGroup({
         const allRequirementsComplete = materialRequirementRows.every(
           (row) => row.remainingRequired <= SCU_QUANTITY_EPSILON,
         );
-        const autoReserveDisabled =
+        const _autoReserveDisabled =
           !hasMaterialInputs ||
           isCompletedCraft ||
           allRequirementsComplete;
 
-        const runCraftSolver = () => {
+        const _runCraftSolver = () => {
           setSolverPlanning(true);
           window.requestAnimationFrame(() => {
             const plan = solveBuildQueueCraftAllocation(craftSolverRequirements);
@@ -1418,6 +1395,8 @@ export default function BuildQueueGroup({
             setSolverPlanning(false);
           });
         };
+        void _autoReserveDisabled;
+        void _runCraftSolver;
 
         const applyCraftSolverPlan = () => {
           if (!pendingCraftSolverPlan || pendingCraftSolverPlan.itemId !== item.id) return;
@@ -1470,7 +1449,6 @@ export default function BuildQueueGroup({
 
                 <div className="bq-item-identity">
                   <div className="bq-item-name-block">
-                    <span className="bq-item-cat">{readableType}</span>
                     <h2 className="bq-item-name">{itemName}</h2>
                   </div>
 
@@ -1492,29 +1470,6 @@ export default function BuildQueueGroup({
                 <div className="bq-selected-craft-actions">
                   <button
                     type="button"
-                    className="bq-btn bq-btn--header-action"
-                    disabled={isCompletedCraft || !firstInventoryTarget}
-                    onClick={() => firstInventoryTarget && openQuickAdd(
-                      firstInventoryTarget.material?.id ?? firstInventoryTarget.requirements[0]?.materialKey ?? '',
-                      firstInventoryTarget.displayName,
-                      firstInventoryTarget.material,
-                    )}
-                  >
-                    <PlusIcon />
-                    <span>Inventory</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="bq-btn bq-btn--header-action"
-                    disabled={autoReserveDisabled || solverPlanning || !inventoryEnabled}
-                    aria-label={`Auto reserve inventory for ${itemName}`}
-                    onClick={runCraftSolver}
-                  >
-                    <SolveIcon />
-                    <span>{solverPlanning ? 'Planning…' : 'Reserve Materials'}</span>
-                  </button>
-                  <button
-                    type="button"
                     className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
                     onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
                     aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
@@ -1525,14 +1480,6 @@ export default function BuildQueueGroup({
                 </div>
               </div>
 
-              <footer className="bq-selected-craft-footer">
-                <BuildQueueCraftHeaderSummary materialsLabel={materialsAllocatedLabel} allocationPercentage={allocationPercentage} />
-                <div className="bq-qty" aria-label="Craft quantity">
-                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={isCompletedCraft || item.quantity <= 1} aria-label="Decrease quantity">-</button>
-                  <span className="bq-qty-val">{item.quantity}x</span>
-                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} disabled={isCompletedCraft} aria-label="Increase quantity">+</button>
-                </div>
-              </footer>
             </section>
 
             {/* Primary allocation and outcome workspace */}

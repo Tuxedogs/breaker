@@ -8,6 +8,7 @@ import type {
 } from "../../lib/crafting/craftStatViewModel";
 import {
   CompactCraftStatRow,
+  CraftStatComparisonRow,
   CraftStatSection,
 } from "../shared/CraftStatisticsPresentation";
 import { getStatGroupIconSrc } from "./componentStatGroupIcons";
@@ -138,10 +139,26 @@ function comparisonIsModified(row: CraftStatComparisonRowView): boolean {
     || columnDiffersFromBase(row.allocation, row.baseValue);
 }
 
-function getEndProductColumn(row: CraftStatComparisonRowView): CraftStatComparisonColumnView | null {
-  if (row.allocation.state === "ready") return row.allocation;
-  if (row.target.state === "ready") return row.target;
-  return null;
+function ComparisonValue({ column }: { column: CraftStatComparisonColumnView }) {
+  if (column.state !== "ready") {
+    return <span className="bq-stat-compare-empty">{column.emptyLabel ?? "—"}</span>;
+  }
+  return (
+    <span className={`bq-stat-compare-value ${column.impactClass ?? ""}`.trim()}>
+      {column.value}
+      {column.absoluteDelta ?? column.percentDelta ? (
+        <span className={`bq-stat-compare-delta ${column.impactClass ?? ""}`.trim()}>
+          {column.absoluteDelta ?? column.percentDelta}
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+function benefitDirectionLabel(value: CraftStatComparisonRowView["benefitDirection"]): string {
+  if (value === "higher-is-better") return "Higher is better";
+  if (value === "lower-is-better") return "Lower is better";
+  return "No directional preference";
 }
 
 function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
@@ -170,21 +187,16 @@ function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
             />
           );
         }
-        const endProduct = getEndProductColumn(stat.row);
-        const isModified = endProduct
-          ? columnDiffersFromBase(endProduct, stat.row.baseValue)
-          : false;
         const displayLabel = formatCompactStatLabel(stat.row.label);
         return (
-          <CompactCraftStatRow
+          <CraftStatComparisonRow
             key={stat.row.statId}
-            label={displayLabel.label}
-            labelMetadata={displayLabel.metadata}
-            value={isModified ? endProduct?.value ?? stat.row.baseValue : stat.row.baseValue}
-            baseValue={isModified ? stat.row.baseValue : undefined}
-            delta={isModified ? endProduct?.absoluteDelta ?? endProduct?.percentDelta : undefined}
-            unit={stat.row.unit}
-            valueClassName={isModified ? endProduct?.impactClass : undefined}
+            label={`${displayLabel.label}${displayLabel.metadata ? ` ${displayLabel.metadata}` : ""}`}
+            base={<span className="bq-stat-compare-value">{stat.row.baseValue}</span>}
+            target={<ComparisonValue column={stat.row.target} />}
+            allocation={<ComparisonValue column={stat.row.allocation} />}
+            direction={<span className="bq-stat-direction">{benefitDirectionLabel(stat.row.benefitDirection)}</span>}
+            benefitDirection={stat.row.benefitDirection}
           />
         );
       })}
@@ -205,14 +217,6 @@ const ENGINEERING_GROUP_KEYS = new Set([
   "repair",
   "fireactions",
 ]);
-
-function getAllocationModifiedRows(groups: ConsolidatedStatGroup[]) {
-  return groups.flatMap((group) => group.stats.flatMap((stat) => (
-    stat.kind === "comparison" && columnDiffersFromBase(stat.row.allocation, stat.row.baseValue)
-      ? [stat.row]
-      : []
-  )));
-}
 
 function formatProductQuality(value: number | null | undefined): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return "—";
@@ -237,41 +241,11 @@ export function BuildQueueCraftTargetQualityPanel({ productQuality }: { productQ
   );
 }
 
-export function BuildQueueCraftHeaderSummaryPanel({
-  model,
-  productQuality,
-  materialsLabel,
-  allocationPercentage,
-}: {
-  model: CraftStatViewModel;
-  productQuality: BuildQueueProductQualitySummary;
-  materialsLabel: string;
-  allocationPercentage: number;
-}) {
-  const modifiedCount = model.status === "ready"
-    ? getAllocationModifiedRows(buildConsolidatedGroups(model)).length
-    : 0;
-  return (
-    <div className="bq-selected-summary-strip" aria-label="Selected craft summary">
-      <span><small>Materials</small><strong>{materialsLabel}</strong></span>
-      <span><small>Allocated</small><strong>{Math.max(0, Math.min(100, Math.round(allocationPercentage)))}<span className="bq-selected-summary-unit">%</span></strong></span>
-      <span><small>Predicted Quality</small><strong>{formatProductQuality(productQuality.predicted?.averageBand)}</strong></span>
-      <span><small>Modified Stats</small><strong>{modifiedCount}</strong></span>
-    </div>
-  );
-}
-
 export function BuildQueueCraftOutcomePanel({
-  model,
   productQuality,
 }: {
-  model: CraftStatViewModel;
   productQuality: BuildQueueProductQualitySummary;
 }) {
-  const modifiedRows = model.status === "ready"
-    ? getAllocationModifiedRows(buildConsolidatedGroups(model))
-    : [];
-  const emptyIconSrc = getStatGroupIconSrc("output");
   return (
     <section className="bq-craft-outcome bq-workspace-card" aria-label="Craft outcome">
       <header className="bq-craft-outcome-header">
@@ -290,44 +264,6 @@ export function BuildQueueCraftOutcomePanel({
           <small>Difference</small>
           <strong>{getQualityDifference(productQuality)}</strong>
         </span>
-      </div>
-      <div className="bq-craft-outcome-stats">
-        <div className="bq-craft-outcome-stats-head">
-          <h4>Stat Changes</h4>
-          <span>{modifiedRows.length} modified</span>
-        </div>
-        {model.status === "loading" ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="loading">Loading affected statistics…</p>
-        ) : model.status !== "ready" ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unavailable">Affected statistics unavailable.</p>
-        ) : modifiedRows.length === 0 && !productQuality.predicted ? (
-          <div className="bq-craft-outcome-empty bq-craft-outcome-empty--centered" data-bq-outcome-state="unallocated">
-            {emptyIconSrc ? (
-              <img className="bq-craft-outcome-empty-icon" src={emptyIconSrc} alt="" />
-            ) : null}
-            <strong>No materials allocated</strong>
-            <span>Reserve material to preview the resulting quality and modified statistics.</span>
-          </div>
-        ) : modifiedRows.length === 0 ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unallocated">No modified statistics for the current allocation.</p>
-        ) : (
-          <div className="bq-craft-outcome-stat-list" role="list">
-            {modifiedRows.slice(0, 4).map((row) => (
-              <CompactCraftStatRow
-                key={row.statId}
-                label={formatStatLabel(row.label)}
-                value={row.allocation.value}
-                baseValue={row.baseValue}
-                delta={row.allocation.percentDelta ?? row.allocation.absoluteDelta}
-                unit={row.unit}
-                valueClassName={row.allocation.impactClass}
-              />
-            ))}
-            {modifiedRows.length > 4 ? (
-              <p className="bq-craft-outcome-more">+ {modifiedRows.length - 4} more shown inline below</p>
-            ) : null}
-          </div>
-        )}
       </div>
     </section>
   );

@@ -37,6 +37,7 @@ import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
 import { LocationDetail } from "./LocationDetail";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+import MobileFilterSheet from "../../shared/MobileFilterSheet";
 
 const MIN_VISIBLE_ROUTE_LOCATIONS = 8;
 const SYSTEM_SELECTOR_ORDER = ["Stanton", "Pyro", "Nyx"];
@@ -133,6 +134,7 @@ export default function MiningModule() {
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [buildQueueSelectionActive, setBuildQueueSelectionActive] = useState(initialSidebarState.buildQueueActive);
   const isMobileViewport = useIsMobileMiningViewport();
 
@@ -488,7 +490,23 @@ export default function MiningModule() {
             </div>
           </header>
 
+          <button
+            type="button"
+            className={`mining-mobile-filter-trigger${effectiveMaterialFilterKeys.size || selectedSystemName || buildQueueSelectionActive || planner.filters.showOnlyStarred ? " is-active" : ""}`}
+            aria-expanded={mobileFiltersOpen}
+            onClick={() => setMobileFiltersOpen(true)}
+          >
+            <span>Filters</span>
+            <strong>{effectiveMaterialFilterKeys.size ? `${effectiveMaterialFilterKeys.size} materials` : selectedSystemName ?? miningScopeLabel}</strong>
+          </button>
+
           <div className="mining-shell">
+            <MobileFilterSheet
+              open={mobileFiltersOpen}
+              title="Mining filters"
+              onClose={() => setMobileFiltersOpen(false)}
+              footer={<><button type="button" className="mining-sheet-clear" onClick={clearAllFilters}>Clear filters</button><button type="button" className="mining-sheet-apply" onClick={() => setMobileFiltersOpen(false)}>Show {searchFilteredLocations.length} locations</button></>}
+            >
             <aside className="mining-filter-panel" aria-label="Mining filters and constraints">
               <div className="mining-panel-heading">Filters &amp; constraints</div>
               <div className="mine-browse-section">
@@ -526,6 +544,7 @@ export default function MiningModule() {
                 onClearMaterials={clearSelectedMaterials}
               />
             </aside>
+            </MobileFilterSheet>
 
             <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
               <div className="mlist-header">

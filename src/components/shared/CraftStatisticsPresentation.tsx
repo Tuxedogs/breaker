@@ -139,7 +139,7 @@ export function CraftStatComparisonRow({
           <span className="craft-stat-comparison-slot-content bq-stat-compare-slot-content">{target}</span>
         </span>
         <span className="craft-stat-comparison-slot craft-stat-comparison-slot--allocation bq-stat-compare-slot bq-stat-compare-allocation">
-          <span className="craft-stat-comparison-slot-label bq-stat-compare-slot-label">Allocation</span>
+          <span className="craft-stat-comparison-slot-label bq-stat-compare-slot-label">Allocated</span>
           <span className="craft-stat-comparison-slot-content bq-stat-compare-slot-content">{allocation}</span>
         </span>
       </div>
