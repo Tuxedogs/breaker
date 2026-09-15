@@ -224,6 +224,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
 });
 
 test("uses compact mobile model names without changing the canonical title", async ({ page }) => {
+  await mkdir(screenshotDir, { recursive: true });
   await page.setViewportSize({ width: 393, height: 852 });
   await page.goto("/industry/crafting/ba842720-ad32-4d53-8f56-992bacb1fc45", { waitUntil: "domcontentloaded" });
   const title = page.locator(".craft-detail-title");
@@ -231,6 +232,11 @@ test("uses compact mobile model names without changing the canonical title", asy
   const canonicalTitle = await title.getAttribute("title");
   expect(canonicalTitle).toContain("AD5B Ballistic Gatling");
   await expect(title).toHaveAttribute("aria-label", canonicalTitle ?? "AD5B Ballistic Gatling");
+  await expect(page.locator(".craft-detail-mobile-overview-art img")).toHaveAttribute(
+    "src",
+    "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+  );
+  await page.screenshot({ path: path.join(screenshotDir, "weapon-detail-mobile-393x852.png") });
 });
 
 test("keeps the table presentation at tablet and desktop widths", async ({ page }) => {
@@ -255,5 +261,12 @@ test("keeps the table presentation at tablet and desktop widths", async ({ page 
     await expect(page.locator(".craft-detail-summary-section")).toBeVisible();
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `stable-detail-${viewport.name}.png`) });
+
+    await page.goto("/industry/crafting/ba842720-ad32-4d53-8f56-992bacb1fc45", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".craft-detail-hero-card img")).toHaveAttribute(
+      "src",
+      "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+    );
+    await page.screenshot({ path: path.join(screenshotDir, `weapon-detail-desktop-${viewport.name}.png`) });
   }
 });

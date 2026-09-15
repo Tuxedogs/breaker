@@ -32,6 +32,28 @@ test("resolves exact representative Crafting art before family fallback", () => 
   );
 });
 
+test("resolves the supplied ship weapon renders from existing blueprint identifiers", () => {
+  const cases = [
+    ["BP_CRAFT_BEHR_BallisticGatling_S4", "behr-ballistic-gatling-s4.webp"],
+    ["BP_CRAFT_BEHR_BallisticGatling_S5", "behr-ballistic-gatling-s5.webp"],
+    ["BP_CRAFT_BEHR_BallisticGatling_S6", "behr-ballistic-gatling-s6.webp"],
+    ["BP_CRAFT_BEHR_BallisticCannon_S4", "behr-ballistic-cannon-s4.webp"],
+    ["BP_CRAFT_KBAR_BallisticCannon_S1", "kbar-ballistic-cannon-s1.webp"],
+    ["BP_CRAFT_KBAR_BallisticCannon_S2", "kbar-ballistic-cannon-s2.webp"],
+    ["BP_CRAFT_KBAR_BallisticCannon_S3", "kbar-ballistic-cannon-s3.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S1", "hrst-laser-repeater-s1.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S2", "hrst-laser-repeater-s2.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S3", "hrst-laser-repeater-s3.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S4", "hrst-laser-repeater-s4.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S5", "hrst-laser-repeater-s5.webp"],
+    ["BP_CRAFT_HRST_LaserRepeater_S6", "hrst-laser-repeater-s6.webp"],
+  ] as const;
+
+  for (const [blueprintId, filename] of cases) {
+    assert.equal(resolveComponentImageUrl({ blueprintId }), `/images/component-thumbnails/${filename}`);
+  }
+});
+
 test("falls back to representative art by family, size, and class", () => {
   assert.equal(
     resolveComponentImageUrl({ componentName: "Unrendered Drive", componentType: "quantum_drive", size: "1", className: "military" }),
