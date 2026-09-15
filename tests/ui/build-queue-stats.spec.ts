@@ -1616,7 +1616,7 @@ test.describe("Build Queue stats fixture", () => {
     await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?target=1`, { waitUntil: "domcontentloaded" });
 
     await expect(page.locator(".bq-item-name")).toHaveText("AD5B Ballistic Gatling");
-    await expect(page.locator('.bq-item-visual img[src$="/component-thumbnails/ad5b.png"]')).toBeVisible();
+    await expect(page.locator('.bq-item-visual img[src$="/component-thumbnails/behr-ballistic-gatling-s5.webp"]')).toBeVisible();
     await expect(page.locator(".bq-mat-group")).toHaveCount(3);
     await expect(page.locator(".bq-craft-outcome")).toBeVisible();
     await expect(page.locator(".bq-stat-modified-card")).toHaveCount(0);

@@ -17,9 +17,19 @@ type ComponentImageEntry = {
 };
 
 export const COMPONENT_IMAGE_ENTRIES: readonly ComponentImageEntry[] = [
-  { filename: "ad5b.png", identifiers: ["ba842720-ad32-4d53-8f56-992bacb1fc45", "ad5b", "BP_CRAFT_BEHR_BallisticGatling_S5"] },
-  { filename: "AD4B.png", identifiers: ["e4afc8b4-da61-4efb-af7e-f003d9900d96", "1727fc8f-e31c-4d66-9670-084aadb15955", "BP_CRAFT_BEHR_BallisticGatling_S4"] },
-  { filename: "c788.png", identifiers: ["6635dc5f-dfcd-4b72-9d9d-8d3620820352", "6713db41-8231-4e71-b7a2-74073ddd4b50", "BP_CRAFT_BEHR_BallisticCannon_S4"] },
+  { filename: "behr-ballistic-gatling-s5.webp", identifiers: ["ba842720-ad32-4d53-8f56-992bacb1fc45", "ad5b", "BP_CRAFT_BEHR_BallisticGatling_S5"] },
+  { filename: "behr-ballistic-gatling-s4.webp", identifiers: ["e4afc8b4-da61-4efb-af7e-f003d9900d96", "1727fc8f-e31c-4d66-9670-084aadb15955", "BP_CRAFT_BEHR_BallisticGatling_S4"] },
+  { filename: "behr-ballistic-gatling-s6.webp", identifiers: ["6c46b8e3-81c8-4018-bce2-740b81174a00", "ac3dc178-0b5d-4a73-9ad6-6ce05e9c2620", "BP_CRAFT_BEHR_BallisticGatling_S6"] },
+  { filename: "behr-ballistic-cannon-s4.webp", identifiers: ["6635dc5f-dfcd-4b72-9d9d-8d3620820352", "6713db41-8231-4e71-b7a2-74073ddd4b50", "BP_CRAFT_BEHR_BallisticCannon_S4"] },
+  { filename: "kbar-ballistic-cannon-s1.webp", identifiers: ["85fd75f8-6c6c-4d3f-839f-988ae7660617", "ad0494d5-ca83-4f6a-a4c0-f29b7b221a20", "BP_CRAFT_KBAR_BallisticCannon_S1"] },
+  { filename: "kbar-ballistic-cannon-s2.webp", identifiers: ["02a7f68a-5bdd-4887-a256-20c985a65bda", "b04aff42-d892-4ca9-991e-101c869a7caa", "BP_CRAFT_KBAR_BallisticCannon_S2"] },
+  { filename: "kbar-ballistic-cannon-s3.webp", identifiers: ["f03daac4-28e2-405c-b226-c258151cb9f1", "a8c6afe2-0920-43ca-a62f-01bf6908c93e", "BP_CRAFT_KBAR_BallisticCannon_S3"] },
+  { filename: "hrst-laser-repeater-s1.webp", identifiers: ["ed951ee5-0873-45e8-92b2-586a277f4ba6", "4c5a8d37-1eb2-4395-8c3e-54b8f738639d", "BP_CRAFT_HRST_LaserRepeater_S1"] },
+  { filename: "hrst-laser-repeater-s2.webp", identifiers: ["ea6b4297-83a4-476f-aee0-9d4f87168cf7", "8f166b36-2bb7-4d38-9e3a-464801b40f83", "BP_CRAFT_HRST_LaserRepeater_S2"] },
+  { filename: "hrst-laser-repeater-s3.webp", identifiers: ["c526f686-a3da-48fa-b9c3-d58fb8e31dc5", "626da3a0-dc9c-49bd-ad97-497239675894", "BP_CRAFT_HRST_LaserRepeater_S3"] },
+  { filename: "hrst-laser-repeater-s4.webp", identifiers: ["8d868b78-eccd-4ba5-a4a5-57e2f20bdc35", "44fc600c-7523-4ce7-85a5-d02cd586cb4a", "BP_CRAFT_HRST_LaserRepeater_S4"] },
+  { filename: "hrst-laser-repeater-s5.webp", identifiers: ["2c9b3880-a108-4746-a6cd-7e2b04feee36", "f6cc35f9-96b6-4e58-90d0-9b50d4dc92ee", "BP_CRAFT_HRST_LaserRepeater_S5"] },
+  { filename: "hrst-laser-repeater-s6.webp", identifiers: ["f02c1934-9ebb-413c-9f3e-cbcb262f25de", "668c64ba-05cf-47fb-88af-e815d176c7d5", "BP_CRAFT_HRST_LaserRepeater_S6"] },
   { filename: "cit2cool.png", identifiers: ["59a37716-f4d3-4dcb-a41e-0f2c3064e169", "80f82e57-67d7-464e-a3f1-10770d31440e", "BP_CRAFT_COOL_JSPN_S02_FrostStarEX_SCItem"] },
   { filename: "comp2power.png", identifiers: ["78e0c040-6668-4b43-a29c-4c47051bba8d", "63a75fe7-dd41-41c8-8854-b5ba3b5acf46", "BP_CRAFT_POWR_ACOM_S02_LuxCore_SCItem"] },
   { filename: "cool2comp.png", identifiers: ["67b6c401-1017-4c39-93f6-8305c4c67f69", "479a96c4-0b36-48f3-9ff6-5f4d7645dec3", "BP_CRAFT_COOL_ACOM_S02_AbsoluteZero_SCItem"] },
