@@ -3505,6 +3505,10 @@
 }
 
 @media (max-width: 760px) {
+  body.mobile-navigation-open {
+    overflow: hidden;
+  }
+
   .dash-sidebar { display: none; }
   .dash-page { height: 100dvh; }
   .dash-body {
@@ -3519,8 +3523,7 @@
     min-height: calc(58px + env(safe-area-inset-top));
     align-items: end;
     padding: env(safe-area-inset-top) max(10px, env(safe-area-inset-right)) 8px max(10px, env(safe-area-inset-left));
-    border-bottom: 1px solid rgba(109, 166, 199, 0.11);
-    background: rgba(4, 13, 21, 0.96);
+    background: #071620;
   }
   .dash-mobile-menu-trigger {
     display: grid;

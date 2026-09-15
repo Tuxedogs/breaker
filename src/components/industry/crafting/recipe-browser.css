@@ -7890,8 +7890,10 @@
   .crb2-mobile-clear:disabled { opacity: 0.45; cursor: not-allowed; }
   .crb2-mobile-apply { border-color: rgba(103, 210, 255, 0.58); background: var(--craft-highlight-focus); color: #02101a; }
 
-  .component-browser-body > .crb2-results {
+  .component-browser-body > .crb2-results,
+  .craft-browser-workspace > .crb2-results {
     gap: 8px;
+    overflow-x: hidden;
     overflow-y: auto;
     padding: 0 1px 8px 0;
   }

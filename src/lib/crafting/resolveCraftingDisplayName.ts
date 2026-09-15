@@ -116,3 +116,23 @@ export function resolveCraftingCardTitle(input: ResolveCraftingDisplayNameInput)
   const variantLabel = resolveCraftingVariantLabel(input);
   return formatCraftingDisplayTitle(primaryName, variantLabel);
 }
+
+const MOBILE_MODEL_SUFFIX = /\b(?:ballistic|cannon|gatling|repeater|weapon)\b/i;
+const MOBILE_MODEL_TOKEN = /^(?:\d+-Series|(?=[A-Za-z0-9-]*\d)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*|[A-Z]{3,}(?:-[A-Z0-9]+)*)$/;
+
+/** Presentation-only mobile heading derived from a canonical component name. */
+export function resolveCraftingMobileCompactName(canonicalName: string): string {
+  const normalized = canonicalName.trim().replace(/\s+/g, " ");
+  if (!normalized) return canonicalName;
+
+  const [firstToken, ...remainder] = normalized.split(" ");
+  if (
+    remainder.length > 0
+    && MOBILE_MODEL_TOKEN.test(firstToken)
+    && MOBILE_MODEL_SUFFIX.test(remainder.join(" "))
+  ) {
+    return firstToken;
+  }
+
+  return normalized;
+}

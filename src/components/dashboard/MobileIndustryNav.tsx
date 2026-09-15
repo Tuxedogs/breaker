@@ -42,9 +42,8 @@ export default function MobileIndustryNav() {
   useEffect(() => {
     if (!open) return;
 
-    const previousOverflow = document.body.style.overflow;
     const trigger = triggerRef.current;
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("mobile-navigation-open");
     dialogRef.current?.querySelector<HTMLElement>("button:not([disabled]), a[href]")?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -70,7 +69,7 @@ export default function MobileIndustryNav() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("mobile-navigation-open");
       document.removeEventListener("keydown", handleKeyDown);
       trigger?.focus();
     };
@@ -103,7 +102,7 @@ export default function MobileIndustryNav() {
           <span aria-hidden />
           <span aria-hidden />
         </button>
-        <span className="dash-mobile-shell-brand">BREAKER</span>
+        <span className="dash-mobile-shell-brand">SCINTEL</span>
         <span className="dash-mobile-shell-header-end" aria-hidden />
       </header>
 
