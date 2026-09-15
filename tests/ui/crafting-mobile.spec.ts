@@ -14,7 +14,7 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 async function expectActionsClearOfNavigation(page: Page) {
-  const actionBox = await page.locator(".craft-detail-actions").boundingBox();
+  const actionBox = await page.locator(".craft-detail-mobile-overview-actions:visible, .craft-detail-actions:visible").boundingBox();
   const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
   expect(actionBox).not.toBeNull();
   expect(fixtureBox).not.toBeNull();
@@ -128,11 +128,31 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
     );
     await expect(page.getByRole("button", { name: /Save Atlas/ })).toBeVisible();
-    await expect(page.locator(".craft-summary-queue-btn")).toBeVisible();
+    await expect(page.locator(".craft-summary-queue-btn:visible")).toBeVisible();
     await expectActionsClearOfNavigation(page);
     const detailTabs = page.getByRole("tablist", { name: "Component detail sections" });
     await expect(detailTabs.getByRole("tab", { name: "Overview" })).toHaveAttribute("aria-selected", "true");
     await expect(page.locator(".craft-detail-mobile-overview")).toBeVisible();
+    await expect(page.locator(".craft-detail-hero-card.crafting-component-art")).toBeHidden();
+    const overviewArt = page.locator(".craft-detail-mobile-overview-art img");
+    await expect(overviewArt).toHaveAttribute(
+      "src",
+      "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
+    );
+    expect((await overviewArt.boundingBox())?.width).toBeGreaterThan(180);
+    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Component Type");
+    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Family");
+    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Size");
+    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Grade");
+    await expect(page.locator(".craft-detail-mobile-overview-facts")).toContainText("Class");
+    await expect(page.locator(".craft-detail-mobile-overview-time")).toContainText("Craft Time");
+    const overviewActions = await page.locator(".craft-detail-mobile-overview-actions .craft-summary-action-btn").evaluateAll((buttons) =>
+      buttons.map((button) => {
+        const box = button.getBoundingClientRect();
+        return { top: box.top, bottom: box.bottom };
+      }),
+    );
+    expect(overviewActions[1].top).toBeGreaterThan(overviewActions[0].bottom);
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-overview-${viewport.name}.png`) });
 

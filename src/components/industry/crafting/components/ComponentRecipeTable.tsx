@@ -51,7 +51,7 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
-import { resolveCraftingCardTitle } from "@/lib/crafting/resolveCraftingDisplayName";
+import { resolveCraftingCardTitle, resolveCraftingDisplayName } from "@/lib/crafting/resolveCraftingDisplayName";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
   buildItemSummaryDetailStatRows,
@@ -2636,6 +2636,14 @@ function RecipeDrawer({
     }),
     [fittingDetail, selectedRecipe, selectedComponentCard],
   );
+  const mobileDisplayName = useMemo(
+    () => resolveCraftingDisplayName({
+      fittingDetail,
+      recipe: selectedRecipe,
+      card: selectedComponentCard,
+    }),
+    [fittingDetail, selectedRecipe, selectedComponentCard],
+  );
 
   const totalModifiers = useMemo(
     () => computeTotalModifiersFromQualities(selectedRecipe, selectedMaterialQualities),
@@ -2697,6 +2705,11 @@ function RecipeDrawer({
   const heroFamily = selectedComponentCard?.typeLabel
     ?? selectedRecipe.wiki_type
     ?? selectedRecipe.component_type;
+  const heroComponentType = selectedComponentCard?.type === "quantumdrive"
+    ? "QT"
+    : selectedComponentCard?.typeLabel
+      ?? selectedRecipe.wiki_type
+      ?? selectedRecipe.component_type;
   const itemDescription = selectedComponentCard?.description
     ? trimItemDescription(selectedComponentCard.description)
     : "";
@@ -2935,7 +2948,10 @@ function RecipeDrawer({
         </div>
         <div className="craft-detail-title-block crafting-identity-copy">
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-          <h1 className="craft-detail-title crafting-item-name">{displayName}</h1>
+          <h1 className="craft-detail-title crafting-item-name">
+            <span className="craft-detail-desktop-title">{displayName}</span>
+            <span className="craft-detail-mobile-title">{mobileDisplayName}</span>
+          </h1>
           <div className="craft-detail-mobile-family crafting-family-label">{heroFamily}</div>
           <div className="craft-summary-chips craft-detail-hero-chips">
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
@@ -3025,18 +3041,64 @@ function RecipeDrawer({
       </nav>
 
       <section className="craft-detail-mobile-overview" aria-label="Component overview">
-        <div className="craft-detail-mobile-overview-facts">
-          <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-            Quality {formatCompactNumber(finalProductQuality.averageBand)}
-          </span>
-          {heroMeta.map((value) => (
-            <span key={value} className="crafting-meta-line">{value}</span>
-          ))}
-          {heroCraftTime && (
-            <span><span>Craft time</span><strong>{heroCraftTime}</strong></span>
+        <div className="craft-detail-mobile-overview-art crafting-component-art">
+          {heroIconUrl ? (
+            <img src={heroIconUrl} alt="" aria-hidden="true" />
+          ) : (
+            <span className="craft-detail-hero-icon--fallback" aria-hidden="true" />
           )}
         </div>
-        {itemDescription && <p>{itemDescription}</p>}
+        <div className="craft-detail-mobile-overview-facts" aria-label="Component metadata">
+          <div className="craft-detail-mobile-overview-fact-group">
+            {heroComponentType && (
+              <span><span>Component Type</span><strong>{heroComponentType}</strong></span>
+            )}
+            {heroFamily && (
+              <span><span>Family</span><strong>{heroFamily}</strong></span>
+            )}
+          </div>
+          <div className="craft-detail-mobile-overview-fact-group">
+            {formatSize(selectedRecipe.size) && (
+              <span><span>Size</span><strong>{formatSize(selectedRecipe.size)}</strong></span>
+            )}
+            {selectedRecipe.grade && (
+              <span><span>Grade</span><strong>{selectedRecipe.grade}</strong></span>
+            )}
+            {selectedRecipe.class && (
+              <span><span>Class</span><strong>{selectedRecipe.class}</strong></span>
+            )}
+          </div>
+        </div>
+        {heroCraftTime && (
+          <div className="craft-detail-mobile-overview-time">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v6l4 2" />
+            </svg>
+            <span><span>Craft Time</span><strong>{heroCraftTime}</strong></span>
+          </div>
+        )}
+        {itemDescription && <p className="craft-detail-mobile-overview-description">{itemDescription}</p>}
+        <div className="craft-detail-mobile-overview-actions">
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
+            aria-pressed={selectedIsBookmarked}
+            aria-label={selectedIsBookmarked ? `Remove ${mobileDisplayName} save` : `Save ${mobileDisplayName}`}
+            onClick={() => onToggleBookmark(selectedRecipe)}
+          >
+            {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
+          </button>
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+            aria-pressed={selectedIsQueued}
+            aria-label={selectedIsQueued ? `${mobileDisplayName} is in build queue` : `Add ${mobileDisplayName} to build queue`}
+            onClick={() => onAddToQueue(selectedRecipe, selectedQualitySnapshot, finalProductQuality)}
+          >
+            {selectedIsQueued ? "Queued" : "Add to Queue"}
+          </button>
+        </div>
       </section>
 
       <div className="craft-detail-workspace craft-detail-grid">
