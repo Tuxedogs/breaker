@@ -47,6 +47,10 @@ async function captureStableDetailHeader(page: Page) {
   });
 }
 
+async function expectCraftDetailMobileCanvas(page: Page) {
+  await expect(page.locator(".craft-detail-page")).toHaveCSS("background-color", "rgb(7, 22, 32)");
+}
+
 async function expectActionsClearOfNavigation(page: Page) {
   const actionBox = await page.locator(".craft-detail-mobile-overview-actions:visible, .craft-detail-actions:visible").boundingBox();
   const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
@@ -192,6 +196,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     );
     expect(overviewActions[1].top).toBeGreaterThan(overviewActions[0].bottom);
     const overviewHeader = await captureStableDetailHeader(page);
+    await expectCraftDetailMobileCanvas(page);
     await expectScrollOwner(page, false);
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-overview-${viewport.name}.png`) });
@@ -199,6 +204,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await detailTabs.getByRole("tab", { name: "Materials" }).click();
     expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
     await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expectCraftDetailMobileCanvas(page);
     await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
     await expect(page.getByText(/Quality Required/i)).toHaveCount(0);
     await expect(page.locator(".craft-detail-material-row").first().locator(".bq-target-slider-marker").first()).toBeVisible();
@@ -208,6 +214,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await detailTabs.getByRole("tab", { name: "Statistics" }).click();
     expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
     await expect(page.locator(".craft-detail-title")).toBeInViewport();
+    await expectCraftDetailMobileCanvas(page);
     await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
     await expectScrollOwner(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-statistics-${viewport.name}.png`) });
@@ -216,6 +223,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       await detailTabs.getByRole("tab", { name: "Sources" }).click();
       expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
       await expect(page.locator(".craft-detail-title")).toBeInViewport();
+      await expectCraftDetailMobileCanvas(page);
       await expect(page.locator(".craft-detail-sources-section")).toBeVisible();
       await expectScrollOwner(page, false);
       await page.screenshot({ path: path.join(screenshotDir, "detail-sources-mobile-nav-393x852.png") });
