@@ -5,9 +5,29 @@ import {
   isGenericBlueprintLabel,
   resolveCraftingCardTitle,
   resolveCraftingDisplayName,
+  resolveCraftingMobileCompactName,
   resolveCraftingVariantLabel,
   variantLabelFromBlueprintFields,
 } from "./resolveCraftingDisplayName.ts";
+
+test("resolveCraftingMobileCompactName keeps a centralized model-first mobile heading", () => {
+  const cases = [
+    ["AD5B Ballistic Gatling", "AD5B"],
+    ["AD4B Ballistic Gatling", "AD4B"],
+    ["10-Series Greatsword Cannon", "10-Series"],
+    ["11-Series Broadsword Cannon", "11-Series"],
+    ["Attrition-1 Repeater", "Attrition-1"],
+    ["ATVS Repeater", "ATVS"],
+    ["C-788 Cannon", "C-788"],
+    ['CF-117 Bulldog "Hazard-Zone" Repeater', "CF-117"],
+    ["Atlas", "Atlas"],
+    ["Quantum Drive", "Quantum Drive"],
+  ] as const;
+
+  for (const [canonical, expected] of cases) {
+    assert.equal(resolveCraftingMobileCompactName(canonical), expected);
+  }
+});
 
 test("isGenericBlueprintLabel detects size and role placeholders", () => {
   assert.equal(isGenericBlueprintLabel("S1"), true);

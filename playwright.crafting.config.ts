@@ -6,7 +6,7 @@ const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: "./tests/ui",
-  testMatch: "crafting-browser-detail.spec.ts",
+  testMatch: ["crafting-browser-detail.spec.ts", "crafting-mobile.spec.ts"],
   fullyParallel: false,
   reporter: [["list"]],
   timeout: 120_000,

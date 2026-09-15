@@ -1133,38 +1133,21 @@
   .craft-detail-hero.crafting-detail-identity {
     display: grid;
     grid-template-areas:
-      "copy art"
-      "actions actions";
-    grid-template-columns: minmax(0, 1fr) 118px;
-    gap: 8px 12px;
+      "copy"
+      "actions";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
     align-items: center;
-    min-height: 116px;
-    padding: 2px 2px 6px;
+    min-height: 76px;
+    padding: 2px 2px;
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
   }
 
-  .craft-detail-stage[data-mobile-tab="overview"] .craft-detail-hero.crafting-detail-identity {
-    grid-template-areas:
-      "copy"
-      "actions";
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 76px;
-    padding-bottom: 2px;
-  }
-
-  .craft-detail-stage[data-mobile-tab="overview"] .craft-detail-hero-card.crafting-component-art {
-    display: none;
-  }
-
   .craft-detail-hero-card.crafting-component-art {
-    grid-area: art;
-    display: grid;
-    width: 118px;
-    height: 106px;
-    place-items: center;
+    display: none;
   }
 
   .craft-detail-shell .craft-detail-hero-icon {

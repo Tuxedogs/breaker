@@ -51,7 +51,11 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
-import { resolveCraftingCardTitle, resolveCraftingDisplayName } from "@/lib/crafting/resolveCraftingDisplayName";
+import {
+  resolveCraftingCardTitle,
+  resolveCraftingDisplayName,
+  resolveCraftingMobileCompactName,
+} from "@/lib/crafting/resolveCraftingDisplayName";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
   buildItemSummaryDetailStatRows,
@@ -2637,11 +2641,11 @@ function RecipeDrawer({
     [fittingDetail, selectedRecipe, selectedComponentCard],
   );
   const mobileDisplayName = useMemo(
-    () => resolveCraftingDisplayName({
+    () => resolveCraftingMobileCompactName(resolveCraftingDisplayName({
       fittingDetail,
       recipe: selectedRecipe,
       card: selectedComponentCard,
-    }),
+    })),
     [fittingDetail, selectedRecipe, selectedComponentCard],
   );
 
@@ -2948,7 +2952,7 @@ function RecipeDrawer({
         </div>
         <div className="craft-detail-title-block crafting-identity-copy">
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-          <h1 className="craft-detail-title crafting-item-name">
+          <h1 className="craft-detail-title crafting-item-name" aria-label={displayName} title={displayName}>
             <span className="craft-detail-desktop-title">{displayName}</span>
             <span className="craft-detail-mobile-title">{mobileDisplayName}</span>
           </h1>

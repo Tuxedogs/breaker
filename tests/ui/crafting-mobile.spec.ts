@@ -13,6 +13,40 @@ async function expectNoDocumentOverflow(page: Page) {
   expect(overflow).toBeLessThanOrEqual(1);
 }
 
+async function expectScrollOwner(page: Page, requireMovement = true) {
+  const scrollOwner = page.locator(".crb2-results:visible, .craft-detail-page:visible");
+  await expect(scrollOwner).toHaveCount(1);
+  const metrics = await scrollOwner.evaluate((element) => ({
+    clientHeight: element.clientHeight,
+    scrollHeight: element.scrollHeight,
+    overflowY: getComputedStyle(element).overflowY,
+  }));
+  expect(metrics.overflowY).toBe("auto");
+  if (!requireMovement) return;
+  expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight);
+  await scrollOwner.evaluate((element) => {
+    element.scrollTop = Math.min(420, element.scrollHeight - element.clientHeight);
+  });
+  await expect.poll(() => scrollOwner.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await scrollOwner.evaluate((element) => { element.scrollTop = 0; });
+  await expect.poll(() => scrollOwner.evaluate((element) => element.scrollTop)).toBe(0);
+}
+
+async function captureStableDetailHeader(page: Page) {
+  return page.locator(".craft-detail-stage").evaluate((stage) => {
+    const selectors = [
+      ".craft-detail-back-link",
+      ".craft-detail-title",
+      ".craft-detail-mobile-family",
+      ".craft-detail-mobile-tabs",
+    ];
+    return selectors.map((selector) => {
+      const box = stage.querySelector(selector)?.getBoundingClientRect();
+      return box ? { x: box.x, y: box.y, width: box.width, height: box.height } : null;
+    });
+  });
+}
+
 async function expectActionsClearOfNavigation(page: Page) {
   const actionBox = await page.locator(".craft-detail-mobile-overview-actions:visible, .craft-detail-actions:visible").boundingBox();
   const fixtureBox = await page.locator('[data-fixture-mode="active"]').boundingBox();
@@ -35,7 +69,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
     const menuTrigger = page.getByRole("button", { name: "Open primary navigation" });
     await expect(menuTrigger).toBeVisible();
-    await expect(page.locator(".dash-mobile-shell-brand")).toHaveText("BREAKER");
+    await expect(page.locator(".dash-mobile-shell-brand")).toHaveText("SCINTEL");
     await expect(page.locator(".dash-mobile-auth-bar")).toHaveCount(0);
     await expect(page.getByRole("button", { name: /Discord account|Sign in with Discord/ })).toHaveCount(0);
     await expect(page.locator(".dash-mobile-nav")).toHaveCount(0);
@@ -75,11 +109,14 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await page.keyboard.press("Escape");
     await expect(navigationDialog).toBeHidden();
     await expect(menuTrigger).toBeFocused();
+    await expect(page.locator("body")).not.toHaveClass(/mobile-navigation-open/);
 
     await menuTrigger.click();
     await page.mouse.click(viewport.width - 8, Math.round(viewport.height / 2));
     await expect(navigationDialog).toBeHidden();
     await expect(menuTrigger).toBeFocused();
+    await expect(page.locator("body")).not.toHaveClass(/mobile-navigation-open/);
+    await expectScrollOwner(page);
 
     const filterTrigger = page.getByRole("button", { name: /^Filters/ });
     await filterTrigger.click();
@@ -95,6 +132,7 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     await materialSearch.fill("Tungsten");
     await dialog.locator(".crb2-material-option", { hasText: "Tungsten" }).click();
     await dialog.getByRole("button", { name: /Show .* results/ }).click();
+    await expect(page.locator("body")).not.toHaveClass(/mobile-filter-sheet-open/);
     await expect(page).toHaveURL(/(?:\?|&)mt=/);
     await expect(page.locator(".crb2-mobile-card").first()).toBeVisible();
     await expectNoDocumentOverflow(page);
@@ -153,26 +191,46 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       }),
     );
     expect(overviewActions[1].top).toBeGreaterThan(overviewActions[0].bottom);
+    const overviewHeader = await captureStableDetailHeader(page);
+    await expectScrollOwner(page, false);
     await expectNoDocumentOverflow(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-overview-${viewport.name}.png`) });
 
     await detailTabs.getByRole("tab", { name: "Materials" }).click();
+    expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
     await expect(page.locator(".craft-detail-title")).toBeInViewport();
     await expect(page.locator(".craft-detail-material-row").first()).toBeVisible();
+    await expect(page.getByText(/Quality Required/i)).toHaveCount(0);
+    await expect(page.locator(".craft-detail-material-row").first().locator(".bq-target-slider-marker").first()).toBeVisible();
+    await expectScrollOwner(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-materials-${viewport.name}.png`) });
 
     await detailTabs.getByRole("tab", { name: "Statistics" }).click();
+    expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
     await expect(page.locator(".craft-detail-title")).toBeInViewport();
     await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
+    await expectScrollOwner(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-statistics-${viewport.name}.png`) });
 
     if (viewport.width === 393) {
       await detailTabs.getByRole("tab", { name: "Sources" }).click();
+      expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
       await expect(page.locator(".craft-detail-title")).toBeInViewport();
       await expect(page.locator(".craft-detail-sources-section")).toBeVisible();
+      await expectScrollOwner(page, false);
       await page.screenshot({ path: path.join(screenshotDir, "detail-sources-mobile-nav-393x852.png") });
     }
   }
+});
+
+test("uses compact mobile model names without changing the canonical title", async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 852 });
+  await page.goto("/industry/crafting/ba842720-ad32-4d53-8f56-992bacb1fc45", { waitUntil: "domcontentloaded" });
+  const title = page.locator(".craft-detail-title");
+  await expect(title.locator(".craft-detail-mobile-title")).toHaveText("AD5B");
+  const canonicalTitle = await title.getAttribute("title");
+  expect(canonicalTitle).toContain("AD5B Ballistic Gatling");
+  await expect(title).toHaveAttribute("aria-label", canonicalTitle ?? "AD5B Ballistic Gatling");
 });
 
 test("keeps the table presentation at tablet and desktop widths", async ({ page }) => {
