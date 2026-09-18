@@ -1606,3 +1606,24 @@
     bottom: calc(38px + env(safe-area-inset-bottom));
   }
 }
+
+@media (max-width: 760px) {
+  /* The input owns the shortened mobile track. Its bubble and markers are
+     descendants of that same width, so every normalized position stays on the
+     thumb's coordinate system. */
+  .craft-detail-shell .craft-detail-material-quality-control {
+    padding-left: 0;
+  }
+
+  .craft-detail-shell .craft-detail-material-target-input {
+    right: auto;
+    left: 0;
+    width: 60%;
+  }
+
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider,
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell,
+  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider {
+    width: 100%;
+  }
+}
