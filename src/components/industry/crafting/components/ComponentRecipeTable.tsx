@@ -2416,7 +2416,7 @@ function RightCraftingPanel({
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
-  sourcePanel: ReactNode;
+  sourcePanel?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -2497,7 +2497,7 @@ function RecipeDrawer({
     () => projectCraftingDetailMaterialRows(selectedRecipe),
     [selectedRecipe],
   );
-  const [drawerTab, setDrawerTab] = useState<"overview" | "materials" | "stats">("materials");
+  const [drawerTab, setDrawerTab] = useState<"overview" | "materials" | "stats" | "sources">("materials");
   const [mobileDetailTab, setMobileDetailTab] = useState<"overview" | "materials" | "stats" | "sources">("overview");
   const [expandedDescriptionRecipeId, setExpandedDescriptionRecipeId] = useState<string | null>(null);
   const descriptionExpanded = expandedDescriptionRecipeId === selectedRecipe.blueprint_id;
@@ -2507,9 +2507,9 @@ function RecipeDrawer({
   }, [initialSelectedRecipeId]);
 
   useEffect(() => {
-    if (presentation === "drawer") setDrawerTab("materials");
-    else setMobileDetailTab("overview");
-  }, [presentation, selectedRecipe.blueprint_id]);
+    setDrawerTab("materials");
+    setMobileDetailTab("overview");
+  }, [selectedRecipe.blueprint_id]);
 
   const buildDefaultMaterialQualities = useCallback(
     (targetRecipe: ComponentRecipe) =>
@@ -2731,6 +2731,14 @@ function RecipeDrawer({
         aria-busy={quantizationLoading || fittingStatsLoading}
       >
         <header className="craft-detail-drawer-header">
+          <button
+            type="button"
+            className="craft-detail-drawer-mobile-back"
+            onClick={onClose}
+          >
+            <span aria-hidden="true">‹</span>
+            <span>Crafting</span>
+          </button>
           <div className="craft-detail-drawer-icon-wrap">
             {heroIconUrl ? (
               <img
@@ -2743,9 +2751,12 @@ function RecipeDrawer({
               <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
             )}
           </div>
-          <div className="craft-detail-drawer-identity">
+          <div className="craft-detail-drawer-identity" data-mobile-family={heroFamily ?? ""}>
             {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-            <h2 className="craft-detail-drawer-title">{displayName}</h2>
+            <h2 className="craft-detail-drawer-title">
+              <span className="craft-detail-drawer-desktop-title">{displayName}</span>
+              <span className="craft-detail-drawer-mobile-title">{mobileDisplayName}</span>
+            </h2>
             <div className="craft-summary-chips craft-detail-hero-chips">
               <span className={`craft-detail-band-pill ${componentRarityClass}`}>
                 Quality {formatCompactNumber(finalProductQuality.averageBand)}
@@ -2777,7 +2788,7 @@ function RecipeDrawer({
         </header>
 
         <nav className="craft-detail-drawer-tabs" aria-label="Component detail sections" role="tablist">
-          {(["overview", "materials", "stats"] as const).map((tabName) => (
+          {(["overview", "materials", "stats", "sources"] as const).map((tabName) => (
             <button
               key={tabName}
               type="button"
@@ -2892,6 +2903,22 @@ function RecipeDrawer({
                 fittingStatsMissing={fittingStatsMissing}
                 fittingStatsError={fittingStatsError}
                 totalModifiers={totalModifiers}
+              />
+            </div>
+          )}
+
+          {drawerTab === "sources" && (
+            <div
+              className="craft-detail-drawer-sources"
+              id="craft-detail-drawer-panel-sources"
+              role="tabpanel"
+              aria-labelledby="craft-detail-drawer-tab-sources"
+            >
+              <MissionSourcePanel
+                recipe={selectedRecipe}
+                rewardPools={rewardPools}
+                isMissionBookmarked={isMissionBookmarked}
+                onToggleMissionBookmark={onToggleMissionBookmark}
               />
             </div>
           )}

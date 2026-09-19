@@ -19,6 +19,7 @@ export default function CraftingLayout() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const isBrowserRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting";
+  const hasSelectedDetail = isBrowserRoute && Boolean(searchParams.get("preview"));
 
   useEffect(() => {
     let cancelled = false;
@@ -72,7 +73,7 @@ export default function CraftingLayout() {
   return (
     <CraftingContext.Provider value={contextValue}>
       <div className="craft-page craft-planner-shell component-results-browser">
-        <div className={`recipe-browser-page-body${isBrowserRoute ? " is-browser" : ""}`}>
+        <div className={`recipe-browser-page-body${isBrowserRoute ? " is-browser" : ""}${hasSelectedDetail ? " is-detail-preview" : ""}`}>
           {isBrowserRoute ? (
             <header className="recipe-browser-command-header">
               <span className="recipe-browser-command-icon" aria-hidden="true">

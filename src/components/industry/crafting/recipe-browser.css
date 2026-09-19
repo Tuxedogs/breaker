@@ -3612,6 +3612,36 @@
 }
 
 @media (max-width: 760px) {
+  /* At phone widths a selected component is the page, not browser chrome with
+     a pane appended beneath it.  The canonical drawer remains mounted. */
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    background: var(--crafting-presentation-canvas);
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .recipe-browser-command-header,
+  .component-results-browser .recipe-browser-page-body.is-detail-preview > .recipe-browser-content-shell > .crb2-toolbar {
+    display: none;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .recipe-browser-content-shell {
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .component-browser-body,
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .craft-browser-workspace,
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .craft-detail-drawer-region {
+    background: transparent;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-detail-preview .craft-detail-drawer-region {
+    border: 0;
+    box-shadow: none;
+  }
+
   .craft-detail-stage.craft-detail-shell {
     gap: 10px;
     padding: 10px;
@@ -6892,10 +6922,10 @@
   color: var(--craft-highlight-danger);
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 761px) {
   .craft-browser-workspace--drawer {
     display: grid !important;
-    grid-template-columns: minmax(720px, 1.06fr) minmax(700px, 0.94fr);
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
     gap: 10px;
   }
 

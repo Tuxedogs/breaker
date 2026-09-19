@@ -654,6 +654,10 @@
   box-sizing: border-box;
 }
 
+.craft-detail-drawer-mobile-back {
+  display: none;
+}
+
 .craft-detail-drawer-icon-wrap {
   display: grid;
   width: 72px;
@@ -685,6 +689,10 @@
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.craft-detail-drawer-mobile-title {
+  display: none;
 }
 
 .craft-detail-drawer-facts {
@@ -788,6 +796,12 @@
   border-right: 1px solid var(--craft-border-soft);
 }
 
+/* Sources stays in the Materials flow on desktop; narrow detail gets its own
+   fourth tab without creating a second detail implementation. */
+.craft-detail-drawer-tabs button:last-child {
+  display: none;
+}
+
 .craft-detail-drawer-tabs button:hover {
   border-color: var(--craft-border-strong);
   border-bottom-color: var(--craft-border-default);
@@ -826,6 +840,10 @@
 }
 
 .craft-detail-drawer-stats {
+  min-width: 0;
+}
+
+.craft-detail-drawer-sources {
   min-width: 0;
 }
 
@@ -985,7 +1003,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     background: #071620;
-    padding: 10px 10px calc(82px + env(safe-area-inset-bottom));
+    padding: 10px;
   }
 
   .craft-detail-stage.craft-detail-shell {
@@ -1363,12 +1381,203 @@
     display: none;
   }
 
-  body:has([data-fixture-mode="active"]) .component-browser-body > .craft-detail-page {
-    padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  /* The drawer is the canonical detail at every width.  On a phone it becomes
+     the prior selected-item canvas rather than a compressed desktop pane. */
+  .craft-detail-stage.craft-detail-drawer-shell {
+    gap: 0;
+    padding: 0;
   }
 
-  body:has([data-fixture-mode="active"]) .craft-detail-actions {
-    bottom: calc(38px + env(safe-area-inset-bottom));
+  .craft-detail-drawer-header {
+    grid-template-areas:
+      "back art"
+      "identity art";
+    grid-template-columns: minmax(0, 1fr) clamp(96px, 30vw, 132px);
+    gap: 7px 8px;
+    min-height: 128px;
+    padding: 8px 2px 6px;
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .craft-detail-page--drawer,
+  .craft-detail-page.craft-detail-page--drawer > .craft-detail-stage.craft-detail-drawer-shell,
+  .craft-detail-drawer-body {
+    background: transparent;
+  }
+
+  .craft-detail-drawer-mobile-back {
+    display: inline-flex;
+    grid-area: back;
+    align-items: center;
+    gap: 7px;
+    justify-self: start;
+    min-height: 44px;
+    padding: 7px 3px 7px 0;
+    border: 0;
+    background: transparent;
+    color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    font: 650 0.94rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+    letter-spacing: -0.01em;
+    cursor: pointer;
+  }
+
+  .craft-detail-drawer-mobile-back > span:first-child {
+    font-size: 1.55rem;
+    font-weight: 400;
+    line-height: 0.72;
+  }
+
+  .craft-detail-drawer-mobile-back:focus-visible {
+    outline: 2px solid var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    outline-offset: 3px;
+  }
+
+  .craft-detail-drawer-icon-wrap {
+    grid-area: art;
+    justify-self: end;
+    align-self: center;
+    width: 100%;
+    height: 104px;
+    margin-right: clamp(8px, 3vw, 18px);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .craft-detail-drawer-icon-wrap .craft-detail-hero-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
+  }
+
+  .craft-detail-drawer-icon-wrap:has(.craft-detail-hero-icon--fallback) {
+    display: none;
+  }
+
+  .craft-detail-drawer-identity {
+    grid-area: identity;
+    align-self: start;
+  }
+
+  .craft-detail-drawer-identity > .craft-detail-meta,
+  .craft-detail-drawer-identity > .craft-detail-hero-chips,
+  .craft-detail-drawer-facts,
+  .craft-detail-drawer-header-actions {
+    display: none;
+  }
+
+  .craft-detail-drawer-title {
+    margin: 0 0 5px;
+    color: var(--void-text-main);
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: clamp(1.75rem, 8vw, 2.1rem);
+    font-weight: 670;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    text-transform: none;
+  }
+
+  .craft-detail-drawer-desktop-title {
+    display: none;
+  }
+
+  .craft-detail-drawer-mobile-title {
+    display: inline;
+  }
+
+  .craft-detail-drawer-identity::after {
+    display: block;
+    overflow: hidden;
+    color: var(--void-text-muted);
+    content: attr(data-mobile-family);
+    font-size: 0.98rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .craft-detail-drawer-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    min-height: 42px;
+    padding: 0;
+    border-bottom: 1px solid var(--craft-border-default);
+    background: transparent;
+  }
+
+  .craft-detail-drawer-tabs button,
+  .craft-detail-drawer-tabs button:last-child {
+    display: block;
+    min-width: 0;
+    min-height: 42px;
+    margin: 0;
+    padding: 0 3px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--void-text-muted);
+    font: 500 0.77rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .craft-detail-drawer-tabs button.is-active {
+    border: 0;
+    border-bottom: 2px solid var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    background: transparent;
+    box-shadow: none;
+    color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+  }
+
+  .craft-detail-drawer-body {
+    padding: 10px 0;
+    background: transparent;
+  }
+
+  .craft-detail-drawer-materials,
+  .craft-detail-drawer-overview,
+  .craft-detail-drawer-sources {
+    gap: 12px;
+  }
+
+  .craft-detail-drawer-materials .craft-detail-sources-section {
+    display: none;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-material-table {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-material-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "identity"
+      "quality"
+      "summary";
+    gap: 14px;
+    min-height: 0;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-material-summary {
+    grid-template-columns: minmax(90px, max-content) minmax(0, 1fr);
+    padding-top: 12px;
+    padding-left: 0;
+    border-top: 1px solid rgba(45, 136, 181, 0.32);
+    border-left: 0;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-material-effects {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .craft-detail-drawer-footer {
+    position: static;
+    gap: 7px;
+    padding: 7px;
   }
 }
 

@@ -278,3 +278,98 @@ test("keeps the table presentation at tablet and desktop widths", async ({ page 
     await page.screenshot({ path: path.join(screenshotDir, `weapon-detail-desktop-${viewport.name}.png`) });
   }
 });
+
+test("makes a selected detail the flat mobile page while retaining the desktop split pane", async ({ page }) => {
+  await mkdir(screenshotDir, { recursive: true });
+  const previewId = "ba842720-ad32-4d53-8f56-992bacb1fc45";
+
+  for (const viewport of [
+    { name: "390x844", width: 390, height: 844 },
+    { name: "402x874", width: 402, height: 874 },
+    { name: "430x932", width: 430, height: 932 },
+    { name: "466x900", width: 466, height: 900 },
+    { name: "600x900", width: 600, height: 900 },
+    { name: "678x900", width: 678, height: 900 },
+    { name: "728x900", width: 728, height: 900 },
+    { name: "768x900", width: 768, height: 900 },
+    { name: "998x1000", width: 998, height: 1000 },
+    { name: "1328x1000", width: 1328, height: 1000 },
+    { name: "1900x1080", width: 1900, height: 1080 },
+  ]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto(`${browserPath}?preview=${previewId}`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
+    await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
+    await expectNoDocumentOverflow(page);
+
+    if (viewport.width <= 760) {
+      await expect(page.locator(".recipe-browser-page-body")).toHaveClass(/is-detail-preview/);
+      await expect(page.locator(".recipe-browser-command-header")).toBeHidden();
+      await expect(page.locator(".crb2-toolbar")).toBeHidden();
+      await expect(page.locator(".craft-browser-workspace > .crb2-results")).toBeHidden();
+      await expect(page.locator(".craft-detail-drawer-mobile-back")).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-icon-wrap img")).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-tabs [role='tab']")).toHaveCount(4);
+      await expect(page.locator(".craft-detail-drawer-tabs")).not.toHaveCSS("overflow-x", "auto");
+
+      const headerGeometry = await page.locator(".craft-detail-drawer-header").evaluate((header) => {
+        const back = header.querySelector<HTMLElement>(".craft-detail-drawer-mobile-back");
+        const title = header.querySelector<HTMLElement>(".craft-detail-drawer-title");
+        const art = header.querySelector<HTMLElement>(".craft-detail-drawer-icon-wrap");
+        const page = header.closest<HTMLElement>(".craft-detail-page");
+        const backBox = back?.getBoundingClientRect();
+        const titleBox = title?.getBoundingClientRect();
+        const artBox = art?.getBoundingClientRect();
+        const pageBox = page?.getBoundingClientRect();
+        return {
+          backHeight: Math.round(backBox?.height ?? 0),
+          backInset: Math.round((backBox?.left ?? 0) - (pageBox?.left ?? 0)),
+          artRightInset: Math.round((pageBox?.right ?? 0) - (artBox?.right ?? 0)),
+          titleRight: Math.round(titleBox?.right ?? 0),
+          artLeft: Math.round(artBox?.left ?? 0),
+        };
+      });
+      expect(headerGeometry.backHeight).toBeGreaterThanOrEqual(44);
+      expect(headerGeometry.backInset).toBeLessThanOrEqual(3);
+      expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(8);
+      expect(headerGeometry.artLeft).toBeGreaterThanOrEqual(headerGeometry.titleRight);
+
+      const materialTab = page.getByRole("tab", { name: "materials", exact: true });
+      await materialTab.click();
+      const card = page.locator(".craft-detail-material-row").first();
+      await expect(card).toBeVisible();
+      const width = await card.evaluate((element) => {
+        const page = element.closest<HTMLElement>(".craft-detail-page");
+        return {
+          card: Math.round(element.getBoundingClientRect().width),
+          page: Math.round(page?.getBoundingClientRect().width ?? 0),
+        };
+      });
+      expect(width.card).toBeGreaterThanOrEqual(width.page - 22);
+      const modifier = card.locator(".craft-detail-effect-chip").first();
+      if (await modifier.count()) {
+        const modifierGeometry = await modifier.evaluate((element) => {
+          const label = element.querySelector<HTMLElement>("span");
+          const amount = element.querySelector<HTMLElement>("strong");
+          const box = element.getBoundingClientRect();
+          const amountBox = amount?.getBoundingClientRect();
+          return {
+            fits: (amountBox?.right ?? box.right + 1) <= box.right + 1,
+            label: label?.textContent?.trim() ?? "",
+            amount: amount?.textContent?.trim() ?? "",
+          };
+        });
+        expect(modifierGeometry.label).not.toBe("");
+        expect(modifierGeometry.amount).not.toBe("");
+        expect(modifierGeometry.fits).toBe(true);
+      }
+      await page.screenshot({ path: path.join(screenshotDir, `flat-detail-${viewport.name}.png`) });
+    } else {
+      await expect(page.locator(".recipe-browser-command-header")).toBeVisible();
+      await expect(page.locator(".crb2-toolbar")).toBeVisible();
+      await expect(page.locator(".craft-browser-workspace > .crb2-results")).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
+      await page.screenshot({ path: path.join(screenshotDir, `split-detail-${viewport.name}.png`) });
+    }
+  }
+});
