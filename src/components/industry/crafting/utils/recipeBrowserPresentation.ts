@@ -147,7 +147,6 @@ const families: Record<string, RecipeBrowserFamily> = {
       sizeColumn,
       { key: "alpha", label: "Alpha", value: (record) => formatNumber(get(record, "shipWeapon", "alphaDamageTotal")) },
       { key: "dps", label: "DPS", value: (record) => formatNumber(shipWeaponDps(record)), sortValue: shipWeaponDps },
-      { key: "penetration", label: "Pen. Dist.", value: (record) => formatNumber(get(record, "shipWeapon", "penetrationDistance"), "m") },
       { key: "rate", label: "Fire Rate", value: (record) => formatNumber(get(record, "shipWeapon", "fireRateRpm"), " rpm") },
       { key: "speed", label: "Projectile Speed", value: (record) => formatNumber(get(record, "shipWeapon", "projectileSpeed"), " m/s") },
       { key: "capacity", label: "Capacity", value: (record) => formatNumber(shipWeaponCapacity(record)) },

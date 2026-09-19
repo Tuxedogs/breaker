@@ -6852,6 +6852,20 @@
   animation: craft-detail-drawer-content-enter 180ms ease-out both;
 }
 
+/* The selected component stays within the browser route.  Below the two-pane
+   threshold, the same drawer fills the workspace while the results remain the
+   destination of its close action. */
+.craft-browser-workspace--detail > .crb2-results {
+  display: none;
+}
+
+.craft-browser-workspace--detail > .craft-detail-drawer-region {
+  display: flex;
+  flex: 1 1 0;
+  width: 100%;
+  border-left: 0;
+}
+
 @keyframes craft-detail-drawer-content-enter {
   from {
     opacity: 0;
@@ -6887,6 +6901,10 @@
 
   .craft-browser-workspace--drawer > .crb2-results {
     overflow: hidden;
+  }
+
+  .craft-browser-workspace--detail > .crb2-results {
+    display: flex;
   }
 
   .craft-browser-workspace--drawer .crb2-list {

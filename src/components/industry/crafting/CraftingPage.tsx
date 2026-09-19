@@ -1,5 +1,5 @@
 import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
@@ -20,24 +20,6 @@ import { createMaterialResolver } from "../../../lib/logistics/materialResolver"
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
 
 type Tab = "recipes" | "analytics" | "quality";
-
-const CRAFTING_DRAWER_MEDIA_QUERY = "(min-width: 1600px)";
-
-function useMediaQuery(queryText: string): boolean {
-  const [matches, setMatches] = useState(() => (
-    typeof window !== "undefined" && window.matchMedia(queryText).matches
-  ));
-
-  useEffect(() => {
-    const query = window.matchMedia(queryText);
-    const update = () => setMatches(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, [queryText]);
-
-  return matches;
-}
 
 type RecipeRewardPool = {
   poolName?: string;
@@ -70,12 +52,8 @@ function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
 
 export default function CraftingModule() {
   const { blueprintId } = useParams<{ blueprintId?: string }>();
-  const location = useLocation();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const drawerCapable = useMediaQuery(CRAFTING_DRAWER_MEDIA_QUERY);
-  const requestedPreviewId = blueprintId ? null : searchParams.get("preview");
-  const previewId = drawerCapable ? requestedPreviewId : null;
+  const previewId = blueprintId ? null : searchParams.get("preview");
   const targetBlueprintId = blueprintId ?? previewId;
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
@@ -92,19 +70,6 @@ export default function CraftingModule() {
   const materialIdentities = useMaterialIdentityIndex();
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
-
-  useEffect(() => {
-    if (!requestedPreviewId || drawerCapable || blueprintId) return;
-    const next = new URLSearchParams(searchParams);
-    next.delete("preview");
-    navigate({
-      pathname: `/industry/crafting/${requestedPreviewId}`,
-      search: next.toString() ? `?${next.toString()}` : "",
-    }, {
-      replace: true,
-      state: { from: `${location.pathname}${next.toString() ? `?${next.toString()}` : ""}` },
-    });
-  }, [blueprintId, drawerCapable, location.pathname, navigate, requestedPreviewId, searchParams]);
 
   useEffect(() => {
     if (!previewId) return;
@@ -268,7 +233,7 @@ export default function CraftingModule() {
       )}
 
       {tab === "recipes" && !blueprintId && (
-        <div className={`craft-browser-workspace${drawerCapable ? " craft-browser-workspace--drawer" : ""}`}>
+        <div className={`craft-browser-workspace craft-browser-workspace--drawer${previewId ? " craft-browser-workspace--detail" : ""}`}>
           <ComponentResultsBrowser
             records={componentCards}
             loading={cardsLoading}
@@ -277,7 +242,7 @@ export default function CraftingModule() {
             previewId={previewId}
             onPreviewRecord={previewRecord}
           />
-          {drawerCapable && (
+          {previewId && (
             <div
               className={`craft-detail-drawer-region${previewRecipeReady ? " craft-detail-drawer-region--ready" : ""}`}
               aria-label="Recipe detail preview"
@@ -301,19 +266,6 @@ export default function CraftingModule() {
             </div>
           )}
         </div>
-      )}
-
-      {tab === "recipes" && blueprintId && (
-        <ComponentRecipeTable
-          recipes={recipes}
-          inventoryEntries={inventoryEntries}
-          materialTemplates={materialTemplates}
-          componentCards={componentCards}
-          initialBlueprintId={blueprintId}
-          presentation="page"
-          onAddToQueue={handleAddToQueue}
-          isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
-        />
       )}
 
       {tab === "analytics" && (

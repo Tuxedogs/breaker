@@ -57,7 +57,7 @@ test("preserves valid zero values in table cells", () => {
   assert.equal(family.columns.find((column) => column.key === "alpha")?.value(record({})), "0");
 });
 
-test("ship weapons expose penetration distance, energy maximum load, and shared-resolver DPS columns", () => {
+test("ship weapons expose energy maximum load and shared-resolver DPS columns", () => {
   const weapon = record({
     stats: {
       ...record({}).stats,
@@ -72,8 +72,7 @@ test("ship weapons expose penetration distance, energy maximum load, and shared-
   });
   const family = getRecipeBrowserFamily(weapon);
   assert.equal(family.columns.find((column) => column.key === "dps")?.value(weapon), "300");
-  assert.equal(family.columns.find((column) => column.key === "penetration")?.label, "Pen. Dist.");
-  assert.equal(family.columns.find((column) => column.key === "penetration")?.value(weapon), "18m");
+  assert.equal(family.columns.some((column) => column.key === "penetration"), false);
   assert.equal(family.columns.find((column) => column.key === "capacity")?.value(weapon), "75");
 });
 

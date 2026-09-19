@@ -2450,7 +2450,7 @@ function RecipeDrawer({
   onToggleBookmark,
   isMissionBookmarked,
   onToggleMissionBookmark,
-  presentation = "page",
+  presentation = "drawer",
   onClose,
 }: {
   recipe: ComponentRecipe;
@@ -2469,7 +2469,7 @@ function RecipeDrawer({
   onToggleBookmark: (recipe: ComponentRecipe) => void;
   isMissionBookmarked: (missionId: string) => boolean;
   onToggleMissionBookmark: (missionId: string) => void;
-  presentation?: "page" | "drawer";
+  presentation?: "drawer";
   onClose?: () => void;
 }) {
   const {
@@ -2724,15 +2724,6 @@ function RecipeDrawer({
   const descriptionCanExpand = itemDescription.length > 150 || itemDescription.split("\n").length > 2;
 
   if (presentation === "drawer") {
-    const detailSearch = new URLSearchParams(location.search);
-    detailSearch.delete("preview");
-    const detailSearchString = detailSearch.toString();
-    const fullDetailTo = {
-      pathname: `/industry/crafting/${selectedRecipe.blueprint_id}`,
-      search: detailSearchString ? `?${detailSearchString}` : "",
-    };
-    const browserReturnTo = `${location.pathname}${detailSearchString ? `?${detailSearchString}` : ""}`;
-
     return (
       <section
         className="craft-detail-stage craft-detail-shell craft-detail-drawer-shell"
@@ -2774,13 +2765,6 @@ function RecipeDrawer({
             </span>
           </div>
           <div className="craft-detail-drawer-header-actions">
-            <Link
-              className="craft-detail-drawer-full-link"
-              to={fullDetailTo}
-              state={{ from: browserReturnTo }}
-            >
-              Open full details
-            </Link>
             <button
               type="button"
               className="craft-detail-drawer-close"
@@ -3215,7 +3199,7 @@ interface Props {
     finalProductQuality: FinalProductQuality,
   ) => void;
   isRecipeQueued?: (recipe: ComponentRecipe) => boolean;
-  presentation?: "page" | "drawer";
+  presentation?: "drawer";
   onClose?: () => void;
 }
 
@@ -3225,7 +3209,7 @@ export default function ComponentRecipeTable({
   initialBlueprintId,
   onAddToQueue,
   isRecipeQueued = () => false,
-  presentation = "page",
+  presentation = "drawer",
   onClose,
 }: Props) {
   const initialSidebarState = useMemo(
