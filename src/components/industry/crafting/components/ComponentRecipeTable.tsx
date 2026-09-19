@@ -1481,54 +1481,62 @@ export function DetailMaterialQualityRow({
           <strong>{materialName}</strong>
         </span>
       </div>
-      <div className="craft-detail-material-required">{requiredAmount}</div>
-      <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
-        <TargetQualitySlider
-          label={`${selectedQuality}`}
-          tone="cyan"
-          materialName={materialName}
-          min={1}
-          max={1000}
-          step={1}
-          value={selectedQuality}
-          markers={bandMarkers}
-          layout="stacked"
-          onChange={(rawQuality) => {
-            if (onQualityChange) {
-              onQualityChange(rawQuality);
-            } else {
-              onBandChange?.(findNearestBandForQuality(bands, rawQuality));
-            }
-          }}
-          onCommit={(rawQuality) => {
-            if (onQualityChange) {
-              onQualityChange(rawQuality);
-            } else {
-              onBandChange?.(findNearestBandForQuality(bands, rawQuality));
-            }
-          }}
-        />
+      <div className="craft-detail-material-quality-control">
+        <span className="craft-detail-material-quality-label">Target quality</span>
+        <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
+          <TargetQualitySlider
+            label={`${selectedQuality}`}
+            tone="cyan"
+            materialName={materialName}
+            min={1}
+            max={1000}
+            step={1}
+            value={selectedQuality}
+            markers={bandMarkers}
+            layout="stacked"
+            onChange={(rawQuality) => {
+              if (onQualityChange) {
+                onQualityChange(rawQuality);
+              } else {
+                onBandChange?.(findNearestBandForQuality(bands, rawQuality));
+              }
+            }}
+            onCommit={(rawQuality) => {
+              if (onQualityChange) {
+                onQualityChange(rawQuality);
+              } else {
+                onBandChange?.(findNearestBandForQuality(bands, rawQuality));
+              }
+            }}
+          />
+        </div>
       </div>
-      <div className="craft-detail-material-effects">
-        {atQuality.map((m, i) => {
-          const impact = getModifierImpact(m.property, m.value);
-          const display = formatMaterialModifierDisplay(
-            m.property,
-            getCraftingModifierBaseValue(fittingDetail, m.property),
-            m.value,
-            m.modifierMode,
-          );
+      <div className="craft-detail-material-summary">
+        <div className="craft-detail-material-required">
+          <span>Required qty</span>
+          <strong>{requiredAmount ?? "—"}</strong>
+        </div>
+        <div className="craft-detail-material-effects">
+          {atQuality.map((m, i) => {
+            const impact = getModifierImpact(m.property, m.value);
+            const display = formatMaterialModifierDisplay(
+              m.property,
+              getCraftingModifierBaseValue(fittingDetail, m.property),
+              m.value,
+              m.modifierMode,
+            );
 
-          return (
-            <span
-              key={`${m.slot}:${m.property}:${i}`}
-              className={`craft-detail-effect-chip ${getEffectChipToneClass(m.property)}`}
-            >
-              <span>{formatModifierStatName(m.property)}</span>
-              <strong className={getImpactClass(impact)}>{display.modifier}</strong>
-            </span>
-          );
-        })}
+            return (
+              <span
+                key={`${m.slot}:${m.property}:${i}`}
+                className={`craft-detail-effect-chip ${getEffectChipToneClass(m.property)}`}
+              >
+                <span>{formatModifierStatName(m.property)}</span>
+                <strong className={getImpactClass(impact)}>{display.modifier}</strong>
+              </span>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
