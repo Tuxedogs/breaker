@@ -152,6 +152,105 @@
   justify-self: stretch;
 }
 
+.bq-target-editor--material {
+  --slider-thumb-size: 14px;
+  --slider-bubble-width: 48px;
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+
+.bq-target-editor--material > .bq-target-slider-shell {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 72px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bq-target-editor--material:hover > .bq-target-slider-shell,
+.bq-target-editor--material:focus-within > .bq-target-slider-shell {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bq-target-slider-geometry {
+  position: absolute;
+  inset: 0 calc(var(--slider-bubble-width) / 2);
+  display: block;
+  min-width: 0;
+}
+
+.bq-target-editor--material .bq-target-quality,
+.bq-target-editor--material .bq-target-quality-input {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: var(--target-quality-pct, 0%);
+  width: var(--slider-bubble-width);
+  min-width: var(--slider-bubble-width);
+  min-height: 28px;
+  padding-inline: 5px;
+  transform: translateX(-50%);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.bq-target-editor--material button.bq-target-quality {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.bq-target-editor--material button.bq-target-quality:active {
+  cursor: grabbing;
+}
+
+.bq-target-slider-track {
+  position: absolute;
+  z-index: 0;
+  top: 37px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.2);
+  pointer-events: none;
+}
+
+.bq-target-slider-track-fill {
+  display: block;
+  width: var(--target-quality-pct, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(125, 211, 252, 0.82);
+}
+
+.bq-target-editor--material .bq-target-slider-markers {
+  inset: 43px 0 auto;
+  height: 10px;
+}
+
+.bq-target-editor--material .bq-target-quality-slider {
+  position: absolute;
+  z-index: 3;
+  top: 28px;
+  left: calc(var(--slider-thumb-size) / -2);
+  width: calc(100% + var(--slider-thumb-size));
+  height: 22px;
+}
+
+.bq-target-editor--material .bq-target-quality-slider::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.bq-target-editor--material .bq-target-quality-slider::-moz-range-track,
+.bq-target-editor--material .bq-target-quality-slider::-moz-range-progress {
+  background: transparent;
+}
+
 .bq-target-editor--input {
   display: grid;
   justify-self: center;

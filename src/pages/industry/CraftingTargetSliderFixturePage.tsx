@@ -46,7 +46,7 @@ export default function CraftingTargetSliderFixturePage() {
 
   return (
     <main className="craft-page craft-planner-shell craft-detail-page" data-crafting-target-slider-fixture="true">
-      <section className="craft-detail-stage">
+      <section className="craft-detail-stage craft-detail-shell">
         <div className="craft-detail-crafting-panel">
           <div className="craft-summary-section-label">Material Requirements</div>
           <div className="craft-detail-material-table">

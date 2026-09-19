@@ -227,11 +227,16 @@ test.describe("Crafting browser and detail refactor", () => {
       { name: "2560x1440", width: 2560, height: 1440 },
       { name: "3840x2160", width: 3840, height: 2160 },
       { name: "768x900", width: 768, height: 900 },
+      { name: "430x932", width: 430, height: 932 },
+      { name: "375x812", width: 375, height: 812 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(detailPath, { waitUntil: "domcontentloaded" });
       await expect(page.locator(".craft-detail-stage")).toBeVisible();
       await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
+      if (viewport.width <= 430) {
+        await page.getByRole("tab", { name: "Materials" }).click();
+      }
 
       const firstSlider = page.locator(".craft-detail-material-target-input input[type='range']").first();
       await expect(firstSlider).toHaveAttribute("min", "1");
@@ -243,21 +248,27 @@ test.describe("Crafting browser and detail refactor", () => {
       await firstSlider.fill("723");
       await expect(page.locator(".craft-detail-material-target-input .bq-target-quality").first()).toHaveText("723");
       const firstMaterialCard = page.locator(".craft-detail-material-row").first();
-      await expect(firstMaterialCard).toContainText("Target quality");
+      await expect(firstMaterialCard).not.toContainText("Target quality");
+      await expect(firstMaterialCard.locator(".bq-material-icon, .craft-detail-material-icon")).toHaveCount(0);
       await expect(firstMaterialCard).toContainText("Required qty");
       await expect(firstMaterialCard).not.toContainText(/Available Quality|Available/);
       const sliderAlignment = await firstMaterialCard.evaluate((card) => {
         const slider = card.querySelector<HTMLInputElement>(".bq-target-quality-slider");
         const bubble = card.querySelector<HTMLElement>(".bq-target-quality");
-        if (!slider || !bubble) return null;
+        const geometry = card.querySelector<HTMLElement>("[data-slider-geometry='true']");
+        if (!slider || !bubble || !geometry) return null;
         const sliderBox = slider.getBoundingClientRect();
         const bubbleBox = bubble.getBoundingClientRect();
+        const geometryBox = geometry.getBoundingClientRect();
+        const thumbSize = Number.parseFloat(getComputedStyle(slider).getPropertyValue("--slider-thumb-size"));
         const min = Number(slider.min);
         const max = Number(slider.max);
         const range = Math.max(1, max - min);
-        const positionFor = (value: number) => sliderBox.left + ((value - min) / range) * sliderBox.width;
+        const positionFor = (value: number) => geometryBox.left + ((value - min) / range) * geometryBox.width;
         return {
           bubbleDelta: Math.abs((bubbleBox.left + bubbleBox.width / 2) - positionFor(Number(slider.value))),
+          inputStartDelta: Math.abs((sliderBox.left + thumbSize / 2) - geometryBox.left),
+          inputEndDelta: Math.abs((sliderBox.right - thumbSize / 2) - geometryBox.right),
           markerDeltas: Array.from(card.querySelectorAll<HTMLElement>(".bq-target-slider-marker")).map((marker) => {
             const value = Number(marker.textContent);
             const markerBox = marker.getBoundingClientRect();
@@ -267,29 +278,33 @@ test.describe("Crafting browser and detail refactor", () => {
       });
       expect(sliderAlignment).not.toBeNull();
       expect(sliderAlignment?.bubbleDelta).toBeLessThanOrEqual(2);
+      expect(sliderAlignment?.inputStartDelta).toBeLessThanOrEqual(1);
+      expect(sliderAlignment?.inputEndDelta).toBeLessThanOrEqual(1);
       expect(Math.max(...(sliderAlignment?.markerDeltas ?? []))).toBeLessThanOrEqual(2);
       await expect(page.locator(".craft-detail-material-table-head")).not.toContainText("Quality");
       await expect(page.locator(".craft-detail-material-row").first()).not.toContainText("Band");
       await expect(page.locator(".craft-detail-material-id").filter({ hasText: "Hephaestanite" })).toBeVisible();
-      await expect(page.locator(".craft-detail-graph-panel")).toBeVisible();
-      await expect(page.locator(".craft-detail-graph-head")).toContainText(/chart window/i);
-      await expect(page.locator(".craft-detail-graph-x-axis")).toContainText("250m");
-      await expect(page.locator(".craft-detail-graph-readouts")).toContainText("Projectile Travel (context)");
-      const chartPlacement = await page.evaluate(() => {
-        const materials = document.querySelector(".craft-detail-material-section");
-        const chart = document.querySelector(".craft-detail-chart-section");
-        return {
-          materialBottom: materials?.getBoundingClientRect().bottom ?? 0,
-          chartTop: chart?.getBoundingClientRect().top ?? 0,
-        };
-      });
-      expect(chartPlacement.chartTop).toBeGreaterThanOrEqual(chartPlacement.materialBottom);
-      const modifierColor = await page.locator(".craft-detail-stat-modifier.craft-ok").first().evaluate((element) => ({
-        rendered: getComputedStyle(element).color,
-        token: getComputedStyle(element).getPropertyValue("--stat-beneficial").trim(),
-      }));
-      expect(modifierColor.rendered).toBe("rgb(69, 216, 157)");
-      expect(modifierColor.token.toLowerCase()).toBe("#45d89d");
+      if (viewport.width > 430) {
+        await expect(page.locator(".craft-detail-graph-panel")).toBeVisible();
+        await expect(page.locator(".craft-detail-graph-head")).toContainText(/chart window/i);
+        await expect(page.locator(".craft-detail-graph-x-axis")).toContainText("250m");
+        await expect(page.locator(".craft-detail-graph-readouts")).toContainText("Projectile Travel (context)");
+        const chartPlacement = await page.evaluate(() => {
+          const materials = document.querySelector(".craft-detail-material-section");
+          const chart = document.querySelector(".craft-detail-chart-section");
+          return {
+            materialBottom: materials?.getBoundingClientRect().bottom ?? 0,
+            chartTop: chart?.getBoundingClientRect().top ?? 0,
+          };
+        });
+        expect(chartPlacement.chartTop).toBeGreaterThanOrEqual(chartPlacement.materialBottom);
+        const modifierColor = await page.locator(".craft-detail-stat-modifier.craft-ok").first().evaluate((element) => ({
+          rendered: getComputedStyle(element).color,
+          token: getComputedStyle(element).getPropertyValue("--stat-beneficial").trim(),
+        }));
+        expect(modifierColor.rendered).toBe("rgb(69, 216, 157)");
+        expect(modifierColor.token.toLowerCase()).toBe("#45d89d");
+      }
 
       await expectNoDocumentOverflow(page);
       await page.screenshot({
@@ -297,13 +312,111 @@ test.describe("Crafting browser and detail refactor", () => {
         fullPage: true,
       });
 
-      await page.locator(".craft-detail-graph-panel").scrollIntoViewIfNeeded();
-      await page.screenshot({
-        path: path.join(screenshotDir, `crafting-detail-cq7-chart-${viewport.name}.png`),
-        fullPage: true,
-      });
+      if (viewport.width > 430) {
+        await page.locator(".craft-detail-graph-panel").scrollIntoViewIfNeeded();
+        await page.screenshot({
+          path: path.join(screenshotDir, `crafting-detail-cq7-chart-${viewport.name}.png`),
+          fullPage: true,
+        });
+      }
     }
 
+    expect(failures).toEqual([]);
+  });
+
+  test("keeps the material target bubble, thumb travel, and direct editor synchronized", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(detailPath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
+
+    const card = page.locator(".craft-detail-material-row").first();
+    const slider = card.locator(".bq-target-quality-slider");
+    const bubble = card.getByRole("button", { name: /Edit target quality/ });
+    const geometry = card.locator("[data-slider-geometry='true']");
+    await expect.poll(() => card.locator(".bq-target-slider-marker").count()).toBeGreaterThanOrEqual(8);
+
+    await slider.fill("500");
+    await expect(bubble).toHaveText("500");
+
+    await bubble.click();
+    const editor = card.getByRole("spinbutton", { name: /Edit target quality/ });
+    await editor.fill("723");
+    await editor.press("Enter");
+    await expect(slider).toHaveValue("723");
+
+    await card.getByRole("button", { name: /Edit target quality/ }).click();
+    await editor.fill("5000");
+    await editor.press("Enter");
+    await expect(slider).toHaveValue("1000");
+
+    await slider.fill("500");
+    const bubbleBox = await card.getByRole("button", { name: /Edit target quality/ }).boundingBox();
+    const geometryBox = await geometry.boundingBox();
+    expect(bubbleBox).not.toBeNull();
+    expect(geometryBox).not.toBeNull();
+    if (bubbleBox && geometryBox) {
+      await page.mouse.move(bubbleBox.x + bubbleBox.width / 2, bubbleBox.y + bubbleBox.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(geometryBox.x + geometryBox.width, bubbleBox.y + bubbleBox.height / 2, { steps: 8 });
+      await page.mouse.up();
+    }
+    await expect(slider).toHaveValue("1000");
+    await expect(card.getByRole("spinbutton", { name: /Edit target quality/ })).toHaveCount(0);
+
+    await slider.fill("500");
+    const touchBubbleBox = await card.getByRole("button", { name: /Edit target quality/ }).boundingBox();
+    const touchGeometryBox = await geometry.boundingBox();
+    expect(touchBubbleBox).not.toBeNull();
+    expect(touchGeometryBox).not.toBeNull();
+    if (touchBubbleBox && touchGeometryBox) {
+      const touchX = touchBubbleBox.x + touchBubbleBox.width / 2;
+      const touchY = touchBubbleBox.y + touchBubbleBox.height / 2;
+      const cdp = await page.context().newCDPSession(page);
+      await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchStart",
+        touchPoints: [{ x: touchX, y: touchY }],
+      });
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ x: touchGeometryBox.x, y: touchY }],
+      });
+      await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await cdp.detach();
+    }
+    await expect(slider).toHaveValue("1");
+    await expect(card.getByRole("spinbutton", { name: /Edit target quality/ })).toHaveCount(0);
+    await expect(card).toContainText("Required qty");
+    await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
+    await expectNoDocumentOverflow(page);
+
+    for (const width of [700, 600, 500, 430, 375]) {
+      await page.setViewportSize({ width, height: 900 });
+      if (!(await card.isVisible())) {
+        await page.getByRole("tab", { name: "Materials" }).click();
+      }
+      for (const target of [1, 500, 1000]) {
+        await slider.fill(String(target));
+        const delta = await card.evaluate((element) => {
+          const currentBubble = element.querySelector<HTMLElement>(".bq-target-quality");
+          const currentSlider = element.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+          const currentGeometry = element.querySelector<HTMLElement>("[data-slider-geometry='true']");
+          if (!currentBubble || !currentSlider || !currentGeometry) return Number.POSITIVE_INFINITY;
+          const bubbleRect = currentBubble.getBoundingClientRect();
+          const geometryRect = currentGeometry.getBoundingClientRect();
+          const min = Number(currentSlider.min);
+          const max = Number(currentSlider.max);
+          const ratio = (Number(currentSlider.value) - min) / Math.max(1, max - min);
+          const expectedCenter = geometryRect.left + geometryRect.width * ratio;
+          return Math.abs(bubbleRect.left + bubbleRect.width / 2 - expectedCenter);
+        });
+        expect(delta).toBeLessThanOrEqual(2);
+      }
+      await expect(card.getByText("Required qty")).toBeVisible();
+      await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
+      await expectNoDocumentOverflow(page);
+    }
     expect(failures).toEqual([]);
   });
 

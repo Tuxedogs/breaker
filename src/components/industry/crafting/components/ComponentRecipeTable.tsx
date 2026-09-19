@@ -91,7 +91,6 @@ import {
   type DetailStatScanSection,
 } from "@/lib/crafting/detailStatPresentation";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
-import MaterialIcon from "@/components/logistics/MaterialIcon";
 import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
 import {
   projectCraftingDetailMaterialRows,
@@ -1459,7 +1458,6 @@ export function DetailMaterialQualityRow({
     return (
       <div className="craft-detail-material-row craft-detail-material-row--unavailable">
         <div className="craft-detail-material-id">
-          <MaterialIcon materialName={materialName} size={34} className="craft-detail-material-icon" />
           <span className="craft-detail-material-copy">
             <span className="craft-detail-material-slot">{mat.slot}</span>
             <strong>{materialName}</strong>
@@ -1475,14 +1473,12 @@ export function DetailMaterialQualityRow({
   return (
     <div className="craft-detail-material-row">
       <div className="craft-detail-material-id">
-        <MaterialIcon materialName={materialName} size={34} className="craft-detail-material-icon" />
         <span className="craft-detail-material-copy">
           <span className="craft-detail-material-slot">{mat.slot}</span>
           <strong>{materialName}</strong>
         </span>
       </div>
       <div className="craft-detail-material-quality-control">
-        <span className="craft-detail-material-quality-label">Target quality</span>
         <div className={`craft-detail-material-target-input ${selectedQualityTierClass}`}>
           <TargetQualitySlider
             label={`${selectedQuality}`}
@@ -1493,7 +1489,7 @@ export function DetailMaterialQualityRow({
             step={1}
             value={selectedQuality}
             markers={bandMarkers}
-            layout="stacked"
+            layout="material"
             onChange={(rawQuality) => {
               if (onQualityChange) {
                 onQualityChange(rawQuality);

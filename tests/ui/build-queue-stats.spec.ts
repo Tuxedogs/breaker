@@ -787,22 +787,28 @@ test.describe("Build Queue stats fixture", () => {
       const slider = page.getByRole("slider", { name: "Target quality for Stileron" });
       const editor = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--slider')]");
       const shell = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-slider-shell')]");
-      const badge = editor.locator(":scope > .bq-target-quality");
+      const badge = editor.locator(".bq-target-slider-geometry > .bq-target-quality");
       await expect(slider).toHaveValue("860");
 
       const geometry = await editor.evaluate((element) => {
-        const badgeRect = element.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
-        const shellRect = element.querySelector(".bq-target-slider-shell")?.getBoundingClientRect();
+        const badgeRect = element.querySelector(".bq-target-slider-geometry > .bq-target-quality")?.getBoundingClientRect();
+        const geometryRect = element.querySelector(".bq-target-slider-geometry")?.getBoundingClientRect();
+        const range = element.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+        const ratio = range
+          ? (Number(range.value) - Number(range.min)) / Math.max(1, Number(range.max) - Number(range.min))
+          : 0;
+        const expectedCenter = geometryRect ? geometryRect.left + geometryRect.width * ratio : 0;
         return {
           badgeWidth: badgeRect?.width ?? 0,
-          badgeCenter: badgeRect ? badgeRect.left + badgeRect.width / 2 : 0,
-          shellWidth: shellRect?.width ?? 0,
-          shellCenter: shellRect ? shellRect.left + shellRect.width / 2 : 0,
+          shellWidth: geometryRect?.width ?? 0,
+          alignmentDelta: badgeRect
+            ? Math.abs(badgeRect.left + badgeRect.width / 2 - expectedCenter)
+            : Number.POSITIVE_INFINITY,
         };
       });
       expect(geometry.badgeWidth).toBeLessThanOrEqual(80);
       expect(geometry.shellWidth).toBeGreaterThan(geometry.badgeWidth);
-      expect(geometry.shellCenter).toBeGreaterThan(geometry.badgeCenter);
+      expect(geometry.alignmentDelta).toBeLessThanOrEqual(2);
 
       await expect(shell).toHaveCSS("opacity", "1");
       await editor.hover();

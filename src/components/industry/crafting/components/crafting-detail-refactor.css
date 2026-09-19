@@ -337,92 +337,20 @@
   border-radius: var(--ops-radius-nested);
 }
 
-.craft-detail-material-target-input,
-.craft-detail-material-target-input .bq-target-editor--slider {
-  display: contents;
-}
-
-.craft-detail-material-target-input .bq-target-editor--slider {
-  width: 100%;
-  min-height: 48px;
-  gap: 3px;
-}
-
-.craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
-  justify-self: start;
-  width: auto;
-  min-height: 22px;
-  padding-inline: 7px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-}
-
-.craft-detail-material-target-input .bq-target-slider-shell {
-  width: 100%;
-  min-height: 25px;
-  padding-bottom: 28px;
-}
-
-.craft-detail-material-target-input .bq-target-quality-slider {
-  width: calc(100% - 14px);
-  margin-inline: 7px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-markers {
-  inset: 0 7px 28px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker {
-  height: 9px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker span {
-  top: -14px;
-  font-size: 0.75rem;
-  transform: translateX(-50%);
-  transform-origin: top center;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker span {
-  display: none;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker:first-child span,
-.craft-detail-material-target-input .bq-target-slider-marker:nth-child(4) span,
-.craft-detail-material-target-input .bq-target-slider-marker:last-child span {
-  display: block;
-}
-
 .craft-detail-material-row {
   min-height: 70px;
 }
 
 .craft-detail-shell .craft-detail-material-id {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 9px;
 }
 
 .craft-detail-shell .craft-detail-material-copy {
   display: grid;
   gap: 3px;
   min-width: 0;
-}
-
-.craft-detail-shell .craft-detail-material-icon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
-  border-radius: var(--ops-radius-nested);
-  background: var(--craft-surface-raised, var(--ops-surface-deep));
-}
-
-.craft-detail-shell .craft-detail-material-icon svg {
-  width: 28px;
-  height: 28px;
 }
 
 .craft-detail-material-target,
@@ -623,50 +551,6 @@
 
   .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
     grid-template-columns: 1fr;
-  }
-
-  .craft-detail-shell .craft-detail-material-table-head {
-    display: none;
-  }
-
-  .craft-detail-shell .craft-detail-material-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "material required"
-      "target target"
-      "input input"
-      "effects effects";
-    gap: 9px 12px;
-    padding: 11px;
-  }
-
-  .craft-detail-shell .craft-detail-material-id {
-    grid-area: material;
-  }
-
-  .craft-detail-shell .craft-detail-material-required {
-    grid-area: required;
-  }
-
-  .craft-detail-shell .craft-detail-material-target,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality {
-    grid-area: target;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .craft-detail-shell .craft-detail-material-input,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
-    grid-area: input;
-  }
-
-  .craft-detail-shell .craft-detail-material-effects {
-    grid-area: effects;
-    overflow: visible;
-    flex-wrap: wrap;
   }
 
   .craft-detail-shell .craft-detail-effect-row {
@@ -1425,125 +1309,6 @@
     text-transform: none;
   }
 
-  .craft-detail-material-table {
-    overflow: hidden;
-    border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
-    border-radius: 8px;
-    background: rgba(8, 22, 33, 0.68);
-  }
-
-  .craft-detail-material-table-head {
-    display: none;
-  }
-
-  .craft-detail-shell .craft-detail-material-row {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "material required"
-      "target input"
-      "effects effects";
-    gap: 5px 10px;
-    min-height: 0;
-    padding: 8px;
-    border: 0;
-    border-bottom: 1px solid var(--craft-border-soft, var(--ops-border-soft));
-    border-radius: 0;
-    background: transparent;
-  }
-
-  .craft-detail-shell .craft-detail-material-row:last-child {
-    border-bottom: 0;
-  }
-
-  .craft-detail-shell .craft-detail-material-row:nth-child(even),
-  .craft-detail-shell .craft-detail-material-row:hover,
-  .craft-detail-shell .craft-detail-material-row:nth-child(even):hover {
-    background: rgba(13, 31, 44, 0.42);
-  }
-
-  .craft-detail-shell .craft-detail-material-id {
-    grid-area: material;
-    grid-template-columns: 30px minmax(0, 1fr);
-    gap: 7px;
-  }
-
-  .craft-detail-shell .craft-detail-material-icon {
-    width: 30px;
-    height: 30px;
-    border: 0;
-    background: rgba(8, 22, 33, 0.72);
-  }
-
-  .craft-detail-shell .craft-detail-material-icon svg {
-    width: 25px;
-    height: 25px;
-  }
-
-  .craft-detail-shell .craft-detail-material-copy {
-    gap: 1px;
-  }
-
-  .craft-detail-shell .craft-detail-material-slot {
-    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
-    font-size: 0.61rem !important;
-    font-weight: 550;
-    letter-spacing: 0.035em;
-  }
-
-  .craft-detail-shell .craft-detail-material-id strong {
-    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
-    font-size: 0.86rem;
-    font-weight: 620;
-  }
-
-  .craft-detail-shell .craft-detail-material-required {
-    grid-area: required;
-    align-self: center;
-    justify-self: end;
-    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
-    font-size: 0.82rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality {
-    grid-area: target;
-    align-self: center;
-    min-height: 22px;
-    padding-inline: 6px;
-    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
-    font-size: 0.72rem;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
-    grid-area: input;
-    min-width: 0;
-    min-height: 28px;
-    padding-bottom: 19px;
-  }
-
-  .craft-detail-material-target-input .bq-target-slider-marker span {
-    top: -12px;
-    font-size: 0.65rem;
-  }
-
-  .craft-detail-shell .craft-detail-material-effects {
-    grid-area: effects;
-    display: flex;
-    min-height: 0;
-    gap: 4px;
-    overflow: visible;
-    flex-wrap: wrap;
-  }
-
-  .craft-detail-shell .craft-detail-effect-chip {
-    min-height: 22px;
-    padding: 3px 6px;
-    border-color: rgba(125, 211, 252, 0.13);
-    background: rgba(56, 189, 248, 0.045);
-    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
-    font-size: 0.66rem;
-  }
-
   .craft-detail-shell .craft-detail-effects-panel {
     margin-top: 12px;
   }
@@ -1625,25 +1390,22 @@
 .craft-detail-shell .craft-detail-material-table-body {
   display: grid;
   gap: 10px;
+  container-name: material-card-list;
+  container-type: inline-size;
 }
 
 .craft-detail-shell .craft-detail-material-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22%;
-  grid-template-areas:
-    "identity summary"
-    "quality summary";
-  grid-template-rows: 46px minmax(0, 1fr);
+  grid-template-columns: minmax(10rem, 1fr) minmax(16rem, 2fr) minmax(10rem, 0.8fr);
+  grid-template-areas: "identity quality summary";
   align-items: center;
-  column-gap: 10px;
-  row-gap: 0;
-  min-height: 136px;
-  height: 136px;
-  width: min(100%, 451px);
-  justify-self: start;
-  padding: 12px;
+  gap: clamp(12px, 2vw, 24px);
+  width: 100%;
+  min-width: 0;
+  min-height: 112px;
+  padding: clamp(12px, 1.5vw, 18px);
   box-sizing: border-box;
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
   border-radius: 8px;
   background: linear-gradient(105deg, rgba(11, 30, 45, 0.96), rgba(6, 20, 31, 0.96));
@@ -1662,29 +1424,9 @@
 
 .craft-detail-shell .craft-detail-material-id {
   grid-area: identity;
-  align-self: start;
-  grid-template-columns: 38px minmax(0, 1fr);
-  gap: 10px;
-}
-
-.craft-detail-shell .craft-detail-material-icon {
-  display: grid;
-  width: 36px !important;
-  height: 36px !important;
-  place-items: center;
-  padding: 0;
-  overflow: hidden;
-  border-color: rgba(94, 173, 212, 0.25);
-  border: 1px solid rgba(94, 173, 212, 0.28);
-  border-radius: 6px;
-  background: rgba(4, 17, 27, 0.72);
-  box-shadow: none;
-}
-
-.craft-detail-shell .craft-detail-material-icon svg {
-  display: block;
-  width: 29px;
-  height: 29px;
+  align-self: center;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
 }
 
 .craft-detail-shell .craft-detail-material-copy {
@@ -1694,7 +1436,6 @@
 }
 
 .craft-detail-shell .craft-detail-material-slot,
-.craft-detail-shell .craft-detail-material-quality-label,
 .craft-detail-shell .craft-detail-material-required > span {
   color: var(--void-text-muted);
   font-size: 0.54rem;
@@ -1713,61 +1454,25 @@
 }
 
 .craft-detail-shell .craft-detail-material-quality-control {
-  display: block;
+  display: grid;
   grid-area: quality;
-  position: relative;
-  align-self: start;
+  align-self: center;
+  gap: 8px;
   min-width: 0;
-  box-sizing: border-box;
-  padding: 0 0 0 50px;
 }
 
-.craft-detail-shell .craft-detail-material-target-input,
-.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider {
+.craft-detail-shell .craft-detail-material-target-input {
   display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 50px;
-  width: auto;
-}
-
-.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider {
-  position: relative;
-  inset: auto;
   width: 100%;
+  min-width: 0;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider {
-  position: relative;
-  min-height: 70px;
+  width: 100%;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
-  display: block;
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 70px;
-  min-height: 70px;
-  padding: 0;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider {
-  position: absolute;
-  top: 28px;
-  left: 0;
-  width: 100%;
-  height: 18px;
-  margin-inline: 0;
-}
-
-.craft-detail-shell .craft-detail-material-target-input .bq-target-slider-markers {
-  inset: 44px 0 auto;
-  height: 11px;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-marker {
@@ -1777,9 +1482,9 @@
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-marker span {
   display: none;
-  top: 13px;
+  top: 12px;
   color: var(--void-text-muted);
-  font-size: 0.52rem;
+  font-size: 0.64rem;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-marker:first-child span,
@@ -1788,17 +1493,9 @@
   display: block;
 }
 
-.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality,
-.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality-input {
-  position: absolute;
-  z-index: 3;
-  top: -2px;
-  left: var(--target-quality-pct, 0%);
-  min-width: 40px;
-  width: 40px;
-  min-height: 26px;
+.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality,
+.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality-input {
   padding: 2px 5px;
-  transform: translateX(-50%);
   border: 1px solid rgb(21, 189, 244);
   border-radius: 5px;
   background: #0a2638;
@@ -1807,10 +1504,9 @@
   font-size: 0.82rem;
   font-weight: 800;
   text-align: center;
-  pointer-events: auto;
 }
 
-.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality::after {
+.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality::after {
   position: absolute;
   bottom: -5px;
   left: 50%;
@@ -1823,12 +1519,14 @@
   background: #061d2e;
 }
 
-.craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider::-webkit-slider-runnable-track {
-  height: 4px;
+.craft-detail-shell .craft-detail-material-target-input .bq-target-slider-track {
   border: 1px solid rgba(108, 170, 201, 0.42);
-  border-radius: 999px;
-  background: linear-gradient(90deg, #28c4f4 var(--target-quality-pct, 0%), rgba(37, 116, 158, 0.26) var(--target-quality-pct, 0%));
+  background: rgba(37, 116, 158, 0.26);
   box-shadow: none;
+}
+
+.craft-detail-shell .craft-detail-material-target-input .bq-target-slider-track-fill {
+  background: #28c4f4;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider::-webkit-slider-thumb {
@@ -1844,11 +1542,11 @@
   display: grid;
   grid-area: summary;
   justify-self: stretch;
-  align-self: stretch;
-  grid-template-rows: 46px minmax(0, 1fr);
-  gap: 3px;
+  align-self: center;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  gap: 10px;
   min-width: 0;
-  padding-left: 10px;
+  padding-left: clamp(10px, 1.5vw, 18px);
   border-left: 1px solid rgba(45, 136, 181, 0.32);
 }
 
@@ -1859,7 +1557,7 @@
 
 .craft-detail-shell .craft-detail-material-required {
   display: grid;
-  align-content: start;
+  align-content: center;
   gap: 5px;
 }
 
@@ -1873,54 +1571,14 @@
 
 .craft-detail-shell .craft-detail-material-effects {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  align-self: start;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  align-self: center;
   align-content: center;
   align-items: stretch;
   gap: 3px;
   min-width: 0;
   padding: 0;
   border: 0;
-}
-
-/* A single projected stat is the compact target card's dedicated result tile.
-   Recipes with several live impacts keep every value visible in the existing
-   compact grid instead of dropping information. */
-.craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) {
-  display: block;
-}
-
-.craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip {
-  grid-template-columns: 20px minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: 47px;
-  padding: 5px 6px;
-  border-color: rgba(35, 213, 167, 0.38);
-  background: rgba(4, 30, 34, 0.74);
-}
-
-.craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip::before {
-  grid-row: 1 / -1;
-  grid-column: 1;
-  display: grid;
-  place-items: center;
-  color: #31c8f4;
-  font-size: 1.18rem;
-  line-height: 1;
-  content: "✦";
-}
-
-.craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip > span {
-  grid-row: 1;
-  grid-column: 2;
-  font-size: 0.46rem;
-}
-
-.craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip strong {
-  grid-row: 2;
-  grid-column: 2;
-  align-self: start;
-  font-size: 0.86rem;
 }
 
 .craft-detail-shell .craft-detail-effect-chip {
@@ -1931,13 +1589,13 @@
   width: 100%;
   min-width: 0;
   position: relative;
-  min-height: 30px;
-  padding: 3px 5px;
+  min-height: 42px;
+  padding: 6px 8px;
   border: 1px solid rgba(92, 171, 205, 0.25);
   border-radius: 4px;
   background: rgba(4, 18, 28, 0.6);
   box-shadow: none;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
 }
 
 .craft-detail-shell .craft-detail-effect-chip > span {
@@ -1947,14 +1605,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #88b8e2;
-  font-size: 0.48rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.08em;
 }
 
 .craft-detail-shell .craft-detail-effect-chip strong {
   grid-column: 2;
-  font-size: 0.66rem;
+  font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1970,141 +1628,49 @@
   display: none;
 }
 
-@media (max-width: 980px) {
+@container material-card-list (max-width: 700px) {
   .craft-detail-shell .craft-detail-material-row {
-    grid-template-columns: minmax(0, 1fr) 86px;
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.7fr);
     grid-template-areas:
       "identity summary"
       "quality quality";
-    grid-template-rows: 50px minmax(0, 1fr);
-    min-height: 136px;
-    height: 136px;
-    width: 100%;
-    padding: 12px;
-    row-gap: 0;
+    min-height: 0;
   }
 
   .craft-detail-shell .craft-detail-material-summary {
-    grid-template-rows: 46px minmax(0, 1fr);
-    padding-left: 8px;
-    border-left: 1px solid rgba(45, 136, 181, 0.32);
+    grid-template-columns: minmax(5rem, auto) minmax(7rem, 1fr);
+  }
+}
+
+@container material-card-list (max-width: 460px) {
+  .craft-detail-shell .craft-detail-material-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "identity"
+      "quality"
+      "summary";
+    gap: 14px;
   }
 
-  .craft-detail-shell .craft-detail-material-id {
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 4px;
-  }
-
-  .craft-detail-shell .craft-detail-material-icon,
-  .craft-detail-shell .craft-detail-material-icon svg {
-    width: 34px;
-    height: 34px;
-  }
-
-  .craft-detail-shell .craft-detail-material-quality-control {
-    padding-left: 50px;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
-    min-height: 70px;
-    height: 70px;
+  .craft-detail-shell .craft-detail-material-summary {
+    grid-template-columns: minmax(5rem, 0.35fr) minmax(0, 1fr);
+    padding-top: 12px;
+    padding-left: 0;
+    border-top: 1px solid rgba(45, 136, 181, 0.32);
+    border-left: 0;
   }
 
   .craft-detail-shell .craft-detail-material-effects {
-    gap: 4px;
-    padding-top: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .craft-detail-shell .craft-detail-effect-chip > span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
   }
 
   .craft-detail-shell .craft-detail-effect-chip {
-    min-height: 28px;
-    padding: 4px 6px;
-  }
-}
-
-@media (max-width: 520px) {
-  .craft-detail-shell .craft-detail-material-row {
-    padding: 6px;
-    row-gap: 6px;
-  }
-
-  .craft-detail-shell .craft-detail-material-id {
-    grid-template-columns: 36px minmax(0, 1fr);
-    gap: 4px;
-  }
-
-  .craft-detail-shell .craft-detail-material-icon {
-    width: 34px;
-    height: 34px;
-  }
-
-  .craft-detail-shell .craft-detail-material-icon svg {
-    width: 27px;
-    height: 27px;
-  }
-
-  .craft-detail-shell .craft-detail-material-quality-control {
-    gap: 11px;
-  }
-
-  .craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip {
-    margin-top: 8px;
-    min-height: 63px;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-marker span {
-    font-size: 0.61rem;
-  }
-
-  .craft-detail-shell .craft-detail-effect-chip {
-    min-height: 26px;
-    padding: 4px 6px;
-    font-size: 0.66rem;
-  }
-}
-
-@media (max-width: 760px) {
-  /* The input owns the shortened mobile track. Its bubble and markers are
-     descendants of that same width, so every normalized position stays on the
-     thumb's coordinate system. */
-  .craft-detail-shell .craft-detail-material-quality-control {
-    padding-left: 0;
-    transform: translateY(-10px);
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input {
-    right: auto;
-    left: 0;
-    width: 60%;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--slider,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider {
-    width: 100%;
-  }
-
-  /* Native range thumbs stop one radius inside their input bounds. Expand the
-     input symmetrically so its center travel matches the bubble/tick shell. */
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality-slider {
-    left: -7px;
-    width: calc(100% + 14px);
-  }
-}
-
-.craft-detail-shell .craft-detail-material-target-input .bq-target-slider-marker span {
-  top: 14px;
-  font-size: 12px;
-}
-
-@media (max-width: 520px) {
-  .craft-detail-shell .craft-detail-material-row {
-    padding: 6px;
-    row-gap: 6px;
-  }
-
-  .craft-detail-shell .craft-detail-material-effects:has(.craft-detail-effect-chip:only-child) .craft-detail-effect-chip {
-    margin-top: 8px;
-    min-height: 63px;
+    min-height: 38px;
   }
 }
