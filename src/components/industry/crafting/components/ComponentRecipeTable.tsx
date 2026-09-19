@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { Link, useLocation } from "react-router-dom";
+import MiningBookmarkIcon from "../../mining/MiningBookmarkIcon";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -152,6 +153,13 @@ type MissionRewardEntry = {
   chance?: number;
   isDisabled?: boolean;
   source: "mission" | "pool";
+  reputationRequirement?: string;
+  pickupSystem?: string;
+  reputationScope?: string;
+  reputationReward?: string;
+  payout?: string;
+  systems?: string[];
+  deliveryItems?: string[];
 };
 
 type ApiBlueprintMission = {
@@ -264,11 +272,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function formatMissionChance(value?: number): string | null {
-  if (typeof value !== "number" || !Number.isFinite(value)) return null;
-  return `${Math.round(value * 100)}%`;
-}
-
 function normalizeMissionTitle(value: string): string {
   return value.replace(/~mission\(([^)]+)\)/g, "$1");
 }
@@ -339,6 +342,45 @@ function buildPoolMissionEntries(
   });
 }
 
+async function enrichMissionEntry(entry: MissionRewardEntry): Promise<MissionRewardEntry> {
+  if (!entry.contractId) return entry;
+  try {
+    const response = await fetch(apiUrl(`/api/missions/variant/${encodeURIComponent(entry.contractId)}`));
+    if (!response.ok) return entry;
+    const payload = await parseJsonResponse<Record<string, unknown>>(response, {
+      label: "mission variant",
+      url: response.url,
+    });
+    const variant = isRecord(payload.variant) ? payload.variant : null;
+    if (!variant) return entry;
+    const pickupLocation = isRecord(variant.pickupLocation) ? variant.pickupLocation : null;
+    const reputationScope = isRecord(variant.reputationScope) ? variant.reputationScope : null;
+    const rewards = isRecord(variant.rewards) ? variant.rewards : null;
+    const rewardedPaths = Array.isArray(variant.rewardedReputationPaths) ? variant.rewardedReputationPaths : [];
+    return {
+      ...entry,
+      reputationRequirement: asNonEmptyString(variant.reputationRequirement)
+        ?? asNonEmptyString(variant.standingRequirement),
+      pickupSystem: asNonEmptyString(pickupLocation?.system)
+        ?? asNonEmptyString(variant.locationRoles && isRecord(variant.locationRoles) && isRecord(variant.locationRoles.pickup)
+          ? variant.locationRoles.pickup.primarySystem
+          : undefined),
+      reputationScope: asNonEmptyString(reputationScope?.displayName),
+      reputationReward: asNonEmptyString(rewardedPaths[0] && isRecord(rewardedPaths[0]) ? rewardedPaths[0].displayText : undefined)
+        ?? (Array.isArray(rewards?.reputationRewards) ? asNonEmptyString(rewards.reputationRewards[0]) : undefined),
+      payout: asNonEmptyString(rewards?.credits),
+      systems: Array.isArray(variant.locationRoles) ? undefined : (isRecord(variant.locationRoles) && isRecord(variant.locationRoles.pickup) && Array.isArray(variant.locationRoles.pickup.systems)
+        ? variant.locationRoles.pickup.systems.filter((value): value is string => typeof value === "string")
+        : []),
+      deliveryItems: Array.isArray(rewards?.itemRewards)
+        ? rewards.itemRewards.map((item) => isRecord(item) ? asNonEmptyString(item.displayName) : undefined).filter((value): value is string => Boolean(value))
+        : [],
+    };
+  } catch {
+    return entry;
+  }
+}
+
 function useMissionRewardEntries(
   recipe: ComponentRecipe,
   rewardPools: RecipeRewardPoolSummary[],
@@ -359,11 +401,12 @@ function useMissionRewardEntries(
       loadBlueprintSourceMissions(recipe.blueprint_id),
       loadBlueprintReleaseStateMap(),
     ])
-      .then(([missions, releaseStateMap]) => {
+      .then(async ([missions, releaseStateMap]) => {
         if (cancelled) return;
-        const entries = missions
+        const entries = (await Promise.all(missions
           .map((mission) => normalizeMissionRewardEntry(mission, releaseStateMap))
-          .filter((entry): entry is MissionRewardEntry => Boolean(entry));
+          .filter((entry): entry is MissionRewardEntry => Boolean(entry))
+          .map(enrichMissionEntry)));
         setApiEntries(entries);
       })
       .catch(() => {
@@ -1438,6 +1481,9 @@ export function DetailMaterialQualityRow({
   fittingDetail?: FittingComponentDetail | null;
 }) {
   const materialName = getMaterialName(mat);
+  // The shortened label is constrained to this dense material-card presentation;
+  // all data, slider semantics, and accessible naming retain the canonical name.
+  const materialPresentationName = materialName === "Hephaestanite" ? "Heph." : materialName;
   const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
   const selectedQuality = clampQuality(
     quality ?? getEffectiveQualityFromBands(bands, bandIndex ?? DEFAULT_BAND_INDEX),
@@ -1460,7 +1506,7 @@ export function DetailMaterialQualityRow({
         <div className="craft-detail-material-id">
           <span className="craft-detail-material-copy">
             <span className="craft-detail-material-slot">{mat.slot}</span>
-            <strong>{materialName}</strong>
+            <strong title={materialName}>{materialPresentationName}</strong>
           </span>
         </div>
         <div className="craft-detail-material-required">{requiredAmount}</div>
@@ -1475,7 +1521,7 @@ export function DetailMaterialQualityRow({
       <div className="craft-detail-material-id">
         <span className="craft-detail-material-copy">
           <span className="craft-detail-material-slot">{mat.slot}</span>
-          <strong>{materialName}</strong>
+          <strong title={materialName}>{materialPresentationName}</strong>
         </span>
       </div>
       <div className="craft-detail-material-quality-control">
@@ -2151,29 +2197,14 @@ function MissionSourcePanel({
 }) {
   const missionEntries = useMissionRewardEntries(recipe, rewardPools);
   const [expandedSourceRecipeId, setExpandedSourceRecipeId] = useState<string | null>(null);
+  const [selectedMission, setSelectedMission] = useState<MissionRewardEntry | null>(null);
   const showAllSources = expandedSourceRecipeId === recipe.blueprint_id;
   const visibleMissionEntries = showAllSources ? missionEntries : missionEntries.slice(0, 3);
   const hasAdditionalSources = missionEntries.length > 3;
 
-  const hasSourceValue = (value: unknown) => Boolean(value) && !/^unknown|n\/a$/i.test(String(value));
-  const blueprintRows: ComponentCardMetric[] = [
-    { label: "Blueprint ID", value: recipe.blueprint_id },
-    { label: "Entity ID", value: recipe.output_entityClass },
-    { label: "Item Type", value: recipe.wiki_type ?? recipe.component_type },
-    { label: "Size", value: formatSize(recipe.size) ?? "" },
-    { label: "Grade", value: recipe.grade ?? "" },
-  ].filter((row) => hasSourceValue(row.value));
-  const sourceRows: ComponentCardMetric[] = [
-    { label: "Source Path", value: recipe.source_file ?? "" },
-    { label: "Name Source", value: recipe.name_source ?? "" },
-    { label: "Raw Name", value: recipe.raw_name ?? "" },
-  ].filter((row) => hasSourceValue(row.value));
-  const hasAdvancedSourceData = blueprintRows.length > 0 || sourceRows.length > 0;
-
   return (
     <section className="craft-detail-sources-section">
       <div className="craft-summary-section craft-summary-mission-section">
-        <div className="craft-summary-section-label">Blueprint Sources</div>
           {missionEntries.length === 0 ? (
             <div className="craft-summary-empty craft-summary-empty--compact">
               No mission data for this blueprint
@@ -2182,14 +2213,6 @@ function MissionSourcePanel({
             <div className="craft-mission-source-list">
               {visibleMissionEntries.map((entry, entryIndex) => {
                 const bookmarked = isMissionBookmarked(entry.id);
-                const chance = formatMissionChance(entry.chance);
-                const missionParams = entry.conceptKey
-                  ? new URLSearchParams({ concept: entry.conceptKey })
-                  : entry.contractId
-                    ? new URLSearchParams({ search: entry.contractId })
-                    : null;
-                const missionHref = missionParams ? `/industry/missions?${missionParams.toString()}` : null;
-
                 return (
                   <div key={`${entry.id}:${entryIndex}`} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
                     <button
@@ -2199,38 +2222,17 @@ function MissionSourcePanel({
                       aria-label={bookmarked ? `Remove ${entry.title} mission save` : `Save ${entry.title} mission`}
                       onClick={() => onToggleMissionBookmark(entry.id)}
                     >
-                      <svg
-                        viewBox="0 0 24 24"
-                        width="14"
-                        height="14"
-                        fill={bookmarked ? "currentColor" : "none"}
-                        stroke="currentColor"
-                        strokeWidth="1.9"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden
-                      >
-                        <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
-                      </svg>
+                      <MiningBookmarkIcon />
                     </button>
                     <div className="craft-mission-source-copy">
                       <div className="craft-mission-source-name">
                         {entry.isDisabled && <span className="craft-disabled-badge">[DISABLED]</span>}
-                        {missionHref ? (
-                          <Link
-                            className="craft-detail-drawer-full-link craft-mission-source-link"
-                            to={missionHref}
-                          >
-                            {entry.title}
-                          </Link>
-                        ) : (
-                          <span>{entry.title}</span>
-                        )}
+                        <button type="button" className="craft-mission-source-link" onClick={() => setSelectedMission(entry)}>{entry.title}</button>
                       </div>
                       <div className="craft-mission-source-meta">
-                        {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
-                          .filter(Boolean)
-                          .join(" / ")}
+                        <span>Rep required: {entry.reputationRequirement ?? "Unavailable"}</span>
+                        <span>Pickup system: {entry.pickupSystem ?? "Unavailable"}</span>
+                        <span>Rep scope: {entry.reputationScope ?? entry.factionName ?? "Unavailable"}</span>
                       </div>
                     </div>
                   </div>
@@ -2251,38 +2253,21 @@ function MissionSourcePanel({
             </button>
           )}
       </div>
-      {hasAdvancedSourceData && (
-        <details className="craft-detail-source-advanced">
-          <summary>Advanced Source Data</summary>
-          <div className="craft-detail-source-advanced-body">
-            {blueprintRows.length > 0 && (
-              <div className="craft-summary-section">
-                <div className="craft-summary-section-label">Blueprint Details</div>
-                <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-                  {blueprintRows.map((row) => (
-                    <span key={`${row.label}:${row.value}`}>
-                      <span>{row.label}</span>
-                      <strong className="component-result-card__id">{row.value}</strong>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {sourceRows.length > 0 && (
-              <div className="craft-summary-section">
-                <div className="craft-summary-section-label">Additional / Source Metadata</div>
-                <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-                  {sourceRows.map((row) => (
-                    <span key={`${row.label}:${row.value}`}>
-                      <span>{row.label}</span>
-                      <strong className="component-result-card__id">{row.value}</strong>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+      {selectedMission && (
+        <div className="craft-mission-briefing-modal" role="dialog" aria-modal="true" aria-label="Mission Briefing">
+          <div className="craft-mission-briefing-card">
+            <button type="button" className="craft-detail-drawer-close" aria-label="Close Mission Briefing" onClick={() => setSelectedMission(null)}>×</button>
+            <h3>Mission Briefing</h3>
+            <strong>{selectedMission.title}</strong>
+            <dl>
+              <dt>Reputation Reward</dt><dd>{selectedMission.reputationReward ?? "Unavailable"}</dd>
+              <dt>Blueprint Reward Pool</dt><dd>{selectedMission.poolName ?? "Unavailable"}</dd>
+              <dt>Payout</dt><dd>{selectedMission.payout ?? "Unavailable"}</dd>
+              <dt>Systems</dt><dd>{selectedMission.systems?.join(" / ") || selectedMission.pickupSystem || "Unavailable"}</dd>
+              <dt>Items to Collect or Deliver</dt><dd>{selectedMission.deliveryItems?.join(" / ") || "Nothing more."}</dd>
+            </dl>
           </div>
-        </details>
+        </div>
       )}
     </section>
   );
@@ -2799,7 +2784,12 @@ function RecipeDrawer({
               aria-controls={`craft-detail-drawer-panel-${tabName}`}
               onClick={() => setDrawerTab(tabName)}
             >
-              {tabName === "stats" ? "Statistics" : tabName}
+              {{
+                overview: "Overview",
+                materials: "Materials",
+                stats: "Statistics",
+                sources: "Sources",
+              }[tabName]}
             </button>
           ))}
         </nav>
@@ -2860,14 +2850,6 @@ function RecipeDrawer({
                 overallModifiers={overallModifiers}
                 overallQualitySource={overallQualitySource}
                 finalProductQuality={finalProductQuality}
-                sourcePanel={(
-                  <MissionSourcePanel
-                    recipe={selectedRecipe}
-                    rewardPools={rewardPools}
-                    isMissionBookmarked={isMissionBookmarked}
-                    onToggleMissionBookmark={onToggleMissionBookmark}
-                  />
-                )}
               >
                 {detailMaterialRows.map(({ requirement: mat, inputIndex }) => {
                   const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
@@ -2929,9 +2911,10 @@ function RecipeDrawer({
             type="button"
             className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
             aria-pressed={selectedIsBookmarked}
+            aria-label={selectedIsBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
             onClick={() => onToggleBookmark(selectedRecipe)}
           >
-            {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
+            <MiningBookmarkIcon />
           </button>
           <button
             type="button"

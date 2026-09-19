@@ -324,17 +324,26 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
         return {
           backHeight: Math.round(backBox?.height ?? 0),
           backInset: Math.round((backBox?.left ?? 0) - (pageBox?.left ?? 0)),
+          titleInset: Math.round((titleBox?.left ?? 0) - (pageBox?.left ?? 0)),
           artRightInset: Math.round((pageBox?.right ?? 0) - (artBox?.right ?? 0)),
-          titleRight: Math.round(titleBox?.right ?? 0),
-          artLeft: Math.round(artBox?.left ?? 0),
         };
       });
       expect(headerGeometry.backHeight).toBeGreaterThanOrEqual(44);
-      expect(headerGeometry.backInset).toBeLessThanOrEqual(3);
-      expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(8);
-      expect(headerGeometry.artLeft).toBeGreaterThanOrEqual(headerGeometry.titleRight);
+      expect(headerGeometry.backInset).toBe(headerGeometry.titleInset);
+      if (viewport.width <= 466) {
+        expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(30);
+      } else {
+        expect(headerGeometry.artRightInset).toBeGreaterThanOrEqual(8);
+      }
 
-      const materialTab = page.getByRole("tab", { name: "materials", exact: true });
+      await expect(page.locator(".craft-detail-drawer-tabs [role='tab']")).toHaveText([
+        "Overview",
+        "Materials",
+        "Statistics",
+        "Sources",
+      ]);
+
+      const materialTab = page.getByRole("tab", { name: "Materials", exact: true });
       await materialTab.click();
       const card = page.locator(".craft-detail-material-row").first();
       await expect(card).toBeVisible();
@@ -371,5 +380,70 @@ test("makes a selected detail the flat mobile page while retaining the desktop s
       await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       await page.screenshot({ path: path.join(screenshotDir, `split-detail-${viewport.name}.png`) });
     }
+  }
+});
+
+test("keeps the mobile detail identity header composed at target phone widths", async ({ page }) => {
+  await mkdir(screenshotDir, { recursive: true });
+  const previewId = "ba842720-ad32-4d53-8f56-992bacb1fc45";
+
+  for (const viewport of [
+    { name: "390x844", width: 390, height: 844 },
+    { name: "402x874", width: 402, height: 874 },
+    { name: "430x932", width: 430, height: 932 },
+    { name: "466x900", width: 466, height: 900 },
+  ]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto(`${browserPath}?preview=${previewId}`, { waitUntil: "domcontentloaded" });
+
+    const header = page.locator(".craft-detail-drawer-header");
+    const back = header.locator(".craft-detail-drawer-mobile-back");
+    const art = header.locator(".craft-detail-drawer-icon-wrap");
+    const tabs = page.locator(".craft-detail-drawer-tabs [role='tab']");
+
+    await expect(back).toHaveText("‹Crafting");
+    await expect(tabs).toHaveText(["Overview", "Materials", "Statistics", "Sources"]);
+    await expect(art.locator("img")).toBeVisible();
+
+    const geometry = await header.evaluate((element) => {
+      const page = element.closest<HTMLElement>(".craft-detail-page");
+      const back = element.querySelector<HTMLElement>(".craft-detail-drawer-mobile-back");
+      const title = element.querySelector<HTMLElement>(".craft-detail-drawer-title");
+      const art = element.querySelector<HTMLElement>(".craft-detail-drawer-icon-wrap");
+      const image = art?.querySelector<HTMLElement>("img");
+      const pageBox = page?.getBoundingClientRect();
+      const backBox = back?.getBoundingClientRect();
+      const titleBox = title?.getBoundingClientRect();
+      const artBox = art?.getBoundingClientRect();
+      const imageBox = image?.getBoundingClientRect();
+      const backStyle = back ? getComputedStyle(back) : null;
+      const titleStyle = title ? getComputedStyle(title) : null;
+      return {
+        backInset: Math.round((backBox?.left ?? 0) - (pageBox?.left ?? 0)),
+        titleInset: Math.round((titleBox?.left ?? 0) - (pageBox?.left ?? 0)),
+        backHeight: Math.round(backBox?.height ?? 0),
+        backFontSize: Number.parseFloat(backStyle?.fontSize ?? "0"),
+        backFontWeight: Number.parseInt(backStyle?.fontWeight ?? "0", 10),
+        titleFontWeight: Number.parseInt(titleStyle?.fontWeight ?? "0", 10),
+        artRightInset: Math.round((pageBox?.right ?? 0) - (artBox?.right ?? 0)),
+        imageWidth: Math.round(imageBox?.width ?? 0),
+      };
+    });
+
+    expect(geometry.backInset).toBe(geometry.titleInset);
+    expect(geometry.backHeight).toBeGreaterThanOrEqual(44);
+    expect(geometry.backFontSize).toBeGreaterThanOrEqual(13);
+    expect(geometry.backFontSize).toBeLessThanOrEqual(14);
+    expect(geometry.backFontWeight).toBeLessThan(600);
+    expect(geometry.titleFontWeight).toBeGreaterThan(geometry.backFontWeight);
+    expect(geometry.artRightInset).toBeGreaterThanOrEqual(30);
+    expect(geometry.imageWidth).toBeGreaterThanOrEqual(96);
+
+    await page.getByRole("tab", { name: "Materials", exact: true }).click();
+    const qualityBubble = page.locator(".craft-detail-material-target-input button.bq-target-quality").first();
+    await expect(qualityBubble).toBeVisible();
+    await expect(qualityBubble).toHaveCSS("justify-content", "center");
+    await expect(qualityBubble).toHaveCSS("align-items", "center");
+    await page.screenshot({ path: path.join(screenshotDir, `detail-header-refinement-${viewport.name}.png`) });
   }
 });

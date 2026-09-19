@@ -347,6 +347,27 @@
   align-items: center;
 }
 
+.craft-detail-sources-section .craft-mission-source-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 7px;
+  white-space: normal;
+}
+
+.craft-detail-sources-section .craft-mission-source-meta span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.craft-mission-briefing-modal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: rgba(1, 8, 14, .72); }
+.craft-mission-briefing-card { position: relative; width: min(540px, 100%); padding: 20px; border: 1px solid var(--craft-border-default); border-radius: 8px; background: var(--craft-surface-panel); color: var(--void-text-main); }
+.craft-mission-briefing-card h3 { margin: 0 0 14px; }
+.craft-mission-briefing-card dl { display: grid; grid-template-columns: minmax(130px, .7fr) minmax(0, 1.3fr); gap: 10px 16px; margin: 18px 0 0; }
+.craft-mission-briefing-card dt { color: var(--void-text-muted); font-size: .72rem; text-transform: uppercase; }
+.craft-mission-briefing-card dd { margin: 0; }
+.craft-mission-source-link { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+
 .craft-detail-shell .craft-detail-material-copy {
   display: grid;
   gap: 3px;
@@ -796,12 +817,6 @@
   border-right: 1px solid var(--craft-border-soft);
 }
 
-/* Sources stays in the Materials flow on desktop; narrow detail gets its own
-   fourth tab without creating a second detail implementation. */
-.craft-detail-drawer-tabs button:last-child {
-  display: none;
-}
-
 .craft-detail-drawer-tabs button:hover {
   border-color: var(--craft-border-strong);
   border-bottom-color: var(--craft-border-default);
@@ -900,7 +915,7 @@
 
 .craft-detail-drawer-footer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  grid-template-columns: 42px minmax(0, 1fr);
   gap: 12px;
   flex: 0 0 auto;
   padding: 12px 14px;
@@ -912,6 +927,19 @@
 .craft-detail-drawer-footer .craft-summary-action-btn {
   width: 100%;
   min-height: 42px;
+  border: 1px solid rgb(0, 64, 110);
+  background: rgba(0, 117, 203, 0.12);
+  color: #fff;
+}
+
+.craft-detail-drawer-footer .craft-summary-action-btn.is-active {
+  border-color: rgb(0, 148, 255);
+  background: rgba(0, 118, 205, 0.4);
+}
+
+.craft-detail-drawer-footer .craft-summary-bookmark-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Full-page hierarchy and the same tunable surface family. */
@@ -1410,20 +1438,20 @@
     display: inline-flex;
     grid-area: back;
     align-items: center;
-    gap: 7px;
+    gap: 5px;
     justify-self: start;
     min-height: 44px;
     padding: 7px 3px 7px 0;
     border: 0;
     background: transparent;
     color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
-    font: 650 0.94rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
-    letter-spacing: -0.01em;
+    font: 500 0.84rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+    letter-spacing: 0;
     cursor: pointer;
   }
 
   .craft-detail-drawer-mobile-back > span:first-child {
-    font-size: 1.55rem;
+    font-size: 1.15rem;
     font-weight: 400;
     line-height: 0.72;
   }
@@ -1581,6 +1609,13 @@
   }
 }
 
+@media (max-width: 499px) {
+  .craft-detail-drawer-icon-wrap {
+    /* Keep the art paired with the identity block instead of the viewport edge. */
+    margin-right: clamp(30px, 8vw, 42px);
+  }
+}
+
 /* Recipe Browser material card presentation. The material and quality values
    remain owned by DetailMaterialQualityRow and TargetQualitySlider. */
 .craft-detail-shell .craft-detail-material-table {
@@ -1605,7 +1640,7 @@
 
 .craft-detail-shell .craft-detail-material-row {
   display: grid;
-  grid-template-columns: minmax(10rem, 0.72fr) minmax(16rem, 1.7fr) minmax(12rem, 0.9fr);
+  grid-template-columns: minmax(7.5rem, 9rem) minmax(16rem, 1.4fr) minmax(13rem, 1.1fr);
   grid-template-areas: "identity quality summary";
   align-items: center;
   gap: clamp(12px, 2vw, 24px);
@@ -1713,6 +1748,12 @@
   font-size: 0.82rem;
   font-weight: 800;
   text-align: center;
+}
+
+.craft-detail-shell .craft-detail-material-target-input .bq-target-editor--material button.bq-target-quality {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality::after {
