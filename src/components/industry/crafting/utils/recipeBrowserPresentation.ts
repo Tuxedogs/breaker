@@ -5,6 +5,7 @@ import { resolveWeaponDps } from "../../../../lib/fitting/fittingWeaponStats";
 export type RecipeBrowserColumn = {
   key: string;
   label: string;
+  width?: string;
   value: (record: ComponentCardIndexRecord) => string;
   sortValue?: (record: ComponentCardIndexRecord) => number | string | null;
 };
@@ -14,6 +15,40 @@ export type RecipeBrowserFamily = {
   label: string;
   columns: RecipeBrowserColumn[];
 };
+
+const RECIPE_BROWSER_COLUMN_WIDTHS: Record<string, string> = {
+  craftTime: "6.75rem",
+  health: "6rem",
+  mass: "6rem",
+  materials: "6rem",
+  hp: "7rem",
+  regen: "6rem",
+  delay: "7.5rem",
+  output: "7rem",
+  heat: "6rem",
+  em: "7rem",
+  cooling: "7rem",
+  power: "7rem",
+  powerPipsMin: "8.75rem",
+  powerPipsMax: "8.75rem",
+  assistMin: "9rem",
+  assistMax: "9rem",
+  spool: "6rem",
+  cooldown: "7rem",
+  fuel: "6rem",
+  class: "8rem",
+  slot: "7rem",
+  weight: "7rem",
+  physical: "8.5rem",
+  energy: "8rem",
+  temperature: "8.5rem",
+  storage: "7.5rem",
+  falloff: "8.5rem",
+};
+
+export function getRecipeBrowserColumnWidth(column: RecipeBrowserColumn): string {
+  return column.width ?? RECIPE_BROWSER_COLUMN_WIDTHS[column.key] ?? "7rem";
+}
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -103,6 +138,7 @@ export function getRecipeBrowserDamageBadges(
 const sizeColumn: RecipeBrowserColumn = {
   key: "size",
   label: "Size",
+  width: "4.25rem",
   value: (record) => record.size === null ? "—" : String(record.size),
   sortValue: (record) => record.size,
 };
@@ -110,6 +146,7 @@ const sizeColumn: RecipeBrowserColumn = {
 const gradeClassColumn: RecipeBrowserColumn = {
   key: "gradeClass",
   label: "Grade / Class",
+  width: "9.5rem",
   value: (record) => {
     const parts = [record.grade, record.class ? titleCase(record.class) : null].filter(Boolean);
     return parts.length ? parts.join(" · ") : "—";
@@ -145,11 +182,11 @@ const families: Record<string, RecipeBrowserFamily> = {
     label: "Vehicle Weapons",
     columns: [
       sizeColumn,
-      { key: "alpha", label: "Alpha", value: (record) => formatNumber(get(record, "shipWeapon", "alphaDamageTotal")) },
-      { key: "dps", label: "DPS", value: (record) => formatNumber(shipWeaponDps(record)), sortValue: shipWeaponDps },
-      { key: "rate", label: "Fire Rate", value: (record) => formatNumber(get(record, "shipWeapon", "fireRateRpm"), " rpm") },
-      { key: "speed", label: "Projectile Speed", value: (record) => formatNumber(get(record, "shipWeapon", "projectileSpeed"), " m/s") },
-      { key: "capacity", label: "Capacity", value: (record) => formatNumber(shipWeaponCapacity(record)) },
+      { key: "alpha", label: "Alpha", width: "5.5rem", value: (record) => formatNumber(get(record, "shipWeapon", "alphaDamageTotal")) },
+      { key: "dps", label: "DPS", width: "4.75rem", value: (record) => formatNumber(shipWeaponDps(record)), sortValue: shipWeaponDps },
+      { key: "rate", label: "Fire Rate", width: "7.25rem", value: (record) => formatNumber(get(record, "shipWeapon", "fireRateRpm"), " rpm") },
+      { key: "speed", label: "Projectile Speed", width: "10.5rem", value: (record) => formatNumber(get(record, "shipWeapon", "projectileSpeed"), " m/s") },
+      { key: "capacity", label: "Capacity", width: "6.25rem", value: (record) => formatNumber(shipWeaponCapacity(record)) },
     ],
   },
   shield: {

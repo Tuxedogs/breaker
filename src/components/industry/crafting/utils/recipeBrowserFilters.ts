@@ -2,6 +2,31 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
 export const DEFAULT_VEHICLE_TYPE = "weaponGun";
 
+const VEHICLE_TYPE_ALIASES = new Map([
+  ["weapongun", "weaponGun"],
+  ["vehicleweapon", "weaponGun"],
+  ["vehicleweapons", "weaponGun"],
+  ["shipweapon", "weaponGun"],
+  ["shipweapons", "weaponGun"],
+  ["powerplant", "powerplant"],
+  ["shield", "shield"],
+  ["cooler", "cooler"],
+  ["radar", "radar"],
+  ["quantumdrive", "quantumdrive"],
+  ["weaponmining", "weaponMining"],
+  ["salvagehead", "salvageHead"],
+  ["salvagemodifier", "salvageModifier"],
+]);
+
+const FPS_TYPE_ALIASES = new Map([
+  ["weapon", "weapons"],
+  ["weapons", "weapons"],
+  ["armor", "armor"],
+  ["armors", "armor"],
+  ["ammo", "ammo"],
+  ["utility", "utility"],
+]);
+
 const LEGACY_UTILITY_TYPES = new Set([
   "dockingCollar",
   "salvageHead",
@@ -72,6 +97,28 @@ function recordUsesMaterialFilter(
     || materialNames.some((name) => materialFilters.has(name));
 }
 
+function normalizeRecipeBrowserCategoryType(
+  kind: ComponentCardIndexRecord["kind"],
+  value: string | null | undefined,
+): string {
+  const normalized = (value ?? "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (normalized.startsWith("__") || value?.startsWith("__")) return value ?? "";
+  const aliases = kind === "vehicle" ? VEHICLE_TYPE_ALIASES : FPS_TYPE_ALIASES;
+  return aliases.get(normalized) ?? value?.trim() ?? "";
+}
+
+function parseRecipeBrowserCategoryFilterSet(
+  searchParams: URLSearchParams,
+  key: "v" | "f",
+): Set<string> {
+  const kind = key === "v" ? "vehicle" : "fps";
+  return new Set(
+    [...parseRecipeBrowserFilterSet(searchParams, key)]
+      .map((value) => normalizeRecipeBrowserCategoryType(kind, value))
+      .filter(Boolean),
+  );
+}
+
 export function matchesRecipeBrowserCategory(
   record: ComponentCardIndexRecord,
   vehicleFilters: Set<string>,
@@ -81,13 +128,13 @@ export function matchesRecipeBrowserCategory(
   if (!hasCategoryFilters) return false;
 
   if (record.kind === "fps") {
-    const type = record.type ?? "";
+    const type = normalizeRecipeBrowserCategoryType("fps", record.type);
     return fpsFilters.has(type)
       || (fpsFilters.has("__utility__") && type === "utility")
       || (fpsFilters.has("__other__") && !KNOWN_FPS_TYPES.has(type) && type !== "utility");
   }
 
-  const type = record.type ?? "";
+  const type = normalizeRecipeBrowserCategoryType("vehicle", record.type);
   return vehicleFilters.has(type)
     || (vehicleFilters.has("__mining__") && type === "weaponMining")
     || (vehicleFilters.has("__salvage__") && (type === "salvageHead" || type === "salvageModifier"))
@@ -118,8 +165,8 @@ export function matchesRecipeBrowserAppliedFilters(
   searchParams: URLSearchParams,
   options: RecipeBrowserFilterOptions = {},
 ): boolean {
-  const vehicleFilters = parseRecipeBrowserFilterSet(searchParams, "v");
-  const fpsFilters = parseRecipeBrowserFilterSet(searchParams, "f");
+  const vehicleFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "v");
+  const fpsFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "f");
   const sizeFilters = parseRecipeBrowserFilterSet(searchParams, "sz");
   const gradeFilters = parseRecipeBrowserFilterSet(searchParams, "gr");
   const classFilters = parseRecipeBrowserFilterSet(searchParams, "cl");
@@ -185,18 +232,12 @@ export function filterRecipeBrowserRecords(
   if (!Array.isArray(records) || records.length === 0) return [];
 
   const isDefaultState = isRecipeBrowserDefaultState(searchParams);
-  const vehicleFilters = parseRecipeBrowserFilterSet(searchParams, "v");
-  const fpsFilters = parseRecipeBrowserFilterSet(searchParams, "f");
+  const vehicleFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "v");
+  const fpsFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "f");
   const searchTokens = buildRecipeBrowserSearchTokens(getRecipeBrowserSearchParam(searchParams));
   const hasTextSearch = searchTokens.length > 0;
   const savedOnly = options.savedOnly ?? searchParams.get("bk") === "1";
   const savedBlueprintIds = options.savedBlueprintIds;
-
-  if (hasTextSearch) {
-    return records
-      .filter((record) => Boolean(record?.id) && matchesRecipeBrowserSearch(record, searchTokens))
-      .sort(compareRecipeBrowserRecords);
-  }
 
   return records
     .filter((record) => {
@@ -205,7 +246,10 @@ export function filterRecipeBrowserRecords(
 
       if (vehicleFilters.size > 0 || fpsFilters.size > 0) {
         if (!matchesRecipeBrowserCategory(record, vehicleFilters, fpsFilters)) return false;
-      } else if (isDefaultState && record.type !== DEFAULT_VEHICLE_TYPE) {
+      } else if (
+        isDefaultState
+        && normalizeRecipeBrowserCategoryType("vehicle", record.type) !== DEFAULT_VEHICLE_TYPE
+      ) {
         return false;
       } else if (record.kind === "fps" && !hasTextSearch) {
         // Preserve the current vehicle-first default while allowing search to span
@@ -216,7 +260,7 @@ export function filterRecipeBrowserRecords(
       return matchesRecipeBrowserAppliedFilters(record, searchParams, {
         savedOnly,
         savedBlueprintIds,
-      });
+      }) && matchesRecipeBrowserSearch(record, searchTokens);
     })
     .sort(compareRecipeBrowserRecords);
 }

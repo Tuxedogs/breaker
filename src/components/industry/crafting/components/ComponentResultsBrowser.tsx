@@ -17,6 +17,7 @@ import {
   pickPreferredRecipeBrowserSearchRecord,
 } from "../utils/recipeBrowserFilters";
 import {
+  getRecipeBrowserColumnWidth,
   getRecipeBrowserFamily,
   type RecipeBrowserColumn,
   type RecipeBrowserFamily,
@@ -175,6 +176,12 @@ function RecipeResultsTable({
       </header>
       <div className="crb2-table-scroll">
         <table className="crb2-table">
+          <colgroup>
+            <col className="crb2-table-column--component" />
+            {family.columns.map((column) => (
+              <col key={column.key} style={{ width: getRecipeBrowserColumnWidth(column) }} />
+            ))}
+          </colgroup>
           <thead>
             <tr>
               <th scope="col" aria-sort={sort?.key === "component" ? sort.direction : "none"}>

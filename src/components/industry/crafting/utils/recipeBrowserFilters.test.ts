@@ -88,17 +88,36 @@ test("different filter families combine with AND", () => {
   assert.deepEqual(filterRecipeBrowserRecords(records, params).map((item) => item.id), ["vehicle:shield"]);
 });
 
-test("manual text search overrides filters while retaining filter-match truth", () => {
+test("text search intersects applied filters", () => {
   const shield = { ...record("vehicle", "shield"), searchText: "paladin shield" };
   const weapon = { ...record("fps", "weapons"), searchText: "paladin fps weapon" };
   const params = new URLSearchParams("v=shield&sz=1&search=paladin");
 
   assert.deepEqual(
     filterRecipeBrowserRecords([shield, weapon], params).map((item) => item.id).sort(),
-    ["fps:weapons", "vehicle:shield"],
+    ["vehicle:shield"],
   );
   assert.equal(matchesRecipeBrowserAppliedFilters(shield, params), true);
   assert.equal(matchesRecipeBrowserAppliedFilters(weapon, params), false);
+});
+
+test("Vehicle Weapons uses the canonical vehicle weapon type and excludes mining lasers", () => {
+  const vehicleWeapon = {
+    ...record("vehicle", "WeaponGun"),
+    id: "ship-weapon",
+    searchText: "greatsword cannon",
+  };
+  const miningLaser = {
+    ...record("vehicle", "weaponMining"),
+    id: "mining-laser",
+    searchText: "greatsword mining laser",
+  };
+  const params = new URLSearchParams("v=vehicle-weapons&search=greatsword");
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords([vehicleWeapon, miningLaser], params).map((item) => item.id),
+    ["ship-weapon"],
+  );
 });
 
 test("an FPS weapon is the preferred search target over its magazine", () => {

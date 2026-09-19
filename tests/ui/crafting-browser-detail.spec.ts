@@ -41,6 +41,51 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 test.describe("Crafting browser and detail refactor", () => {
+  test("keeps Vehicle Weapons and table columns constrained to their canonical data", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${browserPath}?v=weaponGun`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".crb2-table-section").filter({ hasText: "Vehicle Weapons" })).toBeVisible();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "AD5B Ballistic Gatling" })).toBeVisible();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "Arbor MHV Mining Laser" })).toHaveCount(0);
+
+    const tableGeometry = await page.locator(".crb2-table").evaluate((table) => {
+      const headerCells = Array.from(table.querySelectorAll("thead th"));
+      const rowCells = Array.from(table.querySelectorAll("tbody tr:first-child > *"));
+      const header = headerCells.map((cell) => {
+        const rect = cell.getBoundingClientRect();
+        return { left: Math.round(rect.left), width: Math.round(rect.width) };
+      });
+      const row = rowCells.map((cell) => {
+        const rect = cell.getBoundingClientRect();
+        return { left: Math.round(rect.left), width: Math.round(rect.width) };
+      });
+      return { header, row };
+    });
+    expect(tableGeometry.header).toEqual(tableGeometry.row);
+    expect(tableGeometry.header[0].width).toBeGreaterThan(tableGeometry.header[1].width * 2);
+    expect(tableGeometry.header[4].width).toBeLessThan(tableGeometry.header[0].width);
+
+    await page.screenshot({
+      path: path.join(screenshotDir, "recipe-browser-table-filter-polish-1920x1080.png"),
+      fullPage: true,
+    });
+
+    await page.goto(`${browserPath}?v=weaponGun&search=arbor`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByText("No craftable components match the current search and filters.")).toBeVisible();
+
+    await page.goto(`${browserPath}?v=weaponGun&sz=2`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".crb2-table tbody tr").first()).toBeVisible();
+    const sizes = await page.locator(".crb2-table tbody tr > td:first-of-type").allTextContents();
+    expect(sizes).not.toHaveLength(0);
+    expect(sizes.every((size) => size.trim() === "2")).toBe(true);
+
+    await page.goto(`${browserPath}?v=weaponGun&search=greatsword`, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "Clear all" }).click();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "AD5B Ballistic Gatling" })).toBeVisible();
+    expect(new URL(page.url()).search).toBe("");
+  });
+
   test("renders the permanent filter rail, stable selection, dense tables, and empty state", async ({ page }) => {
     const failures = installFailureGuards(page);
     const measurements: Array<Record<string, string | number>> = [];
@@ -166,7 +211,7 @@ test.describe("Crafting browser and detail refactor", () => {
     }
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto(`${browserPath}?v=shield&search=C54`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${browserPath}?f=weapons&search=C54`, { waitUntil: "domcontentloaded" });
     const preferredSearchRow = page.locator('.crb2-table tbody tr[aria-selected="true"]');
     await expect(preferredSearchRow).toContainText("C54 SMG");
     await expect(preferredSearchRow).not.toContainText("Magazine");
