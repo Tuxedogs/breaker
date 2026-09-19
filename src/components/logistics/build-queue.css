@@ -1724,7 +1724,7 @@
 }
 
 .bq-summary-collapse-icon {
-  transform: rotate(135deg);
+  transform: rotate(-45deg);
 }
 
 .bq-summary-reopen-alert {
@@ -4202,14 +4202,13 @@
   .bq-queue-pill {
     position: relative;
     box-sizing: border-box;
-    flex: 0 0 min(176px, 72vw);
-    width: min(176px, 72vw);
-    min-height: 56px;
-    padding: 7px 28px 7px 42px;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
     display: grid;
-    grid-template-rows: auto auto;
-    align-content: center;
-    justify-items: start;
+    place-items: center;
     border: 1px solid rgba(65, 132, 160, 0.22);
     border-radius: 10px;
     background: #051A28;
@@ -4233,18 +4232,11 @@
   }
 
   .bq-queue-pill-index {
-    position: absolute;
-    left: 13px;
-    top: 50%;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1;
     font-weight: 800;
     font-variant-numeric: tabular-nums;
-    transform: translateY(-50%);
   }
-
-  .bq-queue-pill-name { display: block; width: 100%; overflow: hidden; color: var(--text-primary); font-size: 13px; font-weight: 750; line-height: 1.15; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
-  .bq-queue-pill-state { color: var(--text-muted); font-size: var(--app-text-label); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 
   .bq-queue-pill-dot {
     position: absolute;
@@ -5548,7 +5540,8 @@
   text-align: left;
 }
 
-.bq-component-statistics .bq-stat-compare-target .bq-stat-compare-slot-label {
+.bq-component-statistics .bq-stat-compare-target .bq-stat-compare-slot-label,
+.bq-component-statistics .bq-stat-compare-target .bq-stat-compare-value {
   color: var(--bq-target-accent);
 }
 
@@ -5561,22 +5554,9 @@
   background: rgba(143, 168, 255, 0.045);
 }
 
-.bq-component-statistics .bq-stat-compare-allocation .bq-stat-compare-slot-label {
+.bq-component-statistics .bq-stat-compare-allocation .bq-stat-compare-slot-label,
+.bq-component-statistics .bq-stat-compare-allocation .bq-stat-compare-value {
   color: var(--bq-allocation-accent);
-}
-
-.bq-page .bq-stat-compare-allocation .bq-stat-compare-value:not(.craft-ok):not(.craft-shortage) {
-  color: var(--bq-allocation-accent);
-}
-
-.bq-page .bq-stat-compare-value.craft-ok,
-.bq-page .bq-stat-compare-delta.craft-ok {
-  color: var(--stat-beneficial);
-}
-
-.bq-page .bq-stat-compare-value.craft-shortage,
-.bq-page .bq-stat-compare-delta.craft-shortage {
-  color: var(--stat-detrimental);
 }
 
 .bq-component-statistics .bq-stat-compare-delta {
@@ -8093,6 +8073,15 @@
     font-size: 1rem;
   }
 
+  .bq-page .bq-craft-card-status {
+    font-size: 0.6875rem;
+  }
+
+  .bq-page .bq-center-shell .bq-item-cat,
+  .bq-page .bq-center-shell .bq-item-mission-label {
+    font-size: 0.6875rem;
+  }
+
   .bq-page .bq-center-shell .bq-item-name {
     font-size: 1.125rem;
   }
@@ -9051,8 +9040,8 @@
   --ops-surface-selected: rgba(13, 36, 53, 0.65);
   --ops-header-band: rgba(14, 23, 34, 0.55);
   background:
-    linear-gradient(180deg, #01070ecf, #01070ec9),
-    url(/assets/build-queue-hangar-3XBTAD1M.webp) center / cover no-repeat;
+    linear-gradient(180deg, rgba(1, 7, 14, 0.94), rgba(1, 7, 14, 0.97)),
+    url("../../assets/backgrounds/build-queue-hangar.webp") center / cover no-repeat;
 }
 
 /* Canonical Build Queue workspace refinements. */
@@ -11336,19 +11325,18 @@
 .bq-page .bq-craft-card {
   /* Keep the rail geometry fixed while selection changes. Previously the
      outgoing card shrank as the incoming card grew, which reflowed every row. */
-  min-height: 60px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  min-height: 72px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   border-color: rgba(83, 126, 151, 0.2);
   background: rgba(7, 20, 31, 0.76);
 }
 
 .bq-page .bq-craft-card.is-selected {
-  min-height: 60px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border-color: #3b9cd4ba;
-  background: #0d2a4357;
+  border-color: rgba(78, 197, 240, 0.62);
+  background: linear-gradient(90deg, rgba(18, 68, 91, 0.56), rgba(8, 26, 39, 0.88) 58%);
   box-shadow: inset 3px 0 0 #55ccef, inset 0 0 0 1px rgba(85, 204, 239, 0.12);
 }
 
@@ -11359,19 +11347,8 @@
 }
 
 .bq-page .bq-craft-card-drag-handle {
-  right: 17px;
   opacity: 0.28;
   transition: opacity 150ms ease, color 150ms ease;
-}
-
-.bq-page .bq-craft-card-cat {
-  font-size: 9px;
-  font-weight: 500;
-}
-
-.bq-page .bq-craft-card-status {
-  font-size: 9px;
-  padding: 2px 2px;
 }
 
 .bq-page .bq-craft-card-shell:hover .bq-craft-card-drag-handle,
@@ -11552,6 +11529,7 @@
 
 .bq-page .bq-queue-tab,
 .bq-page .bq-craft-card-index,
+.bq-page .bq-craft-card-cat,
 .bq-page .bq-center-shell .bq-item-blueprint,
 .bq-page .bq-materials-section-summary {
   font-size: 12px;
@@ -11559,6 +11537,17 @@
 
 .bq-page .bq-craft-card-name {
   font-size: 16px;
+}
+
+.bq-page .bq-craft-card-status,
+.bq-page .bq-center-shell .bq-item-cat,
+.bq-page .bq-center-shell .bq-item-mission-label,
+.bq-page .bq-center-shell .bq-btn,
+.bq-page .bq-inventory-toggle,
+.bq-page .bq-auto-reserve-btn,
+.bq-page .bq-quality-chip,
+.bq-page .bq-quality-chip[class*="logi-rarity--"] {
+  font-size: 11px;
 }
 
 .bq-page .bq-selected-craft-body .bq-item-name {

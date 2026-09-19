@@ -242,10 +242,32 @@ test.describe("Crafting browser and detail refactor", () => {
 
       await firstSlider.fill("723");
       await expect(page.locator(".craft-detail-material-target-input .bq-target-quality").first()).toHaveText("723");
-      await expect(page.locator(".craft-detail-material-target-input .bq-target-quality")).toHaveCount(3);
-      for (const target of await page.locator(".craft-detail-material-target-input .bq-target-quality").all()) {
-        await expect(target).toBeVisible();
-      }
+      const firstMaterialCard = page.locator(".craft-detail-material-row").first();
+      await expect(firstMaterialCard).toContainText("Target quality");
+      await expect(firstMaterialCard).toContainText("Required qty");
+      await expect(firstMaterialCard).not.toContainText(/Available Quality|Available/);
+      const sliderAlignment = await firstMaterialCard.evaluate((card) => {
+        const slider = card.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+        const bubble = card.querySelector<HTMLElement>(".bq-target-quality");
+        if (!slider || !bubble) return null;
+        const sliderBox = slider.getBoundingClientRect();
+        const bubbleBox = bubble.getBoundingClientRect();
+        const min = Number(slider.min);
+        const max = Number(slider.max);
+        const range = Math.max(1, max - min);
+        const positionFor = (value: number) => sliderBox.left + ((value - min) / range) * sliderBox.width;
+        return {
+          bubbleDelta: Math.abs((bubbleBox.left + bubbleBox.width / 2) - positionFor(Number(slider.value))),
+          markerDeltas: Array.from(card.querySelectorAll<HTMLElement>(".bq-target-slider-marker")).map((marker) => {
+            const value = Number(marker.textContent);
+            const markerBox = marker.getBoundingClientRect();
+            return Math.abs((markerBox.left + markerBox.width / 2) - positionFor(value));
+          }),
+        };
+      });
+      expect(sliderAlignment).not.toBeNull();
+      expect(sliderAlignment?.bubbleDelta).toBeLessThanOrEqual(2);
+      expect(Math.max(...(sliderAlignment?.markerDeltas ?? []))).toBeLessThanOrEqual(2);
       await expect(page.locator(".craft-detail-material-table-head")).not.toContainText("Quality");
       await expect(page.locator(".craft-detail-material-row").first()).not.toContainText("Band");
       await expect(page.locator(".craft-detail-material-id").filter({ hasText: "Hephaestanite" })).toBeVisible();

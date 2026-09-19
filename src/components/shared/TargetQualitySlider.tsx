@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import "./target-quality-slider.css";
 
 type TargetQualitySliderProps = {
@@ -40,6 +40,9 @@ export default function TargetQualitySlider({
   const upperBound = Math.max(min, max);
   const hasResolvedValue = Number.isFinite(value);
   const normalizedValue = clampToRange(value ?? lowerBound, lowerBound, upperBound);
+  const normalizedPercent = upperBound === lowerBound
+    ? 0
+    : ((normalizedValue - lowerBound) / (upperBound - lowerBound)) * 100;
   const valueFromInput = (rawValue: string) => clampToRange(Number(rawValue), lowerBound, upperBound);
   const [isEditing, setIsEditing] = useState(false);
   const [draftValue, setDraftValue] = useState(String(normalizedValue));
@@ -114,6 +117,7 @@ export default function TargetQualitySlider({
     <span
       className={`bq-target-editor bq-target-editor--slider${layout === "stacked" ? " bq-target-editor--stacked" : ""}`}
       data-bq-row-control="true"
+      style={{ "--target-quality-pct": `${normalizedPercent}%` } as CSSProperties}
     >
       {layout === "stacked" && isEditing && !disabled ? (
         <input
@@ -159,7 +163,9 @@ export default function TargetQualitySlider({
           <span>{label}</span>
         </span>
       )}
-      <span className="bq-target-slider-shell">
+      <span
+        className="bq-target-slider-shell"
+      >
         {markers.length > 0 ? (
           <span className="bq-target-slider-markers" aria-hidden="true">
             {markers.map((marker, index) => {

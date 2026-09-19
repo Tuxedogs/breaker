@@ -40,6 +40,7 @@ type MaterialIdentityIndex = {
 const sourcePath = getScintelComponentCardSourcePath();
 const blueprintsPath = getScintelCraftingSourcePath("blueprints.json");
 const fpsBlueprintsPath = getScintelCraftingSourcePath("fps", "fps_blueprints.json");
+const blueprintItemIndexPath = getScintelCraftingSourcePath("blueprint_item_index.json");
 const materialIdentityPath = getScintelCraftingSourcePath("material_identity_index.json");
 const outputRoot = getComponentCardsRoot();
 const byIdRoot = path.join(outputRoot, "by-id");
@@ -799,6 +800,7 @@ async function writeJson(filePath: string, value: unknown): Promise<void> {
 const source = JSON.parse(await readFile(sourcePath, "utf8")) as SourceIndex;
 const blueprints = JSON.parse(await readFile(blueprintsPath, "utf8")) as BlueprintRecord[];
 const fpsBlueprints = JSON.parse(await readFile(fpsBlueprintsPath, "utf8")) as BlueprintRecord[];
+const blueprintItemIndex = JSON.parse(await readFile(blueprintItemIndexPath, "utf8")) as JsonRecord;
 const materialIdentityIndex = JSON.parse(await readFile(materialIdentityPath, "utf8")) as MaterialIdentityIndex;
 const fittingShipWeapons = await loadCurrentFittingShipWeapons();
 const weaponModifierBadges = buildWeaponModifierBadgeMap(blueprints);
@@ -828,12 +830,24 @@ if (sourceRecords.length === 0) {
 }
 
 const catalogRecords = [...blueprints, ...fpsBlueprints];
-const catalogIds = catalogRecords
-  .map((blueprint) => normalizeId(blueprint.blueprintGuid))
-  .filter((id): id is string => Boolean(id));
-const authoritativeCatalogIds = new Set(catalogIds);
-if (authoritativeCatalogIds.size !== catalogIds.length) {
+const catalogIds = catalogRecords.map((blueprint) => normalizeId(blueprint.blueprintGuid));
+if (catalogIds.some((id) => !id) || new Set(catalogIds).size !== catalogIds.length) {
   throw new Error("Current crafting catalogs contain missing or duplicate blueprint identities.");
+}
+const indexedRecords = Array.isArray(blueprintItemIndex.records) ? blueprintItemIndex.records : null;
+if (!indexedRecords) {
+  throw new Error(`Accepted blueprint-item index has no records array: ${blueprintItemIndexPath}`);
+}
+const indexedIds = indexedRecords.map((record) => {
+  const entry = asRecord(record);
+  return normalizeId(entry?.blueprintGuid);
+});
+if (indexedIds.some((id) => !id) || new Set(indexedIds).size !== indexedIds.length) {
+  throw new Error(`Accepted blueprint-item index has missing or duplicate identities: ${blueprintItemIndexPath}`);
+}
+const authoritativeCatalogIds = new Set(indexedIds as string[]);
+if (authoritativeCatalogIds.size !== catalogIds.length || catalogIds.some((id) => !id || !authoritativeCatalogIds.has(id))) {
+  throw new Error("Current crafting catalogs and the accepted blueprint-item index disagree.");
 }
 
 // The accepted current recipe catalogs are the identity authority. Older

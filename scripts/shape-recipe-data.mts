@@ -12,6 +12,7 @@ type JsonRecord = Record<string, unknown>;
 
 const vehicleSourcePath = getScintelCraftingSourcePath("blueprints.json");
 const fpsSourcePath = getScintelCraftingSourcePath("fps", "fps_blueprints.json");
+const blueprintIndexSourcePath = getScintelCraftingSourcePath("blueprint_item_index.json");
 const outputRoot = getCraftingRecipesRoot();
 const byBlueprintRoot = path.join(outputRoot, "by-blueprint");
 
@@ -64,10 +65,29 @@ async function readJsonArray(filePath: string): Promise<JsonRecord[]> {
   return parsed.filter((entry): entry is JsonRecord => typeof entry === "object" && entry !== null);
 }
 
+async function readAcceptedBlueprintIds(): Promise<Set<string>> {
+  const raw = JSON.parse(await readFile(blueprintIndexSourcePath, "utf8")) as unknown;
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    throw new Error(`Expected a blueprint-item index object in ${blueprintIndexSourcePath}`);
+  }
+  const records = (raw as JsonRecord).records;
+  if (!Array.isArray(records)) {
+    throw new Error(`Expected blueprint-item index records in ${blueprintIndexSourcePath}`);
+  }
+  const ids = records
+    .map((record) => record && typeof record === "object" ? normalizeGuid((record as JsonRecord).blueprintGuid) : null)
+    .filter((id): id is string => Boolean(id));
+  if (ids.length !== records.length || new Set(ids).size !== ids.length) {
+    throw new Error(`Blueprint-item index has missing or duplicate identities: ${blueprintIndexSourcePath}`);
+  }
+  return new Set(ids);
+}
+
 async function main() {
-  const [vehicleRecords, fpsRecords] = await Promise.all([
+  const [vehicleRecords, fpsRecords, acceptedBlueprintIds] = await Promise.all([
     readJsonArray(vehicleSourcePath),
     readJsonArray(fpsSourcePath),
+    readAcceptedBlueprintIds(),
   ]);
 
   await mkdir(byBlueprintRoot, { recursive: true });
@@ -86,6 +106,9 @@ async function main() {
         missingIdCount += 1;
         continue;
       }
+      if (!acceptedBlueprintIds.has(guid)) {
+        throw new Error(`Recipe ${guid} is absent from the accepted blueprint-item index.`);
+      }
       if (recordFiles[guid]) {
         duplicateIdCount += 1;
         continue;
@@ -103,6 +126,12 @@ async function main() {
 
   await shapeRecords(vehicleRecords, "vehicle");
   await shapeRecords(fpsRecords, "fps");
+
+  if (Object.keys(recordFiles).length !== acceptedBlueprintIds.size) {
+    throw new Error(
+      `Recipe output (${Object.keys(recordFiles).length}) does not cover the accepted blueprint-item index (${acceptedBlueprintIds.size}).`,
+    );
+  }
 
   const index = {
     schemaVersion: 1 as const,
