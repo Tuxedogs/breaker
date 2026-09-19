@@ -58,9 +58,6 @@ import {
   resolveCraftingMobileCompactName,
 } from "@/lib/crafting/resolveCraftingDisplayName";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
-import {
-  buildItemSummaryDetailStatRows,
-} from "@/lib/fitting/fittingStatProjection";
 import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import {
   formatCraftTime,
@@ -70,7 +67,6 @@ import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 import {
   applyModifierToBase,
-  buildModifiedDetailStatRows,
   formatCraftingCompactNumber as formatCompactNumber,
   formatCraftingContributionValue as formatContributionValue,
   getCraftingImpactClass as getImpactClass,
@@ -80,17 +76,9 @@ import {
   formatModifierStatName,
   getCraftingModifierBaseValue,
   getModifierStatBindingLabel,
-  type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
-import {
-  buildDetailStatGroups,
-} from "@/lib/crafting/detailStatGroups";
-import {
-  buildDetailStatScanSections,
-  formatDetailStatSectionTitle,
-  splitDetailStatScanColumns,
-  type DetailStatScanSection,
-} from "@/lib/crafting/detailStatPresentation";
+import { buildCraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
+import { CraftStatisticsCards } from "@/components/shared/CraftStatisticsCards";
 import TargetQualitySlider from "@/components/shared/TargetQualitySlider";
 import { formatMaterialDisplayName } from "@/lib/crafting/materialDisplayName";
 import {
@@ -1591,80 +1579,6 @@ function getIndexStatsObject(record: ComponentCardIndexRecord | undefined, key: 
   return isRecord(value) ? value : null;
 }
 
-function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
-  const displayLabel = stat.label === "Projectile Range / Max Travel" ? "Range" : stat.label;
-
-  return (
-    <span className="craft-detail-stat-row craft-stat-row stat-row">
-      <span className="craft-stat-label">{displayLabel}</span>
-      <strong className="craft-stat-value">
-        <span className={`craft-detail-stat-value ${stat.valueImpactClass ?? ""}`}>{stat.value}</span>
-        {stat.modifier && (
-          <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
-            {stat.modifier.value}
-          </span>
-        )}
-      </strong>
-    </span>
-  );
-}
-
-function GroupedDetailStatGroups({
-  detail,
-  stats,
-}: {
-  detail: FittingComponentDetail;
-  stats: DetailStatRow[];
-}) {
-  const groups = buildDetailStatGroups(detail, stats);
-  const displaySections = buildDetailStatScanSections(groups, stats);
-  const columns = splitDetailStatScanColumns(displaySections, 3);
-
-  const renderSection = (section: DetailStatScanSection) => (
-    <section
-      key={section.key}
-      className={`stat-group stat-group--scan stat-group--scan-${section.kind}`}
-      aria-label={formatDetailStatSectionTitle(section.title)}
-    >
-      <h4 className="stat-group-title stat-group-scan-title">
-        {formatDetailStatSectionTitle(section.title)}
-      </h4>
-      {section.kind === "matrix" ? (
-        <div className={`stat-scan-matrix stat-scan-matrix--${Math.min(2, section.columns.length)}-value`}>
-          <div className="stat-scan-matrix-head" aria-hidden="true">
-            <span>Type</span>
-            {section.columns.map((column) => <span key={column}>{column}</span>)}
-          </div>
-          {section.rows.map((row) => (
-            <div className="stat-scan-matrix-row" key={`${section.key}:${row.label}`}>
-              <span>{row.label}</span>
-              {row.values.map((value, index) => (
-                <strong key={`${row.label}:${section.columns[index] ?? index}`}>{value}</strong>
-              ))}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="stat-group-grid stat-group-grid--scan">
-          {section.stats.map((stat) => (
-            <DetailStatRowItem key={`${section.key}:${stat.label}`} stat={stat} />
-          ))}
-        </div>
-      )}
-    </section>
-  );
-
-  return (
-    <div className="detail-stat-groups detail-stat-groups--scannable">
-      {columns.map((column, index) => (
-        <div className="detail-stat-scan-column" key={`stat-column-${index}`}>
-          {column.map(renderSection)}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 type DetailGraphPoint = {
   x: number;
   base: number;
@@ -2127,7 +2041,6 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
 
 function ItemSummaryPanel({
   recipe,
-  componentCardRecord,
   fittingDetail,
   fittingStatsLoading,
   fittingStatsMissing,
@@ -2135,50 +2048,31 @@ function ItemSummaryPanel({
   totalModifiers,
 }: {
   recipe: ComponentRecipe;
-  componentCardRecord?: ComponentCardIndexRecord;
   fittingDetail?: FittingComponentDetail | null;
   fittingStatsLoading?: boolean;
   fittingStatsMissing?: boolean;
   fittingStatsError?: string | null;
   totalModifiers: TotalModifierRow[];
 }) {
-  const baseStatRows = fittingDetail ? buildItemSummaryDetailStatRows(fittingDetail) : [];
-  const displayStatRows = buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
-  const statsSectionLabel = `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? recipe.component_type} Stats`;
-  const showFittingUnavailable = Boolean(
-    fittingStatsMissing || fittingStatsError || (fittingStatsLoading && !fittingDetail),
-  );
+  const statisticsModel = useMemo(() => buildCraftStatViewModel({
+    detail: fittingDetail,
+    recipe,
+    targetModifiers: totalModifiers,
+    allocationModifiers: totalModifiers,
+    targetConfigured: true,
+    loading: fittingStatsLoading,
+    missing: fittingStatsMissing,
+    error: fittingStatsError,
+  }), [fittingDetail, fittingStatsError, fittingStatsLoading, fittingStatsMissing, recipe, totalModifiers]);
 
   return (
     <section className="craft-detail-summary-section" aria-label="Selected item summary">
       <div className="craft-detail-summary-content">
-
-        {displayStatRows.length > 0 && (
-          <div className="craft-summary-section craft-detail-stat-panel">
-            <div className="craft-summary-section-label">Component Statistics</div>
-            {fittingDetail ? (
-              <GroupedDetailStatGroups detail={fittingDetail} stats={displayStatRows} />
-            ) : (
-              <>
-              <div className="craft-summary-section-label">{statsSectionLabel}</div>
-              <div className="craft-detail-stat-list craft-stat-grid">
-                {displayStatRows.map((stat) => (
-                  <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
-                ))}
-              </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {showFittingUnavailable && displayStatRows.length === 0 && (
-          <p className="craft-detail-stat-unavailable">
-            {fittingStatsLoading
-              ? "Loading fitting stats..."
-              : fittingStatsError ?? "Fitting stats unavailable for this item."}
-          </p>
-        )}
-
+        <CraftStatisticsCards
+          model={statisticsModel}
+          hasError={Boolean(fittingStatsError)}
+          className="crafting-statistics-cards"
+        />
       </div>
     </section>
   );
@@ -2879,7 +2773,6 @@ function RecipeDrawer({
             >
               <ItemSummaryPanel
                 recipe={selectedRecipe}
-                componentCardRecord={selectedComponentCard}
                 fittingDetail={fittingDetail}
                 fittingStatsLoading={fittingStatsLoading}
                 fittingStatsMissing={fittingStatsMissing}
@@ -3106,7 +2999,6 @@ function RecipeDrawer({
       <div className="craft-detail-workspace craft-detail-grid">
         <ItemSummaryPanel
           recipe={selectedRecipe}
-          componentCardRecord={selectedComponentCard}
           fittingDetail={fittingDetail}
           fittingStatsLoading={fittingStatsLoading}
           fittingStatsMissing={fittingStatsMissing}

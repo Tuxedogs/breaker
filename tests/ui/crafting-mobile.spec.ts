@@ -215,7 +215,8 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
     expect(await captureStableDetailHeader(page)).toEqual(overviewHeader);
     await expect(page.locator(".craft-detail-title")).toBeInViewport();
     await expectCraftDetailMobileCanvas(page);
-    await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
+    await expect(page.locator(".craft-statistics-cards")).toBeVisible();
+    await expect(page.locator(".detail-stat-groups--scannable")).toHaveCount(0);
     await expectScrollOwner(page);
     await page.screenshot({ path: path.join(screenshotDir, `detail-statistics-${viewport.name}.png`) });
 
@@ -228,6 +229,32 @@ test("matches the approved phone browse, filter, material, art, and detail flow"
       await expectScrollOwner(page, false);
       await page.screenshot({ path: path.join(screenshotDir, "detail-sources-mobile-nav-393x852.png") });
     }
+  }
+});
+
+test("renders the shared statistics cards without mobile overflow", async ({ page }) => {
+  await mkdir(screenshotDir, { recursive: true });
+
+  for (const viewport of [
+    { name: "375x812", width: 375, height: 812 },
+    { name: "430x932", width: 430, height: 932 },
+    { name: "768x900", width: 768, height: 900 },
+  ]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto(`${browserPath}?preview=1a85280e-7b8f-4486-a563-17cd2549d268`, {
+      waitUntil: "domcontentloaded",
+    });
+
+    const detailTabs = page.getByRole("tablist", { name: "Component detail sections" });
+    await expect(detailTabs).toBeVisible();
+    await detailTabs.getByRole("tab", { name: "Statistics" }).click();
+
+    const statisticsPanel = page.locator(".craft-statistics-cards");
+    await expect(statisticsPanel).toBeVisible();
+    await expect(page.locator(".bq-stat-view-tabs")).toHaveCount(0);
+    await expect(page.locator(".detail-stat-groups--scannable")).toHaveCount(0);
+    await expectNoDocumentOverflow(page);
+    await page.screenshot({ path: path.join(screenshotDir, `shared-statistics-${viewport.name}.png`) });
   }
 });
 

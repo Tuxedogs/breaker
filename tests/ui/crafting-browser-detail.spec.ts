@@ -517,16 +517,23 @@ test.describe("Crafting browser and detail refactor", () => {
       for (const item of itemFamilies) {
         await page.goto(`/industry/crafting/${item.id}`, { waitUntil: "domcontentloaded" });
         await expect(page.locator(".craft-detail-title")).toContainText(item.title);
-        await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
-
-        for (const group of item.groups) {
-          await expect(page.getByRole("region", { name: group, exact: true })).toBeAttached();
+        if (viewport.width <= 900) {
+          await page.getByRole("tab", { name: "Statistics" }).click();
         }
 
-        const renderedColumns = await page.locator(".detail-stat-groups--scannable").evaluate((element) => (
+        const statisticsPanel = page.locator(".craft-statistics-cards");
+        await expect(statisticsPanel).toBeVisible();
+        await expect(page.locator(".detail-stat-groups--scannable")).toHaveCount(0);
+
+        for (const group of item.groups) {
+          await expect(page.getByRole("region", { name: `${group} end product statistics`, exact: true })).toBeAttached();
+        }
+
+        const renderedColumns = await statisticsPanel.evaluate((element) => (
           getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length
         ));
-        expect(renderedColumns).toBe(viewport.width <= 900 ? 1 : 3);
+        expect(renderedColumns).toBeGreaterThanOrEqual(1);
+        expect(renderedColumns).toBeLessThanOrEqual(viewport.width <= 900 ? 1 : 3);
 
         await page.locator(".craft-detail-summary-section").evaluate((element) => {
           element.scrollIntoView({ block: "start" });
@@ -542,7 +549,7 @@ test.describe("Crafting browser and detail refactor", () => {
     expect(failures).toEqual([]);
   });
 
-  test("lays out drawer statistics in three columns", async ({ page }) => {
+  test("uses the shared statistics cards in the wide drawer", async ({ page }) => {
     await mkdir(screenshotDir, { recursive: true });
 
     for (const viewport of [
@@ -557,15 +564,15 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       await page.getByRole("tab", { name: "Statistics" }).click();
 
-      const statColumns = page.locator(
-        ".craft-detail-drawer-stats .detail-stat-groups--scannable",
-      );
-      await expect(statColumns).toBeVisible();
-      const layout = await statColumns.evaluate((element) => ({
+      const statisticsPanel = page.locator(".craft-detail-drawer-stats .craft-statistics-cards");
+      await expect(statisticsPanel).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-stats .detail-stat-groups--scannable")).toHaveCount(0);
+      const layout = await statisticsPanel.evaluate((element) => ({
         columns: getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length,
         overflow: element.scrollWidth - element.clientWidth,
       }));
-      expect(layout.columns).toBe(3);
+      expect(layout.columns).toBeGreaterThanOrEqual(1);
+      expect(layout.columns).toBeLessThanOrEqual(3);
       expect(layout.overflow).toBeLessThanOrEqual(1);
 
       await page.screenshot({
