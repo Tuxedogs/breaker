@@ -511,13 +511,13 @@ test.describe("Crafting browser and detail refactor", () => {
         slug: "fps-weapon-cq7",
         id: "1a85280e-7b8f-4486-a563-17cd2549d268",
         title: "CQ7",
-        groups: ["Damage Output", "Projectile", "Penetration", "Falloff", "Spread", "Handling"],
+        groups: ["Damage Output", "Firing", "Projectile", "Accuracy / Spread", "Penetration", "Thermal and Power"],
       },
       {
         slug: "ship-weapon-ad5b",
         id: "ba842720-ad32-4d53-8f56-992bacb1fc45",
         title: "AD5B",
-        groups: ["Damage Output", "Ammunition", "Projectile"],
+        groups: ["Damage Output", "Firing & Ammunition", "Ballistics", "Accuracy and Spread", "Thermal & Power", "Signature", "Durability & Repair"],
       },
       {
         slug: "shield-fr66",
@@ -578,7 +578,26 @@ test.describe("Crafting browser and detail refactor", () => {
           getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length
         ));
         expect(renderedColumns).toBeGreaterThanOrEqual(1);
-        expect(renderedColumns).toBeLessThanOrEqual(viewport.width <= 900 ? 1 : 3);
+        const expectedShipColumns = viewport.width <= 520 ? 1 : viewport.width <= 900 ? 2 : 3;
+        expect(renderedColumns).toBeLessThanOrEqual(item.slug === "ship-weapon-ad5b" ? expectedShipColumns : viewport.width <= 900 ? 1 : 3);
+        if (item.slug === "ship-weapon-ad5b") {
+          expect(renderedColumns).toBe(expectedShipColumns);
+          if (expectedShipColumns === 3) {
+            const positions = await statisticsPanel.locator(":scope > .craft-stat-section").evaluateAll((cards) => cards.map((card) => {
+              const bounds = card.getBoundingClientRect();
+              return { left: Math.round(bounds.left), top: Math.round(bounds.top) };
+            }));
+            expect(positions).toHaveLength(7);
+            expect(positions[3].left).toBe(positions[0].left);
+            expect(positions[3].top).toBeGreaterThan(positions[0].top);
+            expect(positions[4].left).toBe(positions[1].left);
+            expect(positions[4].top).toBeGreaterThan(positions[1].top);
+            expect(positions[5].left).toBe(positions[2].left);
+            expect(positions[5].top).toBeGreaterThan(positions[2].top);
+            expect(positions[6].left).toBe(positions[0].left);
+            expect(positions[6].top).toBeGreaterThan(positions[3].top);
+          }
+        }
 
         await page.locator(".craft-detail-summary-section").evaluate((element) => {
           element.scrollIntoView({ block: "start" });

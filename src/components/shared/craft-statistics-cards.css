@@ -1,6 +1,6 @@
 .craft-statistics-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(var(--craft-statistics-desktop-columns, auto-fit), minmax(250px, 1fr));
   gap: 12px;
   min-width: 0;
 }
@@ -48,6 +48,12 @@
 .craft-statistics-empty { margin: 0; color: #9dafc0; }
 .craft-statistics-loading { display: grid; gap: 8px; }
 .craft-statistics-loading span { height: 28px; border-radius: 4px; background: rgba(111, 151, 180, 0.12); }
+
+@media (max-width: 900px) {
+  .craft-statistics-cards {
+    grid-template-columns: repeat(var(--craft-statistics-tablet-columns, auto-fit), minmax(250px, 1fr));
+  }
+}
 
 @media (max-width: 520px) {
   .craft-statistics-cards { grid-template-columns: minmax(0, 1fr); gap: 10px; }

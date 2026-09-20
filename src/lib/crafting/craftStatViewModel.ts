@@ -95,6 +95,8 @@ export type CraftStatComparisonGroupView = {
 export type CraftStatViewModel = {
   category: string;
   title: string;
+  /** Generic presentation hint supplied by a statistics adapter. */
+  desktopColumns?: number;
   identity: CraftStatIdentityBadge[];
   overviewGroups: CraftStatOverviewGroupView[];
   comparisonGroups: CraftStatComparisonGroupView[];
@@ -607,6 +609,7 @@ export function buildCraftStatViewModel(input: {
   return {
     category: detail.type,
     title: statsSectionTitle(detail),
+    desktopColumns: detail.type === "ship_weapon" ? 3 : undefined,
     identity: buildIdentityBadges(detail),
     overviewGroups,
     comparisonGroups,

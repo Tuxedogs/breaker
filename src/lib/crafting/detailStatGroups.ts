@@ -52,14 +52,15 @@ const WEAPON_DAMAGE_OUTPUT_CORE_LABELS = [
   "Thermal Damage",
   "Biochemical Damage",
   "Stun Damage",
+];
+
+const FPS_FIRING_LABELS = [
   "Fire Rate",
+  "Ammo Per Shot",
+  "Ammo Count",
   "Burst Size",
   "Ammo Capacity",
   "Loaded Rounds",
-];
-
-const FPS_DAMAGE_OUTPUT_LABELS = [
-  ...WEAPON_DAMAGE_OUTPUT_CORE_LABELS,
   "Ballistic Reserve",
   "Energy Maximum Load",
   "Ammo Cost Per Shot",
@@ -69,9 +70,20 @@ const FPS_DAMAGE_OUTPUT_LABELS = [
   "Charge Time",
 ];
 
+const FPS_DAMAGE_OUTPUT_LABELS = [
+  ...WEAPON_DAMAGE_OUTPUT_CORE_LABELS,
+];
+
 const SHIP_DAMAGE_OUTPUT_LABELS = [
   ...WEAPON_DAMAGE_OUTPUT_CORE_LABELS,
   "Charge Time",
+];
+
+const SHIP_FIRING_AND_AMMUNITION_CORE_LABELS = [
+  "Fire Rate",
+  "Burst Size",
+  "Ammo Capacity",
+  "Loaded Rounds",
 ];
 
 const WEAPON_PROJECTILE_CORE_LABELS = [
@@ -94,6 +106,7 @@ const FPS_FALLOFF_LABELS = [
 
 const FPS_PROJECTILE_LABELS = [
   ...WEAPON_PROJECTILE_CORE_LABELS,
+  ...FPS_FALLOFF_LABELS,
   "Damage Falloff Range",
   "Damage Falloff Max",
 ];
@@ -123,6 +136,11 @@ const SHIP_PENETRATION_LABELS = [
   "Impulse Maximum Falloff",
 ];
 
+const SHIP_BALLISTICS_LABELS = [
+  ...SHIP_PROJECTILE_LABELS,
+  ...SHIP_PENETRATION_LABELS,
+];
+
 const WEAPON_SPREAD_LABELS = [
   "Spread Min–Max",
   "Spread First Attack",
@@ -137,6 +155,30 @@ const WEAPON_HANDLING_LABELS = [
   "Weapon Recoil Smoothness",
   "Weapon Recoil Handling",
   "Weapon Recoil Kick",
+];
+
+const FPS_ACCURACY_SPREAD_LABELS = [
+  ...WEAPON_SPREAD_LABELS,
+  ...WEAPON_HANDLING_LABELS,
+];
+
+const FPS_THERMAL_AND_POWER_LABELS = [
+  "Heat Per Shot",
+  "Heat Generation",
+  "Heat Capacity",
+  "Cooling Rate",
+  "Cooling Delay",
+  "Overheat Recovery",
+  "Minimum Temperature",
+  "Overheat Temperature",
+  "Post-Overheat Temperature",
+  "Wear Per Shot",
+  "Power",
+  "Power Maximum",
+  "Power Minimum (derived)",
+  "Power Draw",
+  "Cooling Draw",
+  "Coolant",
 ];
 
 const SHIP_ENERGY_AMMUNITION_LABELS = [
@@ -154,6 +196,54 @@ const SHIP_BALLISTIC_AMMUNITION_LABELS = [
   "Ammo Per Shot",
   "Energy Cost Per Shot",
   "Ammo Cost Per Shot",
+];
+
+const SHIP_ACCURACY_SPREAD_LABELS = [
+  ...WEAPON_SPREAD_LABELS,
+  ...WEAPON_HANDLING_LABELS,
+];
+
+const SHIP_THERMAL_AND_POWER_LABELS = [
+  "Heat Per Shot",
+  "Heat Generation",
+  "Heat Capacity",
+  "Cooling Rate",
+  "Cooling Delay",
+  "Overheat Recovery",
+  "Minimum Temperature",
+  "Overheat Temperature",
+  "Post-Overheat Temperature",
+  "Wear Per Shot",
+  "Power",
+  "Power Maximum",
+  "Power Minimum (derived)",
+  "Power Draw",
+  "Cooling Draw",
+  "Coolant",
+];
+
+const SHIP_SIGNATURE_LABELS = [
+  "Online EM",
+  "Online IR",
+  "Firing EM",
+  "Firing IR",
+  "EM Signature",
+  "IR Signature",
+  "EM Maximum",
+  "EM Decay Rate",
+  "Distortion Maximum",
+  "Distortion Resistance",
+];
+
+const SHIP_DURABILITY_AND_REPAIR_LABELS = [
+  "Mass",
+  "Component HP",
+  "Health",
+  "Self-Repair Uses",
+  "Self-Repair Cycle",
+  "Self-Repair Health Ratio",
+  "Baseline HP Restored (derived)",
+  "Repair Restore Ratio",
 ];
 
 const WEAPON_SUPPORT_STAT_GROUPS: DetailStatGroupDefinition[] = [
@@ -223,17 +313,41 @@ function shipAmmunitionLabels(detail: FittingComponentDetail): string[] {
     : SHIP_BALLISTIC_AMMUNITION_LABELS;
 }
 
+function shipFiringAndAmmunitionLabels(detail: FittingComponentDetail): string[] {
+  return [
+    "Fire Rate",
+    ...shipAmmunitionLabels(detail),
+    ...SHIP_FIRING_AND_AMMUNITION_CORE_LABELS.slice(1),
+  ];
+}
+
 function weaponPerformanceStatGroups(detail: FittingComponentDetail): DetailStatGroupDefinition[] {
-  const combatSubclusters = detail.type === "ship_weapon"
-    ? [
+  if (detail.type === "ship_weapon") {
+    return [{
+      title: "Ballistics / Damage",
+      kind: "nested",
+      subclusters: [
         { title: "Damage Output", labels: SHIP_DAMAGE_OUTPUT_LABELS },
-        { title: "Ammunition", labels: shipAmmunitionLabels(detail) },
-        { title: "Projectile", labels: SHIP_PROJECTILE_LABELS },
-        { title: "Penetration", labels: SHIP_PENETRATION_LABELS },
-        { title: "Spread", labels: WEAPON_SPREAD_LABELS },
-        { title: "Handling", labels: WEAPON_HANDLING_LABELS },
+        { title: "Firing & Ammunition", labels: shipFiringAndAmmunitionLabels(detail) },
+        { title: "Ballistics", labels: SHIP_BALLISTICS_LABELS },
+        { title: "Accuracy / Spread", labels: SHIP_ACCURACY_SPREAD_LABELS },
+        { title: "Thermal & Power", labels: SHIP_THERMAL_AND_POWER_LABELS },
+        { title: "Signature", labels: SHIP_SIGNATURE_LABELS },
+        { title: "Durability & Repair", labels: SHIP_DURABILITY_AND_REPAIR_LABELS },
+      ],
+    }];
+  }
+
+  const combatSubclusters = detail.type === "fps_weapon"
+      ? [
+        { title: "Damage Output", labels: FPS_DAMAGE_OUTPUT_LABELS },
+        { title: "Firing", labels: FPS_FIRING_LABELS },
+        { title: "Projectile", labels: FPS_PROJECTILE_LABELS },
+        { title: "Accuracy / Spread", labels: FPS_ACCURACY_SPREAD_LABELS },
+        { title: "Penetration", labels: FPS_PENETRATION_LABELS },
+        { title: "Thermal and Power", labels: FPS_THERMAL_AND_POWER_LABELS },
       ]
-    : [
+      : [
         { title: "Damage Output", labels: FPS_DAMAGE_OUTPUT_LABELS },
         { title: "Projectile", labels: FPS_PROJECTILE_LABELS },
         { title: "Penetration", labels: FPS_PENETRATION_LABELS },
@@ -248,7 +362,9 @@ function weaponPerformanceStatGroups(detail: FittingComponentDetail): DetailStat
       kind: "nested",
       subclusters: combatSubclusters,
     },
-    ...WEAPON_SUPPORT_STAT_GROUPS,
+    ...(detail.type === "fps_weapon"
+      ? WEAPON_SUPPORT_STAT_GROUPS.slice(1)
+      : WEAPON_SUPPORT_STAT_GROUPS),
   ];
 }
 
@@ -634,7 +750,15 @@ export function groupWeaponPerformanceStats(
     return true;
   });
   if (actionStats.length > 0) {
-    groups.push({ title: "Fire Actions", kind: "flat", stats: actionStats });
+    if (detail.type === "ship_weapon") {
+      const combatGroup = groups.find((group) => group.kind === "nested" && group.title === "Ballistics / Damage");
+      const firing = combatGroup?.kind === "nested"
+        ? combatGroup.subclusters.find((subcluster) => subcluster.title === "Firing & Ammunition")
+        : undefined;
+      if (firing) firing.stats.push(...actionStats);
+    } else {
+      groups.push({ title: "Fire Actions", kind: "flat", stats: actionStats });
+    }
   }
 
   const remaining = displayStats.filter((row) => {

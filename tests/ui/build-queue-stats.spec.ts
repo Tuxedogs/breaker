@@ -1205,8 +1205,16 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = statContent.labels;
-          expect(statContent.groups).toContain("Ammunition");
-          expect(statContent.groups).not.toContain("Falloff");
+          expect(statContent.groups).toEqual(expect.arrayContaining([
+            "Damage Output",
+            "Firing & Ammunition",
+            "Ballistics",
+            "Accuracy and Spread",
+            "Thermal & Power",
+            "Signature",
+            "Durability & Repair",
+          ]));
+          expect(statContent.groups).not.toEqual(expect.arrayContaining(["Ammunition", "Projectile", "Penetration", "Spread", "Fire Actions", "Additional", "Repair", "Durability / Physical"]));
           expect(compactLabels[0]).toBe("Alpha");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Fire Rate",
@@ -1241,8 +1249,15 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.cq7) {
           const compactLabels = statContent.labels;
-          expect(statContent.groups).toContain("Falloff");
-          expect(statContent.groups).not.toContain("Ammunition");
+          expect(statContent.groups).toEqual(expect.arrayContaining([
+            "Damage Output",
+            "Firing",
+            "Projectile",
+            "Accuracy / Spread",
+            "Penetration",
+            "Thermal and Power",
+          ]));
+          expect(statContent.groups).not.toEqual(expect.arrayContaining(["Ammunition", "Falloff", "Spread", "Handling"]));
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Alpha",
             "DPS",

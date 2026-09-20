@@ -219,12 +219,12 @@ function flattenGroupStats(groups: ReturnType<typeof buildDetailStatGroups>): Ma
   return byTitle;
 }
 
-test("FPS weapons move falloff stats into Falloff and never receive Ammunition", () => {
+test("FPS weapons organize firing, projectile falloff, and accuracy stats into their canonical sections", () => {
   const detail = buildFittingDetailFromFpsComponentCard(loadCard("1a85280e-7b8f-4486-a563-17cd2549d268"));
   assert.ok(detail);
   const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
-  const falloff = groups.get("Falloff") ?? [];
-  assert.deepEqual(falloff, [
+  const projectile = groups.get("Projectile") ?? [];
+  assert.deepEqual(projectile.slice(-6), [
     "Impulse Falloff Start",
     "Impulse Drop Falloff",
     "Impulse Maximum Falloff",
@@ -233,11 +233,13 @@ test("FPS weapons move falloff stats into Falloff and never receive Ammunition",
     "Minimum Damage After Falloff",
   ]);
   assert.equal(groups.has("Ammunition"), false);
-  assert.equal((groups.get("Projectile") ?? []).some((label) => label.includes("Falloff")), false);
+  assert.equal(groups.has("Falloff"), false);
+  assert.ok((groups.get("Firing") ?? []).includes("Fire Rate"));
+  assert.ok((groups.get("Accuracy / Spread") ?? []).includes("Spread Min–Max"));
   assert.equal((groups.get("Penetration") ?? []).some((label) => label.includes("Falloff")), false);
 });
 
-test("ship energy weapons keep energy ammunition stats and omit ballistic-only ammunition", () => {
+test("ship energy weapons group firing and ammunition together while omitting ballistic-only ammunition", () => {
   const detail = shipDetail("ship_weapon", {
     alphaDamage: 90,
     fireRateRpm: 200,
@@ -249,20 +251,21 @@ test("ship energy weapons keep energy ammunition stats and omit ballistic-only a
     projectileSpeed: 1400,
   });
   const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
-  const ammunition = groups.get("Ammunition") ?? [];
-  assert.deepEqual(ammunition, [
+  const firing = groups.get("Firing & Ammunition") ?? [];
+  assert.deepEqual(firing, [
+    "Fire Rate",
     "Energy Maximum Load",
     "Energy Cost Per Shot",
     "Energy Recharge Rate",
     "Recharge Cooldown",
   ]);
-  assert.equal(ammunition.includes("Ballistic Reserve"), false);
-  assert.equal(ammunition.includes("Ammo Count"), false);
+  assert.equal(firing.includes("Ballistic Reserve"), false);
+  assert.equal(firing.includes("Ammo Count"), false);
   assert.equal((groups.get("Damage Output") ?? []).includes("Energy Maximum Load"), false);
-  assert.equal(groups.has("Falloff"), false);
+  assert.equal(groups.has("Ammunition"), false);
 });
 
-test("ship ballistic weapons keep ballistic ammunition stats and omit energy-only ammunition", () => {
+test("ship weapons use the canonical seven-section organization", () => {
   const detail = shipDetail("ship_weapon", {
     alphaDamage: 40,
     fireRateRpm: 1200,
@@ -272,16 +275,57 @@ test("ship ballistic weapons keep ballistic ammunition stats and omit energy-onl
     maxRegenPerSec: null,
     regenerationCooldown: 2,
     projectileSpeed: 900,
+    projectileLifetime: 1.2,
+    projectileMaxTravel: 1080,
+    penetration: 0.5,
+    penetrationDistance: 1,
+    penetrationNearRadius: 0.05,
+    penetrationFarRadius: 0.05,
+    spreadMin: 0.1,
+    spreadMax: 0.2,
+    spreadFirstAttack: 0.01,
+    spreadPerAttack: 0.01,
+    spreadDecay: 0.01,
+    heatPerShot: 0.57,
+    coolingPerSecond: 30.2,
+    timeTillCoolingStarts: 0.51,
+    overheatFixTime: 2.41,
+    minimumTemperature: 0,
+    overheatTemperature: 100,
+    postOverheatTemperature: 0,
+    powerInputMaximum: 0.1,
+    powerInputMinimum: 0.1,
+    emSignatureNominal: 36,
+    emSignatureDecayRate: 0.15,
+    selfRepairMaxCount: 1,
+    selfRepairTime: 61,
+    selfRepairHealthRatio: 0.2,
+    selfRepairBaselineHp: 330,
+    repairRestoreRatio: 0.1,
+    health: 1650,
+    mass: 938,
   });
   const groups = flattenGroupStats(buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail)));
-  const ammunition = groups.get("Ammunition") ?? [];
-  assert.deepEqual(ammunition, [
+  assert.deepEqual(Array.from(groups.keys()).slice(0, 7), [
+    "Damage Output",
+    "Firing & Ammunition",
+    "Ballistics",
+    "Accuracy / Spread",
+    "Thermal & Power",
+    "Signature",
+    "Durability & Repair",
+  ]);
+  const firing = groups.get("Firing & Ammunition") ?? [];
+  assert.deepEqual(firing, [
+    "Fire Rate",
     "Ballistic Reserve",
     "Energy Cost Per Shot",
   ]);
-  assert.equal(ammunition.includes("Energy Maximum Load"), false);
-  assert.equal(ammunition.includes("Energy Recharge Rate"), false);
-  assert.equal(ammunition.includes("Recharge Cooldown"), false);
+  assert.equal(firing.includes("Energy Maximum Load"), false);
+  assert.equal(firing.includes("Energy Recharge Rate"), false);
+  assert.equal(firing.includes("Recharge Cooldown"), false);
   assert.equal((groups.get("Damage Output") ?? []).includes("Ballistic Reserve"), false);
-  assert.equal(groups.has("Falloff"), false);
+  assert.equal(groups.has("Ammunition"), false);
+  assert.equal(groups.has("Fire Actions"), false);
+  assert.equal(groups.has("Additional"), false);
 });
