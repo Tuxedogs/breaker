@@ -763,10 +763,11 @@
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.28);
   color: var(--craft-muted);
-  font-size: 9px;
-  font-weight: 900;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-regular);
   line-height: 1;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-default);
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -2326,7 +2327,6 @@
 .craft-detail-meta {
   color: var(--text-muted);
   font-size: 0.72rem;
-  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: lowercase;
 }
@@ -2744,12 +2744,19 @@
 }
 
 .craft-detail-material-table-head,
-.craft-detail-material-slot,
 .craft-detail-meta-list span span {
   color: var(--text-muted);
-  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.craft-detail-material-slot {
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-9);
+  font-weight: 800;
+  letter-spacing: var(--tracking-label);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -2814,9 +2821,11 @@
 
 .craft-detail-material-id strong {
   color: var(--text-primary);
-  font-size: 0.84rem;
-  font-weight: 900;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-semibold);
   line-height: 1.1;
+  letter-spacing: var(--tracking-default);
 }
 
 .craft-detail-material-id,
@@ -2993,8 +3002,9 @@
 
 .craft-detail-effect-stat {
   color: var(--text-primary);
-  font-size: 0.8rem;
-  font-weight: 850;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-14);
+  letter-spacing: var(--tracking-default);
   line-height: 1.1;
 }
 
@@ -3011,8 +3021,10 @@
 
 .craft-detail-effect-delta {
   color: var(--text-secondary);
-  font-size: 0.74rem;
-  font-weight: 400;
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-default);
   line-height: 1;
   white-space: nowrap;
 }
@@ -3040,7 +3052,7 @@
 .craft-detail-effect-source strong {
   color: var(--text-secondary);
   font-size: inherit;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .craft-detail-effect-source-sep {
@@ -6256,10 +6268,8 @@
   background: #111c27;
 }
 
-.craft-detail-material-id strong,
 .craft-detail-material-required,
-.craft-detail-quality-value,
-.craft-detail-effect-stat {
+.craft-detail-quality-value {
   font-size: 0.88rem;
 }
 
@@ -6922,7 +6932,9 @@
   color: var(--craft-highlight-danger);
 }
 
-@media (min-width: 761px) {
+/* A selected item becomes a peer comparison drawer only on wide desktop. At
+   narrower widths the same canonical detail fills the browser workspace. */
+@media (min-width: 1600px) {
   .craft-browser-workspace--drawer {
     display: grid !important;
     grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
@@ -6948,6 +6960,53 @@
     zoom: 1;
   }
 
+}
+
+/* When the drawer is present, the filter rail and results form the left
+   comparison column while the peer detail starts alongside the filter rail.
+   Flattening the route wrappers is deliberate: it lets the existing canonical
+   drawer remain untouched while the browser shell owns the wide layout. */
+@media (min-width: 1600px) {
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .recipe-browser-content-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 52.5fr) minmax(0, 47.5fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 8px;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .crb2-toolbar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .component-browser-body,
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-browser-workspace--drawer {
+    display: contents !important;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-browser-workspace--drawer > .crb2-results {
+    grid-column: 1;
+    grid-row: 2;
+    overflow: hidden;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-detail-drawer-region {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+@media (min-width: 3200px) and (min-height: 1800px) {
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .recipe-browser-content-shell {
+    width: min(3440px, calc(100vw - 160px));
+    margin-inline: auto;
+  }
+
+  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .crb2-toolbar {
+    width: auto;
+    margin-inline: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -7082,7 +7141,27 @@
   padding: 5px 7px;
 }
 
-.crb2-filter-chip,
+.crb2-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 29px;
+  padding: 0 9px;
+  border: 1px solid var(--ops-border-soft);
+  border-radius: var(--ops-radius-nested);
+  background: var(--ops-surface-row);
+  color: var(--craft-muted, #a9bad0);
+  white-space: nowrap;
+  font-family: var(--font-primary, Rajdhani, sans-serif);
+  font-size: 12px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  letter-spacing: var(--tracking-default);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
 .crb2-material-trigger {
   display: inline-flex;
   align-items: center;
@@ -7112,7 +7191,8 @@
   border-color: rgba(125, 211, 252, 0.42);
   background: var(--ops-surface-selected);
   color: var(--ops-focus-ring);
-  box-shadow: inset 0 -2px 0 rgba(125, 211, 252, 0.58);
+  box-shadow: inset 0 -1px #7dd3fc94;
+  font-weight: var(--font-weight-semibold);
 }
 
 .crb2-filter-chip:disabled {
@@ -7139,8 +7219,8 @@
   color: var(--craft-faint, #7a8fa3);
   white-space: nowrap;
   font-size: var(--recipe-text-kicker);
-  font-weight: 800;
-  letter-spacing: 0.11em;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08rem;
   text-transform: uppercase;
 }
 
@@ -7297,10 +7377,10 @@
 .crb2-table-section h3 {
   margin: 0;
   color: var(--craft-text, #edf7ff);
-  font-size: var(--recipe-text-title);
-  letter-spacing: 0.09em;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-14);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-weight: 0.75rem;
 }
 
 .crb2-table-section > header > span {
@@ -7344,10 +7424,11 @@
   padding-top: 5px;
   padding-bottom: 5px;
   background: var(--ops-surface-deep);
-  color: var(--craft-faint, #7a8fa3);
-  font-size: var(--app-table-header);
-  font-weight: 800;
-  letter-spacing: 0.075em;
+  color: #4897c7;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-table);
   text-transform: uppercase;
 }
 
@@ -7437,7 +7518,10 @@
   overflow: hidden;
   color: var(--craft-text, #edf7ff);
   text-overflow: ellipsis;
-  font-weight:450;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-light);
+  letter-spacing: var(--tracking-default);
 }
 
 .crb2-row-open {
@@ -7572,7 +7656,7 @@
 
   .crb2-table thead th {
     height: 38px;
-    font-size: 14px;
+    font-size: var(--font-size-12);
   }
 
   .crb2-pager {
@@ -7646,7 +7730,12 @@
     max-height: calc(100vh - 136px);
   }
 
-  .crb2-filter-chip,
+  .crb2-filter-chip {
+    min-height: 27px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
   .crb2-material-trigger {
     min-height: 27px;
     padding: 0 8px;
@@ -7909,7 +7998,8 @@
   .crb2-mobile-filter-groups h3 { margin: 0; color: var(--craft-text, #edf7ff); font-size: 0.92rem; letter-spacing: 0.01em; }
   .crb2-mobile-filter-chips { display: flex; flex-wrap: wrap; gap: 7px; }
   .crb2-mobile-filter-chips--even { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .crb2-mobile-filter-groups .crb2-filter-chip { min-height: 39px; padding: 0 13px; border-radius: 8px; font-size: 0.78rem; letter-spacing: 0; text-transform: none; }
+  .crb2-mobile-filter-groups .crb2-filter-chip { min-height: 39px; padding: 0 13px; border-radius: 8px; font-size: 10px; font-weight: var(--font-weight-regular); letter-spacing: var(--tracking-default); text-transform: none; }
+  .crb2-mobile-filter-groups .crb2-filter-chip--active { font-weight: var(--font-weight-semibold); }
   .crb2-mobile-filter-chips--even .crb2-filter-chip { padding-inline: 5px; }
   .crb2-mobile-materials .crb2-material-search { height: 42px; border: 1px solid var(--ops-border-default); border-radius: 7px; }
   .crb2-mobile-material-options { max-height: 230px; overflow-y: auto; border: 1px solid var(--ops-border-soft); border-radius: 7px; background: var(--ops-surface-primary); }

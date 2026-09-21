@@ -41,6 +41,65 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 test.describe("Crafting browser and detail refactor", () => {
+  test("keeps the selected detail single-pane below 1600px and makes it a 52.5% comparison peer at wide desktop", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    const previewId = "ba842720-ad32-4d53-8f56-992bacb1fc45";
+
+    for (const viewport of [
+      { name: "1599x1000", width: 1599, height: 1000 },
+      { name: "1600x1000", width: 1600, height: 1000 },
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${browserPath}?preview=${previewId}`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
+      await expectNoDocumentOverflow(page);
+
+      const results = page.locator(".craft-browser-workspace > .crb2-results");
+      if (viewport.width < 1600) {
+        await expect(results).toBeHidden();
+        await page.screenshot({
+          path: path.join(screenshotDir, `single-detail-boundary-${viewport.name}.png`),
+          fullPage: true,
+        });
+        continue;
+      }
+
+      await expect(results).toBeVisible();
+      const geometry = await page.evaluate(() => {
+        const toolbar = document.querySelector<HTMLElement>(".crb2-toolbar")?.getBoundingClientRect();
+        const resultList = document.querySelector<HTMLElement>(".craft-browser-workspace > .crb2-results")?.getBoundingClientRect();
+        const drawer = document.querySelector<HTMLElement>(".craft-detail-drawer-region")?.getBoundingClientRect();
+        return {
+          toolbarLeft: Math.round(toolbar?.left ?? 0),
+          toolbarWidth: Math.round(toolbar?.width ?? 0),
+          toolbarBottom: Math.round(toolbar?.bottom ?? 0),
+          resultsLeft: Math.round(resultList?.left ?? 0),
+          resultsTop: Math.round(resultList?.top ?? 0),
+          drawerLeft: Math.round(drawer?.left ?? 0),
+          drawerTop: Math.round(drawer?.top ?? 0),
+          drawerWidth: Math.round(drawer?.width ?? 0),
+        };
+      });
+
+      expect(geometry.resultsLeft).toBe(geometry.toolbarLeft);
+      expect(geometry.resultsTop).toBeGreaterThanOrEqual(geometry.toolbarBottom + 8);
+      expect(geometry.drawerTop).toBeLessThanOrEqual(geometry.toolbarBottom);
+      expect(geometry.drawerLeft).toBeGreaterThan(geometry.toolbarLeft + geometry.toolbarWidth);
+      const leftShare = geometry.toolbarWidth / (geometry.toolbarWidth + geometry.drawerWidth);
+      expect(leftShare).toBeGreaterThan(0.51);
+      expect(leftShare).toBeLessThan(0.54);
+
+      await page.screenshot({
+        path: path.join(screenshotDir, `peer-detail-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+  });
+
   test("keeps Vehicle Weapons and table columns constrained to their canonical data", async ({ page }) => {
     await mkdir(screenshotDir, { recursive: true });
     await page.setViewportSize({ width: 1920, height: 1080 });
