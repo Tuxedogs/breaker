@@ -77,11 +77,19 @@ test("falls back to representative art by family, size, and class", () => {
 test("limits large hero artwork to transparent presentation-safe assets", () => {
   assert.equal(
     resolveComponentHeroArtUrl({ blueprintId: "BP_CRAFT_BEHR_BallisticGatling_S5" }),
-    "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+    "/images/crafting/hero-artwork/component-thumbnails/behr-ballistic-gatling-s5.webp",
   );
   assert.equal(
     resolveComponentHeroArtUrl({ componentName: "Atlas", componentType: "quantumdrive", size: 1, className: "civilian" }),
-    "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
+    "/images/crafting/hero-artwork/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
+  );
+  assert.equal(
+    resolveComponentHeroArtUrl({ blueprintId: "BP_CRAFT_ESPR_BallisticCannon_S4" }),
+    "/images/crafting/hero-artwork/component-thumbnails/espr-ballistic-cannon-s4.webp",
+  );
+  assert.equal(
+    resolveComponentHeroArtUrl({ blueprintId: "343ab6b2-5ffe-45cf-9fe7-b6ec48d30208" }),
+    "/images/crafting/hero-artwork/component-thumbnails/behr-sniper-ballistic-01-base.webp",
   );
   assert.equal(
     resolveComponentHeroArtUrl({ canonicalKey: "BP_CRAFT_POWR_ACOM_S02_LuxCore_SCItem" }),

@@ -696,7 +696,7 @@
   display: none;
 }
 
-.craft-detail-drawer-icon-wrap {
+.craft-detail-hero-art-stage {
   display: grid;
   width: 72px;
   height: 72px;
@@ -706,15 +706,12 @@
   background: var(--craft-surface-deep);
 }
 
-.craft-detail-drawer-icon-wrap .craft-detail-hero-icon {
+.craft-detail-hero-art-stage .craft-detail-hero-icon {
   width: 60px;
   height: 60px;
   object-fit: contain;
 }
 
-.craft-detail-drawer-art-breakout {
-  display: none;
-}
 
 .craft-detail-drawer-identity {
   min-width: 0;
@@ -1487,7 +1484,7 @@
     outline-offset: 3px;
   }
 
-  .craft-detail-drawer-icon-wrap {
+  .craft-detail-hero-art-stage {
     grid-area: art;
     justify-self: end;
     align-self: center;
@@ -1499,19 +1496,24 @@
     background: transparent;
   }
 
-  .craft-detail-drawer-art-breakout {
-    display: none;
-  }
-
-  .craft-detail-drawer-icon-wrap .craft-detail-hero-icon,
-  .craft-detail-drawer-icon-wrap .craft-detail-hero-artwork {
+  .craft-detail-hero-art-stage .craft-detail-hero-icon {
     width: 100%;
     height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
   }
 
-  .craft-detail-drawer-icon-wrap:has(.craft-detail-hero-icon--fallback) {
+  .craft-detail-hero-art-stage .craft-detail-hero-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
+  }
+
+  .craft-detail-hero-art-stage:has(.craft-detail-hero-icon--fallback) {
     display: none;
   }
 
@@ -1645,7 +1647,7 @@
 }
 
 @media (max-width: 499px) {
-  .craft-detail-drawer-icon-wrap {
+  .craft-detail-hero-art-stage {
     /* Keep the art paired with the identity block instead of the viewport edge. */
     margin-right: clamp(30px, 8vw, 42px);
   }
@@ -1998,9 +2000,11 @@
     grid-template-areas: "identity art facts actions";
     grid-template-columns: minmax(230px, 0.95fr) minmax(245px, 1.2fr) auto 34px;
     min-height: 150px;
+    margin-bottom: 26px;
     gap: 12px;
     padding: 15px 16px 17px;
     overflow: visible;
+    container-type: inline-size;
     border-bottom: 1px solid rgba(82, 199, 232, 0.38);
     background:
       linear-gradient(90deg, rgba(4, 7, 9, 0.94) 0%, rgba(5, 8, 10, 0.72) 32%, rgba(7, 10, 12, 0.3) 64%, rgba(4, 7, 9, 0.82) 100%),
@@ -2066,27 +2070,27 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   }
 
-  .craft-detail-drawer-icon-wrap {
-    position: relative;
-    grid-column: 2 / 4;
-    grid-row: 1;
-    align-self: stretch;
-    justify-self: stretch;
-    width: auto;
+  .craft-detail-hero-art-stage {
+    position: absolute;
+    top: 10px;
+    right: clamp(250px, 29cqw, 340px);
+    bottom: -22px;
+    width: min(clamp(360px, 42cqw, 520px), calc(100% - 500px));
     height: auto;
     min-width: 0;
-    overflow: hidden;
+    overflow: visible;
     border: 0;
     border-radius: 0;
     background: transparent;
+    pointer-events: none;
   }
 
-  .craft-detail-drawer-icon-wrap::after {
+  .craft-detail-hero-art-stage::after {
     position: absolute;
     right: 4%;
-    bottom: 7px;
+    bottom: 4px;
     left: 4%;
-    height: 18px;
+    height: 31px;
     border-radius: 50%;
     background: radial-gradient(ellipse, rgba(0, 0, 0, 0.72), transparent 68%);
     content: "";
@@ -2094,51 +2098,31 @@
     pointer-events: none;
   }
 
-  .craft-detail-drawer-icon-wrap .craft-detail-hero-artwork {
+  .craft-detail-hero-art-stage .craft-detail-hero-art {
     position: absolute;
-    top: 50%;
-    left: 40%;
+    right: 0;
+    bottom: 40px;
     z-index: 2;
-    width: clamp(350px, 28vw, 560px);
+    width: 100%;
+    height: auto;
     max-width: none;
-    aspect-ratio: 1;
-    object-fit: contain;
-    clip-path: inset(36% 0 38.5% 0);
-    transform: translate(-50%, -49%) rotate(3deg);
-    transform-origin: 42% 52%;
+    max-height: none;
+    object-fit: initial;
     filter:
       drop-shadow(0 13px 10px rgba(0, 0, 0, 0.62))
       drop-shadow(0 0 12px rgba(101, 180, 208, 0.08));
-    pointer-events: none;
   }
 
-  .craft-detail-drawer-art-breakout {
-    position: relative;
-    display: block;
-    grid-column: 2 / 4;
-    grid-row: 1;
-    align-self: stretch;
-    z-index: 4;
-    min-width: 0;
-    overflow: visible;
-    pointer-events: none;
+  .craft-detail-hero-art-stage[data-hero-layout="component"] {
+    width: clamp(190px, 28cqw, 380px);
   }
 
-  .craft-detail-drawer-art-breakout .craft-detail-hero-artwork-breakout {
-    position: absolute;
-    top: 50%;
-    left: 40%;
-    width: clamp(350px, 28vw, 560px);
-    max-width: none;
-    aspect-ratio: 1;
-    object-fit: contain;
-    clip-path: inset(36% 0 32% 91%);
-    transform: translate(-50%, -49%) rotate(3deg);
-    transform-origin: 42% 52%;
-    filter: drop-shadow(0 13px 10px rgba(0, 0, 0, 0.62));
+  .craft-detail-hero-art-stage[data-hero-layout="component"] .craft-detail-hero-art {
+    width: auto;
+    height: 100%;
   }
 
-  .craft-detail-drawer-icon-wrap .craft-detail-hero-icon {
+  .craft-detail-hero-art-stage .craft-detail-hero-icon {
     position: absolute;
     top: 50%;
     left: 50%;

@@ -1,5 +1,19 @@
 import fr66Card from "../../../../server-data/crafting/component-cards/by-id/db3f4c97-8d40-4b36-b397-452dea1594fc.json";
 import ad5bCard from "../../../../server-data/crafting/component-cards/by-id/ba842720-ad32-4d53-8f56-992bacb1fc45.json";
+import vk00Card from "../../../../server-data/crafting/component-cards/by-id/33be7f1a-3f75-4627-bb8b-88e6d6b42f4e.json";
+import p6lrCard from "../../../../server-data/crafting/component-cards/by-id/343ab6b2-5ffe-45cf-9fe7-b6ec48d30208.json";
+import deadboltICard from "../../../../server-data/crafting/component-cards/by-id/fca087e5-c043-4638-99e8-3c0bd668ab89.json";
+import deadboltIICard from "../../../../server-data/crafting/component-cards/by-id/82b2cc9d-aa04-4dfa-8bc1-bd972c17276d.json";
+import deadboltIIICard from "../../../../server-data/crafting/component-cards/by-id/d5e2dda5-e104-4e50-887e-10a583b6064d.json";
+import deadboltIVCard from "../../../../server-data/crafting/component-cards/by-id/a0802d45-54d4-4e9b-8fa8-6b45ac193463.json";
+import deadboltVCard from "../../../../server-data/crafting/component-cards/by-id/08edebc6-4c64-49e6-ba3a-c62140ead490.json";
+import deadboltVICard from "../../../../server-data/crafting/component-cards/by-id/8c003415-d13f-467f-8322-e00b7e2c6d5f.json";
+import attrition1Card from "../../../../server-data/crafting/component-cards/by-id/4c5a8d37-1eb2-4395-8c3e-54b8f738639d.json";
+import attrition2Card from "../../../../server-data/crafting/component-cards/by-id/8f166b36-2bb7-4d38-9e3a-464801b40f83.json";
+import attrition3Card from "../../../../server-data/crafting/component-cards/by-id/626da3a0-dc9c-49bd-ad97-497239675894.json";
+import attrition4Card from "../../../../server-data/crafting/component-cards/by-id/44fc600c-7523-4ce7-85a5-d02cd586cb4a.json";
+import attrition5Card from "../../../../server-data/crafting/component-cards/by-id/f6cc35f9-96b6-4e58-90d0-9b50d4dc92ee.json";
+import attrition6Card from "../../../../server-data/crafting/component-cards/by-id/668c64ba-05cf-47fb-88af-e815d176c7d5.json";
 import fpsWeaponCard from "../../../../server-data/crafting/component-cards/by-id/bd636d35-43fd-4782-a223-40ce0a727f39.json";
 import fpsArmorCard from "../../../../server-data/crafting/component-cards/by-id/005d95db-96ca-45b7-9647-7e7537b8fac8.json";
 import hazardZoneWeaponCard from "../../../../server-data/crafting/component-cards/by-id/ad3568b3-9a28-441e-b8cd-af572cd52e3f.json";
@@ -12,6 +26,20 @@ import snowBlindCard from "../../../../server-data/crafting/component-cards/by-i
 import js300Card from "../../../../server-data/crafting/component-cards/by-id/9585b0dc-b660-4e2a-9136-0092af1e72c1.json";
 import fr66Recipe from "../../../../server-data/crafting/recipes/by-blueprint/db3f4c97-8d40-4b36-b397-452dea1594fc.json";
 import ad5bRecipe from "../../../../server-data/crafting/recipes/by-blueprint/ba842720-ad32-4d53-8f56-992bacb1fc45.json";
+import vk00Recipe from "../../../../server-data/crafting/recipes/by-blueprint/33be7f1a-3f75-4627-bb8b-88e6d6b42f4e.json";
+import p6lrRecipe from "../../../../server-data/crafting/recipes/by-blueprint/343ab6b2-5ffe-45cf-9fe7-b6ec48d30208.json";
+import deadboltIRecipe from "../../../../server-data/crafting/recipes/by-blueprint/fca087e5-c043-4638-99e8-3c0bd668ab89.json";
+import deadboltIIRecipe from "../../../../server-data/crafting/recipes/by-blueprint/82b2cc9d-aa04-4dfa-8bc1-bd972c17276d.json";
+import deadboltIIIRecipe from "../../../../server-data/crafting/recipes/by-blueprint/d5e2dda5-e104-4e50-887e-10a583b6064d.json";
+import deadboltIVRecipe from "../../../../server-data/crafting/recipes/by-blueprint/a0802d45-54d4-4e9b-8fa8-6b45ac193463.json";
+import deadboltVRecipe from "../../../../server-data/crafting/recipes/by-blueprint/08edebc6-4c64-49e6-ba3a-c62140ead490.json";
+import deadboltVIRecipe from "../../../../server-data/crafting/recipes/by-blueprint/8c003415-d13f-467f-8322-e00b7e2c6d5f.json";
+import attrition1Recipe from "../../../../server-data/crafting/recipes/by-blueprint/4c5a8d37-1eb2-4395-8c3e-54b8f738639d.json";
+import attrition2Recipe from "../../../../server-data/crafting/recipes/by-blueprint/8f166b36-2bb7-4d38-9e3a-464801b40f83.json";
+import attrition3Recipe from "../../../../server-data/crafting/recipes/by-blueprint/626da3a0-dc9c-49bd-ad97-497239675894.json";
+import attrition4Recipe from "../../../../server-data/crafting/recipes/by-blueprint/44fc600c-7523-4ce7-85a5-d02cd586cb4a.json";
+import attrition5Recipe from "../../../../server-data/crafting/recipes/by-blueprint/f6cc35f9-96b6-4e58-90d0-9b50d4dc92ee.json";
+import attrition6Recipe from "../../../../server-data/crafting/recipes/by-blueprint/668c64ba-05cf-47fb-88af-e815d176c7d5.json";
 import fpsWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/bd636d35-43fd-4782-a223-40ce0a727f39.json";
 import fpsArmorRecipe from "../../../../server-data/crafting/recipes/by-blueprint/005d95db-96ca-45b7-9647-7e7537b8fac8.json";
 import hazardZoneWeaponRecipe from "../../../../server-data/crafting/recipes/by-blueprint/ad3568b3-9a28-441e-b8cd-af572cd52e3f.json";
@@ -43,9 +71,20 @@ export const blueprintSourceMissions = new Map<string, unknown[]>([
   }]],
 ]);
 
+const weaponFamilyFixtureCards = [
+  deadboltICard, deadboltIICard, deadboltIIICard, deadboltIVCard, deadboltVCard, deadboltVICard,
+  attrition1Card, attrition2Card, attrition3Card, attrition4Card, attrition5Card, attrition6Card,
+];
+const weaponFamilyFixtureRecipes = [
+  deadboltIRecipe, deadboltIIRecipe, deadboltIIIRecipe, deadboltIVRecipe, deadboltVRecipe, deadboltVIRecipe,
+  attrition1Recipe, attrition2Recipe, attrition3Recipe, attrition4Recipe, attrition5Recipe, attrition6Recipe,
+];
+
 export const componentCards = new Map([
   fr66Card,
   ad5bCard,
+  vk00Card,
+  p6lrCard,
   fpsWeaponCard,
   fpsArmorCard,
   hazardZoneWeaponCard,
@@ -56,10 +95,13 @@ export const componentCards = new Map([
   atlasCard,
   snowBlindCard,
   js300Card,
+  ...weaponFamilyFixtureCards,
 ].map((record) => [record.id, record]));
 export const componentCardRecords = [
   fr66Card,
   ad5bCard,
+  vk00Card,
+  p6lrCard,
   fpsWeaponCard,
   fpsArmorCard,
   hazardZoneWeaponCard,
@@ -70,6 +112,7 @@ export const componentCardRecords = [
   atlasCard,
   snowBlindCard,
   js300Card,
+  ...weaponFamilyFixtureCards,
 ];
 export const componentCardRecordFiles = Object.fromEntries(
   componentCardRecords.map((record) => [record.id, `by-id/${record.id}.json`]),
@@ -108,6 +151,8 @@ export const componentCardBrowseResponse = {
 export const recipeShards = new Map<string, unknown>([
   ["db3f4c97-8d40-4b36-b397-452dea1594fc", fr66Recipe],
   ["ba842720-ad32-4d53-8f56-992bacb1fc45", ad5bRecipe],
+  ["33be7f1a-3f75-4627-bb8b-88e6d6b42f4e", vk00Recipe],
+  ["343ab6b2-5ffe-45cf-9fe7-b6ec48d30208", p6lrRecipe],
   ["bd636d35-43fd-4782-a223-40ce0a727f39", fpsWeaponRecipe],
   ["005d95db-96ca-45b7-9647-7e7537b8fac8", fpsArmorRecipe],
   ["ad3568b3-9a28-441e-b8cd-af572cd52e3f", hazardZoneWeaponRecipe],
@@ -118,15 +163,18 @@ export const recipeShards = new Map<string, unknown>([
   ["17b29a33-88fe-484f-bb9b-fbf780273ff5", atlasRecipe],
   ["9b4499d4-b54c-4eb9-b661-e65f3d0f501d", snowBlindRecipe],
   ["9585b0dc-b660-4e2a-9136-0092af1e72c1", js300Recipe],
+  ...weaponFamilyFixtureRecipes.map((recipe) => [recipe.record.blueprintGuid, recipe] as const),
 ]);
 export const vehicleRecipeBlueprintGuids = [
   fr66Recipe,
   ad5bRecipe,
+  vk00Recipe,
   hazardZoneWeaponRecipe,
   m5aRecipe,
   atlasRecipe,
   snowBlindRecipe,
   js300Recipe,
+  ...weaponFamilyFixtureRecipes,
 ].map((recipe) => recipe.record.blueprintGuid);
 export const fpsRecipeBlueprintGuids = [
   fpsWeaponRecipe,
@@ -134,6 +182,7 @@ export const fpsRecipeBlueprintGuids = [
   secondWindArmorRecipe,
   secondWindWeaponRecipe,
   cq7Recipe,
+  p6lrRecipe,
 ].map((recipe) => recipe.record.blueprintGuid);
 export const recipeIndexResponse = {
   schemaVersion: 1,

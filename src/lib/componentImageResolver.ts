@@ -1,4 +1,5 @@
 const COMPONENT_IMAGE_ROOT = "/images/component-thumbnails";
+const COMPONENT_HERO_ART_ROOT = "/images/crafting/hero-artwork";
 
 export type ComponentImageIdentity = {
   entityClass?: string | null;
@@ -21,6 +22,7 @@ export const COMPONENT_IMAGE_ENTRIES: readonly ComponentImageEntry[] = [
   { filename: "behr-ballistic-gatling-s5.webp", identifiers: ["ba842720-ad32-4d53-8f56-992bacb1fc45", "ad5b", "BP_CRAFT_BEHR_BallisticGatling_S5"], heroSafe: true },
   { filename: "behr-ballistic-gatling-s4.webp", identifiers: ["e4afc8b4-da61-4efb-af7e-f003d9900d96", "1727fc8f-e31c-4d66-9670-084aadb15955", "BP_CRAFT_BEHR_BallisticGatling_S4"], heroSafe: true },
   { filename: "behr-ballistic-gatling-s6.webp", identifiers: ["6c46b8e3-81c8-4018-bce2-740b81174a00", "ac3dc178-0b5d-4a73-9ad6-6ce05e9c2620", "BP_CRAFT_BEHR_BallisticGatling_S6"], heroSafe: true },
+  { filename: "behr-sniper-ballistic-01-base.webp", identifiers: ["343ab6b2-5ffe-45cf-9fe7-b6ec48d30208", "01f2b88a-9752-4cd8-9f73-d151b4b2ca61", "BP_CRAFT_BEHR_Sniper_Ballistic_01"], heroSafe: true },
   { filename: "behr-ballistic-cannon-s4.webp", identifiers: ["6635dc5f-dfcd-4b72-9d9d-8d3620820352", "6713db41-8231-4e71-b7a2-74073ddd4b50", "BP_CRAFT_BEHR_BallisticCannon_S4"], heroSafe: true },
   { filename: "kbar-ballistic-cannon-s1.webp", identifiers: ["85fd75f8-6c6c-4d3f-839f-988ae7660617", "ad0494d5-ca83-4f6a-a4c0-f29b7b221a20", "BP_CRAFT_KBAR_BallisticCannon_S1"], heroSafe: true },
   { filename: "kbar-ballistic-cannon-s2.webp", identifiers: ["02a7f68a-5bdd-4887-a256-20c985a65bda", "b04aff42-d892-4ca9-991e-101c869a7caa", "BP_CRAFT_KBAR_BallisticCannon_S2"], heroSafe: true },
@@ -34,8 +36,11 @@ export const COMPONENT_IMAGE_ENTRIES: readonly ComponentImageEntry[] = [
   { filename: "cit2cool.png", identifiers: ["59a37716-f4d3-4dcb-a41e-0f2c3064e169", "80f82e57-67d7-464e-a3f1-10770d31440e", "BP_CRAFT_COOL_JSPN_S02_FrostStarEX_SCItem"] },
   { filename: "comp2power.png", identifiers: ["78e0c040-6668-4b43-a29c-4c47051bba8d", "63a75fe7-dd41-41c8-8854-b5ba3b5acf46", "BP_CRAFT_POWR_ACOM_S02_LuxCore_SCItem"] },
   { filename: "cool2comp.png", identifiers: ["67b6c401-1017-4c39-93f6-8305c4c67f69", "479a96c4-0b36-48f3-9ff6-5f4d7645dec3", "BP_CRAFT_COOL_ACOM_S02_AbsoluteZero_SCItem"] },
-  { filename: "deadbolt4.png", identifiers: ["45a6750e-f453-4444-8a4d-67023187ac3f", "a0802d45-54d4-4e9b-8fa8-6b45ac193463", "BP_CRAFT_ESPR_BallisticCannon_S4"] },
-  { filename: "deadbolt5.png", identifiers: ["76775574-fcf2-493d-859e-337f1267a7ef", "08edebc6-4c64-49e6-ba3a-c62140ead490", "BP_CRAFT_ESPR_BallisticCannon_S5"] },
+  { filename: "espr-ballistic-cannon-s1.webp", identifiers: ["3727a5ce-bf98-43a7-a96e-c0ffedd071d0", "fca087e5-c043-4638-99e8-3c0bd668ab89", "BP_CRAFT_ESPR_BallisticCannon_S1"], heroSafe: true },
+  { filename: "espr-ballistic-cannon-s2.webp", identifiers: ["92f60837-933a-42dc-a7b0-473a337ffc13", "82b2cc9d-aa04-4dfa-8bc1-bd972c17276d", "BP_CRAFT_ESPR_BallisticCannon_S2"], heroSafe: true },
+  { filename: "espr-ballistic-cannon-s3.webp", identifiers: ["370e4728-924a-4791-9297-a71b25ff08e9", "d5e2dda5-e104-4e50-887e-10a583b6064d", "BP_CRAFT_ESPR_BallisticCannon_S3"], heroSafe: true },
+  { filename: "espr-ballistic-cannon-s4.webp", identifiers: ["45a6750e-f453-4444-8a4d-67023187ac3f", "a0802d45-54d4-4e9b-8fa8-6b45ac193463", "BP_CRAFT_ESPR_BallisticCannon_S4"], heroSafe: true },
+  { filename: "espr-ballistic-cannon-s5.webp", identifiers: ["76775574-fcf2-493d-859e-337f1267a7ef", "08edebc6-4c64-49e6-ba3a-c62140ead490", "BP_CRAFT_ESPR_BallisticCannon_S5"], heroSafe: true },
   { filename: "disto5scatter.png", identifiers: ["2e0a3446-23e2-447b-8f1c-2b01516ca396"] },
   { filename: "gt220.png", identifiers: ["b837397c-47b6-45e7-b409-db290a068b47", "1b6eb647-f144-4643-9d8d-ec76bf5c985f", "BP_CRAFT_GATS_BallisticGatling_S3"] },
   { filename: "hofsteade2.png", identifiers: ["b422bcf8-b553-4b09-b2be-e92ab2f80e9a", "0b6cf9a1-ef55-47ee-ab8d-c734d4f3b073", "BP_CRAFT_Mining_Laser_SHIN_Hofstede_S2"] },
@@ -135,7 +140,11 @@ export function resolveComponentHeroArtUrl(identity: ComponentImageIdentity): st
   const imageUrl = resolveComponentImageUrl(identity);
   if (!imageUrl) return null;
 
-  if (REPRESENTATIVE_COMPONENT_ART.some((entry) => entry.url === imageUrl)) return imageUrl;
+  if (REPRESENTATIVE_COMPONENT_ART.some((entry) => entry.url === imageUrl)) {
+    return `${COMPONENT_HERO_ART_ROOT}/representative${imageUrl.slice("/assets/fitting/components/representative".length)}`;
+  }
 
-  return componentHeroSafeUrls.has(imageUrl) ? imageUrl : null;
+  return componentHeroSafeUrls.has(imageUrl)
+    ? `${COMPONENT_HERO_ART_ROOT}/component-thumbnails/${imageUrl.slice(`${COMPONENT_IMAGE_ROOT}/`.length)}`
+    : null;
 }

@@ -2599,6 +2599,16 @@ function RecipeDrawer({
     size: selectedComponentCard?.size ?? selectedRecipe.size,
     className: selectedComponentCard?.class ?? selectedRecipe.class,
   });
+  const heroLayout = /weapon|gun|cannon|gatling|repeater/i.test([
+    selectedComponentCard?.category,
+    selectedComponentCard?.type,
+    selectedComponentCard?.typeLabel,
+    selectedRecipe.category,
+    selectedRecipe.component_type,
+    selectedRecipe.wiki_type,
+  ].filter((value): value is string => Boolean(value)).join(" "))
+    ? "weapon"
+    : "component";
   const heroIconUrl = selectedComponentCard ? getComponentCategoryIconUrl(selectedComponentCard) : null;
   const heroFamily = selectedComponentCard?.typeLabel
     ?? selectedRecipe.wiki_type
@@ -2621,8 +2631,7 @@ function RecipeDrawer({
         aria-busy={quantizationLoading || fittingStatsLoading}
       >
         <header
-          className={`craft-detail-drawer-header${heroArtworkUrl ? " has-hero-artwork" : ""}`}
-          data-hero-kind={selectedComponentCard?.type ?? selectedRecipe.component_type}
+          className="craft-detail-drawer-header"
         >
           <button
             type="button"
@@ -2632,13 +2641,13 @@ function RecipeDrawer({
             <span aria-hidden="true">‹</span>
             <span>Crafting</span>
           </button>
-          <div className="craft-detail-drawer-icon-wrap">
+          <div className="craft-detail-hero-art-stage" data-hero-layout={heroLayout}>
             {heroArtworkUrl ? (
               <img
                 src={heroArtworkUrl}
                 alt=""
                 aria-hidden="true"
-                className="craft-detail-hero-artwork"
+                className="craft-detail-hero-art craft-detail-hero-artwork"
               />
             ) : heroIconUrl ? (
               <img
@@ -2651,15 +2660,10 @@ function RecipeDrawer({
               <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
             )}
           </div>
-          {heroArtworkUrl && (
-            <div className="craft-detail-drawer-art-breakout" aria-hidden="true">
-              <img src={heroArtworkUrl} alt="" className="craft-detail-hero-artwork-breakout" />
-            </div>
-          )}
           <div className="craft-detail-drawer-identity" data-mobile-family={heroFamily ?? ""}>
             {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
-            <h2 className="craft-detail-drawer-title">
-              <span className="craft-detail-drawer-desktop-title">{displayName}</span>
+            <h2 className="craft-detail-drawer-title" aria-label={displayName} title={displayName}>
+              <span className="craft-detail-drawer-desktop-title">{mobileDisplayName}</span>
               <span className="craft-detail-drawer-mobile-title">{mobileDisplayName}</span>
             </h2>
             <div className="craft-summary-chips craft-detail-hero-chips">

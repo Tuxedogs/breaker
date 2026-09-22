@@ -270,7 +270,9 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(selectedWeaponRow).toBeVisible();
       await selectedWeaponRow.click();
       if (viewport.width >= 1600) {
-        await expect(page.locator(".craft-detail-drawer-title")).toContainText(
+        await expect(page.locator(".craft-detail-drawer-title")).toHaveText("AD5B");
+        await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
+          "aria-label",
           "AD5B Ballistic Gatling",
         );
       } else {
