@@ -50,6 +50,7 @@ import {
 } from "../utils/qualityBands";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
+import { resolveComponentHeroArtUrl } from "@/lib/componentImageResolver";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import {
@@ -2174,7 +2175,7 @@ function MaterialRequirementsTable({ children }: { children: ReactNode }) {
         <span>Material</span>
         <span>Required</span>
         <span>Target</span>
-        <span>Input</span>
+        <span>Quality</span>
         <span>Effect</span>
       </div>
       <div className="craft-detail-material-table-body">
@@ -2588,6 +2589,16 @@ function RecipeDrawer({
     selectedComponentCard?.craftTimeSeconds ?? selectedRecipe.craft_time_seconds ?? 0,
   );
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const heroArtworkUrl = resolveComponentHeroArtUrl({
+    entityClass: selectedComponentCard?.entityClass ?? selectedRecipe.output_entityClass,
+    componentId: selectedComponentCard?.id,
+    blueprintId: selectedRecipe.blueprint_id,
+    canonicalKey: selectedRecipe.internal_name,
+    componentName: selectedComponentCard?.name ?? selectedRecipe.component_name,
+    componentType: selectedComponentCard?.type ?? selectedRecipe.component_type,
+    size: selectedComponentCard?.size ?? selectedRecipe.size,
+    className: selectedComponentCard?.class ?? selectedRecipe.class,
+  });
   const heroIconUrl = selectedComponentCard ? getComponentCategoryIconUrl(selectedComponentCard) : null;
   const heroFamily = selectedComponentCard?.typeLabel
     ?? selectedRecipe.wiki_type
@@ -2609,7 +2620,10 @@ function RecipeDrawer({
         aria-label={`${displayName} component detail`}
         aria-busy={quantizationLoading || fittingStatsLoading}
       >
-        <header className="craft-detail-drawer-header">
+        <header
+          className={`craft-detail-drawer-header${heroArtworkUrl ? " has-hero-artwork" : ""}`}
+          data-hero-kind={selectedComponentCard?.type ?? selectedRecipe.component_type}
+        >
           <button
             type="button"
             className="craft-detail-drawer-mobile-back"
@@ -2619,7 +2633,14 @@ function RecipeDrawer({
             <span>Crafting</span>
           </button>
           <div className="craft-detail-drawer-icon-wrap">
-            {heroIconUrl ? (
+            {heroArtworkUrl ? (
+              <img
+                src={heroArtworkUrl}
+                alt=""
+                aria-hidden="true"
+                className="craft-detail-hero-artwork"
+              />
+            ) : heroIconUrl ? (
               <img
                 src={heroIconUrl}
                 alt=""
@@ -2630,6 +2651,11 @@ function RecipeDrawer({
               <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
             )}
           </div>
+          {heroArtworkUrl && (
+            <div className="craft-detail-drawer-art-breakout" aria-hidden="true">
+              <img src={heroArtworkUrl} alt="" className="craft-detail-hero-artwork-breakout" />
+            </div>
+          )}
           <div className="craft-detail-drawer-identity" data-mobile-family={heroFamily ?? ""}>
             {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
             <h2 className="craft-detail-drawer-title">

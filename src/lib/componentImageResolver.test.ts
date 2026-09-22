@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { COMPONENT_IMAGE_ENTRIES, REPRESENTATIVE_COMPONENT_ART, resolveComponentImageUrl } from "./componentImageResolver";
+import {
+  COMPONENT_IMAGE_ENTRIES,
+  REPRESENTATIVE_COMPONENT_ART,
+  resolveComponentHeroArtUrl,
+  resolveComponentImageUrl,
+} from "./componentImageResolver";
 
 test("resolves the same component image from entity class, component ID, and canonical blueprint key", () => {
   const expected = "/assets/fitting/components/representative/shields/s1/shld-godi-military-s01-fr66.webp";
@@ -65,6 +70,21 @@ test("falls back to representative art by family, size, and class", () => {
   );
   assert.equal(
     resolveComponentImageUrl({ componentName: "Unknown", componentType: "shield", size: 2, className: "stealth" }),
+    null,
+  );
+});
+
+test("limits large hero artwork to transparent presentation-safe assets", () => {
+  assert.equal(
+    resolveComponentHeroArtUrl({ blueprintId: "BP_CRAFT_BEHR_BallisticGatling_S5" }),
+    "/images/component-thumbnails/behr-ballistic-gatling-s5.webp",
+  );
+  assert.equal(
+    resolveComponentHeroArtUrl({ componentName: "Atlas", componentType: "quantumdrive", size: 1, className: "civilian" }),
+    "/assets/fitting/components/representative/quantum-drives/s1/qdrv-rsi-civilian-s01-atlas.webp",
+  );
+  assert.equal(
+    resolveComponentHeroArtUrl({ canonicalKey: "BP_CRAFT_POWR_ACOM_S02_LuxCore_SCItem" }),
     null,
   );
 });

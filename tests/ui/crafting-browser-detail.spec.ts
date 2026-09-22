@@ -100,6 +100,40 @@ test.describe("Crafting browser and detail refactor", () => {
     }
   });
 
+  test("presents the premium drawer header and preserves every source-backed detail tab", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${browserPath}?preview=ba842720-ad32-4d53-8f56-992bacb1fc45`, { waitUntil: "domcontentloaded" });
+
+    const drawer = page.locator(".craft-detail-drawer-shell");
+    await expect(drawer).toBeVisible();
+    await expect(drawer.locator(".craft-detail-hero-artwork")).toHaveAttribute(
+      "src",
+      /behr-ballistic-gatling-s5\.webp$/,
+    );
+
+    await page.getByRole("tab", { name: "Materials" }).click();
+    const materialRow = drawer.locator(".craft-detail-material-row").first();
+    await expect(materialRow.locator(".craft-detail-material-slot")).not.toHaveText("");
+    await expect(materialRow.locator(".craft-detail-material-id strong")).not.toHaveText("");
+    await expect(materialRow.locator(".bq-target-quality")).toBeVisible();
+    await expect(materialRow.locator(".bq-target-slider-marker")).not.toHaveCount(0);
+    await expect(materialRow.locator(".craft-detail-material-required")).toContainText("Required qty");
+    await expect(materialRow.locator(".craft-detail-effect-chip").first()).toBeVisible();
+
+    await page.getByRole("tab", { name: "Overview" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-overview")).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, "crafting-drawer-overview-1920x1080.png"), fullPage: true });
+
+    await page.getByRole("tab", { name: "Statistics" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-stats")).toBeVisible();
+    await expect(drawer.locator(".craft-statistics-cards")).toBeVisible();
+
+    await page.getByRole("tab", { name: "Sources" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-sources")).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, "crafting-drawer-sources-1920x1080.png"), fullPage: true });
+  });
+
   test("keeps Vehicle Weapons and table columns constrained to their canonical data", async ({ page }) => {
     await mkdir(screenshotDir, { recursive: true });
     await page.setViewportSize({ width: 1920, height: 1080 });
