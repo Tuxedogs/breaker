@@ -1544,7 +1544,6 @@ export function DetailMaterialQualityRow({
       </div>
       <div className="craft-detail-material-summary">
         <div className="craft-detail-material-required">
-          <span>Required qty</span>
           <strong>{requiredAmount ?? "—"}</strong>
         </div>
         <div className="craft-detail-material-effects">
@@ -2173,10 +2172,10 @@ function MaterialRequirementsTable({ children }: { children: ReactNode }) {
     <div className="craft-detail-material-table">
       <div className="craft-detail-material-table-head" aria-hidden="true">
         <span>Material</span>
-        <span>Required</span>
-        <span>Target</span>
         <span>Quality</span>
-        <span>Effect</span>
+        <span>Required qty</span>
+        <span>Affects</span>
+        <span>Modifier</span>
       </div>
       <div className="craft-detail-material-table-body">
         {children}
@@ -2226,6 +2225,13 @@ function EstimatedEffectsPanel({
       <div className="craft-summary-section-label">Estimated Effects</div>
       {hasMaterialModifiers && (
         <div className="craft-detail-effects-list">
+          <div className="craft-detail-effects-head" aria-hidden="true">
+            <span>Statistic</span>
+            <span>Base</span>
+            <span>Final</span>
+            <span>Change</span>
+            <span>Contribution</span>
+          </div>
           {visibleTotalModifiers.map((row) => {
             const baseValue = getCraftingModifierBaseValue(fittingDetail, row.property);
             const display = formatMaterialModifierDisplay(
@@ -2239,6 +2245,7 @@ function EstimatedEffectsPanel({
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
                 <span className="craft-detail-effect-stat">{getModifierStatBindingLabel(row.property)}</span>
                 <div className="craft-detail-effect-values">
+                  <span className="craft-detail-effect-base">{display.base ?? "—"}</span>
                   {display.total ? (
                     <strong className="craft-detail-effect-total">{display.total}</strong>
                   ) : (
@@ -2258,7 +2265,14 @@ function EstimatedEffectsPanel({
                       <span key={`${c.materialName}:${index}`} className="craft-detail-effect-source">
                         {index > 0 && <span className="craft-detail-effect-source-sep" aria-hidden="true">·</span>}
                         <span>{formatMaterialDisplayName(c.materialName)}</span>
-                        <strong>{formatContributionValue(c.value, row.modifierMode)}</strong>
+                        <strong>
+                          {formatMaterialModifierDisplay(
+                            row.property,
+                            baseValue,
+                            c.value,
+                            row.modifierMode,
+                          ).modifier}
+                        </strong>
                       </span>
                     ))}
                   </span>
