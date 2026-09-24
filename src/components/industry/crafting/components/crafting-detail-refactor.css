@@ -1842,6 +1842,7 @@
     --drawer-cyan: #52c7e8;
     --drawer-cyan-soft: rgba(82, 199, 232, 0.16);
     --drawer-slider-cyan: #1cc9ff;
+    --drawer-section-label: #505d63;
     background:
       radial-gradient(circle at 62% 0%, rgba(35, 61, 72, 0.13), transparent 30%),
       var(--drawer-graphite-0);
@@ -2065,9 +2066,10 @@
     padding: 8px;
   }
 
+  /* Custom Changes */
   .craft-summary-section-label {
     margin: 0 0 10px;
-    color: #b9cbd3;
+    color: var(--drawer-section-label);
     font-family: var(--font-ui);
     font-size: 0.74rem;
     font-weight: 600;
@@ -2080,25 +2082,34 @@
     display: grid;
     gap: 0;
     overflow: hidden;
-    border: 1px solid var(--drawer-line);
-    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0 20px 30px -10px;
+  }
+
+  .craft-detail-material-table-head,
+  .craft-detail-effects-head {
+    color: #7897a5;
+    font-family: var(--crafting-presentation-font);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
   }
 
   .craft-detail-material-table-head {
     display: grid;
     grid-template-columns: minmax(90px, 0.82fr) minmax(250px, 2.45fr) minmax(72px, 0.58fr) minmax(76px, 0.65fr) minmax(70px, 0.6fr);
     gap: 0;
-    min-height: 32px;
-    padding: 0 12px;
+    min-height: 30px;
+    padding: 14px;
     align-items: center;
     border-bottom: 1px solid var(--drawer-line);
-    background: #080e11;
-    color: #7897a5;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
+    background: #070d10;
+  }
+
+  .craft-detail-material-table-head > :nth-child(2) {
+    justify-self: center;
   }
 
   .craft-detail-material-table-body {
@@ -2271,9 +2282,11 @@
     background: #082433;
   }
 
+  /* Custom Changes */
   .craft-detail-material-target-input .bq-target-slider-track {
     border: 1px solid rgba(80, 190, 229, 0.6);
     background: rgba(25, 114, 156, 0.34);
+    box-shadow: rgba(31, 150, 220, 0.29) 0 4px 6px;
   }
 
   .craft-detail-material-target-input .bq-target-slider-track-fill {
@@ -2286,18 +2299,19 @@
     box-shadow: 0 0 0 2px rgba(28, 201, 255, 0.18);
   }
 
+  /* Custom Changes */
   .craft-detail-effects-list {
     display: grid;
     gap: 0;
-    border: 0;
-    border-top: 1px solid var(--drawer-line);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
     background: transparent;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    box-shadow: rgba(0, 0, 0, 0.6) 0 20px 30px -10px;
   }
 
   .craft-detail-effects-panel {
     border: 0;
-    background: transparent;
     box-shadow: none;
     padding: 8px;
   }
@@ -2319,15 +2333,10 @@
   }
   .craft-detail-effects-head {
     min-height: 30px;
-    padding: 0 12px;
-    border-bottom: 1px solid rgba(125, 186, 212, 0.11);
-    background: transparent;
-    color: #7897a5;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
+    padding: 14px;
+    border-bottom: 1px solid rgba(83, 140, 164, 0.11);
+    border-radius: 1rem 1rem 0 0;
+    background: #080e11;
   }
   .craft-detail-effect-row {
     min-height: 56px;
