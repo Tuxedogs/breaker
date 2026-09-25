@@ -277,6 +277,7 @@ export default function ComponentResultsBrowser({
   onPreviewRecord,
   autoSelectFirstRecord = true,
   layoutMode,
+  serverPage,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
@@ -286,6 +287,7 @@ export default function ComponentResultsBrowser({
   onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
   autoSelectFirstRecord?: boolean;
   layoutMode: CraftingBrowserLayoutMode;
+  serverPage?: { totalRecords: number; page: number; limit: number } | null;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const savedOnly = searchParams.get("bk") === "1";
@@ -348,6 +350,7 @@ export default function ComponentResultsBrowser({
   );
 
   const { groupedRecords,  } = useMemo(() => {
+    if (serverPage) return { groupedRecords: records };
     const groups = new Map<string, ComponentCardIndexRecord[]>();
     const ungrouped: ComponentCardIndexRecord[] = [];
     for (const record of filteredRecords) {
@@ -372,15 +375,17 @@ export default function ComponentResultsBrowser({
       ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
       : compareRecipeBrowserRecords);
     return { groupedRecords: grouped };
-  }, [filteredRecords, search]);
+  }, [filteredRecords, records, savedOnly, search, serverPage]);
 
   
-  const totalPages = Math.max(1, Math.ceil(groupedRecords.length / resultsPerPage));
-  const visiblePage = Math.min(page, totalPages);
-  const pageStart = (visiblePage - 1) * resultsPerPage;
+  const pageLimit = serverPage?.limit ?? resultsPerPage;
+  const totalResultCount = serverPage ? serverPage.totalRecords : groupedRecords.length;
+  const totalPages = Math.max(1, Math.ceil(totalResultCount / pageLimit));
+  const visiblePage = serverPage ? serverPage.page : Math.min(page, totalPages);
+  const pageStart = (visiblePage - 1) * pageLimit;
   const pageRecords = useMemo(
-    () => groupedRecords.slice(pageStart, pageStart + resultsPerPage),
-    [groupedRecords, pageStart, resultsPerPage],
+    () => serverPage ? groupedRecords : groupedRecords.slice(pageStart, pageStart + pageLimit),
+    [groupedRecords, pageLimit, pageStart, savedOnly, serverPage],
   );
 
   useEffect(() => {
@@ -463,8 +468,8 @@ export default function ComponentResultsBrowser({
 
       <footer className="crb2-pager" aria-label="Component results pages">
         <span>
-          Showing {pageStart + 1}–{Math.min(pageStart + pageRecords.length, groupedRecords.length)}
-          {" "}of {groupedRecords.length}
+          Showing {pageStart + 1}–{Math.min(pageStart + pageRecords.length, totalResultCount)}
+          {" "}of {totalResultCount}
         </span>
         <div>
           <button

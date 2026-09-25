@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
-import { enrichComponentCardBrowseWithShipWeapons } from "../../server/routes/componentCards.routes.ts";
+import {
+  enrichComponentCardBrowseWithShipWeapons,
+  handleComponentCardsRoute,
+} from "../../server/routes/componentCards.routes.ts";
 import {
   filterInventoryRecipeInputs,
   stripNonInventoryRecipePartsFromSearchText,
@@ -271,4 +274,36 @@ test("component card browse receives source-backed weapon capacity and penetrati
   });
   assert.equal(enriched.records[1], browse.records[1]);
   assert.equal((browse.records[0]?.stats.shipWeapon as Record<string, unknown>).maxAmmoLoad, undefined);
+});
+
+test("browser projection pages source-backed summaries without transferring detail-only search payloads", async () => {
+  const result = await handleComponentCardsRoute(
+    "GET",
+    "/api/crafting/component-cards/browser?v=shield&limit=40",
+  );
+  assert.ok(result);
+  assert.equal(result.status, 200);
+  const payload = result.body as {
+    totalRecords?: number;
+    page?: number;
+    limit?: number;
+    records?: Array<{ id?: string; type?: string; searchText?: unknown; description?: unknown; source?: unknown }>;
+  };
+  assert.equal(payload.page, 1);
+  assert.equal(payload.limit, 40);
+  assert.ok((payload.totalRecords ?? 0) > 0);
+  assert.ok((payload.records ?? []).length <= 40);
+  assert.ok(payload.records?.every((record) => record.type === "shield"));
+  assert.ok(payload.records?.every((record) => record.searchText === undefined && record.description === undefined && record.source === undefined));
+});
+
+test("browser projection ignores unknown URL filter values", async () => {
+  const [all, unknown] = await Promise.all([
+    handleComponentCardsRoute("GET", "/api/crafting/component-cards/browser?limit=1"),
+    handleComponentCardsRoute("GET", "/api/crafting/component-cards/browser?v=not-a-real-filter&sz=999&limit=1"),
+  ]);
+  assert.ok(all && unknown);
+  const allPayload = all.body as { totalRecords?: number };
+  const unknownPayload = unknown.body as { totalRecords?: number };
+  assert.equal(unknownPayload.totalRecords, allPayload.totalRecords);
 });

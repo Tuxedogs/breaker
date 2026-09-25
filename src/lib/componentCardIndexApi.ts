@@ -6,6 +6,7 @@ import { validateComponentCatalogGeneration } from "@/lib/componentCatalogGenera
 const COMPONENT_CARDS_INDEX_URL = "/api/crafting/component-cards/index";
 const COMPONENT_CARDS_FACETS_URL = "/api/crafting/component-cards/facets";
 const COMPONENT_CARDS_BROWSE_URL = "/api/crafting/component-cards/browse";
+const COMPONENT_CARDS_BROWSER_URL = "/api/crafting/component-cards/browser";
 const COMPONENT_CARD_BY_ID_URL = "/api/crafting/component-cards";
 
 type ComponentCardsIndexResponse = {
@@ -32,6 +33,17 @@ type ComponentCardsBrowseResponse = {
 
 let componentCardIndexPromise: Promise<ComponentCardIndex> | null = null;
 const componentCardsById = new Map<string, ComponentCardIndexRecord>();
+
+export type ComponentCardBrowserPage = {
+  generatedAt?: string;
+  totalRecords: number;
+  page: number;
+  limit: number;
+  records: ComponentCardIndexRecord[];
+  supportingRecords: ComponentCardIndexRecord[];
+  facets?: ComponentCardIndex["facets"];
+  familyRecipeIdsById: Record<string, string[]>;
+};
 
 async function fetchJson<T>(url: string, label: string): Promise<T> {
   const response = await fetch(apiUrl(url));
@@ -92,6 +104,41 @@ export async function getComponentCardIndexFromApi(): Promise<ComponentCardIndex
   })();
 
   return componentCardIndexPromise;
+}
+
+/**
+ * Browser rows are a deliberately small projection. Full card detail remains
+ * on the by-id route so opening Crafting does not hydrate every detail card.
+ */
+export async function getComponentCardBrowserPage(
+  searchParams: URLSearchParams,
+  limit: number,
+  signal?: AbortSignal,
+): Promise<ComponentCardBrowserPage> {
+  const params = new URLSearchParams(searchParams);
+  params.set("limit", String(limit));
+  const url = apiUrl(`${COMPONENT_CARDS_BROWSER_URL}?${params.toString()}`);
+  const response = await fetch(url, { signal });
+  const data = await parseJsonResponse<Partial<ComponentCardBrowserPage>>(response, {
+    label: "component card browser",
+    url: response.url,
+  });
+  if (!response.ok) throw new Error(`component card browser unavailable: ${response.status}`);
+  if (!Array.isArray(data.records) || typeof data.totalRecords !== "number") {
+    throw new Error("Component browser API payload is invalid");
+  }
+  return {
+    generatedAt: data.generatedAt,
+    totalRecords: data.totalRecords,
+    page: typeof data.page === "number" ? data.page : 1,
+    limit: typeof data.limit === "number" ? data.limit : limit,
+    records: data.records,
+    supportingRecords: Array.isArray(data.supportingRecords) ? data.supportingRecords : [],
+    facets: data.facets,
+    familyRecipeIdsById: data.familyRecipeIdsById && typeof data.familyRecipeIdsById === "object"
+      ? data.familyRecipeIdsById
+      : {},
+  };
 }
 
 export async function fetchComponentCardById(id: string): Promise<ComponentCardIndexRecord> {

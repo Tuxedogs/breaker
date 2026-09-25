@@ -203,7 +203,7 @@ export default defineConfig(({ mode }) => {
   const fittingDataRoot = path.resolve(
     process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? path.join(process.cwd(), "server-data", "fitting"),
   );
-  const useLocalApi = process.env.SCINTEL_LOCAL_API === "1" || env.SCINTEL_LOCAL_API === "1";
+  const useLocalApi = mode === "local-api" || process.env.SCINTEL_LOCAL_API === "1" || env.SCINTEL_LOCAL_API === "1";
 
   return {
     define: {

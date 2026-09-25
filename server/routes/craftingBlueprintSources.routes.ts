@@ -51,6 +51,16 @@ async function loadIndex(): Promise<BlueprintSourcesIndex> {
   return indexCache;
 }
 
+/**
+ * The browser is only allowed to surface blueprints with a canonical,
+ * source-backed acquisition path. Keeping this lookup here prevents the
+ * browser projection from inventing a parallel eligibility dataset.
+ */
+export async function loadCraftingBlueprintSourceGuidSet(): Promise<Set<string>> {
+  const index = await loadIndex();
+  return new Set(Object.keys(index.blueprintFiles).map(normalizeGuid));
+}
+
 function methodNotAllowed(): RouteResult {
   return { status: 405, body: { error: "Method not allowed" } };
 }
