@@ -1,3 +1,5 @@
+import appPackage from "../../../../../package.json";
+
 const STANDBY_ART_URL = "/images/crafting/hero-artwork/component-thumbnails/behr-ballistic-gatling-s4.webp";
 
 export default function CraftingInspectionBayEmptyState() {
@@ -9,8 +11,8 @@ export default function CraftingInspectionBayEmptyState() {
     >
       <header className="craft-inspection-status">
         <span aria-hidden="true" />
-        <p>Fabrication inspection bay / standby</p>
-        <small>Assembly reference 04-A</small>
+        <p>Waiting...</p>
+        <small>{appPackage.version}</small>
       </header>
 
       <div className="craft-inspection-visual" aria-hidden="true">
@@ -50,11 +52,6 @@ export default function CraftingInspectionBayEmptyState() {
         <div className="craft-inspection-scan craft-inspection-scan--three" />
         <img className="craft-inspection-component" src={STANDBY_ART_URL} alt="" />
 
-        <div className="craft-inspection-callout craft-inspection-callout--frame"><span>Frame</span></div>
-        <div className="craft-inspection-callout craft-inspection-callout--drive"><span>Drive</span></div>
-        <div className="craft-inspection-callout craft-inspection-callout--thermal"><span>Thermal</span></div>
-        <div className="craft-inspection-callout craft-inspection-callout--output"><span>Output</span></div>
-
         <div className="craft-inspection-plinth">
           <span />
           <span />
@@ -63,7 +60,7 @@ export default function CraftingInspectionBayEmptyState() {
       </div>
 
       <div className="craft-inspection-copy">
-        <p className="craft-inspection-kicker">Inspection system idle</p>
+        <p className="craft-inspection-kicker">Inspection Panel</p>
         <h2 id="craft-inspection-empty-title">Select a component</h2>
         <p>Inspect materials, attributes, statistics, and blueprint requirements.</p>
       </div>

@@ -1,5 +1,4 @@
 import {
-  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -371,23 +370,15 @@ export default function CraftingFilterBar({
           <span className="crb2-filter-divider" aria-hidden="true" />
           <FilterLabel>Class</FilterLabel>
           {CLASS_OPTIONS.map((option) => (
-            <Fragment key={option.value}>
-              <FilterChip
-                option={option}
-                active={classFilters.has(option.value)}
-                onClick={() => setValues("cl", classFilters, option.value)}
-              />
-              {option.value === "competition" ? (
-                <FilterChip
-                  option={VEHICLE_CATEGORY_OPTIONS[0]}
-                  active={vehicleFilters.has("weaponGun")}
-                  onClick={() => setValues("v", vehicleFilters, "weaponGun")}
-                />
-              ) : null}
-            </Fragment>
+            <FilterChip
+              key={option.value}
+              option={option}
+              active={classFilters.has(option.value)}
+              onClick={() => setValues("cl", classFilters, option.value)}
+            />
           ))}
           <span className="crb2-filter-divider" aria-hidden="true" />
-          {VEHICLE_CATEGORY_OPTIONS.slice(1).map((option) => (
+          {VEHICLE_CATEGORY_OPTIONS.map((option) => (
             <FilterChip
               key={option.value}
               option={option}
