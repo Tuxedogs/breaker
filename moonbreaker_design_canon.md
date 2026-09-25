@@ -476,6 +476,8 @@ Use `Unknown Location` when an assigned location cannot be resolved and `Unassig
 
 Recipe Browser is a discovery and comparison workspace, not a grid of unrelated feature cards.
 
+The browser displays only recipes whose blueprint has a source-backed acquisition path. Mission Browser displays only mission offers that reward those eligible blueprints. Wikelo is the explicit temporary exception: every Wikelo mission remains visible even when it has no normal blueprint-reward relationship. This eligibility is derived from the canonical blueprint-source and mission-offer join; do not implement it with page-local names, text matching, or manually maintained allowlists.
+
 Preserve this composition:
 
 1. Search bar

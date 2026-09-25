@@ -34,6 +34,8 @@ import {
   type PlayerMissionStateView,
 } from "@/lib/missionData";
 import { missionOfferMatchesClientFilters } from "@/lib/missionOfferCompatibility";
+import { loadEligibleBlueprintMissionOfferKeys } from "@/lib/craftingBlueprintSourcesApi";
+import { isEligibleCraftingMission } from "@/lib/crafting/blueprintEligibility";
 import {
   MISSION_BROWSER_PATH,
   missionConceptKeyFromSlug,
@@ -2505,6 +2507,8 @@ export default function MissionBrowserPage() {
   const [catalog, setCatalog] = useState<MissionBrowserCatalog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [eligibleMissionOfferKeys, setEligibleMissionOfferKeys] = useState<Set<string> | null>(null);
+  const [eligibilityError, setEligibilityError] = useState<string | null>(null);
   const [conceptVariantsByKey, setConceptVariantsByKey] = useState<Record<string, MissionVariantView[]>>({});
   const [conceptLoadingKey, setConceptLoadingKey] = useState("");
   const [conceptErrors, setConceptErrors] = useState<Record<string, string>>({});
@@ -2518,7 +2522,11 @@ export default function MissionBrowserPage() {
   const families = useMemo(() => catalog?.families ?? [], [catalog]);
   const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
   const conceptsByKey = useMemo(() => new Map(Object.entries(catalog?.conceptsByKey ?? {})), [catalog]);
-  const offersByKey = useMemo(() => new Map(Object.entries(catalog?.offersByKey ?? {})), [catalog]);
+  const allOffersByKey = useMemo(() => new Map(Object.entries(catalog?.offersByKey ?? {})), [catalog]);
+  const offersByKey = useMemo(() => new Map(
+    Array.from(allOffersByKey.entries()).filter(([, offer]) => eligibleMissionOfferKeys !== null
+      && isEligibleCraftingMission(offer, eligibleMissionOfferKeys)),
+  ), [allOffersByKey, eligibleMissionOfferKeys]);
   const isOfferCatalog = catalog?.schemaVersion === 3;
   const query = searchParams.get("search") ?? "";
   const provider = searchParams.get("provider") ?? "";
@@ -2615,6 +2623,15 @@ export default function MissionBrowserPage() {
     confidence,
     verification,
   }), [confidence, missionType, provider, query, repReward, reward, status, verification]);
+  useEffect(() => {
+    let cancelled = false;
+    loadEligibleBlueprintMissionOfferKeys()
+      .then((offerKeys) => { if (!cancelled) setEligibleMissionOfferKeys(offerKeys); })
+      .catch((reason: unknown) => {
+        if (!cancelled) setEligibilityError(reason instanceof Error ? reason.message : "Crafting mission eligibility unavailable");
+      });
+    return () => { cancelled = true; };
+  }, []);
   useEffect(() => {
     let cancelled = false;
     queueMicrotask(() => {
@@ -3067,7 +3084,7 @@ export default function MissionBrowserPage() {
           </div>
           <div className="mb-page-heading__summary">
             <strong>{activeView === "full" ? "Full Registry" : activeView === "faction" ? "Faction View" : "Reputation View"}</strong>
-            <span>{loading ? "Loading missions" : error ? "Registry unavailable" : isOfferCatalog
+            <span>{loading || eligibleMissionOfferKeys === null ? "Loading missions" : error || eligibilityError ? "Registry unavailable" : isOfferCatalog
               ? `${offerProjection.visibleOfferCount} offer${offerProjection.visibleOfferCount === 1 ? "" : "s"}`
               : `${visibleConceptCount} concept${visibleConceptCount === 1 ? "" : "s"}`}</span>
           </div>

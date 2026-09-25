@@ -5,6 +5,8 @@ import type { ComponentRecipe } from "./utils/craftingTypes";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItemsByBlueprintGuids } from "../../../lib/craftingData";
+import { loadBlueprintSourceGuidSet } from "@/lib/craftingBlueprintSourcesApi";
+import { isEligibleCraftingBlueprint } from "@/lib/crafting/blueprintEligibility";
 import { useCraftingContext } from "./CraftingContext";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
@@ -67,9 +69,28 @@ export default function CraftingModule() {
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
+  const [eligibleBlueprintGuids, setEligibleBlueprintGuids] = useState<Set<string> | null>(null);
+  const [eligibilityError, setEligibilityError] = useState<string | null>(null);
 
   // Component card index comes from CraftingLayout via context
   const { componentCards, loading: cardsLoading, error: cardsError } = useCraftingContext();
+
+  useEffect(() => {
+    let cancelled = false;
+    loadBlueprintSourceGuidSet()
+      .then((guids) => { if (!cancelled) setEligibleBlueprintGuids(guids); })
+      .catch((reason: unknown) => {
+        if (!cancelled) setEligibilityError(reason instanceof Error ? reason.message : "Blueprint eligibility unavailable");
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const eligibleComponentCards = useMemo(
+    () => eligibleBlueprintGuids === null
+      ? []
+      : componentCards.filter((card) => isEligibleCraftingBlueprint(card.id, eligibleBlueprintGuids)),
+    [componentCards, eligibleBlueprintGuids],
+  );
 
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const allInventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
@@ -98,15 +119,24 @@ export default function CraftingModule() {
       queueMicrotask(() => setRecipes([]));
       return;
     }
+    if (eligibleBlueprintGuids === null) return;
+    if (!isEligibleCraftingBlueprint(targetBlueprintId, eligibleBlueprintGuids)) {
+      queueMicrotask(() => {
+        setRecipes([]);
+        setDetailLoading(false);
+        setDetailError("This blueprint has no source-backed acquisition path.");
+      });
+      return;
+    }
     let cancelled = false;
     queueMicrotask(() => {
       if (cancelled) return;
       setDetailLoading(true);
       setDetailError(null);
     });
-    const selectedCard = componentCards.find((card) => card.id === targetBlueprintId);
+    const selectedCard = eligibleComponentCards.find((card) => card.id === targetBlueprintId);
     const familyRecipeIds = selectedCard?.familyKey
-      ? componentCards
+      ? eligibleComponentCards
         .filter((card) => (
           card.kind === selectedCard.kind
           && card.type === selectedCard.type
@@ -137,7 +167,7 @@ export default function CraftingModule() {
         }
       });
     return () => { cancelled = true; };
-  }, [componentCards, targetBlueprintId]);
+  }, [eligibleBlueprintGuids, eligibleComponentCards, targetBlueprintId]);
 
   const handleAddToQueue = useCallback((
     recipe: ComponentRecipe,
@@ -220,13 +250,13 @@ export default function CraftingModule() {
     setSearchParams(next, { replace: false });
   }, [setSearchParams]);
 
-  const loadError = blueprintId ? detailError : cardsError;
+  const loadError = blueprintId ? detailError ?? eligibilityError : cardsError ?? eligibilityError;
   const previewRecipeReady = previewId
     ? recipes.some((recipe) => recipe.blueprint_id === previewId)
     : false;
   const previewLoading = Boolean(previewId) && (detailLoading || (!previewRecipeReady && !detailError));
   const resultCount = useMemo(() => {
-    const filtered = filterRecipeBrowserRecords(componentCards, searchParams);
+    const filtered = filterRecipeBrowserRecords(eligibleComponentCards, searchParams);
     const groups = new Map<string, ComponentCardIndexRecord[]>();
     let ungroupedCount = 0;
     for (const record of filtered) {
@@ -240,7 +270,7 @@ export default function CraftingModule() {
       else groups.set(key, [record]);
     }
     return ungroupedCount + groups.size;
-  }, [componentCards, searchParams]);
+  }, [eligibleComponentCards, searchParams]);
 
   const detailContent = !previewId ? (
     <CraftingInspectionBayEmptyState />
@@ -260,7 +290,7 @@ export default function CraftingModule() {
       recipes={recipes}
       inventoryEntries={inventoryEntries}
       materialTemplates={materialTemplates}
-      componentCards={componentCards}
+      componentCards={eligibleComponentCards}
       initialBlueprintId={previewId}
       presentation="drawer"
       onClose={closePreview}
@@ -281,12 +311,12 @@ export default function CraftingModule() {
         <CraftingBrowserWorkspace
           selectedId={previewId}
           detailReady={previewRecipeReady}
-          toolbar={<CraftingFilterBar records={componentCards} resultCount={resultCount} />}
+          toolbar={<CraftingFilterBar records={eligibleComponentCards} resultCount={resultCount} />}
           results={(
             <ComponentResultsBrowser
-              records={componentCards}
-              loading={cardsLoading}
-              error={cardsError}
+              records={eligibleComponentCards}
+              loading={cardsLoading || eligibleBlueprintGuids === null}
+              error={cardsError ?? eligibilityError}
               isRecipeQueued={(record) => queuedRecipeIds.has(`craft-${record.id}`)}
               previewId={previewId}
               onPreviewRecord={previewRecord}

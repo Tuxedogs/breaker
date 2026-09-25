@@ -1,5 +1,6 @@
 import { apiUrl } from "@/lib/apiUrl";
 import { parseJsonResponse } from "@/lib/safeJson";
+import { normalizeBlueprintGuid } from "@/lib/crafting/blueprintEligibility";
 
 const BLUEPRINT_SOURCES_API_URL = "/api/crafting/blueprint-sources";
 const BLUEPRINT_SOURCES_INDEX_API_URL = "/api/crafting/blueprint-sources/index";
@@ -33,10 +34,8 @@ type MissionCatalogResponse = {
 let releaseStateMapCache: Promise<Map<string, boolean>> | null = null;
 let missionRewardsCatalogCache: Promise<unknown[]> | null = null;
 let missionDetailMapCache: Promise<Map<string, unknown[]>> | null = null;
-
-function normalizeBlueprintGuid(value: string): string {
-  return value.trim().toLowerCase();
-}
+let blueprintSourceGuidSetCache: Promise<Set<string>> | null = null;
+let eligibleMissionOfferKeysCache: Promise<Set<string>> | null = null;
 
 async function fetchJson<T>(url: string, label: string, init?: RequestInit): Promise<T> {
   const response = await fetch(apiUrl(url), init);
@@ -77,14 +76,21 @@ export async function loadBlueprintSourceMissions(blueprintGuid: string): Promis
   return Array.isArray(data.missions) ? data.missions : [];
 }
 
+/** Canonical set of blueprints which have a source-backed acquisition path. */
+export async function loadBlueprintSourceGuidSet(): Promise<Set<string>> {
+  if (!blueprintSourceGuidSetCache) {
+    blueprintSourceGuidSetCache = fetchJson<BlueprintSourcesIndexResponse>(
+      BLUEPRINT_SOURCES_INDEX_API_URL,
+      "blueprint source index",
+    ).then((index) => new Set((index.blueprintGuids ?? []).map(normalizeBlueprintGuid).filter(Boolean)));
+  }
+  return blueprintSourceGuidSetCache;
+}
+
 export async function loadBlueprintSourceMissionMap(): Promise<Map<string, unknown[]>> {
   if (!missionDetailMapCache) {
     missionDetailMapCache = (async () => {
-      const index = await fetchJson<BlueprintSourcesIndexResponse>(
-        BLUEPRINT_SOURCES_INDEX_API_URL,
-        "blueprint source index",
-      );
-      const blueprintGuids = (index.blueprintGuids ?? []).map(normalizeBlueprintGuid).filter(Boolean);
+      const blueprintGuids = Array.from(await loadBlueprintSourceGuidSet());
       const map = new Map<string, unknown[]>();
 
       for (const chunk of chunkValues(blueprintGuids, BATCH_GUID_LIMIT)) {
@@ -106,6 +112,22 @@ export async function loadBlueprintSourceMissionMap(): Promise<Map<string, unkno
     })();
   }
   return missionDetailMapCache;
+}
+
+/** Exact mission-offer keys which reward an eligible Crafting blueprint. */
+export async function loadEligibleBlueprintMissionOfferKeys(): Promise<Set<string>> {
+  if (!eligibleMissionOfferKeysCache) {
+    eligibleMissionOfferKeysCache = loadBlueprintRewardMissionsCatalog().then(({ missions }) => {
+      const offerKeys = new Set<string>();
+      for (const mission of missions) {
+        if (typeof mission !== "object" || mission === null) continue;
+        const offerKey = (mission as { offerKey?: unknown }).offerKey;
+        if (typeof offerKey === "string" && offerKey.trim()) offerKeys.add(offerKey);
+      }
+      return offerKeys;
+    });
+  }
+  return eligibleMissionOfferKeysCache;
 }
 
 function isNormalizedMissionCatalogEntry(value: unknown): boolean {
