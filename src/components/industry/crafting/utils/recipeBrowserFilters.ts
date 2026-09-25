@@ -1,7 +1,5 @@
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
-export const DEFAULT_VEHICLE_TYPE = "weaponGun";
-
 const VEHICLE_TYPE_ALIASES = new Map([
   ["weapongun", "weaponGun"],
   ["vehicleweapon", "weaponGun"],
@@ -48,6 +46,35 @@ const KNOWN_VEHICLE_TYPES = new Set([
 
 const KNOWN_FPS_TYPES = new Set(["weapons", "armor"]);
 
+export const RECIPE_BROWSER_VEHICLE_FILTER_VALUES = new Set([
+  "weaponGun",
+  "powerplant",
+  "shield",
+  "cooler",
+  "radar",
+  "quantumdrive",
+  "__mining__",
+  "__salvage__",
+  "__other__",
+]);
+
+export const RECIPE_BROWSER_FPS_FILTER_VALUES = new Set([
+  "weapons",
+  "armor",
+  "__utility__",
+  "__other__",
+]);
+
+export const RECIPE_BROWSER_SIZE_FILTER_VALUES = new Set(["1", "2", "3", "4", "5", "6"]);
+export const RECIPE_BROWSER_GRADE_FILTER_VALUES = new Set(["A", "B", "C", "D"]);
+export const RECIPE_BROWSER_CLASS_FILTER_VALUES = new Set([
+  "military",
+  "stealth",
+  "civilian",
+  "industrial",
+  "competition",
+]);
+
 export function getRecipeBrowserSearchParam(searchParams: URLSearchParams): string {
   return (searchParams.get("search") ?? searchParams.get("q") ?? "").trim();
 }
@@ -56,26 +83,19 @@ export function buildRecipeBrowserSearchTokens(query: string): string[] {
   return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-export function parseRecipeBrowserFilterSet(searchParams: URLSearchParams, key: string): Set<string> {
+export function parseRecipeBrowserFilterSet(
+  searchParams: URLSearchParams,
+  key: string,
+  allowedValues?: ReadonlySet<string>,
+): Set<string> {
   const raw = searchParams.get(key);
   if (!raw) return new Set();
-  return new Set(raw.split(",").filter(Boolean));
-}
-
-export function hasExplicitVehicleFilter(searchParams: URLSearchParams): boolean {
-  const raw = searchParams.get("v");
-  return raw !== null && raw !== "";
-}
-
-export function isRecipeBrowserDefaultState(searchParams: URLSearchParams): boolean {
-  return !hasExplicitVehicleFilter(searchParams)
-    && !getRecipeBrowserSearchParam(searchParams)
-    && !searchParams.get("f")
-    && !searchParams.get("sz")
-    && !searchParams.get("gr")
-    && !searchParams.get("cl")
-    && !searchParams.get("mt")
-    && searchParams.get("bk") !== "1";
+  return new Set(
+    raw
+      .split(",")
+      .map((value) => value.trim())
+      .filter((value) => value && (!allowedValues || allowedValues.has(value))),
+  );
 }
 
 export function matchesRecipeBrowserSearch(
@@ -107,16 +127,34 @@ function normalizeRecipeBrowserCategoryType(
   return aliases.get(normalized) ?? value?.trim() ?? "";
 }
 
-function parseRecipeBrowserCategoryFilterSet(
+export function parseRecipeBrowserCategoryFilterSet(
   searchParams: URLSearchParams,
   key: "v" | "f",
 ): Set<string> {
   const kind = key === "v" ? "vehicle" : "fps";
+  const allowedValues = key === "v"
+    ? RECIPE_BROWSER_VEHICLE_FILTER_VALUES
+    : RECIPE_BROWSER_FPS_FILTER_VALUES;
   return new Set(
     [...parseRecipeBrowserFilterSet(searchParams, key)]
       .map((value) => normalizeRecipeBrowserCategoryType(kind, value))
-      .filter(Boolean),
+      .filter((value) => allowedValues.has(value)),
   );
+}
+
+export function collectRecipeBrowserMaterialFilterValues(
+  records: ComponentCardIndexRecord[],
+): Set<string> {
+  const values = new Set<string>();
+  for (const record of records) {
+    for (const value of record.facets?.materials ?? []) {
+      if (value) values.add(value);
+    }
+    for (const value of record.facets?.materialNames ?? []) {
+      if (value) values.add(value);
+    }
+  }
+  return values;
 }
 
 export function matchesRecipeBrowserCategory(
@@ -158,6 +196,7 @@ export function compareRecipeBrowserRecords(
 export type RecipeBrowserFilterOptions = {
   savedOnly?: boolean;
   savedBlueprintIds?: Set<string>;
+  materialFilterValues?: ReadonlySet<string>;
 };
 
 export function matchesRecipeBrowserAppliedFilters(
@@ -167,10 +206,26 @@ export function matchesRecipeBrowserAppliedFilters(
 ): boolean {
   const vehicleFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "v");
   const fpsFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "f");
-  const sizeFilters = parseRecipeBrowserFilterSet(searchParams, "sz");
-  const gradeFilters = parseRecipeBrowserFilterSet(searchParams, "gr");
-  const classFilters = parseRecipeBrowserFilterSet(searchParams, "cl");
-  const materialFilters = parseRecipeBrowserFilterSet(searchParams, "mt");
+  const sizeFilters = parseRecipeBrowserFilterSet(
+    searchParams,
+    "sz",
+    RECIPE_BROWSER_SIZE_FILTER_VALUES,
+  );
+  const gradeFilters = parseRecipeBrowserFilterSet(
+    searchParams,
+    "gr",
+    RECIPE_BROWSER_GRADE_FILTER_VALUES,
+  );
+  const classFilters = parseRecipeBrowserFilterSet(
+    searchParams,
+    "cl",
+    RECIPE_BROWSER_CLASS_FILTER_VALUES,
+  );
+  const materialFilters = parseRecipeBrowserFilterSet(
+    searchParams,
+    "mt",
+    options.materialFilterValues,
+  );
   const savedOnly = options.savedOnly ?? searchParams.get("bk") === "1";
 
   if (
@@ -231,13 +286,13 @@ export function filterRecipeBrowserRecords(
 ): ComponentCardIndexRecord[] {
   if (!Array.isArray(records) || records.length === 0) return [];
 
-  const isDefaultState = isRecipeBrowserDefaultState(searchParams);
   const vehicleFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "v");
   const fpsFilters = parseRecipeBrowserCategoryFilterSet(searchParams, "f");
   const searchTokens = buildRecipeBrowserSearchTokens(getRecipeBrowserSearchParam(searchParams));
-  const hasTextSearch = searchTokens.length > 0;
   const savedOnly = options.savedOnly ?? searchParams.get("bk") === "1";
   const savedBlueprintIds = options.savedBlueprintIds;
+  const materialFilterValues = options.materialFilterValues
+    ?? collectRecipeBrowserMaterialFilterValues(records);
 
   return records
     .filter((record) => {
@@ -246,20 +301,12 @@ export function filterRecipeBrowserRecords(
 
       if (vehicleFilters.size > 0 || fpsFilters.size > 0) {
         if (!matchesRecipeBrowserCategory(record, vehicleFilters, fpsFilters)) return false;
-      } else if (
-        isDefaultState
-        && normalizeRecipeBrowserCategoryType("vehicle", record.type) !== DEFAULT_VEHICLE_TYPE
-      ) {
-        return false;
-      } else if (record.kind === "fps" && !hasTextSearch) {
-        // Preserve the current vehicle-first default while allowing search to span
-        // both inventories when no category filter is selected.
-        return false;
       }
 
       return matchesRecipeBrowserAppliedFilters(record, searchParams, {
         savedOnly,
         savedBlueprintIds,
+        materialFilterValues,
       }) && matchesRecipeBrowserSearch(record, searchTokens);
     })
     .sort(compareRecipeBrowserRecords);

@@ -6493,16 +6493,16 @@
    * Crafting-only surface and highlight system. Keep hue-bearing fills here so
    * the browser/detail family can be retuned without editing component rules.
    */
-  --craft-surface-canvas: #050b12;
-  --craft-surface-panel: #08121d;
-  --craft-surface-deep: #060e17;
-  --craft-surface-raised: #0b1824;
-  --craft-surface-row: #091520;
-  --craft-surface-row-alt: #0a1722;
-  --craft-surface-hover: #102231;
-  --craft-surface-selected: #102536;
-  --craft-surface-selected-strong: #153148;
-  --craft-surface-disabled: #080f17;
+  --craft-surface-canvas: #05080b;
+  --craft-surface-panel: #0c1116;
+  --craft-surface-deep: #080c10;
+  --craft-surface-raised: #11171d;
+  --craft-surface-row: #0a0f13;
+  --craft-surface-row-alt: #0c1115;
+  --craft-surface-hover: #151e24;
+  --craft-surface-selected: #17242b;
+  --craft-surface-selected-strong: #20323c;
+  --craft-surface-disabled: #080b0e;
   --craft-highlight-primary: #ffb21a;
   --craft-highlight-primary-soft: rgba(255, 178, 26, 0.11);
   --craft-highlight-primary-muted: rgba(255, 178, 26, 0.24);
@@ -6512,9 +6512,9 @@
   --craft-highlight-positive-soft: rgba(69, 216, 157, 0.09);
   --craft-highlight-danger: #ff6b72;
   --craft-highlight-danger-soft: rgba(255, 107, 114, 0.1);
-  --craft-border-soft: rgba(111, 148, 176, 0.13);
-  --craft-border-default: rgba(111, 148, 176, 0.22);
-  --craft-border-strong: rgba(132, 174, 205, 0.34);
+  --craft-border-soft: rgba(132, 151, 164, 0.13);
+  --craft-border-default: rgba(132, 151, 164, 0.22);
+  --craft-border-strong: rgba(145, 166, 179, 0.34);
   --ops-canvas: var(--craft-surface-canvas);
   --ops-surface-primary: var(--craft-surface-panel);
   --ops-surface-deep: var(--craft-surface-deep);
@@ -6549,9 +6549,8 @@
   gap: 8px;
 }
 
-/* Recipe Browser follows Mining's page-level command rhythm. The browser
-   surface itself stays unpadded and borderless; this local body owns only the
-   application-chrome inset, command header, and header-to-content gap. */
+/* Production Recipe Browser chassis. The browser, spine, and current detail
+   surface form one inspection workspace while state remains owned by React. */
 .component-results-browser .recipe-browser-page-body {
   display: flex;
   flex: 1 1 0;
@@ -6568,19 +6567,38 @@
   grid-template-rows: 48px minmax(0, 1fr);
   gap: 8px;
   padding: 8px;
+  background:
+    radial-gradient(circle at 49% 18%, rgba(79, 100, 113, 0.08), transparent 28%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.018), transparent 32%),
+    var(--craft-surface-canvas);
 }
 
 .component-results-browser .recipe-browser-command-header {
-  display: flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
   min-width: 0;
   align-items: center;
   gap: 11px;
   min-height: 48px;
-  padding: 0 14px;
-  border: 1px solid var(--ops-border-default);
-  border-radius: 5px;
-  background: var(--ops-surface-primary);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+  padding: 0 13px;
+  overflow: hidden;
+  border: 1px solid var(--craft-border-default);
+  border-radius: 2px;
+  background:
+    linear-gradient(90deg, rgba(103, 216, 255, 0.035), transparent 22%),
+    linear-gradient(180deg, #10161c, #0b1015);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 7px 22px rgba(0, 0, 0, 0.18);
+}
+
+.component-results-browser .recipe-browser-command-header::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(107, 217, 255, 0.32) 23%, rgba(107, 217, 255, 0.06) 64%, transparent);
 }
 
 .component-results-browser .recipe-browser-command-icon {
@@ -6590,7 +6608,8 @@
   place-items: center;
   flex: 0 0 25px;
   border: 1px solid rgba(125, 211, 252, 0.26);
-  border-radius: 3px;
+  border-radius: 0;
+  background: #0b1218;
   color: var(--craft-highlight-focus);
 }
 
@@ -6615,9 +6634,9 @@
   margin: 0;
   color: var(--ui-text-primary);
   font-family: var(--font-primary);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.09em;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
@@ -6626,9 +6645,9 @@
 .component-results-browser .recipe-browser-command-copy p {
   margin: 0;
   overflow: hidden;
-  color: var(--ui-text-muted);
-  font-size: 11px;
-  line-height: 1.2;
+  color: #778894;
+  font: 500 var(--recipe-text-kicker)/1.1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.025em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -6639,52 +6658,148 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  gap: 8px;
+  gap: 0;
   overflow: hidden;
 }
 
 .component-browser-body > .craft-browser-workspace {
-  display: flex;
+  position: relative;
+  display: block;
   flex: 1 1 0;
-  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(132, 151, 164, 0.13);
+  background: #06090c;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+}
+
+.craft-browser-production-pane,
+.craft-browser-detail-pane {
+  position: relative;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
 }
 
-.craft-browser-workspace > .crb2-results {
+.craft-browser-production-pane {
+  z-index: 2;
   display: flex;
-  flex: 1 1 0;
   flex-direction: column;
-  min-width: 0;
-  min-height: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgba(20, 26, 32, 0.96), rgba(8, 12, 16, 0.995) 31%),
+    var(--craft-surface-deep);
 }
 
-.craft-detail-drawer-region {
+.craft-browser-production-pane::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  content: "";
+  background: linear-gradient(transparent, rgba(137, 158, 170, 0.35) 9%, rgba(137, 158, 170, 0.15) 82%, transparent);
+  pointer-events: none;
+}
+
+.craft-browser-blueprint-artwork {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 164px;
+  overflow: hidden;
+  color: rgba(143, 163, 175, 0.34);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(#000 0 72%, transparent 100%);
+  mask-image: linear-gradient(#000 0 72%, transparent 100%);
+}
+
+.craft-browser-blueprint-artwork::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    repeating-linear-gradient(90deg, transparent 0 39px, rgba(142, 160, 171, 0.026) 39px 40px),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(142, 160, 171, 0.022) 31px 32px);
+}
+
+.craft-browser-blueprint-artwork img {
+  position: absolute;
+  top: -40px;
+  right: -3%;
+  width: min(55%, 520px);
+  height: 196px;
+  object-fit: contain;
+  object-position: right center;
+  filter: grayscale(1) contrast(1.18) brightness(0.8);
+  opacity: 0.28;
+  transform: scaleX(-1) rotate(-2deg);
+}
+
+.craft-browser-blueprint-artwork svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.58;
+  stroke-width: 0.75;
+}
+
+.craft-browser-control-deck-label {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+  padding: 0 11px;
+  border-bottom: 1px solid rgba(132, 151, 164, 0.13);
+  color: #697984;
+  background: rgba(8, 12, 16, 0.7);
+  font: 700 9px/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.craft-browser-control-deck-label span:first-child {
+  color: #91a2ac;
+}
+
+.craft-browser-production-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1 1 0;
   min-width: 0;
   min-height: 0;
+  padding: 0;
   overflow: hidden;
-  border-left: 1px solid var(--craft-highlight-primary);
-  background: var(--craft-surface-canvas);
-  box-shadow: -14px 0 30px rgba(0, 0, 0, 0.22);
+  background: #080c10;
+}
+
+.craft-browser-detail-pane {
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #090d11;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.craft-browser-detail-pane > .craft-detail-page,
+.craft-browser-detail-pane .craft-detail-drawer-shell {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 }
 
 .craft-detail-drawer-region--ready > .craft-detail-page {
   animation: craft-detail-drawer-content-enter 180ms ease-out both;
-}
-
-/* The selected component stays within the browser route.  Below the two-pane
-   threshold, the same drawer fills the workspace while the results remain the
-   destination of its close action. */
-.craft-browser-workspace--detail > .crb2-results {
-  display: none;
-}
-
-.craft-browser-workspace--detail > .craft-detail-drawer-region {
-  display: flex;
-  flex: 1 1 0;
-  width: 100%;
-  border-left: 0;
 }
 
 @keyframes craft-detail-drawer-content-enter {
@@ -6702,110 +6817,409 @@
 .craft-detail-drawer-state {
   display: grid;
   height: 100%;
-  place-items: center;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
   padding: 24px;
-  color: var(--text-secondary);
-  background: var(--craft-surface-panel);
+  color: #95a5af;
+  background: #090d11;
+  text-align: center;
   font-size: var(--recipe-text-body);
+}
+
+.craft-detail-drawer-state > span {
+  color: #d7e1e7;
+  font: 700 12px/1 var(--font-ui);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.craft-detail-drawer-state p { margin: 0; }
+
+.craft-detail-drawer-state button {
+  padding: 8px 11px;
+  border: 1px solid var(--craft-border-strong);
+  background: var(--craft-surface-raised);
+  color: #d8e2e7;
+  cursor: pointer;
 }
 
 .craft-detail-drawer-state--error {
   color: var(--craft-highlight-danger);
 }
 
-/* A selected item becomes a peer comparison drawer only on wide desktop. At
-   narrower widths the same canonical detail fills the browser workspace. */
-@media (min-width: 1600px) {
-  .craft-browser-workspace--drawer {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
-    gap: 10px;
-  }
-
-  .craft-browser-workspace--drawer > .crb2-results {
-    overflow: hidden;
-  }
-
-  .craft-browser-workspace--detail > .crb2-results {
-    display: flex;
-  }
-
-  .craft-browser-workspace--drawer .crb2-list {
-    overflow-y: auto;
-    padding-right: 2px;
-    scrollbar-gutter: stable;
-  }
-
-  .craft-browser-workspace--drawer .crb2-table-scroll {
-    overflow-x: auto;
-    zoom: 1;
-  }
-
+.craft-detail-drawer-loader {
+  width: 110px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(127, 145, 156, 0.18);
 }
 
-/* When the drawer is present, the filter rail and results form the left
-   comparison column while the peer detail starts alongside the filter rail.
-   Flattening the route wrappers is deliberate: it lets the existing canonical
-   drawer remain untouched while the browser shell owns the wide layout. */
+.craft-detail-drawer-loader::after {
+  display: block;
+  width: 42%;
+  height: 1px;
+  content: "";
+  background: var(--craft-highlight-focus);
+  animation: craft-detail-drawer-loader 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes craft-detail-drawer-loader {
+  from { transform: translateX(0); }
+  to { transform: translateX(140%); }
+}
+
+.craft-browser-spine {
+  position: relative;
+  z-index: 6;
+  display: none;
+  min-height: 0;
+  overflow: visible;
+  border-right: 1px solid rgba(132, 151, 164, 0.2);
+  border-left: 1px solid rgba(132, 151, 164, 0.23);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 11px, rgba(145, 165, 177, 0.16) 11px 12px, transparent 12px 24px),
+    linear-gradient(90deg, #090d10, #161c21 49%, #090d10 50%);
+  box-shadow: inset 4px 0 7px rgba(0, 0, 0, 0.45), inset -4px 0 7px rgba(0, 0, 0, 0.45);
+}
+
+.craft-browser-spine::before,
+.craft-browser-spine::after {
+  position: absolute;
+  z-index: 2;
+  right: 4px;
+  left: 4px;
+  height: 1px;
+  content: "";
+  background: #6b7a83;
+  opacity: 0.42;
+}
+
+.craft-browser-spine::before { top: 32%; }
+.craft-browser-spine::after { top: 68%; }
+
+.craft-browser-spine-rail {
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(transparent, rgba(125, 144, 155, 0.58) 9%, rgba(125, 144, 155, 0.3) 91%, transparent);
+}
+
+.craft-browser-spine-cap {
+  position: absolute;
+  z-index: 3;
+  right: 3px;
+  left: 3px;
+  height: 5px;
+  border: 1px solid rgba(145, 165, 177, 0.27);
+  background: #11171b;
+}
+
+.craft-browser-spine-cap--top { top: 7px; }
+.craft-browser-spine-cap--bottom { bottom: 7px; }
+
+.craft-browser-spine-trace {
+  position: absolute;
+  z-index: 5;
+  top: var(--craft-browser-connector-y, 50%);
+  right: -16px;
+  left: -16px;
+  height: 1px;
+  background: #5fd4ff;
+  box-shadow: 0 0 8px rgba(87, 207, 250, 0.48);
+  opacity: 0;
+  transform: scaleX(0.35);
+  transition: top 150ms ease, opacity 150ms ease, transform 150ms ease;
+  transform-origin: center;
+}
+
+.craft-browser-spine.is-active .craft-browser-spine-trace {
+  opacity: 0.84;
+  transform: scaleX(1);
+}
+
+.craft-browser-spine-trace i {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #b9efff;
+  background: #1b859f;
+  box-shadow: 0 0 8px rgba(77, 215, 255, 0.75);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@media (max-width: 1599px) {
+  .craft-browser-production-workspace.is-selected .craft-browser-production-pane { display: none; }
+  .craft-browser-production-workspace.is-empty .craft-browser-detail-pane { display: none; }
+  .craft-browser-production-pane::after { display: none; }
+}
+
 @media (min-width: 1600px) {
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .recipe-browser-content-shell {
+  .component-browser-body > .craft-browser-production-workspace {
     display: grid;
-    grid-template-columns: minmax(0, 52.5fr) minmax(0, 47.5fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    column-gap: 10px;
-    row-gap: 8px;
+    grid-template-columns: minmax(0, 52.5fr) 22px minmax(0, 47.5fr);
   }
 
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .crb2-toolbar {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .component-browser-body,
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-browser-workspace--drawer {
-    display: contents !important;
-  }
-
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-browser-workspace--drawer > .crb2-results {
-    grid-column: 1;
-    grid-row: 2;
-    overflow: hidden;
-  }
-
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .craft-detail-drawer-region {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
-}
-
-@media (min-width: 3200px) and (min-height: 1800px) {
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .recipe-browser-content-shell {
-    width: min(3440px, calc(100vw - 160px));
-    margin-inline: auto;
-  }
-
-  .component-results-browser .recipe-browser-page-body.is-browser.is-detail-preview .crb2-toolbar {
-    width: auto;
-    margin-inline: 0;
+  .craft-browser-spine {
+    display: block;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .craft-detail-drawer-region--ready > .craft-detail-page {
-    animation: none;
-  }
+  .craft-detail-drawer-region--ready > .craft-detail-page { animation: none; }
+  .craft-detail-drawer-loader::after { animation: none; }
+  .craft-browser-spine-trace { transition: none; }
+}
+
+.craft-inspection-bay {
+  position: relative;
+  display: grid;
+  grid-template-rows: 39px minmax(260px, 1fr) auto 54px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  color: #8b9ca7;
+  background:
+    linear-gradient(180deg, rgba(6, 9, 12, 0.2), rgba(6, 9, 12, 0.7)),
+    url("/images/crafting/craft-detail-graphite-texture.webp") center / cover,
+    #090d11;
+}
+
+.craft-inspection-bay::before {
+  position: absolute;
+  inset: 39px 0 54px;
+  content: "";
+  background:
+    radial-gradient(ellipse at 52% 42%, rgba(80, 114, 131, 0.11), transparent 42%),
+    linear-gradient(90deg, transparent 49.9%, rgba(116, 139, 151, 0.1) 50%, transparent 50.1%);
+  pointer-events: none;
+}
+
+.craft-inspection-status {
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 7px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  border-bottom: 1px solid rgba(132, 151, 164, 0.17);
+  background: rgba(11, 16, 20, 0.88);
+  text-transform: uppercase;
+}
+
+.craft-inspection-status > span {
+  width: 6px;
+  height: 6px;
+  background: #70808a;
+  box-shadow: 0 0 0 3px rgba(112, 128, 138, 0.08);
+  transform: rotate(45deg);
+}
+
+.craft-inspection-status p,
+.craft-inspection-status small {
+  margin: 0;
+  font: 700 9px/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.11em;
+}
+
+.craft-inspection-status p { color: #a7b5bd; }
+.craft-inspection-status small { color: #647580; }
+
+.craft-inspection-visual {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+}
+
+.craft-inspection-geometry {
+  position: absolute;
+  inset: 1% 1% 0;
+  width: 98%;
+  height: 98%;
+  color: #7393a4;
+  opacity: 0.67;
+}
+
+.craft-inspection-axis {
+  position: absolute;
+  top: 49%;
+  right: 5%;
+  left: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(108, 168, 192, 0.38) 24%, rgba(108, 168, 192, 0.38) 76%, transparent);
+}
+
+.craft-inspection-component {
+  position: relative;
+  z-index: 3;
+  width: min(79%, 720px);
+  height: min(48%, 280px);
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.12) brightness(0.78) drop-shadow(0 19px 22px rgba(0, 0, 0, 0.56));
+  opacity: 0.74;
+}
+
+.craft-inspection-scan {
+  position: absolute;
+  z-index: 4;
+  top: 21%;
+  bottom: 20%;
+  width: 1px;
+  background: linear-gradient(transparent, rgba(107, 217, 255, 0.72) 35%, rgba(107, 217, 255, 0.25) 70%, transparent);
+  box-shadow: 0 0 8px rgba(107, 217, 255, 0.13);
+}
+
+.craft-inspection-scan::before,
+.craft-inspection-scan::after {
+  position: absolute;
+  left: -3px;
+  width: 7px;
+  height: 1px;
+  content: "";
+  background: rgba(107, 217, 255, 0.56);
+}
+
+.craft-inspection-scan::before { top: 0; }
+.craft-inspection-scan::after { bottom: 0; }
+.craft-inspection-scan--one { left: 30%; opacity: 0.5; }
+.craft-inspection-scan--two { left: 52%; opacity: 0.76; }
+.craft-inspection-scan--three { left: 73%; opacity: 0.38; }
+
+.craft-inspection-callout {
+  position: absolute;
+  z-index: 5;
+  width: 74px;
+  border-top: 1px solid rgba(124, 153, 168, 0.45);
+  color: #77909e;
+  font: 700 8px/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.craft-inspection-callout::before {
+  position: absolute;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  content: "";
+  background: #7393a4;
+}
+
+.craft-inspection-callout span { display: block; padding-top: 5px; }
+.craft-inspection-callout--frame { top: 24%; left: 9%; }
+.craft-inspection-callout--drive { top: 28%; right: 8%; text-align: right; }
+.craft-inspection-callout--thermal { bottom: 21%; left: 13%; }
+.craft-inspection-callout--output { right: 11%; bottom: 24%; text-align: right; }
+.craft-inspection-callout--drive::before,
+.craft-inspection-callout--output::before { right: 0; }
+.craft-inspection-callout--frame::before,
+.craft-inspection-callout--thermal::before { left: 0; }
+
+.craft-inspection-plinth {
+  position: absolute;
+  z-index: 2;
+  right: 20%;
+  bottom: 9%;
+  left: 20%;
+  height: 38px;
+  border-top: 1px solid rgba(137, 159, 170, 0.31);
+  border-right: 1px solid rgba(137, 159, 170, 0.12);
+  border-left: 1px solid rgba(137, 159, 170, 0.12);
+  background: linear-gradient(180deg, rgba(77, 94, 104, 0.09), transparent);
+  transform: perspective(160px) rotateX(56deg);
+}
+
+.craft-inspection-plinth span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(127, 150, 162, 0.14);
+}
+
+.craft-inspection-plinth span:nth-child(1) { left: 25%; }
+.craft-inspection-plinth span:nth-child(2) { left: 50%; }
+.craft-inspection-plinth span:nth-child(3) { left: 75%; }
+
+.craft-inspection-copy {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  padding: 4px 26px 20px;
+  text-align: center;
+}
+
+.craft-inspection-copy p,
+.craft-inspection-copy h2 { margin: 0; }
+
+.craft-inspection-copy .craft-inspection-kicker {
+  color: #758c99;
+  font: 700 9px/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.craft-inspection-copy h2 {
+  margin-top: 7px;
+  color: #e8f0f4;
+  font-family: var(--font-ui);
+  font-size: clamp(18px, 1.45vw, 25px);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.craft-inspection-copy > p:last-child {
+  max-width: 490px;
+  margin-top: 8px;
+  color: #8697a2;
+  font: 500 12px/1.35 var(--font-primary, Rajdhani, sans-serif);
+}
+
+.craft-inspection-footer {
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 26px;
+  align-items: center;
+  margin: 0 12px 10px;
+  border: 1px solid rgba(132, 151, 164, 0.2);
+  background: linear-gradient(180deg, #11171c, #0d1216);
+  color: #667883;
+}
+
+.craft-inspection-footer span {
+  color: #778b96;
+  text-align: center;
+}
+
+.craft-inspection-footer p {
+  margin: 0;
+  padding-left: 12px;
+  border-left: 1px solid rgba(132, 151, 164, 0.17);
+  color: #8697a1;
+  font: 700 9px/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .component-results-browser .crb2-toolbar {
   position: relative;
-  z-index: 40;
+  z-index: 4;
   flex: 0 0 auto;
-  border: 1px solid rgba(92, 130, 147, 0.24);
-  border-radius: 2px;
-  background:
-    linear-gradient(180deg, rgba(11, 22, 28, 0.98), rgba(5, 13, 18, 0.98)),
-    repeating-linear-gradient(135deg, rgba(127, 169, 181, 0.018) 0 1px, transparent 1px 5px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  border: 0;
+  border-bottom: 1px solid var(--craft-border-strong);
+  border-radius: 0;
+  background: rgba(12, 17, 22, 0.74);
+  box-shadow: inset 0 -8px 18px rgba(0, 0, 0, 0.17);
 }
 
 .crb2-search-row {
@@ -6813,10 +7227,10 @@
   grid-template-columns: minmax(280px, 1fr) auto auto auto;
   align-items: center;
   gap: 8px;
-  min-height: 50px;
+  min-height: 48px;
   padding: 7px 9px;
-  border-bottom: 1px solid rgba(92, 130, 147, 0.18);
-  background: linear-gradient(180deg, rgba(13, 27, 34, 0.92), rgba(7, 16, 22, 0.8));
+  border-bottom: 1px solid rgba(132, 151, 164, 0.17);
+  background: linear-gradient(180deg, rgba(17, 23, 29, 0.66), rgba(10, 14, 18, 0.76));
 }
 
 .crb2-search {
@@ -6826,15 +7240,16 @@
   gap: 9px;
   height: 34px;
   padding: 0 10px;
-  border: 1px solid rgba(100, 146, 165, 0.3);
+  border: 1px solid rgba(137, 158, 171, 0.27);
   border-radius: 2px;
-  background: rgba(3, 9, 13, 0.88);
-  color: var(--craft-orange, #ffb21a);
+  background: rgba(4, 7, 10, 0.83);
+  color: #8fa1ad;
+  box-shadow: inset 3px 0 0 rgba(107, 217, 255, 0.17);
 }
 
 .crb2-search:focus-within {
-  border-color: var(--ops-focus-ring);
-  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.1);
+  border-color: rgba(107, 217, 255, 0.5);
+  box-shadow: inset 3px 0 0 rgba(107, 217, 255, 0.7), 0 0 0 2px rgba(107, 217, 255, 0.065);
 }
 
 .crb2-search input,
@@ -6844,7 +7259,7 @@
   border: 0;
   outline: 0;
   background: transparent;
-  color: var(--craft-text, #edf7ff);
+  color: #e7eff4;
   font: 600 var(--recipe-text-body)/1 var(--font-primary, Rajdhani, sans-serif);
   letter-spacing: 0.02em;
 }
@@ -6871,8 +7286,8 @@
   padding: 0 11px;
   border: 1px solid var(--ops-border-default);
   border-radius: 2px;
-  background: rgba(11, 25, 32, 0.9);
-  color: var(--craft-muted, #a9bad0);
+  background: #10161b;
+  color: #9baab3;
   font: 700 var(--recipe-text-chip)/1 var(--font-primary, Rajdhani, sans-serif);
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -6888,9 +7303,10 @@
 }
 
 .crb2-bookmark--active {
-  border-color: rgba(125, 211, 252, 0.44);
-  background: var(--ops-surface-selected);
-  color: var(--ops-focus-ring);
+  border-color: rgba(107, 217, 255, 0.42);
+  background: rgba(45, 78, 91, 0.34);
+  color: var(--craft-highlight-focus);
+  box-shadow: inset 0 -1px rgba(107, 217, 255, 0.74);
 }
 
 .crb2-result-count {
@@ -6916,13 +7332,26 @@
 }
 
 .crb2-filter-rail {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 4px 5px;
-  min-height: 43px;
-  padding: 6px 8px 7px;
-  background: linear-gradient(180deg, rgba(7, 16, 22, 0.72), rgba(4, 11, 16, 0.88));
+  min-height: 45px;
+  padding: 7px 8px 8px;
+  background:
+    linear-gradient(180deg, rgba(12, 17, 22, 0.66), rgba(7, 10, 13, 0.84)),
+    repeating-linear-gradient(90deg, transparent 0 55px, rgba(140, 159, 170, 0.025) 55px 56px);
+}
+
+.crb2-filter-rail::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(90deg, rgba(107, 217, 255, 0.42) 0 7%, rgba(132, 151, 164, 0.18) 7% 91%, transparent);
 }
 
 .crb2-filter-chip {
@@ -6930,12 +7359,13 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  min-height: 29px;
+  min-height: 28px;
   padding: 0 9px;
-  border: 1px solid rgba(83, 119, 136, 0.28);
-  border-radius: 2px;
-  background: rgba(10, 23, 30, 0.9);
-  color: var(--craft-muted, #a9bad0);
+  border: 1px solid rgba(135, 154, 166, 0.24);
+  border-radius: 1px;
+  background: linear-gradient(180deg, #151b20, #0d1216);
+  color: #99a7b0;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.018);
   white-space: nowrap;
   font-family: var(--font-primary, Rajdhani, sans-serif);
   font-size: 12px;
@@ -6951,12 +7381,13 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  min-height: 29px;
+  min-height: 28px;
   padding: 0 9px;
-  border: 1px solid rgba(83, 119, 136, 0.28);
-  border-radius: 2px;
-  background: rgba(10, 23, 30, 0.9);
-  color: var(--craft-muted, #a9bad0);
+  border: 1px solid rgba(135, 154, 166, 0.24);
+  border-radius: 1px;
+  background: linear-gradient(180deg, #151b20, #0d1216);
+  color: #99a7b0;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.018);
   white-space: nowrap;
   font: 700 var(--recipe-text-chip)/1 var(--font-primary, Rajdhani, sans-serif);
   letter-spacing: 0.055em;
@@ -6966,16 +7397,17 @@
 
 .crb2-filter-chip:hover,
 .crb2-material-trigger:hover {
-  border-color: rgba(125, 211, 252, 0.32);
-  color: var(--craft-text, #edf7ff);
+  border-color: rgba(107, 217, 255, 0.35);
+  background: #151e24;
+  color: #e4edf2;
 }
 
 .crb2-filter-chip--active,
 .crb2-material-trigger.crb2-filter-chip--active {
-  border-color: rgba(125, 211, 252, 0.42);
-  background: rgba(13, 54, 66, 0.72);
-  color: var(--ops-focus-ring);
-  box-shadow: inset 0 -1px #7dd3fc94;
+  border-color: rgba(123, 154, 169, 0.42);
+  background: linear-gradient(180deg, #18242b, #10191e);
+  color: #d9f4ff;
+  box-shadow: inset 0 -2px rgba(107, 217, 255, 0.76), inset 3px 0 rgba(107, 217, 255, 0.09);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -7000,7 +7432,7 @@
 
 .crb2-filter-label {
   padding: 0 2px 0 5px;
-  color: var(--craft-faint, #7a8fa3);
+  color: #758690;
   white-space: nowrap;
   font-size: var(--recipe-text-kicker);
   font-weight: var(--font-weight-semibold);
@@ -7012,7 +7444,7 @@
   width: 1px;
   height: 22px;
   margin: 0 3px;
-  background: rgba(95, 145, 163, 0.28);
+  background: rgba(132, 151, 164, 0.23);
 }
 
 .crb2-material {
@@ -7093,17 +7525,20 @@
   font-size: var(--recipe-text-meta);
 }
 
-.component-browser-body > .crb2-results {
+.component-browser-body > .crb2-results,
+.craft-browser-production-body > .crb2-results {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
   min-width: 0;
   min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-right: 2px;
+  overflow: auto;
+  padding: 0;
   scrollbar-gutter: stable;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.008), transparent 35%),
+    #080c10;
 }
 
 
@@ -7136,17 +7571,16 @@
 
 .crb2-list {
   display: grid;
-  gap: 9px;
+  gap: 0;
 }
 
 .crb2-table-section {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgba(88, 126, 143, 0.24);
-  border-radius: 2px;
-  background:
-    linear-gradient(180deg, rgba(8, 19, 25, 0.96), rgba(4, 11, 16, 0.98)),
-    repeating-linear-gradient(135deg, rgba(127, 169, 181, 0.014) 0 1px, transparent 1px 6px);
+  border: 0;
+  border-bottom: 1px solid rgba(132, 151, 164, 0.19);
+  border-radius: 0;
+  background: #080c10;
 }
 
 .crb2-table-section > header {
@@ -7154,23 +7588,26 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  min-height: 34px;
+  min-height: 35px;
   padding: 7px 10px;
-  border-bottom: 1px solid var(--craft-border, rgba(95, 125, 145, 0.2));
-  background: rgba(10, 24, 31, 0.92);
+  border-bottom: 1px solid rgba(132, 151, 164, 0.22);
+  background:
+    linear-gradient(90deg, rgba(107, 217, 255, 0.045), transparent 30%),
+    #11171c;
+  box-shadow: inset 3px 0 rgba(107, 217, 255, 0.28);
 }
 
 .crb2-table-section h3 {
   margin: 0;
-  color: var(--craft-text, #edf7ff);
+  color: #edf5f9;
   font-family: var(--font-ui);
-  font-size: var(--font-size-14);
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.105em;
   text-transform: uppercase;
 }
 
 .crb2-table-section > header > span {
-  color: var(--craft-faint, #7a8fa3);
+  color: #7c8b95;
   font-size: var(--recipe-text-meta);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -7178,12 +7615,12 @@
 
 .crb2-table-scroll {
   overflow-x: auto;
-  zoom:120%;
+  zoom: normal;
 }
 
 .crb2-table {
   width: 100%;
-  min-width: 940px;
+  min-width: 760px;
   border-spacing: 0;
   border-collapse: separate;
   table-layout: fixed;
@@ -7192,9 +7629,10 @@
 .crb2-table th,
 .crb2-table td {
   overflow: hidden;
-  padding: 7px 10px;
-  border-bottom: 1px solid rgba(105, 132, 150, 0.12);
-  color: var(--craft-muted, #a9bad0);
+  height: 29px;
+  padding: 5px 9px;
+  border-bottom: 1px solid rgba(139, 157, 168, 0.105);
+  color: #aebbc3;
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -7206,11 +7644,13 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  height: 29px;
+  height: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background: rgba(4, 13, 18, 0.98);
-  color: #78a9c2;
+  border-bottom-color: rgba(132, 151, 164, 0.22);
+  background: #0b1014;
+  color: #7995a5;
+  box-shadow: inset 0 -1px rgba(132, 151, 164, 0.08);
   font-family: var(--font-ui);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-semibold);
@@ -7281,17 +7721,29 @@
   transition: background 100ms ease, box-shadow 100ms ease;
 }
 
+.crb2-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.008);
+}
+
 .crb2-table tbody tr:hover,
 .crb2-table tbody tr:focus-visible {
-  background: var(--ops-surface-hover);
+  background: linear-gradient(90deg, rgba(120, 145, 159, 0.105), rgba(120, 145, 159, 0.035));
 }
 
 .crb2-table tbody .crb2-table-row--selected {
-  background: linear-gradient(90deg, rgba(38, 67, 78, 0.68), rgba(21, 38, 45, 0.72));
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(51, 75, 87, 0.58), rgba(25, 35, 42, 0.68) 68%, rgba(63, 151, 184, 0.09));
   box-shadow:
-    inset 3px 0 0 var(--ops-focus-ring),
-    inset 0 1px 0 rgba(125, 211, 252, 0.28),
-    inset 0 -1px 0 rgba(125, 211, 252, 0.28);
+    inset 3px 0 var(--craft-highlight-focus),
+    inset 0 1px rgba(107, 217, 255, 0.25),
+    inset 0 -1px rgba(107, 217, 255, 0.19),
+    inset -5px 0 rgba(107, 217, 255, 0.25);
+}
+
+.crb2-table tbody .crb2-table-row--selected .crb2-row-name {
+  color: #fff;
+  text-shadow: 0 0 13px rgba(107, 217, 255, 0.17);
 }
 
 .crb2-table tbody tr:last-child th,
@@ -7302,10 +7754,10 @@
 .crb2-row-name {
   display: block;
   overflow: hidden;
-  color: var(--craft-text, #edf7ff);
+  color: #dfe8ed;
   text-overflow: ellipsis;
   font-family: var(--font-ui);
-  font-size: var(--font-size-14);
+  font-size: 12px;
   font-weight: var(--font-weight-light);
   letter-spacing: var(--tracking-default);
 }
@@ -7327,12 +7779,17 @@
   justify-content: space-between;
   gap: 12px;
   flex: 0 0 auto;
-  min-height: 45px;
+  position: sticky;
+  z-index: 8;
+  bottom: 0;
+  min-height: 43px;
+  margin-top: auto;
   padding: 5px 8px;
   border: 0;
-  border-top: 1px solid var(--ops-border-soft);
+  border-top: 1px solid rgba(132, 151, 164, 0.22);
   border-radius: 0;
-  background: rgba(4, 12, 17, 0.72);
+  background: linear-gradient(180deg, rgba(13, 18, 23, 0.98), rgba(8, 12, 15, 0.99));
+  box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.21);
   color: var(--craft-faint, #7a8fa3);
   font-size: var(--recipe-text-meta);
 }
@@ -7390,7 +7847,7 @@
 
   .crb2-table-scroll {
     overflow: visible;
-    zoom:120%
+    zoom: normal;
   }
 }
 
@@ -7620,13 +8077,13 @@
    reuse them without rebuilding the mobile design. */
 .component-results-browser {
   --crafting-presentation-font: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --crafting-presentation-canvas: #071620;
-  --crafting-presentation-surface: #0c2230;
-  --crafting-presentation-surface-selected: #123d56;
-  --crafting-presentation-border: rgba(109, 166, 199, 0.3);
-  --crafting-presentation-accent: #25bdf4;
-  --crafting-presentation-text: #eef7fc;
-  --crafting-presentation-meta: #9fb6c8;
+  --crafting-presentation-canvas: #05080b;
+  --crafting-presentation-surface: #0c1116;
+  --crafting-presentation-surface-selected: #17242b;
+  --crafting-presentation-border: rgba(132, 151, 164, 0.28);
+  --crafting-presentation-accent: #6bd9ff;
+  --crafting-presentation-text: #eef5f8;
+  --crafting-presentation-meta: #94a4ae;
 }
 
 .crafting-identity-copy,
@@ -7692,6 +8149,7 @@
   }
 
   .component-results-browser .recipe-browser-command-header {
+    grid-template-columns: minmax(0, 1fr);
     min-height: 58px;
     padding: 4px 2px;
     border: 0;
@@ -7730,6 +8188,8 @@
     gap: 10px;
     overflow: hidden;
   }
+
+  .craft-browser-control-deck-label { display: none; }
 
   .component-results-browser .crb2-toolbar {
     border: 0;
@@ -7797,7 +8257,8 @@
   .crb2-mobile-apply { border-color: rgba(103, 210, 255, 0.58); background: var(--craft-highlight-focus); color: #02101a; }
 
   .component-browser-body > .crb2-results,
-  .craft-browser-workspace > .crb2-results {
+  .craft-browser-workspace > .crb2-results,
+  .craft-browser-production-body > .crb2-results {
     gap: 8px;
     overflow-x: hidden;
     overflow-y: auto;

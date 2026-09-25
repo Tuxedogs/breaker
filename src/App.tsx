@@ -44,6 +44,7 @@ const ComponentMappingPage = lazy(() =>
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 const CraftingTargetSliderFixturePage = lazy(() => import("./pages/industry/CraftingTargetSliderFixturePage"));
+const CraftingDesignPreviewPage = lazy(() => import("./pages/industry/CraftingDesignPreviewPage"));
 const IndustryCraftingLayout = lazy(() =>
   import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
 );
@@ -235,6 +236,14 @@ export default function App() {
               element={<Suspense fallback={<RouteFallback />}><CraftingTargetSliderFixturePage /></Suspense>}
             />
           ) : null}
+          <Route
+            path="design-preview"
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <CraftingDesignPreviewPage />
+              </Suspense>
+            }
+          />
           <Route
             index
             element={

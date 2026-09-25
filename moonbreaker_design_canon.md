@@ -421,11 +421,12 @@ The permanent filter bar includes:
 
 The material picker is a primary discovery control. It must remain searchable and support finding every item that uses the selected crafting material.
 
-Manual text search intentionally overrides applied filters. Do not hide a valid text-search result because it falls outside a selected chip. Instead:
+Manual text search intersects the explicit faceted filter state:
 
-- Keep the filters selected so they resume when search is cleared.
-- Show a red, informational `Non-Filter Match` badge on results outside those filters.
-- Do not change queue, bookmark, pagination, or route behavior.
+- Search never activates, deactivates, or bypasses category and facet selections.
+- Multiple selections within one group use OR semantics; separate groups and search combine with AND semantics.
+- Clearing search leaves filters intact, while clearing filters leaves selected-detail state intact.
+- Filter and search changes reset pagination without changing queue, bookmark, or selected-detail state.
 - When an FPS weapon and its magazine both match a weapon search, prefer the weapon as the selected result.
 
 At widths below 1600px, a single click selects the table row while double-click or an explicit open action routes to the full Crafting Detail page. At 1600px and wider, a single selection opens a peer detail drawer beside the comparison table; double-click and explicit open actions may route directly to full details. The drawer must not be nested inside a selected-item header or table card.

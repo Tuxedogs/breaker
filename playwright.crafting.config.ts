@@ -6,7 +6,12 @@ const baseURL = `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: "./tests/ui",
-  testMatch: ["crafting-browser-detail.spec.ts", "crafting-mobile.spec.ts"],
+  testMatch: [
+    "crafting-browser-detail.spec.ts",
+    "crafting-design-preview.spec.ts",
+    "crafting-browser-migration.spec.ts",
+    "crafting-mobile.spec.ts",
+  ],
   fullyParallel: false,
   reporter: [["list"]],
   timeout: 120_000,
@@ -21,7 +26,7 @@ export default defineConfig({
   webServer: {
     command: `vite --mode fixtures --host 127.0.0.1 --port ${port}`,
     url: `${baseURL}${fixturePath}`,
-    reuseExistingServer: false,
+    reuseExistingServer: process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",
     timeout: 180_000,
   },
 });

@@ -12,9 +12,12 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { useCraftingContext } from "../CraftingContext";
 import {
+  parseRecipeBrowserCategoryFilterSet,
   getRecipeBrowserSearchParam,
-  isRecipeBrowserDefaultState,
   parseRecipeBrowserFilterSet,
+  RECIPE_BROWSER_CLASS_FILTER_VALUES,
+  RECIPE_BROWSER_GRADE_FILTER_VALUES,
+  RECIPE_BROWSER_SIZE_FILTER_VALUES,
 } from "../utils/recipeBrowserFilters";
 import { buildRecipeBrowserMaterialOptions } from "../utils/recipeBrowserMaterialOptions";
 import MobileFilterSheet from "../../../shared/MobileFilterSheet";
@@ -93,42 +96,52 @@ function FilterLabel({ children }: { children: ReactNode }) {
 export default function CraftingFilterBar({
   records,
   resultCount,
+  forceBrowserRoute = false,
 }: {
   records: ComponentCardIndexRecord[];
   resultCount: number;
+  forceBrowserRoute?: boolean;
 }) {
   const { componentCardFacets } = useCraftingContext();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const isDetailRoute = location.pathname.replace(/\/+$/, "") !== "/industry/crafting";
+  const isDetailRoute = !forceBrowserRoute
+    && location.pathname.replace(/\/+$/, "") !== "/industry/crafting";
   const search = getRecipeBrowserSearchParam(searchParams);
+  const materialOptions = useMemo(
+    () => buildRecipeBrowserMaterialOptions(componentCardFacets?.materials, records),
+    [componentCardFacets?.materials, records],
+  );
+  const materialFilterValues = useMemo(
+    () => new Set(materialOptions.map((option) => option.value)),
+    [materialOptions],
+  );
   const vehicleFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "v"),
+    () => parseRecipeBrowserCategoryFilterSet(searchParams, "v"),
     [searchParams],
   );
   const fpsFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "f"),
+    () => parseRecipeBrowserCategoryFilterSet(searchParams, "f"),
     [searchParams],
   );
   const sizeFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "sz"),
+    () => parseRecipeBrowserFilterSet(searchParams, "sz", RECIPE_BROWSER_SIZE_FILTER_VALUES),
     [searchParams],
   );
   const gradeFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "gr"),
+    () => parseRecipeBrowserFilterSet(searchParams, "gr", RECIPE_BROWSER_GRADE_FILTER_VALUES),
     [searchParams],
   );
   const classFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "cl"),
+    () => parseRecipeBrowserFilterSet(searchParams, "cl", RECIPE_BROWSER_CLASS_FILTER_VALUES),
     [searchParams],
   );
   const materialFilters = useMemo(
-    () => parseRecipeBrowserFilterSet(searchParams, "mt"),
-    [searchParams],
+    () => parseRecipeBrowserFilterSet(searchParams, "mt", materialFilterValues),
+    [materialFilterValues, searchParams],
   );
   const savedOnly = searchParams.get("bk") === "1";
-  const defaultVehicleWeapon = isRecipeBrowserDefaultState(searchParams);
 
   const applySearchParams = useCallback((
     updater: (previous: URLSearchParams) => URLSearchParams,
@@ -157,10 +170,6 @@ export default function CraftingFilterBar({
     setParam(key, next.size ? [...next].join(",") : null);
   }, [setParam]);
 
-  const materialOptions = useMemo(
-    () => buildRecipeBrowserMaterialOptions(componentCardFacets?.materials, records),
-    [componentCardFacets?.materials, records],
-  );
   const [materialOpen, setMaterialOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [materialQuery, setMaterialQuery] = useState("");
@@ -231,7 +240,12 @@ export default function CraftingFilterBar({
     + (savedOnly ? 1 : 0);
   const activeCount = filterCount + (search ? 1 : 0);
 
-  const clearFilters = () => applySearchParams(() => new URLSearchParams());
+  const clearFilters = () => applySearchParams((next) => {
+    ["search", "q", "v", "f", "sz", "gr", "cl", "mt", "bk", "pg"].forEach((key) => {
+      next.delete(key);
+    });
+    return next;
+  });
 
   return (
     <header className="crb2-toolbar">
@@ -366,7 +380,7 @@ export default function CraftingFilterBar({
               {option.value === "competition" ? (
                 <FilterChip
                   option={VEHICLE_CATEGORY_OPTIONS[0]}
-                  active={defaultVehicleWeapon || vehicleFilters.has("weaponGun")}
+                  active={vehicleFilters.has("weaponGun")}
                   onClick={() => setValues("v", vehicleFilters, "weaponGun")}
                 />
               ) : null}
@@ -419,7 +433,7 @@ export default function CraftingFilterBar({
                 <FilterChip
                   key={`vehicle:${option.value}`}
                   option={option}
-                  active={defaultVehicleWeapon ? option.value === "weaponGun" : vehicleFilters.has(option.value)}
+                  active={vehicleFilters.has(option.value)}
                   onClick={() => setValues("v", vehicleFilters, option.value)}
                 />
               ))}

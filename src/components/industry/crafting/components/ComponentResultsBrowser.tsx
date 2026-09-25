@@ -13,7 +13,6 @@ import {
   compareRecipeBrowserRecords,
   compareRecipeBrowserSearchRecords,
   getRecipeBrowserSearchParam,
-  matchesRecipeBrowserAppliedFilters,
   pickPreferredRecipeBrowserSearchRecord,
 } from "../utils/recipeBrowserFilters";
 import {
@@ -127,8 +126,6 @@ function RecipeResultsTable({
       return compared * direction;
     });
   }, [family.columns, records, sort]);
-  const [searchParams] = useSearchParams();
-
   const toggleSort = (key: string) => {
     setSort((current) => {
       if (current?.key === key) {
@@ -241,10 +238,6 @@ function RecipeResultsTable({
             ]
               .filter(Boolean)
               .join(" · ");
-            const nonFilterMatch = Boolean(
-              getRecipeBrowserSearchParam(searchParams)
-              && !matchesRecipeBrowserAppliedFilters(record, searchParams),
-            );
             return (
               <button
                 key={record.id}
@@ -260,7 +253,6 @@ function RecipeResultsTable({
                   <strong className="crafting-item-name">{record.name}</strong>
                   <span className="crb2-mobile-card-type crafting-family-label">{record.typeLabel}</span>
                   {classification ? <small className="crafting-meta-line">{classification}</small> : null}
-                  {nonFilterMatch ? <small className="crb2-mobile-card-override">Non-Filter Match</small> : null}
                 </span>
                 <span className="crb2-mobile-card-chevron" aria-hidden="true">›</span>
               </button>
@@ -278,6 +270,7 @@ export default function ComponentResultsBrowser({
   error,
   previewId,
   onPreviewRecord,
+  autoSelectFirstRecord = true,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
@@ -285,6 +278,7 @@ export default function ComponentResultsBrowser({
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
   previewId?: string | null;
   onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
+  autoSelectFirstRecord?: boolean;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const savedOnly = searchParams.get("bk") === "1";
@@ -394,8 +388,10 @@ export default function ComponentResultsBrowser({
     && preferredRecord?.kind === "fps"
     && preferredRecord.type === "weapons",
   );
-  const selectedRecord = !selectedCandidate || shouldPreferWeapon
-    ? preferredRecord ?? pageRecords[0]
+  const selectedRecord = autoSelectFirstRecord
+    ? (!selectedCandidate || shouldPreferWeapon
+      ? preferredRecord ?? pageRecords[0]
+      : selectedCandidate)
     : selectedCandidate;
 
   const tableGroups = useMemo(() => {
