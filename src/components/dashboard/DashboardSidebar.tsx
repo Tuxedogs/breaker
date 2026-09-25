@@ -14,6 +14,7 @@ import BlueprintTrackerIcon from "@/assets/sidebar-icons/12-blueprint-tracker.sv
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 import { useSignatureDock } from "@/lib/useSignatureDock";
 import { loadBuildQueuePage } from "@/pages/logistics/buildQueueRoute";
+import { useCraftingBrowserLayoutMode } from "@/components/industry/crafting/utils/craftingBrowserLayout";
 
 // ── Inline icon primitives ─────────────────────────────────────────
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -210,6 +211,9 @@ function preloadRoute(path: string) {
 // ── Component ──────────────────────────────────────────────────────
 export default function DashboardSidebar() {
   const location = useLocation();
+  const craftingLayoutMode = useCraftingBrowserLayoutMode();
+  const compactCraftingSidebar = location.pathname.startsWith("/industry/crafting")
+    && craftingLayoutMode === "compact-split";
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -246,7 +250,8 @@ export default function DashboardSidebar() {
     };
   }, [highContrast]);
 
-  const { tip, show, hide } = useNavTooltip(collapsed);
+  const sidebarCollapsed = collapsed || compactCraftingSidebar;
+  const { tip, show, hide } = useNavTooltip(sidebarCollapsed);
   const { enabled: signatureDockEnabled, toggleEnabled } = useSignatureDock();
 
   function isActive(to: string, exact = false) {
@@ -258,7 +263,11 @@ export default function DashboardSidebar() {
   return (
     <>
       <aside
-        className={["dash-sidebar", collapsed ? "dash-sidebar--collapsed" : ""].filter(Boolean).join(" ")}
+        className={[
+          "dash-sidebar",
+          sidebarCollapsed ? "dash-sidebar--collapsed" : "",
+          compactCraftingSidebar ? "dash-sidebar--crafting-compact" : "",
+        ].filter(Boolean).join(" ")}
         aria-label="Main navigation"
       >
         {/* Logo */}
@@ -269,7 +278,7 @@ export default function DashboardSidebar() {
               <circle cx="10" cy="10" r="2.5" fill="rgba(255,255,255,0.85)" />
             </svg>
           </div>
-          {!collapsed && (
+          {!sidebarCollapsed && (
             <div className="dash-sidebar-logo-text">
               <span className="dash-sidebar-logo-name">SCINTEL</span>
               <span className="dash-sidebar-logo-tagline">PLAN. BUILD. BURN.</span>
@@ -281,10 +290,10 @@ export default function DashboardSidebar() {
         <nav className="dash-sidebar-nav">
           {sections.map((section) => (
             <div key={section.label} className="dash-sidebar-section">
-              {!collapsed && (
+              {!sidebarCollapsed && (
                 <span className="dash-sidebar-section-label">{section.label}</span>
               )}
-              {collapsed && <div className="dash-sidebar-section-divider" aria-hidden />}
+              {sidebarCollapsed && <div className="dash-sidebar-section-divider" aria-hidden />}
               {section.items.map((item) => {
                 const active = isActive(item.to, "exact" in item ? item.exact : false);
 
@@ -292,7 +301,7 @@ export default function DashboardSidebar() {
                   <NavLink
                     key={item.label + item.to}
                     to={item.to}
-                    aria-label={collapsed ? item.label : undefined}
+                    aria-label={sidebarCollapsed ? item.label : undefined}
                     onMouseEnter={(e) => {
                       preloadRoute(item.to);
                       show(e, item.label);
@@ -304,7 +313,7 @@ export default function DashboardSidebar() {
                       "dash-sidebar-item",
                       active ? "active" : "",
                       "wip" in item && item.wip ? "wip" : "",
-                      collapsed ? "dash-sidebar-item--icon" : "",
+                      sidebarCollapsed ? "dash-sidebar-item--icon" : "",
                     ].filter(Boolean).join(" ")}
                     aria-current={active ? "page" : undefined}
                     aria-disabled={"wip" in item && item.wip ? true : undefined}
@@ -314,7 +323,7 @@ export default function DashboardSidebar() {
                     ) : (
                       <Icon d={ICONS[item.icon] ?? ICONS.grid} />
                     )}
-                    {!collapsed && item.label}
+                    {!sidebarCollapsed && item.label}
                   </NavLink>
                 );
               })}
@@ -328,7 +337,7 @@ export default function DashboardSidebar() {
           <LoginWithDiscordButton
             onMouseEnter={(e) => show(e, "User menu")}
             onMouseLeave={hide}
-            collapsed={collapsed}
+            collapsed={sidebarCollapsed}
           />
 
           <button
@@ -337,7 +346,7 @@ export default function DashboardSidebar() {
               "discord-btn",
               "discord-btn--signed-in",
               "dash-sidebar-sdock-toggle",
-              collapsed ? "discord-btn--icon" : "",
+              sidebarCollapsed ? "discord-btn--icon" : "",
               signatureDockEnabled ? "dash-sidebar-sdock-toggle--on" : "",
             ].filter(Boolean).join(" ")}
             aria-pressed={signatureDockEnabled}
@@ -348,15 +357,15 @@ export default function DashboardSidebar() {
             onMouseLeave={hide}
           >
             <SignatureDockToggleIcon />
-            {!collapsed && <span className="discord-btn-label">Signature Dock</span>}
-            {!collapsed && (
+            {!sidebarCollapsed && <span className="discord-btn-label">Signature Dock</span>}
+            {!sidebarCollapsed && (
               <span className="discord-btn-status">{signatureDockEnabled ? "on" : "off"}</span>
             )}
           </button>
 
           {/* Bottom controls */}
           <div className="dash-sidebar-footer-controls">
-            {!collapsed && (
+            {!sidebarCollapsed && (
               <span className="dash-sidebar-version">SCINTEL α1.0</span>
             )}
             <button
@@ -369,15 +378,17 @@ export default function DashboardSidebar() {
             >
               <Icon d={ICONS.sun} size={13} />
             </button>
-            <button
-              type="button"
-              className="dash-sidebar-footer-btn"
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              onClick={() => setCollapsed((c) => !c)}
-            >
-              <Icon d={collapsed ? ICONS.chevronsRight : ICONS.chevrons} size={13} />
-            </button>
+            {!compactCraftingSidebar && (
+              <button
+                type="button"
+                className="dash-sidebar-footer-btn"
+                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                onClick={() => setCollapsed((c) => !c)}
+              >
+                <Icon d={collapsed ? ICONS.chevronsRight : ICONS.chevrons} size={13} />
+              </button>
+            )}
           </div>
         </div>
       </aside>

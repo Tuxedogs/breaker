@@ -284,6 +284,7 @@ export default function CraftingDesignPreview() {
               previewId={selectedId}
               onPreviewRecord={handleSelect}
               autoSelectFirstRecord={false}
+              layoutMode="wide-split"
             />
           </div>
         </section>

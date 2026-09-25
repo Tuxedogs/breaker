@@ -25,6 +25,7 @@ import {
   getComponentCardVariantGroupKey,
 } from "./utils/componentCardVariants";
 import { filterRecipeBrowserRecords } from "./utils/recipeBrowserFilters";
+import { useCraftingBrowserLayoutMode } from "./utils/craftingBrowserLayout";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
@@ -71,6 +72,7 @@ export default function CraftingModule() {
   const [detailError, setDetailError] = useState<string | null>(null);
   const [eligibleBlueprintGuids, setEligibleBlueprintGuids] = useState<Set<string> | null>(null);
   const [eligibilityError, setEligibilityError] = useState<string | null>(null);
+  const layoutMode = useCraftingBrowserLayoutMode();
 
   // Component card index comes from CraftingLayout via context
   const { componentCards, loading: cardsLoading, error: cardsError } = useCraftingContext();
@@ -311,6 +313,7 @@ export default function CraftingModule() {
         <CraftingBrowserWorkspace
           selectedId={previewId}
           detailReady={previewRecipeReady}
+          layoutMode={layoutMode}
           toolbar={<CraftingFilterBar records={eligibleComponentCards} resultCount={resultCount} />}
           results={(
             <ComponentResultsBrowser
@@ -321,6 +324,7 @@ export default function CraftingModule() {
               previewId={previewId}
               onPreviewRecord={previewRecord}
               autoSelectFirstRecord={false}
+              layoutMode={layoutMode}
             />
           )}
           detail={detailContent}

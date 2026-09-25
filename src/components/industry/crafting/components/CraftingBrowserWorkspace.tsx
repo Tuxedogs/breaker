@@ -6,6 +6,10 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import {
+  CRAFTING_WIDE_SPLIT_MIN_WIDTH,
+  type CraftingBrowserLayoutMode,
+} from "../utils/craftingBrowserLayout";
 
 type ConnectorStyle = CSSProperties & { "--craft-browser-connector-y"?: string };
 
@@ -36,12 +40,14 @@ export default function CraftingBrowserWorkspace({
   results,
   detail,
   detailReady = false,
+  layoutMode,
 }: {
   selectedId: string | null;
   toolbar: ReactNode;
   results: ReactNode;
   detail: ReactNode;
   detailReady?: boolean;
+  layoutMode: CraftingBrowserLayoutMode;
 }) {
   const [connectorY, setConnectorY] = useState<number | null>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
@@ -50,7 +56,7 @@ export default function CraftingBrowserWorkspace({
   const measureConnector = useCallback(() => {
     const workspace = workspaceRef.current;
     const browser = browserRef.current;
-    if (!workspace || !browser || !selectedId || window.innerWidth < 1600) {
+    if (!workspace || !browser || !selectedId || window.innerWidth < CRAFTING_WIDE_SPLIT_MIN_WIDTH) {
       setConnectorY(null);
       return;
     }
@@ -119,7 +125,7 @@ export default function CraftingBrowserWorkspace({
   return (
     <div
       ref={workspaceRef}
-      className={`craft-browser-workspace craft-browser-production-workspace${selectedId ? " is-selected" : " is-empty"}`}
+      className={`craft-browser-workspace craft-browser-production-workspace craft-browser-production-workspace--${layoutMode}${selectedId ? " is-selected" : " is-empty"}`}
       data-testid="crafting-production-workspace"
       style={connectorStyle}
     >

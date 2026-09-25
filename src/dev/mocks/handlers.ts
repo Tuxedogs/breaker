@@ -34,6 +34,11 @@ export const handlers = [
   http.get("*/api/crafting/reference/material-identity", () => HttpResponse.json(materialIdentityIndex)),
   http.get("*/api/crafting/blueprint-rewards/release-state", () => HttpResponse.json({ states: {} })),
   http.get("*/api/crafting/blueprint-rewards/missions", () => HttpResponse.json({ missions: [] })),
+  http.get("*/api/crafting/blueprint-sources/index", () => HttpResponse.json({
+    // Fixture cards are the curated source-backed Crafting browse set. The
+    // individual mission fixture remains intentionally sparse for detail tests.
+    blueprintGuids: [...componentCards.keys()],
+  })),
   http.get("*/api/crafting/blueprint-sources", ({ request }) => {
     const blueprintGuid = new URL(request.url).searchParams.get("blueprintGuid")?.trim().toLowerCase() ?? "";
     return HttpResponse.json({ blueprintGuid, missions: blueprintSourceMissions.get(blueprintGuid) ?? [] });

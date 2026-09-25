@@ -52,6 +52,17 @@ test("selects a family-specific table schema", () => {
   assert.equal(getRecipeBrowserFamily(record({ kind: "fps", type: "utility" })).key, "fpsOther");
 });
 
+test("exposes classification-only columns for the compact split", () => {
+  const vehicle = getRecipeBrowserFamily(record({ type: "weaponGun" }));
+  const fpsWeapon = getRecipeBrowserFamily(record({ kind: "fps", type: "weapons" }));
+  const fpsArmor = getRecipeBrowserFamily(record({ kind: "fps", type: "armor" }));
+
+  assert.deepEqual(vehicle.compactColumns.map((column) => column.key), ["size", "gradeClass"]);
+  assert.deepEqual(fpsWeapon.compactColumns.map((column) => column.key), ["class"]);
+  assert.deepEqual(fpsArmor.compactColumns.map((column) => column.key), ["mass"]);
+  assert.equal(fpsArmor.compactColumns[0]?.label, "Mass");
+});
+
 test("preserves valid zero values in table cells", () => {
   const family = getRecipeBrowserFamily(record({ type: "weaponGun" }));
   assert.equal(family.columns.find((column) => column.key === "alpha")?.value(record({})), "0");

@@ -6953,9 +6953,138 @@
 }
 
 @media (max-width: 1599px) {
-  .craft-browser-production-workspace.is-selected .craft-browser-production-pane { display: none; }
-  .craft-browser-production-workspace.is-empty .craft-browser-detail-pane { display: none; }
+  .craft-browser-production-workspace:not(.craft-browser-production-workspace--compact-split).is-selected .craft-browser-production-pane { display: none; }
+  .craft-browser-production-workspace:not(.craft-browser-production-workspace--compact-split).is-empty .craft-browser-detail-pane { display: none; }
   .craft-browser-production-pane::after { display: none; }
+}
+
+.component-browser-body > .craft-browser-production-workspace--compact-split {
+  display: grid;
+  grid-template-columns: minmax(328px, 30fr) minmax(0, 70fr);
+  gap: 0;
+}
+
+.craft-browser-production-workspace--compact-split .craft-browser-detail-pane {
+  border-left: 1px solid rgba(132, 151, 164, 0.22);
+}
+
+.craft-browser-production-workspace--compact-split .crb2-filter-viewport {
+  display: none;
+}
+
+.craft-browser-production-workspace--compact-split .crb2-search-row {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.craft-browser-production-workspace--compact-split .crb2-result-count {
+  display: none;
+}
+
+.craft-browser-production-workspace--compact-split .crb2-mobile-filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--ops-border-default);
+  border-radius: 2px;
+  background: #10161b;
+  color: #9baab3;
+  font: 700 var(--recipe-text-chip)/1 var(--font-primary, Rajdhani, sans-serif);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.craft-browser-production-workspace--compact-split .crb2-mobile-filter-trigger:hover,
+.craft-browser-production-workspace--compact-split .crb2-mobile-filter-trigger:focus-visible,
+.craft-browser-production-workspace--compact-split .crb2-mobile-filter-trigger.is-active {
+  border-color: rgba(125, 211, 252, 0.5);
+  background: rgba(45, 78, 91, 0.34);
+  color: var(--craft-highlight-focus);
+}
+
+.craft-browser-production-workspace--compact-split .crb2-mobile-filter-trigger strong {
+  display: grid;
+  min-width: 17px;
+  height: 17px;
+  place-items: center;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: rgba(103, 210, 255, 0.14);
+  font-size: 0.68rem;
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-shell.is-open {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  align-items: end;
+}
+
+.craft-browser-production-workspace--compact-split .craft-browser-production-pane:has(.mobile-filter-shell.is-open) {
+  z-index: 501;
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: rgba(1, 5, 10, 0.8);
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 100%);
+  max-height: min(88dvh, 780px);
+  justify-self: center;
+  overflow: hidden;
+  border: 1px solid var(--ops-border-default);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  background: var(--ops-surface-deep);
+  box-shadow: 0 -22px 56px rgba(0, 0, 0, 0.6);
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-sheet__header {
+  position: relative;
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ops-border-soft);
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-sheet__body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 18px;
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-sheet__footer {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ops-border-soft);
+  background: rgba(2, 8, 14, 0.98);
+}
+
+.craft-browser-production-workspace--compact-split .mobile-filter-sheet__footer > button {
+  min-height: 42px;
+  flex: 1;
+}
+
+.craft-browser-production-workspace--compact-split .crb2-table--compact {
+  width: 100%;
+  min-width: 0;
+  table-layout: auto;
 }
 
 @media (min-width: 1600px) {

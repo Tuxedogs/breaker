@@ -44,6 +44,29 @@
   width: 52px;
 }
 
+/* Crafting's intermediate split has a constrained working canvas. Keep the
+   existing icon-only navigation behavior while recovering a narrow fixed rail
+   for the browser and inspector. */
+.dash-sidebar--crafting-compact {
+  width: 40px;
+}
+
+.dash-sidebar--crafting-compact .dash-sidebar-logo {
+  padding: 0.75rem 0;
+}
+
+.dash-sidebar--crafting-compact .dash-sidebar-section {
+  padding-inline: 0.15rem;
+}
+
+.dash-sidebar--crafting-compact .dash-sidebar-item--icon {
+  padding: 0.28rem;
+}
+
+.dash-sidebar--crafting-compact .dash-sidebar-footer {
+  padding: 0.45rem 0.2rem;
+}
+
 .dash-sidebar-logo {
   display: flex;
   align-items: center;

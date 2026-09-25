@@ -14,6 +14,7 @@ export type RecipeBrowserFamily = {
   key: string;
   label: string;
   columns: RecipeBrowserColumn[];
+  compactColumns: RecipeBrowserColumn[];
 };
 
 const RECIPE_BROWSER_COLUMN_WIDTHS: Record<string, string> = {
@@ -153,6 +154,36 @@ const gradeClassColumn: RecipeBrowserColumn = {
   },
 };
 
+const compactSizeColumn: RecipeBrowserColumn = {
+  ...sizeColumn,
+  width: "2.5rem",
+};
+
+const compactGradeClassColumn: RecipeBrowserColumn = {
+  key: "gradeClass",
+  label: "Grade / Class",
+  value: (record) => {
+    const parts = [record.grade, record.class ? titleCase(record.class) : null].filter(Boolean);
+    return parts.length ? parts.join(" · ") : "—";
+  },
+};
+
+const fpsClassColumn: RecipeBrowserColumn = {
+  key: "class",
+  label: "Class",
+  value: (record) => titleCase(
+    get(record, record.type === "ammo" ? "fpsAmmo" : "fpsWeapon", record.type === "ammo" ? "ammoClass" : "weaponClass")
+      ?? record.facets?.ammoClass
+      ?? record.facets?.weaponClass,
+  ),
+};
+
+const fpsArmorMassColumn: RecipeBrowserColumn = {
+  key: "mass",
+  label: "Mass",
+  value: (record) => formatNumber(get(record, "fpsArmor", "mass")),
+};
+
 const genericColumns: RecipeBrowserColumn[] = [
   {
     key: "craftTime",
@@ -188,6 +219,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "speed", label: "Projectile Speed", width: "10.5rem", value: (record) => formatNumber(get(record, "shipWeapon", "projectileSpeed"), " m/s") },
       { key: "capacity", label: "Capacity", width: "6.25rem", value: (record) => formatNumber(shipWeaponCapacity(record)) },
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   shield: {
     key: "shield",
@@ -199,6 +231,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "delay", label: "Regen Delay", value: (record) => formatNumber(get(record, "shield", "damageRegenDelay"), "s") },
       gradeClassColumn,
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   powerPlant: {
     key: "powerPlant",
@@ -210,6 +243,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "em", label: "Online EM", value: (record) => formatNumber(get(record, "powerPlant", "onlineEmSignature")) },
       gradeClassColumn,
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   cooler: {
     key: "cooler",
@@ -228,6 +262,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "em", label: "Online EM", value: (record) => formatNumber(get(record, "cooler", "onlineEmSignature")) },
       gradeClassColumn,
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   radar: {
     key: "radar",
@@ -240,6 +275,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "assistMax", label: "Max Assist Range", value: (record) => formatNumber(get(record, "radar", "aimAssistRangeMax"), "m") },
       gradeClassColumn,
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   quantumDrive: {
     key: "quantumDrive",
@@ -258,6 +294,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "cooldown", label: "Cooldown", value: (record) => formatNumber(get(record, "quantumDrive", "cooldown"), "s") },
       { key: "fuel", label: "Fuel", value: (record) => formatNumber(get(record, "quantumDrive", "quantumFuelRequirement")) },
     ],
+    compactColumns: [compactSizeColumn, compactGradeClassColumn],
   },
   fpsWeapon: {
     key: "fpsWeapon",
@@ -270,6 +307,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "capacity", label: "Capacity", value: (record) => formatNumber(get(record, "fpsWeapon", "ammoCapacity")) },
       { key: "falloff", label: "Falloff Starts", value: (record) => formatNumber(get(record, "fpsWeapon", "damageDropMinDistance"), "m") },
     ],
+    compactColumns: [fpsClassColumn],
   },
   fpsArmor: {
     key: "fpsArmor",
@@ -290,6 +328,7 @@ const families: Record<string, RecipeBrowserFamily> = {
       },
       { key: "storage", label: "Storage", value: (record) => formatNumber(get(record, "fpsArmor", "storageCapacity"), " µSCU") },
     ],
+    compactColumns: [fpsArmorMassColumn],
   },
   fpsAmmo: {
     key: "fpsAmmo",
@@ -301,11 +340,13 @@ const families: Record<string, RecipeBrowserFamily> = {
       { key: "falloff", label: "Falloff Starts", value: (record) => formatNumber(get(record, "fpsAmmo", "damageDropMinDistance"), "m") },
       { key: "speed", label: "Projectile Speed", value: (record) => formatNumber(get(record, "fpsAmmo", "projectileSpeed"), " m/s") },
     ],
+    compactColumns: [fpsClassColumn],
   },
   other: {
     key: "other",
     label: "Other Components",
     columns: genericColumns,
+    compactColumns: [genericColumns[0]],
   },
 };
 

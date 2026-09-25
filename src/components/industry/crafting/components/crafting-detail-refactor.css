@@ -2472,3 +2472,77 @@
     color: #bfeaf5;
   }
 }
+
+/* The compact split is a constrained inspection composition, not the phone
+   detail page. It preserves the canonical drawer and tabs while reserving its
+   header for identity, a small visual cue, and an explicit close action. */
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header {
+  grid-template-areas: "identity actions";
+  grid-template-columns: minmax(0, 1fr) 34px;
+  min-height: 106px;
+  gap: 8px;
+  padding: 12px 12px 14px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header::before {
+  inset: 6px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-identity {
+  padding-right: 92px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header .craft-detail-meta {
+  font-size: 0.58rem;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-title {
+  margin: 4px 0 7px;
+  font-size: clamp(0.9rem, 1.5vw, 1.08rem);
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header .craft-detail-hero-chips {
+  gap: 4px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header .craft-detail-band-pill,
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header .craft-badge {
+  padding: 3px 5px;
+  font-size: 0.58rem;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-hero-art-stage {
+  top: 8px;
+  right: 44px;
+  bottom: -6px;
+  width: 104px;
+  opacity: 0.58;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-hero-art-stage[data-hero-layout="component"] {
+  width: 112px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-hero-art-stage .craft-detail-hero-art {
+  right: 0;
+  bottom: 14px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-hero-art-stage .craft-detail-hero-icon {
+  width: 58px;
+  height: 58px;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-facts {
+  display: none;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-header-actions {
+  display: grid;
+}
+
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-tabs button,
+.craft-browser-production-workspace--compact-split .craft-detail-drawer-tabs button:last-child {
+  padding-inline: 4px;
+  font-size: 0.62rem;
+}

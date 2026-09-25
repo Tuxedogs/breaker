@@ -21,6 +21,7 @@ import {
   type RecipeBrowserColumn,
   type RecipeBrowserFamily,
 } from "../utils/recipeBrowserPresentation";
+import type { CraftingBrowserLayoutMode } from "../utils/craftingBrowserLayout";
 
 const SAVED_BLUEPRINT_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MOBILE_TABLET_RESULTS_PER_PAGE = 18;
@@ -81,14 +82,17 @@ function RecipeResultsTable({
   records,
   selectedId,
   onSelect,
+  layoutMode,
 }: {
   family: RecipeBrowserFamily;
   records: ComponentCardIndexRecord[];
   selectedId: string;
   onSelect: (record: ComponentCardIndexRecord) => void;
+  layoutMode: CraftingBrowserLayoutMode;
 }) {
   type SortState = { key: string; direction: "ascending" | "descending" };
   const [sort, setSort] = useState<SortState | null>(null);
+  const columns = layoutMode === "compact-split" ? family.compactColumns : family.columns;
 
   const compareValues = (
     a: ComponentCardIndexRecord,
@@ -117,7 +121,7 @@ function RecipeResultsTable({
 
   const sortedRecords = useMemo(() => {
     if (!sort) return records;
-    const column = family.columns.find((item) => item.key === sort.key);
+    const column = columns.find((item) => item.key === sort.key);
     const direction = sort.direction === "ascending" ? 1 : -1;
     return [...records].sort((a, b) => {
       const compared = sort.key === "component"
@@ -125,7 +129,7 @@ function RecipeResultsTable({
         : compareValues(a, b, column);
       return compared * direction;
     });
-  }, [family.columns, records, sort]);
+  }, [columns, records, sort]);
   const toggleSort = (key: string) => {
     setSort((current) => {
       if (current?.key === key) {
@@ -172,19 +176,20 @@ function RecipeResultsTable({
         <span>{records.length} on this page</span>
       </header>
       <div className="crb2-table-scroll">
-        <table className="crb2-table">
+        <table className={`crb2-table${layoutMode === "compact-split" ? " crb2-table--compact" : ""}`}>
           <colgroup>
             <col className="crb2-table-column--component" />
-            {family.columns.map((column) => (
-              <col key={column.key} style={{ width: getRecipeBrowserColumnWidth(column) }} />
-            ))}
+            {columns.map((column) => {
+              const width = layoutMode === "compact-split" ? column.width : getRecipeBrowserColumnWidth(column);
+              return <col key={column.key} style={width ? { width } : undefined} />;
+            })}
           </colgroup>
           <thead>
             <tr>
               <th scope="col" aria-sort={sort?.key === "component" ? sort.direction : "none"}>
                 {sortHeader("component", "Component")}
               </th>
-              {family.columns.map((column) => (
+              {columns.map((column) => (
                 <th
                   key={column.key}
                   scope="col"
@@ -210,9 +215,9 @@ function RecipeResultsTable({
                   onKeyDown={(event) => onRowKeyboard(event, record)}
                 >
                   <th scope="row">
-                    <span className="crb2-row-name">{record.name}</span>
+                    <span className="crb2-row-name" title={record.name}>{record.name}</span>
                   </th>
-                  {family.columns.map((column) => (
+                  {columns.map((column) => (
                     <td key={column.key}>{column.value(record)}</td>
                   ))}
                 </tr>
@@ -271,6 +276,7 @@ export default function ComponentResultsBrowser({
   previewId,
   onPreviewRecord,
   autoSelectFirstRecord = true,
+  layoutMode,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
@@ -279,6 +285,7 @@ export default function ComponentResultsBrowser({
   previewId?: string | null;
   onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
   autoSelectFirstRecord?: boolean;
+  layoutMode: CraftingBrowserLayoutMode;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const savedOnly = searchParams.get("bk") === "1";
@@ -449,6 +456,7 @@ export default function ComponentResultsBrowser({
             records={familyRecords}
             selectedId={selectedRecord?.id ?? ""}
             onSelect={selectRecord}
+            layoutMode={layoutMode}
           />
         ))}
       </div>
