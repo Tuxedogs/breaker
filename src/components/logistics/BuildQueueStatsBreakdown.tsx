@@ -16,7 +16,6 @@ import {
   type BuildQueueProductQualitySummary,
 } from "@/lib/logistics/buildQueueCraftStats";
 import {
-  BuildQueueCraftHeaderSummaryPanel,
   BuildQueueCraftIdentityPanel,
   BuildQueueCraftOutcomePanel,
   BuildQueueCraftOverviewPanel,
@@ -249,27 +248,9 @@ export function BuildQueueCraftTargetQuality() {
   return <BuildQueueCraftTargetQualityPanel productQuality={productQuality} />;
 }
 
-export function BuildQueueCraftHeaderSummary({
-  materialsLabel,
-  allocationPercentage,
-}: {
-  materialsLabel: string;
-  allocationPercentage: number;
-}) {
-  const { model, productQuality } = useBuildQueueStatsContext();
-  return (
-    <BuildQueueCraftHeaderSummaryPanel
-      model={model}
-      productQuality={productQuality}
-      materialsLabel={materialsLabel}
-      allocationPercentage={allocationPercentage}
-    />
-  );
-}
-
 export function BuildQueueCraftOutcome() {
-  const { model, productQuality } = useBuildQueueStatsContext();
-  return <BuildQueueCraftOutcomePanel model={model} productQuality={productQuality} />;
+  const { productQuality } = useBuildQueueStatsContext();
+  return <BuildQueueCraftOutcomePanel productQuality={productQuality} />;
 }
 
 /** @deprecated Use BuildQueueStatsProvider + BuildQueueCraftOverview/Statistics */

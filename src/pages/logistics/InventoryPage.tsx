@@ -48,6 +48,7 @@ import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
 import { buildInventoryHierarchy } from '../../lib/logistics/inventoryHierarchy';
 import { getReservedAmountForInventoryLot } from '../../lib/logistics/buildQueueReservations';
 import QualityTierBadge from '../../components/shared/QualityTierBadge';
+import MobileFilterSheet from '../../components/shared/MobileFilterSheet';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
@@ -1808,6 +1809,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [csvImportOpen, setCsvImportOpen] = useState(false);
   const [search, setSearch] = useState(() => inventoryUi.searchQuery);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [materialFilter, setMaterialFilter] = useState(() => inventoryUi.materialFilter);
   const [locationFilter, setLocationFilter] = useState(() => inventoryUi.locationFilter);
   const effectiveLocationFilter = queryLocationId || locationFilter;
@@ -2555,6 +2557,24 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           </span>
         </label>
 
+        <button
+          type="button"
+          className={`logi-inv-mobile-filter-trigger${materialFilter || effectiveLocationFilter || qualityMin ? ' is-active' : ''}`}
+          aria-expanded={mobileFiltersOpen}
+          onClick={() => setMobileFiltersOpen(true)}
+        >
+          Filters
+          {materialFilter || effectiveLocationFilter || qualityMin ? <span>Active</span> : null}
+        </button>
+
+        <MobileFilterSheet
+          open={mobileFiltersOpen}
+          title="Inventory filters"
+          onClose={() => setMobileFiltersOpen(false)}
+          desktopContent
+          footer={<><button type="button" className="logi-btn-secondary" onClick={() => { setMaterialFilter(''); setLocationFilter(''); setQualityMin(0); }}>Clear filters</button><button type="button" className="logi-btn-primary" onClick={() => setMobileFiltersOpen(false)}>Show {filtered.length} boxes</button></>}
+        >
+
         <label className="logi-inv-filter-field">
           <span className="logi-inv-filter-label">Material</span>
           <select
@@ -2626,6 +2646,7 @@ export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixt
           <strong>{filtered.length}</strong>
           <span>shown / {activeEntries.length}</span>
         </span>
+        </MobileFilterSheet>
       </div>
 
       {manageLocationId !== null && (

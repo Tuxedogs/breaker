@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
 import SignatureDock from "./components/SignatureDock";
@@ -44,6 +44,7 @@ const ComponentMappingPage = lazy(() =>
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 const CraftingTargetSliderFixturePage = lazy(() => import("./pages/industry/CraftingTargetSliderFixturePage"));
+const CraftingDesignPreviewPage = lazy(() => import("./pages/industry/CraftingDesignPreviewPage"));
 const IndustryCraftingLayout = lazy(() =>
   import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
 );
@@ -68,6 +69,14 @@ function RedirectToDashboard() {
 function RedirectToCrafting() {
   const location = useLocation();
   return <Navigate to={`/industry/crafting${location.search}`} replace />;
+}
+
+function RedirectCraftingDetailToBrowser() {
+  const location = useLocation();
+  const { blueprintId } = useParams<{ blueprintId: string }>();
+  const search = new URLSearchParams(location.search);
+  if (blueprintId) search.set("preview", blueprintId);
+  return <Navigate to={`/industry/crafting?${search.toString()}`} replace />;
 }
 
 function RedirectToDashboardDoctrine() {
@@ -228,6 +237,14 @@ export default function App() {
             />
           ) : null}
           <Route
+            path="design-preview"
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <CraftingDesignPreviewPage />
+              </Suspense>
+            }
+          />
+          <Route
             index
             element={
               <Suspense fallback={<RouteFallback />}>
@@ -237,11 +254,7 @@ export default function App() {
           />
           <Route
             path=":blueprintId"
-            element={
-              <Suspense fallback={<RouteFallback />}>
-                <IndustryCraftingPage />
-              </Suspense>
-            }
+            element={<RedirectCraftingDetailToBrowser />}
           />
         </Route>
         <Route

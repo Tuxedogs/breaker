@@ -5728,3 +5728,26 @@
     grid-column: auto;
   }
 }
+.logi-inv-mobile-filter-trigger { display: none; }
+
+@media (max-width: 760px) {
+  .logi-inv-page { max-width: 100%; overflow-x: clip; padding: 10px 8px calc(28px + env(safe-area-inset-bottom)); }
+  .logi-inv-page .logi-inv-header { gap: 10px; }
+  .logi-inv-page .logi-page-title { font-size: 20px; }
+  .logi-inv-page .logi-page-subtitle { font-size: 13px; }
+  .logi-inv-page .logi-inv-header-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .logi-inv-page .logi-inv-header-actions > * { width: 100%; min-height: 40px; }
+  .logi-inv-page .logi-inv-filter-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; padding: 7px; }
+  .logi-inv-page .logi-inv-filter-field--search { grid-column: 1; }
+  .logi-inv-page .logi-inv-mobile-filter-trigger { display: inline-flex; grid-column: 2; align-items: center; justify-content: center; gap: 5px; min-height: 40px; padding: 0 11px; border: 1px solid var(--inv-line); border-radius: 5px; background: var(--inv-panel-raised); color: var(--inv-copy); font-weight: 800; }
+  .logi-inv-page .logi-inv-mobile-filter-trigger.is-active { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  .logi-inv-page .logi-inv-mobile-filter-trigger span { font-size: var(--app-text-label); }
+  .logi-inv-page .mobile-filter-sheet__body { display: grid; gap: 10px; }
+  .logi-inv-page .mobile-filter-sheet__body .logi-inv-filter-field { display: grid; gap: 5px; }
+  .logi-inv-page .mobile-filter-sheet__body .logi-inv-filter-label { position: static; width: auto; height: auto; margin: 0; clip: auto; clip-path: none; color: var(--inv-copy-muted); font-size: var(--app-text-label); }
+  .logi-inv-page .mobile-filter-sheet__body .logi-select,
+  .logi-inv-page .mobile-filter-sheet__body .logi-search-wrap { min-height: 44px; }
+  .logi-inv-page .mobile-filter-sheet__body .logi-filter-count { justify-content: flex-start; }
+  .logi-inv-page .logi-inv-tree-box,
+  .logi-inv-page .logi-inv-tree-box:has(.logi-inv-tree-box-select) { margin: 4px; padding: 9px; gap: 9px; border-radius: 5px; }
+}

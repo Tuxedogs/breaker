@@ -2,6 +2,8 @@
 /* Superseded legacy redesign generations were removed during stylesheet consolidation. */
 @import "../../../styles/scintel-filter-shell.css";
 
+.mining-mobile-filter-trigger { display: none; }
+
 /* ──────────────────────────────────────────────
    Industry / Mining Module Styles
    Scoped to .mine-* / .mloc-* / .msb-* to avoid conflicts.
@@ -3656,6 +3658,14 @@
 }
 
 @media (max-width: 760px) {
+  .mine-page.mine-page--v2 .mining-mobile-filter-trigger { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 7px 12px; border: 1px solid var(--mine-intel-border); border-radius: 5px; background: var(--mine-intel-panel); color: var(--text-secondary); font-weight: 800; }
+  .mine-page.mine-page--v2 .mining-mobile-filter-trigger strong { color: var(--text-primary); font-size: var(--app-text-meta); }
+  .mine-page.mine-page--v2 .mining-mobile-filter-trigger.is-active { border-color: rgba(10, 204, 249, .55); box-shadow: inset 3px 0 #0accf9; }
+  .mine-page.mine-page--v2 .mobile-filter-sheet__body { padding: 0; }
+  .mine-page.mine-page--v2 .mobile-filter-sheet .mining-filter-panel { display: block; max-height: none; overflow: visible; border: 0; border-radius: 0; }
+  .mine-page.mine-page--v2 .mining-sheet-clear,
+  .mine-page.mine-page--v2 .mining-sheet-apply { border: 1px solid var(--mine-intel-border); border-radius: 5px; background: rgba(255,255,255,.04); color: var(--text-secondary); font-weight: 800; }
+  .mine-page.mine-page--v2 .mining-sheet-apply { border-color: rgba(10,204,249,.55); background: rgba(10,204,249,.13); color: #dcfaff; }
   .mine-page.mine-page--v2 .mining-command-copy p {
     white-space: normal;
   }

@@ -1,13 +1,17 @@
 import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItemsByBlueprintGuids } from "../../../lib/craftingData";
 import { useCraftingContext } from "./CraftingContext";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import ComponentResultsBrowser from "./components/ComponentResultsBrowser";
+import CraftingBrowserWorkspace from "./components/CraftingBrowserWorkspace";
+import CraftingFilterBar from "./components/CraftingFilterBar";
+import CraftingInspectionBayEmptyState from "./components/CraftingInspectionBayEmptyState";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
@@ -15,29 +19,15 @@ import { clampQuality } from "./utils/qualityBands";
 import { getActiveInventoryEntries, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
 import { useMaterialIdentityIndex } from "../../../lib/logistics/materialIdentityIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
+import {
+  getComponentCardVariantGroupKey,
+} from "./utils/componentCardVariants";
+import { filterRecipeBrowserRecords } from "./utils/recipeBrowserFilters";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
 
 type Tab = "recipes" | "analytics" | "quality";
-
-const CRAFTING_DRAWER_MEDIA_QUERY = "(min-width: 1600px)";
-
-function useMediaQuery(queryText: string): boolean {
-  const [matches, setMatches] = useState(() => (
-    typeof window !== "undefined" && window.matchMedia(queryText).matches
-  ));
-
-  useEffect(() => {
-    const query = window.matchMedia(queryText);
-    const update = () => setMatches(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, [queryText]);
-
-  return matches;
-}
 
 type RecipeRewardPool = {
   poolName?: string;
@@ -70,12 +60,8 @@ function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
 
 export default function CraftingModule() {
   const { blueprintId } = useParams<{ blueprintId?: string }>();
-  const location = useLocation();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const drawerCapable = useMediaQuery(CRAFTING_DRAWER_MEDIA_QUERY);
-  const requestedPreviewId = blueprintId ? null : searchParams.get("preview");
-  const previewId = drawerCapable ? requestedPreviewId : null;
+  const previewId = blueprintId ? null : searchParams.get("preview");
   const targetBlueprintId = blueprintId ?? previewId;
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
@@ -94,27 +80,12 @@ export default function CraftingModule() {
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 
   useEffect(() => {
-    if (!requestedPreviewId || drawerCapable || blueprintId) return;
-    const next = new URLSearchParams(searchParams);
-    next.delete("preview");
-    navigate({
-      pathname: `/industry/crafting/${requestedPreviewId}`,
-      search: next.toString() ? `?${next.toString()}` : "",
-    }, {
-      replace: true,
-      state: { from: `${location.pathname}${next.toString() ? `?${next.toString()}` : ""}` },
-    });
-  }, [blueprintId, drawerCapable, location.pathname, navigate, requestedPreviewId, searchParams]);
-
-  useEffect(() => {
     if (!previewId) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      setSearchParams((previous) => {
-        const next = new URLSearchParams(previous);
-        next.delete("preview");
-        return next;
-      }, { replace: true });
+      const next = new URLSearchParams(window.location.search);
+      next.delete("preview");
+      setSearchParams(next, { replace: true });
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -238,19 +209,15 @@ export default function CraftingModule() {
   );
 
   const closePreview = useCallback(() => {
-    setSearchParams((previous) => {
-      const next = new URLSearchParams(previous);
-      next.delete("preview");
-      return next;
-    }, { replace: true });
+    const next = new URLSearchParams(window.location.search);
+    next.delete("preview");
+    setSearchParams(next, { replace: true });
   }, [setSearchParams]);
 
   const previewRecord = useCallback((record: { id: string }) => {
-    setSearchParams((previous) => {
-      const next = new URLSearchParams(previous);
-      next.set("preview", record.id);
-      return next;
-    }, { replace: false });
+    const next = new URLSearchParams(window.location.search);
+    next.set("preview", record.id);
+    setSearchParams(next, { replace: false });
   }, [setSearchParams]);
 
   const loadError = blueprintId ? detailError : cardsError;
@@ -258,6 +225,49 @@ export default function CraftingModule() {
     ? recipes.some((recipe) => recipe.blueprint_id === previewId)
     : false;
   const previewLoading = Boolean(previewId) && (detailLoading || (!previewRecipeReady && !detailError));
+  const resultCount = useMemo(() => {
+    const filtered = filterRecipeBrowserRecords(componentCards, searchParams);
+    const groups = new Map<string, ComponentCardIndexRecord[]>();
+    let ungroupedCount = 0;
+    for (const record of filtered) {
+      const key = getComponentCardVariantGroupKey(record);
+      if (!key) {
+        ungroupedCount += 1;
+        continue;
+      }
+      const members = groups.get(key);
+      if (members) members.push(record);
+      else groups.set(key, [record]);
+    }
+    return ungroupedCount + groups.size;
+  }, [componentCards, searchParams]);
+
+  const detailContent = !previewId ? (
+    <CraftingInspectionBayEmptyState />
+  ) : detailError ? (
+    <div className="craft-detail-drawer-state craft-detail-drawer-state--error">
+      <span>Detail unavailable</span>
+      <p>{detailError}</p>
+      <button type="button" onClick={closePreview}>Return to standby</button>
+    </div>
+  ) : previewLoading ? (
+    <div className="craft-detail-drawer-state" aria-busy="true">
+      <span>Loading inspection data</span>
+      <div className="craft-detail-drawer-loader" aria-hidden="true" />
+    </div>
+  ) : previewRecipeReady ? (
+    <ComponentRecipeTable
+      recipes={recipes}
+      inventoryEntries={inventoryEntries}
+      materialTemplates={materialTemplates}
+      componentCards={componentCards}
+      initialBlueprintId={previewId}
+      presentation="drawer"
+      onClose={closePreview}
+      onAddToQueue={handleAddToQueue}
+      isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+    />
+  ) : null;
 
   return (
     <>
@@ -268,51 +278,22 @@ export default function CraftingModule() {
       )}
 
       {tab === "recipes" && !blueprintId && (
-        <div className={`craft-browser-workspace${drawerCapable ? " craft-browser-workspace--drawer" : ""}`}>
-          <ComponentResultsBrowser
-            records={componentCards}
-            loading={cardsLoading}
-            error={cardsError}
-            isRecipeQueued={(record) => queuedRecipeIds.has(`craft-${record.id}`)}
-            previewId={previewId}
-            onPreviewRecord={previewRecord}
-          />
-          {drawerCapable && (
-            <div
-              className={`craft-detail-drawer-region${previewRecipeReady ? " craft-detail-drawer-region--ready" : ""}`}
-              aria-label="Recipe detail preview"
-              aria-busy={previewLoading}
-            >
-              {previewId && detailError ? (
-                <div className="craft-detail-drawer-state craft-detail-drawer-state--error">{detailError}</div>
-              ) : previewId && previewRecipeReady ? (
-                <ComponentRecipeTable
-                  recipes={recipes}
-                  inventoryEntries={inventoryEntries}
-                  materialTemplates={materialTemplates}
-                  componentCards={componentCards}
-                  initialBlueprintId={previewId}
-                  presentation="drawer"
-                  onClose={closePreview}
-                  onAddToQueue={handleAddToQueue}
-                  isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
-                />
-              ) : null}
-            </div>
+        <CraftingBrowserWorkspace
+          selectedId={previewId}
+          detailReady={previewRecipeReady}
+          toolbar={<CraftingFilterBar records={componentCards} resultCount={resultCount} />}
+          results={(
+            <ComponentResultsBrowser
+              records={componentCards}
+              loading={cardsLoading}
+              error={cardsError}
+              isRecipeQueued={(record) => queuedRecipeIds.has(`craft-${record.id}`)}
+              previewId={previewId}
+              onPreviewRecord={previewRecord}
+              autoSelectFirstRecord={false}
+            />
           )}
-        </div>
-      )}
-
-      {tab === "recipes" && blueprintId && (
-        <ComponentRecipeTable
-          recipes={recipes}
-          inventoryEntries={inventoryEntries}
-          materialTemplates={materialTemplates}
-          componentCards={componentCards}
-          initialBlueprintId={blueprintId}
-          presentation="page"
-          onAddToQueue={handleAddToQueue}
-          isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+          detail={detailContent}
         />
       )}
 

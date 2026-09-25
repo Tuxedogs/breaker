@@ -41,6 +41,144 @@ async function expectNoDocumentOverflow(page: Page) {
 }
 
 test.describe("Crafting browser and detail refactor", () => {
+  test("keeps the selected detail single-pane below 1600px and makes it a 52.5% comparison peer at wide desktop", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    const previewId = "ba842720-ad32-4d53-8f56-992bacb1fc45";
+
+    for (const viewport of [
+      { name: "1599x1000", width: 1599, height: 1000 },
+      { name: "1600x1000", width: 1600, height: 1000 },
+      { name: "1920x1080", width: 1920, height: 1080 },
+      { name: "2560x1440", width: 2560, height: 1440 },
+      { name: "3840x2160", width: 3840, height: 2160 },
+    ]) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto(`${browserPath}?preview=${previewId}`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator('[data-fixture-mode="active"]')).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
+      await expectNoDocumentOverflow(page);
+
+      const results = page.locator(".craft-browser-workspace > .crb2-results");
+      if (viewport.width < 1600) {
+        await expect(results).toBeHidden();
+        await page.screenshot({
+          path: path.join(screenshotDir, `single-detail-boundary-${viewport.name}.png`),
+          fullPage: true,
+        });
+        continue;
+      }
+
+      await expect(results).toBeVisible();
+      const geometry = await page.evaluate(() => {
+        const toolbar = document.querySelector<HTMLElement>(".crb2-toolbar")?.getBoundingClientRect();
+        const resultList = document.querySelector<HTMLElement>(".craft-browser-workspace > .crb2-results")?.getBoundingClientRect();
+        const drawer = document.querySelector<HTMLElement>(".craft-detail-drawer-region")?.getBoundingClientRect();
+        return {
+          toolbarLeft: Math.round(toolbar?.left ?? 0),
+          toolbarWidth: Math.round(toolbar?.width ?? 0),
+          toolbarBottom: Math.round(toolbar?.bottom ?? 0),
+          resultsLeft: Math.round(resultList?.left ?? 0),
+          resultsTop: Math.round(resultList?.top ?? 0),
+          drawerLeft: Math.round(drawer?.left ?? 0),
+          drawerTop: Math.round(drawer?.top ?? 0),
+          drawerWidth: Math.round(drawer?.width ?? 0),
+        };
+      });
+
+      expect(geometry.resultsLeft).toBe(geometry.toolbarLeft);
+      expect(geometry.resultsTop).toBeGreaterThanOrEqual(geometry.toolbarBottom + 8);
+      expect(geometry.drawerTop).toBeLessThanOrEqual(geometry.toolbarBottom);
+      expect(geometry.drawerLeft).toBeGreaterThan(geometry.toolbarLeft + geometry.toolbarWidth);
+      const leftShare = geometry.toolbarWidth / (geometry.toolbarWidth + geometry.drawerWidth);
+      expect(leftShare).toBeGreaterThan(0.51);
+      expect(leftShare).toBeLessThan(0.54);
+
+      await page.screenshot({
+        path: path.join(screenshotDir, `peer-detail-${viewport.name}.png`),
+        fullPage: true,
+      });
+    }
+  });
+
+  test("presents the premium drawer header and preserves every source-backed detail tab", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${browserPath}?preview=ba842720-ad32-4d53-8f56-992bacb1fc45`, { waitUntil: "domcontentloaded" });
+
+    const drawer = page.locator(".craft-detail-drawer-shell");
+    await expect(drawer).toBeVisible();
+    await expect(drawer.locator(".craft-detail-hero-artwork")).toHaveAttribute(
+      "src",
+      /behr-ballistic-gatling-s5\.webp$/,
+    );
+
+    await page.getByRole("tab", { name: "Materials" }).click();
+    const materialRow = drawer.locator(".craft-detail-material-row").first();
+    await expect(materialRow.locator(".craft-detail-material-slot")).not.toHaveText("");
+    await expect(materialRow.locator(".craft-detail-material-id strong")).not.toHaveText("");
+    await expect(materialRow.locator(".bq-target-quality")).toBeVisible();
+    await expect(materialRow.locator(".bq-target-slider-marker")).not.toHaveCount(0);
+    await expect(materialRow.locator(".craft-detail-material-required")).toContainText("Required qty");
+    await expect(materialRow.locator(".craft-detail-effect-chip").first()).toBeVisible();
+
+    await page.getByRole("tab", { name: "Overview" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-overview")).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, "crafting-drawer-overview-1920x1080.png"), fullPage: true });
+
+    await page.getByRole("tab", { name: "Statistics" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-stats")).toBeVisible();
+    await expect(drawer.locator(".craft-statistics-cards")).toBeVisible();
+
+    await page.getByRole("tab", { name: "Sources" }).click();
+    await expect(drawer.locator(".craft-detail-drawer-sources")).toBeVisible();
+    await page.screenshot({ path: path.join(screenshotDir, "crafting-drawer-sources-1920x1080.png"), fullPage: true });
+  });
+
+  test("keeps Vehicle Weapons and table columns constrained to their canonical data", async ({ page }) => {
+    await mkdir(screenshotDir, { recursive: true });
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(`${browserPath}?v=weaponGun`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".crb2-table-section").filter({ hasText: "Vehicle Weapons" })).toBeVisible();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "AD5B Ballistic Gatling" })).toBeVisible();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "Arbor MHV Mining Laser" })).toHaveCount(0);
+
+    const tableGeometry = await page.locator(".crb2-table").evaluate((table) => {
+      const headerCells = Array.from(table.querySelectorAll("thead th"));
+      const rowCells = Array.from(table.querySelectorAll("tbody tr:first-child > *"));
+      const header = headerCells.map((cell) => {
+        const rect = cell.getBoundingClientRect();
+        return { left: Math.round(rect.left), width: Math.round(rect.width) };
+      });
+      const row = rowCells.map((cell) => {
+        const rect = cell.getBoundingClientRect();
+        return { left: Math.round(rect.left), width: Math.round(rect.width) };
+      });
+      return { header, row };
+    });
+    expect(tableGeometry.header).toEqual(tableGeometry.row);
+    expect(tableGeometry.header[0].width).toBeGreaterThan(tableGeometry.header[1].width * 2);
+    expect(tableGeometry.header[4].width).toBeLessThan(tableGeometry.header[0].width);
+
+    await page.screenshot({
+      path: path.join(screenshotDir, "recipe-browser-table-filter-polish-1920x1080.png"),
+      fullPage: true,
+    });
+
+    await page.goto(`${browserPath}?v=weaponGun&search=arbor`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByText("No craftable components match the current search and filters.")).toBeVisible();
+
+    await page.goto(`${browserPath}?v=weaponGun&sz=2`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".crb2-table tbody tr").first()).toBeVisible();
+    const sizes = await page.locator(".crb2-table tbody tr > td:first-of-type").allTextContents();
+    expect(sizes).not.toHaveLength(0);
+    expect(sizes.every((size) => size.trim() === "2")).toBe(true);
+
+    await page.goto(`${browserPath}?v=weaponGun&search=greatsword`, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "Clear all" }).click();
+    await expect(page.locator(".crb2-table tbody tr").filter({ hasText: "AD5B Ballistic Gatling" })).toBeVisible();
+    expect(new URL(page.url()).search).toBe("");
+  });
+
   test("renders the permanent filter rail, stable selection, dense tables, and empty state", async ({ page }) => {
     const failures = installFailureGuards(page);
     const measurements: Array<Record<string, string | number>> = [];
@@ -132,7 +270,9 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(selectedWeaponRow).toBeVisible();
       await selectedWeaponRow.click();
       if (viewport.width >= 1600) {
-        await expect(page.locator(".craft-detail-drawer-title")).toContainText(
+        await expect(page.locator(".craft-detail-drawer-title")).toHaveText("AD5B");
+        await expect(page.locator(".craft-detail-drawer-title")).toHaveAttribute(
+          "aria-label",
           "AD5B Ballistic Gatling",
         );
       } else {
@@ -166,7 +306,7 @@ test.describe("Crafting browser and detail refactor", () => {
     }
 
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto(`${browserPath}?v=shield&search=C54`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${browserPath}?f=weapons&search=C54`, { waitUntil: "domcontentloaded" });
     const preferredSearchRow = page.locator('.crb2-table tbody tr[aria-selected="true"]');
     await expect(preferredSearchRow).toContainText("C54 SMG");
     await expect(preferredSearchRow).not.toContainText("Magazine");
@@ -227,11 +367,16 @@ test.describe("Crafting browser and detail refactor", () => {
       { name: "2560x1440", width: 2560, height: 1440 },
       { name: "3840x2160", width: 3840, height: 2160 },
       { name: "768x900", width: 768, height: 900 },
+      { name: "430x932", width: 430, height: 932 },
+      { name: "375x812", width: 375, height: 812 },
     ]) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto(detailPath, { waitUntil: "domcontentloaded" });
       await expect(page.locator(".craft-detail-stage")).toBeVisible();
       await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
+      if (viewport.width <= 430) {
+        await page.getByRole("tab", { name: "Materials" }).click();
+      }
 
       const firstSlider = page.locator(".craft-detail-material-target-input input[type='range']").first();
       await expect(firstSlider).toHaveAttribute("min", "1");
@@ -242,32 +387,64 @@ test.describe("Crafting browser and detail refactor", () => {
 
       await firstSlider.fill("723");
       await expect(page.locator(".craft-detail-material-target-input .bq-target-quality").first()).toHaveText("723");
-      await expect(page.locator(".craft-detail-material-target-input .bq-target-quality")).toHaveCount(3);
-      for (const target of await page.locator(".craft-detail-material-target-input .bq-target-quality").all()) {
-        await expect(target).toBeVisible();
-      }
+      const firstMaterialCard = page.locator(".craft-detail-material-row").first();
+      await expect(firstMaterialCard).not.toContainText("Target quality");
+      await expect(firstMaterialCard.locator(".bq-material-icon, .craft-detail-material-icon")).toHaveCount(0);
+      await expect(firstMaterialCard).toContainText("Required qty");
+      await expect(firstMaterialCard).not.toContainText(/Available Quality|Available/);
+      const sliderAlignment = await firstMaterialCard.evaluate((card) => {
+        const slider = card.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+        const bubble = card.querySelector<HTMLElement>(".bq-target-quality");
+        const geometry = card.querySelector<HTMLElement>("[data-slider-geometry='true']");
+        if (!slider || !bubble || !geometry) return null;
+        const sliderBox = slider.getBoundingClientRect();
+        const bubbleBox = bubble.getBoundingClientRect();
+        const geometryBox = geometry.getBoundingClientRect();
+        const thumbSize = Number.parseFloat(getComputedStyle(slider).getPropertyValue("--slider-thumb-size"));
+        const min = Number(slider.min);
+        const max = Number(slider.max);
+        const range = Math.max(1, max - min);
+        const positionFor = (value: number) => geometryBox.left + ((value - min) / range) * geometryBox.width;
+        return {
+          bubbleDelta: Math.abs((bubbleBox.left + bubbleBox.width / 2) - positionFor(Number(slider.value))),
+          inputStartDelta: Math.abs((sliderBox.left + thumbSize / 2) - geometryBox.left),
+          inputEndDelta: Math.abs((sliderBox.right - thumbSize / 2) - geometryBox.right),
+          markerDeltas: Array.from(card.querySelectorAll<HTMLElement>(".bq-target-slider-marker")).map((marker) => {
+            const value = Number(marker.textContent);
+            const markerBox = marker.getBoundingClientRect();
+            return Math.abs((markerBox.left + markerBox.width / 2) - positionFor(value));
+          }),
+        };
+      });
+      expect(sliderAlignment).not.toBeNull();
+      expect(sliderAlignment?.bubbleDelta).toBeLessThanOrEqual(2);
+      expect(sliderAlignment?.inputStartDelta).toBeLessThanOrEqual(1);
+      expect(sliderAlignment?.inputEndDelta).toBeLessThanOrEqual(1);
+      expect(Math.max(...(sliderAlignment?.markerDeltas ?? []))).toBeLessThanOrEqual(2);
       await expect(page.locator(".craft-detail-material-table-head")).not.toContainText("Quality");
       await expect(page.locator(".craft-detail-material-row").first()).not.toContainText("Band");
       await expect(page.locator(".craft-detail-material-id").filter({ hasText: "Hephaestanite" })).toBeVisible();
-      await expect(page.locator(".craft-detail-graph-panel")).toBeVisible();
-      await expect(page.locator(".craft-detail-graph-head")).toContainText(/chart window/i);
-      await expect(page.locator(".craft-detail-graph-x-axis")).toContainText("250m");
-      await expect(page.locator(".craft-detail-graph-readouts")).toContainText("Projectile Travel (context)");
-      const chartPlacement = await page.evaluate(() => {
-        const materials = document.querySelector(".craft-detail-material-section");
-        const chart = document.querySelector(".craft-detail-chart-section");
-        return {
-          materialBottom: materials?.getBoundingClientRect().bottom ?? 0,
-          chartTop: chart?.getBoundingClientRect().top ?? 0,
-        };
-      });
-      expect(chartPlacement.chartTop).toBeGreaterThanOrEqual(chartPlacement.materialBottom);
-      const modifierColor = await page.locator(".craft-detail-stat-modifier.craft-ok").first().evaluate((element) => ({
-        rendered: getComputedStyle(element).color,
-        token: getComputedStyle(element).getPropertyValue("--stat-beneficial").trim(),
-      }));
-      expect(modifierColor.rendered).toBe("rgb(69, 216, 157)");
-      expect(modifierColor.token.toLowerCase()).toBe("#45d89d");
+      if (viewport.width > 430) {
+        await expect(page.locator(".craft-detail-graph-panel")).toBeVisible();
+        await expect(page.locator(".craft-detail-graph-head")).toContainText(/chart window/i);
+        await expect(page.locator(".craft-detail-graph-x-axis")).toContainText("250m");
+        await expect(page.locator(".craft-detail-graph-readouts")).toContainText("Projectile Travel (context)");
+        const chartPlacement = await page.evaluate(() => {
+          const materials = document.querySelector(".craft-detail-material-section");
+          const chart = document.querySelector(".craft-detail-chart-section");
+          return {
+            materialBottom: materials?.getBoundingClientRect().bottom ?? 0,
+            chartTop: chart?.getBoundingClientRect().top ?? 0,
+          };
+        });
+        expect(chartPlacement.chartTop).toBeGreaterThanOrEqual(chartPlacement.materialBottom);
+        const modifierColor = await page.locator(".craft-detail-stat-modifier.craft-ok").first().evaluate((element) => ({
+          rendered: getComputedStyle(element).color,
+          token: getComputedStyle(element).getPropertyValue("--stat-beneficial").trim(),
+        }));
+        expect(modifierColor.rendered).toBe("rgb(69, 216, 157)");
+        expect(modifierColor.token.toLowerCase()).toBe("#45d89d");
+      }
 
       await expectNoDocumentOverflow(page);
       await page.screenshot({
@@ -275,13 +452,111 @@ test.describe("Crafting browser and detail refactor", () => {
         fullPage: true,
       });
 
-      await page.locator(".craft-detail-graph-panel").scrollIntoViewIfNeeded();
-      await page.screenshot({
-        path: path.join(screenshotDir, `crafting-detail-cq7-chart-${viewport.name}.png`),
-        fullPage: true,
-      });
+      if (viewport.width > 430) {
+        await page.locator(".craft-detail-graph-panel").scrollIntoViewIfNeeded();
+        await page.screenshot({
+          path: path.join(screenshotDir, `crafting-detail-cq7-chart-${viewport.name}.png`),
+          fullPage: true,
+        });
+      }
     }
 
+    expect(failures).toEqual([]);
+  });
+
+  test("keeps the material target bubble, thumb travel, and direct editor synchronized", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto(detailPath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".craft-detail-title")).toContainText("CQ7");
+
+    const card = page.locator(".craft-detail-material-row").first();
+    const slider = card.locator(".bq-target-quality-slider");
+    const bubble = card.getByRole("button", { name: /Edit target quality/ });
+    const geometry = card.locator("[data-slider-geometry='true']");
+    await expect.poll(() => card.locator(".bq-target-slider-marker").count()).toBeGreaterThanOrEqual(8);
+
+    await slider.fill("500");
+    await expect(bubble).toHaveText("500");
+
+    await bubble.click();
+    const editor = card.getByRole("spinbutton", { name: /Edit target quality/ });
+    await editor.fill("723");
+    await editor.press("Enter");
+    await expect(slider).toHaveValue("723");
+
+    await card.getByRole("button", { name: /Edit target quality/ }).click();
+    await editor.fill("5000");
+    await editor.press("Enter");
+    await expect(slider).toHaveValue("1000");
+
+    await slider.fill("500");
+    const bubbleBox = await card.getByRole("button", { name: /Edit target quality/ }).boundingBox();
+    const geometryBox = await geometry.boundingBox();
+    expect(bubbleBox).not.toBeNull();
+    expect(geometryBox).not.toBeNull();
+    if (bubbleBox && geometryBox) {
+      await page.mouse.move(bubbleBox.x + bubbleBox.width / 2, bubbleBox.y + bubbleBox.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(geometryBox.x + geometryBox.width, bubbleBox.y + bubbleBox.height / 2, { steps: 8 });
+      await page.mouse.up();
+    }
+    await expect(slider).toHaveValue("1000");
+    await expect(card.getByRole("spinbutton", { name: /Edit target quality/ })).toHaveCount(0);
+
+    await slider.fill("500");
+    const touchBubbleBox = await card.getByRole("button", { name: /Edit target quality/ }).boundingBox();
+    const touchGeometryBox = await geometry.boundingBox();
+    expect(touchBubbleBox).not.toBeNull();
+    expect(touchGeometryBox).not.toBeNull();
+    if (touchBubbleBox && touchGeometryBox) {
+      const touchX = touchBubbleBox.x + touchBubbleBox.width / 2;
+      const touchY = touchBubbleBox.y + touchBubbleBox.height / 2;
+      const cdp = await page.context().newCDPSession(page);
+      await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchStart",
+        touchPoints: [{ x: touchX, y: touchY }],
+      });
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ x: touchGeometryBox.x, y: touchY }],
+      });
+      await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await cdp.detach();
+    }
+    await expect(slider).toHaveValue("1");
+    await expect(card.getByRole("spinbutton", { name: /Edit target quality/ })).toHaveCount(0);
+    await expect(card).toContainText("Required qty");
+    await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
+    await expectNoDocumentOverflow(page);
+
+    for (const width of [700, 600, 500, 430, 375]) {
+      await page.setViewportSize({ width, height: 900 });
+      if (!(await card.isVisible())) {
+        await page.getByRole("tab", { name: "Materials" }).click();
+      }
+      for (const target of [1, 500, 1000]) {
+        await slider.fill(String(target));
+        const delta = await card.evaluate((element) => {
+          const currentBubble = element.querySelector<HTMLElement>(".bq-target-quality");
+          const currentSlider = element.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+          const currentGeometry = element.querySelector<HTMLElement>("[data-slider-geometry='true']");
+          if (!currentBubble || !currentSlider || !currentGeometry) return Number.POSITIVE_INFINITY;
+          const bubbleRect = currentBubble.getBoundingClientRect();
+          const geometryRect = currentGeometry.getBoundingClientRect();
+          const min = Number(currentSlider.min);
+          const max = Number(currentSlider.max);
+          const ratio = (Number(currentSlider.value) - min) / Math.max(1, max - min);
+          const expectedCenter = geometryRect.left + geometryRect.width * ratio;
+          return Math.abs(bubbleRect.left + bubbleRect.width / 2 - expectedCenter);
+        });
+        expect(delta).toBeLessThanOrEqual(2);
+      }
+      await expect(card.getByText("Required qty")).toBeVisible();
+      await expect(card.locator(".craft-detail-effect-chip").first()).toBeVisible();
+      await expectNoDocumentOverflow(page);
+    }
     expect(failures).toEqual([]);
   });
 
@@ -331,13 +606,13 @@ test.describe("Crafting browser and detail refactor", () => {
         slug: "fps-weapon-cq7",
         id: "1a85280e-7b8f-4486-a563-17cd2549d268",
         title: "CQ7",
-        groups: ["Damage Output", "Projectile", "Penetration", "Falloff", "Spread", "Handling"],
+        groups: ["Damage Output", "Firing", "Projectile", "Accuracy / Spread", "Penetration", "Thermal and Power"],
       },
       {
         slug: "ship-weapon-ad5b",
         id: "ba842720-ad32-4d53-8f56-992bacb1fc45",
         title: "AD5B",
-        groups: ["Damage Output", "Ammunition", "Projectile"],
+        groups: ["Damage Output", "Firing & Ammunition", "Ballistics", "Accuracy and Spread", "Thermal & Power", "Signature", "Durability & Repair"],
       },
       {
         slug: "shield-fr66",
@@ -382,16 +657,42 @@ test.describe("Crafting browser and detail refactor", () => {
       for (const item of itemFamilies) {
         await page.goto(`/industry/crafting/${item.id}`, { waitUntil: "domcontentloaded" });
         await expect(page.locator(".craft-detail-title")).toContainText(item.title);
-        await expect(page.locator(".detail-stat-groups--scannable")).toBeVisible();
-
-        for (const group of item.groups) {
-          await expect(page.getByRole("region", { name: group, exact: true })).toBeAttached();
+        if (viewport.width <= 900) {
+          await page.getByRole("tab", { name: "Statistics" }).click();
         }
 
-        const renderedColumns = await page.locator(".detail-stat-groups--scannable").evaluate((element) => (
+        const statisticsPanel = page.locator(".craft-statistics-cards");
+        await expect(statisticsPanel).toBeVisible();
+        await expect(page.locator(".detail-stat-groups--scannable")).toHaveCount(0);
+
+        for (const group of item.groups) {
+          await expect(page.getByRole("region", { name: `${group} end product statistics`, exact: true })).toBeAttached();
+        }
+
+        const renderedColumns = await statisticsPanel.evaluate((element) => (
           getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length
         ));
-        expect(renderedColumns).toBe(viewport.width <= 900 ? 1 : 3);
+        expect(renderedColumns).toBeGreaterThanOrEqual(1);
+        const expectedShipColumns = viewport.width <= 520 ? 1 : viewport.width <= 900 ? 2 : 3;
+        expect(renderedColumns).toBeLessThanOrEqual(item.slug === "ship-weapon-ad5b" ? expectedShipColumns : viewport.width <= 900 ? 1 : 3);
+        if (item.slug === "ship-weapon-ad5b") {
+          expect(renderedColumns).toBe(expectedShipColumns);
+          if (expectedShipColumns === 3) {
+            const positions = await statisticsPanel.locator(":scope > .craft-stat-section").evaluateAll((cards) => cards.map((card) => {
+              const bounds = card.getBoundingClientRect();
+              return { left: Math.round(bounds.left), top: Math.round(bounds.top) };
+            }));
+            expect(positions).toHaveLength(7);
+            expect(positions[3].left).toBe(positions[0].left);
+            expect(positions[3].top).toBeGreaterThan(positions[0].top);
+            expect(positions[4].left).toBe(positions[1].left);
+            expect(positions[4].top).toBeGreaterThan(positions[1].top);
+            expect(positions[5].left).toBe(positions[2].left);
+            expect(positions[5].top).toBeGreaterThan(positions[2].top);
+            expect(positions[6].left).toBe(positions[0].left);
+            expect(positions[6].top).toBeGreaterThan(positions[3].top);
+          }
+        }
 
         await page.locator(".craft-detail-summary-section").evaluate((element) => {
           element.scrollIntoView({ block: "start" });
@@ -407,7 +708,7 @@ test.describe("Crafting browser and detail refactor", () => {
     expect(failures).toEqual([]);
   });
 
-  test("lays out drawer statistics in three columns", async ({ page }) => {
+  test("uses the shared statistics cards in the wide drawer", async ({ page }) => {
     await mkdir(screenshotDir, { recursive: true });
 
     for (const viewport of [
@@ -422,15 +723,15 @@ test.describe("Crafting browser and detail refactor", () => {
       await expect(page.locator(".craft-detail-drawer-region")).toBeVisible();
       await page.getByRole("tab", { name: "Statistics" }).click();
 
-      const statColumns = page.locator(
-        ".craft-detail-drawer-stats .detail-stat-groups--scannable",
-      );
-      await expect(statColumns).toBeVisible();
-      const layout = await statColumns.evaluate((element) => ({
+      const statisticsPanel = page.locator(".craft-detail-drawer-stats .craft-statistics-cards");
+      await expect(statisticsPanel).toBeVisible();
+      await expect(page.locator(".craft-detail-drawer-stats .detail-stat-groups--scannable")).toHaveCount(0);
+      const layout = await statisticsPanel.evaluate((element) => ({
         columns: getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length,
         overflow: element.scrollWidth - element.clientWidth,
       }));
-      expect(layout.columns).toBe(3);
+      expect(layout.columns).toBeGreaterThanOrEqual(1);
+      expect(layout.columns).toBeLessThanOrEqual(3);
       expect(layout.overflow).toBeLessThanOrEqual(1);
 
       await page.screenshot({

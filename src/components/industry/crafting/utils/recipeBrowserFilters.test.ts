@@ -55,6 +55,20 @@ test("category choices form one OR family across vehicle and FPS", () => {
   assert.equal(matchesRecipeBrowserCategory(record("vehicle", "cooler"), vehicle, fps), false);
 });
 
+test("an empty query returns the complete mixed inventory without an implicit category", () => {
+  const records = [
+    record("vehicle", "weaponGun"),
+    record("vehicle", "shield"),
+    record("fps", "weapons"),
+    record("fps", "armor"),
+  ];
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords(records, new URLSearchParams()).map((item) => item.id).sort(),
+    records.map((item) => item.id).sort(),
+  );
+});
+
 test("approved grouped category mappings do not invent utility data", () => {
   assert.equal(matchesRecipeBrowserCategory(
     record("vehicle", "weaponMining"),
@@ -88,17 +102,72 @@ test("different filter families combine with AND", () => {
   assert.deepEqual(filterRecipeBrowserRecords(records, params).map((item) => item.id), ["vehicle:shield"]);
 });
 
-test("manual text search overrides filters while retaining filter-match truth", () => {
+test("text search intersects applied filters", () => {
   const shield = { ...record("vehicle", "shield"), searchText: "paladin shield" };
   const weapon = { ...record("fps", "weapons"), searchText: "paladin fps weapon" };
   const params = new URLSearchParams("v=shield&sz=1&search=paladin");
 
   assert.deepEqual(
     filterRecipeBrowserRecords([shield, weapon], params).map((item) => item.id).sort(),
-    ["fps:weapons", "vehicle:shield"],
+    ["vehicle:shield"],
   );
   assert.equal(matchesRecipeBrowserAppliedFilters(shield, params), true);
   assert.equal(matchesRecipeBrowserAppliedFilters(weapon, params), false);
+});
+
+test("multiple values within a filter group use OR while groups still use AND", () => {
+  const shield = { ...record("vehicle", "shield"), id: "shield-a", size: 1 };
+  const cooler = { ...record("vehicle", "cooler"), id: "cooler-a", size: 1 };
+  const weapon = { ...record("vehicle", "weaponGun"), id: "weapon-a", size: 1 };
+  const wrongSize = { ...record("vehicle", "shield"), id: "shield-b", size: 2 };
+  const params = new URLSearchParams("v=shield,cooler&sz=1");
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords([shield, cooler, weapon, wrongSize], params).map((item) => item.id).sort(),
+    ["cooler-a", "shield-a"],
+  );
+});
+
+test("unknown URL filter values are ignored instead of constraining results", () => {
+  const records = [record("vehicle", "weaponGun"), record("fps", "weapons")];
+  const params = new URLSearchParams(
+    "v=not-a-category&f=also-invalid&sz=99&gr=Z&cl=pirate&mt=unknown-material",
+  );
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords(records, params).map((item) => item.id).sort(),
+    records.map((item) => item.id).sort(),
+  );
+});
+
+test("valid and invalid URL values canonicalize to the valid explicit selection", () => {
+  const shield = record("vehicle", "shield");
+  const weapon = record("vehicle", "weaponGun");
+  const params = new URLSearchParams("v=ship-weapons,invalid&sz=1,99");
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords([shield, weapon], params).map((item) => item.id),
+    ["vehicle:weaponGun"],
+  );
+});
+
+test("Vehicle Weapons uses the canonical vehicle weapon type and excludes mining lasers", () => {
+  const vehicleWeapon = {
+    ...record("vehicle", "WeaponGun"),
+    id: "ship-weapon",
+    searchText: "greatsword cannon",
+  };
+  const miningLaser = {
+    ...record("vehicle", "weaponMining"),
+    id: "mining-laser",
+    searchText: "greatsword mining laser",
+  };
+  const params = new URLSearchParams("v=vehicle-weapons&search=greatsword");
+
+  assert.deepEqual(
+    filterRecipeBrowserRecords([vehicleWeapon, miningLaser], params).map((item) => item.id),
+    ["ship-weapon"],
+  );
 });
 
 test("an FPS weapon is the preferred search target over its magazine", () => {

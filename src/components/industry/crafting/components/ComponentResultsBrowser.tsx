@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -15,6 +16,7 @@ import {
   pickPreferredRecipeBrowserSearchRecord,
 } from "../utils/recipeBrowserFilters";
 import {
+  getRecipeBrowserColumnWidth,
   getRecipeBrowserFamily,
   type RecipeBrowserColumn,
   type RecipeBrowserFamily,
@@ -79,13 +81,11 @@ function RecipeResultsTable({
   records,
   selectedId,
   onSelect,
-  onOpen,
 }: {
   family: RecipeBrowserFamily;
   records: ComponentCardIndexRecord[];
   selectedId: string;
   onSelect: (record: ComponentCardIndexRecord) => void;
-  onOpen: (record: ComponentCardIndexRecord) => void;
 }) {
   type SortState = { key: string; direction: "ascending" | "descending" };
   const [sort, setSort] = useState<SortState | null>(null);
@@ -126,7 +126,6 @@ function RecipeResultsTable({
       return compared * direction;
     });
   }, [family.columns, records, sort]);
-
   const toggleSort = (key: string) => {
     setSort((current) => {
       if (current?.key === key) {
@@ -159,7 +158,7 @@ function RecipeResultsTable({
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      onOpen(record);
+      onSelect(record);
     } else if (event.key === " ") {
       event.preventDefault();
       onSelect(record);
@@ -174,6 +173,12 @@ function RecipeResultsTable({
       </header>
       <div className="crb2-table-scroll">
         <table className="crb2-table">
+          <colgroup>
+            <col className="crb2-table-column--component" />
+            {family.columns.map((column) => (
+              <col key={column.key} style={{ width: getRecipeBrowserColumnWidth(column) }} />
+            ))}
+          </colgroup>
           <thead>
             <tr>
               <th scope="col" aria-sort={sort?.key === "component" ? sort.direction : "none"}>
@@ -188,7 +193,6 @@ function RecipeResultsTable({
                   {sortHeader(column.key, column.label)}
                 </th>
               ))}
-              <th scope="col"><span className="sr-only">Open recipe</span></th>
             </tr>
           </thead>
           <tbody>
@@ -202,7 +206,7 @@ function RecipeResultsTable({
                   tabIndex={0}
                   aria-selected={selected}
                   onClick={() => onSelect(record)}
-                  onDoubleClick={() => onOpen(record)}
+                  onDoubleClick={() => onSelect(record)}
                   onKeyDown={(event) => onRowKeyboard(event, record)}
                 >
                   <th scope="row">
@@ -211,24 +215,50 @@ function RecipeResultsTable({
                   {family.columns.map((column) => (
                     <td key={column.key}>{column.value(record)}</td>
                   ))}
-                  <td>
-                    <button
-                      type="button"
-                      className="crb2-row-open"
-                      aria-label={`Open ${record.name}`}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onOpen(record);
-                      }}
-                    >
-                      Open
-                    </button>
-                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+      </div>
+      <div className="crb2-mobile-results">
+        <div className="crb2-mobile-results-head">
+          <span>{records.length} components</span>
+          <button type="button" onClick={() => toggleSort("component")}>
+            Sort: Name <span aria-hidden="true">{sort?.key === "component" && sort.direction === "descending" ? "↑" : "↓"}</span>
+          </button>
+        </div>
+        <div className="crb2-mobile-card-list">
+          {sortedRecords.map((record) => {
+            const iconUrl = getComponentCategoryIconUrl(record);
+            const classification = [
+              record.size !== null ? `S${record.size}` : null,
+              record.grade ? `Grade ${record.grade}` : null,
+              record.class,
+            ]
+              .filter(Boolean)
+              .join(" · ");
+            return (
+              <button
+                key={record.id}
+                type="button"
+                className="crb2-mobile-card crafting-catalog-card"
+                data-crafting-record-id={record.id}
+                onClick={() => onSelect(record)}
+              >
+                <span className="crb2-mobile-card-art crafting-component-art">
+                  {iconUrl ? <img src={iconUrl} alt="" aria-hidden="true" /> : <span aria-hidden="true" />}
+                </span>
+                <span className="crb2-mobile-card-copy crafting-identity-copy">
+                  <strong className="crafting-item-name">{record.name}</strong>
+                  <span className="crb2-mobile-card-type crafting-family-label">{record.typeLabel}</span>
+                  {classification ? <small className="crafting-meta-line">{classification}</small> : null}
+                </span>
+                <span className="crb2-mobile-card-chevron" aria-hidden="true">›</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -240,6 +270,7 @@ export default function ComponentResultsBrowser({
   error,
   previewId,
   onPreviewRecord,
+  autoSelectFirstRecord = true,
 }: {
   records: ComponentCardIndexRecord[];
   loading: boolean;
@@ -247,9 +278,8 @@ export default function ComponentResultsBrowser({
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
   previewId?: string | null;
   onPreviewRecord?: (record: ComponentCardIndexRecord) => void;
+  autoSelectFirstRecord?: boolean;
 }) {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const savedOnly = searchParams.get("bk") === "1";
   const search = getRecipeBrowserSearchParam(searchParams);
@@ -358,8 +388,10 @@ export default function ComponentResultsBrowser({
     && preferredRecord?.kind === "fps"
     && preferredRecord.type === "weapons",
   );
-  const selectedRecord = !selectedCandidate || shouldPreferWeapon
-    ? preferredRecord ?? pageRecords[0]
+  const selectedRecord = autoSelectFirstRecord
+    ? (!selectedCandidate || shouldPreferWeapon
+      ? preferredRecord ?? pageRecords[0]
+      : selectedCandidate)
     : selectedCandidate;
 
   const tableGroups = useMemo(() => {
@@ -373,24 +405,9 @@ export default function ComponentResultsBrowser({
     return [...groups.values()];
   }, [pageRecords]);
 
-  const openRecord = useCallback((record: ComponentCardIndexRecord) => {
-    const nextSearch = new URLSearchParams(location.search);
-    nextSearch.delete("preview");
-    navigate({
-      pathname: `/industry/crafting/${record.id}`,
-      search: nextSearch.toString() ? `?${nextSearch.toString()}` : "",
-    }, {
-      state: {
-        from: `${location.pathname}${nextSearch.toString() ? `?${nextSearch.toString()}` : ""}`,
-      },
-    });
-  }, [location.pathname, location.search, navigate]);
-
   const selectRecord = useCallback((record: ComponentCardIndexRecord) => {
     setSelectedId(record.id);
-    if (window.matchMedia("(min-width: 1600px)").matches) {
-      onPreviewRecord?.(record);
-    }
+    onPreviewRecord?.(record);
   }, [onPreviewRecord]);
 
   if (loading) {
@@ -432,7 +449,6 @@ export default function ComponentResultsBrowser({
             records={familyRecords}
             selectedId={selectedRecord?.id ?? ""}
             onSelect={selectRecord}
-            onOpen={openRecord}
           />
         ))}
       </div>

@@ -112,6 +112,10 @@ export function getComponentCategoryIconUrl(record: ComponentCardIndexRecord): s
   const componentImageUrl = resolveComponentImageUrl({
     entityClass: record.entityClass,
     componentId: record.id,
+    componentName: record.name,
+    componentType: record.type,
+    size: record.size,
+    className: record.class,
   });
   if (componentImageUrl) return componentImageUrl;
 

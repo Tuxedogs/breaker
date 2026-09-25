@@ -1,218 +1,7 @@
-import { useMemo, useState } from "react";
-import { toCraftStatDisplayLabel } from "../../lib/crafting/craftingDetailStats";
+import { useState } from "react";
 import type { BuildQueueProductQualitySummary } from "../../lib/logistics/buildQueueCraftStats";
-import type {
-  CraftStatComparisonColumnView,
-  CraftStatComparisonRowView,
-  CraftStatViewModel,
-} from "../../lib/crafting/craftStatViewModel";
-import {
-  CompactCraftStatRow,
-  CraftStatSection,
-} from "../shared/CraftStatisticsPresentation";
-import { getStatGroupIconSrc } from "./componentStatGroupIcons";
-
-type ConsolidatedStat =
-  | { kind: "comparison"; row: CraftStatComparisonRowView }
-  | { kind: "static"; label: string; value: string };
-
-type ConsolidatedStatGroup = { title: string; stats: ConsolidatedStat[] };
-
-const WEAPON_DAMAGE_CHANNEL_KEYS = new Set([
-  "ballisticdamage",
-  "physicaldamage",
-  "energydamage",
-  "distortiondamage",
-  "thermaldamage",
-  "biochemicaldamage",
-  "stundamage",
-]);
-
-function normalizeStatKey(value: string): string {
-  const normalized = value.toLowerCase().replace(/[^a-z0-9]/g, "");
-  if (normalized === "componenthp") return "health";
-  if (normalized.startsWith("weaponrecoil")) return normalized.slice("weapon".length);
-  return normalized;
-}
-
-function normalizeGroupKey(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
-function formatStatLabel(value: string): string {
-  return toCraftStatDisplayLabel(value)
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .replace(/\s*\/\s*/g, " and ");
-}
-
-function getStatGroupIcon(title: string) {
-  const src = getStatGroupIconSrc(normalizeGroupKey(title));
-  if (!src) return undefined;
-  return <img className="bq-stat-group-icon" src={src} alt="" />;
-}
-
-function formatCompactStatLabel(value: string): { label: string; metadata?: string } {
-  const formatted = formatStatLabel(value);
-  const derivedMatch = formatted.match(/^(.*?)(\s*\(derived\))$/i);
-  if (!derivedMatch) return { label: formatted };
-  return { label: derivedMatch[1].trim(), metadata: derivedMatch[2].trim() };
-}
-
-function prioritizeAlphaDamage(stats: ConsolidatedStat[]): ConsolidatedStat[] {
-  const alphaIndex = stats.findIndex((stat) => (
-    normalizeStatKey(stat.kind === "comparison" ? stat.row.label : stat.label) === "alphadamage"
-  ));
-  if (alphaIndex <= 0) return stats;
-  return [
-    stats[alphaIndex],
-    ...stats.slice(0, alphaIndex),
-    ...stats.slice(alphaIndex + 1),
-  ];
-}
-
-function buildConsolidatedGroups(model: CraftStatViewModel): ConsolidatedStatGroup[] {
-  const comparisonByGroup = new Map(
-    model.comparisonGroups.map((group) => [normalizeGroupKey(group.title), group] as const),
-  );
-  const allComparisonKeys = new Set(
-    model.comparisonGroups.flatMap((group) => group.rows.map((row) => normalizeStatKey(row.label))),
-  );
-  const usedComparisonGroups = new Set<string>();
-  const groups: ConsolidatedStatGroup[] = [];
-
-  for (const overviewGroup of model.overviewGroups) {
-    const groupKey = normalizeGroupKey(overviewGroup.title);
-    const comparisonGroup = comparisonByGroup.get(groupKey);
-    const comparisonKeys = new Set(
-      comparisonGroup?.rows.map((row) => normalizeStatKey(row.label)) ?? [],
-    );
-    const hasAlphaDamage = comparisonKeys.has("alphadamage")
-      || overviewGroup.stats.some((stat) => normalizeStatKey(stat.label) === "alphadamage");
-    const stats: ConsolidatedStat[] = overviewGroup.stats
-      .filter((stat) => {
-        const statKey = normalizeStatKey(stat.label);
-        return !allComparisonKeys.has(statKey)
-          && !(hasAlphaDamage && WEAPON_DAMAGE_CHANNEL_KEYS.has(statKey));
-      })
-      .map((stat) => ({ kind: "static", label: stat.label, value: stat.value }));
-
-    if (comparisonGroup) {
-      usedComparisonGroups.add(groupKey);
-      stats.push(...comparisonGroup.rows.map((row) => ({ kind: "comparison" as const, row })));
-    }
-
-    if (stats.length > 0) {
-      groups.push({ title: overviewGroup.title, stats: prioritizeAlphaDamage(stats) });
-    }
-  }
-
-  for (const comparisonGroup of model.comparisonGroups) {
-    const groupKey = normalizeGroupKey(comparisonGroup.title);
-    if (usedComparisonGroups.has(groupKey)) continue;
-    groups.push({
-      title: comparisonGroup.title,
-      stats: prioritizeAlphaDamage(
-        comparisonGroup.rows.map((row) => ({ kind: "comparison", row })),
-      ),
-    });
-  }
-
-  return groups;
-}
-
-function hasNonZeroDelta(value: string | undefined): boolean {
-  if (!value) return false;
-  const parsed = Number.parseFloat(value.replace(/[^0-9+.-]/g, ""));
-  return Number.isFinite(parsed) && Math.abs(parsed) > 0.0001;
-}
-
-function columnDiffersFromBase(column: CraftStatComparisonColumnView, baseValue: string): boolean {
-  if (column.state !== "ready") return false;
-  return hasNonZeroDelta(column.percentDelta)
-    || hasNonZeroDelta(column.absoluteDelta)
-    || (column.percentDelta === undefined && column.absoluteDelta === undefined && column.value !== baseValue);
-}
-
-function comparisonIsModified(row: CraftStatComparisonRowView): boolean {
-  return columnDiffersFromBase(row.target, row.baseValue)
-    || columnDiffersFromBase(row.allocation, row.baseValue);
-}
-
-function getEndProductColumn(row: CraftStatComparisonRowView): CraftStatComparisonColumnView | null {
-  if (row.allocation.state === "ready") return row.allocation;
-  if (row.target.state === "ready") return row.target;
-  return null;
-}
-
-function EndProductStatGroup({ group }: { group: ConsolidatedStatGroup }) {
-  const visibleStats = group.stats.filter((stat) => (
-    stat.kind === "static"
-    || stat.row.baseValue !== "-"
-    || comparisonIsModified(stat.row)
-  ));
-  if (visibleStats.length === 0) return null;
-  return (
-    <CraftStatSection
-      title={formatStatLabel(group.title)}
-      ariaLabel={`${formatStatLabel(group.title)} end product statistics`}
-      variant="compact"
-      icon={getStatGroupIcon(group.title)}
-    >
-      {visibleStats.map((stat) => {
-        if (stat.kind === "static") {
-          const displayLabel = formatCompactStatLabel(stat.label);
-          return (
-            <CompactCraftStatRow
-              key={`${group.title}:${stat.label}`}
-              label={displayLabel.label}
-              labelMetadata={displayLabel.metadata}
-              value={stat.value}
-            />
-          );
-        }
-        const endProduct = getEndProductColumn(stat.row);
-        const isModified = endProduct
-          ? columnDiffersFromBase(endProduct, stat.row.baseValue)
-          : false;
-        const displayLabel = formatCompactStatLabel(stat.row.label);
-        return (
-          <CompactCraftStatRow
-            key={stat.row.statId}
-            label={displayLabel.label}
-            labelMetadata={displayLabel.metadata}
-            value={isModified ? endProduct?.value ?? stat.row.baseValue : stat.row.baseValue}
-            baseValue={isModified ? stat.row.baseValue : undefined}
-            delta={isModified ? endProduct?.absoluteDelta ?? endProduct?.percentDelta : undefined}
-            unit={stat.row.unit}
-            valueClassName={isModified ? endProduct?.impactClass : undefined}
-          />
-        );
-      })}
-    </CraftStatSection>
-  );
-}
-
-const ENGINEERING_GROUP_KEYS = new Set([
-  "thermalandpower",
-  "thermalpower",
-  "powerandthermal",
-  "powerthermal",
-  "signatureanddetection",
-  "signaturedetection",
-  "signatures",
-  "durabilityandphysical",
-  "durabilityphysical",
-  "repair",
-  "fireactions",
-]);
-
-function getAllocationModifiedRows(groups: ConsolidatedStatGroup[]) {
-  return groups.flatMap((group) => group.stats.flatMap((stat) => (
-    stat.kind === "comparison" && columnDiffersFromBase(stat.row.allocation, stat.row.baseValue)
-      ? [stat.row]
-      : []
-  )));
-}
+import type { CraftStatViewModel } from "../../lib/crafting/craftStatViewModel";
+import { CraftStatisticsCards } from "../shared/CraftStatisticsCards";
 
 function formatProductQuality(value: number | null | undefined): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return "—";
@@ -237,41 +26,11 @@ export function BuildQueueCraftTargetQualityPanel({ productQuality }: { productQ
   );
 }
 
-export function BuildQueueCraftHeaderSummaryPanel({
-  model,
-  productQuality,
-  materialsLabel,
-  allocationPercentage,
-}: {
-  model: CraftStatViewModel;
-  productQuality: BuildQueueProductQualitySummary;
-  materialsLabel: string;
-  allocationPercentage: number;
-}) {
-  const modifiedCount = model.status === "ready"
-    ? getAllocationModifiedRows(buildConsolidatedGroups(model)).length
-    : 0;
-  return (
-    <div className="bq-selected-summary-strip" aria-label="Selected craft summary">
-      <span><small>Materials</small><strong>{materialsLabel}</strong></span>
-      <span><small>Allocated</small><strong>{Math.max(0, Math.min(100, Math.round(allocationPercentage)))}<span className="bq-selected-summary-unit">%</span></strong></span>
-      <span><small>Predicted Quality</small><strong>{formatProductQuality(productQuality.predicted?.averageBand)}</strong></span>
-      <span><small>Modified Stats</small><strong>{modifiedCount}</strong></span>
-    </div>
-  );
-}
-
 export function BuildQueueCraftOutcomePanel({
-  model,
   productQuality,
 }: {
-  model: CraftStatViewModel;
   productQuality: BuildQueueProductQualitySummary;
 }) {
-  const modifiedRows = model.status === "ready"
-    ? getAllocationModifiedRows(buildConsolidatedGroups(model))
-    : [];
-  const emptyIconSrc = getStatGroupIconSrc("output");
   return (
     <section className="bq-craft-outcome bq-workspace-card" aria-label="Craft outcome">
       <header className="bq-craft-outcome-header">
@@ -290,44 +49,6 @@ export function BuildQueueCraftOutcomePanel({
           <small>Difference</small>
           <strong>{getQualityDifference(productQuality)}</strong>
         </span>
-      </div>
-      <div className="bq-craft-outcome-stats">
-        <div className="bq-craft-outcome-stats-head">
-          <h4>Stat Changes</h4>
-          <span>{modifiedRows.length} modified</span>
-        </div>
-        {model.status === "loading" ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="loading">Loading affected statistics…</p>
-        ) : model.status !== "ready" ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unavailable">Affected statistics unavailable.</p>
-        ) : modifiedRows.length === 0 && !productQuality.predicted ? (
-          <div className="bq-craft-outcome-empty bq-craft-outcome-empty--centered" data-bq-outcome-state="unallocated">
-            {emptyIconSrc ? (
-              <img className="bq-craft-outcome-empty-icon" src={emptyIconSrc} alt="" />
-            ) : null}
-            <strong>No materials allocated</strong>
-            <span>Reserve material to preview the resulting quality and modified statistics.</span>
-          </div>
-        ) : modifiedRows.length === 0 ? (
-          <p className="bq-craft-outcome-empty" data-bq-outcome-state="unallocated">No modified statistics for the current allocation.</p>
-        ) : (
-          <div className="bq-craft-outcome-stat-list" role="list">
-            {modifiedRows.slice(0, 4).map((row) => (
-              <CompactCraftStatRow
-                key={row.statId}
-                label={formatStatLabel(row.label)}
-                value={row.allocation.value}
-                baseValue={row.baseValue}
-                delta={row.allocation.percentDelta ?? row.allocation.absoluteDelta}
-                unit={row.unit}
-                valueClassName={row.allocation.impactClass}
-              />
-            ))}
-            {modifiedRows.length > 4 ? (
-              <p className="bq-craft-outcome-more">+ {modifiedRows.length - 4} more shown inline below</p>
-            ) : null}
-          </div>
-        )}
       </div>
     </section>
   );
@@ -367,16 +88,6 @@ export function BuildQueueCraftIdentityPanel({ model }: { model: CraftStatViewMo
 
 export function BuildQueueCraftStatisticsPanel({ model, selectionId = model.title, hasError = false }: { model: CraftStatViewModel; selectionId?: string; hasError?: boolean }) {
   const [activeView, setActiveView] = useState<"performance" | "engineering">("performance");
-  const consolidatedGroups = useMemo(
-    () => model.status === "ready" ? buildConsolidatedGroups(model) : [],
-    [model],
-  );
-  const visibleGroups = consolidatedGroups.filter((group) => (
-    activeView === "engineering"
-      ? ENGINEERING_GROUP_KEYS.has(normalizeGroupKey(group.title))
-      : !ENGINEERING_GROUP_KEYS.has(normalizeGroupKey(group.title))
-  ));
-
   const hasStatistics = model.comparisonGroups.length > 0 || model.overviewGroups.length > 0;
   const phase = model.status === "loading" ? "loading" : model.status !== "ready" ? (hasError ? "error" : "unavailable") : hasStatistics ? "ready" : "empty";
 
@@ -402,10 +113,7 @@ export function BuildQueueCraftStatisticsPanel({ model, selectionId = model.titl
         </div>
       </header>
       <div key={`${selectionId}:${phase}:${activeView}`} className="bq-component-statistics-body bq-component-statistics-content">
-        {phase === "loading" ? <div className="bq-stat-loading-shell" aria-label="Loading component statistics"><span /><span /><span /></div>
-          : phase === "error" ? <p className="bq-stats-breakdown-empty" role="alert">{model.unavailableReason ?? "Component statistics could not be loaded."}</p>
-          : phase !== "ready" ? <p className="bq-stats-breakdown-empty">{phase === "empty" ? `No ${activeView} statistics are available for this component.` : model.unavailableReason ?? "Component statistics unavailable"}</p>
-          : <div className="bq-stat-unmodified-column" aria-label={`${activeView} end product statistics`}>{visibleGroups.length > 0 ? visibleGroups.map((group) => <EndProductStatGroup key={group.title} group={group} />) : <p className="bq-stats-breakdown-empty">No {activeView} statistics are available for this component.</p>}</div>}
+        <CraftStatisticsCards model={model} view={activeView} hasError={hasError} className="bq-stat-unmodified-column" />
       </div>
     </section>
   );

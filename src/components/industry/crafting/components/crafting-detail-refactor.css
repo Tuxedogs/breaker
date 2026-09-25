@@ -60,8 +60,6 @@
 }
 
 .craft-detail-shell .craft-detail-meta,
-.craft-detail-shell .craft-detail-material-slot,
-.craft-detail-shell .craft-detail-material-table-head,
 .craft-detail-shell .craft-detail-graph-readouts span span {
   font-size: var(--recipe-text-kicker) !important;
 }
@@ -78,7 +76,6 @@
 }
 
 .craft-detail-shell .craft-detail-header-facts > span > span,
-.craft-detail-shell .craft-summary-section-label,
 .craft-detail-shell .stat-group-title,
 .craft-detail-shell .stat-subcluster-title {
   color: var(--void-text-muted);
@@ -98,25 +95,10 @@
   padding: var(--app-card-padding);
 }
 
-.craft-detail-shell .craft-detail-material-table,
-.craft-detail-shell .craft-detail-effects-list,
 .craft-detail-shell .craft-detail-graph-plot {
   background: var(--ops-surface-deep);
   border-color: var(--ops-border-soft);
   border-radius: var(--ops-radius-nested);
-}
-
-.craft-detail-shell .craft-detail-material-table-head {
-  background: var(--ops-header-band);
-  border-color: var(--ops-border-soft);
-}
-
-.craft-detail-shell .craft-detail-material-row,
-.craft-detail-shell .craft-detail-effect-row,
-.craft-detail-shell .craft-detail-graph-readouts > span {
-  background: var(--ops-surface-row);
-  border-color: var(--ops-border-soft);
-  border-radius: 0;
 }
 
 .craft-detail-shell .craft-detail-sources-section .craft-mission-source:nth-child(odd) {
@@ -133,32 +115,29 @@
   background: var(--craft-surface-hover, var(--ops-surface-hover));
 }
 
-.craft-detail-shell .craft-detail-material-row:nth-child(even),
-.craft-detail-shell .craft-detail-effect-row:nth-child(even) {
-  background: var(--ops-surface-row);
-}
-
-.craft-detail-shell .craft-detail-material-row:hover,
-.craft-detail-shell .craft-detail-material-row:nth-child(even):hover {
-  background: var(--ops-surface-hover);
-}
-
 
 
 .craft-detail-shell .craft-detail-effect-total {
   font-size: var(--recipe-text-stat);
 }
 
-.craft-detail-shell .craft-detail-effect-delta,
 .craft-detail-shell .craft-detail-graph-metrics strong,
 .craft-detail-shell .craft-detail-graph-readouts strong {
   font-size: var(--recipe-text-meta);
 }
 
-.craft-detail-shell .craft-detail-effect-chip {
-  background: var(--ops-surface-deep);
-  border-color: var(--ops-border-soft);
-  border-radius: var(--ops-radius-nested);
+.craft-detail-shell .craft-detail-effect-delta {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-default);
+  letter-spacing: var(--tracking-default);
+}
+
+.craft-detail-shell .craft-detail-effect-stat {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-14);
+  letter-spacing: var(--tracking-default);
 }
 
 .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable {
@@ -337,92 +316,31 @@
   border-radius: var(--ops-radius-nested);
 }
 
-.craft-detail-material-target-input,
-.craft-detail-material-target-input .bq-target-editor--slider {
-  display: contents;
-}
-
-.craft-detail-material-target-input .bq-target-editor--slider {
-  width: 100%;
-  min-height: 48px;
-  gap: 3px;
-}
-
-.craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
-  justify-self: start;
-  width: auto;
-  min-height: 22px;
-  padding-inline: 7px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-}
-
-.craft-detail-material-target-input .bq-target-slider-shell {
-  width: 100%;
-  min-height: 25px;
-  padding-bottom: 28px;
-}
-
-.craft-detail-material-target-input .bq-target-quality-slider {
-  width: calc(100% - 14px);
-  margin-inline: 7px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-markers {
-  inset: 0 7px 28px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker {
-  height: 9px;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker span {
-  top: -14px;
-  font-size: 0.75rem;
-  transform: translateX(-50%);
-  transform-origin: top center;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker span {
-  display: none;
-}
-
-.craft-detail-material-target-input .bq-target-slider-marker:first-child span,
-.craft-detail-material-target-input .bq-target-slider-marker:nth-child(4) span,
-.craft-detail-material-target-input .bq-target-slider-marker:last-child span {
-  display: block;
-}
-
-.craft-detail-material-row {
-  min-height: 70px;
-}
-
-.craft-detail-shell .craft-detail-material-id {
+.craft-detail-sources-section .craft-mission-source-meta {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  align-items: center;
-  gap: 9px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 7px;
+  white-space: normal;
 }
 
-.craft-detail-shell .craft-detail-material-copy {
+.craft-detail-sources-section .craft-mission-source-meta span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.craft-mission-briefing-modal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: rgba(1, 8, 14, .72); }
+.craft-mission-briefing-card { position: relative; width: min(540px, 100%); padding: 20px; border: 1px solid var(--craft-border-default); border-radius: 8px; background: var(--craft-surface-panel); color: var(--void-text-main); }
+.craft-mission-briefing-card h3 { margin: 0 0 14px; }
+.craft-mission-briefing-card dl { display: grid; grid-template-columns: minmax(130px, .7fr) minmax(0, 1.3fr); gap: 10px 16px; margin: 18px 0 0; }
+.craft-mission-briefing-card dt { color: var(--void-text-muted); font-size: .72rem; text-transform: uppercase; }
+.craft-mission-briefing-card dd { margin: 0; }
+.craft-mission-source-link { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+
+.craft-detail-material-copy {
   display: grid;
   gap: 3px;
   min-width: 0;
-}
-
-.craft-detail-shell .craft-detail-material-icon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
-  border-radius: var(--ops-radius-nested);
-  background: var(--craft-surface-raised, var(--ops-surface-deep));
-}
-
-.craft-detail-shell .craft-detail-material-icon svg {
-  width: 28px;
-  height: 28px;
 }
 
 .craft-detail-material-target,
@@ -602,10 +520,6 @@
 }
 
 @media (max-width: 900px) {
-  .craft-detail-material-row {
-    min-height: 0;
-  }
-
   .craft-detail-graph-panel {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(176px, 1fr) auto auto;
@@ -625,57 +539,6 @@
     grid-template-columns: 1fr;
   }
 
-  .craft-detail-shell .craft-detail-material-table-head {
-    display: none;
-  }
-
-  .craft-detail-shell .craft-detail-material-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "material required"
-      "target target"
-      "input input"
-      "effects effects";
-    gap: 9px 12px;
-    padding: 11px;
-  }
-
-  .craft-detail-shell .craft-detail-material-id {
-    grid-area: material;
-  }
-
-  .craft-detail-shell .craft-detail-material-required {
-    grid-area: required;
-  }
-
-  .craft-detail-shell .craft-detail-material-target,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-quality {
-    grid-area: target;
-  }
-
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-editor--stacked > .bq-target-quality {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .craft-detail-shell .craft-detail-material-input,
-  .craft-detail-shell .craft-detail-material-target-input .bq-target-slider-shell {
-    grid-area: input;
-  }
-
-  .craft-detail-shell .craft-detail-material-effects {
-    grid-area: effects;
-    overflow: visible;
-    flex-wrap: wrap;
-  }
-
-  .craft-detail-shell .craft-detail-effect-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .craft-detail-shell .craft-detail-effect-sources {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (min-width: 3200px) and (min-height: 1800px) {
@@ -708,16 +571,6 @@
     padding: 18px;
   }
 
-  .craft-detail-shell .craft-detail-material-row {
-    min-height: 96px;
-    padding: 12px 14px;
-  }
-
-  .craft-detail-shell .craft-detail-material-table-head {
-    min-height: 42px;
-    padding: 10px 14px;
-  }
-
   .craft-detail-shell .craft-detail-graph-panel {
     grid-template-rows: auto minmax(260px, 1fr) auto;
     max-height: 460px;
@@ -727,9 +580,6 @@
     min-height: 260px;
   }
 
-  .craft-detail-material-target-input .bq-target-slider-marker span {
-    display: block;
-  }
 }
 
 /* Hybrid browser drawer. This is a purpose-built compact detail presentation. */
@@ -770,7 +620,11 @@
   box-sizing: border-box;
 }
 
-.craft-detail-drawer-icon-wrap {
+.craft-detail-drawer-mobile-back {
+  display: none;
+}
+
+.craft-detail-hero-art-stage {
   display: grid;
   width: 72px;
   height: 72px;
@@ -780,11 +634,12 @@
   background: var(--craft-surface-deep);
 }
 
-.craft-detail-drawer-icon-wrap .craft-detail-hero-icon {
+.craft-detail-hero-art-stage .craft-detail-hero-icon {
   width: 60px;
   height: 60px;
   object-fit: contain;
 }
+
 
 .craft-detail-drawer-identity {
   min-width: 0;
@@ -794,13 +649,18 @@
   margin: 3px 0 7px;
   overflow: hidden;
   color: var(--void-text-main);
-  font-size: clamp(1.05rem, 1.2vw, 1.42rem);
-  font-weight: 800;
-  letter-spacing: 0.025em;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-default);
   line-height: 1.08;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.craft-detail-drawer-mobile-title {
+  display: none;
 }
 
 .craft-detail-drawer-facts {
@@ -919,6 +779,10 @@
   background: var(--craft-surface-panel);
   color: var(--craft-highlight-focus);
   box-shadow: inset 0 2px 0 var(--craft-highlight-focus-soft);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
 }
 
 .craft-detail-drawer-tabs button.is-active::after {
@@ -930,8 +794,6 @@
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 14px;
-  background: var(--craft-surface-panel);
   scrollbar-gutter: stable;
 }
 
@@ -943,6 +805,12 @@
 
 .craft-detail-drawer-stats {
   min-width: 0;
+  padding: 8px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.craft-detail-drawer-sources {
+  min-width: 0;
 }
 
 .craft-detail-drawer-shell .craft-detail-drawer-stats .craft-detail-stat-panel .detail-stat-groups--scannable,
@@ -951,11 +819,11 @@
   width: 100%;
 }
 
-.craft-detail-drawer-shell .craft-detail-crafting-section,
-.craft-detail-drawer-shell .craft-detail-material-section,
-.craft-detail-drawer-shell .craft-detail-effects-panel,
-.craft-detail-drawer-shell .craft-detail-summary-section,
-.craft-detail-drawer-shell .craft-detail-sources-section {
+.craft-detail-crafting-section,
+.craft-detail-material-section,
+.craft-detail-effects-panel,
+.craft-detail-summary-section,
+.craft-detail-sources-section {
   min-width: 0;
 }
 
@@ -967,38 +835,9 @@
   box-shadow: none;
 }
 
-.craft-detail-drawer-shell .craft-detail-material-table,
-.craft-detail-drawer-shell .craft-detail-effects-list,
-.craft-detail-drawer-shell .craft-summary-mission-section,
-.craft-detail-drawer-shell .craft-detail-stat-panel {
-  background: var(--craft-surface-deep);
-  border-color: var(--craft-border-soft);
-}
-
-.craft-detail-drawer-shell .craft-detail-material-row:nth-child(odd),
-.craft-detail-drawer-shell .craft-detail-effect-row:nth-child(odd),
-.craft-detail-drawer-shell .stat-scan-matrix-row:nth-child(odd) {
-  background: var(--craft-surface-row);
-}
-
-.craft-detail-drawer-shell .craft-detail-material-row:nth-child(even),
-.craft-detail-drawer-shell .craft-detail-effect-row:nth-child(even),
-.craft-detail-drawer-shell .stat-scan-matrix-row:nth-child(even) {
-  background: var(--craft-surface-row-alt);
-}
-
-.craft-detail-drawer-shell .craft-detail-material-row {
-  min-height: 78px;
-  padding-block: 10px;
-}
-
-.craft-detail-drawer-shell .craft-detail-effect-row {
-  min-height: 46px;
-}
-
 .craft-detail-drawer-footer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  grid-template-columns: 42px minmax(0, 1fr);
   gap: 12px;
   flex: 0 0 auto;
   padding: 12px 14px;
@@ -1010,6 +849,19 @@
 .craft-detail-drawer-footer .craft-summary-action-btn {
   width: 100%;
   min-height: 42px;
+  border: 1px solid rgb(0, 64, 110);
+  background: rgba(0, 117, 203, 0.12);
+  color: #fff;
+}
+
+.craft-detail-drawer-footer .craft-summary-action-btn.is-active {
+  border-color: rgb(0, 148, 255);
+  background: rgba(0, 118, 205, 0.4);
+}
+
+.craft-detail-drawer-footer .craft-summary-bookmark-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Full-page hierarchy and the same tunable surface family. */
@@ -1021,17 +873,1602 @@
   border-color: var(--craft-border-default, var(--ops-border-default));
 }
 
-.craft-detail-shell .craft-detail-material-row:nth-child(odd),
-.craft-detail-shell .craft-detail-effect-row:nth-child(odd) {
-  background: var(--craft-surface-row, var(--ops-surface-row));
+/* Reusable Crafting detail primitives. Their layout is activated on mobile in
+   this pass; the visual vocabulary can be reused by a later desktop migration. */
+.craft-detail-mobile-tabs,
+.craft-detail-mobile-overview,
+.craft-detail-mobile-family {
+  display: none;
 }
 
-.craft-detail-shell .craft-detail-material-row:nth-child(even),
-.craft-detail-shell .craft-detail-effect-row:nth-child(even) {
-  background: var(--craft-surface-row-alt, var(--ops-surface-row));
+.craft-detail-mobile-tabs {
+  font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+  border-bottom: 1px solid var(--craft-border-default, var(--ops-border-default));
 }
 
-.craft-detail-shell .craft-detail-material-row:hover,
-.craft-detail-shell .craft-detail-effect-row:hover {
-  background: var(--craft-surface-hover, var(--ops-surface-hover));
+.craft-detail-mobile-tabs button {
+  position: relative;
+  border: 0;
+  background: transparent;
+  color: var(--void-text-muted);
+  font: 500 0.77rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+  cursor: pointer;
+}
+
+.craft-detail-mobile-tabs button::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.55);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.craft-detail-mobile-tabs button.is-active {
+  color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+}
+
+.craft-detail-mobile-tabs button.is-active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.craft-detail-mobile-tabs button:focus-visible {
+  outline: 2px solid rgba(37, 189, 244, 0.85);
+  outline-offset: -2px;
+}
+
+.craft-detail-mobile-overview {
+  font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+}
+
+.craft-detail-mobile-overview-art,
+.craft-detail-mobile-overview-time,
+.craft-detail-mobile-overview-actions,
+.craft-detail-mobile-title {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .component-browser-body > .craft-detail-page {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #071620;
+    padding: 10px 10px calc(96px + env(safe-area-inset-bottom));
+  }
+
+  .craft-detail-stage.craft-detail-shell {
+    display: grid;
+    gap: 9px;
+    min-width: 0;
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+  }
+
+  .craft-detail-back-link {
+    width: max-content;
+    min-height: 30px;
+    padding: 4px 2px;
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: 0;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .craft-detail-back-link::after {
+    content: "Crafting";
+    font-size: 0.84rem;
+  }
+
+  .craft-detail-hero.crafting-detail-identity {
+    display: grid;
+    grid-template-areas:
+      "copy"
+      "actions";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+    min-height: 76px;
+    padding: 2px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .craft-detail-hero-card.crafting-component-art {
+    display: none;
+  }
+
+  .craft-detail-shell .craft-detail-hero-icon {
+    width: 118px;
+    height: 106px;
+    border: 0;
+    background: transparent;
+    object-fit: contain;
+    filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
+    transform: scale(1.14);
+  }
+
+  .craft-detail-shell .craft-detail-title-block {
+    grid-area: copy;
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .craft-detail-stage .craft-detail-title {
+    overflow: hidden;
+    margin: 0;
+    color: var(--void-text-main);
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: clamp(1.75rem, 8vw, 2.1rem);
+    font-weight: 670;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+  }
+
+  .craft-detail-stage .craft-detail-desktop-title {
+    display: none;
+  }
+
+  .craft-detail-stage .craft-detail-mobile-title {
+    display: inline;
+  }
+
+  .craft-detail-mobile-family {
+    display: block;
+    overflow: hidden;
+    font-size: 0.98rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .craft-detail-title-block > .craft-detail-meta,
+  .craft-detail-title-block > .craft-detail-hero-chips,
+  .craft-detail-title-block > .craft-detail-description,
+  .craft-detail-header-facts {
+    display: none;
+  }
+
+  .craft-detail-hero-right {
+    grid-area: actions;
+    display: contents;
+  }
+
+  .craft-detail-mobile-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 42px;
+  }
+
+  .craft-detail-mobile-tabs button {
+    min-width: 0;
+    min-height: 42px;
+    padding: 0 3px;
+  }
+
+  .craft-detail-mobile-overview {
+    display: none;
+    gap: 0;
+    padding: 0 2px 8px;
+  }
+
+  .craft-detail-stage[data-mobile-tab="overview"] .craft-detail-mobile-overview {
+    display: grid;
+  }
+
+  .craft-detail-mobile-overview-art {
+    display: grid;
+    width: 100%;
+    min-height: clamp(180px, 50vw, 216px);
+    place-items: center;
+    padding: 8px 12px 6px;
+  }
+
+  .craft-detail-mobile-overview-art img {
+    width: min(76vw, 294px);
+    height: clamp(168px, 47vw, 204px);
+    object-fit: contain;
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.46));
+    transform: scale(1.3);
+  }
+
+  .craft-detail-mobile-overview-art .craft-detail-hero-icon--fallback {
+    width: min(58vw, 220px);
+    height: 132px;
+    border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
+    border-radius: 7px;
+    background: var(--craft-surface-row, var(--ops-surface-row));
+  }
+
+  .craft-detail-mobile-overview-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    padding: 8px 0 14px;
+    border-bottom: 1px solid var(--craft-border-soft, var(--ops-border-soft));
+  }
+
+  .craft-detail-mobile-overview-fact-group {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .craft-detail-mobile-overview-fact-group + .craft-detail-mobile-overview-fact-group {
+    padding-left: 18px;
+    border-left: 1px solid var(--craft-border-soft, var(--ops-border-soft));
+  }
+
+  .craft-detail-mobile-overview-fact-group > span {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 4px 10px;
+    color: var(--void-text-muted);
+    font-size: 0.78rem;
+  }
+
+  .craft-detail-mobile-overview-fact-group:first-child > span {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-detail-mobile-overview-fact-group > span > span {
+    color: #9fb6c8;
+  }
+
+  .craft-detail-mobile-overview-fact-group strong {
+    color: #eef7fc;
+    font-size: 0.86rem;
+    font-weight: 620;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .craft-detail-mobile-overview-fact-group:last-child strong {
+    text-transform: capitalize;
+  }
+
+  .craft-detail-mobile-overview-fact-group:first-child strong {
+    color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+  }
+
+  .craft-detail-mobile-overview-time {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 11px 2px 9px;
+  }
+
+  .craft-detail-mobile-overview-time svg {
+    width: 26px;
+    height: 26px;
+    color: #dcecf6;
+  }
+
+  .craft-detail-mobile-overview-time > span {
+    display: grid;
+    gap: 2px;
+    color: #9fb6c8;
+    font-size: 0.78rem;
+  }
+
+  .craft-detail-mobile-overview-time strong {
+    color: #eef7fc;
+    font-size: 0.96rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .craft-detail-mobile-overview > .craft-detail-mobile-overview-description {
+    max-width: 46ch;
+    margin: 0;
+    padding: 4px 0 10px;
+    color: #afc2d1;
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  .craft-detail-mobile-overview-actions {
+    display: grid;
+    gap: 7px;
+    padding-top: 6px;
+  }
+
+  .craft-detail-mobile-overview-actions .craft-summary-action-btn {
+    width: 100%;
+    min-height: 44px;
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0;
+  }
+
+  .craft-detail-mobile-overview-actions .craft-summary-queue-btn {
+    border-color: rgba(37, 189, 244, 0.78);
+    background: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    color: #02101a;
+  }
+
+  .craft-detail-workspace.craft-detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .craft-detail-workspace > .craft-detail-summary-section,
+  .craft-detail-workspace > .craft-detail-crafting {
+    display: none;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .craft-detail-stage[data-mobile-tab="materials"] .craft-detail-crafting,
+  .craft-detail-stage[data-mobile-tab="sources"] .craft-detail-crafting,
+  .craft-detail-stage[data-mobile-tab="stats"] .craft-detail-crafting.has-chart,
+  .craft-detail-stage[data-mobile-tab="stats"] .craft-detail-summary-section {
+    display: block;
+  }
+
+  .craft-detail-stage[data-mobile-tab="materials"] .craft-detail-sources-section,
+  .craft-detail-stage[data-mobile-tab="materials"] .craft-detail-chart-section,
+  .craft-detail-stage[data-mobile-tab="sources"] .craft-detail-material-section,
+  .craft-detail-stage[data-mobile-tab="sources"] .craft-detail-effects-panel,
+  .craft-detail-stage[data-mobile-tab="sources"] .craft-detail-chart-section,
+  .craft-detail-stage[data-mobile-tab="sources"] .craft-variant-selector,
+  .craft-detail-stage[data-mobile-tab="stats"] .craft-detail-crafting-section,
+  .craft-detail-stage[data-mobile-tab="stats"] .craft-variant-selector {
+    display: none;
+  }
+
+  .craft-detail-shell .craft-detail-crafting,
+  .craft-detail-shell .craft-detail-crafting-section,
+  .craft-detail-shell .craft-detail-summary-section,
+  .craft-detail-shell .craft-detail-sources-section {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .craft-detail-material-section,
+  .craft-detail-stat-panel,
+  .craft-summary-mission-section {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .craft-summary-section-label {
+    margin: 0 0 8px;
+    color: var(--void-text-main);
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: 1rem;
+    font-weight: 620;
+    letter-spacing: -0.015em;
+    text-transform: none;
+  }
+
+  .craft-detail-effects-panel {
+    margin-top: 12px;
+  }
+
+  .craft-detail-effects-head {
+    display: none;
+  }
+
+  .craft-detail-shell .craft-detail-stat-panel .detail-stat-groups--scannable,
+  .craft-detail-shell .detail-stat-scan-column {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .craft-detail-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row {
+    min-height: 38px;
+    padding-inline: 2px;
+  }
+
+  .craft-detail-chart-section {
+    margin-top: 10px;
+  }
+
+  .craft-detail-actions {
+    position: fixed;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    left: 10px;
+    z-index: 80;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 7px;
+    padding: 7px;
+    border: 1px solid var(--craft-border-default, var(--ops-border-default));
+    border-radius: 9px;
+    background: rgba(4, 13, 21, 0.97);
+    box-shadow: 0 -10px 26px rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(12px);
+  }
+
+  .craft-detail-actions .craft-summary-action-btn {
+    min-width: 0;
+    min-height: 43px;
+    font-family: var(--crafting-presentation-font, system-ui, sans-serif);
+    font-size: 0.76rem;
+    letter-spacing: 0;
+  }
+
+  .craft-detail-actions .craft-summary-queue-btn {
+    border-color: rgba(37, 189, 244, 0.78);
+    background: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    color: #02101a;
+  }
+
+  .craft-detail-stage[data-mobile-tab="overview"] .craft-detail-actions {
+    display: none;
+  }
+
+  /* The drawer is the canonical detail at every width.  On a phone it becomes
+     the prior selected-item canvas rather than a compressed desktop pane. */
+  .craft-detail-stage.craft-detail-drawer-shell {
+    gap: 0;
+    padding: 0;
+  }
+
+  .craft-detail-drawer-header {
+    grid-template-areas:
+      "back art"
+      "identity art";
+    grid-template-columns: minmax(0, 1fr) clamp(96px, 30vw, 132px);
+    gap: 7px 8px;
+    min-height: 128px;
+    padding: 8px 2px 6px;
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .craft-detail-page--drawer,
+  .craft-detail-page.craft-detail-page--drawer > .craft-detail-stage.craft-detail-drawer-shell,
+  .craft-detail-drawer-body {
+    background: transparent;
+  }
+
+  .craft-detail-drawer-mobile-back {
+    display: inline-flex;
+    grid-area: back;
+    align-items: center;
+    gap: 5px;
+    justify-self: start;
+    min-height: 44px;
+    padding: 7px 3px 7px 0;
+    border: 0;
+    background: transparent;
+    color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    font: 500 0.84rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+
+  .craft-detail-drawer-mobile-back > span:first-child {
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 0.72;
+  }
+
+  .craft-detail-drawer-mobile-back:focus-visible {
+    outline: 2px solid var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    outline-offset: 3px;
+  }
+
+  .craft-detail-hero-art-stage {
+    grid-area: art;
+    justify-self: end;
+    align-self: center;
+    width: 100%;
+    height: 104px;
+    margin-right: clamp(8px, 3vw, 18px);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .craft-detail-hero-art-stage .craft-detail-hero-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
+  }
+
+  .craft-detail-hero-art-stage .craft-detail-hero-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.46));
+  }
+
+  .craft-detail-hero-art-stage:has(.craft-detail-hero-icon--fallback) {
+    display: none;
+  }
+
+  .craft-detail-drawer-identity {
+    grid-area: identity;
+    align-self: start;
+  }
+
+  .craft-detail-drawer-identity > .craft-detail-meta,
+  .craft-detail-drawer-identity > .craft-detail-hero-chips,
+  .craft-detail-drawer-facts,
+  .craft-detail-drawer-header-actions {
+    display: none;
+  }
+
+  .craft-detail-drawer-title {
+    margin: 0 0 5px;
+    color: var(--void-text-main);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-default);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .craft-detail-drawer-desktop-title {
+    display: none;
+  }
+
+  .craft-detail-drawer-mobile-title {
+    display: inline;
+  }
+
+  .craft-detail-drawer-identity::after {
+    display: block;
+    overflow: hidden;
+    color: var(--void-text-muted);
+    content: attr(data-mobile-family);
+    font-size: 0.98rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .craft-detail-drawer-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    min-height: 42px;
+    padding: 0;
+    border-bottom: 1px solid var(--craft-border-default);
+    background: transparent;
+  }
+
+  .craft-detail-drawer-tabs button,
+  .craft-detail-drawer-tabs button:last-child {
+    display: block;
+    min-width: 0;
+    min-height: 42px;
+    margin: 0;
+    padding: 0 3px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--void-text-muted);
+    font: 500 0.77rem/1 var(--crafting-presentation-font, system-ui, sans-serif);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .craft-detail-drawer-tabs button.is-active {
+    border: 0;
+    border-bottom: 2px solid var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    background: transparent;
+    box-shadow: none;
+    color: var(--crafting-presentation-accent, var(--craft-highlight-focus));
+    font-family: var(--font-ui);
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .craft-detail-drawer-body {
+    padding: 10px 0;
+    background: transparent;
+  }
+
+  .craft-detail-drawer-materials,
+  .craft-detail-drawer-overview,
+  .craft-detail-drawer-sources {
+    gap: 12px;
+  }
+
+  .craft-detail-drawer-materials .craft-detail-sources-section {
+    display: none;
+  }
+
+  .craft-detail-drawer-footer {
+    position: static;
+    gap: 7px;
+    padding: 7px;
+  }
+}
+
+@media (max-width: 499px) {
+  .craft-detail-hero-art-stage {
+    /* Keep the art paired with the identity block instead of the viewport edge. */
+    margin-right: clamp(30px, 8vw, 42px);
+  }
+}
+
+/* Compact material cards are the mobile presentation only. The desktop table
+   is owned by the unqualified component selectors in the desktop media block. */
+@media (max-width: 760px) {
+.craft-detail-material-table {
+  display: grid;
+  gap: 10px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.craft-detail-material-table-head {
+  display: none;
+}
+
+.craft-detail-material-table-body {
+  display: grid;
+  gap: 10px;
+  container-name: material-card-list;
+  container-type: inline-size;
+}
+
+.craft-detail-material-row {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 9rem) minmax(16rem, 1.4fr) minmax(13rem, 1.1fr);
+  grid-template-areas: "identity quality summary";
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  width: 100%;
+  min-width: 0;
+  min-height: 112px;
+  padding: clamp(12px, 1.5vw, 18px);
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--craft-border-soft, var(--ops-border-soft));
+  border-radius: 8px;
+  background: linear-gradient(105deg, rgba(11, 30, 45, 0.96), rgba(6, 20, 31, 0.96));
+  box-shadow: inset 0 1px 0 rgba(181, 220, 242, 0.025);
+}
+
+.craft-detail-material-id {
+  grid-area: identity;
+  align-self: center;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.craft-detail-material-copy {
+  align-content: start;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.craft-detail-material-required > span {
+  color: var(--void-text-muted);
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.095em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.craft-detail-material-slot {
+  color: var(--void-text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-9);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.craft-detail-material-id strong {
+  color: var(--void-text-main);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-default);
+  overflow-wrap: anywhere;
+}
+
+.craft-detail-material-quality-control {
+  display: grid;
+  grid-area: quality;
+  align-self: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.craft-detail-material-target-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+  .craft-detail-material-target-input .bq-target-editor--slider {
+  width: 100%;
+}
+
+  .craft-detail-material-target-input .bq-target-slider-shell {
+  width: 100%;
+}
+
+  .craft-detail-material-target-input .bq-target-slider-marker {
+  height: 11px;
+  background: rgba(154, 199, 221, 0.56);
+}
+
+  .craft-detail-material-target-input .bq-target-slider-marker span {
+  display: none;
+  top: 12px;
+  color: var(--void-text-muted);
+  font-size: 0.64rem;
+}
+
+@media (max-width: 760px) {
+  .craft-detail-material-target-input .bq-target-slider-marker:first-child span,
+  .craft-detail-material-target-input .bq-target-slider-marker:nth-child(4) span,
+  .craft-detail-material-target-input .bq-target-slider-marker:last-child span {
+    display: block;
+  }
+}
+
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality,
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality-input {
+  padding: 2px 5px;
+  border: 1px solid rgb(21, 189, 244);
+  border-radius: 5px;
+  background: #0a2638;
+  box-shadow: none;
+  color: #8addff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+  .craft-detail-material-target-input .bq-target-editor--material button.bq-target-quality {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality::after {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  content: "";
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 1px solid rgb(21, 189, 244);
+  border-bottom: 1px solid rgb(21, 189, 244);
+  background: #061d2e;
+}
+
+  .craft-detail-material-target-input .bq-target-slider-track {
+  border: 1px solid rgba(108, 170, 201, 0.42);
+  background: rgba(37, 116, 158, 0.26);
+  box-shadow: none;
+}
+
+  .craft-detail-material-target-input .bq-target-slider-track-fill {
+  background: #28c4f4;
+}
+
+  .craft-detail-material-target-input .bq-target-quality-slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 2px solid #d9f6ff;
+  background: #4ac9f4;
+  box-shadow: 0 0 0 2px rgba(76, 207, 249, 0.12);
+}
+
+.craft-detail-material-summary {
+  display: grid;
+  grid-area: summary;
+  justify-self: stretch;
+  align-self: center;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  padding-left: clamp(10px, 1.5vw, 18px);
+  border-left: 1px solid rgba(45, 136, 181, 0.32);
+}
+
+.craft-detail-material-summary > .craft-detail-material-required,
+.craft-detail-material-summary > .craft-detail-material-effects {
+  grid-area: auto;
+}
+
+.craft-detail-material-required {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+}
+
+.craft-detail-material-required strong {
+  color: var(--void-text-main);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-22);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+}
+
+.craft-detail-material-effects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  align-self: center;
+  align-content: center;
+  align-items: stretch;
+  gap: 3px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.craft-detail-effect-chip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 3px;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  min-height: 42px;
+  padding: 6px 8px;
+  border: 1px solid rgba(92, 171, 205, 0.25);
+  border-radius: 4px;
+  background: rgba(4, 18, 28, 0.6);
+  box-shadow: none;
+  font-size: 0.68rem;
+}
+
+.craft-detail-effect-chip > span {
+  grid-column: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  color: #88b8e2;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-default);
+}
+
+.craft-detail-effect-chip strong {
+  grid-column: 2;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.craft-detail-effect-chip strong.craft-ok {
+  color: var(--stat-beneficial, var(--craft-good));
+}
+
+.craft-detail-effect-chip strong.craft-shortage {
+  color: var(--stat-detrimental, var(--craft-bad));
+}
+
+.craft-detail-effect-chip::before {
+  display: none;
+}
+
+@container material-card-list (max-width: 700px) {
+  .craft-detail-material-row {
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.7fr);
+    grid-template-areas:
+      "identity summary"
+      "quality quality";
+    min-height: 0;
+  }
+
+  .craft-detail-material-summary {
+    grid-template-columns: minmax(5rem, auto) minmax(7rem, 1fr);
+  }
+}
+
+@container material-card-list (max-width: 460px) {
+  .craft-detail-material-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "identity"
+      "quality"
+      "summary";
+    gap: 14px;
+  }
+
+  .craft-detail-material-summary {
+    grid-template-columns: minmax(5rem, 0.35fr) minmax(0, 1fr);
+    padding-top: 12px;
+    padding-left: 0;
+    border-top: 1px solid rgba(45, 136, 181, 0.32);
+    border-left: 0;
+  }
+
+  .craft-detail-material-effects {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .craft-detail-effect-chip > span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .craft-detail-effect-chip {
+    min-height: 38px;
+  }
+}
+}
+
+/* Premium graphite drawer presentation. The header is the single cinematic
+   moment; the workflow beneath it stays quiet, compact, and source-led. */
+@media (min-width: 761px) {
+  .craft-detail-page.craft-detail-page--drawer > .craft-detail-stage.craft-detail-drawer-shell {
+    --drawer-graphite-0: #050708;
+    --drawer-graphite-1: #090d10;
+    --drawer-graphite-3: #12191e;
+    --drawer-line: rgba(125, 186, 212, 0.11);
+    --drawer-line-strong: rgba(104, 211, 244, 0.38);
+    --drawer-cyan: #52c7e8;
+    --drawer-cyan-soft: rgba(82, 199, 232, 0.16);
+    --drawer-slider-cyan: #1cc9ff;
+    --drawer-section-label: #505d63;
+    background:
+      radial-gradient(circle at 62% 0%, rgba(35, 61, 72, 0.13), transparent 30%),
+      var(--drawer-graphite-0);
+    color: var(--void-text-main);
+  }
+
+  .craft-detail-drawer-header {
+    position: relative;
+    isolation: isolate;
+    z-index: 2;
+    grid-template-areas: "identity art facts actions";
+    grid-template-columns: minmax(230px, 0.95fr) minmax(245px, 1.2fr) auto 34px;
+    min-height: 150px;
+    gap: 12px;
+    padding: 15px 16px 17px;
+    overflow: visible;
+    container-type: inline-size;
+    border-bottom: 1px solid rgba(82, 199, 232, 0.38);
+    background:
+      linear-gradient(90deg, rgba(4, 7, 9, 0.94) 0%, rgba(5, 8, 10, 0.72) 32%, rgba(7, 10, 12, 0.3) 64%, rgba(4, 7, 9, 0.82) 100%),
+      url("/images/crafting/craft-detail-graphite-texture.webp") center / cover no-repeat,
+      var(--drawer-graphite-1);
+    box-shadow:
+      inset 0 1px 0 rgba(211, 233, 241, 0.08),
+      inset 0 -16px 32px rgba(0, 0, 0, 0.3),
+      0 8px 24px rgba(0, 0, 0, 0.24);
+  }
+
+  .craft-detail-drawer-header::before {
+    position: absolute;
+    inset: 8px;
+    z-index: -1;
+    border: 1px solid rgba(127, 173, 194, 0.16);
+    clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);
+    content: "";
+    pointer-events: none;
+  }
+
+  .craft-detail-drawer-header::after {
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+    left: 0;
+    z-index: 3;
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0 3%, rgba(82, 199, 232, 0.54) 3% 9%, rgba(100, 133, 147, 0.22) 9% 91%, rgba(82, 199, 232, 0.54) 91% 97%, transparent 97%);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 100%, 7px 100%);
+    content: "";
+    pointer-events: none;
+  }
+
+  .craft-detail-drawer-identity {
+    grid-area: identity;
+    align-self: center;
+    z-index: 2;
+  }
+
+  .craft-detail-drawer-header .craft-detail-meta {
+    color: #7794a3;
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+  }
+
+  .craft-detail-drawer-title {
+    margin: 5px 0 10px;
+    color: #edf4f6;
+    font-size: clamp(1rem, 1.18vw, 1.32rem);
+    letter-spacing: 0.035em;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  }
+
+  .craft-detail-drawer-header .craft-detail-hero-chips {
+    gap: 6px;
+  }
+
+  .craft-detail-drawer-header .craft-detail-band-pill,
+  .craft-detail-drawer-header .craft-badge {
+    border-color: rgba(123, 163, 180, 0.25);
+    background: rgba(8, 13, 16, 0.72);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .craft-detail-hero-art-stage {
+    position: absolute;
+    top: 10px;
+    right: clamp(250px, 29cqw, 340px);
+    bottom: -22px;
+    width: min(clamp(360px, 42cqw, 520px), calc(100% - 500px));
+    height: auto;
+    min-width: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .craft-detail-hero-art-stage::after {
+    position: absolute;
+    right: 4%;
+    bottom: 4px;
+    left: 4%;
+    height: 31px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.72), transparent 68%);
+    content: "";
+    filter: blur(3px);
+    pointer-events: none;
+  }
+
+  .craft-detail-hero-art-stage .craft-detail-hero-art {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    z-index: 2;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    object-fit: initial;
+    filter:
+      drop-shadow(0 13px 10px rgba(0, 0, 0, 0.62))
+      drop-shadow(0 0 12px rgba(101, 180, 208, 0.08));
+  }
+
+  .craft-detail-hero-art-stage[data-hero-layout="component"] {
+    width: clamp(190px, 28cqw, 380px);
+  }
+
+  .craft-detail-hero-art-stage[data-hero-layout="component"] .craft-detail-hero-art {
+    width: auto;
+    height: 100%;
+  }
+
+  .craft-detail-hero-art-stage .craft-detail-hero-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 12px 15px rgba(0, 0, 0, 0.58));
+    opacity: 0.88;
+  }
+
+  .craft-detail-drawer-facts {
+    grid-area: facts;
+    align-self: center;
+    z-index: 3;
+  }
+
+  .craft-detail-drawer-facts > span {
+    min-width: 76px;
+    padding: 0 10px;
+    border-left-color: rgba(137, 170, 185, 0.2);
+    background: rgba(4, 7, 9, 0.22);
+  }
+
+  .craft-detail-drawer-facts span span {
+    color: #76909d;
+  }
+
+  .craft-detail-drawer-header-actions {
+    grid-area: actions;
+    z-index: 4;
+  }
+
+  .craft-detail-drawer-close {
+    border-color: rgba(147, 179, 193, 0.22);
+    background: rgba(5, 9, 11, 0.66);
+  }
+
+  .craft-detail-drawer-tabs {
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0;
+    min-height: 44px;
+    padding: 0;
+    border-bottom-color: var(--drawer-line);
+    background: linear-gradient(180deg, #0c1013, #080b0d);
+  }
+
+  .craft-detail-drawer-tabs button,
+  .craft-detail-drawer-tabs button:last-child {
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 10px;
+    border: 0;
+    border-right: 1px solid rgba(137, 161, 172, 0.1);
+    border-radius: 0;
+    background: transparent;
+    color: #788a93;
+    font-size: 0.7rem;
+  }
+
+  .craft-detail-drawer-tabs button:first-child {
+    border-left: 1px solid rgba(137, 161, 172, 0.1);
+  }
+
+  .craft-detail-drawer-tabs button:hover {
+    border-color: rgba(137, 161, 172, 0.1);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .craft-detail-drawer-tabs button.is-active {
+    border: 0;
+    border-right: 1px solid rgba(137, 161, 172, 0.1);
+    border-bottom: 2px solid var(--drawer-cyan);
+    background: linear-gradient(180deg, rgba(76, 166, 195, 0.08), transparent);
+    box-shadow: inset 0 1px 0 rgba(94, 196, 228, 0.14);
+    color: #b9e8f5;
+  }
+
+  .craft-detail-drawer-body.craft-detail-drawer-body {
+    background: linear-gradient(105deg, rgba(255, 255, 255, 0.014), transparent 45%), var(--drawer-graphite-2);
+    padding: 8px;
+  }
+
+  /* Custom Changes */
+  .craft-summary-section-label {
+    margin: 0 0 10px;
+    color: var(--drawer-section-label);
+    font-family: var(--font-ui);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .craft-detail-material-table {
+    display: grid;
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.53) 0 20px 30px -10px;
+  }
+
+  .craft-detail-material-table-head,
+  .craft-detail-effects-head {
+    color: #7897a5;
+    font-family: var(--crafting-presentation-font);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .craft-detail-material-table-head {
+    display: grid;
+    grid-template-columns: minmax(90px, 0.82fr) minmax(250px, 2.45fr) minmax(72px, 0.58fr) minmax(76px, 0.65fr) minmax(70px, 0.6fr);
+    gap: 0;
+    min-height: 30px;
+    padding: 14px;
+    align-items: center;
+    border-bottom: 1px solid var(--drawer-line);
+    background: #070d10;
+  }
+
+  .craft-detail-material-table-head > :nth-child(2) {
+    justify-self: center;
+  }
+
+  .craft-detail-material-table-body {
+    display: grid;
+    gap: 0;
+  }
+
+  .craft-detail-drawer-shell .craft-item-description,
+  .craft-detail-drawer-shell .craft-detail-stat-panel,
+  .craft-detail-drawer-shell .craft-summary-mission-section,
+  .craft-detail-drawer-shell .craft-mission-briefing-card {
+    border: 1px solid var(--drawer-line);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.018), transparent 42%),
+      var(--drawer-graphite-1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 10px 26px rgba(0, 0, 0, 0.12);
+  }
+
+  .craft-detail-drawer-shell .craft-item-description {
+    margin: 0;
+    padding: 15px 17px;
+    border-left: 2px solid rgba(82, 199, 232, 0.42);
+    color: #9baab1;
+    line-height: 1.55;
+  }
+
+  .craft-detail-material-row {
+    display: grid;
+    grid-template-columns: minmax(90px, 0.82fr) minmax(250px, 2.45fr) minmax(72px, 0.58fr) minmax(76px, 0.65fr) minmax(70px, 0.6fr);
+    grid-template-areas: none;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+    min-height: 88px;
+    padding: 9px 12px;
+    border-color: var(--drawer-line);
+    border-width: 0 0 1px;
+    border-radius: 0;
+    background:
+      linear-gradient(105deg, rgba(255, 255, 255, 0.014), transparent 45%),
+      var(--drawer-graphite-2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+  }
+
+  .craft-detail-material-slot,
+  .craft-detail-material-required > span {
+    color: #70858f;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0.05rem;
+  }
+
+  .craft-detail-material-row:last-child {
+    border-bottom: 0;
+  }
+
+  .craft-detail-material-id { grid-column: 1; grid-row: 1; }
+  .craft-detail-material-quality-control {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 8px;
+  }
+  .craft-detail-material-summary { display: contents; }
+  .craft-detail-material-required {
+    display: flex;
+    grid-column: 3;
+    grid-row: 1;
+    align-items: center;
+    padding: 0 12px;
+    border-left: 1px solid rgba(132, 161, 174, 0.14);
+  }
+
+  .craft-detail-material-required strong {
+    font-family: var(--font-ui);
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .craft-detail-material-effects {
+    display: grid;
+    grid-column: 4 / span 2;
+    grid-row: 1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    padding-left: 0;
+    border-left: 1px solid rgba(132, 161, 174, 0.14);
+  }
+
+  .craft-detail-effect-chip {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(52px, auto);
+    min-height: 34px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .craft-detail-effect-chip > span,
+  .craft-detail-effect-chip > strong {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    padding: 0 10px;
+  }
+
+  .craft-detail-effect-chip > span {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.055em;
+    overflow-wrap: normal;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .craft-detail-effect-chip > strong {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: flex-start;
+    border-left: 1px solid rgba(132, 161, 174, 0.11);
+  }
+
+  .craft-detail-material-target-input .bq-target-editor--slider,
+  .craft-detail-material-target-input .bq-target-slider-shell {
+    width: 100%;
+  }
+
+  .craft-detail-material-target-input .bq-target-slider-marker {
+    height: 11px;
+    background: rgba(154, 199, 221, 0.56);
+  }
+
+  .craft-detail-material-target-input .bq-target-slider-marker span {
+    display: none;
+    top: 17px;
+    color: var(--void-text-muted);
+    font-size: 0.64rem;
+  }
+
+  .craft-detail-material-target-input .bq-target-slider-marker:is(:first-child, :nth-child(4), :last-child) span {
+    display: block;
+  }
+
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality,
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality-input {
+    padding: 2px 6px;
+    border: 1px solid var(--drawer-slider-cyan);
+    border-radius: 4px;
+    background: #030b0f;
+    box-shadow: inset 0 1px 0 rgba(214, 249, 255, 0.08);
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .craft-detail-material-target-input .bq-target-editor--material .bq-target-quality::after {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    content: "";
+    transform: translateX(-50%) rotate(45deg);
+    border-right-color: var(--drawer-slider-cyan);
+    border-bottom-color: var(--drawer-slider-cyan);
+    background: #082433;
+  }
+
+  /* Custom Changes */
+  .craft-detail-material-target-input .bq-target-slider-track {
+    border: 1px solid rgba(80, 190, 229, 0.6);
+    background: rgba(25, 114, 156, 0.34);
+    box-shadow: rgba(31, 150, 220, 0.29) 0 4px 6px;
+  }
+
+  .craft-detail-material-target-input .bq-target-slider-track-fill {
+    background: var(--drawer-slider-cyan);
+  }
+
+  .craft-detail-material-target-input .bq-target-quality-slider::-webkit-slider-thumb {
+    border-color: #e1faff;
+    background: #35cffd;
+    box-shadow: 0 0 0 2px rgba(28, 201, 255, 0.18);
+  }
+
+  /* Custom Changes */
+  .craft-detail-effects-list {
+    display: grid;
+    gap: 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    background: transparent;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    box-shadow: rgba(0, 0, 0, 0.6) 0 20px 30px -10px;
+  }
+
+  .craft-detail-effects-panel {
+    border: 0;
+    box-shadow: none;
+    padding: 8px;
+  }
+
+  .craft-detail-effects-head {
+    display: grid;
+    grid-template-columns: minmax(130px, 1.15fr) minmax(68px, 0.7fr) minmax(68px, 0.7fr) minmax(90px, 0.9fr) minmax(150px, 1.35fr);
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .craft-detail-effect-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 1.15fr) minmax(68px, 0.7fr) minmax(68px, 0.7fr) minmax(90px, 0.9fr) minmax(150px, 1.35fr);
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+  }
+  .craft-detail-effects-head {
+    min-height: 30px;
+    padding: 14px;
+    border-bottom: 1px solid rgba(83, 140, 164, 0.11);
+    border-radius: 2px 2px 0 0;
+    background: #080e11;
+  }
+  .craft-detail-effect-row {
+    min-height: 56px;
+    padding: 0 12px;
+    border: 0;
+    border-bottom: 1px solid rgba(137, 161, 172, 0.1);
+    border-radius: 0;
+    background: rgba(7, 12, 15, 0.38);
+  }
+  .craft-detail-effect-row:last-child { border-bottom: 0; }
+  .craft-detail-effect-values { display: contents; }
+  .craft-detail-effect-sources {
+    grid-column: 5;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .craft-detail-effect-base {
+    position: relative;
+    padding-right: 22px;
+  }
+
+  .craft-detail-effect-base::after {
+    position: absolute;
+    right: 7px;
+    color: var(--drawer-cyan);
+    content: "\2192";
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .craft-detail-effect-chip > span {
+    color: #8ca2ad;
+  }
+
+  .craft-detail-drawer-shell .stat-group--scan,
+  .craft-detail-drawer-shell .craft-detail-stat-panel .stat-group--scan {
+    border-color: var(--drawer-line);
+    background: var(--drawer-graphite-1);
+  }
+
+  .craft-detail-drawer-shell .craft-detail-drawer-stats .craft-statistics-cards {
+    --craft-statistics-desktop-columns: 3 !important;
+  }
+
+  .craft-detail-drawer-shell .craft-statistics-cards .craft-stat-section-surface {
+    border-color: var(--drawer-line);
+    background: var(--drawer-graphite-1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.022);
+  }
+
+  .craft-detail-drawer-shell .craft-statistics-cards .craft-stat-section-title {
+    border-bottom-color: var(--drawer-line);
+    background: linear-gradient(180deg, #151c20, #10161a);
+    color: #83bfd1;
+  }
+
+  .craft-detail-drawer-shell .craft-statistics-cards .craft-stat-compact-row,
+  .craft-detail-drawer-shell .craft-statistics-cards .craft-stat-comparison-row {
+    border-bottom-color: rgba(137, 161, 172, 0.1);
+  }
+
+  .craft-detail-drawer-shell .craft-detail-stat-panel .stat-group-scan-header {
+    border-bottom-color: var(--drawer-line);
+    background: linear-gradient(180deg, #151c20, #10161a);
+  }
+
+  .craft-detail-drawer-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row,
+  .craft-detail-drawer-shell .craft-detail-sources-section .craft-mission-source {
+    border-color: rgba(138, 161, 171, 0.1);
+    background: #0c1114;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-stat-panel .stat-group-grid--scan .stat-row:nth-child(even),
+  .craft-detail-drawer-shell .craft-detail-sources-section .craft-mission-source:nth-child(even) {
+    background: #0e1418;
+  }
+
+  .craft-detail-drawer-shell .craft-mission-source-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .craft-detail-drawer-shell .craft-detail-sources-section .craft-mission-source {
+    min-height: 72px;
+    padding: 13px 14px;
+    border: 1px solid var(--drawer-line);
+    border-left: 2px solid rgba(82, 199, 232, 0.42);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .craft-detail-drawer-shell .craft-mission-source-link {
+    color: #dce8eb;
+    font-size: 0.82rem;
+  }
+
+  .craft-detail-drawer-shell .craft-mission-source-meta {
+    color: #78909b;
+  }
+
+  .craft-detail-drawer-footer {
+    padding: 10px 14px;
+    border-top-color: var(--drawer-line);
+    background: linear-gradient(180deg, #101519, #090c0e);
+    box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.16);
+  }
+
+  .craft-detail-drawer-footer .craft-summary-action-btn {
+    border-color: rgba(155, 180, 192, 0.22);
+    background: #11181c;
+    color: #dbe5e8;
+  }
+
+  .craft-detail-drawer-footer .craft-summary-queue-btn {
+    border-color: rgba(255, 164, 13, 0.62);
+    background: linear-gradient(180deg, #e39000, #ff9400);
+    box-shadow: inset 0 1px 0 rgba(255, 243, 202, 0.24), 0 5px 14px rgba(95, 55, 12, 0.24);
+    color: #110d06;
+    text-shadow: 0 2px rgba(0, 0, 0, 0.25);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .craft-detail-drawer-footer .craft-summary-queue-btn:hover {
+    border-color: rgba(244, 191, 99, 0.78);
+    background: linear-gradient(180deg, #dfaa49, #b97d27);
+  }
+
+  .craft-detail-drawer-footer .craft-summary-action-btn.is-active {
+    border-color: rgba(93, 193, 221, 0.58);
+    background: rgba(44, 131, 158, 0.22);
+    color: #bfeaf5;
+  }
 }

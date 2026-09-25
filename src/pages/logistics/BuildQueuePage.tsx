@@ -79,7 +79,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
   const [selectedItemId, setSelectedItemId] = useState<string | null>(fixture?.selectedItemId ?? null);
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
-  const [summaryCollapsed, setSummaryCollapsed] = useState(true);
+  const [summaryCollapsed, setSummaryCollapsed] = useState(false);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const [inventoryEnabled, setInventoryEnabled] = useState(true);
   const [queueTab, setQueueTab] = useState<QueueTab>("active");
@@ -200,6 +200,7 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
   const updateBuildQueueItemQuantity = isFixture
     ? flagFixtureReadOnly
     : storeUpdateBuildQueueItemQuantity;
+  void updateBuildQueueItemQuantity;
   const updateBuildQueueItemAllowLowerQuality = isFixture
     ? flagFixtureReadOnly
     : storeUpdateBuildQueueItemAllowLowerQuality;
@@ -696,6 +697,8 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
                     onClick={() => handleMobileSelectorClick(row.item.id)}
                   >
                     <span className="bq-queue-pill-index">{index + 1}</span>
+                    <span className="bq-queue-pill-name">{itemLabel}</span>
+                    <span className="bq-queue-pill-state">{row.item.status === "complete" ? "Completed" : "Active"}</span>
                     <span className="bq-queue-pill-dot" aria-hidden="true" />
                   </button>
                 );
@@ -799,7 +802,6 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
               materials={materials}
               locations={locations}
               strategy={sourceStrategy}
-              onQuantityChange={updateBuildQueueItemQuantity}
               onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
               onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
               onStatusChange={handleStatusChange}
@@ -832,5 +834,4 @@ export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFi
     </div>
   );
 }
-
 

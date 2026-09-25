@@ -191,7 +191,7 @@ test.describe("Build Queue stats fixture", () => {
       await selectQueue(page, "Ground Team Loadout");
       await selectFixtureItem(page, FIXTURE_ITEM_IDS.cq7, "CQ7 Rifle");
 
-      const labels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+      const labels = await page.locator(".bq-component-statistics .craft-stat-compact-label").allTextContents();
       expect(labels).toEqual(expect.arrayContaining([
         "Alpha",
         "DPS",
@@ -211,16 +211,16 @@ test.describe("Build Queue stats fixture", () => {
 
       const traitLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const statColumn = panel.querySelector(".bq-stat-unmodified-column");
-        const firstRow = panel.querySelector(".bq-stat-compact-row");
-        const firstGroup = panel.querySelector(".bq-stat-unmodified-group");
+        const firstRow = panel.querySelector(".craft-stat-compact-row");
+        const firstGroup = panel.querySelector(".craft-stat-section");
         const firstGroupHeading = firstGroup?.querySelector(":scope > .craft-stat-section-surface > .craft-stat-section-title");
-        const firstGroupCard = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
-        const label = firstRow?.querySelector(".bq-stat-compact-label");
-        const value = firstRow?.querySelector(".bq-stat-compact-value");
+        const firstGroupCard = firstGroup?.querySelector(":scope > .craft-stat-section-surface");
+        const label = firstRow?.querySelector(".craft-stat-compact-label");
+        const value = firstRow?.querySelector(".craft-stat-compact-value");
         const headingRect = firstGroupHeading?.getBoundingClientRect();
         const cardRect = firstGroupCard?.getBoundingClientRect();
         return {
-          groupTitles: Array.from(panel.querySelectorAll(".bq-stat-unmodified-group .craft-stat-section-title"))
+          groupTitles: Array.from(panel.querySelectorAll(".craft-stat-section .craft-stat-section-title"))
             .map((heading) => heading.textContent?.trim() ?? ""),
           columnCount: statColumn
             ? getComputedStyle(statColumn).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
@@ -266,7 +266,7 @@ test.describe("Build Queue stats fixture", () => {
 
       const geometry = await page.locator(".bq-component-statistics").evaluate((panel) => {
         const panelRect = panel.getBoundingClientRect();
-        const rows = Array.from(panel.querySelectorAll(".bq-stat-compact-row, .bq-stat-compare-row"));
+        const rows = Array.from(panel.querySelectorAll(".craft-stat-compact-row, .craft-stat-comparison-row"));
         return {
           viewportWidth: document.documentElement.clientWidth,
           documentWidth: document.documentElement.scrollWidth,
@@ -323,7 +323,7 @@ test.describe("Build Queue stats fixture", () => {
         };
       });
       expect(craftCardControls.progressRight).toBeLessThan(craftCardControls.dragHandleLeft);
-      const damageLabels = await page.locator(".bq-component-statistics .bq-stat-compact-label").allTextContents();
+      const damageLabels = await page.locator(".bq-component-statistics .craft-stat-compact-label").allTextContents();
       expect(damageLabels).toContain("Alpha");
       expect(damageLabels).not.toEqual(expect.arrayContaining([
         "Ballistic Damage",
@@ -471,18 +471,18 @@ test.describe("Build Queue stats fixture", () => {
       await expect(targetInput).toHaveValue(originalTarget);
 
       const statValues = await page.locator(".bq-component-statistics").evaluate((panel) => {
-        const compactRows = Array.from(panel.querySelectorAll(".bq-stat-compact-row"));
+        const compactRows = Array.from(panel.querySelectorAll(".craft-stat-compact-row"));
         const compact = compactRows.find((row) => row.querySelector(".craft-stat-compact-arrow"));
-        const label = compact?.querySelector(".bq-stat-compact-label")?.textContent?.trim() ?? "";
-        const compactValue = compact?.querySelector(".bq-stat-compact-value");
+        const label = compact?.querySelector(".craft-stat-compact-label")?.textContent?.trim() ?? "";
+        const compactValue = compact?.querySelector(".craft-stat-compact-value");
         const compactBase = compact?.querySelector(".craft-stat-compact-base-value");
         const compactArrow = compact?.querySelector(".craft-stat-compact-arrow");
         const compactDelta = compact?.querySelector(".craft-stat-compact-delta");
-        const unchanged = compactRows.find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "Ammo Per Shot");
-        const unchangedValue = unchanged?.querySelector(".bq-stat-compact-value");
+        const unchanged = compactRows.find((row) => row.querySelector(".craft-stat-compact-label")?.textContent?.trim() === "Ammo Per Shot");
+        const unchangedValue = unchanged?.querySelector(".craft-stat-compact-value");
         const defaultValue = compactRows
-          .find((row) => row.querySelector(".bq-stat-compact-label")?.textContent?.trim() === "DPS")
-          ?.querySelector(".bq-stat-compact-value");
+          .find((row) => row.querySelector(".craft-stat-compact-label")?.textContent?.trim() === "DPS")
+          ?.querySelector(".craft-stat-compact-value");
         return {
           label,
           compact: compactValue?.textContent?.trim() ?? "",
@@ -516,7 +516,7 @@ test.describe("Build Queue stats fixture", () => {
           const materialHeader = craft.querySelector(".bq-materials-section-header");
           const statisticsHeader = craft.querySelector(".bq-component-statistics-header");
           const statisticsTitle = craft.querySelector(".bq-component-statistics-title");
-          const firstStatLabel = craft.querySelector(".bq-stat-compact-label");
+          const firstStatLabel = craft.querySelector(".craft-stat-compact-label");
           return {
             selectedCardHeight: selectedCard?.getBoundingClientRect().height ?? Number.POSITIVE_INFINITY,
             materialHeaderHeight: materialHeader?.getBoundingClientRect().height ?? Number.POSITIVE_INFINITY,
@@ -787,22 +787,28 @@ test.describe("Build Queue stats fixture", () => {
       const slider = page.getByRole("slider", { name: "Target quality for Stileron" });
       const editor = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-editor--slider')]");
       const shell = slider.locator("xpath=ancestor::*[contains(@class, 'bq-target-slider-shell')]");
-      const badge = editor.locator(":scope > .bq-target-quality");
+      const badge = editor.locator(".bq-target-slider-geometry > .bq-target-quality");
       await expect(slider).toHaveValue("860");
 
       const geometry = await editor.evaluate((element) => {
-        const badgeRect = element.querySelector(":scope > .bq-target-quality")?.getBoundingClientRect();
-        const shellRect = element.querySelector(".bq-target-slider-shell")?.getBoundingClientRect();
+        const badgeRect = element.querySelector(".bq-target-slider-geometry > .bq-target-quality")?.getBoundingClientRect();
+        const geometryRect = element.querySelector(".bq-target-slider-geometry")?.getBoundingClientRect();
+        const range = element.querySelector<HTMLInputElement>(".bq-target-quality-slider");
+        const ratio = range
+          ? (Number(range.value) - Number(range.min)) / Math.max(1, Number(range.max) - Number(range.min))
+          : 0;
+        const expectedCenter = geometryRect ? geometryRect.left + geometryRect.width * ratio : 0;
         return {
           badgeWidth: badgeRect?.width ?? 0,
-          badgeCenter: badgeRect ? badgeRect.left + badgeRect.width / 2 : 0,
-          shellWidth: shellRect?.width ?? 0,
-          shellCenter: shellRect ? shellRect.left + shellRect.width / 2 : 0,
+          shellWidth: geometryRect?.width ?? 0,
+          alignmentDelta: badgeRect
+            ? Math.abs(badgeRect.left + badgeRect.width / 2 - expectedCenter)
+            : Number.POSITIVE_INFINITY,
         };
       });
       expect(geometry.badgeWidth).toBeLessThanOrEqual(80);
       expect(geometry.shellWidth).toBeGreaterThan(geometry.badgeWidth);
-      expect(geometry.shellCenter).toBeGreaterThan(geometry.badgeCenter);
+      expect(geometry.alignmentDelta).toBeLessThanOrEqual(2);
 
       await expect(shell).toHaveCSS("opacity", "1");
       await editor.hover();
@@ -988,10 +994,10 @@ test.describe("Build Queue stats fixture", () => {
       const performanceTab = page.getByRole("tab", { name: "Performance" });
       const engineeringTab = page.getByRole("tab", { name: "Engineering" });
       await performanceTab.click();
-      const performanceLabels = await panel.locator(".bq-stat-compact-label").allTextContents();
+      const performanceLabels = await panel.locator(".craft-stat-compact-label").allTextContents();
       const performanceGroups = await panel.locator(".craft-stat-section-title").allTextContents();
       await engineeringTab.click();
-      const engineeringLabels = await panel.locator(".bq-stat-compact-label").allTextContents();
+      const engineeringLabels = await panel.locator(".craft-stat-compact-label").allTextContents();
       const engineeringGroups = await panel.locator(".craft-stat-section-title").allTextContents();
       await performanceTab.click();
       return {
@@ -1023,12 +1029,12 @@ test.describe("Build Queue stats fixture", () => {
         await expect(missionLink).toHaveAttribute("href", "/industry/missions?concept=xenothreat-2-85-01");
 
         await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
-        await expect(page.locator(".bq-item-header .bq-stat-compare-row")).toHaveCount(0);
+        await expect(page.locator(".bq-item-header .craft-stat-comparison-row")).toHaveCount(0);
         await expect(page.locator(".bq-item-identity .bq-stats-meta--header")).toBeVisible();
         await expect(page.locator(".bq-component-statistics .bq-stat-unmodified-column")).toBeVisible();
         await expect(page.locator(".bq-component-statistics .bq-stat-modified-card")).toHaveCount(0);
         await expect(page.locator(".bq-craft-outcome")).toBeVisible();
-        await expect(page.locator(".bq-component-statistics .bq-stat-compact-row").first()).toBeVisible();
+        await expect(page.locator(".bq-component-statistics .craft-stat-compact-row").first()).toBeVisible();
         await expect(page.locator(".bq-component-statistics")).not.toContainText("Not modified");
         await expect(page.locator(".bq-component-statistics")).not.toContainText("Thermal / Power");
         await expect(page.locator(".bq-component-statistics")).not.toContainText("Projectile Range / Max Travel");
@@ -1137,18 +1143,18 @@ test.describe("Build Queue stats fixture", () => {
           await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
           statContent = await readAllStatContent();
           expect(statContent.labels.length).toBeGreaterThan(0);
-          const visibleGroups = page.locator(".bq-component-statistics .bq-stat-unmodified-group");
+          const visibleGroups = page.locator(".bq-component-statistics .craft-stat-section");
           if (await visibleGroups.count() === 0) {
             await page.getByRole("tab", { name: "Engineering" }).click();
           }
           await expect(visibleGroups.first()).toBeVisible();
           const sharedStatLayout = await page.locator(".bq-component-statistics").evaluate((panel) => {
-            const groups = Array.from(panel.querySelectorAll(".bq-stat-unmodified-group"));
+            const groups = Array.from(panel.querySelectorAll(".craft-stat-section"));
             const traitColumns = panel.querySelectorAll(".bq-stat-unmodified-column > .bq-stat-trait-column");
             const groupHeadings = Array.from(panel.querySelectorAll(".craft-stat-section-title"));
             const firstGroup = groups[0];
             const heading = firstGroup?.querySelector(":scope > .craft-stat-section-surface > .craft-stat-section-title");
-            const card = firstGroup?.querySelector(":scope > .bq-stat-unmodified-card");
+            const card = firstGroup?.querySelector(":scope > .craft-stat-section-surface");
             const headingRect = heading?.getBoundingClientRect();
             const cardRect = card?.getBoundingClientRect();
             const icons = Array.from(panel.querySelectorAll(".bq-stat-group-icon"));
@@ -1199,8 +1205,16 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.ad5b) {
           const compactLabels = statContent.labels;
-          expect(statContent.groups).toContain("Ammunition");
-          expect(statContent.groups).not.toContain("Falloff");
+          expect(statContent.groups).toEqual(expect.arrayContaining([
+            "Damage Output",
+            "Firing & Ammunition",
+            "Ballistics",
+            "Accuracy and Spread",
+            "Thermal & Power",
+            "Signature",
+            "Durability & Repair",
+          ]));
+          expect(statContent.groups).not.toEqual(expect.arrayContaining(["Ammunition", "Projectile", "Penetration", "Spread", "Fire Actions", "Additional", "Repair", "Durability / Physical"]));
           expect(compactLabels[0]).toBe("Alpha");
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Fire Rate",
@@ -1219,9 +1233,9 @@ test.describe("Build Queue stats fixture", () => {
             "Physical Damage",
             "Energy Damage",
           ]));
-          const modifiedLabels = await page.locator(".bq-craft-outcome .bq-stat-compact-label").allTextContents();
+          const modifiedLabels = await page.locator(".bq-craft-outcome .craft-stat-compact-label").allTextContents();
           expect(modifiedLabels).toEqual(["Alpha", "Health"]);
-          const compactValues = await page.locator(".bq-stat-compact-value").allTextContents();
+          const compactValues = await page.locator(".craft-stat-compact-value").allTextContents();
           expect(compactValues).not.toContain("0%");
 
           const allocationColors = await page.evaluate(() => {
@@ -1235,8 +1249,15 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.id === FIXTURE_ITEM_IDS.cq7) {
           const compactLabels = statContent.labels;
-          expect(statContent.groups).toContain("Falloff");
-          expect(statContent.groups).not.toContain("Ammunition");
+          expect(statContent.groups).toEqual(expect.arrayContaining([
+            "Damage Output",
+            "Firing",
+            "Projectile",
+            "Accuracy / Spread",
+            "Penetration",
+            "Thermal and Power",
+          ]));
+          expect(statContent.groups).not.toEqual(expect.arrayContaining(["Ammunition", "Falloff", "Spread", "Handling"]));
           expect(compactLabels).toEqual(expect.arrayContaining([
             "Alpha",
             "DPS",
@@ -1616,7 +1637,7 @@ test.describe("Build Queue stats fixture", () => {
     await page.goto(`${BUILD_QUEUE_STATS_FIXTURE_PATH}?target=1`, { waitUntil: "domcontentloaded" });
 
     await expect(page.locator(".bq-item-name")).toHaveText("AD5B Ballistic Gatling");
-    await expect(page.locator('.bq-item-visual img[src$="/component-thumbnails/ad5b.png"]')).toBeVisible();
+    await expect(page.locator('.bq-item-visual img[src$="/component-thumbnails/behr-ballistic-gatling-s5.webp"]')).toBeVisible();
     await expect(page.locator(".bq-mat-group")).toHaveCount(3);
     await expect(page.locator(".bq-craft-outcome")).toBeVisible();
     await expect(page.locator(".bq-stat-modified-card")).toHaveCount(0);

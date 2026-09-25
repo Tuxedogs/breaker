@@ -658,11 +658,8 @@
   position: relative;
 }
 
-.dash-mobile-auth-bar {
-  display: none;
-}
-
-.dash-mobile-nav {
+.dash-mobile-shell-header,
+.dash-mobile-menu-layer {
   display: none;
 }
 
@@ -3508,136 +3505,211 @@
 }
 
 @media (max-width: 760px) {
+  body.mobile-navigation-open {
+    overflow: hidden;
+  }
+
   .dash-sidebar { display: none; }
+  .dash-page { height: 100dvh; }
   .dash-body {
     overflow: visible;
   }
-  .dash-mobile-auth-bar {
-    position: fixed;
-    right: max(0.75rem, env(safe-area-inset-right));
-    bottom: calc(4.65rem + env(safe-area-inset-bottom));
-    z-index: 40;
-    display: flex;
-    width: auto;
-    padding: 0;
-    pointer-events: none;
-  }
-  .dash-mobile-auth-button.discord-btn {
-    width: 2.75rem;
-    height: 2.75rem;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding: 0;
-    border-radius: 999px;
-    border-color: rgba(88, 101, 242, 0.42);
-    background:
-      linear-gradient(180deg, rgba(32, 37, 72, 0.98), rgba(17, 20, 43, 0.94));
-    box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.42),
-      0 0 0 1px rgba(88, 101, 242, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    pointer-events: auto;
-    justify-content: center;
-    color: rgba(200, 210, 255, 0.92);
-  }
-  .dash-mobile-auth-button.discord-btn:hover:not(:disabled) {
-    border-color: rgba(88, 101, 242, 0.62);
-    background:
-      linear-gradient(180deg, rgba(42, 48, 92, 0.98), rgba(22, 26, 54, 0.96));
-    color: #fff;
-  }
-  .dash-mobile-auth-button.discord-btn.discord-btn--signed-in {
-    border-color: rgba(74, 222, 128, 0.42);
-    background:
-      linear-gradient(180deg, rgba(12, 40, 28, 0.98), rgba(6, 22, 16, 0.96));
-    box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.42),
-      0 0 14px rgba(74, 222, 128, 0.16),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    color: rgba(187, 247, 208, 0.94);
-  }
-  .dash-mobile-auth-button.discord-btn.discord-btn--signed-in:hover:not(:disabled) {
-    border-color: rgba(74, 222, 128, 0.58);
-    background:
-      linear-gradient(180deg, rgba(16, 52, 36, 0.98), rgba(8, 30, 22, 0.96));
-    color: rgba(220, 252, 231, 0.98);
-  }
-  .dash-mobile-auth-button.discord-btn .discord-btn-avatar {
-    width: 1.35rem;
-    height: 1.35rem;
-    border-color: rgba(74, 222, 128, 0.35);
-    background: rgba(12, 40, 28, 0.42);
-  }
-  .dash-mobile-auth-button.discord-btn svg {
-    width: 1.1rem;
-    height: 1.1rem;
-  }
-  .dash-mobile-nav {
+  .dash-mobile-shell-header {
     position: relative;
-    inset-inline: auto;
-    bottom: auto;
-    width: 100%;
-    flex: 0 0 auto;
-    z-index: 50;
+    z-index: 55;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    padding: 0.35rem max(0.45rem, env(safe-area-inset-left)) calc(0.35rem + env(safe-area-inset-bottom)) max(0.45rem, env(safe-area-inset-right));
-    border-top: 1px solid rgba(126, 105, 171, 0.22);
-    background:
-      linear-gradient(180deg, rgba(19, 24, 34, 0.94), rgba(7, 10, 16, 0.98)),
-      rgba(7, 10, 16, 0.98);
-    box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.42);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    flex: 0 0 auto;
+    min-height: calc(58px + env(safe-area-inset-top));
+    align-items: end;
+    padding: env(safe-area-inset-top) max(10px, env(safe-area-inset-right)) 8px max(10px, env(safe-area-inset-left));
+    background: #071620;
   }
-  .dash-mobile-nav-item {
-    position: relative;
-    display: flex;
-    min-width: 0;
-    min-height: 48px;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.18rem;
+  .dash-mobile-menu-trigger {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-content: center;
+    gap: 5px;
+    padding: 0;
+    border: 0;
     border-radius: 6px;
-    color: rgba(156, 170, 202, 0.78);
-    font-family: var(--font-primary);
-    font-size: var(--app-text-chip);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-decoration: none;
+    background: transparent;
+    color: rgba(225, 240, 250, 0.94);
+    cursor: pointer;
+  }
+  .dash-mobile-menu-trigger > span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+  .dash-mobile-menu-trigger:hover,
+  .dash-mobile-menu-trigger[aria-expanded="true"] {
+    background: rgba(37, 189, 244, 0.08);
+    color: #cdefff;
+  }
+  .dash-mobile-menu-trigger:focus-visible,
+  .dash-mobile-menu-close:focus-visible,
+  .dash-mobile-menu-item:focus-visible,
+  .dash-mobile-menu-backdrop:focus-visible {
+    outline: 2px solid rgba(37, 189, 244, 0.9);
+    outline-offset: 2px;
+  }
+  .dash-mobile-shell-brand {
+    align-self: center;
+    justify-self: center;
+    padding-top: 8px;
+    color: rgba(207, 229, 248, 0.96);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.38em;
+  }
+  .dash-mobile-shell-header-end {
+    width: 42px;
+    height: 42px;
+  }
+  .dash-mobile-menu-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: block;
+  }
+  .dash-mobile-menu-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 7, 12, 0.7);
+    backdrop-filter: blur(4px);
+    cursor: default;
+  }
+  .dash-mobile-menu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    width: min(82vw, 320px);
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    border-right: 1px solid rgba(109, 166, 199, 0.25);
+    background: linear-gradient(180deg, rgba(8, 24, 36, 0.99), rgba(3, 12, 19, 0.995));
+    box-shadow: 18px 0 48px rgba(0, 0, 0, 0.48);
+  }
+  .dash-mobile-menu-header {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px 8px 18px;
+    border-bottom: 1px solid rgba(109, 166, 199, 0.16);
+    color: rgba(220, 238, 251, 0.94);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
-  .dash-mobile-nav-item--active {
-    color: rgba(216, 203, 255, 0.98);
-    background: rgba(167, 139, 250, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(167, 139, 250, 0.24);
-  }
-  .dash-mobile-nav-icon-wrap {
-    position: relative;
+  .dash-mobile-menu-close {
     display: grid;
+    width: 38px;
+    height: 38px;
     place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(183, 210, 230, 0.8);
+    font: 300 1.6rem/1 system-ui, sans-serif;
+    cursor: pointer;
   }
-  .dash-mobile-nav-icon {
-    width: 1.08rem;
-    height: 1.08rem;
+  .dash-mobile-menu-close:hover { background: rgba(37, 189, 244, 0.08); color: #e8f7ff; }
+  .dash-mobile-menu-list {
+    display: grid;
+    align-content: start;
+    gap: 3px;
+    overflow-y: auto;
+    padding: 12px;
   }
-  .dash-mobile-nav-badge {
+  .dash-mobile-menu-item {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 14px;
+    gap: 10px;
+    min-height: 48px;
+    align-items: center;
+    padding: 0 11px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: rgba(174, 199, 218, 0.86);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 520;
+    text-decoration: none;
+  }
+  .dash-mobile-menu-item:hover { background: rgba(37, 189, 244, 0.055); color: #e8f7ff; }
+  .dash-mobile-menu-item--active {
+    border-color: rgba(37, 189, 244, 0.3);
+    background: rgba(37, 189, 244, 0.1);
+    color: #dff5ff;
+  }
+  .dash-mobile-menu-icon-wrap { position: relative; display: grid; place-items: center; }
+  .dash-mobile-menu-icon { width: 19px; height: 19px; }
+  .dash-mobile-menu-badge {
     position: absolute;
-    right: -0.62rem;
-    top: -0.46rem;
+    right: -7px;
+    top: -7px;
     display: grid;
-    min-width: 1rem;
-    height: 1rem;
+    min-width: 16px;
+    height: 16px;
     place-items: center;
-    border-radius: 999px;
+    padding: 0 4px;
+    border-radius: 8px;
     background: rgba(248, 113, 113, 0.92);
-    color: rgba(255, 255, 255, 0.96);
-    font-size: var(--app-text-chip);
+    color: #fff;
+    font-size: 0.62rem;
     line-height: 1;
   }
+  .dash-mobile-menu-chevron { color: rgba(143, 193, 220, 0.66); font-size: 1.3rem; font-weight: 300; }
+  .dash-mobile-menu-secondary {
+    display: grid;
+    gap: 6px;
+    padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    border-top: 1px solid rgba(109, 166, 199, 0.16);
+  }
+  .dash-mobile-menu-community.discord-btn {
+    width: 100%;
+    min-height: 46px;
+    border-color: transparent;
+    background: transparent;
+    color: rgba(174, 199, 218, 0.86);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.84rem;
+  }
+  .dash-mobile-menu-community.discord-btn:hover:not(:disabled) {
+    border-color: rgba(109, 166, 199, 0.2);
+    background: rgba(37, 189, 244, 0.055);
+    color: #e8f7ff;
+  }
+  .dash-mobile-menu-setting {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+  .dash-mobile-menu-setting-state {
+    color: rgba(143, 193, 220, 0.66);
+    font-size: 0.66rem;
+    text-align: right;
+  }
   .dash-content {
-    padding-bottom: calc(3.8rem + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
   }
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
   .dash-cards-row { grid-template-columns: 1fr; }
