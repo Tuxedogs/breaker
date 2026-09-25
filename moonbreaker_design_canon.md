@@ -1,26 +1,101 @@
 # Moonbreaker Design Canon
 
-Updated: 2026-08-13
+Updated: 2026-09-25
 
 This canon describes the visual system currently implemented across Moonbreaker / Scintel. It is the default reference for new UI work and for page-by-page visual refinement.
 
 It does not approve every existing page-level rule. The shared tokens and interaction roles are authoritative; page-local composition must still be judged against the workflow it supports.
 
-## Product Character
+## Crafting Is the Reference Implementation
 
-Moonbreaker should feel like a dark, premium spacecraft operations interface:
+The Crafting Recipe Browser is the primary reference implementation for Breaker’s application UI. New pages and major redesigns should inherit its visual hierarchy, density, surface treatment, interaction language, responsive behavior, and overall restraint unless the page has a functional reason to diverge.
 
-- Dense but readable
-- Operational rather than ornamental
-- Calm during long sessions
-- Strongly hierarchical
-- Compact where records repeat
-- Restrained in glow, gradients, and accent use
-- Clear about state without relying on color alone
+The goal is not to make every Breaker page identical. The goal is to make every page unmistakably part of the same application. Crafting is the visual grammar, not a page template: adapt its principles to each workflow and do not force its exact DOM structure onto unrelated pages.
 
-The interface is built on graphite-black and deep navy surfaces with cool structural highlights, amber decisive actions, and labeled semantic colors.
+Next Fabrication Run remains the accepted composition benchmark for its specific operational handoff; it is not the global visual benchmark or a universal three-column template.
 
-The original Next Fabrication Run composition is the primary quality benchmark for operational UI. It succeeds because its hierarchy, density, grouping, and action path are designed around the workflow. It is not a universal card template, and its exact three-column geometry should not be copied onto unrelated pages.
+## Core Visual Character
+
+Breaker uses a dark graphite/navy application canvas with layered neutral surfaces and restrained blue/cyan accents. The interface should feel operational, dense, precise, and modern without becoming a game HUD.
+
+Color communicates state rather than decorating containers. Most of the interface should remain neutral; accent belongs primarily to selection, focus, active controls, important values, status, and small identity elements. Avoid large blue washes, excessive gradients, glowing containers, permanently saturated panels, and competing accent colors.
+
+A useful visual balance is approximately:
+
+- 80% neutral dark structure
+- 15% muted borders, secondary surfaces, and typography
+- 5% active/status accent
+
+Purple, teal, green, yellow, red, and amber are semantic colors, not general decoration. State must remain understandable without color alone.
+
+## Surface Hierarchy
+
+Pages establish hierarchy primarily through spacing, elevation, border contrast, typography, and surface depth. Do not solve hierarchy by giving every region a colored background.
+
+Primary work surfaces should read clearly against the application canvas. Nested surfaces become progressively quieter rather than progressively brighter. Borders should be thin and restrained: they define structure without turning every component into a card. Large card grids are appropriate only when the underlying information is genuinely card-shaped; operational tables, browsers, lists, inspectors, and queues remain dense.
+
+## Page Shell and Headers
+
+Crafting establishes the preferred Breaker page rhythm: a clear application-level header followed by the working surface, with compact deliberate spacing between major regions. Where appropriate, reuse:
+
+```css
+display: grid;
+grid-template-rows: 48px minmax(0, 1fr);
+gap: 8px;
+padding: 8px;
+```
+
+Workflows may change the grid structure but should retain this rhythm. Use `minmax(0, 1fr)` and `min-height: 0` correctly so browsers and tables own scrolling rather than the entire shell.
+
+Page headers are application headers, not marketing heroes. They provide concise page identity, optional short operational context, and relevant status or utility actions without consuming excessive vertical space. Crafting is the baseline for header height, spacing, typography, and relationship to the working surface.
+
+## Filters, Search, and Selection
+
+Crafting defines the preferred filter language. Search remains immediately discoverable and high-frequency controls remain in the primary interface. Lower-frequency or numerous filters may move into an organized filter surface, especially on mobile. Inactive filters stay quiet; active filters become identifiable without filling the page with accent color. Show counts and clear/reset actions where useful.
+
+Search, filter chips, selects, toggles, and associated controls share heights, borders, typography, spacing, focus treatment, and surface colors across Breaker. Use existing Breaker primitives and tokens before introducing page-specific variants.
+
+Selection must be obvious. Selected rows, cards, filters, queue entries, navigation items, and tabs use the same family of signals: restrained accent, border emphasis, surface shift, clear text hierarchy, and where appropriate a compact status marker. Do not rely on a border difference that disappears into adjacent structure, and never require the user to remember what they clicked.
+
+## Information Hierarchy and Density
+
+Expose the information needed for the current decision before secondary detail. Crafting’s browser/detail relationship is canonical: discovery controls lead into results; results expose enough information to select; selection exposes progressively deeper information without unnecessary page changes or modal hopping.
+
+Where it improves comprehension, details should read as coherent vertical documents rather than excessive tabs. The preferred Crafting order is identity and primary context, materials and requirements, effects or calculated outcomes, statistics, blueprint/source information, then actions. Domains may use different sections, but should follow the user’s decision process.
+
+Breaker is an operational tool. Do not inflate components merely to create whitespace or make every metric an oversized tile. Dense tables, compact rows, concise metadata, and small gaps are desirable when readability remains strong.
+
+## Scrolling and Responsive Behavior
+
+The shell should generally remain stable while browsers, tables, result lists, inspectors, and other large working regions own their scrolling. The preferred structure is an available-height root, a header outside the scroll region, a `flex: 1` or `minmax(0, 1fr)` working region with `min-height: 0`, and inner content that uses `overflow-y: auto` as needed. Avoid accidental double scroll. Preserve useful horizontal comparison tables at compact widths when that is the honest information model.
+
+Responsive work is a deliberate alternate composition, not an emergency pile of overrides. Desktop remains coherent through intermediate widths; mobile prioritizes the current task rather than attempting to display every desktop control at once. Crafting’s mobile filter sheet is the reference for large filter sets: its compact trigger communicates active-filter state and its sheet contains the real existing controls, not a disconnected duplicate.
+
+Dialogs support keyboard focus containment, Escape dismissal where applicable, focus restoration, backdrop dismissal, a scrollable body, and safe-area-aware actions. Avoid overlapping breakpoint systems and duplicate selectors controlling the same component.
+
+## CSS Ownership and Redesign Process
+
+Every major screen has a clearly identifiable styling owner. Before styling, determine which stylesheet and components own the presentation. Do not permanently layer redesign styles over obsolete selectors; migrate ownership and remove superseded rules after verification.
+
+Prefer existing tokens and shared primitives such as the operational surface, filter shell, focus treatment, application spacing, and typography. Extract a shared primitive only from patterns that have already succeeded in real pages; do not create speculative design-system abstractions.
+
+A redesign may substantially change layout and presentation while preserving domain behavior. Preserve data semantics, persistence, calculations, routing, filtering behavior, domain actions, accessibility, and other working application behavior—not obsolete markup. Start from a concrete visual target, audit the real implementation, identify incompatible layout and CSS, and build the target structure directly. Keep functional changes separate unless UX requires otherwise. Compare realistic viewport renders with the target; mismatches are defects, not reinterpretations. The objective is convergence, not approximation.
+
+## Environmental Artwork
+
+Environmental artwork may be a first-class part of Breaker’s visual system. Crafting is the reference implementation. Artwork establishes place, atmosphere, and product identity without competing with the operational interface; it is integrated composition, not a decorative banner or wallpaper.
+
+Artwork may establish a major workspace, differentiate domains, reinforce the Star Citizen industrial/logistical setting, add depth behind neutral surfaces, and transition between navigation, page identity, and working content. It must never carry required information: controls, labels, state, values, warnings, and targets remain legible and understandable without it.
+
+Artwork should be dark, cinematic, low contrast behind content, compositionally intentional, and compatible with graphite/navy surfaces. Preserve recognizable detail in exposed regions while allowing darker values beneath dense UI. Do not force readability with a strong global gradient; generate or edit the composition so negative space and dark regions occur where the UI needs them.
+
+Artwork may extend behind headers, browsers, inspectors, or other suitable surfaces, but UI surfaces retain sufficient opacity and separation. Do not make every container transparent merely to reveal the image. Reserve uninterrupted imagery where it improves composition, and let it recede as the user moves into dense operational content.
+
+Major domains may use coherent environmental identities: Crafting uses fabrication/workshops/components; Inventory cargo bays, storage grids, and freight handling; Build Queue production lines and fabrication cells; Mining planetary, asteroid, vehicle, extraction, or orbital industrial scenes. These environments are not literal illustrations of controls.
+
+All artwork belongs to one visual universe: consistent lighting, contrast, camera language, realism, color treatment, environmental density, and cinematic restraint. Generate against the intended UI composition—determine aspect ratio, dense surface placement, visible artwork, required dark negative space, and a subject that survives desktop and intermediate widths. Generate alternate compositions or mobile crops when necessary instead of forcing one generic crop.
+
+The artwork serves the interface. If it creates readability, cropping, responsive, or hierarchy problems, change the artwork rather than distorting the UI. The Crafting treatment is the standard: atmospheric enough to establish identity, quiet enough that operational work remains dominant.
 
 ## Implementation Authority
 
@@ -644,14 +719,11 @@ Also require:
 
 Visual changes require deterministic evidence. Tests and builds alone are not enough.
 
-Inspect at minimum:
+Inspect representative viewports appropriate to the affected composition. For major responsive work, use 375, 390, 393, 430, 768, 901, 1180, 1920, 2560, and 3840 pixels wide where applicable. Record the exact viewport heights used.
 
-- 1920×1080
-- 2560×1440
+Recipe Browser and Crafting Detail changes require 1920×1080, 2560×1440, and 3840×2160 passes in addition to their affected compact widths.
 
-Recipe Browser and Crafting Detail changes also require a 3840×2160 pass.
-
-Also inspect mobile when the affected component already supports mobile or the task requests it.
+Inspect mobile whenever the component supports it or the work changes responsive behavior.
 
 For responsive logistics hierarchies, the standard compact evidence size is 768×900 unless the task specifies another viewport.
 
