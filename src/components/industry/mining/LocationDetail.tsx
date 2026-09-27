@@ -38,6 +38,7 @@ import {
   miningCompetitionEmptyMessage,
   miningCompetitionProbabilitySummary,
 } from "./miningCompetitionPresentation";
+import { miningMethodPresentation, type MiningMethodIconKey } from "./miningMethodPresentation";
 import handMiningMultitoolIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
 import surfaceShipMiningIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
 import vehicleMiningExosuitIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
@@ -239,15 +240,7 @@ const MINING_METHOD_ICON_ASSETS = {
   vehicle: vehicleMiningExosuitIcon,
 } as const;
 
-function miningMethodIconKey(method: string): keyof typeof MINING_METHOD_ICON_ASSETS {
-  const normalized = method.toLowerCase();
-  if (normalized.includes("hand")) return "hand";
-  if (normalized.includes("vehicle")) return "vehicle";
-  return "ship";
-}
-
-function MiningMethodIcon({ method }: { method: string }) {
-  const methodKey = miningMethodIconKey(method);
+function MiningMethodIcon({ methodKey }: { methodKey: MiningMethodIconKey }) {
   return <img className={`mdet-method-icon mdet-method-icon--${methodKey}`} src={MINING_METHOD_ICON_ASSETS[methodKey]} alt="" aria-hidden="true" />;
 }
 
@@ -572,8 +565,11 @@ export function LocationDetail({
           <span className="mdet-survey-heading">Mining methods</span>
           {locationMethodMixItems.length > 0 ? locationMethodMixItems.map((item) => {
             const label = miningMethodBadge(item.method)?.label ?? item.method;
+            const presentation = miningMethodPresentation(item.method);
             return <div className="mdet-method-rack-item" key={item.method} title={`${label}: ${formatMiningProbability(item.share)} available`}>
-              <MiningMethodIcon method={item.method} /><span className="sr-only">{label}</span><strong>{formatMiningProbability(item.share)}</strong>
+              {presentation.iconKey ? <MiningMethodIcon methodKey={presentation.iconKey} /> : <span className="mdet-method-fallback">{presentation.visibleLabel}</span>}
+              {presentation.iconKey && <span className="sr-only">{label}</span>}
+              <strong>{formatMiningProbability(item.share)}</strong>
             </div>;
           }) : <span className="mdet-unavailable">Unavailable</span>}
         </div>
