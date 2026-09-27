@@ -15,13 +15,19 @@ export default function CraftingLayout() {
   const location = useLocation();
   const isBrowserRoute = location.pathname.replace(/\/+$/, "") === "/industry/crafting";
   const hasSelectedDetail = isBrowserRoute && Boolean(searchParams.get("preview"));
+  const browserRequestParams = new URLSearchParams(searchParams);
+  browserRequestParams.delete("preview");
+  const browserRequestKey = browserRequestParams.toString();
 
   useEffect(() => {
     if (!isBrowserRoute) return;
     const controller = new AbortController();
-    setLoading(true);
-    setError(null);
-    const query = new URLSearchParams(searchParams);
+    queueMicrotask(() => {
+      if (controller.signal.aborted) return;
+      setLoading(true);
+      setError(null);
+    });
+    const query = new URLSearchParams(browserRequestKey);
     if (query.get("bk") === "1") {
       try {
         const values = JSON.parse(window.localStorage.getItem("scintel:recipe:bookmarks:v1") ?? "[]");
@@ -46,7 +52,7 @@ export default function CraftingLayout() {
         setLoading(false);
       });
     return () => controller.abort();
-  }, [isBrowserRoute, searchParams]);
+  }, [browserRequestKey, isBrowserRoute]);
 
   const contextValue = useMemo(
     () => ({ componentCards, componentCardFacets, loading, error, browserPage }),

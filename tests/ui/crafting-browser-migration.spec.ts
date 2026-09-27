@@ -4,6 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const browserPath = "/industry/crafting";
 const AD5B_ID = "ba842720-ad32-4d53-8f56-992bacb1fc45";
+const ATLAS_ID = "17b29a33-88fe-484f-bb9b-fbf780273ff5";
 const screenshotDir = path.resolve(process.cwd(), "artifacts", "crafting-production-migration");
 
 function installFailureGuards(page: Page) {
@@ -35,6 +36,16 @@ async function selectAd5b(page: Page) {
     "aria-label",
     /AD5B Ballistic Gatling/,
   );
+}
+
+async function clickRecipeRowById(page: Page, id: string) {
+  await page.locator(".crb2-results").evaluate((results, recipeId) => {
+    const row = results.querySelector<HTMLElement>(
+      `[data-crafting-record-id="${CSS.escape(recipeId)}"]`,
+    );
+    if (!row) throw new Error(`Recipe row is unavailable: ${recipeId}`);
+    row.click();
+  }, id);
 }
 
 test.describe("Crafting production browser migration", () => {
@@ -77,6 +88,85 @@ test.describe("Crafting production browser migration", () => {
     await page.getByRole("button", { name: "Clear all" }).click();
     await expect(page).toHaveURL(new RegExp(`preview=${AD5B_ID}`));
     await expect(page).not.toHaveURL(/(?:\?|&)(?:search|v|f|sz|gr|cl|mt|bk|pg)=/);
+    expect(failures).toEqual([]);
+  });
+
+  test("keeps the browser list mounted and does not refetch it for selection history", async ({ page }) => {
+    const failures = installFailureGuards(page);
+    const browserRequests: string[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/crafting/component-cards/browser") {
+        browserRequests.push(request.url());
+      }
+    });
+
+    await page.setViewportSize({ width: 1920, height: 800 });
+    await page.goto(browserPath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".crb2-list")).toBeVisible();
+    const filteredBrowserResponse = page.waitForResponse((response) => {
+      const url = new URL(response.url());
+      return url.pathname === "/api/crafting/component-cards/browser"
+        && url.searchParams.get("search") === "a";
+    });
+    await page.getByRole("searchbox", { name: "Search components" }).fill("a");
+    await filteredBrowserResponse;
+    await expect(page.locator(".crb2-list")).toBeVisible();
+
+    const baselineRequestCount = browserRequests.length;
+    const initialNavigationCount = await page.evaluate(() => performance.getEntriesByType("navigation").length);
+    const initialScrollTop = await page.locator(".crb2-results").evaluate((results) => {
+      const target = Math.min(260, results.scrollHeight - results.clientHeight);
+      if (target <= 0) throw new Error("Recipe results are not scrollable in the regression fixture");
+      results.scrollTop = target;
+      Object.assign(window, {
+        __craftingResultsNode: results,
+        __craftingListNode: results.querySelector(".crb2-list"),
+        __craftingDocumentMarker: Symbol("crafting-document"),
+      });
+      return results.scrollTop;
+    });
+    expect(initialScrollTop).toBeGreaterThan(0);
+
+    await clickRecipeRowById(page, AD5B_ID);
+    await expect(page).toHaveURL(new RegExp(`preview=${AD5B_ID}`));
+    await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
+    await expect.poll(() => browserRequests.length).toBe(baselineRequestCount);
+    await expect.poll(() => page.locator(".crb2-results").evaluate((results) => ({
+      sameResults: (window as typeof window & { __craftingResultsNode?: Element }).__craftingResultsNode === results,
+      sameList: (window as typeof window & { __craftingListNode?: Element }).__craftingListNode === results.querySelector(".crb2-list"),
+      scrollTop: results.scrollTop,
+    }))).toEqual({ sameResults: true, sameList: true, scrollTop: initialScrollTop });
+
+    await clickRecipeRowById(page, ATLAS_ID);
+    await expect(page).toHaveURL(new RegExp(`preview=${ATLAS_ID}`));
+    await expect.poll(() => browserRequests.length).toBe(baselineRequestCount);
+
+    await page.goBack();
+    await expect(page).toHaveURL(new RegExp(`preview=${AD5B_ID}`));
+    await expect.poll(() => browserRequests.length).toBe(baselineRequestCount);
+    await page.goForward();
+    await expect(page).toHaveURL(new RegExp(`preview=${ATLAS_ID}`));
+    await expect.poll(() => browserRequests.length).toBe(baselineRequestCount);
+    await expect(page.getByRole("searchbox", { name: "Search components" })).toHaveValue("a");
+
+    const lifecycle = await page.locator(".crb2-results").evaluate((results) => ({
+      sameResults: (window as typeof window & { __craftingResultsNode?: Element }).__craftingResultsNode === results,
+      sameList: (window as typeof window & { __craftingListNode?: Element }).__craftingListNode === results.querySelector(".crb2-list"),
+      scrollTop: results.scrollTop,
+      navigationCount: performance.getEntriesByType("navigation").length,
+      documentMarkerRetained: Boolean((window as typeof window & { __craftingDocumentMarker?: symbol }).__craftingDocumentMarker),
+    }));
+    expect(lifecycle).toEqual({
+      sameResults: true,
+      sameList: true,
+      scrollTop: initialScrollTop,
+      navigationCount: initialNavigationCount,
+      documentMarkerRetained: true,
+    });
+
+    await page.goto(`${browserPath}?search=a&preview=${ATLAS_ID}`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator(".craft-detail-drawer-shell")).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: "Search components" })).toHaveValue("a");
     expect(failures).toEqual([]);
   });
 

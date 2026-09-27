@@ -1,4 +1,15 @@
 import { http, HttpResponse, passthrough } from "msw";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import {
+  getComponentCardVariantGroupKey,
+  pickComponentCardGroupRepresentative,
+} from "@/components/industry/crafting/utils/componentCardVariants";
+import {
+  compareRecipeBrowserRecords,
+  compareRecipeBrowserSearchRecords,
+  filterRecipeBrowserRecords,
+  getRecipeBrowserSearchParam,
+} from "@/components/industry/crafting/utils/recipeBrowserFilters";
 import {
   componentCardBrowseResponse,
   componentCardFacetsResponse,
@@ -22,6 +33,59 @@ const localMiningApiPaths = [
   "/api/mining/lagrange-groups",
   "/api/mining/lagrange-children",
 ] as const;
+
+function getFixtureComponentCardBrowserPage(requestUrl: string) {
+  const url = new URL(requestUrl);
+  const searchParams = url.searchParams;
+  const savedBlueprintIds = new Set(
+    (searchParams.get("saved") ?? "").split(",").map((value) => value.trim()).filter(Boolean),
+  );
+  const records = (componentCardBrowseResponse.records as ComponentCardIndexRecord[])
+    .filter((record) => componentCards.has(record.id));
+  const filteredRecords = filterRecipeBrowserRecords(records, searchParams, {
+    savedOnly: searchParams.get("bk") === "1",
+    savedBlueprintIds,
+  });
+  const groupedRecords = new Map<string, ComponentCardIndexRecord[]>();
+  const ungroupedRecords: ComponentCardIndexRecord[] = [];
+  for (const record of filteredRecords) {
+    const key = getComponentCardVariantGroupKey(record);
+    if (!key) ungroupedRecords.push(record);
+    else groupedRecords.set(key, [...(groupedRecords.get(key) ?? []), record]);
+  }
+  const search = getRecipeBrowserSearchParam(searchParams);
+  const browserRecords = [
+    ...ungroupedRecords,
+    ...[...groupedRecords.values()].map(pickComponentCardGroupRepresentative),
+  ].sort(search
+    ? (a, b) => compareRecipeBrowserSearchRecords(a, b, search)
+    : compareRecipeBrowserRecords);
+  const limit = Math.max(1, Math.min(40, Number(searchParams.get("limit") ?? "40") || 40));
+  const requestedPage = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
+  const page = Math.min(requestedPage, Math.max(1, Math.ceil(browserRecords.length / limit)));
+  const pageRecords = browserRecords.slice((page - 1) * limit, page * limit);
+
+  return {
+    schemaVersion: 1,
+    generatedAt: componentCardBrowseResponse.generatedAt,
+    facets: componentCardFacetsResponse.facets,
+    totalRecords: browserRecords.length,
+    page,
+    limit,
+    records: pageRecords,
+    supportingRecords: [],
+    familyRecipeIdsById: Object.fromEntries(pageRecords.map((record) => [
+      record.id,
+      record.familyKey
+        ? records.filter((candidate) => (
+          candidate.kind === record.kind
+          && candidate.type === record.type
+          && candidate.familyKey === record.familyKey
+        )).map((candidate) => candidate.id)
+        : [record.id],
+    ])),
+  };
+}
 
 export const handlers = [
   ...localMiningApiPaths.map((path) => http.get(`*${path}`, () => passthrough())),
@@ -49,6 +113,9 @@ export const handlers = [
       ? HttpResponse.json({ error: "Fixture PTU dataset unavailable" }, { status: 404 })
       : HttpResponse.json({ meta: fittingMeta, data: {} });
   }),
+  http.get("*/api/crafting/component-cards/browser", ({ request }) => (
+    HttpResponse.json(getFixtureComponentCardBrowserPage(request.url))
+  )),
   http.get("*/api/crafting/component-cards/:id", ({ params }) => {
     const record = componentCards.get(String(params.id).toLowerCase());
     return record ? HttpResponse.json(record) : HttpResponse.json({ error: "Unknown fixture component card" }, { status: 404 });
