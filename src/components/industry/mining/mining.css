@@ -6,43 +6,11 @@
 
 /* ──────────────────────────────────────────────
    Industry / Mining Module Styles
-   Scoped to .mine-* / .mloc-* / .msb-* to avoid conflicts.
+   Scoped to the Mining page and shared detail/list utilities.
    Follows the same dark palette as logistics.css / crafting.css.
    ────────────────────────────────────────────── */
 
 /* ── Page shell ───────────────────────────────── */
-
-:root {
-  --sc-bg-0: var(--void-bg-0);
-  --sc-bg-1: var(--void-bg-1);
-  --sc-bg-2: var(--void-bg-2);
-  --sc-bg-3: var(--void-bg-3);
-
-  --sc-border: var(--border-soft-color);
-  --sc-border-strong: var(--border-panel-color);
-
-  --sc-text: #edf7ff;
-  --sc-text-muted: rgba(169, 186, 208, 0.82);
-  --sc-text-faint: rgba(122, 143, 163, 0.7);
-
-  --sc-teal: #4db8b0;
-  --sc-teal-soft: rgba(77, 184, 168, 0.12);
-  --sc-teal-border: rgba(77, 184, 168, 0.24);
-
-  --sc-purple: #a78bfa;
-  --sc-purple-soft: rgba(124, 58, 237, 0.16);
-  --sc-purple-border: rgba(167, 139, 250, 0.36);
-
-  --sc-green: #34d399;
-  --sc-green-soft: rgba(16, 185, 129, 0.14);
-  --sc-green-border: rgba(52, 211, 153, 0.28);
-
-  --sc-amber: #fbbf24;
-  --sc-amber-soft: rgba(251, 191, 36, 0.13);
-  --sc-amber-border: rgba(251, 191, 36, 0.32);
-
-  --sc-red: #fb7185;
-}
 
 .mine-page {
   display: flex;
@@ -54,186 +22,6 @@
   box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
-}
-
-/* ── Filter sidebar ────────────────────────────── */
-
-.msb-sidebar {
-  display: flex;
-  flex-direction: column;
-  position: static;
-  max-height: none;
-  overflow: visible;
-  background: rgba(7, 10, 18, 0.88);
-  border: 1px solid rgba(148, 163, 184, 0.08);
-  position: sticky;
-  top: 1rem;
-  max-height: none;
-  overflow: visible;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-}
-
-/* ── Sidebar section ──────────────────────────── */
-
-.msb-section {
-  padding: 0.62rem 0.72rem 0.52rem;
-  padding: 0.62rem 0.72rem 0.52rem;
-  padding: 0.62rem 0.72rem 0.52rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.msb-section-label {
-  display: block;
-  font-family: var(--font-primary);
-  font-size: 0.48rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(169, 186, 208, 0.62);
-  margin-bottom: 0.24rem;
-  color: rgba(169, 186, 208, 0.55);
-  margin-bottom: 0.36rem;
-}
-
-.msb-section-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.22rem;
-}
-
-.msb-section-label-row .msb-section-label {
-  margin-bottom: 0;
-}
-
-/* ── Chip rail ────────────────────────────────── */
-
-.msb-chip-rail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.16rem;
-}
-
-/* ── Sidebar chips ────────────────────────────── */
-
-.msb-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  font-family: var(--font-primary);
-  font-size: 0.68rem;
-  letter-spacing: 0.02em;
-  background: rgba(10, 14, 22, 0.55);
-  border: 1px solid rgba(148, 163, 184, 0.1);
-  border-radius: 3px;
-  color: rgba(169, 186, 208, 0.72);
-  padding: 0.1rem 0.3rem;
-  cursor: pointer;
-  transition: all 0.12s;
-  white-space: nowrap;
-  height: 22px;
-  box-sizing: border-box;
-}
-
-.msb-chip:hover:not(:disabled) {
-  border-color: rgba(148, 163, 184, 0.24);
-  color: rgba(226, 232, 240, 0.9);
-  background: rgba(15, 20, 30, 0.86);
-}
-
-/* Selected state: violet accent, same as logistics/crafting */
-.msb-chip--active {
-  background: rgba(167, 139, 250, 0.1);
-  border-color: rgba(167, 139, 250, 0.3);
-  color: rgba(167, 139, 250, 0.95);
-}
-
-.msb-chip--active:hover:not(:disabled) {
-  background: rgba(167, 139, 250, 0.16);
-  border-color: rgba(167, 139, 250, 0.45);
-}
-
-/* Selected removable chip: shows × */
-.msb-chip--selected {
-  background: rgba(167, 139, 250, 0.1);
-  border-color: rgba(167, 139, 250, 0.3);
-  color: rgba(167, 139, 250, 0.9);
-}
-
-.msb-chip--selected:hover {
-  background: rgba(248, 113, 113, 0.08);
-  border-color: rgba(248, 113, 113, 0.28);
-  color: rgba(248, 113, 113, 0.8);
-}
-
-.msb-chip-x {
-  font-size: 0.62rem;
-  opacity: 0.65;
-}
-
-.msb-chip:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-/* ── Sidebar divider ──────────────────────────── */
-
-.msb-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* ── Collapsible panels ───────────────────────── */
-
-.msb-collapsible {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.msb-collapsible:last-child {
-  border-bottom: none;
-}
-
-.msb-collapsible-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  width: 100%;
-  padding: 0.6rem 0.85rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.12s;
-}
-
-.msb-collapsible-header:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.msb-collapsible-header .msb-section-label {
-  margin-bottom: 0;
-  flex: 1;
-}
-
-.msb-count-pill {
-  font-family: var(--font-primary);
-  font-size: 0.52rem;
-  color: rgba(169, 186, 208, 0.62);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
-  padding: 0.05rem 0.28rem;
-  flex-shrink: 0;
-}
-
-.msb-collapse-arrow {
-  font-size: 0.46rem;
-  color: rgba(160, 180, 220, 0.2);
-  flex-shrink: 0;
-}
-
-.msb-collapsible-body {
-  padding: 0 0.85rem 0.65rem;
 }
 
 /* ── Empty / status states ────────────────────── */
@@ -276,170 +64,6 @@
 
 .mine-status-state--error .mine-status-text {
   color: rgba(248, 113, 113, 0.7);
-}
-
-/* ── Top filter rail ──────────────────────────── */
-
-.mfr-rail {
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
-  flex-wrap: wrap;
-  background: var(--bg-panel);
-  border: var(--border-panel);
-  border-radius: 7px;
-  padding: 0.5rem 0.75rem;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
-}
-
-.mfr-group {
-  display: flex;
-  align-items: center;
-  gap: 0.28rem;
-  flex-wrap: wrap;
-  padding: 0.12rem 0;
-  min-width: 0;
-}
-
-.mfr-group--materials {
-  flex: 1;
-  min-width: 0;
-}
-
-.mfr-group-label {
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.72);
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin-right: 0.14rem;
-}
-
-.mfr-divider {
-  width: 1px;
-  align-self: stretch;
-  background: var(--border-soft-color);
-  margin: 0 0.62rem;
-  flex-shrink: 0;
-}
-
-.mfr-chips {
-  display: flex;
-  align-items: center;
-  gap: 0.22rem;
-  flex-wrap: nowrap;
-}
-
-.mfr-chips--wrap {
-  flex-wrap: wrap;
-}
-
-.mfr-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.22rem;
-  height: 28px;
-  min-width: 0;
-  padding: 0 0.52rem;
-  border: 1px solid rgba(148, 163, 184, 0.1);
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.02);
-  color: rgba(169, 186, 208, 0.72);
-  font-family: var(--font-primary);
-  font-size: 0.75rem;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.1s, border-color 0.1s, background 0.1s;
-  box-sizing: border-box;
-}
-
-.mfr-chip:hover {
-  border-color: rgba(148, 163, 184, 0.28);
-  color: rgba(220, 228, 238, 0.88);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.mfr-chip--active {
-  border-color: rgba(255, 153, 0, 0.52);
-  background: rgba(255, 120, 0, 0.1);
-  color: rgba(255, 210, 80, 0.97);
-}
-
-.mfr-chip--active:hover {
-  border-color: rgba(255, 153, 0, 0.7);
-  background: rgba(255, 120, 0, 0.16);
-  color: rgba(255, 220, 90, 1);
-}
-
-.mfr-chip--bq.mfr-chip--active {
-  background: rgba(52, 211, 153, 0.1);
-  border-color: rgba(52, 211, 153, 0.42);
-  color: rgba(52, 211, 153, 0.95);
-}
-
-.mfr-chip--disabled,
-.mfr-chip:disabled {
-  opacity: 0.32;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.mfr-chip--clear {
-  color: rgba(248, 113, 113, 0.58);
-  border: var(--border-danger);
-  background: none;
-}
-
-.mfr-chip--clear:hover {
-  color: rgba(248, 113, 113, 0.85);
-  border: var(--border-danger);
-  background: rgba(248, 113, 113, 0.05);
-}
-
-.mfr-chip-count {
-  font-size: 0.68rem;
-  background: rgba(52, 211, 153, 0.18);
-  border-radius: 2px;
-  padding: 0 0.24rem;
-  color: rgba(52, 211, 153, 0.95);
-  font-weight: 700;
-}
-
-.mfr-clear-btn {
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  letter-spacing: 0.03em;
-  color: rgba(248, 113, 113, 0.62);
-  background: none;
-  border: 1px solid rgba(248, 113, 113, 0.2);
-  border-radius: 3px;
-  padding: 0.18rem 0.52rem;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.12s;
-  align-self: center;
-}
-
-.mfr-clear-btn:hover {
-  color: rgba(248, 113, 113, 0.85);
-  border-color: rgba(248, 113, 113, 0.35);
-}
-
-/* ── Main console 3-column layout ─────────────── */
-
-.mconsole-layout {
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 0.7rem;
-  align-items: stretch;
-  flex: 1 1 0;
-  min-height: 0;
-  overflow: hidden;
 }
 
 
@@ -558,11 +182,6 @@
   text-decoration-color: rgba(255, 190, 80, 0.72);
 }
 
-.mine-page :where(button, [role="button"], input, select):focus-visible {
-  outline: 2px solid rgba(255, 153, 0, 0.72);
-  outline-offset: 2px;
-}
-
 .mdet-th-wrap {
   display: inline-flex;
   align-items: center;
@@ -576,120 +195,10 @@
   font-size: 0.74rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.78);
   margin-bottom: 0.25rem;
   display: flex;
   align-items: center;
   gap: 0.35rem;
-}
-
-.mdet-section-count {
-  color: rgba(160, 180, 220, 0.55);
-  font-size: 0.68rem;
-  padding-left: 0.5rem;
-  letter-spacing: 0.03em;
-}
-
-.mdet-section-subtitle {
-  font-family: var(--font-primary);
-  font-size: 0.74rem;
-  color: rgba(160, 180, 220, 0.52);
-  margin: -0.1rem 0 0.35rem;
-}
-
-/* Insights */
-
-.mdet-insights {
-  display: flex;
-  flex-direction: column;
-}
-
-.mdet-insights-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
-}
-
-.mdet-insight {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.38rem;
-  font-family: var(--font-primary);
-  font-size: 0.86rem;
-  line-height: 1.45;
-  color: rgba(203, 213, 225, 0.82);
-}
-
-.mdet-insight-icon {
-  flex-shrink: 0;
-  font-weight: 700;
-  font-size: 0.88rem;
-  line-height: 1.45;
-}
-
-.mdet-insight--positive .mdet-insight-icon { color: rgba(52, 211, 153, 0.85); }
-.mdet-insight--warning .mdet-insight-icon  { color: rgba(251, 146, 60, 0.85); }
-.mdet-insight--neutral .mdet-insight-icon  { color: rgba(160, 180, 220, 0.45); }
-
-.mdet-insight--positive .mdet-insight-text { color: rgba(203, 213, 225, 0.82); }
-.mdet-insight--warning .mdet-insight-text  { color: rgba(251, 146, 60, 0.8); }
-.mdet-insight--neutral .mdet-insight-text  { color: rgba(203, 213, 225, 0.58); }
-
-.mdet-insight-text { min-width: 0; }
-
-/* Material coverage table */
-
-.mdet-coverage {
-  display: flex;
-  flex-direction: column;
-}
-
-.mdet-mat-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-primary);
-}
-
-.mdet-mat-table thead tr {
-  border-bottom: 1px solid rgba(255, 153, 0, 0.14);
-}
-
-.mdet-mat-table thead th {
-  font-size: 0.72rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.72);
-  padding: 0 0.5rem 0.42rem;
-  text-align: left;
-  font-weight: 600;
-}
-
-.mdet-mat-table thead th:first-child { padding-left: 0; }
-
-.mdet-mat-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transition: background 0.1s;
-}
-
-.mdet-mat-row:hover { background: rgba(255, 255, 255, 0.028); }
-.mdet-mat-row:last-child { border-bottom: none; }
-
-.mdet-mat-row td {
-  padding: 0.3rem 0.5rem;
-  font-size: 0.88rem;
-  line-height: 1.35;
-}
-
-.mdet-mat-row td:first-child { padding-left: 0; }
-
-.mdet-mat-name {
-  color: rgba(226, 232, 240, 0.85);
-  font-weight: 600;
-  min-width: 0;
-  max-width: 9rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .mining-material-name-cell {
@@ -699,20 +208,6 @@
   min-width: 0;
   max-width: 100%;
   vertical-align: middle;
-}
-
-.mine-page .bq-material-icon {
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  color: rgba(226, 232, 240, 0.88);
-  filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.72));
-}
-
-.mine-page .bq-material-icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 .mining-material-name-text {
@@ -740,24 +235,6 @@
 .mdet-mat-score.mloc-score--okay { color: rgba(251, 146, 60, 0.82); }
 .mdet-mat-score.mloc-score--poor { color: rgba(248, 113, 113, 0.78); }
 
-.mdet-source-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 0.12rem 0.36rem;
-  border-radius: 3px;
-  white-space: nowrap;
-}
-
-.mdet-source-badge--strong  { color: rgba(52, 211, 153, 0.85); background: rgba(52, 211, 153, 0.07); border: 1px solid rgba(52, 211, 153, 0.18); }
-.mdet-source-badge--moderate { color: rgba(255, 190, 80, 0.85); background: rgba(255, 153, 0, 0.07); border: 1px solid rgba(255, 153, 0, 0.18); }
-.mdet-source-badge--low     { color: rgba(251, 146, 60, 0.8);  background: rgba(251, 146, 60, 0.06); border: 1px solid rgba(251, 146, 60, 0.15); }
-.mdet-source-badge--missing { color: rgba(248, 113, 113, 0.72); background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.13); }
-
 .mdet-source-bar-wrap {
   display: inline-block;
   width: 28px;
@@ -777,186 +254,12 @@
   transition: width 0.2s;
 }
 
-.mdet-mat-row--missing .mdet-mat-name {
-  color: rgba(169, 186, 208, 0.62);
-}
-
-.mdet-view-all-btn {
-  align-self: flex-start;
-  margin-top: 0.45rem;
-  font-family: var(--font-primary);
-  font-size: 0.68rem;
-  letter-spacing: 0.07em;
-  color: rgba(255, 153, 0, 0.62);
-  background: none;
-  border: 1px solid rgba(255, 153, 0, 0.2);
-  border-radius: 3px;
-  padding: 0.2rem 0.55rem;
-  cursor: pointer;
-  transition: all 0.12s;
-}
-
-.mdet-view-all-btn:hover {
-  color: rgba(255, 153, 0, 0.8);
-  border-color: rgba(255, 153, 0, 0.32);
-}
-
-/* All-mats fallback */
-
-.mdet-all-mats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-/* ── Right: intelligence panels ───────────────── */
-
-.mintel-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  min-width: 0;
-  position: sticky;
-  top: 0.75rem;
-}
-
-.mintel-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.42rem;
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 7px;
-  padding: 0.65rem 0.72rem;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
-}
-
-.mintel-panel-title {
-  font-family: var(--font-primary);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.8);
-  padding-bottom: 0.36rem;
-  border-bottom: 1px solid rgba(255, 153, 0, 0.16);
-}
-
-/* Route strength factors */
-
-.mintel-factor-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.mintel-factor-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.22rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
-}
-
-.mintel-factor-row:last-child { border-bottom: none; }
-
-.mintel-factor-label {
-  font-family: var(--font-primary);
-  font-size: 0.82rem;
-  color: rgba(203, 213, 225, 0.78);
-}
-
-.mintel-factor-val {
-  font-family: var(--font-primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.mintel-val--best  { color: rgba(52, 211, 153, 0.85); }
-.mintel-val--good  { color: rgba(255, 190, 80, 0.85); }
-.mintel-val--okay  { color: rgba(251, 146, 60, 0.8);  }
-.mintel-val--poor  { color: rgba(248, 113, 113, 0.78); }
-
-/* Data quality panel */
-
-.mintel-dq-body {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.mintel-dq-ring {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-}
-
-.mintel-dq-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.mintel-dq-pct {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(226, 232, 240, 0.92);
-}
-
-.mintel-dq-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.14rem;
-}
-
-.mintel-dq-label {
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.6);
-}
-
-.mintel-dq-val {
-  font-family: var(--font-primary);
-  font-size: 0.88rem;
-  color: rgba(203, 213, 225, 0.88);
-}
-
-.mintel-dq-warning {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.1rem;
-  font-family: var(--font-primary);
-  font-size: 0.76rem;
-  line-height: 1.4;
-  color: rgba(251, 146, 60, 0.88);
-  padding: 0.26rem 0.4rem;
-  background: rgba(251, 146, 60, 0.06);
-  border: 1px solid rgba(251, 146, 60, 0.18);
-  border-radius: 4px;
-}
-
-.mintel-dq-warn-icon {
-  flex-shrink: 0;
-  font-size: 0.6rem;
-}
-
 /* ── Demand Coverage Breakdown & Planet Resource Index ─── */
 
 .mining-demand-breakdown,
 .mining-resource-index {
   display: flex;
   flex-direction: column;
-  width:80%;
 }
 
 .mdet-mobile-material-list {
@@ -1092,25 +395,6 @@
 .mining-resource-row--missing .mdet-mat-name {
   color: rgba(160, 180, 220, 0.42);
 }
-
-.mining-source-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 0.12rem 0.36rem;
-  border-radius: 3px;
-  white-space: nowrap;
-}
-
-.mining-source-badge--strong   { color: rgba(52, 211, 153, 0.85);  background: rgba(52, 211, 153, 0.07);  border: 1px solid rgba(52, 211, 153, 0.18); }
-.mining-source-badge--moderate { color: rgba(255, 190, 80, 0.85);  background: rgba(255, 153, 0, 0.07);   border: 1px solid rgba(255, 153, 0, 0.18); }
-.mining-source-badge--low      { color: rgba(251, 146, 60, 0.8);   background: rgba(251, 146, 60, 0.06);  border: 1px solid rgba(251, 146, 60, 0.15); }
-.mining-source-badge--missing  { color: rgba(248, 113, 113, 0.72); background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.13); }
-.mining-source-badge--none     { color: rgba(160, 180, 220, 0.38); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
 
 .mdet-mobile-material-card {
   display: flex;
@@ -1311,6 +595,11 @@
   background: var(--mine-intel-bg);
 }
 
+.mine-page.mine-page--v2 :where(button, [role="button"], input, select):focus-visible {
+  outline: 2px solid var(--mine-focus-color, rgba(255, 153, 0, 0.72));
+  outline-offset: 2px;
+}
+
 .mine-page.mine-page--v2 .mining-command-header {
   display: flex;
   min-width: 0;
@@ -1343,6 +632,20 @@
   stroke-width: 1.45;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.mine-page.mine-page--v2 .mining-material-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--mine-intel-copy);
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.72));
+}
+
+.mine-page.mine-page--v2 .mining-material-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .mine-page.mine-page--v2 .mining-command-copy {
@@ -1476,6 +779,19 @@
 .mine-page.mine-page--v2 .mining-scope-button__icon {
   width: 13px;
   height: 13px;
+}
+
+.mine-page.mine-page--v2 .mfr-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1em;
+  padding: 0 0.24rem;
+  border-radius: 2px;
+  background: rgba(52, 211, 153, 0.18);
+  color: rgba(52, 211, 153, 0.95);
+  font-size: 0.68rem;
+  font-weight: 700;
 }
 
 .mine-page.mine-page--v2 .mine-browse-section {
@@ -1612,8 +928,7 @@
 }
 
 .mine-page.mine-page--v2 .mining-material-clear-button:focus-visible {
-  outline: 1px solid rgba(251, 113, 133, 0.9);
-  outline-offset: 2px;
+  --mine-focus-color: rgba(251, 113, 133, 0.9);
 }
 
 .mine-page.mine-page--v2 .mining-material-clear-button:disabled {
@@ -1973,8 +1288,7 @@
 }
 
 .mine-page.mine-page--v2 :is(.mining-scope-button, .mine-system-button, .mining-filter-chip--material, .mlist-rank-btn, .mlist-item, .mloc-bookmark-btn):focus-visible {
-  outline: 2px solid var(--mine-intel-teal);
-  outline-offset: 2px;
+  --mine-focus-color: var(--mine-intel-teal);
 }
 
 .mine-page.mine-page--v2 .mining-location-panel .mlist-item-coverage {
@@ -2162,7 +1476,7 @@
 .mine-page.mine-page--v2 .mdet-method-rack { display: flex; align-items: end; justify-content: flex-end; gap: 7px; padding: 10px 12px; border-left: 1px solid var(--mine-intel-border-soft); }
 .mine-page.mine-page--v2 .mdet-method-rack .mdet-survey-heading { align-self: start; margin-right: auto; }
 .mine-page.mine-page--v2 .mdet-method-rack-item { display: grid; justify-items: center; gap: 3px; min-width: 30px; color: var(--mine-intel-copy-secondary); }
-.mine-page.mine-page--v2 .mdet-method-rack-item .mdet-method-icon { width: 29px; height: 21px; opacity: .9; }
+.mine-page.mine-page--v2 .mdet-method-rack-item .mdet-method-icon { display: block; width: 29px; height: 21px; flex: 0 0 auto; object-fit: contain; opacity: .9; }
 .mine-page.mine-page--v2 .mdet-method-rack-item strong { font-size: 11px; font-variant-numeric: tabular-nums; }
 .mine-page.mine-page--v2 .mdet-unavailable { align-self: center; color: var(--mine-intel-copy-muted); font-size: 11px; }
 
@@ -2572,20 +1886,4 @@
 
 @media (max-width: 900px) {
   .mine-page--v2 .mining-material-index-head { display: flex; justify-content: space-between; margin: 6px 0; }
-}
-
-/* The supplied raster method art has no intrinsic UI dimensions, so constrain it
-   at every breakpoint rather than relying on the desktop-only method styling. */
-.mine-page.mine-page--v2 .mdet-method-icon {
-  display: block;
-  width: 28px;
-  height: 20px;
-  flex: 0 0 auto;
-  object-fit: contain;
-}
-
-.mine-page.mine-page--v2 .mdet-method-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
 }
