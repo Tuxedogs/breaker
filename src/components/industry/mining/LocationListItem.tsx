@@ -12,6 +12,17 @@ import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
+import handMiningMethodIcon from "../../../assets/mining/methods/hand-mining-multitool.png";
+import shipMiningMethodIcon from "../../../assets/mining/methods/surface-ship-mining-ship.png";
+import vehicleMiningMethodIcon from "../../../assets/mining/methods/vehicle-mining-exosuit.png";
+
+const METHOD_ICON_BY_LABEL: Record<string, string> = {
+  Ship: shipMiningMethodIcon,
+  "Surface Ship": shipMiningMethodIcon,
+  Vehicle: vehicleMiningMethodIcon,
+  "Surface Vehicle": vehicleMiningMethodIcon,
+  Hand: handMiningMethodIcon,
+};
 
 export function LocationListItem({
   rank,
@@ -71,6 +82,9 @@ export function LocationListItem({
   const methodLabel = methodMixItems.length > 0
     ? methodMixItems.map((item) => miningMethodBadge(item.method)?.label ?? item.method).join(" / ")
     : entry.locationKind || entry.spawnType || "Unavailable";
+  const methodIcons = methodMixItems
+    .map((item) => miningMethodBadge(item.method)?.label ?? item.method)
+    .filter((label, index, labels) => Boolean(METHOD_ICON_BY_LABEL[label]) && labels.indexOf(label) === index);
 
   return (
     <div
@@ -106,7 +120,15 @@ export function LocationListItem({
             <span className="mlist-system-text">{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
-          <span className="mlist-method-text">{methodLabel}</span>
+          {methodIcons.length > 0 ? (
+            <span className="mlist-method-icons" role="img" aria-label={`${methodLabel} mining available`}>
+              {methodIcons.map((label) => (
+                <img key={label} src={METHOD_ICON_BY_LABEL[label]} alt="" title={`${label} mining`} />
+              ))}
+            </span>
+          ) : (
+            <span className="mlist-method-text">{methodLabel}</span>
+          )}
         </div>
       </div>
       {demandBar !== null && (

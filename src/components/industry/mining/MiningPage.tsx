@@ -509,34 +509,36 @@ export default function MiningModule() {
               footer={<><button type="button" className="mining-sheet-clear" onClick={clearAllFilters}>Clear filters</button><button type="button" className="mining-sheet-apply" onClick={() => setMobileFiltersOpen(false)}>Show {searchFilteredLocations.length} locations</button></>}
             >
             <aside className="mining-filter-panel" aria-label="Mining filters and constraints">
-              <div className="mining-panel-heading">Filters &amp; constraints</div>
-              <div className="mine-browse-section">
-                <span className="mine-browse-section-label">System</span>
-                <div className="mine-system-selector" role="group" aria-label="System filters">
-                  {orderedSystemFilters.map((sys) => (
-                    <button
-                      key={sys}
-                      type="button"
-                      className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
-                      aria-pressed={selectedSystemName === sys}
-                      onClick={() => toggleSystem(sys)}
-                    >
-                      {sys}
-                    </button>
-                  ))}
+              <div className="mining-panel-heading">Survey controls</div>
+              <div className="mining-control-deck">
+                <div className="mine-browse-section">
+                  <span className="mine-browse-section-label">System</span>
+                  <div className="mine-system-selector" role="group" aria-label="System filters">
+                    {orderedSystemFilters.map((sys) => (
+                      <button
+                        key={sys}
+                        type="button"
+                        className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
+                        aria-pressed={selectedSystemName === sys}
+                        onClick={() => toggleSystem(sys)}
+                      >
+                        {sys}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="mining-scope-section">
-                <span className="mine-browse-section-label">Scope</span>
-                <MiningScopeActions
-                  exploreActive={!buildQueueSelectionActive && !planner.filters.showOnlyStarred}
-                  buildQueueSelectionActive={buildQueueSelectionActive}
-                  buildQueueMaterials={buildQueueMaterials}
-                  showOnlyStarred={planner.filters.showOnlyStarred}
-                  onSelectExplore={selectExploreMode}
-                  onSelectBuildQueueMaterials={selectBuildQueueMaterials}
-                  onToggleStarred={() => planner.toggleShowOnlyStarred()}
-                />
+                <div className="mining-scope-section">
+                  <span className="mine-browse-section-label">Route scope</span>
+                  <MiningScopeActions
+                    exploreActive={!buildQueueSelectionActive && !planner.filters.showOnlyStarred}
+                    buildQueueSelectionActive={buildQueueSelectionActive}
+                    buildQueueMaterials={buildQueueMaterials}
+                    showOnlyStarred={planner.filters.showOnlyStarred}
+                    onSelectExplore={selectExploreMode}
+                    onSelectBuildQueueMaterials={selectBuildQueueMaterials}
+                    onToggleStarred={() => planner.toggleShowOnlyStarred()}
+                  />
+                </div>
               </div>
               <MiningFilterBar
                 selectedMaterials={effectiveSelectedMaterials}
@@ -550,7 +552,7 @@ export default function MiningModule() {
             <aside className="mlist-panel mining-location-panel" aria-label="Ranked mining locations">
               <div className="mlist-header">
                 <div className="mlist-header-line">
-                  <span className="mlist-header-label">Ranked locations</span>
+                  <span className="mlist-header-label">Route locations</span>
                   <span className="mlist-header-count">{searchFilteredLocations.length}</span>
                 </div>
                 <label className="mining-location-search">
@@ -665,6 +667,9 @@ export default function MiningModule() {
                     </button>
                   )}
                 </div>
+                <footer className="mlist-footer">
+                  <span>{listLocations.length} route locations</span>
+                </footer>
               </div>
             </aside>
 
