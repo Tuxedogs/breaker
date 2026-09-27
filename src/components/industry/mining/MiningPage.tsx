@@ -111,6 +111,7 @@ function resolveMiningSystemSelection(candidate: string | null | undefined, avai
 export default function MiningModule() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
   const [staticMiningIndex, setStaticMiningIndex] = useState<StaticMiningIndex | null>(null);
+  const [staticIndexStatus, setStaticIndexStatus] = useState<"loading" | "loaded" | "error">("loading");
   const [planetAssetMap, setPlanetAssetMap] = useState<Map<string, PlanetAsset> | null>(null);
   const recommendationRequestSeqRef = useRef(0);
   const [, setLagrangeChildrenDataVersion] = useState(0);
@@ -145,7 +146,17 @@ export default function MiningModule() {
 
   useEffect(() => {
     let cancelled = false;
-    loadStaticMiningIndex().then((index) => { if (!cancelled) setStaticMiningIndex(index); }).catch((e) => { if (import.meta.env.DEV) console.warn("[mining] static index failed", e); });
+    loadStaticMiningIndex()
+      .then((index) => {
+        if (cancelled) return;
+        setStaticMiningIndex(index);
+        setStaticIndexStatus("loaded");
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setStaticIndexStatus("error");
+        if (import.meta.env.DEV) console.warn("[mining] static index failed", e);
+      });
     loadStantonLagrangeGroupData().then(() => { if (!cancelled) setLagrangeChildrenDataVersion((v) => v + 1); }).catch(() => {});
     loadManifest().then((map) => { if (!cancelled) setPlanetAssetMap(map); }).catch(() => {});
     return () => { cancelled = true; };
@@ -485,6 +496,8 @@ export default function MiningModule() {
               <h1>Mining Intelligence</h1>
               <p>Survey locations, compare material probability, plan the next extraction route.</p>
             </div>
+            {state.status === "loading" && <span className="mining-command-status" role="status">Refreshing recommendations…</span>}
+            {state.status === "error" && <span className="mining-command-status mining-command-status--error" role="status">Could not refresh recommendations. Showing previous results.</span>}
           </header>
 
           <button
@@ -641,6 +654,7 @@ export default function MiningModule() {
                                 buildQueueMaterialKeys={effectiveMaterialFilterKeys}
                                 locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
                                 staticMiningIndex={staticMiningIndex}
+                                staticIndexStatus={staticIndexStatus}
                                 planetAssetMap={planetAssetMap}
                                 starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
                                 onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
@@ -678,6 +692,7 @@ export default function MiningModule() {
                   buildQueueMaterialKeys={effectiveMaterialFilterKeys}
                   locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
                   staticMiningIndex={staticMiningIndex}
+                  staticIndexStatus={staticIndexStatus}
                   planetAssetMap={planetAssetMap}
                   starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
                   onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
@@ -690,8 +705,8 @@ export default function MiningModule() {
         </div>
       )}
 
-      {state.status === "loading" && <div className="mine-status-state"><span className="mine-status-text">Loading recommendations…</span></div>}
-      {state.status === "error" && <div className="mine-status-state mine-status-state--error"><span className="mine-status-text">Failed to load: {state.message}</span></div>}
+      {!hasRecommendationData && state.status === "loading" && <div className="mine-status-state" role="status"><span className="mine-status-text">Loading recommendations…</span></div>}
+      {!hasRecommendationData && state.status === "error" && <div className="mine-status-state mine-status-state--error" role="alert"><span className="mine-status-text">Failed to load: {state.message}</span></div>}
     </div>
   );
 }

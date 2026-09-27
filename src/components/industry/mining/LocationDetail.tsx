@@ -215,7 +215,7 @@ function TraceMaterialList({ row, mobile = false }: { row: DemandRow | ResourceR
 
 function MiningMaterialCell({ row }: { row: DemandRow | ResourceRow }) {
   return (
-    <div className="mdet-material-cell">
+    <div className="mdet-material-cell" title={row.name}>
       <MaterialNameCell name={row.name} miningMethod={row.miningType} />
       <TraceMaterialList row={row} />
     </div>
@@ -384,6 +384,7 @@ export function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
+  staticIndexStatus,
   planetAssetMap,
   starred,
   onToggleStar,
@@ -394,6 +395,7 @@ export function LocationDetail({
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
+  staticIndexStatus: "loading" | "loaded" | "error";
   planetAssetMap?: Map<string, PlanetAsset> | null;
   starred?: boolean;
   onToggleStar?: (e: MouseEvent<HTMLButtonElement>) => void;
@@ -577,6 +579,17 @@ export function LocationDetail({
         </div>
       </section>
 
+      {staticIndexStatus === "loading" && (
+        <p className="mdet-reference-note" role="status">
+          Loading source-backed location detail…
+        </p>
+      )}
+      {staticIndexStatus === "error" && (
+        <p className="mdet-reference-note" role="status">
+          The location reference index is unavailable. Source-backed detail fields may be unavailable.
+        </p>
+      )}
+
       <section className="mdet-competition" aria-label="Direct spawn competition">
         <div className="mdet-competition-heading"><span>Direct spawn competition</span><small>Pool shares remain source-backed and distinct by source group.</small></div>
         {competitionPools.length > 0
@@ -664,6 +677,10 @@ export function LocationDetail({
           </table>
           <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" />
         </div>
+      )}
+
+      {demandRows.length === 0 && otherLocationMaterialRows.length === 0 && (
+        <p className="mdet-empty-readout">No material rows are available for this location.</p>
       )}
     </div>
   );
