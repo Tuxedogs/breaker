@@ -463,9 +463,6 @@ export default function MiningModule() {
       : selectedSystemName
         ? `No indexed mining locations are available for ${selectedSystemName}.`
         : "No indexed mining locations are available.";
-  const visibleMaterialCount = visibleResourceGroups.shipAndHarvestable.length
-    + visibleResourceGroups.vehicle.length
-    + visibleResourceGroups.hand.filter((resource) => resource.label.trim().toLowerCase() !== "pure carinite").length;
   const miningScopeLabel = buildQueueSelectionActive
     ? "Queue mode"
     : planner.filters.showOnlyStarred
@@ -684,12 +681,6 @@ export default function MiningModule() {
                   planetAssetMap={planetAssetMap}
                   starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
                   onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
-                  contextSummary={{
-                    scopeLabel: miningScopeLabel,
-                    selectedMaterialCount: effectiveMaterialFilterKeys.size,
-                    totalMaterialCount: visibleMaterialCount,
-                    rankedLocationCount: searchFilteredLocations.length,
-                  }}
                 />
               ) : !isMobileViewport ? (
                 <div className="mdet-empty"><span>{mobileQueueDemandEmpty ? "No active Queue material requirements need a mining route." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>

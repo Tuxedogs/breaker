@@ -443,67 +443,6 @@
 }
 
 
-/* ── Left: ranked location list panel ─────────── */
-
-.mdet-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.65rem 0.85rem;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
-  min-width: 0;
-}
-
-.mdet-panel--inline-mobile {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-/* Header */
-
-.mdet-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid rgba(255, 153, 0, 0.14);
-}
-
-.mdet-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  min-width: 0;
-}
-
-.mdet-label {
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.72);
-}
-
-.mdet-name {
-  font-family: var(--font-primary);
-  font-size: 1.55rem;
-  font-weight: 700;
-  color: #e8eeff;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-}
-
-.mdet-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-}
-
 /* Lagrange children — badge layout */
 
 .mloc-lagrange-children {
@@ -542,101 +481,6 @@
   padding: 0.1rem 0.38rem;
   font-size: 0.62rem;
 }
-
-/* Thumbnail */
-
-.mdet-header-right {
-  flex-shrink: 0;
-}
-
-.mdet-thumb {
-  width: 18rem;
-  height: 18rem;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.mdet-thumb-inner {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mdet-thumb-name {
-  font-family: var(--font-primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(255, 153, 0, 0.28);
-  letter-spacing: 0.06em;
-  user-select: none;
-}
-
-.mdet-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* Selected location stat chips */
-
-.location-stat-chip-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  align-items: flex-start;
-}
-
-.location-method-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(150px, 220px));
-  gap: 0.55rem;
-  align-items: stretch;
-  max-width: 760px;
-}
-
-.location-stat-chip {
-  display: flex;
-  flex-direction: column;
-  gap: 0.14rem;
-  flex: 0 0 auto;
-  width: auto;
-  max-width: none;
-  min-width: unset;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0.55rem;
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.location-stat-label {
-  font-family: var(--font-primary);
-  font-size: 0.56rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.62);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  min-width: 0;
-}
-
-.location-stat-value {
-  font-family: var(--font-primary);
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
-  color: rgba(226, 232, 240, 0.9);
-  white-space: nowrap;
-}
-
-.location-stat-value.mloc-score--best { color: rgba(52, 211, 153, 0.9); }
-.location-stat-value.mloc-score--good { color: rgba(255, 190, 80, 0.9); }
-.location-stat-value.mloc-score--okay { color: rgba(251, 146, 60, 0.85); }
-.location-stat-value.mloc-score--poor { color: rgba(248, 113, 113, 0.8); }
 
 /* Nearby stations */
 
@@ -1179,7 +1023,6 @@
 
 .mdet-method-availability,
 .mdet-occurrence span,
-.location-stat-subvalue,
 .mdet-trace-list {
   color: rgba(160, 180, 220, 0.58);
   font-family: var(--font-primary);
@@ -1452,12 +1295,11 @@
 }
 
 
-/* Mining Intelligence three-zone composition. This final page-scoped layer
+/* Mining Intelligence two-region survey composition. This canonical page-scoped owner
    translates the approved mockup while leaving mining data and calculations intact. */
 .mine-page.mine-page--v2 {
   --mine-intel-bg: #05080b;
   --mine-intel-panel: #0c1115;
-  --mine-intel-panel-raised: #11171b;
   --mine-intel-row: #0a0f13;
   --mine-intel-row-alt: #080c10;
   --mine-intel-border: rgba(132, 151, 164, 0.22);
@@ -1465,10 +1307,7 @@
   --mine-intel-copy: var(--ui-text-primary);
   --mine-intel-copy-secondary: var(--ui-text-secondary);
   --mine-intel-copy-muted: var(--ui-text-muted);
-  --mine-intel-amber: #f2a91f;
   --mine-intel-teal: #42b9df;
-  --mine-intel-blue: #4da3ff;
-  --mine-intel-purple: #b85cf6;
   background: var(--mine-intel-bg);
 }
 
@@ -2247,78 +2086,105 @@
   background: rgba(113, 142, 170, 0.28);
 }
 
-.mine-page.mine-page--v2 .mining-detail-context {
+.mine-page.mine-page--v2 .mdet-panel {
   display: flex;
-  min-height: 42px;
-  align-items: center;
-  gap: 0;
-  margin-top: -9px;
-  padding: 0 13px;
+  flex-direction: column;
+  min-width: 0;
+  gap: 8px;
+  padding: 0;
   border: 1px solid var(--mine-intel-border);
-  border-top: 1px solid var(--mine-intel-border-soft);
-  border-radius: 0 0 5px 5px;
-  background: #08111a;
-  color: var(--mine-intel-copy-muted);
-  font-size: var(--app-text-meta);
-  font-weight: 650;
-  letter-spacing: 0.065em;
-  text-transform: uppercase;
+  border-radius: 5px;
+  background: #0a1014;
+  box-shadow: none;
 }
 
-.mine-page.mine-page--v2 .mining-detail-context__item {
-  display: inline-flex;
-  min-height: 18px;
-  align-items: center;
-  padding: 0 14px;
-  border-left: 1px solid var(--mine-intel-border-soft);
-  white-space: nowrap;
-}
-
-.mine-page.mine-page--v2 .mining-detail-context__item:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-
-.mine-page.mine-page--v2 .mining-detail-context__item::before {
-  width: 5px;
-  height: 5px;
-  margin-right: 7px;
-  border: 1px solid currentColor;
-  border-radius: 1px;
-  content: "";
-}
-
-.mine-page.mine-page--v2 .mining-detail-context__item--scope {
-  color: var(--mine-intel-copy-secondary);
-}
-
-.mine-page.mine-page--v2 .mining-detail-context__item--scope::before {
-  border-color: var(--mine-intel-teal);
-  border-radius: 50%;
-}
-
-.mine-page.mine-page--v2 .mining-detail-context__item strong {
-  margin-right: 3px;
-  color: var(--mine-intel-copy-secondary);
-  font-variant-numeric: tabular-nums;
+.mine-page.mine-page--v2 .mdet-panel--inline-mobile {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .mine-page.mine-page--v2 .mdet-header {
-  border-color: var(--mine-intel-border);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 31%);
+  align-items: start;
+  gap: 0;
+  min-height: 164px;
+  padding: 15px;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid var(--mine-intel-border-soft);
   border-radius: 5px 5px 0 0;
-  background:
-    linear-gradient(180deg, rgba(14, 27, 39, 0.9), rgba(9, 18, 27, 0.94)),
-    var(--mine-intel-panel);
+  background: #0d1519;
 }
 
+.mine-page.mine-page--v2 .mdet-thumb {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(45%, 340px);
+  height: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  opacity: 0.48;
+  mask-image: linear-gradient(90deg, transparent, #000 32%);
+}
+
+.mine-page.mine-page--v2 .mdet-thumb-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mine-page.mine-page--v2 .mdet-thumb-name { display: grid; width: 100%; height: 100%; place-items: center; color: var(--mine-intel-copy-muted); font-family: var(--font-primary); font-size: 13px; font-weight: 700; letter-spacing: .06em; user-select: none; }
+.mine-page.mine-page--v2 .mdet-header-left { position: relative; z-index: 1; display: flex; min-width: 0; flex-direction: column; gap: 4px; align-self: end; }
 .mine-page.mine-page--v2 .mdet-label,
-.mine-page.mine-page--v2 .mdet-section-label {
-  color: var(--mine-cyan);
+.mine-page.mine-page--v2 .mdet-section-label,
+.mine-page.mine-page--v2 .mdet-survey-heading { color: var(--mine-cyan); font-family: var(--font-primary); }
+.mine-page.mine-page--v2 .mdet-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.mine-page.mine-page--v2 .mdet-name { color: #f0f7fc; font-family: var(--font-primary); font-size: clamp(25px, 2vw, 34px); font-weight: 700; letter-spacing: .02em; line-height: 1.1; }
+.mine-page.mine-page--v2 .mdet-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.mine-page.mine-page--v2 .mdet-bookmark-btn { position: relative; z-index: 2; justify-self: end; }
+
+.mine-page.mine-page--v2 .mdet-survey-readout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.36fr);
+  gap: 0;
+  margin: 0 12px;
+  border: 1px solid var(--mine-intel-border-soft);
+  background: #0b1216;
 }
 
-.mine-page.mine-page--v2 .mdet-name {
-  color: #f0f7fc;
-}
+.mine-page.mine-page--v2 .mdet-environment { min-width: 0; padding: 10px 12px; }
+.mine-page.mine-page--v2 .mdet-survey-heading { display: block; font-size: 10px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.mine-page.mine-page--v2 .mdet-environment-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 9px; }
+.mine-page.mine-page--v2 .mdet-environment-item { display: grid; gap: 3px; min-width: 0; padding: 0 10px; border-left: 1px solid var(--mine-intel-border-soft); }
+.mine-page.mine-page--v2 .mdet-environment-item:first-child { padding-left: 0; border-left: 0; }
+.mine-page.mine-page--v2 .mdet-environment-item span { color: var(--mine-intel-copy-muted); font-size: 10px; }
+.mine-page.mine-page--v2 .mdet-environment-item strong { overflow: hidden; color: var(--mine-intel-copy); font-size: 13px; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.mine-page.mine-page--v2 .mdet-environment-note { margin: 7px 0 0; color: var(--mine-intel-copy-muted); font-size: 10px; }
+
+.mine-page.mine-page--v2 .mdet-method-rack { display: flex; align-items: end; justify-content: flex-end; gap: 7px; padding: 10px 12px; border-left: 1px solid var(--mine-intel-border-soft); }
+.mine-page.mine-page--v2 .mdet-method-rack .mdet-survey-heading { align-self: start; margin-right: auto; }
+.mine-page.mine-page--v2 .mdet-method-rack-item { display: grid; justify-items: center; gap: 3px; min-width: 30px; color: var(--mine-intel-copy-secondary); }
+.mine-page.mine-page--v2 .mdet-method-rack-item .mdet-method-icon { width: 29px; height: 21px; opacity: .9; }
+.mine-page.mine-page--v2 .mdet-method-rack-item strong { font-size: 11px; font-variant-numeric: tabular-nums; }
+.mine-page.mine-page--v2 .mdet-unavailable { align-self: center; color: var(--mine-intel-copy-muted); font-size: 11px; }
+
+.mine-page.mine-page--v2 .mdet-competition { margin: 0 12px; border-top: 1px solid var(--mine-intel-border-soft); border-bottom: 1px solid var(--mine-intel-border-soft); }
+.mine-page.mine-page--v2 .mdet-competition-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 8px 0; }
+.mine-page.mine-page--v2 .mdet-competition-heading > span { color: var(--mine-intel-copy-secondary); font-size: 11px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.mine-page.mine-page--v2 .mdet-competition-heading small,
+.mine-page.mine-page--v2 .mdet-competition-empty { color: var(--mine-intel-copy-muted); font-size: 10px; }
+.mine-page.mine-page--v2 .mdet-competition-empty { margin: 0; padding: 0 0 9px; }
+.mine-page.mine-page--v2 .mdet-competition-pool { padding: 9px 0 10px; border-top: 1px solid var(--mine-intel-border-soft); }
+.mine-page.mine-page--v2 .mdet-competition-pool-head { display: flex; align-items: end; justify-content: space-between; gap: 10px; }
+.mine-page.mine-page--v2 .mdet-competition-pool-head > div { display: grid; gap: 2px; min-width: 0; }
+.mine-page.mine-page--v2 .mdet-competition-pool-head span { color: var(--mine-intel-copy-muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+.mine-page.mine-page--v2 .mdet-competition-pool-head strong { overflow: hidden; color: var(--mine-intel-copy); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.mine-page.mine-page--v2 .mdet-competition-pool-head p { margin: 0; color: var(--mine-intel-copy-muted); font-size: 10px; white-space: nowrap; }
+.mine-page.mine-page--v2 .mdet-competition-pool-head p strong { color: #dca94d; font-variant-numeric: tabular-nums; }
+.mine-page.mine-page--v2 .mdet-competition-members { display: grid; grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)); gap: 4px; margin: 8px 0 0; padding: 0; list-style: none; }
+.mine-page.mine-page--v2 .mdet-competition-member { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 2px 7px; min-width: 0; padding: 5px 6px; border-left: 2px solid #596c76; background: rgba(255,255,255,.018); }
+.mine-page.mine-page--v2 .mdet-competition-member.is-target { border-left-color: var(--mine-intel-teal); background: rgba(66,185,223,.075); }
+.mine-page.mine-page--v2 .mdet-competition-member .mining-material-name-text { color: var(--mine-intel-copy-secondary); font-size: 12px; }
+.mine-page.mine-page--v2 .mdet-competition-member > strong { color: var(--mine-intel-copy); font-size: 12px; font-variant-numeric: tabular-nums; }
+.mine-page.mine-page--v2 .mdet-competition-member > span { grid-column: 1 / -1; color: var(--mine-intel-copy-muted); font-size: 9px; }
 
 .mine-page.mine-page--v2 .mining-demand-breakdown,
 .mine-page.mine-page--v2 .mining-resource-index {
@@ -2340,7 +2206,7 @@
 }
 
 .mine-page.mine-page--v2 .mining-resource-index-table tbody tr:hover td {
-  background: rgba(13, 35, 49, 0.88);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-mat-name {
@@ -2349,7 +2215,7 @@
 
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-trace-branch,
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-trace-copy strong {
-  color: var(--mine-intel-teal);
+  color: var(--mine-intel-copy-secondary);
 }
 
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-trace-copy > span,
@@ -2359,23 +2225,16 @@
 }
 
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-method-text {
-  color: #8fbdd6;
+  color: var(--mine-intel-copy-secondary);
 }
 
 .mine-page.mine-page--v2 .mining-resource-index-table .mdet-occurrence strong {
-  color: #d6edf6;
-}
-
-.mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(4) {
-  color: var(--mine-intel-blue);
-}
-
-.mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(5) {
-  color: var(--mine-intel-purple);
-}
-
-.mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(6) {
   color: var(--mine-intel-copy);
+}
+
+.mine-page.mine-page--v2 .mining-resource-index-table :is(th, td):nth-child(n + 4) {
+  color: var(--mine-intel-copy-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 1600px) {
@@ -2660,6 +2519,40 @@
   .mine-page.mine-page--v2 .mdet-mobile-stat-label {
     font-size: var(--app-text-label);
   }
+
+  .mine-page.mine-page--v2 .mdet-header {
+    min-height: 136px;
+    padding: 12px;
+  }
+
+  .mine-page.mine-page--v2 .mdet-survey-readout {
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0 8px;
+  }
+
+  .mine-page.mine-page--v2 .mdet-environment-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .mine-page.mine-page--v2 .mdet-environment-item,
+  .mine-page.mine-page--v2 .mdet-environment-item:first-child {
+    grid-template-columns: 92px minmax(0, 1fr);
+    align-items: baseline;
+    padding: 0;
+    border: 0;
+  }
+
+  .mine-page.mine-page--v2 .mdet-method-rack {
+    align-items: center;
+    border-top: 1px solid var(--mine-intel-border-soft);
+    border-left: 0;
+  }
+
+  .mine-page.mine-page--v2 .mdet-method-rack .mdet-survey-heading { align-self: center; }
+  .mine-page.mine-page--v2 .mdet-competition { margin: 0 8px; }
+  .mine-page.mine-page--v2 .mdet-competition-heading { display: grid; gap: 3px; }
+  .mine-page.mine-page--v2 .mdet-competition-members { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 480px) {
