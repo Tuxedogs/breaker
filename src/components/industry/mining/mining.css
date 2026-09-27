@@ -1777,6 +1777,10 @@
 }
 
 @media (max-width: 760px) {
+  .mine-page.mine-page--v2 .mine-body {
+    grid-template-rows: max-content max-content minmax(0, 1fr);
+  }
+
   .mine-page.mine-page--v2 .mining-mobile-filter-trigger { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 7px 12px; border: 1px solid var(--mine-intel-border); border-radius: 5px; background: var(--mine-intel-panel); color: var(--text-secondary); font-weight: 800; }
   .mine-page.mine-page--v2 .mining-mobile-filter-trigger strong { color: var(--text-primary); font-size: var(--app-text-meta); }
   .mine-page.mine-page--v2 .mining-mobile-filter-trigger.is-active { border-color: rgba(10, 204, 249, .55); box-shadow: inset 3px 0 #0accf9; }
