@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { getStaticLocationDisplayName, type StaticMiningIndex } from "./staticMiningIndex";
+import {
+  getStaticLocationDescription,
+  getStaticLocationDisplayName,
+  type StaticMiningIndex,
+} from "./staticMiningIndex";
 import { groupStaticMiningBrowseRows } from "./recommenderAdapter";
 import { configureStantonLagrangeGroupData } from "../locations/stantonLagrangeChildren";
 import type { PublicLocationEntry } from "./types";
@@ -24,6 +28,29 @@ test("Lagrange group display names are not replaced by a physical child name", (
   } as unknown as StaticMiningIndex;
 
   assert.equal(getStaticLocationDisplayName(entry, index), "Lagrange D");
+});
+
+test("location descriptions resolve through canonical Pyro aliases without treating empty text as missing", () => {
+  const entry = {
+    locationKey: "Pyro6",
+    locationName: "Terminus",
+    systemName: "Pyro",
+  } as PublicLocationEntry;
+  const distributionRow = {
+    locationDescriptionKey: "@Pyro6_desc",
+    locationShortDescription: "",
+  };
+  const index = {
+    distributionByLocationJoinKey: new Map([
+      ["pyro::pyro vi (terminus)", [distributionRow]],
+    ]),
+    locationKeysByDisplayName: new Map(),
+  } as unknown as StaticMiningIndex;
+
+  assert.deepEqual(getStaticLocationDescription(entry, index), {
+    sourceKey: "@Pyro6_desc",
+    sourceText: "",
+  });
 });
 
 test("Browse-mode static rows use generated Lagrange parents and retain member codes", () => {

@@ -83,6 +83,8 @@ export type StaticLocationDistributionRow = {
   location?: string;
   locationKey?: string;
   locationDisplayName?: string;
+  locationDescriptionKey?: string | null;
+  locationShortDescription?: string | null;
   resolvedMineableClass?: string;
   mineableClass?: string;
   miningMethod?: string;
@@ -148,6 +150,11 @@ export type StaticMiningIndex = {
   qualityRows: StaticMaterialQualityRow[];
   qualityByRowKey: Map<string, StaticMaterialQualityRow>;
   locationHierarchy: StaticLocationHierarchyIndex | null;
+};
+
+export type StaticLocationDescription = {
+  sourceKey?: string | null;
+  sourceText?: string | null;
 };
 
 const LOCATION_INDEX_URL = "/api/mining/location-materials";
@@ -561,6 +568,28 @@ export function getStaticLocationMaterialKeys(entry: PublicLocationEntry, index:
 
 export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry, index?: StaticMiningIndex | null): string[] {
   return getEntryJoinKeys(entry, index);
+}
+
+/**
+ * Returns the delivered location description for a resolved location without
+ * substituting system text or manufacturing a fallback. `null` means the
+ * location itself was not found; an omitted, null, or empty sourceText remains
+ * distinguishable for a matched location.
+ */
+export function getStaticLocationDescription(
+  entry: PublicLocationEntry,
+  index: StaticMiningIndex | null | undefined,
+): StaticLocationDescription | null {
+  if (!index) return null;
+  for (const key of getEntryJoinKeys(entry, index)) {
+    const row = index.distributionByLocationJoinKey.get(key)?.[0];
+    if (!row) continue;
+    return {
+      sourceKey: row.locationDescriptionKey,
+      sourceText: row.locationShortDescription,
+    };
+  }
+  return null;
 }
 
 export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string {
