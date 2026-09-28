@@ -1,3 +1,5 @@
+import { resolveMaterialPresentation } from '../../lib/materialPresentation';
+
 type MaterialIconProps = {
   materialName: string;
   miningMethod?: string;
@@ -127,11 +129,26 @@ function getFallbackAccent(materialName: string): string {
 }
 
 export default function MaterialIcon({ materialName, miningMethod, materialState = 'raw', size = 20, className = '' }: MaterialIconProps) {
+  const presentation = resolveMaterialPresentation(materialName);
+  const classes = ['bq-material-icon', className].filter(Boolean).join(' ');
+  if (presentation.iconSrc) {
+    return (
+      <span className={classes} aria-hidden="true" style={{ width: size, height: size }}>
+        <img
+          className="bq-material-icon__image"
+          src={presentation.iconSrc}
+          alt=""
+          draggable={false}
+          style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain' }}
+        />
+      </span>
+    );
+  }
+
   const variant = getIconVariant(materialName);
   const shape = getIconShape(materialName, miningMethod, variant);
   const isRefinedOre = materialState === 'refined' && !isGemMineable(materialName, miningMethod);
-  const fallbackAccent = getFallbackAccent(materialName);
-  const classes = ['bq-material-icon', className].filter(Boolean).join(' ');
+  const fallbackAccent = presentation.isCanonical ? presentation.color : getFallbackAccent(materialName);
 
   const palette: Record<IconVariant, { base: string; dark: string; accent: string; highlight: string }> = {
     stileron: { base: '#263241', dark: '#090d12', accent: '#5f7fa5', highlight: '#a7bdd4' },
@@ -139,7 +156,7 @@ export default function MaterialIcon({ materialName, miningMethod, materialState
     hephaestonite: { base: '#263540', dark: '#0a1015', accent: '#b36d3a', highlight: '#43a99c' },
     savrilium: { base: '#9fb8ad', dark: '#203b37', accent: '#c9ffed', highlight: '#f2fff9' },
     carinite: { base: '#d047aa', dark: '#3b1231', accent: '#ff7bd5', highlight: '#ffd4f1' },
-    pureCarinite: { base: '#b5071d', dark: '#35040d', accent: '#ff2038', highlight: '#fff1f3' },
+    pureCarinite: { base: presentation.color, dark: '#35040d', accent: '#a92b3e', highlight: '#f3c7ce' },
     quantanium: { base: '#6b35c8', dark: '#1b0d34', accent: '#f2a72e', highlight: '#d6b8ff' },
     dolivine: { base: '#36a86d', dark: '#07351f', accent: '#84f5aa', highlight: '#dcffe9' },
     hadanite: { base: '#c9b8e8', dark: '#302246', accent: '#9d7ad8', highlight: '#fbf7ff' },
